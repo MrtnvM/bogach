@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,7 @@ class GameProgressBar extends StatelessWidget {
                     Text(name),
                     const Spacer(),
                     Text(
-                      '$currentValue p',
+                      currentValue.toPrice(),
                       style: DefaultTextStyle.of(context)
                           .style
                           .copyWith(color: ColorRes.green),
