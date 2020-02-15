@@ -8,6 +8,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+  alice:
+    dependency: transitive
+    description:
+      path: "."
+      ref: "v0.0.5"
+      resolved-ref: f26504028232e3fc0388da72fff42a1499b452ac
+      url: "git://github.com/MrtnvM/alice.git"
+    source: git
+    version: "0.0.15"
   analyzer:
     dependency: transitive
     description:
@@ -265,6 +274,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_platform_control_panel:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "v0.0.6"
+      resolved-ref: "1225d082cabbd6022e977bc56873786db740fd5a"
+      url: "git://github.com/mobile-dualbootpartners/flutter-platform-control-panel"
+    source: git
+    version: "0.0.1"
   flutter_platform_core:
     dependency: "direct main"
     description:
@@ -426,6 +444,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1+2"
+  open_file:
+    dependency: transitive
+    description:
+      name: open_file
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.1"
   package_config:
     dependency: transitive
     description:
@@ -433,6 +458,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  package_info:
+    dependency: transitive
+    description:
+      name: package_info
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0+6"
   package_resolver:
     dependency: transitive
     description:
@@ -447,6 +479,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.4"
+  path_provider:
+    dependency: transitive
+    description:
+      name: path_provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.6.0"
   pedantic:
     dependency: transitive
     description:
@@ -461,6 +500,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.0"
+  platform:
+    dependency: transitive
+    description:
+      name: platform
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.1"
   pool:
     dependency: transitive
     description:
