@@ -16,13 +16,13 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   configureErrorReporting();
-  configureSystemUi();
+  setOrientationModes();
 
-  final sharedPreferances = await SharedPreferences.getInstance();
+  final sharedPreferences = await SharedPreferences.getInstance();
   final tokenStorage = TokenStorage();
 
   final rootEpic = createRootEpic(
-    sharedPreferances,
+    sharedPreferences,
     tokenStorage,
   );
 
