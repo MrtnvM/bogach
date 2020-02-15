@@ -48,7 +48,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> with ReduxState {
   }
 
   void _onSuccessLogin(_) {
-    appRouter.goTo(const MainPage());
+    appRouter.startWith(const MainPage());
   }
 
   void _onErrorLogin(dynamic error) {

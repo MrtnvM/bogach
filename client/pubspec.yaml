@@ -33,6 +33,11 @@ dependencies:
       url: git://github.com/mobile-dualbootpartners/flutter_platform_network
       ref: v0.0.12
 
+  flutter_platform_control_panel:
+    git:
+      url: git://github.com/mobile-dualbootpartners/flutter-platform-control-panel
+      ref: v0.0.6
+
   cupertino_icons: ^0.1.2
 
 dev_dependencies:

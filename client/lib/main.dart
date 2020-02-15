@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cash_flow/app/store/store.dart';
 import 'package:cash_flow/cash_flow_app.dart';
+import 'package:cash_flow/configuration/control_panel.dart';
 import 'package:cash_flow/configuration/error_reporting.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -20,6 +21,8 @@ Future<void> main() async {
 
   final sharedPreferences = await SharedPreferences.getInstance();
   final tokenStorage = TokenStorage();
+
+  configureControlPanel();
 
   final rootEpic = createRootEpic(
     sharedPreferences,
