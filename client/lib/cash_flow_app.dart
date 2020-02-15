@@ -1,6 +1,6 @@
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/navigation/app_router.dart';
-import 'package:cash_flow/presentation/home/home_page.dart';
+import 'package:cash_flow/presentation/splashscreen/splash_screen_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:flutter_redux/flutter_redux.dart' as redux;
@@ -33,7 +33,7 @@ class CashFlowAppState extends State<CashFlowApp> with ReduxComponent {
         debugShowCheckedModeBanner: false,
         builder: (context, child) => child,
         navigatorKey: appRouter.navigatorKey,
-        home: const HomePage(title: 'Cash Flow'),
+        home: const HomePage(),
       ),
     );
   }
