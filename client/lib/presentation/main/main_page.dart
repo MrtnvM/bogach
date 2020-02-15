@@ -1,5 +1,7 @@
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/appbar/app_bar.dart';
+import 'package:cash_flow/navigation/app_router.dart';
+import 'package:cash_flow/presentation/gameboard/gameboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,9 +23,19 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: ColorRes.primary,
       ),
       body: Column(
-        children: const <Widget>[
+        children: <Widget>[
           Expanded(
-            child: Center(child: Text('Welcome!')),
+            child: Center(
+              child: Column(
+                children: <Widget>[
+                  const Text('Welcome!'),
+                  FlatButton(
+                    onPressed: () => appRouter.goTo(GameBoard()),
+                    child: const Text('Go to GameBoard'),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
