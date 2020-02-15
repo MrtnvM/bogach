@@ -18,7 +18,7 @@ class _MainPageState extends State<MainPage> {
         children: const <Widget>[
           Expanded(
             child: Center(child: Text('Welcome!')),
-          )
+          ),
         ],
       ),
     );
