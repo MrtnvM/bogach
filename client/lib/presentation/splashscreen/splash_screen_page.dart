@@ -6,14 +6,14 @@ import 'package:cash_flow/presentation/main/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage();
+class SplashScreenPage extends StatefulWidget {
+  const SplashScreenPage();
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _SplashScreenPageState createState() => _SplashScreenPageState();
 }
 
-class _HomePageState extends State<HomePage> with ReduxState {
+class _SplashScreenPageState extends State<SplashScreenPage> with ReduxState {
   @override
   void initState() {
     super.initState();
@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> with ReduxState {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   const Text('Cash Flow game!'),
+                  if (isLoading) const SizedBox(width: 12),
                   if (isLoading) const CircularProgressIndicator(),
                 ],
               ),

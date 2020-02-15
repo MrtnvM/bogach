@@ -33,7 +33,7 @@ class CashFlowAppState extends State<CashFlowApp> with ReduxComponent {
         debugShowCheckedModeBanner: false,
         builder: (context, child) => child,
         navigatorKey: appRouter.navigatorKey,
-        home: const HomePage(),
+        home: const SplashScreenPage(),
       ),
     );
   }
