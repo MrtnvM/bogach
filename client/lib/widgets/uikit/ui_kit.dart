@@ -1,6 +1,7 @@
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/containers/indicators_table.dart';
 import 'package:cash_flow/widgets/inputs/drop_focus.dart';
+import 'package:cash_flow/widgets/progress/game_progress_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ class UiKit extends StatelessWidget {
           children: <Widget>[
             _getTables(context),
             _getGroupDivider(),
+            _getProgressBars(context),
           ],
         ),
       ),
@@ -104,5 +106,9 @@ class UiKit extends StatelessWidget {
         const SizedBox(height: 32),
       ],
     );
+  }
+
+  Widget _getProgressBars(BuildContext context) {
+    return GameProgressBar('Капитал', 2772, 50000);
   }
 }

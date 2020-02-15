@@ -6,6 +6,7 @@ class ColorRes {
   static const white64 = Color(0xA3ffffff);
   static const primary = Color(0xff006CBB);
   static const primary64 = Color(0xA3006CBB);
+  static const accentColor = Color(0xFF2196F3);
 
   static const black = Color(0xff000000);
   static const black80 = Color(0xCC000000);
@@ -19,4 +20,5 @@ class ColorRes {
   static const grey = Color(0xFFBDBDBD);
   static const gallery = Color(0xFFEEEEEE);
   static const blue = Color(0xFF598398);
+  static const green = Color(0xFFFF4CAF50);
 }
