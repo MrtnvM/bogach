@@ -1,5 +1,8 @@
 import 'package:flutter/services.dart';
 
-void configureSystemUi() {
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+void setOrientationModes() {
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]);
 }
