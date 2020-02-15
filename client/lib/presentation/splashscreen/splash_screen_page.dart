@@ -42,9 +42,9 @@ class _SplashScreenPageState extends State<SplashScreenPage> with ReduxState {
   }
 
   void _authUser() {
-    dispatchAsyncAction(LoginAsyncAction())
-        .listen((action) => action..onSuccess(_onSuccessLogin))
-          ..onError(_onErrorLogin);
+    dispatchAsyncAction(LoginAsyncAction()).listen((action) => action
+      ..onSuccess(_onSuccessLogin)
+      ..onError(_onErrorLogin));
   }
 
   void _onSuccessLogin(_) {
@@ -56,6 +56,8 @@ class _SplashScreenPageState extends State<SplashScreenPage> with ReduxState {
       context: context,
       exception: error,
       onRetry: _authUser,
+      barrierDismissible: false,
+      displayNegative: false,
     );
   }
 }

@@ -74,6 +74,8 @@ void handleError({
   @required dynamic exception,
   VoidCallback onRetry,
   String errorMessage,
+  bool barrierDismissible = true,
+  bool displayNegative = true,
 }) {
   switch (exception.runtimeType) {
     case NetworkConnectionException:
@@ -81,6 +83,8 @@ void handleError({
         context: context,
         message: Strings.noInternetError,
         onRetry: onRetry,
+        barrierDismissible: barrierDismissible,
+        displayNegative: displayNegative,
       );
       break;
 
@@ -90,9 +94,16 @@ void handleError({
           context: context,
           message: errorMessage,
           onRetry: onRetry,
+          barrierDismissible: barrierDismissible,
+          displayNegative: displayNegative,
         );
       } else {
-        showErrorDialog(context: context, onRetry: onRetry);
+        showErrorDialog(
+          context: context,
+          onRetry: onRetry,
+          barrierDismissible: barrierDismissible,
+          displayNegative: displayNegative,
+        );
       }
       break;
   }
@@ -103,6 +114,8 @@ Future<void> showErrorDialog({
   String title = Strings.warning,
   String message = Strings.commonError,
   VoidCallback onRetry,
+  bool barrierDismissible = true,
+  bool displayNegative = true,
 }) async {
   final response = await showCashDialog(
     context: context,
@@ -111,8 +124,8 @@ Future<void> showErrorDialog({
     negativeButton: Strings.cancel,
     positiveButton: onRetry != null ? Strings.retry : null,
     displayPositive: onRetry != null,
-    displayNegative: true,
-    barrierDismissible: true,
+    displayNegative: displayNegative,
+    barrierDismissible: barrierDismissible,
   );
 
   if (response == DialogResponse.confirm && onRetry != null) {
