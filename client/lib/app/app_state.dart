@@ -1,6 +1,7 @@
 library app_state;
 
 import 'package:built_value/built_value.dart';
+import 'package:cash_flow/features/login/login_state.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 part 'app_state.g.dart';
@@ -11,9 +12,11 @@ abstract class AppState
 
   AppState._();
 
+  LoginState get login;
+
   static AppState initial() {
     return AppState(
-      (b) => b,
+      (b) => b..login = LoginState.initial().toBuilder(),
     );
   }
 }

@@ -1,10 +1,10 @@
-import 'dart:async';
-
+import 'package:cash_flow/core/utils/app_store_connector.dart';
+import 'package:cash_flow/features/login/login_actions.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/main/main_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage();
@@ -13,9 +13,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
+class _HomePageState extends State<HomePage> with ReduxState {
   @override
   void initState() {
     super.initState();
@@ -25,27 +23,34 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: const Center(
-        child: Text('Cash Flow game!'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => null,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
-    );
-  }
-
-  FutureOr<void> _onSigned(AuthResult value) {
-    appRouter.goTo(const MainPage());
+    return AppStateConnector<bool>(
+        converter: (s) => s.login.loginRequestState.isInProgress,
+        builder: (context, isLoading) {
+          return Scaffold(
+            body: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const Text('Cash Flow game!'),
+                  if (isLoading) const CircularProgressIndicator(),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   void _authUser() {
-    _auth.signInAnonymously().then(_onSigned, onError: _onSignInError);
+    dispatchAsyncAction(LoginAsyncAction())
+        .listen((action) => action..onSuccess(_onSuccessLogin))
+          ..onError(_onErrorLogin);
   }
 
-  FutureOr<void> _onSignInError(dynamic error) {
+  void _onSuccessLogin(_) {
+    appRouter.goTo(const MainPage());
+  }
+
+  void _onErrorLogin(dynamic error) {
     handleError(
       context: context,
       exception: error,

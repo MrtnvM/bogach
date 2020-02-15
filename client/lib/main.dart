@@ -7,6 +7,7 @@ import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:flutter_platform_network/flutter_platform_network.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,9 +19,11 @@ Future<void> main() async {
   configureSystemUi();
 
   final sharedPreferances = await SharedPreferences.getInstance();
+  final tokenStorage = TokenStorage();
 
   final rootEpic = createRootEpic(
     sharedPreferances,
+    tokenStorage,
   );
 
   final storeProvider = configureStoreProvider(rootEpic);
