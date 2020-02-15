@@ -15,4 +15,8 @@ class ColorRes {
   static const black32 = Color(0x51000000);
   static const black24 = Color(0x3D000000);
   static const black16 = Color(0x29000000);
+
+  static const grey = Color(0xFFBDBDBD);
+  static const gallery = Color(0xFFEEEEEE);
+  static const blue = Color(0xFF598398);
 }
