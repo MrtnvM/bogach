@@ -7,10 +7,17 @@ part of app_state;
 // **************************************************************************
 
 class _$AppState extends AppState {
+  @override
+  final LoginState login;
+
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
 
-  _$AppState._() : super._();
+  _$AppState._({this.login}) : super._() {
+    if (login == null) {
+      throw new BuiltValueNullFieldError('AppState', 'login');
+    }
+  }
 
   @override
   AppState rebuild(void Function(AppStateBuilder) updates) =>
@@ -22,24 +29,37 @@ class _$AppState extends AppState {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is AppState;
+    return other is AppState && login == other.login;
   }
 
   @override
   int get hashCode {
-    return 134797703;
+    return $jf($jc(0, login.hashCode));
   }
 
   @override
   String toString() {
-    return newBuiltValueToStringHelper('AppState').toString();
+    return (newBuiltValueToStringHelper('AppState')..add('login', login))
+        .toString();
   }
 }
 
 class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   _$AppState _$v;
 
+  LoginStateBuilder _login;
+  LoginStateBuilder get login => _$this._login ??= new LoginStateBuilder();
+  set login(LoginStateBuilder login) => _$this._login = login;
+
   AppStateBuilder();
+
+  AppStateBuilder get _$this {
+    if (_$v != null) {
+      _login = _$v.login?.toBuilder();
+      _$v = null;
+    }
+    return this;
+  }
 
   @override
   void replace(AppState other) {
@@ -56,7 +76,20 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
 
   @override
   _$AppState build() {
-    final _$result = _$v ?? new _$AppState._();
+    _$AppState _$result;
+    try {
+      _$result = _$v ?? new _$AppState._(login: login.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'login';
+        login.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'AppState', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

@@ -1,7 +1,9 @@
 import 'package:cash_flow/app/app_reducer.dart';
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/root_epic.dart';
+import 'package:cash_flow/services/user_service.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:flutter_platform_network/flutter_platform_network.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,6 +25,11 @@ StoreProvider<AppState> configureStoreProvider(Epic<AppState> rootEpic) {
 
 Epic<AppState> createRootEpic(
   SharedPreferences sharedPreferences,
+  TokenStorage tokenStorage,
 ) {
-  return rootEpic();
+  final userService = UserService(
+    tokenStorage: tokenStorage,
+  );
+
+  return rootEpic(userService: userService);
 }

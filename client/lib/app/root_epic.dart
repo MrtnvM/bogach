@@ -1,12 +1,14 @@
-import 'package:cash_flow/utils/core/epic.dart';
+import 'package:cash_flow/features/login/login_epic.dart';
+import 'package:cash_flow/services/user_service.dart';
+import 'package:flutter/material.dart';
 import 'package:redux_epics/redux_epics.dart';
 
 import 'app_state.dart';
 
-Epic<AppState> rootEpic() {
-  final emptyEpic = epic((action$, store) => const Stream.empty());
-
+Epic<AppState> rootEpic({
+  @required UserService userService,
+}) {
   return combineEpics([
-    emptyEpic,
+    loginEpic(userService: userService),
   ]);
 }
