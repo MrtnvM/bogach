@@ -1,5 +1,6 @@
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/containers/indicators_table.dart';
+import 'package:cash_flow/widgets/events/property_game_event.dart';
 import 'package:cash_flow/widgets/inputs/drop_focus.dart';
 import 'package:cash_flow/widgets/progress/game_progress_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,6 +17,9 @@ class UiKit extends StatelessWidget {
             _getTables(context),
             _getGroupDivider(),
             _getProgressBars(context),
+            _getGroupDivider(),
+            _getGameEvents(context),
+            _getGroupDivider(),
           ],
         ),
       ),
@@ -24,9 +28,9 @@ class UiKit extends StatelessWidget {
 
   Widget _getGroupDivider() {
     return const Divider(
+      thickness: 32,
       height: 32,
-      thickness: 3,
-      color: ColorRes.grey,
+      color: ColorRes.white,
     );
   }
 
@@ -81,13 +85,9 @@ class UiKit extends StatelessWidget {
                 attribute: 'Первый взнос',
                 value: 'Стоимость'),
             RowHeaderAttributeItem(
-                name: 'Бизнес',
-                attribute: 'Первый взнос',
-                value: 'Стоимость'),
+                name: 'Бизнес', attribute: 'Первый взнос', value: 'Стоимость'),
             RowHeaderAttributeItem(
-                name: 'Прочие',
-                attribute: 'Первый взнос',
-                value: 'Стоимость'),
+                name: 'Прочие', attribute: 'Первый взнос', value: 'Стоимость'),
           ],
         ),
         const SizedBox(height: 32),
@@ -110,5 +110,24 @@ class UiKit extends StatelessWidget {
 
   Widget _getProgressBars(BuildContext context) {
     return const GameProgressBar('Капитал', 2772, 50000);
+  }
+
+  Widget _getGameEvents(BuildContext context) {
+    return Column(
+      children: const <Widget>[
+        PropertyGameEvent(
+          PropertyViewModel(
+            name: 'киоск',
+            price: 83000,
+            marketPrice: 100000,
+            downPayment: 16500,
+            debt: 66500,
+            passiveIncomePerMonth: -100,
+            roi: -7.3,
+            saleRate: 14,
+          ),
+        ),
+      ],
+    );
   }
 }

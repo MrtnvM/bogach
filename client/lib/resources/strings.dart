@@ -3,13 +3,27 @@ class Strings {
       'An error occurred while performing the operation';
 
   static const title = '';
-  static const confirm = 'Ok';
-  static const cancel = 'Cancel';
-  static const warning = 'Warning';
-  static const retry = 'Retry';
+  static const confirm = 'ОК';
+  static const cancel = 'Отмена';
+  static const warning = 'Внимание';
+  static const retry = 'Повторить';
+  static const skip = 'Пропустить';
 
-  static const commonError = 'An error occurred while performing the operation';
+  static const commonError = 'Произошла ошибка';
+
+  static const propertyName = 'Малая недвижимость';
+  static const offeredPrice = 'Предложенная цена:';
+  static const marketPrice = 'Среднерыночная цена:';
+  static const downPayment = 'Первый взнос:';
+  static const debt = 'Долг:';
+  static const passiveIncomePerMonth = 'Пассивный доход за месяц:';
+  static const roi = 'ROI за год';
+  static const saleRate = 'Вероятность продажи';
+  static const takeLoan = 'Взять кредит';
+
+  static String sellingKiosk(String name) => 'Продается $name';
 
   static const noInternetError =
-      'Could not connect to the server. Please check your internet connection';
+      'Не удалось подключиться к серверу. '
+      'Пожалуйста, проверьте ваше интернет-соединение';
 }

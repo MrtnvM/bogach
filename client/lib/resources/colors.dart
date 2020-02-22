@@ -21,4 +21,5 @@ class ColorRes {
   static const gallery = Color(0xFFEEEEEE);
   static const blue = Color(0xFF598398);
   static const green = Color(0xFFFF4CAF50);
+  static const orange = Color(0xFFFFA726);
 }
