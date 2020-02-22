@@ -29,6 +29,9 @@ class Strings {
   static const incomePerMonth = 'Ежемесячный доход:';
   static const available = 'Доступно:';
   static const buyAllAvailable = 'Купить на все';
+  static const sellAllAvailable = 'Продать все';
+  static const purchasing = 'Покупка';
+  static const selling = 'Продажа';
   static String getUserAvailableCount(String count, String cost) => '$count по $cost';
 
 

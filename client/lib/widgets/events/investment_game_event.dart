@@ -18,7 +18,8 @@ class InvestmentGameEvent extends StatefulWidget {
 }
 
 class _InvestmentGameEvent extends State<InvestmentGameEvent> {
-  double _selectedCount = 0;
+  int _selectedCount = 0;
+  InvestmentState _state = InvestmentState.purchasing;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +69,10 @@ class _InvestmentGameEvent extends State<InvestmentGameEvent> {
             ],
           ),
         ),
-        _buildSelector(widget.viewModel),
+        _buildTabBar(),
+        _state == InvestmentState.purchasing
+            ? _buildPurchaseSelector(widget.viewModel)
+            : _buildSellingSelector(widget.viewModel),
         _buildButtons(),
       ],
     );
@@ -133,7 +137,7 @@ class _InvestmentGameEvent extends State<InvestmentGameEvent> {
     );
   }
 
-  Widget _buildSelector(InvestmentViewModel viewModel) {
+  Widget _buildPurchaseSelector(InvestmentViewModel viewModel) {
     return Container(
       color: ColorRes.grey2,
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -144,14 +148,14 @@ class _InvestmentGameEvent extends State<InvestmentGameEvent> {
           Row(
             children: <Widget>[
               Text(
-                _selectedCount.toInt().toString(),
+                _selectedCount.toString(),
                 style: Styles.body1,
               ),
               Expanded(
                 child: Slider(
                   min: 0,
-                  max: viewModel.maxCount,
-                  value: _selectedCount,
+                  max: viewModel.maxCount.toDouble(),
+                  value: _selectedCount.toDouble(),
                   onChanged: _onCountChanged,
                   divisions: viewModel.maxCount.toInt(),
                 ),
@@ -171,22 +175,26 @@ class _InvestmentGameEvent extends State<InvestmentGameEvent> {
 
   void _onCountChanged(double value) {
     setState(() {
-      _selectedCount = value;
+      _selectedCount = value.toInt();
     });
   }
 
   Widget _buildIncomePerMonth(InvestmentViewModel viewModel) {
     return RichText(
-      text: TextSpan(children: [
-        TextSpan(text: Strings.incomePerMonth, style: Styles.body1),
-        const WidgetSpan(
+      text: TextSpan(
+        children: [
+          TextSpan(text: Strings.incomePerMonth, style: Styles.body1),
+          const WidgetSpan(
             child: SizedBox(
-          width: 6,
-        )),
-        TextSpan(
+              width: 6,
+            ),
+          ),
+          TextSpan(
             text: (_selectedCount * viewModel.passiveIncomePerMonth).toPrice(),
-            style: Styles.body1.copyWith(color: ColorRes.green))
-      ]),
+            style: Styles.body1.copyWith(color: ColorRes.green),
+          )
+        ],
+      ),
     );
   }
 
@@ -200,16 +208,16 @@ class _InvestmentGameEvent extends State<InvestmentGameEvent> {
     );
   }
 
-  void _onSelectAllClicked(InvestmentViewModel viewModel) {
+  void _onSelectAllClicked(int selectedCount) {
     setState(() {
-      _selectedCount = viewModel.maxCount;
+      _selectedCount = selectedCount;
     });
   }
 
   Widget _buildSelectAllButton(InvestmentViewModel viewModel) {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () => _onSelectAllClicked(viewModel),
+      onTap: () => _onSelectAllClicked(viewModel.maxCount),
       child: Container(
         padding: const EdgeInsets.all(8),
         alignment: Alignment.center,
@@ -264,6 +272,188 @@ class _InvestmentGameEvent extends State<InvestmentGameEvent> {
       _selectedCount = 0;
     });
   }
+
+  Widget _buildSellingSelector(InvestmentViewModel viewModel) {
+    return Container(
+      color: ColorRes.grey2,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Text(
+                _selectedCount.toInt().toString(),
+                style: Styles.body1,
+              ),
+              Expanded(
+                child: Slider(
+                  min: 0,
+                  max: viewModel.alreadyHave.toDouble(),
+                  value: _selectedCount.toDouble(),
+                  onChanged: _onCountChanged,
+                  divisions: viewModel.alreadyHave.toInt(),
+                ),
+              ),
+              Text(
+                viewModel.alreadyHave.toStringAsFixed(0),
+                style: Styles.body1,
+              ),
+            ],
+          ),
+          _buildSpendingPerMonth(viewModel),
+          _buildSellButtons(viewModel),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSpendingPerMonth(InvestmentViewModel viewModel) {
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(text: Strings.incomePerMonth, style: Styles.body1),
+          const WidgetSpan(
+            child: SizedBox(
+              width: 6,
+            ),
+          ),
+          TextSpan(
+            text: (-_selectedCount * viewModel.passiveIncomePerMonth).toPrice(),
+            style: Styles.body1.copyWith(color: ColorRes.orange),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSellButtons(InvestmentViewModel viewModel) {
+    return Row(
+      children: <Widget>[
+        Expanded(child: _buildSellAllButton(viewModel)),
+        Expanded(child: _buildSellAvailableButton(viewModel)),
+        const Spacer(),
+      ],
+    );
+  }
+
+  Widget _buildSellAllButton(InvestmentViewModel viewModel) {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () => _onSelectAllClicked(viewModel.alreadyHave),
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        alignment: Alignment.center,
+        child: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: Strings.available,
+                style: Styles.body1.copyWith(
+                    decoration: TextDecoration.underline, color: ColorRes.blue),
+              ),
+              const WidgetSpan(
+                  child: SizedBox(
+                width: 4,
+              )),
+              TextSpan(
+                text: viewModel.alreadyHave.toStringAsFixed(0),
+                style: Styles.body1,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSellAvailableButton(InvestmentViewModel viewModel) {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () => _onSellAllAvailableClicked(viewModel),
+      child: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(8),
+        child: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: Strings.sellAllAvailable,
+                style: Styles.body1.copyWith(
+                    decoration: TextDecoration.underline, color: ColorRes.blue),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _onSellAllAvailableClicked(InvestmentViewModel viewModel) {
+    setState(() {
+      _selectedCount = viewModel.alreadyHave;
+    });
+  }
+
+  Widget _buildTabBar() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        const SizedBox(width: 8),
+        GestureDetector(
+          onTap: () => setState(() => _state = InvestmentState.purchasing),
+          child: Container(
+            padding: const EdgeInsets.only(right: 16),
+            color: _state == InvestmentState.purchasing
+                ? ColorRes.grey2
+                : ColorRes.scaffoldBackground,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Radio(
+                  value: InvestmentState.purchasing,
+                  groupValue: _state,
+                  onChanged: (InvestmentState state) {
+                    setState(() {
+                      _selectedCount = 0;
+                      _state = state;
+                    });
+                  },
+                ),
+                Text(Strings.purchasing),
+              ],
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () => setState(() => _state = InvestmentState.selling),
+          child: Container(
+            padding: const EdgeInsets.only(right: 16),
+            color: _state == InvestmentState.selling
+                ? ColorRes.grey2
+                : ColorRes.scaffoldBackground,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Radio(
+                  value: InvestmentState.selling,
+                  groupValue: _state,
+                  onChanged: (InvestmentState state) {
+                    setState(() {
+                      _selectedCount = 0;
+                      _state = state;
+                    });
+                  },
+                ),
+                Text(Strings.selling),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class InvestmentViewModel {
@@ -283,5 +473,10 @@ class InvestmentViewModel {
   final int passiveIncomePerMonth;
   final double roi;
   final int alreadyHave;
-  final double maxCount;
+  final int maxCount;
+}
+
+enum InvestmentState {
+  purchasing,
+  selling,
 }
