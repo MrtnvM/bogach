@@ -3,8 +3,11 @@ import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:cash_flow/widgets/buttons/action_button.dart';
+import 'package:cash_flow/widgets/inputs/border_input_field.dart';
+import 'package:cash_flow/widgets/inputs/input_field_props.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class InvestmentGameEvent extends StatefulWidget {
   const InvestmentGameEvent(this.viewModel);
@@ -18,8 +21,18 @@ class InvestmentGameEvent extends StatefulWidget {
 }
 
 class _InvestmentGameEvent extends State<InvestmentGameEvent> {
+  final TextEditingController _countController =
+      TextEditingController(text: '1');
   int _selectedCount = 0;
   InvestmentState _state = InvestmentState.purchasing;
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    _countController.addListener(_onInputFieldChanged);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +83,20 @@ class _InvestmentGameEvent extends State<InvestmentGameEvent> {
           ),
         ),
         _buildTabBar(),
-        _state == InvestmentState.purchasing
-            ? _buildPurchaseSelector(widget.viewModel)
-            : _buildSellingSelector(widget.viewModel),
+        Container(
+          color: ColorRes.grey2,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          margin: const EdgeInsets.symmetric(horizontal: 8),
+          child: Column(
+            children: <Widget>[
+              const SizedBox(height: 12),
+              _builtInputField(widget.viewModel),
+              _state == InvestmentState.purchasing
+                  ? _buildPurchaseSelector(widget.viewModel)
+                  : _buildSellingSelector(widget.viewModel),
+            ],
+          ),
+        ),
         _buildButtons(),
       ],
     );
@@ -138,44 +162,42 @@ class _InvestmentGameEvent extends State<InvestmentGameEvent> {
   }
 
   Widget _buildPurchaseSelector(InvestmentViewModel viewModel) {
-    return Container(
-      color: ColorRes.grey2,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text(
-                _selectedCount.toString(),
-                style: Styles.body1,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text(
+              _selectedCount.toString(),
+              style: Styles.body1,
+            ),
+            Expanded(
+              child: Slider(
+                min: 0,
+                max: viewModel.maxCount.toDouble(),
+                value: _selectedCount.toDouble(),
+                onChanged: _onCountChanged,
+                divisions: viewModel.maxCount.toInt(),
               ),
-              Expanded(
-                child: Slider(
-                  min: 0,
-                  max: viewModel.maxCount.toDouble(),
-                  value: _selectedCount.toDouble(),
-                  onChanged: _onCountChanged,
-                  divisions: viewModel.maxCount.toInt(),
-                ),
-              ),
-              Text(
-                viewModel.maxCount.toStringAsFixed(0),
-                style: Styles.body1,
-              ),
-            ],
-          ),
-          _buildIncomePerMonth(viewModel),
-          _buildBuyButtons(viewModel),
-        ],
-      ),
+            ),
+            Text(
+              viewModel.maxCount.toStringAsFixed(0),
+              style: Styles.body1,
+            ),
+          ],
+        ),
+        _buildIncomePerMonth(viewModel),
+        _buildBuyButtons(viewModel),
+      ],
     );
   }
 
   void _onCountChanged(double value) {
     setState(() {
-      _selectedCount = value.toInt();
+      final convertedValue = value.toInt();
+
+      _countController.text = convertedValue.toString();
+      _selectedCount = convertedValue;
     });
   }
 
@@ -274,38 +296,33 @@ class _InvestmentGameEvent extends State<InvestmentGameEvent> {
   }
 
   Widget _buildSellingSelector(InvestmentViewModel viewModel) {
-    return Container(
-      color: ColorRes.grey2,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text(
-                _selectedCount.toInt().toString(),
-                style: Styles.body1,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text(
+              _selectedCount.toInt().toString(),
+              style: Styles.body1,
+            ),
+            Expanded(
+              child: Slider(
+                min: 0,
+                max: viewModel.alreadyHave.toDouble(),
+                value: _selectedCount.toDouble(),
+                onChanged: _onCountChanged,
+                divisions: viewModel.alreadyHave.toInt(),
               ),
-              Expanded(
-                child: Slider(
-                  min: 0,
-                  max: viewModel.alreadyHave.toDouble(),
-                  value: _selectedCount.toDouble(),
-                  onChanged: _onCountChanged,
-                  divisions: viewModel.alreadyHave.toInt(),
-                ),
-              ),
-              Text(
-                viewModel.alreadyHave.toStringAsFixed(0),
-                style: Styles.body1,
-              ),
-            ],
-          ),
-          _buildSpendingPerMonth(viewModel),
-          _buildSellButtons(viewModel),
-        ],
-      ),
+            ),
+            Text(
+              viewModel.alreadyHave.toStringAsFixed(0),
+              style: Styles.body1,
+            ),
+          ],
+        ),
+        _buildSpendingPerMonth(viewModel),
+        _buildSellButtons(viewModel),
+      ],
     );
   }
 
@@ -402,7 +419,7 @@ class _InvestmentGameEvent extends State<InvestmentGameEvent> {
       children: <Widget>[
         const SizedBox(width: 8),
         GestureDetector(
-          onTap: () => setState(() => _state = InvestmentState.purchasing),
+          onTap: () => _changeState(InvestmentState.purchasing),
           child: Container(
             padding: const EdgeInsets.only(right: 16),
             color: _state == InvestmentState.purchasing
@@ -411,15 +428,15 @@ class _InvestmentGameEvent extends State<InvestmentGameEvent> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Radio(
-                  value: InvestmentState.purchasing,
-                  groupValue: _state,
-                  onChanged: (InvestmentState state) {
-                    setState(() {
-                      _selectedCount = 0;
-                      _state = state;
-                    });
-                  },
+                Theme(
+                  data: Theme.of(context)
+                      .copyWith(unselectedWidgetColor: ColorRes.green),
+                  child: Radio(
+                    value: InvestmentState.purchasing,
+                    groupValue: _state,
+                    onChanged: _changeState,
+                    activeColor: ColorRes.green,
+                  ),
                 ),
                 Text(Strings.purchasing),
               ],
@@ -427,7 +444,7 @@ class _InvestmentGameEvent extends State<InvestmentGameEvent> {
           ),
         ),
         GestureDetector(
-          onTap: () => setState(() => _state = InvestmentState.selling),
+          onTap: () => _changeState(InvestmentState.selling),
           child: Container(
             padding: const EdgeInsets.only(right: 16),
             color: _state == InvestmentState.selling
@@ -436,15 +453,15 @@ class _InvestmentGameEvent extends State<InvestmentGameEvent> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Radio(
-                  value: InvestmentState.selling,
-                  groupValue: _state,
-                  onChanged: (InvestmentState state) {
-                    setState(() {
-                      _selectedCount = 0;
-                      _state = state;
-                    });
-                  },
+                Theme(
+                  data: Theme.of(context)
+                      .copyWith(unselectedWidgetColor: ColorRes.orange),
+                  child: Radio(
+                    value: InvestmentState.selling,
+                    groupValue: _state,
+                    onChanged: _changeState,
+                    activeColor: ColorRes.orange,
+                  ),
                 ),
                 Text(Strings.selling),
               ],
@@ -453,6 +470,61 @@ class _InvestmentGameEvent extends State<InvestmentGameEvent> {
         ),
       ],
     );
+  }
+
+  Widget _builtInputField(InvestmentViewModel viewModel) {
+    return Container(
+      color: ColorRes.grey2,
+      child: Row(
+        children: <Widget>[
+          Text(
+            Strings.inputCount,
+            style: Styles.body1,
+          ),
+          const SizedBox(width: 12),
+          Container(
+            width: 100,
+            child: BorderInputField(
+              props: InputFieldProps(
+                controller: _countController,
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: [
+                  WhitelistingTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(10),
+                ],
+              ),
+            ),
+          ),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(text: ' = ', style: Styles.body1),
+                TextSpan(
+                  text: (viewModel.currentPrice * _selectedCount).toPrice(),
+                  style: Styles.body2.copyWith(color: ColorRes.orange),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  void _changeState(InvestmentState state) {
+    setState(() {
+      _state = state;
+      _selectedCount = 0;
+    });
+  }
+
+  void _onInputFieldChanged() {
+    final count = int.parse(_countController.text);
+
+    setState(() {
+      _selectedCount = count > widget.viewModel.maxCount ? ;
+    });
   }
 }
 

@@ -8,6 +8,7 @@ class Strings {
   static const warning = 'Внимание';
   static const retry = 'Повторить';
   static const skip = 'Пропустить';
+  static const fieldIsRequired = 'Необходимо заполнить';
 
   static const commonError = 'Произошла ошибка';
 
@@ -32,6 +33,7 @@ class Strings {
   static const sellAllAvailable = 'Продать все';
   static const purchasing = 'Покупка';
   static const selling = 'Продажа';
+  static const inputCount = 'Введите количество';
   static String getUserAvailableCount(String count, String cost) => '$count по $cost';
 
 
