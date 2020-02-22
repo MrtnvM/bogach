@@ -21,7 +21,18 @@ class Strings {
   static const saleRate = 'Вероятность продажи';
   static const takeLoan = 'Взять кредит';
 
-  static String sellingKiosk(String name) => 'Продается $name';
+  static const investments = 'Вложения';
+  static const currentPrice = 'Текущая цена:';
+  static const investmentType = 'Наименование:';
+  static const nominalCost = 'Номинальная стоимость:';
+  static const alreadyHave = 'В наличии:';
+  static const incomePerMonth = 'Ежемесячный доход:';
+  static const available = 'Доступно:';
+  static const buyAllAvailable = 'Купить на все';
+  static String getUserAvailableCount(String count, String cost) => '$count по $cost';
+
+
+  static String getSelling(String name) => 'Продается $name';
 
   static const noInternetError =
       'Не удалось подключиться к серверу. '

@@ -47,7 +47,7 @@ class _PropertyGameEvent extends State<PropertyGameEvent> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                Strings.sellingKiosk(widget.viewModel.name),
+                Strings.getSelling(widget.viewModel.name),
                 style: Styles.body2,
               ),
               const SizedBox(height: 8),
