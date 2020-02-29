@@ -3,6 +3,7 @@ import 'package:cash_flow/widgets/containers/indicators_table.dart';
 import 'package:cash_flow/widgets/events/investment_game_event.dart';
 import 'package:cash_flow/widgets/events/new_business_game_event.dart';
 import 'package:cash_flow/widgets/events/property_game_event.dart';
+import 'package:cash_flow/widgets/events/windfall_income_game_event.dart';
 import 'package:cash_flow/widgets/inputs/drop_focus.dart';
 import 'package:cash_flow/widgets/progress/game_progress_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -146,6 +147,11 @@ class UiKit extends StatelessWidget {
             roi: 0,
             debt: 0,
             marketPrice: 900,
+          ),
+        ),
+        WindfallIncomeGameEvent(
+          WindfallIncomeViewModel(
+            income: 1000,
           ),
         ),
       ],

@@ -9,6 +9,7 @@ class Strings {
   static const retry = 'Повторить';
   static const skip = 'Пропустить';
   static const fieldIsRequired = 'Необходимо заполнить';
+  static const continueAction = 'Продолжить';
 
   static const commonError = 'Произошла ошибка';
 
@@ -39,7 +40,12 @@ class Strings {
   static const newBusinessDesc =
       'Возможность попробовать себя в бизнесе прямых продаж.';
 
-  static String getUserAvailableCount(String count, String cost) =>
+  static const windfallIncomeTitle = 'Непредвиденные доходы';
+  static const windfallIncomeDesc = 'Получили премию на работе';
+  static const windfallIncome = 'Сумма дохода:';
+
+
+      static String getUserAvailableCount(String count, String cost) =>
       '$count по $cost';
 
   static String getSelling(String name) => 'Продается $name';

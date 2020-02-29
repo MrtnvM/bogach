@@ -2,24 +2,23 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
-import 'package:cash_flow/widgets/buttons/action_button.dart';
 import 'package:cash_flow/widgets/containers/event_buttons.dart';
 import 'package:cash_flow/widgets/containers/info_table.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class NewBusinessGameEvent extends StatefulWidget {
-  const NewBusinessGameEvent(this.viewModel) : assert(viewModel != null);
+class WindfallIncomeGameEvent extends StatefulWidget {
+  const WindfallIncomeGameEvent(this.viewModel) : assert(viewModel != null);
 
-  final NewBusinessViewModel viewModel;
+  final WindfallIncomeViewModel viewModel;
 
   @override
   State<StatefulWidget> createState() {
-    return NewBusinessGameEventState();
+    return WindfallIncomeGameEventState();
   }
 }
 
-class NewBusinessGameEventState extends State<NewBusinessGameEvent> {
+class WindfallIncomeGameEventState extends State<WindfallIncomeGameEvent> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -32,12 +31,12 @@ class NewBusinessGameEventState extends State<NewBusinessGameEvent> {
           child: Row(
             children: <Widget>[
               Icon(
-                Icons.business,
+                Icons.mood,
                 color: ColorRes.white,
               ),
               const SizedBox(width: 12),
               Text(
-                Strings.newBusinessTitle.toUpperCase(),
+                Strings.windfallIncomeTitle.toUpperCase(),
                 style: Styles.subhead.copyWith(color: ColorRes.white),
               ),
             ],
@@ -49,27 +48,12 @@ class NewBusinessGameEventState extends State<NewBusinessGameEvent> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                Strings.newBusinessDesc,
+                Strings.windfallIncomeDesc,
                 style: Styles.body2,
               ),
               const SizedBox(height: 8),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(text: Strings.offeredPrice, style: Styles.body1),
-                    const WidgetSpan(
-                        child: SizedBox(
-                      width: 4,
-                    )),
-                    TextSpan(
-                        text: widget.viewModel.marketPrice.toPrice(),
-                        style: Styles.body2.copyWith(color: ColorRes.blue)),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 8),
               _buildInfo(widget.viewModel),
-              EventButtons(),
+              const EventButtons.skip(),
             ],
           ),
         )
@@ -77,27 +61,19 @@ class NewBusinessGameEventState extends State<NewBusinessGameEvent> {
     );
   }
 
-  Widget _buildInfo(NewBusinessViewModel viewModel) {
+  Widget _buildInfo(WindfallIncomeViewModel viewModel) {
     final map = {
-      Strings.debt: viewModel.debt.toPrice(),
-      Strings.passiveIncomePerMonth: viewModel.passiveIncomePerMonth.toPrice(),
-      Strings.roi: viewModel.roi.toPercent(),
+      Strings.windfallIncome: viewModel.income.toPrice(),
     };
 
     return InfoTable(map);
   }
 }
 
-class NewBusinessViewModel {
-  const NewBusinessViewModel({
-    this.debt,
-    this.passiveIncomePerMonth,
-    this.roi,
-    this.marketPrice,
+class WindfallIncomeViewModel {
+  const WindfallIncomeViewModel({
+    this.income,
   });
 
-  final int debt;
-  final int passiveIncomePerMonth;
-  final double roi;
-  final int marketPrice;
+  final int income;
 }

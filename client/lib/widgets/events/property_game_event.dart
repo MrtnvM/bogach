@@ -2,7 +2,8 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
-import 'package:cash_flow/widgets/buttons/action_button.dart';
+import 'package:cash_flow/widgets/containers/event_buttons.dart';
+import 'package:cash_flow/widgets/containers/info_table.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -67,7 +68,7 @@ class PropertyGameEventState extends State<PropertyGameEvent> {
               ),
               const SizedBox(height: 8),
               _buildInfo(widget.viewModel),
-              _buildButtons(),
+              EventButtons(),
             ],
           ),
         )
@@ -85,49 +86,7 @@ class PropertyGameEventState extends State<PropertyGameEvent> {
       Strings.saleRate: viewModel.saleRate.toPercent(),
     };
 
-    return Column(
-      children: map.keys
-          .map(
-            (key) => Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[Text(key), const Spacer(), Text(map[key])],
-                ),
-                Divider(
-                  height: 0,
-                  color: ColorRes.black,
-                ),
-              ],
-            ),
-          )
-          .toList(),
-    );
-  }
-
-  Widget _buildButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        ActionButton(
-          onPressed: () {},
-          color: ColorRes.orange,
-          text: Strings.takeLoan,
-        ),
-        const SizedBox(width: 6),
-        ActionButton(
-          onPressed: () {},
-          color: ColorRes.green,
-          text: Strings.confirm,
-        ),
-        const SizedBox(width: 6),
-        ActionButton(
-          onPressed: () {},
-          color: Colors.grey,
-          text: Strings.skip,
-        ),
-      ],
-    );
+    return InfoTable(map);
   }
 }
 
