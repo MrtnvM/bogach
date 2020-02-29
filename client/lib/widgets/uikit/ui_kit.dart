@@ -1,5 +1,12 @@
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/containers/indicators_table.dart';
+import 'package:cash_flow/widgets/events/insurance_game_event.dart';
+import 'package:cash_flow/widgets/events/investment_game_event.dart';
+import 'package:cash_flow/widgets/events/new_business_game_event.dart';
+import 'package:cash_flow/widgets/events/property_game_event.dart';
+import 'package:cash_flow/widgets/events/sale_business_game_event.dart';
+import 'package:cash_flow/widgets/events/stock_game_event.dart';
+import 'package:cash_flow/widgets/events/windfall_income_game_event.dart';
 import 'package:cash_flow/widgets/inputs/drop_focus.dart';
 import 'package:cash_flow/widgets/progress/game_progress_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,6 +23,9 @@ class UiKit extends StatelessWidget {
             _getTables(context),
             _getGroupDivider(),
             _getProgressBars(context),
+            _getGroupDivider(),
+            _getGameEvents(context),
+            _getGroupDivider(),
           ],
         ),
       ),
@@ -24,9 +34,9 @@ class UiKit extends StatelessWidget {
 
   Widget _getGroupDivider() {
     return const Divider(
+      thickness: 32,
       height: 32,
-      thickness: 3,
-      color: ColorRes.grey,
+      color: ColorRes.white,
     );
   }
 
@@ -81,13 +91,9 @@ class UiKit extends StatelessWidget {
                 attribute: 'Первый взнос',
                 value: 'Стоимость'),
             RowHeaderAttributeItem(
-                name: 'Бизнес',
-                attribute: 'Первый взнос',
-                value: 'Стоимость'),
+                name: 'Бизнес', attribute: 'Первый взнос', value: 'Стоимость'),
             RowHeaderAttributeItem(
-                name: 'Прочие',
-                attribute: 'Первый взнос',
-                value: 'Стоимость'),
+                name: 'Прочие', attribute: 'Первый взнос', value: 'Стоимость'),
           ],
         ),
         const SizedBox(height: 32),
@@ -110,5 +116,74 @@ class UiKit extends StatelessWidget {
 
   Widget _getProgressBars(BuildContext context) {
     return const GameProgressBar('Капитал', 2772, 50000);
+  }
+
+  Widget _getGameEvents(BuildContext context) {
+    return Column(
+      children: const <Widget>[
+        PropertyGameEvent(
+          PropertyViewModel(
+            name: 'киоск',
+            price: 83000,
+            marketPrice: 100000,
+            downPayment: 16500,
+            debt: 66500,
+            passiveIncomePerMonth: -100,
+            roi: -7.3,
+            saleRate: 14,
+          ),
+        ),
+        InvestmentGameEvent(
+          InvestmentViewModel(
+            currentPrice: 1200,
+            type: 'Облигации',
+            nominalCost: 1000,
+            passiveIncomePerMonth: 40,
+            roi: 40,
+            alreadyHave: 1,
+            maxCount: 15,
+          ),
+        ),
+        NewBusinessGameEvent(
+          NewBusinessViewModel(
+            passiveIncomePerMonth: 0,
+            roi: 0,
+            debt: 0,
+            marketPrice: 900,
+          ),
+        ),
+        WindfallIncomeGameEvent(
+          WindfallIncomeViewModel(
+            income: 1000,
+          ),
+        ),
+        StockGameEvent(
+          StockViewModel(
+            currentPrice: 39,
+            type: 'Инвестбанк',
+            nominalCost: 40,
+            alreadyHave: 0,
+            maxCount: 12520,
+          ),
+        ),
+        SaleBusinessGameEvent(
+          SaleBusinessViewModel(
+            offeredPrice: 129000,
+            marketPrice: 125000,
+            downPayment: 22300,
+            debt: 106700,
+            passiveIncomePerMonth: 100,
+            roi: 5.4,
+            saleRate: 10,
+          ),
+        ),
+        InsuranceGameEvent(
+          InsuranceViewModel(
+            price: 387,
+            coverage: 3367,
+          ),
+        ),
+      ],
+    );
   }
 }

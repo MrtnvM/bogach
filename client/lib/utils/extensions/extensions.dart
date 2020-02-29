@@ -6,4 +6,8 @@ extension PriceFormatting on num {
 
     return formatCurrency.format(this);
   }
+
+  String toPercent() {
+    return '$this%';
+  }
 }
