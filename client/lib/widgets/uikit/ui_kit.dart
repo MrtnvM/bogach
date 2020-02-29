@@ -1,7 +1,12 @@
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/containers/indicators_table.dart';
+import 'package:cash_flow/widgets/events/insurance_game_event.dart';
 import 'package:cash_flow/widgets/events/investment_game_event.dart';
+import 'package:cash_flow/widgets/events/new_business_game_event.dart';
 import 'package:cash_flow/widgets/events/property_game_event.dart';
+import 'package:cash_flow/widgets/events/sale_business_game_event.dart';
+import 'package:cash_flow/widgets/events/stock_game_event.dart';
+import 'package:cash_flow/widgets/events/windfall_income_game_event.dart';
 import 'package:cash_flow/widgets/inputs/drop_focus.dart';
 import 'package:cash_flow/widgets/progress/game_progress_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -137,6 +142,45 @@ class UiKit extends StatelessWidget {
             roi: 40,
             alreadyHave: 1,
             maxCount: 15,
+          ),
+        ),
+        NewBusinessGameEvent(
+          NewBusinessViewModel(
+            passiveIncomePerMonth: 0,
+            roi: 0,
+            debt: 0,
+            marketPrice: 900,
+          ),
+        ),
+        WindfallIncomeGameEvent(
+          WindfallIncomeViewModel(
+            income: 1000,
+          ),
+        ),
+        StockGameEvent(
+          StockViewModel(
+            currentPrice: 39,
+            type: 'Инвестбанк',
+            nominalCost: 40,
+            alreadyHave: 0,
+            maxCount: 12520,
+          ),
+        ),
+        SaleBusinessGameEvent(
+          SaleBusinessViewModel(
+            offeredPrice: 129000,
+            marketPrice: 125000,
+            downPayment: 22300,
+            debt: 106700,
+            passiveIncomePerMonth: 100,
+            roi: 5.4,
+            saleRate: 10,
+          ),
+        ),
+        InsuranceGameEvent(
+          InsuranceViewModel(
+            price: 387,
+            coverage: 3367,
           ),
         ),
       ],

@@ -8,52 +8,65 @@ import 'package:cash_flow/widgets/events/game_event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class PropertyGameEvent extends StatefulWidget {
-  const PropertyGameEvent(this.viewModel) : assert(viewModel != null);
+class NewBusinessGameEvent extends StatefulWidget {
+  const NewBusinessGameEvent(this.viewModel) : assert(viewModel != null);
 
-  final PropertyViewModel viewModel;
+  final NewBusinessViewModel viewModel;
 
   @override
   State<StatefulWidget> createState() {
-    return PropertyGameEventState();
+    return NewBusinessGameEventState();
   }
 }
 
-class PropertyGameEventState extends State<PropertyGameEvent> {
+class NewBusinessGameEventState extends State<NewBusinessGameEvent> {
   @override
   Widget build(BuildContext context) {
     return GameEvent(
-      icon: Icons.home,
-      name: Strings.propertyName,
-      buttonsState: ButtonsState.buy,
+      icon: Icons.business,
+      name: Strings.newBusinessTitle,
+      buttonsState: ButtonsState.normal,
       buttonsProperties: widget.viewModel.buttonsProperties,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _buildTitle(),
-            const SizedBox(height: 8),
-            _buildOfferedPrice(),
-            const SizedBox(height: 8),
-            _buildInfo(widget.viewModel),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _buildBody(),
+        ],
       ),
     );
   }
 
-  Widget _buildInfo(PropertyViewModel viewModel) {
+  Widget _buildInfo(NewBusinessViewModel viewModel) {
     final map = {
-      Strings.marketPrice: viewModel.marketPrice.toPrice(),
-      Strings.downPayment: viewModel.downPayment.toPrice(),
       Strings.debt: viewModel.debt.toPrice(),
       Strings.passiveIncomePerMonth: viewModel.passiveIncomePerMonth.toPrice(),
       Strings.roi: viewModel.roi.toPercent(),
-      Strings.saleRate: viewModel.saleRate.toPercent(),
     };
 
     return InfoTable(map);
+  }
+
+  Widget _buildBody() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _buildTitle(),
+          const SizedBox(height: 8),
+          _buildOfferedPrice(),
+          const SizedBox(height: 8),
+          _buildInfo(widget.viewModel),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTitle() {
+    return Text(
+      Strings.newBusinessDesc,
+      style: Styles.body2,
+    );
   }
 
   Widget _buildOfferedPrice() {
@@ -72,34 +85,20 @@ class PropertyGameEventState extends State<PropertyGameEvent> {
       ),
     );
   }
-
-  Widget _buildTitle() {
-    return Text(
-      Strings.getSelling(widget.viewModel.name),
-      style: Styles.body2,
-    );
-  }
 }
 
-class PropertyViewModel {
-  const PropertyViewModel(
-      {this.name,
-      this.price,
-      this.marketPrice,
-      this.downPayment,
-      this.debt,
-      this.passiveIncomePerMonth,
-      this.roi,
-      this.saleRate,
-      this.buttonsProperties});
+class NewBusinessViewModel {
+  const NewBusinessViewModel({
+    this.debt,
+    this.passiveIncomePerMonth,
+    this.roi,
+    this.marketPrice,
+    this.buttonsProperties,
+  });
 
-  final String name;
-  final int price;
-  final int marketPrice;
-  final int downPayment;
   final int debt;
   final int passiveIncomePerMonth;
   final double roi;
-  final int saleRate;
+  final int marketPrice;
   final ButtonsProperties buttonsProperties;
 }

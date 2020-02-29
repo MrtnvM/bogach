@@ -8,6 +8,10 @@ class Strings {
   static const warning = 'Внимание';
   static const retry = 'Повторить';
   static const skip = 'Пропустить';
+  static const fieldIsRequired = 'Необходимо заполнить';
+  static const continueAction = 'Продолжить';
+  static const buy = 'Купить';
+  static const price = 'Стоимость:';
 
   static const commonError = 'Произошла ошибка';
 
@@ -32,12 +36,34 @@ class Strings {
   static const sellAllAvailable = 'Продать все';
   static const purchasing = 'Покупка';
   static const selling = 'Продажа';
-  static String getUserAvailableCount(String count, String cost) => '$count по $cost';
+  static const inputCount = 'Введите количество';
 
+  static const newBusinessTitle = 'Новый бизнесс';
+  static const newBusinessDesc =
+      'Возможность попробовать себя в бизнесе прямых продаж.';
+
+  static const windfallIncomeTitle = 'Непредвиденные доходы';
+  static const windfallIncomeDesc = 'Получили премию на работе';
+  static const windfallIncome = 'Сумма дохода:';
+
+  static const stockMarketTitle = 'Фондовый рынок';
+
+  static const insuranceTitle = 'Страхование';
+  static const insuranceDesc = 'Полис страхования имущества';
+  static const insurance = 'Страховая компания предлагает вам купить полис и '
+      'защитить свое имущество от неприятностей. Действие полиса 1 год.';
+  static const  coverage = 'Защита:';
+
+  static const smallBusinessTitle = 'Малый бизнесс';
+  static const smallBusinessDesc = 'Продается терминал платежных систем';
+
+  static String getUserAvailableCount(String count, String cost) =>
+      '$count по $cost';
 
   static String getSelling(String name) => 'Продается $name';
 
-  static const noInternetError =
-      'Не удалось подключиться к серверу. '
+  static String stocks(String name) => 'Акции "$name"';
+
+  static const noInternetError = 'Не удалось подключиться к серверу. '
       'Пожалуйста, проверьте ваше интернет-соединение';
 }

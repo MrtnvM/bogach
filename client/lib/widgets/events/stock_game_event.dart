@@ -9,23 +9,23 @@ import 'package:cash_flow/widgets/events/game_event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class InvestmentGameEvent extends StatefulWidget {
-  const InvestmentGameEvent(this.viewModel);
+class StockGameEvent extends StatefulWidget {
+  const StockGameEvent(this.viewModel);
 
-  final InvestmentViewModel viewModel;
+  final StockViewModel viewModel;
 
   @override
   State<StatefulWidget> createState() {
-    return InvestmentGameEventState();
+    return StockGameEventState();
   }
 }
 
-class InvestmentGameEventState extends State<InvestmentGameEvent> {
+class StockGameEventState extends State<StockGameEvent> {
   @override
   Widget build(BuildContext context) {
     return GameEvent(
       icon: Icons.home,
-      name: Strings.investments,
+      name: Strings.stockMarketTitle,
       buttonsState: ButtonsState.normal,
       buttonsProperties: widget.viewModel.buttonsProperties,
       child: Column(
@@ -40,12 +40,10 @@ class InvestmentGameEventState extends State<InvestmentGameEvent> {
     );
   }
 
-  Widget _buildInfo(InvestmentViewModel viewModel) {
+  Widget _buildInfo(StockViewModel viewModel) {
     final map = {
-      Strings.investmentType: viewModel.type,
+      Strings.investmentType: Strings.stocks(viewModel.type),
       Strings.nominalCost: viewModel.nominalCost.toPrice(),
-      Strings.passiveIncomePerMonth: viewModel.passiveIncomePerMonth.toPrice(),
-      Strings.roi: viewModel.roi.toPercent(),
       Strings.alreadyHave: viewModel.alreadyHave == 0
           ? viewModel.alreadyHave.toString()
           : Strings.getUserAvailableCount(
@@ -81,26 +79,23 @@ class InvestmentGameEventState extends State<InvestmentGameEvent> {
     );
   }
 
-  Widget _buildSelector(InvestmentViewModel viewModel) {
+  Widget _buildSelector(StockViewModel viewModel) {
     final selectorViewModel = SelectorViewModel(
       currentPrice: viewModel.currentPrice,
-      passiveIncomePerMonth: viewModel.passiveIncomePerMonth,
       alreadyHave: viewModel.alreadyHave,
       maxCount: viewModel.maxCount,
-      changeableType: true,
+      changeableType: false,
     );
 
     return GameEventSelector(selectorViewModel);
   }
 }
 
-class InvestmentViewModel {
-  const InvestmentViewModel({
+class StockViewModel {
+  const StockViewModel({
     this.currentPrice,
     this.type,
     this.nominalCost,
-    this.passiveIncomePerMonth,
-    this.roi,
     this.alreadyHave,
     this.maxCount,
     this.buttonsProperties,
@@ -109,8 +104,6 @@ class InvestmentViewModel {
   final int currentPrice;
   final String type;
   final int nominalCost;
-  final int passiveIncomePerMonth;
-  final double roi;
   final int alreadyHave;
   final int maxCount;
   final ButtonsProperties buttonsProperties;

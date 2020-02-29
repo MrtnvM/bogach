@@ -24,4 +24,18 @@ class Styles {
     fontStyle: FontStyle.normal,
     color: _defaultTextColor,
   );
+
+  static const caption = TextStyle(
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w600,
+    fontSize: 12,
+    color: _defaultTextColor,
+  );
+
+  static const overline = TextStyle(
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w600,
+    fontSize: 10,
+    color: _defaultTextColor,
+  );
 }

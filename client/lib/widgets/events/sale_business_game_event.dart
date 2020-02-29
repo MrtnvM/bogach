@@ -8,42 +8,30 @@ import 'package:cash_flow/widgets/events/game_event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class PropertyGameEvent extends StatefulWidget {
-  const PropertyGameEvent(this.viewModel) : assert(viewModel != null);
+class SaleBusinessGameEvent extends StatefulWidget {
+  const SaleBusinessGameEvent(this.viewModel) : assert(viewModel != null);
 
-  final PropertyViewModel viewModel;
+  final SaleBusinessViewModel viewModel;
 
   @override
   State<StatefulWidget> createState() {
-    return PropertyGameEventState();
+    return SaleBusinessGameEventState();
   }
 }
 
-class PropertyGameEventState extends State<PropertyGameEvent> {
+class SaleBusinessGameEventState extends State<SaleBusinessGameEvent> {
   @override
   Widget build(BuildContext context) {
     return GameEvent(
-      icon: Icons.home,
-      name: Strings.propertyName,
-      buttonsState: ButtonsState.buy,
+      icon: Icons.business,
+      name: Strings.smallBusinessTitle,
+      buttonsState: ButtonsState.normal,
       buttonsProperties: widget.viewModel.buttonsProperties,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _buildTitle(),
-            const SizedBox(height: 8),
-            _buildOfferedPrice(),
-            const SizedBox(height: 8),
-            _buildInfo(widget.viewModel),
-          ],
-        ),
-      ),
+      child: _buildBody(),
     );
   }
 
-  Widget _buildInfo(PropertyViewModel viewModel) {
+  Widget _buildInfo(SaleBusinessViewModel viewModel) {
     final map = {
       Strings.marketPrice: viewModel.marketPrice.toPrice(),
       Strings.downPayment: viewModel.downPayment.toPrice(),
@@ -54,6 +42,29 @@ class PropertyGameEventState extends State<PropertyGameEvent> {
     };
 
     return InfoTable(map);
+  }
+
+  Widget _buildBody() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _buildTitle(),
+          const SizedBox(height: 8),
+          _buildOfferedPrice(),
+          const SizedBox(height: 8),
+          _buildInfo(widget.viewModel),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTitle() {
+    return Text(
+      Strings.smallBusinessDesc,
+      style: Styles.body2,
+    );
   }
 
   Widget _buildOfferedPrice() {
@@ -72,34 +83,26 @@ class PropertyGameEventState extends State<PropertyGameEvent> {
       ),
     );
   }
-
-  Widget _buildTitle() {
-    return Text(
-      Strings.getSelling(widget.viewModel.name),
-      style: Styles.body2,
-    );
-  }
 }
 
-class PropertyViewModel {
-  const PropertyViewModel(
-      {this.name,
-      this.price,
-      this.marketPrice,
-      this.downPayment,
-      this.debt,
-      this.passiveIncomePerMonth,
-      this.roi,
-      this.saleRate,
-      this.buttonsProperties});
+class SaleBusinessViewModel {
+  const SaleBusinessViewModel({
+    this.offeredPrice,
+    this.marketPrice,
+    this.downPayment,
+    this.debt,
+    this.passiveIncomePerMonth,
+    this.roi,
+    this.saleRate,
+    this.buttonsProperties,
+  });
 
-  final String name;
-  final int price;
+  final int offeredPrice;
   final int marketPrice;
   final int downPayment;
   final int debt;
   final int passiveIncomePerMonth;
   final double roi;
-  final int saleRate;
+  final double saleRate;
   final ButtonsProperties buttonsProperties;
 }

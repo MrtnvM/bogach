@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cash_flow/presentation/gameboard/models/game_event.dart';
+import 'package:cash_flow/widgets/containers/event_buttons.dart';
 import 'package:cash_flow/widgets/events/investment_game_event.dart';
 import 'package:cash_flow/widgets/events/property_game_event.dart';
 import 'package:cash_flow/widgets/progress/game_progress_bar.dart';
@@ -16,11 +17,18 @@ class GameEventPage extends StatefulWidget {
 }
 
 class _GameEventPageState extends State<GameEventPage> {
+  ButtonsProperties buttonsProperties;
+
   Widget currentEvent = Container();
 
   @override
   void initState() {
     super.initState();
+    buttonsProperties = ButtonsProperties(
+      onConfirm: _generateNewEvent,
+      onBuy: _generateNewEvent,
+      onSkip: _generateNewEvent,
+    );
     _generateNewEvent();
   }
 
@@ -50,8 +58,7 @@ class _GameEventPageState extends State<GameEventPage> {
         passiveIncomePerMonth: -100,
         roi: -7.3,
         saleRate: 14,
-        onConfirm: _generateNewEvent,
-        onSkip: _generateNewEvent,
+        buttonsProperties: buttonsProperties,
       ),
     );
   }
@@ -59,35 +66,54 @@ class _GameEventPageState extends State<GameEventPage> {
   Widget _buildInvestmentEvent() {
     return InvestmentGameEvent(
       InvestmentViewModel(
-        currentPrice: 1200,
-        type: 'Облигации',
-        nominalCost: 1000,
-        passiveIncomePerMonth: 40,
-        roi: 40,
-        alreadyHave: 1,
-        maxCount: 15,
-        onConfirm: _generateNewEvent,
-        onSkip: _generateNewEvent,
-      ),
+          currentPrice: 1200,
+          type: 'Облигации',
+          nominalCost: 1000,
+          passiveIncomePerMonth: 40,
+          roi: 40,
+          alreadyHave: 1,
+          maxCount: 15,
+          buttonsProperties: buttonsProperties),
     );
   }
 
   void _generateNewEvent() {
-    final nextInt = Random().nextInt(2);
+    final nextInt = Random().nextInt(7);
     print(nextInt);
     switch (nextInt) {
       case 0:
         {
-          setState(() {
-            currentEvent = _buildPropertyEvent();
-          });
+          setState(() => currentEvent = _buildPropertyEvent());
           break;
         }
       case 1:
         {
-          setState(() {
-            currentEvent = _buildInvestmentEvent();
-          });
+          setState(() => currentEvent = _buildInvestmentEvent());
+          break;
+        }
+      case 2:
+        {
+          setState(() => currentEvent = _buildPropertyEvent());
+          break;
+        }
+      case 3:
+        {
+          setState(() => currentEvent = _buildInvestmentEvent());
+          break;
+        }
+      case 4:
+        {
+          setState(() => currentEvent = _buildPropertyEvent());
+          break;
+        }
+      case 5:
+        {
+          setState(() => currentEvent = _buildInvestmentEvent());
+          break;
+        }
+      case 6:
+        {
+          setState(() => currentEvent = _buildPropertyEvent());
           break;
         }
       default:
