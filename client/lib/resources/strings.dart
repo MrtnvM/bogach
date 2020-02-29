@@ -34,12 +34,12 @@ class Strings {
   static const purchasing = 'Покупка';
   static const selling = 'Продажа';
   static const inputCount = 'Введите количество';
-  static String getUserAvailableCount(String count, String cost) => '$count по $cost';
 
+  static String getUserAvailableCount(String count, String cost) =>
+      '$count по $cost';
 
   static String getSelling(String name) => 'Продается $name';
 
-  static const noInternetError =
-      'Не удалось подключиться к серверу. '
+  static const noInternetError = 'Не удалось подключиться к серверу. '
       'Пожалуйста, проверьте ваше интернет-соединение';
 }

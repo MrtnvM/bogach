@@ -26,7 +26,6 @@ class _InvestmentGameEvent extends State<InvestmentGameEvent> {
   int _selectedCount = 0;
   InvestmentState _state = InvestmentState.purchasing;
 
-
   @override
   void initState() {
     super.initState();
@@ -523,7 +522,7 @@ class _InvestmentGameEvent extends State<InvestmentGameEvent> {
     final count = int.parse(_countController.text);
 
     setState(() {
-      _selectedCount = count > widget.viewModel.maxCount ? ;
+      _selectedCount = count > widget.viewModel.maxCount ? 0 : count;
     });
   }
 }
