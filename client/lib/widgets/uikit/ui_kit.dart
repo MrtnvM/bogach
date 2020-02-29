@@ -1,6 +1,7 @@
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/containers/indicators_table.dart';
 import 'package:cash_flow/widgets/events/investment_game_event.dart';
+import 'package:cash_flow/widgets/events/new_business_game_event.dart';
 import 'package:cash_flow/widgets/events/property_game_event.dart';
 import 'package:cash_flow/widgets/inputs/drop_focus.dart';
 import 'package:cash_flow/widgets/progress/game_progress_bar.dart';
@@ -137,6 +138,14 @@ class UiKit extends StatelessWidget {
             roi: 40,
             alreadyHave: 1,
             maxCount: 15,
+          ),
+        ),
+        NewBusinessGameEvent(
+          NewBusinessViewModel(
+            passiveIncomePerMonth: 0,
+            roi: 0,
+            debt: 0,
+            marketPrice: 900,
           ),
         ),
       ],

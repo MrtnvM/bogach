@@ -35,6 +35,10 @@ class Strings {
   static const selling = 'Продажа';
   static const inputCount = 'Введите количество';
 
+  static const newBusinessTitle = 'Новый бизнесс';
+  static const newBusinessDesc =
+      'Возможность попробовать себя в бизнесе прямых продаж.';
+
   static String getUserAvailableCount(String count, String cost) =>
       '$count по $cost';
 

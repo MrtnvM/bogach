@@ -6,18 +6,18 @@ import 'package:cash_flow/widgets/buttons/action_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class PropertyGameEvent extends StatefulWidget {
-  const PropertyGameEvent(this.viewModel) : assert(viewModel != null);
+class NewBusinessGameEvent extends StatefulWidget {
+  const NewBusinessGameEvent(this.viewModel) : assert(viewModel != null);
 
-  final PropertyViewModel viewModel;
+  final NewBusinessViewModel viewModel;
 
   @override
   State<StatefulWidget> createState() {
-    return PropertyGameEventState();
+    return NewBusinessGameEventState();
   }
 }
 
-class PropertyGameEventState extends State<PropertyGameEvent> {
+class NewBusinessGameEventState extends State<NewBusinessGameEvent> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -30,12 +30,12 @@ class PropertyGameEventState extends State<PropertyGameEvent> {
           child: Row(
             children: <Widget>[
               Icon(
-                Icons.home,
+                Icons.business,
                 color: ColorRes.white,
               ),
               const SizedBox(width: 12),
               Text(
-                Strings.propertyName.toUpperCase(),
+                Strings.newBusinessTitle.toUpperCase(),
                 style: Styles.subhead.copyWith(color: ColorRes.white),
               ),
             ],
@@ -47,7 +47,7 @@ class PropertyGameEventState extends State<PropertyGameEvent> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                Strings.getSelling(widget.viewModel.name),
+                Strings.newBusinessDesc,
                 style: Styles.body2,
               ),
               const SizedBox(height: 8),
@@ -75,14 +75,11 @@ class PropertyGameEventState extends State<PropertyGameEvent> {
     );
   }
 
-  Widget _buildInfo(PropertyViewModel viewModel) {
+  Widget _buildInfo(NewBusinessViewModel viewModel) {
     final map = {
-      Strings.marketPrice: viewModel.marketPrice.toPrice(),
-      Strings.downPayment: viewModel.downPayment.toPrice(),
       Strings.debt: viewModel.debt.toPrice(),
       Strings.passiveIncomePerMonth: viewModel.passiveIncomePerMonth.toPrice(),
       Strings.roi: viewModel.roi.toPercent(),
-      Strings.saleRate: viewModel.saleRate.toPercent(),
     };
 
     return Column(
@@ -131,24 +128,16 @@ class PropertyGameEventState extends State<PropertyGameEvent> {
   }
 }
 
-class PropertyViewModel {
-  const PropertyViewModel({
-    this.name,
-    this.price,
-    this.marketPrice,
-    this.downPayment,
+class NewBusinessViewModel {
+  const NewBusinessViewModel({
     this.debt,
     this.passiveIncomePerMonth,
     this.roi,
-    this.saleRate,
+    this.marketPrice,
   });
 
-  final String name;
-  final int price;
-  final int marketPrice;
-  final int downPayment;
   final int debt;
   final int passiveIncomePerMonth;
   final double roi;
-  final int saleRate;
+  final int marketPrice;
 }

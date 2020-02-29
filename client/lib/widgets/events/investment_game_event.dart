@@ -16,11 +16,11 @@ class InvestmentGameEvent extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _InvestmentGameEvent();
+    return InvestmentGameEventState();
   }
 }
 
-class _InvestmentGameEvent extends State<InvestmentGameEvent> {
+class InvestmentGameEventState extends State<InvestmentGameEvent> {
   final TextEditingController _countController =
       TextEditingController(text: '1');
   int _selectedCount = 0;
