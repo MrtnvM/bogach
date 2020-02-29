@@ -117,19 +117,19 @@ class _InvestmentGameEvent extends State<InvestmentGameEvent> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         ActionButton(
-          onPressed: () {},
+          onPressed: widget.viewModel.onTakeLoan,
           color: ColorRes.orange,
           text: Strings.takeLoan,
         ),
         const SizedBox(width: 6),
         ActionButton(
-          onPressed: () {},
+          onPressed: widget.viewModel.onConfirm,
           color: ColorRes.green,
           text: Strings.confirm,
         ),
         const SizedBox(width: 6),
         ActionButton(
-          onPressed: () {},
+          onPressed: widget.viewModel.onSkip,
           color: Colors.grey,
           text: Strings.skip,
         ),
@@ -465,6 +465,9 @@ class InvestmentViewModel {
     this.roi,
     this.alreadyHave,
     this.maxCount,
+    this.onTakeLoan,
+    this.onConfirm,
+    this.onSkip,
   });
 
   final int currentPrice;
@@ -474,6 +477,10 @@ class InvestmentViewModel {
   final double roi;
   final int alreadyHave;
   final int maxCount;
+
+  final VoidCallback onTakeLoan;
+  final VoidCallback onConfirm;
+  final VoidCallback onSkip;
 }
 
 enum InvestmentState {

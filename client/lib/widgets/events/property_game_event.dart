@@ -110,19 +110,19 @@ class _PropertyGameEvent extends State<PropertyGameEvent> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         ActionButton(
-          onPressed: () {},
+          onPressed: widget.viewModel.onTakeLoan,
           color: ColorRes.orange,
           text: Strings.takeLoan,
         ),
         const SizedBox(width: 6),
         ActionButton(
-          onPressed: () {},
+          onPressed: widget.viewModel.onConfirm,
           color: ColorRes.green,
           text: Strings.confirm,
         ),
         const SizedBox(width: 6),
         ActionButton(
-          onPressed: () {},
+          onPressed: widget.viewModel.onSkip,
           color: Colors.grey,
           text: Strings.skip,
         ),
@@ -141,6 +141,9 @@ class PropertyViewModel {
     this.passiveIncomePerMonth,
     this.roi,
     this.saleRate,
+    this.onTakeLoan,
+    this.onConfirm,
+    this.onSkip,
   });
 
   final String name;
@@ -151,4 +154,8 @@ class PropertyViewModel {
   final int passiveIncomePerMonth;
   final double roi;
   final int saleRate;
+
+  final VoidCallback onTakeLoan;
+  final VoidCallback onConfirm;
+  final VoidCallback onSkip;
 }
