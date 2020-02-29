@@ -11,6 +11,7 @@ class Strings {
   static const fieldIsRequired = 'Необходимо заполнить';
   static const continueAction = 'Продолжить';
   static const buy = 'Купить';
+  static const price = 'Стоимость:';
 
   static const commonError = 'Произошла ошибка';
 
@@ -47,11 +48,17 @@ class Strings {
 
   static const stockMarketTitle = 'Фондовый рынок';
 
+  static const insuranceTitle = 'Страхование';
+  static const insuranceDesc = 'Полис страхования имущества';
+  static const insurance = 'Страховая компания предлагает вам купить полис и '
+      'защитить свое имущество от неприятностей. Действие полиса 1 год.';
+  static const  coverage = 'Защита:';
 
-      static String getUserAvailableCount(String count, String cost) =>
+  static String getUserAvailableCount(String count, String cost) =>
       '$count по $cost';
 
   static String getSelling(String name) => 'Продается $name';
+
   static String stocks(String name) => 'Акции "$name"';
 
   static const noInternetError = 'Не удалось подключиться к серверу. '

@@ -1,5 +1,6 @@
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/containers/indicators_table.dart';
+import 'package:cash_flow/widgets/events/insurance_game_event.dart';
 import 'package:cash_flow/widgets/events/investment_game_event.dart';
 import 'package:cash_flow/widgets/events/new_business_game_event.dart';
 import 'package:cash_flow/widgets/events/property_game_event.dart';
@@ -162,6 +163,12 @@ class UiKit extends StatelessWidget {
             nominalCost: 40,
             alreadyHave: 0,
             maxCount: 12520,
+          ),
+        ),
+        InsuranceGameEvent(
+          InsuranceViewModel(
+            price: 387,
+            coverage: 3367,
           ),
         ),
       ],
