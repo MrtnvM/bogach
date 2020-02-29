@@ -25,21 +25,16 @@ class WindfallIncomeGameEventState extends State<WindfallIncomeGameEvent> {
       icon: Icons.mood,
       name: Strings.windfallIncomeTitle,
       buttonsState: ButtonsState.skip,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _buildDescription(),
-                const SizedBox(height: 8),
-                _buildInfo(widget.viewModel),
-              ],
-            ),
-          )
-        ],
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _buildDescription(),
+            const SizedBox(height: 8),
+            _buildInfo(widget.viewModel),
+          ],
+        ),
       ),
     );
   }

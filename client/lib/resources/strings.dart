@@ -45,11 +45,14 @@ class Strings {
   static const windfallIncomeDesc = 'Получили премию на работе';
   static const windfallIncome = 'Сумма дохода:';
 
+  static const stockMarketTitle = 'Фондовый рынок';
+
 
       static String getUserAvailableCount(String count, String cost) =>
       '$count по $cost';
 
   static String getSelling(String name) => 'Продается $name';
+  static String stocks(String name) => 'Акции "$name"';
 
   static const noInternetError = 'Не удалось подключиться к серверу. '
       'Пожалуйста, проверьте ваше интернет-соединение';
