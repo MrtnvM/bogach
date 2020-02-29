@@ -54,6 +54,9 @@ class Strings {
       'защитить свое имущество от неприятностей. Действие полиса 1 год.';
   static const  coverage = 'Защита:';
 
+  static const smallBusinessTitle = 'Малый бизнесс';
+  static const smallBusinessDesc = 'Продается терминал платежных систем';
+
   static String getUserAvailableCount(String count, String cost) =>
       '$count по $cost';
 

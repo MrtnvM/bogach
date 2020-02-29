@@ -20,6 +20,7 @@ class InfoTable extends StatelessWidget {
             Row(
               children: <Widget>[Text(key), const Spacer(), Text(map[key])],
             ),
+            const SizedBox(height: 2),
             Divider(
               height: 0,
               color: ColorRes.black,
