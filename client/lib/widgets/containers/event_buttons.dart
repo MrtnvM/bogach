@@ -5,25 +5,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class EventButtons extends StatelessWidget {
-  const EventButtons() : _state = _ButtonsState.normal;
+  const EventButtons(this._state);
 
-  const EventButtons.skip() : _state = _ButtonsState.skip;
-
-  final _ButtonsState _state;
+  final ButtonsState _state;
 
   @override
   Widget build(BuildContext context) {
     switch (_state) {
-      case _ButtonsState.normal:
-        return _buildNormalState();
-      case _ButtonsState.skip:
+      case ButtonsState.normal:
+        return _buildNormalState(isNormal: true);
+      case ButtonsState.buy:
+        return _buildNormalState(isNormal: false);
+      case ButtonsState.skip:
         return _buildSkipState();
       default:
         return Container();
     }
   }
 
-  Widget _buildNormalState() {
+  Widget _buildNormalState({bool isNormal = true}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -36,7 +36,7 @@ class EventButtons extends StatelessWidget {
         ActionButton(
           onPressed: () {},
           color: ColorRes.green,
-          text: Strings.confirm,
+          text: isNormal ? Strings.confirm : Strings.buy,
         ),
         const SizedBox(width: 6),
         ActionButton(
@@ -62,7 +62,8 @@ class EventButtons extends StatelessWidget {
   }
 }
 
-enum _ButtonsState {
+enum ButtonsState {
   normal,
   skip,
+  buy,
 }

@@ -10,6 +10,7 @@ class Strings {
   static const skip = 'Пропустить';
   static const fieldIsRequired = 'Необходимо заполнить';
   static const continueAction = 'Продолжить';
+  static const buy = 'Купить';
 
   static const commonError = 'Произошла ошибка';
 

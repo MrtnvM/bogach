@@ -4,6 +4,7 @@ import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:cash_flow/widgets/containers/event_buttons.dart';
 import 'package:cash_flow/widgets/containers/info_table.dart';
+import 'package:cash_flow/widgets/events/game_event.dart';
 import 'package:cash_flow/widgets/inputs/border_input_field.dart';
 import 'package:cash_flow/widgets/inputs/input_field_props.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,69 +37,18 @@ class InvestmentGameEventState extends State<InvestmentGameEvent> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          height: 48,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          color: ColorRes.grey,
-          child: Row(
-            children: <Widget>[
-              Icon(
-                Icons.home,
-                color: ColorRes.white,
-              ),
-              const SizedBox(width: 12),
-              Text(
-                Strings.investments.toUpperCase(),
-                style: Styles.subhead.copyWith(color: ColorRes.white),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(text: Strings.currentPrice, style: Styles.body1),
-                    const WidgetSpan(
-                      child: SizedBox(
-                        width: 4,
-                      ),
-                    ),
-                    TextSpan(
-                        text: widget.viewModel.currentPrice.toPrice(),
-                        style: Styles.body2.copyWith(color: ColorRes.blue)),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 8),
-              _buildInfo(widget.viewModel),
-            ],
-          ),
-        ),
-        _buildTabBar(),
-        Container(
-          color: ColorRes.grey2,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          margin: const EdgeInsets.symmetric(horizontal: 8),
-          child: Column(
-            children: <Widget>[
-              const SizedBox(height: 12),
-              _builtInputField(widget.viewModel),
-              _state == InvestmentState.purchasing
-                  ? _buildPurchaseSelector(widget.viewModel)
-                  : _buildSellingSelector(widget.viewModel),
-            ],
-          ),
-        ),
-        EventButtons(),
-      ],
+    return GameEvent(
+      icon: Icons.home,
+      name: Strings.investments,
+      buttonsState: ButtonsState.normal,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _buildSellingPrice(),
+          _buildTabBar(),
+          _buildBottomButtons(),
+        ],
+      ),
     );
   }
 
@@ -123,27 +73,7 @@ class InvestmentGameEventState extends State<InvestmentGameEvent> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text(
-              _selectedCount.toString(),
-              style: Styles.body1,
-            ),
-            Expanded(
-              child: Slider(
-                min: 0,
-                max: viewModel.maxCount.toDouble(),
-                value: _selectedCount.toDouble(),
-                onChanged: _onCountChanged,
-                divisions: viewModel.maxCount.toInt(),
-              ),
-            ),
-            Text(
-              viewModel.maxCount.toStringAsFixed(0),
-              style: Styles.body1,
-            ),
-          ],
-        ),
+        _buildSlider(viewModel),
         _buildIncomePerMonth(viewModel),
         _buildBuyButtons(viewModel),
       ],
@@ -483,6 +413,75 @@ class InvestmentGameEventState extends State<InvestmentGameEvent> {
     setState(() {
       _selectedCount = count > widget.viewModel.maxCount ? 0 : count;
     });
+  }
+
+  Widget _buildBottomButtons() {
+    return Container(
+      color: ColorRes.grey2,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      child: Column(
+        children: <Widget>[
+          const SizedBox(height: 12),
+          _builtInputField(widget.viewModel),
+          _state == InvestmentState.purchasing
+              ? _buildPurchaseSelector(widget.viewModel)
+              : _buildSellingSelector(widget.viewModel),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSellingPrice() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(text: Strings.currentPrice, style: Styles.body1),
+                const WidgetSpan(
+                  child: SizedBox(
+                    width: 4,
+                  ),
+                ),
+                TextSpan(
+                    text: widget.viewModel.currentPrice.toPrice(),
+                    style: Styles.body2.copyWith(color: ColorRes.blue)),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          _buildInfo(widget.viewModel),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSlider(InvestmentViewModel viewModel) {
+    return Row(
+      children: <Widget>[
+        Text(
+          _selectedCount.toString(),
+          style: Styles.body1,
+        ),
+        Expanded(
+          child: Slider(
+            min: 0,
+            max: viewModel.maxCount.toDouble(),
+            value: _selectedCount.toDouble(),
+            onChanged: _onCountChanged,
+            divisions: viewModel.maxCount.toInt(),
+          ),
+        ),
+        Text(
+          viewModel.maxCount.toStringAsFixed(0),
+          style: Styles.body1,
+        ),
+      ],
+    );
   }
 }
 

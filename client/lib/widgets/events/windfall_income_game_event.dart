@@ -1,9 +1,9 @@
-import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:cash_flow/widgets/containers/event_buttons.dart';
 import 'package:cash_flow/widgets/containers/info_table.dart';
+import 'package:cash_flow/widgets/events/game_event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,43 +21,26 @@ class WindfallIncomeGameEvent extends StatefulWidget {
 class WindfallIncomeGameEventState extends State<WindfallIncomeGameEvent> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          height: 48,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          color: ColorRes.grey,
-          child: Row(
-            children: <Widget>[
-              Icon(
-                Icons.mood,
-                color: ColorRes.white,
-              ),
-              const SizedBox(width: 12),
-              Text(
-                Strings.windfallIncomeTitle.toUpperCase(),
-                style: Styles.subhead.copyWith(color: ColorRes.white),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                Strings.windfallIncomeDesc,
-                style: Styles.body2,
-              ),
-              const SizedBox(height: 8),
-              _buildInfo(widget.viewModel),
-              const EventButtons.skip(),
-            ],
-          ),
-        )
-      ],
+    return GameEvent(
+      icon: Icons.mood,
+      name: Strings.windfallIncomeTitle,
+      buttonsState: ButtonsState.skip,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _buildDescription(),
+                const SizedBox(height: 8),
+                _buildInfo(widget.viewModel),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -67,6 +50,13 @@ class WindfallIncomeGameEventState extends State<WindfallIncomeGameEvent> {
     };
 
     return InfoTable(map);
+  }
+
+  Widget _buildDescription() {
+    return Text(
+      Strings.windfallIncomeDesc,
+      style: Styles.body2,
+    );
   }
 }
 
