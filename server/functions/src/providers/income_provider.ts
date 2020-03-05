@@ -12,19 +12,21 @@ export class IncomeProvider {
     private gameId: GameId
   ) {}
 
-  async getAllIncomes(userId: UserId) {
+  async getAllIncomes(userId: UserId): Promise<Income[]> {
     const selector = this.selector.incomes(this.gameId, userId);
     const incomes = await this.firestore.getItems(selector);
-    return incomes;
+    incomes.forEach(IncomeEntity.validate);
+    return incomes as Income[];
   }
 
-  async getIncome(userId: UserId, incomeId: IncomeEntity.Id) {
+  async getIncome(userId: UserId, incomeId: IncomeEntity.Id): Promise<Income> {
     const selector = this.selector.income(this.gameId, userId, incomeId);
-    const income = await this.firestore.getItem(selector);
-    return income;
+    const income = (await this.firestore.getItem(selector)).data();
+    IncomeEntity.validate(income);
+    return income as Income;
   }
 
-  async addIncome(userId: UserId, income: Income) {
+  async addIncome(userId: UserId, income: Income): Promise<Income> {
     const incomeId = uuid.v4();
     const newIncome = {
       ...income,
@@ -33,10 +35,11 @@ export class IncomeProvider {
 
     const selector = this.selector.income(this.gameId, userId, incomeId);
     const createdIncome = await this.firestore.createItem(selector, newIncome);
-    return createdIncome;
+    IncomeEntity.validate(createdIncome);
+    return createdIncome as Income;
   }
 
-  async updateIncome(userId: UserId, income: Income) {
+  async updateIncome(userId: UserId, income: Income): Promise<Income> {
     const incomeId = income.id;
     if (!incomeId) {
       throw 'ERROR: Income Provider - no income ID on updating';
@@ -44,12 +47,13 @@ export class IncomeProvider {
 
     const selector = this.selector.income(this.gameId, userId, incomeId);
     const updatedIncome = await this.firestore.updateItem(selector, income);
-    return updatedIncome;
+    IncomeEntity.validate(updatedIncome);
+    return updatedIncome as Income;
   }
 
   async deleteIncome(userId: UserId, incomeId: IncomeEntity.Id) {
     const selector = this.selector.income(this.gameId, userId, incomeId);
-    this.firestore.removeItem(selector);
+    await this.firestore.removeItem(selector);
   }
 
   async clearIncomes(userId: string) {

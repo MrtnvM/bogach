@@ -12,19 +12,21 @@ export class LiabilityProvider {
     private gameId: GameId
   ) {}
 
-  async getAllLiabilitys(userId: UserId) {
+  async getAllLiabilities(userId: UserId): Promise<Liability[]> {
     const selector = this.selector.liabilities(this.gameId, userId);
-    const liabilitys = await this.firestore.getItems(selector);
-    return liabilitys;
+    const liabilities = await this.firestore.getItems(selector);
+    liabilities.forEach(LiabilityEntity.validate);
+    return liabilities as Liability[];
   }
 
-  async getLiability(userId: UserId, liabilityId: LiabilityEntity.Id) {
+  async getLiability(userId: UserId, liabilityId: LiabilityEntity.Id): Promise<Liability> {
     const selector = this.selector.liability(this.gameId, userId, liabilityId);
-    const liability = await this.firestore.getItem(selector);
-    return liability;
+    const liability = (await this.firestore.getItem(selector)).data();
+    LiabilityEntity.validate(liability);
+    return liability as Liability;
   }
 
-  async addLiability(userId: UserId, liability: Liability) {
+  async addLiability(userId: UserId, liability: Liability): Promise<Liability> {
     const liabilityId = uuid.v4();
     const newLiability = {
       ...liability,
@@ -33,10 +35,11 @@ export class LiabilityProvider {
 
     const selector = this.selector.liability(this.gameId, userId, liabilityId);
     const createdLiability = await this.firestore.createItem(selector, newLiability);
-    return createdLiability;
+    LiabilityEntity.validate(createdLiability);
+    return createdLiability as Liability;
   }
 
-  async updateLiability(userId: UserId, liability: Liability) {
+  async updateLiability(userId: UserId, liability: Liability): Promise<Liability> {
     const liabilityId = liability.id;
     if (!liabilityId) {
       throw 'ERROR: Liability Provider - no liability ID on updating';
@@ -44,12 +47,13 @@ export class LiabilityProvider {
 
     const selector = this.selector.liability(this.gameId, userId, liabilityId);
     const updatedLiability = await this.firestore.updateItem(selector, liability);
-    return updatedLiability;
+    LiabilityEntity.validate(updatedLiability);
+    return updatedLiability as Liability;
   }
 
   async deleteLiability(userId: UserId, liabilityId: LiabilityEntity.Id) {
     const selector = this.selector.liability(this.gameId, userId, liabilityId);
-    this.firestore.removeItem(selector);
+    await this.firestore.removeItem(selector);
   }
 
   async clearLiabilitys(userId: string) {

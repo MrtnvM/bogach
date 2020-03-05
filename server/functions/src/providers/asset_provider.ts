@@ -12,19 +12,21 @@ export class AssetProvider {
     private gameId: GameId
   ) {}
 
-  async getAllAssets(userId: UserId) {
+  async getAllAssets(userId: UserId): Promise<Asset[]> {
     const selector = this.selector.assets(this.gameId, userId);
     const assets = await this.firestore.getItems(selector);
-    return assets;
+    assets.forEach(AssetEntity.validate);
+    return assets as Asset[];
   }
 
-  async getAsset(userId: UserId, assetId: AssetEntity.Id) {
+  async getAsset(userId: UserId, assetId: AssetEntity.Id): Promise<Asset> {
     const selector = this.selector.asset(this.gameId, userId, assetId);
-    const asset = await this.firestore.getItem(selector);
-    return asset;
+    const asset = (await this.firestore.getItem(selector)).data();
+    AssetEntity.validate(asset);
+    return asset as Asset;
   }
 
-  async addAsset(userId: UserId, asset: Asset) {
+  async addAsset(userId: UserId, asset: Asset): Promise<Asset> {
     const assetId = uuid.v4();
     const newAsset = {
       ...asset,
@@ -33,10 +35,11 @@ export class AssetProvider {
 
     const selector = this.selector.asset(this.gameId, userId, assetId);
     const createdAsset = await this.firestore.createItem(selector, newAsset);
-    return createdAsset;
+    AssetEntity.validate(createdAsset);
+    return createdAsset as Asset;
   }
 
-  async updateAsset(userId: UserId, asset: Asset) {
+  async updateAsset(userId: UserId, asset: Asset): Promise<Asset> {
     const assetId = asset.id;
     if (!assetId) {
       throw 'ERROR: Asset Provider - no asset ID on updating';
@@ -44,12 +47,13 @@ export class AssetProvider {
 
     const selector = this.selector.asset(this.gameId, userId, assetId);
     const updatedAsset = await this.firestore.updateItem(selector, asset);
-    return updatedAsset;
+    AssetEntity.validate(updatedAsset);
+    return updatedAsset as Asset;
   }
 
   async deleteAsset(userId: UserId, assetId: AssetEntity.Id) {
     const selector = this.selector.asset(this.gameId, userId, assetId);
-    this.firestore.removeItem(selector);
+    await this.firestore.removeItem(selector);
   }
 
   async clearAssets(userId: string) {

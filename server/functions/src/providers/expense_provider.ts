@@ -12,19 +12,21 @@ export class ExpenseProvider {
     private gameId: GameId
   ) {}
 
-  async getAllExpenses(userId: UserId) {
+  async getAllExpenses(userId: UserId): Promise<Expense[]> {
     const selector = this.selector.expenses(this.gameId, userId);
     const expenses = await this.firestore.getItems(selector);
-    return expenses;
+    expenses.forEach(ExpenseEntity.validate);
+    return expenses as Expense[];
   }
 
-  async getExpense(userId: UserId, expenseId: ExpenseEntity.Id) {
+  async getExpense(userId: UserId, expenseId: ExpenseEntity.Id): Promise<Expense> {
     const selector = this.selector.expense(this.gameId, userId, expenseId);
-    const expense = await this.firestore.getItem(selector);
-    return expense;
+    const expense = (await this.firestore.getItem(selector)).data();
+    ExpenseEntity.validate(expense);
+    return expense as Expense;
   }
 
-  async addExpense(userId: UserId, expense: Expense) {
+  async addExpense(userId: UserId, expense: Expense): Promise<Expense> {
     const expenseId = uuid.v4();
     const newExpense = {
       ...expense,
@@ -33,10 +35,11 @@ export class ExpenseProvider {
 
     const selector = this.selector.expense(this.gameId, userId, expenseId);
     const createdExpense = await this.firestore.createItem(selector, newExpense);
-    return createdExpense;
+    ExpenseEntity.validate(createdExpense);
+    return createdExpense as Expense;
   }
 
-  async updateExpense(userId: UserId, expense: Expense) {
+  async updateExpense(userId: UserId, expense: Expense): Promise<Expense> {
     const expenseId = expense.id;
     if (!expenseId) {
       throw 'ERROR: Expense Provider - no expense ID on updating';
@@ -44,12 +47,13 @@ export class ExpenseProvider {
 
     const selector = this.selector.expense(this.gameId, userId, expenseId);
     const updatedExpense = await this.firestore.updateItem(selector, expense);
-    return updatedExpense;
+    ExpenseEntity.validate(updatedExpense);
+    return updatedExpense as Expense;
   }
 
   async deleteExpense(userId: UserId, expenseId: ExpenseEntity.Id) {
     const selector = this.selector.expense(this.gameId, userId, expenseId);
-    this.firestore.removeItem(selector);
+    await this.firestore.removeItem(selector);
   }
 
   async clearExpenses(userId: string) {
