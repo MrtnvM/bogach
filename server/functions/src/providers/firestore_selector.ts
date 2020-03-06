@@ -60,4 +60,9 @@ export class FirestoreSelector {
     userId: UserId,
     liabilityId: LiabilityEntity.Id
   ): DocumentReference => this.liabilities(gameId, userId).doc(liabilityId);
+
+  possessionState = (gameId: GameId, userId: UserId) =>
+    this.game(gameId)
+      .collection('possession_state')
+      .doc(userId);
 }
