@@ -30,4 +30,8 @@ export namespace LiabilityEntity {
     entity.hasValue('type');
     entity.checkUnion('type', TypeValues);
   };
+
+  export const getExpense = (liability: Liability) => {
+    return undefined;
+  };
 }
