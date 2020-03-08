@@ -24,7 +24,10 @@ export namespace AssetEntity {
 
   export const parse = (data: any): Asset => {
     const { id, name, type } = data;
-    const asset = { id, name, type };
+    let asset: Asset = { id, name, type };
+
+    const assetType: Type = asset.type;
+    asset = Entity.parse<Type>(asset, data, assetType, [['debeture', DebentureAssetEntity.parse]]);
 
     validate(asset);
 
@@ -40,11 +43,7 @@ export namespace AssetEntity {
 
     const assetType: Type = asset.type;
 
-    switch (assetType) {
-      case 'debeture':
-        DebentureAssetEntity.validate(asset);
-        break;
-    }
+    Entity.validate<Type>(asset, assetType, [['debeture', DebentureAssetEntity.validate]]);
   };
 
   export const getIncome = (asset: Asset) => {
