@@ -20,7 +20,7 @@ export class Validator<T extends object> {
   hasNumberValue(field: keyof T) {
     const value = this.entity[field];
 
-    if (value === undefined || (value === null && typeof value !== 'number')) {
+    if (value === undefined || value === null || typeof value !== 'number') {
       this.throwError(`The entity does not have number value for '${field}' field`);
     }
   }
@@ -38,6 +38,15 @@ export class Validator<T extends object> {
 
     if (checkResult) {
       this.throwError(checkResult);
+    }
+  }
+
+  checkWithRules(rules: [(entity: T) => boolean, string][]) {
+    const failedRuleIndex = rules.findIndex(([rule]) => rule(this.entity));
+
+    if (failedRuleIndex >= 0) {
+      const errorMessage = rules[failedRuleIndex][1];
+      this.throwError(errorMessage);
     }
   }
 
