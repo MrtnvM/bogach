@@ -1,5 +1,9 @@
 export class Validator<T extends object> {
-  constructor(private entity: T) {}
+  constructor(private entity: T) {
+    if (!entity) {
+      this.throwError(`Entity can not be undefined or null`);
+    }
+  }
 
   has(field: keyof T) {
     const entityKeys = Object.keys(this.entity);

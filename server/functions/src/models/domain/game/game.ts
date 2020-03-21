@@ -60,8 +60,8 @@ export namespace GameEntity {
     entity.hasValue('id');
     entity.hasValue('name');
     entity.hasValue('participants');
-    entity.hasValue('possessions');
-    entity.hasValue('possessionState');
+    // entity.hasValue('possessions');
+    // entity.hasValue('possessionState');
     entity.hasValue('accounts');
     entity.hasValue('target');
     entity.hasValue('currentEvents');

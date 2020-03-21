@@ -7,6 +7,7 @@ import { AssetEntity } from '../models/domain/asset';
 import { LiabilityEntity } from '../models/domain/liability';
 import { UserId } from '../models/domain/user';
 import { GameEventId } from '../models/domain/game/game_event';
+import { GameTemplateEntity } from '../models/domain/game/game_template';
 
 export type DocumentReference = FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>;
 export type CollectionReference = FirebaseFirestore.CollectionReference<
@@ -18,6 +19,9 @@ export class FirestoreSelector {
 
   games = (): CollectionReference => this.firestore.collection('games');
   game = (gameId: GameEntity.Id): DocumentReference => this.games().doc(gameId);
+
+  gameTemplates = (): CollectionReference => this.firestore.collection('game_templates');
+  gameTemplate = (templateId: GameTemplateEntity.Id) => this.gameTemplates().doc(templateId);
 
   gameEvent = (eventId: GameEventId): DocumentReference =>
     this.firestore.collection('game-events').doc(eventId);

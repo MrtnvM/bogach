@@ -20,4 +20,11 @@ export namespace PossessionStateEntity {
     removeKeys(newState, ['createdAt', 'updatedAt', 'id']);
     return newState;
   };
+
+  export const createEmpty = (): PossessionState => ({
+    incomes: [],
+    expenses: [],
+    assets: [],
+    liabilities: []
+  });
 }
