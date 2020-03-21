@@ -65,4 +65,9 @@ export class FirestoreSelector {
     this.game(gameId)
       .collection('possession_state')
       .doc(userId);
+
+  account = (gameId: GameId, userId: UserId) =>
+    this.game(gameId)
+      .collection('accounts')
+      .doc(userId);
 }

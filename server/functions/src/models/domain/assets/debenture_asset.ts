@@ -4,10 +4,10 @@ import { Strings } from '../../../resources/strings';
 import { Entity } from '../../../core/domain/entity';
 
 export interface DebentureAsset extends Asset {
-  currentPrice: number;
-  nominal: number;
-  profitabilityPercent: number;
-  count: number;
+  readonly currentPrice: number;
+  readonly nominal: number;
+  readonly profitabilityPercent: number;
+  readonly count: number;
 }
 
 export namespace DebentureAssetEntity {
