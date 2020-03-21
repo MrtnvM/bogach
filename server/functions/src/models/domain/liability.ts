@@ -4,6 +4,8 @@ export interface Liability {
   readonly id?: LiabilityEntity.Id;
   readonly name: string;
   readonly type: LiabilityEntity.Type;
+  readonly monthlyPayment: number;
+  readonly value: number;
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }
@@ -15,11 +17,10 @@ export namespace LiabilityEntity {
   export const TypeValues: Type[] = ['mortgage', 'business_credit', 'other'];
 
   export const parse = (data: any): Liability => {
-    const { id, name, type } = data;
-    const liability = { id, name, type };
+    const { id, name, type, monthlyPayment, value } = data;
+    const liability: Liability = { id, name, type, monthlyPayment, value };
 
     validate(liability);
-
     return liability;
   };
 
@@ -29,6 +30,8 @@ export namespace LiabilityEntity {
     entity.hasValue('name');
     entity.hasValue('type');
     entity.checkUnion('type', TypeValues);
+    entity.hasNumberValue('monthlyPayment');
+    entity.hasNumberValue('value');
   };
 
   export const getExpense = (liability: Liability) => {

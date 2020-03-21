@@ -16,8 +16,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const context = apiRequest.getContext();
     const liabilities = apiRequest.parseEntity('liability', LiabilityEntity.parse);
 
-    const expenseProvider = new LiabilityProvider(firestore, selector, context.gameId);
-    const createdLiability = await expenseProvider.addLiability(context.userId, liabilities);
+    const liabilityProvider = new LiabilityProvider(firestore, selector, context.gameId);
+    const createdLiability = await liabilityProvider.addLiability(context.userId, liabilities);
 
     response.status(200).send(createdLiability);
   });

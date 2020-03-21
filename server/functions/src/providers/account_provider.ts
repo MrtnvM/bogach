@@ -1,4 +1,3 @@
-import * as uuid from 'uuid';
 import { FirestoreSelector } from './firestore_selector';
 import { GameId } from '../models/domain/game';
 import { UserId } from '../models/domain/user';

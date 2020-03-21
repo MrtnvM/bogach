@@ -5,10 +5,11 @@ import { AssetProvider } from '../providers/asset_provider';
 import { LiabilityProvider } from '../providers/liability_provider';
 import { PossessionStateProvider } from '../providers/possession_state_provider';
 import { Income } from '../models/domain/income';
-import { AssetEntity } from '../models/domain/asset';
-import { LiabilityEntity } from '../models/domain/liability';
+import { AssetEntity, Asset } from '../models/domain/asset';
+import { LiabilityEntity, Liability } from '../models/domain/liability';
 import { Possessions } from '../models/domain/possessions';
 import { PossessionState, PossessionStateEntity } from '../models/domain/possession_state';
+import { Expense } from '../models/domain/expense';
 
 export class PossessionService {
   constructor(
@@ -29,9 +30,9 @@ export class PossessionService {
 
     return {
       incomes: possessions[0] as Income[],
-      expenses: possessions[1],
-      assets: possessions[2],
-      liabilities: possessions[3]
+      expenses: possessions[1] as Expense[],
+      assets: possessions[2] as Asset[],
+      liabilities: possessions[3] as Liability[]
     };
   }
 
