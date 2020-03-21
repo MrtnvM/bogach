@@ -4,11 +4,7 @@ import { Possessions } from '../possessions';
 import { PossessionState } from '../possession_state';
 import { AccountsState } from '../accounts_state';
 import { Entity } from '../../../core/domain/entity';
-
-export interface GameTarget {
-  type: GameEntity.TargetType;
-  value: number;
-}
+import { GameTarget, GameTargetEntity } from './game_target';
 
 export interface Game {
   readonly id: GameEntity.Id;
@@ -19,15 +15,13 @@ export interface Game {
   readonly accounts: AccountsState;
   readonly target: GameTarget;
   readonly currentEvents: GameEvent[];
+
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }
 
 export namespace GameEntity {
   export type Id = string;
-
-  export type TargetType = 'passive_income' | 'cash';
-  const TargetTypeValues = ['passive_income', 'cash'];
 
   export const parse = (data: any): Game => {
     const {
@@ -73,10 +67,6 @@ export namespace GameEntity {
     entity.hasValue('currentEvents');
 
     const gameEntity = game as Game;
-    const gameTargetEntity = Entity.createEntityValidator<GameTarget>(gameEntity.target);
-
-    gameTargetEntity.hasValue('type');
-    gameTargetEntity.checkUnion('type', TargetTypeValues);
-    gameTargetEntity.hasValue('value');
+    GameTargetEntity.validate(gameEntity.target);
   };
 }
