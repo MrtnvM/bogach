@@ -10,12 +10,14 @@ class GameEvent extends StatefulWidget {
     @required this.name,
     @required this.child,
     @required this.buttonsState,
+    @required this.buttonsProperties,
   });
 
   final IconData icon;
   final String name;
   final Widget child;
   final ButtonsState buttonsState;
+  final ButtonsProperties buttonsProperties;
 
   @override
   State<StatefulWidget> createState() {
@@ -47,7 +49,7 @@ class GameEventState extends State<GameEvent> {
           ),
         ),
         widget.child,
-        EventButtons(widget.buttonsState),
+        EventButtons(widget.buttonsState, widget.buttonsProperties),
       ],
     );
   }

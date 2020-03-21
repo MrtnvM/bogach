@@ -26,6 +26,7 @@ class InsuranceGameEventState extends State<InsuranceGameEvent> {
       icon: Icons.beach_access,
       name: Strings.insuranceTitle,
       buttonsState: ButtonsState.skip,
+      buttonsProperties: widget.viewModel.buttonsProperties,
       child: Container(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -88,8 +89,10 @@ class InsuranceViewModel {
   const InsuranceViewModel({
     this.coverage,
     this.price,
+    this.buttonsProperties,
   });
 
   final int coverage;
   final int price;
+  final ButtonsProperties buttonsProperties;
 }

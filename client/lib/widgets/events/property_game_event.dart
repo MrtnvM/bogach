@@ -26,6 +26,7 @@ class PropertyGameEventState extends State<PropertyGameEvent> {
       icon: Icons.home,
       name: Strings.propertyName,
       buttonsState: ButtonsState.buy,
+      buttonsProperties: widget.viewModel.buttonsProperties,
       child: Container(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -81,16 +82,16 @@ class PropertyGameEventState extends State<PropertyGameEvent> {
 }
 
 class PropertyViewModel {
-  const PropertyViewModel({
-    this.name,
-    this.price,
-    this.marketPrice,
-    this.downPayment,
-    this.debt,
-    this.passiveIncomePerMonth,
-    this.roi,
-    this.saleRate,
-  });
+  const PropertyViewModel(
+      {this.name,
+      this.price,
+      this.marketPrice,
+      this.downPayment,
+      this.debt,
+      this.passiveIncomePerMonth,
+      this.roi,
+      this.saleRate,
+      this.buttonsProperties});
 
   final String name;
   final int price;
@@ -100,4 +101,5 @@ class PropertyViewModel {
   final int passiveIncomePerMonth;
   final double roi;
   final int saleRate;
+  final ButtonsProperties buttonsProperties;
 }

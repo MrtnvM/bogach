@@ -26,6 +26,7 @@ class SaleBusinessGameEventState extends State<SaleBusinessGameEvent> {
       icon: Icons.business,
       name: Strings.smallBusinessTitle,
       buttonsState: ButtonsState.normal,
+      buttonsProperties: widget.viewModel.buttonsProperties,
       child: _buildBody(),
     );
   }
@@ -35,8 +36,7 @@ class SaleBusinessGameEventState extends State<SaleBusinessGameEvent> {
       Strings.marketPrice: viewModel.marketPrice.toPrice(),
       Strings.downPayment: viewModel.downPayment.toPrice(),
       Strings.debt: viewModel.debt.toPrice(),
-      Strings.passiveIncomePerMonth:
-          viewModel.passiveIncomePerMonth.toPrice(),
+      Strings.passiveIncomePerMonth: viewModel.passiveIncomePerMonth.toPrice(),
       Strings.roi: viewModel.roi.toPercent(),
       Strings.saleRate: viewModel.saleRate.toPercent(),
     };
@@ -94,6 +94,7 @@ class SaleBusinessViewModel {
     this.passiveIncomePerMonth,
     this.roi,
     this.saleRate,
+    this.buttonsProperties,
   });
 
   final int offeredPrice;
@@ -103,4 +104,5 @@ class SaleBusinessViewModel {
   final int passiveIncomePerMonth;
   final double roi;
   final double saleRate;
+  final ButtonsProperties buttonsProperties;
 }

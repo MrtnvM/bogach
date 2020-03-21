@@ -1,7 +1,7 @@
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/appbar/app_bar.dart';
 import 'package:cash_flow/navigation/app_router.dart';
-import 'package:cash_flow/presentation/gameboard/gameboard.dart';
+import 'package:cash_flow/presentation/gameboard/game_board.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

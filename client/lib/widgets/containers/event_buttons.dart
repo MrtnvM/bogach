@@ -5,9 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class EventButtons extends StatelessWidget {
-  const EventButtons(this._state);
+  const EventButtons(this._state, this.properties);
 
   final ButtonsState _state;
+  final ButtonsProperties properties;
 
   @override
   Widget build(BuildContext context) {
@@ -28,19 +29,19 @@ class EventButtons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         ActionButton(
-          onPressed: () {},
+          onPressed: properties.onTakeLoan,
           color: ColorRes.orange,
           text: Strings.takeLoan,
         ),
         const SizedBox(width: 6),
         ActionButton(
-          onPressed: () {},
+          onPressed: isNormal ? properties.onConfirm : properties.onBuy,
           color: ColorRes.green,
           text: isNormal ? Strings.confirm : Strings.buy,
         ),
         const SizedBox(width: 6),
         ActionButton(
-          onPressed: () {},
+          onPressed: properties.onSkip,
           color: Colors.grey,
           text: Strings.skip,
         ),
@@ -60,6 +61,15 @@ class EventButtons extends StatelessWidget {
       ],
     );
   }
+}
+
+class ButtonsProperties {
+  ButtonsProperties({this.onTakeLoan, this.onConfirm, this.onBuy, this.onSkip});
+
+  final VoidCallback onTakeLoan;
+  final VoidCallback onConfirm;
+  final VoidCallback onBuy;
+  final VoidCallback onSkip;
 }
 
 enum ButtonsState {

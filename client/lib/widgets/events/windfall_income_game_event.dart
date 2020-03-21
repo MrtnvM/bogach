@@ -25,6 +25,7 @@ class WindfallIncomeGameEventState extends State<WindfallIncomeGameEvent> {
       icon: Icons.mood,
       name: Strings.windfallIncomeTitle,
       buttonsState: ButtonsState.skip,
+      buttonsProperties: widget.viewModel.buttonsProperties,
       child: Container(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -58,7 +59,9 @@ class WindfallIncomeGameEventState extends State<WindfallIncomeGameEvent> {
 class WindfallIncomeViewModel {
   const WindfallIncomeViewModel({
     this.income,
+    this.buttonsProperties,
   });
 
   final int income;
+  final ButtonsProperties buttonsProperties;
 }

@@ -27,6 +27,7 @@ class StockGameEventState extends State<StockGameEvent> {
       icon: Icons.home,
       name: Strings.stockMarketTitle,
       buttonsState: ButtonsState.normal,
+      buttonsProperties: widget.viewModel.buttonsProperties,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -97,6 +98,7 @@ class StockViewModel {
     this.nominalCost,
     this.alreadyHave,
     this.maxCount,
+    this.buttonsProperties,
   });
 
   final int currentPrice;
@@ -104,4 +106,5 @@ class StockViewModel {
   final int nominalCost;
   final int alreadyHave;
   final int maxCount;
+  final ButtonsProperties buttonsProperties;
 }

@@ -26,6 +26,7 @@ class NewBusinessGameEventState extends State<NewBusinessGameEvent> {
       icon: Icons.business,
       name: Strings.newBusinessTitle,
       buttonsState: ButtonsState.normal,
+      buttonsProperties: widget.viewModel.buttonsProperties,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -92,10 +93,12 @@ class NewBusinessViewModel {
     this.passiveIncomePerMonth,
     this.roi,
     this.marketPrice,
+    this.buttonsProperties,
   });
 
   final int debt;
   final int passiveIncomePerMonth;
   final double roi;
   final int marketPrice;
+  final ButtonsProperties buttonsProperties;
 }

@@ -27,6 +27,7 @@ class InvestmentGameEventState extends State<InvestmentGameEvent> {
       icon: Icons.home,
       name: Strings.investments,
       buttonsState: ButtonsState.normal,
+      buttonsProperties: widget.viewModel.buttonsProperties,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -102,6 +103,7 @@ class InvestmentViewModel {
     this.roi,
     this.alreadyHave,
     this.maxCount,
+    this.buttonsProperties,
   });
 
   final int currentPrice;
@@ -111,4 +113,5 @@ class InvestmentViewModel {
   final double roi;
   final int alreadyHave;
   final int maxCount;
+  final ButtonsProperties buttonsProperties;
 }
