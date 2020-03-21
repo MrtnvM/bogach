@@ -1,6 +1,6 @@
 import * as uuid from 'uuid';
 import { FirestoreSelector } from './firestore_selector';
-import { GameId } from '../models/domain/game';
+import { GameEntity } from '../models/domain/game/game';
 import { AssetEntity, Asset } from '../models/domain/asset';
 import { UserId } from '../models/domain/user';
 import { Firestore } from '../core/firebase/firestore';
@@ -9,7 +9,7 @@ export class AssetProvider {
   constructor(
     private firestore: Firestore,
     private selector: FirestoreSelector,
-    private gameId: GameId
+    private gameId: GameEntity.Id
   ) {}
 
   async getAllAssets(userId: UserId): Promise<Asset[]> {

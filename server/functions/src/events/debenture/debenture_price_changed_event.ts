@@ -1,4 +1,4 @@
-import { GameEvent, GameEventId } from '../../models/domain/game_event';
+import { GameEvent, GameEventId } from '../../models/domain/game/game_event';
 import { Entity } from '../../core/domain/entity';
 import { BuySellAction } from '../../models/domain/actions/buy_sell_action';
 

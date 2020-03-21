@@ -1,5 +1,5 @@
 import { FirestoreSelector } from './firestore_selector';
-import { GameId } from '../models/domain/game';
+import { GameEntity } from '../models/domain/game/game';
 import { UserId } from '../models/domain/user';
 import { Firestore } from '../core/firebase/firestore';
 import { Account, AccountEntity } from '../models/domain/account';
@@ -8,7 +8,7 @@ export class AccountProvider {
   constructor(
     private firestore: Firestore,
     private selector: FirestoreSelector,
-    private gameId: GameId
+    private gameId: GameEntity.Id
   ) {}
 
   async getAccount(userId: UserId): Promise<Account> {

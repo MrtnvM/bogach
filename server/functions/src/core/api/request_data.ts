@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as apiUtils from '../../utils/api';
-import { GameContextEntity } from '../../models/domain/game_context';
+import { GameContextEntity } from '../../models/domain/game/game_context';
 
 export namespace APIRequest {
   export const from = (request: functions.https.Request) => {

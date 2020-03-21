@@ -1,4 +1,4 @@
-import { GameEventType } from '../../models/domain/game_event';
+import { GameEventType } from '../../models/domain/game/game_event';
 import { PlayerAction } from '../../models/domain/player_action';
 
 export abstract class PlayerActionHandler<T, P = {}> {

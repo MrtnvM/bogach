@@ -1,6 +1,6 @@
 import * as uuid from 'uuid';
 import { FirestoreSelector } from './firestore_selector';
-import { GameId } from '../models/domain/game';
+import { GameEntity } from '../models/domain/game/game';
 import { ExpenseEntity, Expense } from '../models/domain/expense';
 import { UserId } from '../models/domain/user';
 import { Firestore } from '../core/firebase/firestore';
@@ -9,7 +9,7 @@ export class ExpenseProvider {
   constructor(
     private firestore: Firestore,
     private selector: FirestoreSelector,
-    private gameId: GameId
+    private gameId: GameEntity.Id
   ) {}
 
   async getAllExpenses(userId: UserId): Promise<Expense[]> {

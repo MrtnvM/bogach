@@ -1,9 +1,9 @@
-import { UserId } from './user';
-import { GameId } from './game';
-import { Entity } from '../../core/domain/entity';
+import { UserId } from '../user';
+import { GameEntity } from './game';
+import { Entity } from '../../../core/domain/entity';
 
 export interface GameContext {
-  gameId: GameId;
+  gameId: GameEntity.Id;
   userId: UserId;
 }
 

@@ -1,10 +1,10 @@
-import { GameEvent } from './game_event';
+import { GameEvent } from './game/game_event';
 import { UserId } from './user';
-import { GameId } from './game';
+import { GameEntity } from './game/game';
 
 export interface PlayerAction<E = GameEvent, P = {}> {
   readonly gameEvent: E;
   readonly payload: P;
   readonly userId: UserId;
-  readonly gameId: GameId;
+  readonly gameId: GameEntity.Id;
 }

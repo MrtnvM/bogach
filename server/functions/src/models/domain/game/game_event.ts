@@ -1,6 +1,6 @@
 import * as uuid from 'uuid';
-import { Entity } from '../../core/domain/entity';
-import { DebenturePriceChangedEvent } from '../../events/debenture/debenture_price_changed_event';
+import { Entity } from '../../../core/domain/entity';
+import { DebenturePriceChangedEvent } from '../../../events/debenture/debenture_price_changed_event';
 
 export type GameEventId = string;
 export type GameEventType = string;
