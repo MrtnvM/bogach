@@ -21,7 +21,7 @@ export namespace AccountEntity {
   };
 
   export const validate = (asset: any) => {
-    const entity = Entity.createEntityValidator<Account>(asset);
+    const entity = Entity.createEntityValidator<Account>(asset, 'Account');
 
     entity.hasValue('balance');
     entity.hasValue('credit');

@@ -35,7 +35,7 @@ export namespace AssetEntity {
   };
 
   export const validate = (asset: any) => {
-    const entity = Entity.createEntityValidator<Asset>(asset);
+    const entity = Entity.createEntityValidator<Asset>(asset, 'Asset');
 
     entity.hasValue('name');
     entity.hasValue('type');

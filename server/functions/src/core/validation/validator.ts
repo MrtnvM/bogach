@@ -1,5 +1,5 @@
 export class Validator<T extends object> {
-  constructor(private entity: T) {
+  constructor(private entity: T, private context: any) {
     if (!entity) {
       this.throwError(`Entity can not be undefined or null`);
     }
@@ -66,6 +66,9 @@ export class Validator<T extends object> {
   }
 
   private throwError(reason: string) {
-    throw `[VALIDATION ERROR]: ${reason}`;
+    const error = `[VALIDATION ERROR]: ${reason}`;
+    const context = this.context ? `\n[CONTEXT]: ${this.context}` : '';
+
+    throw error + context;
   }
 }

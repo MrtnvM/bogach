@@ -24,7 +24,7 @@ export namespace DebentureAssetEntity {
   };
 
   export const validate = (asset: any) => {
-    const entity = Entity.createEntityValidator<DebentureAsset>(asset);
+    const entity = Entity.createEntityValidator<DebentureAsset>(asset, 'Debenture Asset');
 
     entity.hasNumberValue('currentPrice');
     entity.hasNumberValue('nominal');

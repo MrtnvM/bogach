@@ -32,7 +32,7 @@ export namespace IncomeEntity {
   };
 
   export const validate = (income: any) => {
-    const entity = Entity.createEntityValidator<Income>(income);
+    const entity = Entity.createEntityValidator<Income>(income, 'Income');
 
     entity.hasValue('name');
     entity.hasValue('value');

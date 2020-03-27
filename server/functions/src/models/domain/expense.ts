@@ -21,7 +21,7 @@ export namespace ExpenseEntity {
   };
 
   export const validate = (expense: any) => {
-    const entity = Entity.createEntityValidator<Expense>(expense);
+    const entity = Entity.createEntityValidator<Expense>(expense, 'Expense');
 
     entity.hasValue('name');
     entity.hasValue('value');

@@ -25,7 +25,7 @@ export namespace LiabilityEntity {
   };
 
   export const validate = (liability: any) => {
-    const entity = Entity.createEntityValidator<Liability>(liability);
+    const entity = Entity.createEntityValidator<Liability>(liability, 'Liability');
 
     entity.hasValue('name');
     entity.hasValue('type');

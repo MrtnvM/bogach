@@ -55,7 +55,7 @@ export namespace GameEntity {
   };
 
   export const validate = (game: any) => {
-    const entity = Entity.createEntityValidator<Game>(game);
+    const entity = Entity.createEntityValidator<Game>(game, 'Game');
 
     entity.hasValue('id');
     entity.hasValue('name');

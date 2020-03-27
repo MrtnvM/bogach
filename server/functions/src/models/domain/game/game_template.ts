@@ -30,7 +30,7 @@ export namespace GameTemplateEntity {
   };
 
   export const validate = (gameTemplate: any) => {
-    const entity = Entity.createEntityValidator<GameTemplate>(gameTemplate);
+    const entity = Entity.createEntityValidator<GameTemplate>(gameTemplate, 'Game Template');
 
     entity.hasValue('id');
     entity.hasValue('name');

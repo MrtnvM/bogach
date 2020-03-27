@@ -22,7 +22,7 @@ export namespace GameTargetEntity {
   };
 
   export const validate = (game: any) => {
-    const entity = Entity.createEntityValidator<GameTarget>(game);
+    const entity = Entity.createEntityValidator<GameTarget>(game, 'Game Target');
 
     entity.hasValue('type');
     entity.checkUnion('type', TypeValues);

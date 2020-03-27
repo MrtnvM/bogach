@@ -35,7 +35,10 @@ export namespace DebenturePriceChangedEvent {
   };
 
   export const validate = (event: any) => {
-    const entity = Entity.createEntityValidator<Data>(event.data);
+    const entity = Entity.createEntityValidator<Data>(
+      event.data,
+      'DebenturePriceChangedEvent.Data'
+    );
 
     entity.hasNumberValue('currentPrice');
     entity.hasNumberValue('nominal');

@@ -20,7 +20,7 @@ export namespace GameContextEntity {
   };
 
   export const validate = (gameContext: any) => {
-    const entity = Entity.createEntityValidator<GameContext>(gameContext);
+    const entity = Entity.createEntityValidator<GameContext>(gameContext, 'Game Context');
 
     entity.hasValue('userId');
     entity.hasValue('gameId');
