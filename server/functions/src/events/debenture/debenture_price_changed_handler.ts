@@ -1,6 +1,5 @@
 import { PlayerActionHandler } from '../../core/domain/player_action_handler';
 import { DebenturePriceChangedEvent } from './debenture_price_changed_event';
-import { PlayerAction } from '../../models/domain/player_action';
 import { AssetProvider } from '../../providers/asset_provider';
 import { AccountProvider } from '../../providers/account_provider';
 import { AssetEntity } from '../../models/domain/asset';
@@ -8,6 +7,7 @@ import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
 import { Strings } from '../../resources/strings';
 import { UserId } from '../../models/domain/user';
 import { BuySellAction } from '../../models/domain/actions/buy_sell_action';
+import { GameContext } from '../../models/domain/game/game_context';
 
 type Event = DebenturePriceChangedEvent.Event;
 type Action = DebenturePriceChangedEvent.PlayerAction;
@@ -21,7 +21,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
     return DebenturePriceChangedEvent.Id;
   }
 
-  async validate(event: Event): Promise<boolean> {
+  async validate(event: Event, action: Action): Promise<boolean> {
     try {
       DebenturePriceChangedEvent.validate(event);
     } catch (error) {
@@ -31,12 +31,11 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
     return true;
   }
 
-  async handle(action: PlayerAction<Event, Action>): Promise<void> {
+  async handle(event: Event, action: Action, context: GameContext): Promise<void> {
     const debentureAssetType: AssetEntity.Type = 'debeture';
-    const userId = action.userId;
-    const event = action.gameEvent;
+    const { userId } = context;
     const { currentPrice, nominal, profitabilityPercent } = event.data;
-    const { count, action: debentureAction } = action.payload;
+    const { count, action: debentureAction } = action;
 
     const assets = await this.assetProvider.getAllAssets(userId);
     const debetureAssets = assets.filter(a => a.type === debentureAssetType) as DebentureAsset[];
