@@ -4,5 +4,6 @@ void setOrientationModes() {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
+    DeviceOrientation.portraitUp
   ]);
 }

@@ -1,3 +1,4 @@
+import 'package:cash_flow/presentation/new_gameboard/new_gameboard.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/appbar/app_bar.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -32,6 +33,10 @@ class _MainPageState extends State<MainPage> {
                   FlatButton(
                     onPressed: () => appRouter.goTo(GameBoard()),
                     child: const Text('Go to GameBoard'),
+                  ),
+                  FlatButton(
+                    onPressed: () => appRouter.goTo(NewGameBoard()),
+                    child: const Text('Go to New GameBoard'),
                   ),
                 ],
               ),

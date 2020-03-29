@@ -25,4 +25,7 @@ class ColorRes {
   static const blue = Color(0xFF598398);
   static const green = Color(0xFFFF4CAF50);
   static const orange = Color(0xFFFFA726);
+
+  static const newGameBoardHeaderBackground = Color(0xFFFFE21C);
+  static const newGameBoardPrimaryTextColor = Color(0xFF48A6D3);
 }
