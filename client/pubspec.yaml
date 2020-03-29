@@ -21,7 +21,9 @@ dependencies:
   firebase_analytics: ^5.0.9
   firebase_crashlytics: ^0.1.2+4
   firebase_auth: ^0.15.4
-  cloud_firestore: ^0.13.0+1
+  cloud_firestore: ^0.13.4+2
+
+  json_serializable: ^3.2.5
 
   flutter_platform_core:
     git:

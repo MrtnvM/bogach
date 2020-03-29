@@ -1,7 +1,9 @@
 import 'package:cash_flow/app/app_reducer.dart';
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/root_epic.dart';
+import 'package:cash_flow/services/firebase_service.dart';
 import 'package:cash_flow/services/user_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:flutter_platform_network/flutter_platform_network.dart';
 import 'package:redux_epics/redux_epics.dart';
@@ -27,9 +29,12 @@ Epic<AppState> createRootEpic(
   SharedPreferences sharedPreferences,
   TokenStorage tokenStorage,
 ) {
+  final firestore = Firestore.instance;
+
   final userService = UserService(
     tokenStorage: tokenStorage,
   );
+  final firebaseService = FirebaseService(firestore: firestore);
 
-  return rootEpic(userService: userService);
+  return rootEpic(userService: userService, firebaseService: firebaseService);
 }

@@ -1,15 +1,16 @@
+import 'package:cash_flow/models/network/request_state.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:flutter/material.dart';
 
 class Loadable extends StatelessWidget {
   const Loadable({
     @required this.child,
-    @required this.loading,
+    @required this.requestState,
     this.padding,
   });
 
   final Widget child;
-  final bool loading;
+  final RequestState requestState;
   final EdgeInsetsGeometry padding;
 
   @override
@@ -17,21 +18,27 @@ class Loadable extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Positioned.fill(child: child),
-        Positioned.fill(child: _getLoadingWidget()),
+        if (requestState.isInProgress)
+          Positioned.fill(child: _getLoadingWidget()),
+        if (requestState.isFailed) Positioned.fill(child: _getErrorWidget()),
       ],
     );
   }
 
   Widget _getLoadingWidget() {
-    return Visibility(
-      visible: loading,
-      child: Container(
-        padding: padding,
-        color: ColorRes.black64,
-        child: const Center(
-          child: CircularProgressIndicator(),
-        ),
+    return Container(
+      padding: padding,
+      color: ColorRes.black64,
+      child: const Center(
+        child: CircularProgressIndicator(),
       ),
+    );
+  }
+
+  Widget _getErrorWidget() {
+    return Container(
+      alignment: Alignment.center,
+      child: const Text('Error'),
     );
   }
 }

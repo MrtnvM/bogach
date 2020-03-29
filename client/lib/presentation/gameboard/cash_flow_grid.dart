@@ -1,84 +1,207 @@
+import 'package:cash_flow/core/utils/app_store_connector.dart';
+import 'package:cash_flow/features/quests/possessions_state.dart';
+import 'package:cash_flow/models/state/posessions_state/assets/business_asset_item.dart';
+import 'package:cash_flow/models/state/posessions_state/assets/debenture_asset_item.dart';
+import 'package:cash_flow/models/state/posessions_state/assets/insurance_asset_item.dart';
+import 'package:cash_flow/models/state/posessions_state/assets/other_asset_item.dart';
+import 'package:cash_flow/models/state/posessions_state/assets/realty_asset_item.dart';
+import 'package:cash_flow/models/state/posessions_state/assets/stock_asset_item.dart';
+import 'package:cash_flow/models/state/posessions_state/possession_asset.dart';
+import 'package:cash_flow/models/state/posessions_state/possession_expense.dart';
+import 'package:cash_flow/models/state/posessions_state/possession_income.dart';
+import 'package:cash_flow/models/state/posessions_state/possession_liability.dart';
+import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:cash_flow/widgets/containers/indicators_table.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 class CashFlowGrid extends StatefulWidget {
+  const CashFlowGrid();
+
   @override
   _CashFlowGridState createState() => _CashFlowGridState();
 }
 
-class _CashFlowGridState extends State<CashFlowGrid> {
+class _CashFlowGridState extends State<CashFlowGrid> with ReduxState {
   @override
   Widget build(BuildContext context) {
+    return AppStateConnector<PossessionsState>(
+      converter: (s) => s.possessions,
+      builder: (context, state) => _buildBody(state),
+    );
+  }
+
+  Widget _buildBody(PossessionsState state) {
     return ListView(
       children: <Widget>[
-        IndicatorsTable(
-          context: context,
-          name: 'Доходы',
-          result: '5 500 р',
-          rows: const <RowHeaderItem>[
-            RowItem(name: 'Зарплата', value: '5 000 p'),
-            RowHeaderItem(name: 'Вложения'),
-            RowItem(name: 'Вексель', value: '500 p'),
-            RowHeaderItem(name: 'Недвижимость'),
-            RowHeaderItem(name: 'Бизнес'),
-            RowHeaderItem(name: 'Прочие'),
-          ],
-        ),
+        _buildIncomes(state.userPossessionsState.incomes),
         const SizedBox(height: 32),
-        IndicatorsTable(
-          context: context,
-          name: 'Расходы',
-          result: '5 070 р',
-          rows: const <RowHeaderItem>[
-            RowItem(name: 'Общие', value: '4 000 p'),
-            RowItem(name: 'Кредит', value: '790 p'),
-            RowItem(name: 'Дети', value: '280 p'),
-          ],
-        ),
+        _buildExpenses(state.userPossessionsState.expenses),
         const SizedBox(height: 32),
-        IndicatorsTable(
-          context: context,
-          name: 'Активы',
-          result: '10 672 р',
-          rows: const <RowHeaderItem>[
-            RowItem(name: 'Наличные:', value: '567 p'),
-            RowHeaderAttributeItem(
-                name: 'Страхование', attribute: 'Стоимость', value: 'Защита'),
-            RowAttributeItem(
-                name: 'Полис СИ (12)', attribute: '468 р', value: '4 118 р'),
-            RowHeaderAttributeItem(
-                name: 'Вложения', attribute: 'Количество', value: 'Сумма'),
-            RowAttributeItem(
-                name: 'Вексель', attribute: '1 шт', value: '10 000 р'),
-            RowHeaderAttributeItem(
-                name: 'Акции/Фонды', attribute: 'Количество', value: 'Сумма'),
-            RowAttributeItem(
-                name: 'Связьком', attribute: '1 по 105 р', value: '105 р'),
-            RowHeaderAttributeItem(
-                name: 'Недвижимость',
-                attribute: 'Первый взнос',
-                value: 'Стоимость'),
-            RowHeaderAttributeItem(
-                name: 'Бизнес', attribute: 'Первый взнос', value: 'Стоимость'),
-            RowHeaderAttributeItem(
-                name: 'Прочие', attribute: 'Первый взнос', value: 'Стоимость'),
-          ],
-        ),
+        _buildAssets(state.userPossessionsState.assets),
         const SizedBox(height: 32),
-        IndicatorsTable(
-          context: context,
-          name: 'Пассивы',
-          result: '7 900 р',
-          rows: const <RowHeaderItem>[
-            RowItem(name: 'Кредит:', value: '7 900 p'),
-            RowHeaderItem(name: 'Ипотека недвижимости'),
-            RowHeaderItem(name: 'Кредиты бизнеса'),
-            RowHeaderItem(name: 'Прочие'),
-            RowItem(name: 'Общие', value: '0 p'),
-          ],
-        ),
+        _buildLiabilities(state.userPossessionsState.liabilities),
         const SizedBox(height: 32),
       ],
     );
+  }
+
+  Widget _buildIncomes(PossessionIncome incomes) {
+    return IndicatorsTable(
+      context: context,
+      name: Strings.incomes,
+      result: incomes.sum.toPrice(),
+      rows: [
+        RowItem(name: Strings.salary, value: incomes.salary.toPrice()),
+        RowItem(
+            name: Strings.investments, value: incomes.investments.toPrice()),
+        RowItem(name: Strings.business, value: incomes.business.toPrice()),
+        RowItem(name: Strings.realty, value: incomes.realty.toPrice()),
+        RowItem(name: Strings.other, value: incomes.other.toPrice()),
+      ],
+    );
+  }
+
+  Widget _buildExpenses(List<PossessionExpense> expenses) {
+    return IndicatorsTable(
+      context: context,
+      name: Strings.expenses,
+      result: expenses.fold<int>(0, (sum, item) => sum + item.value).toPrice(),
+      rows: expenses
+          .map((income) => RowItem(
+                name: income.name,
+                value: income.value.toPrice(),
+              ))
+          .toList(),
+    );
+  }
+
+  Widget _buildAssets(PossessionAsset assets) {
+    return IndicatorsTable(
+      context: context,
+      name: Strings.assets,
+      result: assets.sum.toPrice(),
+      rows: <RowHeaderItem>[
+        RowItem(name: Strings.cash, value: assets.cash.toPrice()),
+        RowHeaderAttributeItem(
+          name: Strings.insuranceTitle,
+          attribute: Strings.cost,
+          value: Strings.defence,
+        ),
+        ..._buildInsuranceItems(assets.insurances),
+        RowHeaderAttributeItem(
+          name: Strings.investments,
+          attribute: Strings.count,
+          value: Strings.sum,
+        ),
+        ..._buildDebentureItems(assets.debentures),
+        RowHeaderAttributeItem(
+            name: Strings.stock, attribute: Strings.count, value: Strings.sum),
+        ..._buildStockItems(assets.stocks),
+        RowHeaderAttributeItem(
+            name: Strings.property,
+            attribute: Strings.firstPayment,
+            value: Strings.cost),
+        ..._buildRealtyItems(assets.realty),
+        RowHeaderAttributeItem(
+            name: Strings.business,
+            attribute: Strings.firstPayment,
+            value: Strings.cost),
+        ..._buildBusinessItems(assets.businesses),
+        RowHeaderAttributeItem(
+            name: Strings.other,
+            attribute: Strings.firstPayment,
+            value: Strings.cost),
+        ..._buildOtherItems(assets.other),
+      ],
+    );
+  }
+
+  Widget _buildLiabilities(List<PossessionLiability> liabilities) {
+    return IndicatorsTable(
+      context: context,
+      name: Strings.liabilities,
+      result:
+          liabilities.fold<int>(0, (sum, item) => sum + item.value).toPrice(),
+      rows: liabilities
+          .map((item) => RowItem(name: item.name, value: item.value.toPrice()))
+          .toList(),
+    );
+  }
+
+  List<RowHeaderItem> _buildStockItems(
+    List<StockAssetItem> stocks,
+  ) {
+    return stocks
+        .map((item) => RowAttributeItem(
+              name: item.name,
+              attribute: Strings.itemsPerPrice(
+                count: item.count,
+                price: item.itemPrice.toPrice(),
+              ),
+              value: (item.itemPrice * item.count).toPrice(),
+            ))
+        .toList();
+  }
+
+  List<RowAttributeItem> _buildInsuranceItems(
+    List<InsuranceAssetItem> insurances,
+  ) {
+    return insurances
+        .map((item) => RowAttributeItem(
+              name: item.name,
+              attribute: item.value.toPrice(),
+              value: item.value.toPrice(),
+            ))
+        .toList();
+  }
+
+  List<RowAttributeItem> _buildDebentureItems(
+    List<DebentureAssetItem> debentures,
+  ) {
+    return debentures
+        .map((item) => RowAttributeItem(
+              name: item.name,
+              attribute: '${item.count}',
+              value: item.purchasePrice.toPrice(),
+            ))
+        .toList();
+  }
+
+  List<RowAttributeItem> _buildRealtyItems(
+    List<RealtyAssetItem> realty,
+  ) {
+    return realty
+        .map((item) => RowAttributeItem(
+              name: item.name,
+              attribute: '${item.downPayment}',
+              value: item.cost.toPrice(),
+            ))
+        .toList();
+  }
+
+  List<RowAttributeItem> _buildBusinessItems(
+    List<BusinessAssetItem> businesses,
+  ) {
+    return businesses
+        .map((item) => RowAttributeItem(
+              name: item.name,
+              attribute: '${item.downPayment}',
+              value: item.cost.toPrice(),
+            ))
+        .toList();
+  }
+
+  List<RowAttributeItem> _buildOtherItems(
+    List<OtherAssetItem> other,
+  ) {
+    return other
+        .map((item) => RowAttributeItem(
+              name: item.name,
+              attribute: '${item.downPayment}',
+              value: item.cost.toPrice(),
+            ))
+        .toList();
   }
 }
