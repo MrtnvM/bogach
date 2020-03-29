@@ -9,7 +9,8 @@ part of 'income_response_model.dart';
 IncomeResponseModel _$IncomeResponseModelFromJson(Map<String, dynamic> json) {
   return IncomeResponseModel(
     name: json['name'] as String,
-    type: _$enumDecodeNullable(_$IncomeTypeEnumMap, json['type']),
+    type: _$enumDecodeNullable(_$IncomeTypeEnumMap, json['type']) ??
+        IncomeType.other,
     value: json['value'] as int,
   );
 }

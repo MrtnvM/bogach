@@ -13,7 +13,8 @@ StockAssetResponseModel _$StockAssetResponseModelFromJson(
     name: json['name'] as String,
     purchasePrice: json['purchasePrice'] as int,
     total: json['total'] as int,
-    type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type']),
+    type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type']) ??
+        AssetType.other,
   );
 }
 
