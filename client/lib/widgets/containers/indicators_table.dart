@@ -110,7 +110,7 @@ class IndicatorsTable extends StatelessWidget {
             item.name,
             style: style,
           ),
-          flex: 2,
+          flex: 13,
         ),
         Expanded(
           child: Text(
@@ -118,6 +118,7 @@ class IndicatorsTable extends StatelessWidget {
             style: style,
             textAlign: TextAlign.end,
           ),
+          flex: 10,
         ),
         Expanded(
           child: Text(
@@ -125,6 +126,7 @@ class IndicatorsTable extends StatelessWidget {
             style: style,
             textAlign: TextAlign.end,
           ),
+          flex: 10,
         ),
       ],
     );
@@ -142,7 +144,7 @@ class IndicatorsTable extends StatelessWidget {
             item.name,
             style: textStyle,
           ),
-          flex: 2,
+          flex: 13,
         ),
         Expanded(
           child: Text(
@@ -150,6 +152,7 @@ class IndicatorsTable extends StatelessWidget {
             style: textStyle,
             textAlign: TextAlign.end,
           ),
+          flex: 10,
         ),
         Expanded(
           child: Text(
@@ -157,6 +160,7 @@ class IndicatorsTable extends StatelessWidget {
             style: textStyle,
             textAlign: TextAlign.end,
           ),
+          flex: 10,
         ),
       ],
     );

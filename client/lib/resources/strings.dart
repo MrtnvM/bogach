@@ -1,3 +1,4 @@
+// ignore: avoid_classes_with_only_static_members
 class Strings {
   static const unknownError =
       'An error occurred while performing the operation';
@@ -12,6 +13,14 @@ class Strings {
   static const continueAction = 'Продолжить';
   static const buy = 'Купить';
   static const price = 'Стоимость:';
+  static const cost = 'Стоимость';
+  static const defence = 'Защита';
+  static const cash = 'Наличные:';
+  static const count = 'Количество';
+  static const sum = 'Сумма';
+  static const stock = 'Акции/Фонды';
+  static const property = 'Недвижимость';
+  static const firstPayment = 'Первый взнос';
 
   static const commonError = 'Произошла ошибка';
 
@@ -64,6 +73,19 @@ class Strings {
 
   static String stocks(String name) => 'Акции "$name"';
 
+  static String itemsPerPrice({int count, String price}) => '$count по $price';
+
   static const noInternetError = 'Не удалось подключиться к серверу. '
       'Пожалуйста, проверьте ваше интернет-соединение';
+
+  static const incomes = 'Доходы';
+  static const expenses = 'Расходы';
+  static const assets = 'Активы';
+  static const liabilities = 'Пассивы';
+  static const salary = 'Зарплата';
+  static const business = 'Бизнес';
+  static const realty = 'Недвижимость';
+  static const other = 'Прочие';
+
+  static String get gameBoardTitle => 'GameBoard';
 }

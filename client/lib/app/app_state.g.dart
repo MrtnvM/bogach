@@ -9,13 +9,18 @@ part of app_state;
 class _$AppState extends AppState {
   @override
   final LoginState login;
+  @override
+  final PossessionsState possessions;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
 
-  _$AppState._({this.login}) : super._() {
+  _$AppState._({this.login, this.possessions}) : super._() {
     if (login == null) {
       throw new BuiltValueNullFieldError('AppState', 'login');
+    }
+    if (possessions == null) {
+      throw new BuiltValueNullFieldError('AppState', 'possessions');
     }
   }
 
@@ -29,17 +34,21 @@ class _$AppState extends AppState {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is AppState && login == other.login;
+    return other is AppState &&
+        login == other.login &&
+        possessions == other.possessions;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, login.hashCode));
+    return $jf($jc($jc(0, login.hashCode), possessions.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('AppState')..add('login', login))
+    return (newBuiltValueToStringHelper('AppState')
+          ..add('login', login)
+          ..add('possessions', possessions))
         .toString();
   }
 }
@@ -51,11 +60,18 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   LoginStateBuilder get login => _$this._login ??= new LoginStateBuilder();
   set login(LoginStateBuilder login) => _$this._login = login;
 
+  PossessionsStateBuilder _possessions;
+  PossessionsStateBuilder get possessions =>
+      _$this._possessions ??= new PossessionsStateBuilder();
+  set possessions(PossessionsStateBuilder possessions) =>
+      _$this._possessions = possessions;
+
   AppStateBuilder();
 
   AppStateBuilder get _$this {
     if (_$v != null) {
       _login = _$v.login?.toBuilder();
+      _possessions = _$v.possessions?.toBuilder();
       _$v = null;
     }
     return this;
@@ -78,12 +94,16 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   _$AppState build() {
     _$AppState _$result;
     try {
-      _$result = _$v ?? new _$AppState._(login: login.build());
+      _$result = _$v ??
+          new _$AppState._(
+              login: login.build(), possessions: possessions.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'login';
         login.build();
+        _$failedField = 'possessions';
+        possessions.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AppState', _$failedField, e.toString());
