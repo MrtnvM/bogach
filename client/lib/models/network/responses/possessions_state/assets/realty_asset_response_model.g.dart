@@ -12,7 +12,8 @@ RealtyAssetResponseModel _$RealtyAssetResponseModelFromJson(
     cost: json['cost'] as int,
     downPayment: json['downPayment'] as int,
     name: json['name'] as String,
-    type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type']),
+    type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type']) ??
+        AssetType.other,
   );
 }
 

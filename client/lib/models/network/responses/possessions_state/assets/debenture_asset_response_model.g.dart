@@ -10,7 +10,8 @@ DebentureAssetResponseModel _$DebentureAssetResponseModelFromJson(
     Map<String, dynamic> json) {
   return DebentureAssetResponseModel(
     name: json['name'] as String,
-    type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type']),
+    type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type']) ??
+        AssetType.other,
     count: json['count'] as int,
     total: json['total'] as int,
   );
