@@ -8,7 +8,8 @@ part of 'asset_response_model.dart';
 
 AssetResponseModel _$AssetResponseModelFromJson(Map<String, dynamic> json) {
   return AssetResponseModel(
-    type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type']),
+    type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type']) ??
+        AssetType.other,
   );
 }
 

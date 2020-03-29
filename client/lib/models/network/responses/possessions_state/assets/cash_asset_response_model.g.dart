@@ -10,7 +10,8 @@ CashAssetResponseModel _$CashAssetResponseModelFromJson(
     Map<String, dynamic> json) {
   return CashAssetResponseModel(
     name: json['name'] as String,
-    type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type']),
+    type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type']) ??
+        AssetType.other,
     value: json['value'] as int,
   );
 }

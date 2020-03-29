@@ -10,7 +10,8 @@ LiabilityResponseModel _$LiabilityResponseModelFromJson(
     Map<String, dynamic> json) {
   return LiabilityResponseModel(
     name: json['name'] as String,
-    type: _$enumDecodeNullable(_$LiabilityTypeEnumMap, json['type']),
+    type: _$enumDecodeNullable(_$LiabilityTypeEnumMap, json['type']) ??
+        LiabilityType.other,
     value: json['value'] as int,
   );
 }

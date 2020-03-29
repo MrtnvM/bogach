@@ -10,7 +10,8 @@ InsuranceAssetResponseModel _$InsuranceAssetResponseModelFromJson(
     Map<String, dynamic> json) {
   return InsuranceAssetResponseModel(
     name: json['name'] as String,
-    type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type']),
+    type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type']) ??
+        AssetType.other,
     value: json['value'] as int,
   );
 }
