@@ -1,10 +1,10 @@
-import { UserId } from '../user';
+import { UserEntity } from '../user';
 import { GameEntity } from './game';
 import { Entity } from '../../../core/domain/entity';
 
 export interface GameContext {
   gameId: GameEntity.Id;
-  userId: UserId;
+  userId: UserEntity.Id;
 }
 
 export namespace GameContextEntity {

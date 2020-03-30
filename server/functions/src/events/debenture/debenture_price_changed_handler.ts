@@ -3,7 +3,7 @@ import { DebenturePriceChangedEvent } from './debenture_price_changed_event';
 import { AssetEntity } from '../../models/domain/asset';
 import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
 import { Strings } from '../../resources/strings';
-import { UserId } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user';
 import { BuySellAction } from '../../models/domain/actions/buy_sell_action';
 import { GameContext } from '../../models/domain/game/game_context';
 import { GameProvider } from '../../providers/game_provider';
@@ -96,7 +96,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
     game: Game;
     debentureAction: BuySellAction;
     currentDebentureCount: number;
-    userId: UserId;
+    userId: UserEntity.Id;
     count: number;
     debenturePrice: number;
   }) {

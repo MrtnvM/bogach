@@ -9,3 +9,12 @@ export interface Possessions {
   readonly assets: Asset[];
   readonly liabilities: Liability[];
 }
+
+export namespace PossessionsEntity {
+  export const createEmpty = (): Possessions => ({
+    incomes: [],
+    expenses: [],
+    assets: [],
+    liabilities: []
+  });
+}

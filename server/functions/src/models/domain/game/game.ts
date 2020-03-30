@@ -1,6 +1,6 @@
 import { GameEvent } from './game_event';
 import { Account } from '../account';
-import { UserId } from '../user';
+import { UserEntity } from '../user';
 import { Possessions } from '../possessions';
 import { PossessionState } from '../possession_state';
 import { Entity } from '../../../core/domain/entity';
@@ -10,7 +10,7 @@ import { GameState } from './game_state';
 export interface Game {
   readonly id: GameEntity.Id;
   readonly name: string;
-  readonly participants: UserId[];
+  readonly participants: UserEntity.Id[];
   readonly possessions: GameState<Possessions>;
   readonly possessionState: GameState<PossessionState>;
   readonly accounts: GameState<Account>;

@@ -3,14 +3,14 @@ import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from './firestore_selector';
 import { Game, GameEntity } from '../models/domain/game/game';
 import { GameTemplate, GameTemplateEntity } from '../models/domain/game/game_template';
-import { UserId } from '../models/domain/user';
+import { UserEntity } from '../models/domain/user';
 import { PossessionStateEntity } from '../models/domain/possession_state';
 import { assertExists } from '../utils/asserts';
 
 export class GameProvider {
   constructor(private firestore: Firestore, private selector: FirestoreSelector) {}
 
-  async createGame(templateId: GameTemplateEntity.Id, userId: UserId): Promise<Game> {
+  async createGame(templateId: GameTemplateEntity.Id, userId: UserEntity.Id): Promise<Game> {
     const template = await this.getGameTemplate(templateId);
 
     if (!template) throw 'ERROR: No template on game creation';
