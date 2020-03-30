@@ -5,15 +5,14 @@ export interface Account {
   readonly balance: number;
   readonly credit: number;
   readonly cashFlow: number;
-  readonly updatedAt?: Date;
 }
 
 export namespace AccountEntity {
   export type Id = string;
 
   export const parse = (data: any): Account => {
-    const { id, balance, credit, cashFlow, updatedAt } = data;
-    let account: Account = { id, balance, credit, cashFlow, updatedAt };
+    const { id, balance, credit, cashFlow } = data;
+    let account: Account = { id, balance, credit, cashFlow };
 
     validate(account);
 

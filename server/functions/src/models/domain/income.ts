@@ -5,22 +5,13 @@ export interface Income {
   readonly name: string;
   readonly value: number;
   readonly type: IncomeEntity.Type;
-  readonly createdAt?: Date;
-  readonly updatedAt?: Date;
 }
 
 export namespace IncomeEntity {
   export type Id = string;
 
-  export type Type = 'none' | 'salary' | 'real property' | 'investment' | 'business' | 'other';
-  export const TypeValues: Type[] = [
-    'none',
-    'salary',
-    'real property',
-    'investment',
-    'business',
-    'other'
-  ];
+  export type Type = 'salary' | 'realty' | 'investment' | 'business' | 'other';
+  export const TypeValues: Type[] = ['salary', 'realty', 'investment', 'business', 'other'];
 
   export const parse = (data: any): Income => {
     const { id, name, value, type } = data;

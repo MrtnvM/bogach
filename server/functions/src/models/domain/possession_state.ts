@@ -9,15 +9,12 @@ export interface PossessionState {
   readonly expenses: Expense[];
   readonly assets: Asset[];
   readonly liabilities: Liability[];
-
-  readonly createdAt?: Date;
-  readonly updatedAt?: Date;
 }
 
 export namespace PossessionStateEntity {
   export const normalize = (possessionState: PossessionState) => {
     const newState = JSON.parse(JSON.stringify(possessionState)) as PossessionState;
-    removeKeys(newState, ['createdAt', 'updatedAt', 'id']);
+    removeKeys(newState, ['id']);
     return newState;
   };
 

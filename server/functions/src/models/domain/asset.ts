@@ -5,8 +5,6 @@ export interface Asset {
   readonly id?: AssetEntity.Id;
   readonly name: string;
   readonly type: AssetEntity.Type;
-  readonly createdAt?: Date;
-  readonly updatedAt?: Date;
 }
 
 export namespace AssetEntity {

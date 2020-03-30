@@ -4,8 +4,6 @@ export interface Expense {
   readonly id?: ExpenseEntity.Id;
   readonly name: string;
   readonly value: number;
-  readonly createdAt?: Date;
-  readonly updatedAt?: Date;
 }
 
 export namespace ExpenseEntity {

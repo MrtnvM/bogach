@@ -1,44 +1,15 @@
-import { IncomeProvider } from '../providers/income_provider';
-import { UserId } from '../models/domain/user';
-import { ExpenseProvider } from '../providers/expense_provider';
-import { AssetProvider } from '../providers/asset_provider';
-import { LiabilityProvider } from '../providers/liability_provider';
-import { PossessionStateProvider } from '../providers/possession_state_provider';
-import { Income } from '../models/domain/income';
-import { AssetEntity, Asset } from '../models/domain/asset';
-import { LiabilityEntity, Liability } from '../models/domain/liability';
+import { AssetEntity } from '../models/domain/asset';
+import { LiabilityEntity } from '../models/domain/liability';
 import { Possessions } from '../models/domain/possessions';
 import { PossessionState, PossessionStateEntity } from '../models/domain/possession_state';
-import { Expense } from '../models/domain/expense';
+import { GameProvider } from '../providers/game_provider';
+import { GameContext } from '../models/domain/game/game_context';
+import { Game } from '../models/domain/game/game';
 
 export class PossessionService {
-  constructor(
-    private incomeProvider: IncomeProvider,
-    private expenseProvider: ExpenseProvider,
-    private assetProvider: AssetProvider,
-    private liabilityProvider: LiabilityProvider,
-    private possessionStateProvider: PossessionStateProvider
-  ) {}
+  constructor(private gameProvider: GameProvider) {}
 
-  async getPossissions(userId: UserId): Promise<Possessions> {
-    const possessions = await Promise.all([
-      this.incomeProvider.getAllIncomes(userId),
-      this.expenseProvider.getAllExpenses(userId),
-      this.assetProvider.getAllAssets(userId),
-      this.liabilityProvider.getAllLiabilities(userId)
-    ]);
-
-    return {
-      incomes: possessions[0] as Income[],
-      expenses: possessions[1] as Expense[],
-      assets: possessions[2] as Asset[],
-      liabilities: possessions[3] as Liability[]
-    };
-  }
-
-  async generatePossessionState(userId: UserId) {
-    const possessions = await this.getPossissions(userId);
-
+  async generatePossessionState(possessions: Possessions) {
     const incomes = possessions.incomes.slice();
     const expenses = possessions.expenses.slice();
     const assets = possessions.assets.slice();
@@ -61,14 +32,19 @@ export class PossessionService {
     return PossessionStateEntity.normalize(newPossessionState);
   }
 
-  async updatePossessionState(userId: UserId) {
-    const newPossessionState = await this.generatePossessionState(userId);
+  async updatePossessionState(context: GameContext): Promise<PossessionState> {
+    const { gameId, userId } = context;
+    const game = await this.gameProvider.getGame(gameId);
+    const possessions = game.possessions[userId];
 
-    const state = await this.possessionStateProvider.updatePossessionState(
-      userId,
-      newPossessionState
-    );
+    const newPossessionState = await this.generatePossessionState(possessions);
+    const updatedGame: Game = {
+      ...game,
+      possessionState: { ...game.possessionState, [userId]: newPossessionState }
+    };
 
-    return state;
+    await this.gameProvider.updateGame(updatedGame);
+
+    return newPossessionState;
   }
 }

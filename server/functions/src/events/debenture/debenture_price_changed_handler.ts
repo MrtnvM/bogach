@@ -1,19 +1,19 @@
 import { PlayerActionHandler } from '../../core/domain/player_action_handler';
 import { DebenturePriceChangedEvent } from './debenture_price_changed_event';
-import { AssetProvider } from '../../providers/asset_provider';
-import { AccountProvider } from '../../providers/account_provider';
 import { AssetEntity } from '../../models/domain/asset';
 import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
 import { Strings } from '../../resources/strings';
 import { UserId } from '../../models/domain/user';
 import { BuySellAction } from '../../models/domain/actions/buy_sell_action';
 import { GameContext } from '../../models/domain/game/game_context';
+import { GameProvider } from '../../providers/game_provider';
+import { Game } from '../../models/domain/game/game';
 
 type Event = DebenturePriceChangedEvent.Event;
 type Action = DebenturePriceChangedEvent.PlayerAction;
 
 export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Action> {
-  constructor(private assetProvider: AssetProvider, private accountProvider: AccountProvider) {
+  constructor(private gameProvider: GameProvider) {
     super();
   }
 
@@ -32,12 +32,15 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
   }
 
   async handle(event: Event, action: Action, context: GameContext): Promise<void> {
+    const { gameId, userId } = context;
+    const game = await this.gameProvider.getGame(gameId);
+
     const debentureAssetType: AssetEntity.Type = 'debeture';
-    const { userId } = context;
+
     const { currentPrice, nominal, profitabilityPercent } = event.data;
     const { count, action: debentureAction } = action;
 
-    const assets = await this.assetProvider.getAllAssets(userId);
+    const assets = game.possessions[userId].assets;
     const debetureAssets = assets.filter(a => a.type === debentureAssetType) as DebentureAsset[];
 
     const theSameDebenture = debetureAssets.find(d => {
@@ -50,6 +53,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
 
     const currentDebentureCount = theSameDebenture?.count || 0;
     const newDebentureCount = await this.getNewDebentureCount({
+      game,
       count,
       debentureAction,
       currentDebentureCount,
@@ -57,9 +61,12 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
       debenturePrice: currentPrice
     });
 
+    let newAssets;
+
     if (theSameDebenture) {
       const newDebenture = { ...theSameDebenture, count: newDebentureCount };
-      this.assetProvider.updateAsset(userId, newDebenture);
+      newAssets = assets.slice().filter(d => d.id !== newDebenture.id);
+      newAssets.push(newDebenture);
     } else {
       const newDebenture: DebentureAsset = {
         currentPrice,
@@ -70,11 +77,23 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
         type: 'debeture'
       };
 
-      this.assetProvider.addAsset(userId, newDebenture);
+      newAssets = assets.slice();
+      newAssets.push(newDebenture);
     }
+
+    const updatedGame: Game = {
+      ...game,
+      possessions: {
+        ...game.possessions,
+        [userId]: { ...game.possessions[userId], assets: newAssets }
+      }
+    };
+
+    await this.gameProvider.updateGame(updatedGame);
   }
 
   async getNewDebentureCount(props: {
+    game: Game;
     debentureAction: BuySellAction;
     currentDebentureCount: number;
     userId: UserId;
@@ -82,7 +101,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
     debenturePrice: number;
   }) {
     const { debentureAction, currentDebentureCount, userId, count, debenturePrice } = props;
-    const account = await this.accountProvider.getAccount(userId);
+    const account = props.game.accounts[userId];
 
     let newDebentureCount = currentDebentureCount;
 

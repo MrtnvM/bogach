@@ -2,10 +2,10 @@ import * as udid from 'uuid';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from './firestore_selector';
 import { Game, GameEntity } from '../models/domain/game/game';
-import { GameEvent, GameEventId, GameEventEntity } from '../models/domain/game/game_event';
 import { GameTemplate, GameTemplateEntity } from '../models/domain/game/game_template';
 import { UserId } from '../models/domain/user';
 import { PossessionStateEntity } from '../models/domain/possession_state';
+import { assertExists } from '../utils/asserts';
 
 export class GameProvider {
   constructor(private firestore: Firestore, private selector: FirestoreSelector) {}
@@ -22,7 +22,7 @@ export class GameProvider {
       name: template.name,
       participants: [userId],
       possessions: template.possessions, // TODO: Implement possession validation
-      possessionState: PossessionStateEntity.createEmpty(),
+      possessionState: { [userId]: PossessionStateEntity.createEmpty() },
       accounts: { userId: template.accountState },
       target: template.target,
       currentEvents: []
@@ -44,6 +44,8 @@ export class GameProvider {
   }
 
   async getGame(gameId: GameEntity.Id): Promise<Game> {
+    assertExists('Game ID', gameId);
+
     const selector = this.selector.game(gameId);
     const game = (await this.firestore.getItem(selector)).data();
 
@@ -51,12 +53,22 @@ export class GameProvider {
     return game as Game;
   }
 
-  async getGameEvent(eventId: GameEventId): Promise<GameEvent> {
-    const selector = this.selector.gameEvent(eventId);
-    const gameEvent = (await this.firestore.getItem(selector)).data();
+  async updateGame(game: Game): Promise<Game> {
+    assertExists('Game and Game ID', game?.id);
+    GameEntity.validate(game);
 
-    GameEventEntity.validate(gameEvent);
-    return gameEvent as GameEvent;
+    const selector = this.selector.game(game.id);
+    const updatedGame = (await this.firestore.getItem(selector)).data();
+
+    GameEntity.validate(updatedGame);
+    return game as Game;
+  }
+
+  async deleteGame(gameId: GameEntity.Id): Promise<void> {
+    assertExists('Game ID', gameId);
+
+    const selector = this.selector.game(gameId);
+    await this.firestore.removeItem(selector);
   }
 
   async getAllGameTemplates(): Promise<GameTemplate[]> {

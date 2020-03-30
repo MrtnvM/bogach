@@ -1,18 +1,19 @@
 import { GameEvent } from './game_event';
+import { Account } from '../account';
 import { UserId } from '../user';
 import { Possessions } from '../possessions';
 import { PossessionState } from '../possession_state';
-import { AccountsState } from '../accounts_state';
 import { Entity } from '../../../core/domain/entity';
 import { GameTarget, GameTargetEntity } from './game_target';
+import { GameState } from './game_state';
 
 export interface Game {
   readonly id: GameEntity.Id;
   readonly name: string;
   readonly participants: UserId[];
-  readonly possessions: Possessions;
-  readonly possessionState: PossessionState;
-  readonly accounts: AccountsState;
+  readonly possessions: GameState<Possessions>;
+  readonly possessionState: GameState<PossessionState>;
+  readonly accounts: GameState<Account>;
   readonly target: GameTarget;
   readonly currentEvents: GameEvent[];
 

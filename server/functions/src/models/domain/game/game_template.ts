@@ -2,11 +2,12 @@ import { Possessions } from '../possessions';
 import { Entity } from '../../../core/domain/entity';
 import { Account } from '../account';
 import { GameTarget, GameTargetEntity } from './game_target';
+import { GameState } from './game_state';
 
 export interface GameTemplate {
   readonly id: GameTemplateEntity.Id;
   readonly name: string;
-  readonly possessions: Possessions;
+  readonly possessions: GameState<Possessions>;
   readonly accountState: Account;
   readonly target: GameTarget;
 }
