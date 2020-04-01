@@ -35,7 +35,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
     const { gameId, userId } = context;
     const game = await this.gameProvider.getGame(gameId);
 
-    const debentureAssetType: AssetEntity.Type = 'debeture';
+    const debentureAssetType: AssetEntity.Type = 'debenture';
 
     const { currentPrice, nominal, profitabilityPercent } = event.data;
     const { count, action: debentureAction } = action;
@@ -74,7 +74,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
         profitabilityPercent,
         count: newDebentureCount,
         name: Strings.debetures(),
-        type: 'debeture'
+        type: 'debenture'
       };
 
       newAssets = assets.slice();

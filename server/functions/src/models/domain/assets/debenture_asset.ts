@@ -14,13 +14,7 @@ export namespace DebentureAssetEntity {
   export const parse = (asset: Asset, data: any): DebentureAsset => {
     const { currentPrice, nominal, profitabilityPercent, count } = data;
 
-    return {
-      ...asset,
-      currentPrice,
-      nominal,
-      profitabilityPercent,
-      count
-    };
+    return { ...asset, currentPrice, nominal, profitabilityPercent, count };
   };
 
   export const validate = (asset: any) => {
@@ -42,7 +36,7 @@ export namespace DebentureAssetEntity {
   export const getIncome = (asset: DebentureAsset): Income => {
     validate(asset);
 
-    const incomeValue = (asset.nominal * asset.profitabilityPercent) / 100;
+    const incomeValue = (asset.nominal * asset.profitabilityPercent * asset.count) / 100;
 
     return {
       name: Strings.debetures(),

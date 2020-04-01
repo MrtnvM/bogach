@@ -10,13 +10,22 @@ export interface Asset {
 export namespace AssetEntity {
   export type Id = string;
 
-  export type Type = 'insurance' | 'debeture' | 'stocks' | 'realty' | 'business' | 'other';
+  export type Type =
+    | 'insurance'
+    | 'debenture'
+    | 'stocks'
+    | 'realty'
+    | 'business'
+    | 'cash'
+    | 'other';
+
   export const TypeValues: Type[] = [
     'insurance',
-    'debeture',
+    'debenture',
     'stocks',
     'realty',
     'business',
+    'cash',
     'other'
   ];
 
@@ -25,7 +34,7 @@ export namespace AssetEntity {
     let asset: Asset = { id, name, type };
 
     const assetType: Type = asset.type;
-    asset = Entity.parse<Type>(asset, data, assetType, [['debeture', DebentureAssetEntity.parse]]);
+    asset = Entity.parse<Type>(asset, data, assetType, [['debenture', DebentureAssetEntity.parse]]);
 
     validate(asset);
 
@@ -41,13 +50,15 @@ export namespace AssetEntity {
 
     const assetType: Type = asset.type;
 
-    Entity.validate<Type>(asset, assetType, [['debeture', DebentureAssetEntity.validate]]);
+    Entity.validate<Type>(asset, assetType, [['debenture', DebentureAssetEntity.validate]]);
   };
 
   export const getIncome = (asset: Asset) => {
-    if (asset.type === 'debeture') {
+    if (asset.type === 'debenture') {
       return DebentureAssetEntity.getIncome(asset as DebentureAsset);
     }
+
+    // TODO: Implement incomes from other asset types
 
     return undefined;
   };
