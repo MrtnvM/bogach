@@ -1,7 +1,8 @@
-import { Income } from './income';
-import { Expense } from './expense';
-import { Asset } from './asset';
+import { Income, IncomeEntity } from './income';
+import { Expense, ExpenseEntity } from './expense';
+import { Asset, AssetEntity } from './asset';
 import { Liability } from './liability';
+import { Entity } from '../../core/domain/entity';
 
 export interface Possessions {
   readonly incomes: Income[];
@@ -15,6 +16,22 @@ export namespace PossessionsEntity {
     incomes: [],
     expenses: [],
     assets: [],
-    liabilities: []
+    liabilities: [],
   });
+
+  export const validate = (possessions: any) => {
+    const entity = Entity.createEntityValidator<Possessions>(possessions, 'Possessions');
+
+    entity.hasValue('incomes');
+    entity.hasValue('expenses');
+    entity.hasValue('assets');
+    entity.hasValue('liabilities');
+
+    const possessionsEntity = possessions as Possessions;
+
+    possessionsEntity.incomes.forEach(IncomeEntity.validate);
+    possessionsEntity.expenses.forEach(ExpenseEntity.validate);
+    possessionsEntity.assets.forEach(AssetEntity.validate);
+    possessionsEntity.liabilities.forEach(PossessionsEntity.validate);
+  };
 }

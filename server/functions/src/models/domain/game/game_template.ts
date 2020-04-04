@@ -1,13 +1,12 @@
-import { Possessions } from '../possessions';
+import { Possessions, PossessionsEntity } from '../possessions';
 import { Entity } from '../../../core/domain/entity';
-import { Account } from '../account';
+import { Account, AccountEntity } from '../account';
 import { GameTarget, GameTargetEntity } from './game_target';
-import { GameState } from './game_state';
 
 export interface GameTemplate {
   readonly id: GameTemplateEntity.Id;
   readonly name: string;
-  readonly possessions: GameState<Possessions>;
+  readonly possessions: Possessions;
   readonly accountState: Account;
   readonly target: GameTarget;
 }
@@ -23,7 +22,7 @@ export namespace GameTemplateEntity {
       name,
       possessions,
       accountState,
-      target
+      target,
     };
 
     validate(gameTemplate);
@@ -40,6 +39,9 @@ export namespace GameTemplateEntity {
     entity.hasValue('target');
 
     const gameTemplateEntity = gameTemplate as GameTemplate;
+
     GameTargetEntity.validate(gameTemplateEntity.target);
+    PossessionsEntity.validate(gameTemplateEntity.possessions);
+    AccountEntity.validate(gameTemplateEntity.accountState);
   };
 }

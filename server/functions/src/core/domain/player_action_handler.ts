@@ -1,8 +1,8 @@
-import { GameEventType } from '../../models/domain/game/game_event';
+import { GameEventEntity } from '../../models/domain/game/game_event';
 import { GameContext } from '../../models/domain/game/game_context';
 
 export abstract class PlayerActionHandler<Event, Action = {}> {
-  abstract get gameEventType(): GameEventType;
+  abstract get gameEventType(): GameEventEntity.Type;
 
   abstract async validate(event: Event, action: Action): Promise<boolean>;
 

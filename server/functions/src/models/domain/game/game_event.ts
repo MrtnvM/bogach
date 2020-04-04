@@ -2,22 +2,22 @@ import * as uuid from 'uuid';
 import { Entity } from '../../../core/domain/entity';
 import { DebenturePriceChangedEvent } from '../../../events/debenture/debenture_price_changed_event';
 
-export type GameEventId = string;
-export type GameEventType = string;
-
 export interface GameEvent<EventData = any> {
-  readonly id: GameEventId;
+  readonly id: GameEventEntity.Id;
   readonly name: string;
   readonly description: string;
-  readonly type: GameEventType;
+  readonly type: GameEventEntity.Type;
   readonly data: EventData;
 }
 
 export namespace GameEventEntity {
+  export type Id = string;
+  export type Type = string;
+
   export const create = <T>(
     name: string,
     description: string,
-    type: GameEventType,
+    type: Type,
     data: T
   ): GameEvent<T> => {
     const newGameEvent = {
@@ -25,7 +25,7 @@ export namespace GameEventEntity {
       name,
       description,
       type,
-      data
+      data,
     };
 
     validate(newGameEvent);
@@ -37,7 +37,7 @@ export namespace GameEventEntity {
     let gameEvent: GameEvent = { id, name, description, type, data: {} };
 
     gameEvent = Entity.parse(gameEvent, eventData, gameEvent.type, [
-      [DebenturePriceChangedEvent.Id, DebenturePriceChangedEvent.parse]
+      [DebenturePriceChangedEvent.Type, DebenturePriceChangedEvent.parse],
     ]);
 
     validate(gameEvent);
@@ -55,7 +55,7 @@ export namespace GameEventEntity {
     const type = gameEvent.type;
 
     Entity.validate(gameEvent, type, [
-      [DebenturePriceChangedEvent.Id, DebenturePriceChangedEvent.validate]
+      [DebenturePriceChangedEvent.Type, DebenturePriceChangedEvent.validate],
     ]);
   };
 }

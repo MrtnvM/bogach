@@ -22,10 +22,13 @@ export namespace AccountEntity {
   export const validate = (asset: any) => {
     const entity = Entity.createEntityValidator<Account>(asset, 'Account');
 
-    entity.hasValue('balance');
-    entity.hasValue('credit');
-    entity.hasValue('cashFlow');
+    entity.hasNumberValue('balance');
+    entity.hasNumberValue('credit');
+    entity.hasNumberValue('cashFlow');
 
-    entity.checkWithRules([[a => a.credit >= 0, "Credit value can't be >= 0"]]);
+    entity.checkWithRules([
+      [(a) => a.credit >= 0, "Credit value can't be >= 0"],
+      [(a) => a.balance < 0, "Balance value can't be < 0"],
+    ]);
   };
 }

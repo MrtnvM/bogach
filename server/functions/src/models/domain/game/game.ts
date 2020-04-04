@@ -35,7 +35,7 @@ export namespace GameEntity {
       target,
       currentEvents,
       createdAt,
-      updatedAt
+      updatedAt,
     } = data;
 
     let game: Game = {
@@ -48,7 +48,7 @@ export namespace GameEntity {
       target,
       currentEvents,
       createdAt,
-      updatedAt
+      updatedAt,
     };
 
     validate(game);
@@ -61,13 +61,16 @@ export namespace GameEntity {
     entity.hasValue('id');
     entity.hasValue('name');
     entity.hasValue('participants');
-    // entity.hasValue('possessions');
-    // entity.hasValue('possessionState');
+    entity.hasValue('possessions');
+    entity.hasValue('possessionState');
     entity.hasValue('accounts');
-    entity.hasValue('target');
+    entity.hasObjectValue('target', GameTargetEntity.validate);
     entity.hasValue('currentEvents');
 
     const gameEntity = game as Game;
-    GameTargetEntity.validate(gameEntity.target);
+
+    entity.hasValuesForKeys('possessions', gameEntity.participants);
+    entity.hasValuesForKeys('possessionState', gameEntity.participants);
+    entity.hasValuesForKeys('accounts', gameEntity.participants);
   };
 }

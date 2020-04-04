@@ -21,11 +21,17 @@ export class GameProvider {
       id: gameId,
       name: template.name,
       participants: [userId],
-      possessions: template.possessions, // TODO: Implement possession validation
-      possessionState: { [userId]: PossessionStateEntity.createEmpty() },
-      accounts: { userId: template.accountState },
+      possessions: {
+        [userId]: template.possessions,
+      },
+      possessionState: {
+        [userId]: PossessionStateEntity.createEmpty(),
+      },
+      accounts: {
+        [userId]: template.accountState,
+      },
       target: template.target,
-      currentEvents: []
+      currentEvents: [],
     };
 
     const selector = this.selector.game(gameId);
