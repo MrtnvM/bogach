@@ -18,14 +18,16 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
   }
 
   get gameEventType(): string {
-    return DebenturePriceChangedEvent.Id;
+    return DebenturePriceChangedEvent.Type;
   }
 
   async validate(event: Event, action: Action): Promise<boolean> {
     try {
       DebenturePriceChangedEvent.validate(event);
+      DebenturePriceChangedEvent.validateAction(action);
     } catch (error) {
       console.error(error);
+      return false;
     }
 
     return true;
@@ -35,15 +37,13 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
     const { gameId, userId } = context;
     const game = await this.gameProvider.getGame(gameId);
 
-    const debentureAssetType: AssetEntity.Type = 'debenture';
-
     const { currentPrice, nominal, profitabilityPercent } = event.data;
     const { count, action: debentureAction } = action;
 
     const assets = game.possessions[userId].assets;
-    const debetureAssets = assets.filter(a => a.type === debentureAssetType) as DebentureAsset[];
+    const debetureAssets = AssetEntity.getDebentures(assets);
 
-    const theSameDebenture = debetureAssets.find(d => {
+    const theSameDebenture = debetureAssets.find((d) => {
       return (
         d.currentPrice === currentPrice &&
         d.nominal === nominal &&
@@ -58,15 +58,22 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
       debentureAction,
       currentDebentureCount,
       userId,
-      debenturePrice: currentPrice
+      debenturePrice: currentPrice,
     });
 
-    let newAssets;
+    let newAssets = assets.slice();
 
     if (theSameDebenture) {
       const newDebenture = { ...theSameDebenture, count: newDebentureCount };
-      newAssets = assets.slice().filter(d => d.id !== newDebenture.id);
-      newAssets.push(newDebenture);
+      const index = assets.findIndex((d) => d.id === newDebenture.id);
+
+      if (index >= 0) {
+        newAssets[index] = newDebenture;
+      }
+
+      if (newDebenture.count === 0) {
+        newAssets = assets.filter((d) => d.id !== newDebenture.id);
+      }
     } else {
       const newDebenture: DebentureAsset = {
         currentPrice,
@@ -74,10 +81,9 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
         profitabilityPercent,
         count: newDebentureCount,
         name: Strings.debetures(),
-        type: 'debenture'
+        type: 'debenture',
       };
 
-      newAssets = assets.slice();
       newAssets.push(newDebenture);
     }
 
@@ -85,8 +91,8 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
       ...game,
       possessions: {
         ...game.possessions,
-        [userId]: { ...game.possessions[userId], assets: newAssets }
-      }
+        [userId]: { ...game.possessions[userId], assets: newAssets },
+      },
     };
 
     await this.gameProvider.updateGame(updatedGame);

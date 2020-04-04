@@ -1,9 +1,9 @@
-import { GameEvent, GameEventId } from '../../models/domain/game/game_event';
+import { GameEvent, GameEventEntity } from '../../models/domain/game/game_event';
 import { Entity } from '../../core/domain/entity';
-import { BuySellAction } from '../../models/domain/actions/buy_sell_action';
+import { BuySellAction, BuySellActionValues } from '../../models/domain/actions/buy_sell_action';
 
 export namespace DebenturePriceChangedEvent {
-  export const Id = 'debenture-price-changed-event';
+  export const Type = 'debenture-price-changed-event';
 
   export type Event = GameEvent<Data>;
 
@@ -15,7 +15,7 @@ export namespace DebenturePriceChangedEvent {
   }
 
   export interface PlayerAction {
-    readonly eventId: GameEventId;
+    readonly eventId: GameEventEntity.Id;
     readonly action: BuySellAction;
     readonly count: number;
   }
@@ -29,12 +29,16 @@ export namespace DebenturePriceChangedEvent {
         currentPrice,
         nominal,
         profitabilityPercent,
-        maxCount
-      }
+        maxCount,
+      },
     };
   };
 
   export const validate = (event: any) => {
+    if (event?.type !== Type) {
+      throw 'ERROR: Event type is not equal to ' + Type;
+    }
+
     const entity = Entity.createEntityValidator<Data>(
       event.data,
       'DebenturePriceChangedEvent.Data'
@@ -46,10 +50,23 @@ export namespace DebenturePriceChangedEvent {
     entity.hasNumberValue('maxCount');
 
     entity.checkWithRules([
-      [a => a.maxCount <= 0, "Count can't be <= 0"],
-      [a => a.nominal <= 0, "Nominal can't be <= 0"],
-      [a => a.profitabilityPercent < 0, "Profitability percent can't be < 0"],
-      [a => a.currentPrice <= 0, "Current price percent can't be <= 0"]
+      [(a) => a.maxCount <= 0, "Count can't be <= 0"],
+      [(a) => a.nominal <= 0, "Nominal can't be <= 0"],
+      [(a) => a.profitabilityPercent < 0, "Profitability percent can't be < 0"],
+      [(a) => a.currentPrice <= 0, "Current price percent can't be <= 0"],
     ]);
+  };
+
+  export const validateAction = (action: any) => {
+    const entity = Entity.createEntityValidator<PlayerAction>(
+      action,
+      'DebenturePriceChangedEvent.PlayerAction'
+    );
+
+    entity.hasValue('eventId');
+    entity.checkUnion('action', BuySellActionValues);
+    entity.hasValue('count');
+
+    entity.checkWithRules([[(a) => a.count <= 0, "Count can't be <= 0"]]);
   };
 }

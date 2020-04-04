@@ -1,5 +1,11 @@
 import { Entity } from '../../core/domain/entity';
 import { DebentureAssetEntity, DebentureAsset } from './assets/debenture_asset';
+import { InsuranceAsset } from './assets/insurance_asset';
+import { StocksAsset } from './assets/stocks_asset';
+import { RealtyAsset } from './assets/realty_asset';
+import { BusinessAsset } from './assets/business_asset';
+import { CashAsset } from './assets/cash_asset';
+import { OtherAsset } from './assets/other_asset';
 
 export interface Asset {
   readonly id?: AssetEntity.Id;
@@ -51,6 +57,38 @@ export namespace AssetEntity {
     const assetType: Type = asset.type;
 
     Entity.validate<Type>(asset, assetType, [['debenture', DebentureAssetEntity.validate]]);
+  };
+
+  const filterAssets = <T extends Asset>(assets: Asset[], type: Type) => {
+    return (assets?.filter(a => a.type === type) as T[]) ?? [];
+  };
+
+  export const getInsurances = (assets: Asset[]) => {
+    return filterAssets<InsuranceAsset>(assets, 'insurance');
+  };
+
+  export const getDebentures = (assets: Asset[]) => {
+    return filterAssets<DebentureAsset>(assets, 'debenture');
+  };
+
+  export const getStocks = (assets: Asset[]) => {
+    return filterAssets<StocksAsset>(assets, 'stocks');
+  };
+
+  export const getRealties = (assets: Asset[]) => {
+    return filterAssets<RealtyAsset>(assets, 'realty');
+  };
+
+  export const getBusinesses = (assets: Asset[]) => {
+    return filterAssets<BusinessAsset>(assets, 'business');
+  };
+
+  export const getCash = (assets: Asset[]) => {
+    return filterAssets<CashAsset>(assets, 'cash');
+  };
+
+  export const getOthers = (assets: Asset[]) => {
+    return filterAssets<OtherAsset>(assets, 'other');
   };
 
   export const getIncome = (asset: Asset) => {
