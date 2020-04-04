@@ -29,11 +29,36 @@ export class Validator<T extends object> {
     }
   }
 
+  hasObjectValue(field: keyof T, validate: (obj: any) => void) {
+    const value = this.entity[field];
+
+    if (value === undefined || value === null || typeof value !== 'object') {
+      this.throwError(`The entity does not have number value for '${field}' field`);
+    }
+
+    validate(value);
+  }
+
   hasNullableValue(field: keyof T) {
     const value = this.entity[field];
 
     if (value === undefined) {
       this.throwError(`The entity does not have nullable value for '${field}' field`);
+    }
+  }
+
+  hasValuesForKeys(field: keyof T, keys: string[]) {
+    this.hasValue(field);
+
+    const value = this.entity[field];
+    const objectKeys = Object.keys(value).sort();
+    const sortedExpectedKeys = keys.sort();
+
+    if (JSON.stringify(objectKeys) !== JSON.stringify(sortedExpectedKeys)) {
+      const expectedKeys = sortedExpectedKeys.join(', ');
+      this.throwError(
+        `The entity does not have all expected keys (${expectedKeys}) for '${field}' field`
+      );
     }
   }
 
