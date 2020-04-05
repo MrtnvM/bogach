@@ -8,6 +8,7 @@ import { BuySellAction } from '../../models/domain/actions/buy_sell_action';
 import { GameContext } from '../../models/domain/game/game_context';
 import { GameProvider } from '../../providers/game_provider';
 import { Game } from '../../models/domain/game/game';
+import produce from 'immer';
 
 type Event = DebenturePriceChangedEvent.Event;
 type Action = DebenturePriceChangedEvent.PlayerAction;
@@ -52,7 +53,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
     });
 
     const currentDebentureCount = theSameDebenture?.count || 0;
-    const newDebentureCount = await this.getNewDebentureCount({
+    const { newDebentureCount, newAccountBalance } = await this.getNewDebentureCount({
       game,
       count,
       debentureAction,
@@ -87,13 +88,10 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
       newAssets.push(newDebenture);
     }
 
-    const updatedGame: Game = {
-      ...game,
-      possessions: {
-        ...game.possessions,
-        [userId]: { ...game.possessions[userId], assets: newAssets },
-      },
-    };
+    const updatedGame: Game = produce(game, (draft) => {
+      draft.accounts[userId].balance = newAccountBalance;
+      draft.possessions[userId].assets = newAssets;
+    });
 
     await this.gameProvider.updateGame(updatedGame);
   }
@@ -108,12 +106,13 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
   }) {
     const { debentureAction, currentDebentureCount, userId, count, debenturePrice } = props;
     const account = props.game.accounts[userId];
+    const totalPrice = debenturePrice * count;
 
     let newDebentureCount = currentDebentureCount;
+    let newAccountBalance = account.balance;
 
     switch (debentureAction) {
       case 'buy':
-        const totalPrice = debenturePrice * count;
         const isEnoughMoney = account.balance >= totalPrice;
 
         if (!isEnoughMoney) {
@@ -121,6 +120,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
         }
 
         newDebentureCount += count;
+        newAccountBalance -= totalPrice;
         break;
 
       case 'sell':
@@ -129,9 +129,10 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
         }
 
         newDebentureCount -= count;
+        newAccountBalance += totalPrice;
         break;
     }
 
-    return newDebentureCount;
+    return { newDebentureCount, newAccountBalance };
   }
 }

@@ -7,9 +7,10 @@ import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
 import { DebenturePriceChangedHandler } from './debenture_price_changed_handler';
 import { Strings } from '../../resources/strings';
 import { stubs, utils } from './debenture_price_changed_handler.spec.utils';
+import produce from 'immer';
 
 describe('Debenture price changed event handler', () => {
-  const { eventId, gameId, context, game, debenture1 } = stubs;
+  const { eventId, gameId, userId, context, game, debenture1, initialBalance } = stubs;
   const mockGameProvider = mock(GameProvider);
 
   beforeEach(() => {
@@ -47,7 +48,10 @@ describe('Debenture price changed event handler', () => {
       count: 1,
     };
 
-    const expectedGame = utils.gameWithNewAsset(newDebentureAsset);
+    const expectedGame = produce(game, (draft) => {
+      draft.possessions[userId].assets.push(newDebentureAsset);
+      draft.accounts[userId].balance = initialBalance - 1100;
+    });
 
     const [newGame] = capture(mockGameProvider.updateGame).last();
     expect(newGame).toStrictEqual(expectedGame);
@@ -74,12 +78,18 @@ describe('Debenture price changed event handler', () => {
 
     await handler.handle(event, action, context);
 
-    const newDebentureAsset: DebentureAsset = {
-      ...debenture1,
-      count: 9,
-    };
+    const newDebentureAsset = produce(debenture1, (draft) => {
+      draft.count = 9;
+    });
 
-    const expectedGame = utils.gameWithUpdatedAsset(newDebentureAsset);
+    const expectedGame = produce(game, (draft) => {
+      const index = draft.possessions[userId].assets.findIndex(
+        (d) => d.id === newDebentureAsset.id
+      );
+
+      draft.possessions[userId].assets[index] = newDebentureAsset;
+      draft.accounts[userId].balance = initialBalance - 5500;
+    });
 
     const [newGame] = capture(mockGameProvider.updateGame).last();
     expect(newGame).toStrictEqual(expectedGame);
@@ -106,12 +116,18 @@ describe('Debenture price changed event handler', () => {
 
     await handler.handle(event, action, context);
 
-    const newDebentureAsset: DebentureAsset = {
-      ...debenture1,
-      count: 1,
-    };
+    const newDebentureAsset = produce(debenture1, (draft) => {
+      draft.count = 1;
+    });
 
-    const expectedGame = utils.gameWithUpdatedAsset(newDebentureAsset);
+    const expectedGame = produce(game, (draft) => {
+      const index = draft.possessions[userId].assets.findIndex(
+        (d) => d.id === newDebentureAsset.id
+      );
+
+      draft.possessions[userId].assets[index] = newDebentureAsset;
+      draft.accounts[userId].balance = initialBalance + 3300;
+    });
 
     const [newGame] = capture(mockGameProvider.updateGame).last();
     expect(newGame).toStrictEqual(expectedGame);
@@ -138,8 +154,41 @@ describe('Debenture price changed event handler', () => {
 
     await handler.handle(event, action, context);
 
-    const expectedGame = utils.gameWithoutAsset(debenture1.id as string);
+    const expectedGame = produce(game, (draft) => {
+      const index = draft.possessions[userId].assets.findIndex((d) => d.id === debenture1.id);
+
+      draft.possessions[userId].assets.splice(index, 1);
+      draft.accounts[userId].balance = initialBalance + 4400;
+    });
+
     const [newGame] = capture(mockGameProvider.updateGame).last();
     expect(newGame).toStrictEqual(expectedGame);
+  });
+
+  test('Cannot sell more debentures than already have', async () => {
+    when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
+
+    const gameProvider = instance(mockGameProvider);
+    const handler = new DebenturePriceChangedHandler(gameProvider);
+
+    const event = utils.debenturePriceChangedEvent({
+      currentPrice: 1100,
+      profitabilityPercent: 8,
+      nominal: 1000,
+      maxCount: 10,
+    });
+
+    const action = utils.debenturePriceChangedPlayerAction({
+      eventId,
+      action: 'sell',
+      count: 6,
+    });
+
+    try {
+      await handler.handle(event, action, context);
+      throw 'ERROR: Shoud fail on previous line';
+    } catch (error) {
+      expect(error).toBe('ERROR: Not enough debentures');
+    }
   });
 });

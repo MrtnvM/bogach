@@ -14,13 +14,13 @@ import { Possessions } from '../../models/domain/possessions';
 import { PossessionStateEntity } from '../../models/domain/possession_state';
 import { GameContext } from '../../models/domain/game/game_context';
 import { GameEventEntity } from '../../models/domain/game/game_event';
-import { Asset, AssetEntity } from '../../models/domain/asset';
 import { DebenturePriceChangedEvent } from './debenture_price_changed_event';
 
 const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
 const userId: UserEntity.Id = 'user1';
 const context: GameContext = { gameId, userId };
+const initialBalance = 10000;
 
 const create = <T>(obj: T) => obj;
 
@@ -136,67 +136,10 @@ const game: Game = {
     [userId]: PossessionStateEntity.createEmpty(),
   },
   accounts: {
-    [userId]: { cashFlow: 10000, balance: 100000, credit: 0 },
+    [userId]: { cashFlow: 10000, balance: initialBalance, credit: 0 },
   },
   target: { type: 'cash', value: 1000000 },
   currentEvents: [],
-};
-
-const gameWithNewAsset = (asset: Asset) => {
-  const upddateddGame: Game = {
-    ...game,
-    possessions: {
-      ...game.possessions,
-      [userId]: {
-        ...game.possessions[userId],
-        assets: [...game.possessions[userId].assets, asset],
-      },
-    },
-  };
-
-  return upddateddGame;
-};
-
-const gameWithUpdatedAsset = (asset: Asset) => {
-  const assets = game.possessions[userId].assets;
-  const index = assets.findIndex((a) => a.id === asset.id);
-
-  if (index < 0) {
-    throw 'ERROR: No such asset: ' + JSON.stringify(asset);
-  }
-
-  const newAssets = assets.slice();
-  newAssets[index] = asset;
-
-  const updatedGame: Game = {
-    ...game,
-    possessions: {
-      ...game.possessions,
-      [userId]: {
-        ...game.possessions[userId],
-        assets: newAssets,
-      },
-    },
-  };
-
-  GameEntity.validate(updatedGame);
-  return updatedGame;
-};
-
-const gameWithoutAsset = (assetId: AssetEntity.Id) => {
-  const updatedGame: Game = {
-    ...game,
-    possessions: {
-      ...game.possessions,
-      [userId]: {
-        ...game.possessions[userId],
-        assets: game.possessions[userId].assets.filter((a) => a.id !== assetId),
-      },
-    },
-  };
-
-  GameEntity.validate(updatedGame);
-  return updatedGame;
 };
 
 const debenturePriceChangedEvent = (data: DebenturePriceChangedEvent.Data) => {
@@ -224,12 +167,10 @@ export const stubs = {
   context,
   game,
   debenture1,
+  initialBalance,
 };
 
 export const utils = {
-  gameWithNewAsset,
-  gameWithUpdatedAsset,
-  gameWithoutAsset,
   debenturePriceChangedEvent,
   debenturePriceChangedPlayerAction,
 };
