@@ -7,15 +7,13 @@ export interface FirestoreWriteOptions {
 }
 
 export class Firestore {
-  constructor() {}
-
   async getItems(selector: CollectionReference) {
     try {
-      const items = await selector.listDocuments().then(snapshots => {
+      const items = await selector.listDocuments().then((snapshots) => {
         const dataObjects = snapshots
-          .map(async s => (await s.get()).data())
-          .filter(s => s !== undefined)
-          .map(s => s as FirebaseFirestore.DocumentData);
+          .map(async (s) => (await s.get()).data())
+          .filter((s) => s !== undefined)
+          .map((s) => s as FirebaseFirestore.DocumentData);
 
         return Promise.all(dataObjects);
       });
@@ -34,7 +32,7 @@ export class Firestore {
     const newItem = item && {
       ...item,
       ...(options?.createdAt !== false ? { createdAt: nowInUtc() } : {}),
-      ...(options?.updatedAt !== false ? { updatedAt: nowInUtc() } : {})
+      ...(options?.updatedAt !== false ? { updatedAt: nowInUtc() } : {}),
     };
 
     await selector.set(newItem);
@@ -44,7 +42,7 @@ export class Firestore {
   async updateItem(selector: DocumentReference, item: any, options?: FirestoreWriteOptions) {
     const updatedItem = item && {
       ...item,
-      ...(options?.updatedAt !== false ? { updatedAt: nowInUtc() } : {})
+      ...(options?.updatedAt !== false ? { updatedAt: nowInUtc() } : {}),
     };
 
     await selector.update(updatedItem);
@@ -57,6 +55,6 @@ export class Firestore {
 
   async removeItems(selector: CollectionReference) {
     const items = await selector.listDocuments();
-    return Promise.all(items.map(i => i.delete()));
+    return Promise.all(items.map((i) => i.delete()));
   }
 }

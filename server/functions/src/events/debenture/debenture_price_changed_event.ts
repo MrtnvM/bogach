@@ -36,7 +36,7 @@ export namespace DebenturePriceChangedEvent {
 
   export const validate = (event: any) => {
     if (event?.type !== Type) {
-      throw 'ERROR: Event type is not equal to ' + Type;
+      throw new Error('ERROR: Event type is not equal to ' + Type);
     }
 
     const entity = Entity.createEntityValidator<Data>(

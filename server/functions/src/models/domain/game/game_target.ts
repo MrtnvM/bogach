@@ -12,9 +12,9 @@ export namespace GameTargetEntity {
   export const parse = (data: any): GameTarget => {
     const { type, value } = data;
 
-    let game: GameTarget = {
+    const game: GameTarget = {
       type,
-      value
+      value,
     };
 
     validate(game);

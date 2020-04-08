@@ -13,8 +13,8 @@ export class GameProvider {
   async createGame(templateId: GameTemplateEntity.Id, userId: UserEntity.Id): Promise<Game> {
     const template = await this.getGameTemplate(templateId);
 
-    if (!template) throw 'ERROR: No template on game creation';
-    if (!userId) throw 'ERROR: No user ID on game creation';
+    if (!template) throw new Error('ERROR: No template on game creation');
+    if (!userId) throw new Error('ERROR: No user ID on game creation');
 
     const gameId: GameEntity.Id = udid.v4();
     const game: Game = {
@@ -67,7 +67,7 @@ export class GameProvider {
     const updatedGame = (await this.firestore.getItem(selector)).data();
 
     GameEntity.validate(updatedGame);
-    return game as Game;
+    return updatedGame as Game;
   }
 
   async deleteGame(gameId: GameEntity.Id): Promise<void> {

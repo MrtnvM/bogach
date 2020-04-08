@@ -17,7 +17,7 @@ export namespace GameTemplateEntity {
   export const parse = (data: any): GameTemplate => {
     const { id, name, possessions, accountState, target } = data;
 
-    let gameTemplate: GameTemplate = {
+    const gameTemplate: GameTemplate = {
       id,
       name,
       possessions,

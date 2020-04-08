@@ -12,7 +12,7 @@ export namespace AccountEntity {
 
   export const parse = (data: any): Account => {
     const { id, balance, credit, cashFlow } = data;
-    let account: Account = { id, balance, credit, cashFlow };
+    const account: Account = { id, balance, credit, cashFlow };
 
     validate(account);
 

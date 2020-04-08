@@ -186,7 +186,7 @@ describe('Debenture price changed event handler', () => {
 
     try {
       await handler.handle(event, action, context);
-      throw 'ERROR: Shoud fail on previous line';
+      throw new Error('ERROR: Shoud fail on previous line');
     } catch (error) {
       expect(error).toBe('ERROR: Not enough debentures');
     }

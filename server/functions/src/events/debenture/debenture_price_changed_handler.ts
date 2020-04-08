@@ -116,7 +116,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
         const isEnoughMoney = account.balance >= totalPrice;
 
         if (!isEnoughMoney) {
-          throw 'ERROR: Not enough money';
+          throw new Error('ERROR: Not enough money');
         }
 
         newDebentureCount += count;
@@ -125,7 +125,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
 
       case 'sell':
         if (currentDebentureCount < count) {
-          throw 'ERROR: Not enough debentures';
+          throw new Error('ERROR: Not enough debentures');
         }
 
         newDebentureCount -= count;

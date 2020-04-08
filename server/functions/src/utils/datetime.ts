@@ -1,6 +1,6 @@
 export function nowInUtc() {
   const date = new Date();
-  const nowInUtc = Date.UTC(
+  const utc = Date.UTC(
     date.getUTCFullYear(),
     date.getUTCMonth(),
     date.getUTCDate(),
@@ -9,5 +9,5 @@ export function nowInUtc() {
     date.getUTCSeconds()
   );
 
-  return new Date(nowInUtc);
+  return new Date(utc);
 }

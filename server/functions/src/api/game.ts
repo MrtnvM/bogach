@@ -9,7 +9,7 @@ import { FirestoreSelector } from '../providers/firestore_selector';
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
-  const create = https.onRequest(async (request, response) => {
+  const createGame = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request);
 
     const templateId = apiRequest.jsonField('templateId');
@@ -57,5 +57,5 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     response.status(200).send(gameTemplates);
   });
 
-  return { create, getAllGames, getGame, getAllGameTemplates, getGameTemplate };
+  return { create: createGame, getAllGames, getGame, getAllGameTemplates, getGameTemplate };
 };

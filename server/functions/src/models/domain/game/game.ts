@@ -38,7 +38,7 @@ export namespace GameEntity {
       updatedAt,
     } = data;
 
-    let game: Game = {
+    const game: Game = {
       id,
       name,
       participants,

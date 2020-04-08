@@ -30,8 +30,8 @@ export namespace IncomeEntity {
     entity.hasValue('type');
     entity.checkUnion('type', TypeValues);
 
-    entity.check(income => {
-      if (income.value < 0) {
+    entity.check((i) => {
+      if (i.value < 0) {
         return 'Income cannot be lower than 0';
       }
 
