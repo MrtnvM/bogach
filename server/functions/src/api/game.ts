@@ -16,16 +16,16 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const userId = apiRequest.jsonField('userId');
 
     const gameProvider = new GameProvider(firestore, selector);
-    const createdGame = await gameProvider.createGame(templateId, userId);
+    const createdGame = gameProvider.createGame(templateId, userId);
 
-    response.status(200).send(createdGame);
+    return send(createdGame, response);
   });
 
   const getAllGames = https.onRequest(async (request, response) => {
     const gameProvider = new GameProvider(firestore, selector);
-    const games = await gameProvider.getAllGames();
+    const games = gameProvider.getAllGames();
 
-    response.status(200).send(games);
+    return send(games, response);
   });
 
   const getGame = https.onRequest(async (request, response) => {
@@ -34,16 +34,16 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const gameId = apiRequest.queryParameter('gameId');
 
     const gameProvider = new GameProvider(firestore, selector);
-    const gameTemplates = await gameProvider.getGame(gameId);
+    const game = gameProvider.getGame(gameId);
 
-    response.status(200).send(gameTemplates);
+    return send(game, response);
   });
 
   const getAllGameTemplates = https.onRequest(async (request, response) => {
     const gameProvider = new GameProvider(firestore, selector);
-    const gameTemplates = await gameProvider.getAllGameTemplates();
+    const gameTemplates = gameProvider.getAllGameTemplates();
 
-    response.status(200).send(gameTemplates);
+    return send(gameTemplates, response);
   });
 
   const getGameTemplate = https.onRequest(async (request, response) => {
@@ -52,10 +52,19 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const templateId = apiRequest.queryParameter('templateId');
 
     const gameProvider = new GameProvider(firestore, selector);
-    const gameTemplates = await gameProvider.getGameTemplate(templateId);
+    const gameTemplate = gameProvider.getGameTemplate(templateId);
 
-    response.status(200).send(gameTemplates);
+    return send(gameTemplate, response);
   });
+
+  const send = <T>(data: Promise<T>, response: functions.Response) => {
+    return data
+      .then((result) => response.status(200).send(result))
+      .catch((error) => {
+        const errorMessage = error['message'] ? error.message : error;
+        response.status(500).send(errorMessage);
+      });
+  };
 
   return { create: createGame, getAllGames, getGame, getAllGameTemplates, getGameTemplate };
 };

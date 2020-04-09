@@ -93,7 +93,8 @@ export class Validator<T extends object> {
   private throwError(reason: string) {
     const error = `[VALIDATION ERROR]: ${reason}`;
     const context = this.context ? `\n[CONTEXT]: ${this.context}` : '';
+    const entity = `\n[ENTITY]: ${JSON.stringify(this.entity, null, 2)}`;
 
-    throw error + context;
+    throw error + context + entity;
   }
 }
