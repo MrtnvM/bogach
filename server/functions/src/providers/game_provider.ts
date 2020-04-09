@@ -64,7 +64,7 @@ export class GameProvider {
     GameEntity.validate(game);
 
     const selector = this.selector.game(game.id);
-    const updatedGame = (await this.firestore.getItem(selector)).data();
+    const updatedGame = await this.firestore.updateItem(selector, game);
 
     GameEntity.validate(updatedGame);
     return updatedGame as Game;
