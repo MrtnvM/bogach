@@ -63,7 +63,7 @@ class NewBusinessGameEventState extends State<NewBusinessGameEvent> {
   }
 
   Widget _buildTitle() {
-    return Text(
+    return const Text(
       Strings.newBusinessDesc,
       style: Styles.body2,
     );

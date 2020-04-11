@@ -116,7 +116,7 @@ class GameEventSelectorState extends State<GameEventSelector> {
       color: ColorRes.grey2,
       child: Row(
         children: <Widget>[
-          Text(
+          const Text(
             Strings.inputCount,
             style: Styles.body1,
           ),
@@ -138,7 +138,7 @@ class GameEventSelectorState extends State<GameEventSelector> {
           RichText(
             text: TextSpan(
               children: [
-                TextSpan(text: ' = ', style: Styles.body1),
+                const TextSpan(text: ' = ', style: Styles.body1),
                 TextSpan(
                   text: (viewModel.currentPrice * _selectedCount).toPrice(),
                   style: Styles.body2.copyWith(color: ColorRes.orange),

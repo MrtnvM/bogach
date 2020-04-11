@@ -66,7 +66,7 @@ class InvestmentGameEventState extends State<InvestmentGameEvent> {
       child: RichText(
         text: TextSpan(
           children: [
-            TextSpan(text: Strings.currentPrice, style: Styles.body1),
+            const TextSpan(text: Strings.currentPrice, style: Styles.body1),
             const WidgetSpan(
               child: SizedBox(
                 width: 4,
