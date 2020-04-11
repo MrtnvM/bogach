@@ -41,9 +41,9 @@ class GameBoardState extends State<GameBoard> with ReduxState {
 
   @override
   void dispose() {
-    super.dispose();
-
     dispatch(StopListenPossessionsStartAction());
+
+    super.dispose();
   }
 
   Widget _buildBody() {

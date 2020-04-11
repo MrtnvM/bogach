@@ -24,7 +24,7 @@ import 'package:cash_flow/models/state/posessions_state/user_possession_state.da
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 UserPossessionState mapToPossessionState(DocumentSnapshot response) {
-  final document = response.data['possessionState'];
+  final document = response.data['possessionState']['user1'];
 
   return UserPossessionState((b) => b
     ..assets = _getAssets(document)
