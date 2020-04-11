@@ -4,10 +4,10 @@ import 'package:cash_flow/features/quests/possessions_state.dart';
 import 'package:cash_flow/presentation/gameboard/cash_flow_grid.dart';
 import 'package:cash_flow/presentation/gameboard/game_event_page.dart';
 import 'package:cash_flow/resources/strings.dart';
-import 'package:cash_flow/widgets/containers/loadable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:flutter_platform_loadable/flutter_platform_loadable.dart';
 
 class GameBoard extends StatefulWidget {
   @override
@@ -31,7 +31,7 @@ class GameBoardState extends State<GameBoard> with ReduxState {
       builder: (context, state) => Scaffold(
         appBar: AppBar(title: Text(Strings.gameBoardTitle)),
         body: Loadable(
-            requestState: state.getRequestState,
+            isLoading: state.getRequestState.isInProgress,
             child: state.userPossessionsState == null
                 ? Container()
                 : _buildBody()),
@@ -41,9 +41,9 @@ class GameBoardState extends State<GameBoard> with ReduxState {
 
   @override
   void dispose() {
-    super.dispose();
-
     dispatch(StopListenPossessionsStartAction());
+
+    super.dispose();
   }
 
   Widget _buildBody() {

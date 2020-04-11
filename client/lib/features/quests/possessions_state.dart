@@ -1,8 +1,8 @@
 library possessions_state;
 
 import 'package:built_value/built_value.dart';
-import 'package:cash_flow/models/network/request_state.dart';
 import 'package:cash_flow/models/state/posessions_state/user_possession_state.dart';
+import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 part 'possessions_state.g.dart';
 

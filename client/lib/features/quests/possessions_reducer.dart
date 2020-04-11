@@ -1,6 +1,5 @@
 import 'package:cash_flow/features/quests/possessions_actions.dart';
 import 'package:cash_flow/features/quests/possessions_state.dart';
-import 'package:cash_flow/models/network/request_state.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 final possessionsReducer = Reducer<PossessionsState>()

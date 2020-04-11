@@ -1,7 +1,7 @@
 library login_state;
 
 import 'package:built_value/built_value.dart';
-import 'package:cash_flow/models/network/request_state.dart';
+import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 part 'login_state.g.dart';
 

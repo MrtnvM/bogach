@@ -54,7 +54,7 @@ class InsuranceGameEventState extends State<InsuranceGameEvent> {
   }
 
   Widget _buildTitle() {
-    return Text(
+    return const Text(
       Strings.insuranceDesc,
       style: Styles.body2,
     );

@@ -1,6 +1,5 @@
 import 'package:cash_flow/features/login/login_actions.dart';
 import 'package:cash_flow/features/login/login_state.dart';
-import 'package:cash_flow/models/network/request_state.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 final loginReducer = Reducer<LoginState>()
