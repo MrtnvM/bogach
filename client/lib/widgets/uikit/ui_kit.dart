@@ -115,7 +115,11 @@ class UiKit extends StatelessWidget {
   }
 
   Widget _getProgressBars(BuildContext context) {
-    return const GameProgressBar('Капитал', 2772, 50000);
+    return const GameProgressBar(
+      name: 'Капитал',
+      currentValue: 2772,
+      maxValue: 50000,
+    );
   }
 
   Widget _getGameEvents(BuildContext context) {

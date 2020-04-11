@@ -1,5 +1,5 @@
 import 'package:cash_flow/app/app_state.dart';
-import 'package:cash_flow/features/quests/possessions_actions.dart';
+import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/services/firebase_service.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:meta/meta.dart';
@@ -9,13 +9,13 @@ import 'package:rxdart/rxdart.dart';
 Epic<AppState> possessionsEpic({@required FirebaseService firebaseService}) {
   final Epic<AppState> getPossessionsEpic = (action$, store) {
     return Observable(action$)
-        .whereType<ListenPossessionsStartAction>()
+        .whereType<ListenGameStateStartAction>()
         .flatMap((action) => firebaseService
-            .getPossessionsStates(action.gameId)
+            .getGameData(action.gameId)
             .takeUntil(Observable(action$)
-                .whereType<StopListenPossessionsStartAction>())
-            .map<Action>((state) => ListenPossessionsSuccessAction(state))
-            .onErrorReturnWith((e) => ListenPossessionsErrorAction()));
+                .whereType<StopListenGameStateAction>())
+            .map<Action>((state) => ListenGameStateSuccessAction(state))
+            .onErrorReturnWith((e) => ListenGameStateErrorAction()));
   };
 
   return combineEpics([

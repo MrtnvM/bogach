@@ -1,6 +1,6 @@
 import 'package:cash_flow/core/utils/app_store_connector.dart';
-import 'package:cash_flow/features/quests/possessions_actions.dart';
-import 'package:cash_flow/features/quests/possessions_state.dart';
+import 'package:cash_flow/features/game/game_actions.dart';
+import 'package:cash_flow/features/game/game_state.dart';
 import 'package:cash_flow/presentation/gameboard/cash_flow_grid.dart';
 import 'package:cash_flow/presentation/gameboard/game_event_page.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -20,19 +20,19 @@ class GameBoardState extends State<GameBoard> with ReduxState {
     super.initState();
 
     dispatch(
-      ListenPossessionsStartAction('c8d3e4b6-8f8c-45ae-8bad-f085101a1c0f'),
+      ListenGameStateStartAction('c8d3e4b6-8f8c-45ae-8bad-f085101a1c0f'),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return AppStateConnector<PossessionsState>(
-      converter: (s) => s.possessions,
+    return AppStateConnector<GameState>(
+      converter: (s) => s.gameState,
       builder: (context, state) => Scaffold(
         appBar: AppBar(title: Text(Strings.gameBoardTitle)),
         body: Loadable(
             isLoading: state.getRequestState.isInProgress,
-            child: state.userPossessionsState == null
+            child: state.possessions == null
                 ? Container()
                 : _buildBody()),
       ),
@@ -41,7 +41,7 @@ class GameBoardState extends State<GameBoard> with ReduxState {
 
   @override
   void dispose() {
-    dispatch(StopListenPossessionsStartAction());
+    dispatch(StopListenGameStateAction());
 
     super.dispose();
   }
