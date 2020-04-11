@@ -121,8 +121,7 @@ class GameEventSelectorState extends State<GameEventSelector> {
             style: Styles.body1,
           ),
           const SizedBox(width: 12),
-          Container(
-            width: 100,
+          Expanded(
             child: BorderInputField(
               props: InputFieldProps(
                 controller: _countController,

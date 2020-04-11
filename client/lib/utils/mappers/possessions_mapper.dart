@@ -1,5 +1,7 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:cash_flow/models/domain/game_data.dart';
 import 'package:cash_flow/models/domain/target_data.dart';
+import 'package:cash_flow/models/network/responses/game/game_event_response_model.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/assets/asset_response_model.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/assets/business_asset_response_model.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/assets/cash_asset_response_model.dart';
@@ -12,6 +14,8 @@ import 'package:cash_flow/models/network/responses/possessions_state/expense_res
 import 'package:cash_flow/models/network/responses/possessions_state/income_response_model.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/liability_response_model.dart';
 import 'package:cash_flow/models/network/responses/target_response_model.dart';
+import 'package:cash_flow/models/state/game/game_event.dart';
+import 'package:cash_flow/models/state/game/game_event_data.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/business_asset_item.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/cash_asset_item.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/debenture_asset_item.dart';
@@ -31,11 +35,30 @@ GameData mapToGameData(DocumentSnapshot response) {
   final userPossessionState =
       mapToPossessionState(response.data['possessionState']);
   final target = mapToTargetState(response.data['target']);
+  final events = mapToGameEvents(response.data['currentEvents']);
 
   return GameData(
-      possessions: userPossessionState,
-      target: target,
+    possessions: userPossessionState,
+    target: target,
+    events: events,
   );
+}
+
+BuiltList<GameEvent> mapToGameEvents(List response) {
+  return response
+      .map((json) => GameEventResponseModel.fromJson(json))
+      .map((event) => GameEvent((b) => b
+        ..id = event.id
+        ..name = event.name
+        ..description = event.description
+        ..type = event.type
+        ..data = GameEventData((b) => b
+              ..currentPrice = event.data.currentPrice
+              ..maxCount = event.data.maxCount
+              ..nominal = event.data.nominal
+              ..profitabilityPercent = event.data.profitabilityPercent)
+            .toBuilder()))
+      .toBuiltList();
 }
 
 TargetData mapToTargetState(Map<String, dynamic> response) {

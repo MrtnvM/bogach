@@ -9,6 +9,6 @@ targets:
           create_to_json: true
           disallow_unrecognized_keys: false
           explicit_to_json: true
-          field_rename: snake
+          field_rename: none
           include_if_null: true
           nullable: true
