@@ -10,7 +10,7 @@ import { stubs, utils } from './debenture_price_changed_handler.spec.utils';
 import produce from 'immer';
 
 describe('Debenture price changed event handler', () => {
-  const { eventId, gameId, userId, context, game, debenture1, initialBalance } = stubs;
+  const { eventId, gameId, userId, context, game, debenture1, initialCash } = stubs;
   const mockGameProvider = mock(GameProvider);
 
   beforeEach(() => {
@@ -50,7 +50,7 @@ describe('Debenture price changed event handler', () => {
 
     const expectedGame = produce(game, (draft) => {
       draft.possessions[userId].assets.push(newDebentureAsset);
-      draft.accounts[userId].balance = initialBalance - 1100;
+      draft.accounts[userId].cash = initialCash - 1100;
     });
 
     const [newGame] = capture(mockGameProvider.updateGame).last();
@@ -88,7 +88,7 @@ describe('Debenture price changed event handler', () => {
       );
 
       draft.possessions[userId].assets[index] = newDebentureAsset;
-      draft.accounts[userId].balance = initialBalance - 5500;
+      draft.accounts[userId].cash = initialCash - 5500;
     });
 
     const [newGame] = capture(mockGameProvider.updateGame).last();
@@ -126,7 +126,7 @@ describe('Debenture price changed event handler', () => {
       );
 
       draft.possessions[userId].assets[index] = newDebentureAsset;
-      draft.accounts[userId].balance = initialBalance + 3300;
+      draft.accounts[userId].cash = initialCash + 3300;
     });
 
     const [newGame] = capture(mockGameProvider.updateGame).last();
@@ -158,7 +158,7 @@ describe('Debenture price changed event handler', () => {
       const index = draft.possessions[userId].assets.findIndex((d) => d.id === debenture1.id);
 
       draft.possessions[userId].assets.splice(index, 1);
-      draft.accounts[userId].balance = initialBalance + 4400;
+      draft.accounts[userId].cash = initialCash + 4400;
     });
 
     const [newGame] = capture(mockGameProvider.updateGame).last();
@@ -186,9 +186,9 @@ describe('Debenture price changed event handler', () => {
 
     try {
       await handler.handle(event, action, context);
-      throw new Error('ERROR: Shoud fail on previous line');
+      throw new Error('Shoud fail on previous line');
     } catch (error) {
-      expect(error).toBe('ERROR: Not enough debentures');
+      expect(error).toStrictEqual(new Error('Not enough debentures'));
     }
   });
 });

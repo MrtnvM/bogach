@@ -2,7 +2,7 @@ import { Entity } from '../../core/domain/entity';
 
 export interface Account {
   readonly id?: AccountEntity.Id;
-  readonly balance: number;
+  readonly cash: number;
   readonly credit: number;
   readonly cashFlow: number;
 }
@@ -12,7 +12,7 @@ export namespace AccountEntity {
 
   export const parse = (data: any): Account => {
     const { id, balance, credit, cashFlow } = data;
-    const account: Account = { id, balance, credit, cashFlow };
+    const account: Account = { id, cash: balance, credit, cashFlow };
 
     validate(account);
 
@@ -22,7 +22,7 @@ export namespace AccountEntity {
   export const validate = (asset: any) => {
     const entity = Entity.createEntityValidator<Account>(asset, 'Account');
 
-    entity.hasNumberValue('balance');
+    entity.hasNumberValue('cash');
     entity.hasNumberValue('credit');
     entity.hasNumberValue('cashFlow');
 

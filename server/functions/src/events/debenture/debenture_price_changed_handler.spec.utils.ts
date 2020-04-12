@@ -20,7 +20,7 @@ const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
 const userId: UserEntity.Id = 'user1';
 const context: GameContext = { gameId, userId };
-const initialBalance = 10000;
+const initialCash = 10000;
 
 const create = <T>(obj: T) => obj;
 
@@ -136,7 +136,7 @@ const game: Game = {
     [userId]: PossessionStateEntity.createEmpty(),
   },
   accounts: {
-    [userId]: { cashFlow: 10000, balance: initialBalance, credit: 0 },
+    [userId]: { cashFlow: 10000, cash: initialCash, credit: 0 },
   },
   target: { type: 'cash', value: 1000000 },
   currentEvents: [],
@@ -167,7 +167,7 @@ export const stubs = {
   context,
   game,
   debenture1,
-  initialBalance,
+  initialCash,
 };
 
 export const utils = {

@@ -89,7 +89,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
     }
 
     const updatedGame: Game = produce(game, (draft) => {
-      draft.accounts[userId].balance = newAccountBalance;
+      draft.accounts[userId].cash = newAccountBalance;
       draft.possessions[userId].assets = newAssets;
     });
 
@@ -109,11 +109,11 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
     const totalPrice = debenturePrice * count;
 
     let newDebentureCount = currentDebentureCount;
-    let newAccountBalance = account.balance;
+    let newAccountBalance = account.cash;
 
     switch (debentureAction) {
       case 'buy':
-        const isEnoughMoney = account.balance >= totalPrice;
+        const isEnoughMoney = account.cash >= totalPrice;
 
         if (!isEnoughMoney) {
           throw new Error('ERROR: Not enough money');
