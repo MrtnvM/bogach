@@ -27,8 +27,8 @@ export namespace AccountEntity {
     entity.hasNumberValue('cashFlow');
 
     entity.checkWithRules([
-      [(a) => a.credit >= 0, "Credit value can't be >= 0"],
-      [(a) => a.balance < 0, "Balance value can't be < 0"],
+      [(a) => a.credit < 0, "Credit value can't be < 0"],
+      [(a) => a.cash < 0, "Balance value can't be < 0"],
     ]);
   };
 }
