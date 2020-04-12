@@ -1,7 +1,7 @@
 import { Income, IncomeEntity } from './income';
 import { Expense, ExpenseEntity } from './expense';
 import { Asset, AssetEntity } from './asset';
-import { Liability } from './liability';
+import { Liability, LiabilityEntity } from './liability';
 import { Entity } from '../../core/domain/entity';
 
 export interface Possessions {
@@ -32,6 +32,6 @@ export namespace PossessionsEntity {
     possessionsEntity.incomes.forEach(IncomeEntity.validate);
     possessionsEntity.expenses.forEach(ExpenseEntity.validate);
     possessionsEntity.assets.forEach(AssetEntity.validate);
-    possessionsEntity.liabilities.forEach(PossessionsEntity.validate);
+    possessionsEntity.liabilities.forEach(LiabilityEntity.validate);
   };
 }
