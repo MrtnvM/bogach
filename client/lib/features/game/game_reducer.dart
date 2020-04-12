@@ -15,7 +15,8 @@ final gameStateReducer = Reducer<GameState>()
         return s
           ..getRequestState = RequestState.success
           ..possessions = action.data.possessions.toBuilder()
-          ..target = targetBuilder;
+          ..target = targetBuilder
+          ..events = action.data.events.toBuilder();
       }))
   ..on<ListenGameStateErrorAction>((state, action) =>
       state.rebuild((s) => s..getRequestState = RequestState.error));

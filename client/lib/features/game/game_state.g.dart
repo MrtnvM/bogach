@@ -13,14 +13,20 @@ class _$GameState extends GameState {
   final UserPossessionState possessions;
   @override
   final TargetState target;
+  @override
+  final BuiltList<GameEvent> events;
 
   factory _$GameState([void Function(GameStateBuilder) updates]) =>
       (new GameStateBuilder()..update(updates)).build();
 
-  _$GameState._({this.getRequestState, this.possessions, this.target})
+  _$GameState._(
+      {this.getRequestState, this.possessions, this.target, this.events})
       : super._() {
     if (getRequestState == null) {
       throw new BuiltValueNullFieldError('GameState', 'getRequestState');
+    }
+    if (events == null) {
+      throw new BuiltValueNullFieldError('GameState', 'events');
     }
   }
 
@@ -37,13 +43,16 @@ class _$GameState extends GameState {
     return other is GameState &&
         getRequestState == other.getRequestState &&
         possessions == other.possessions &&
-        target == other.target;
+        target == other.target &&
+        events == other.events;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc($jc(0, getRequestState.hashCode), possessions.hashCode),
-        target.hashCode));
+    return $jf($jc(
+        $jc($jc($jc(0, getRequestState.hashCode), possessions.hashCode),
+            target.hashCode),
+        events.hashCode));
   }
 
   @override
@@ -51,7 +60,8 @@ class _$GameState extends GameState {
     return (newBuiltValueToStringHelper('GameState')
           ..add('getRequestState', getRequestState)
           ..add('possessions', possessions)
-          ..add('target', target))
+          ..add('target', target)
+          ..add('events', events))
         .toString();
   }
 }
@@ -74,6 +84,11 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
   TargetStateBuilder get target => _$this._target ??= new TargetStateBuilder();
   set target(TargetStateBuilder target) => _$this._target = target;
 
+  ListBuilder<GameEvent> _events;
+  ListBuilder<GameEvent> get events =>
+      _$this._events ??= new ListBuilder<GameEvent>();
+  set events(ListBuilder<GameEvent> events) => _$this._events = events;
+
   GameStateBuilder();
 
   GameStateBuilder get _$this {
@@ -81,6 +96,7 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
       _getRequestState = _$v.getRequestState;
       _possessions = _$v.possessions?.toBuilder();
       _target = _$v.target?.toBuilder();
+      _events = _$v.events?.toBuilder();
       _$v = null;
     }
     return this;
@@ -107,7 +123,8 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
           new _$GameState._(
               getRequestState: getRequestState,
               possessions: _possessions?.build(),
-              target: _target?.build());
+              target: _target?.build(),
+              events: events.build());
     } catch (_) {
       String _$failedField;
       try {
@@ -115,6 +132,8 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
         _possessions?.build();
         _$failedField = 'target';
         _target?.build();
+        _$failedField = 'events';
+        events.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'GameState', _$failedField, e.toString());
