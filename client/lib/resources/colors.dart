@@ -23,6 +23,8 @@ class ColorRes {
   static const grey2 = Color(0xFFE0E0E0);
   static const gallery = Color(0xFFEEEEEE);
   static const blue = Color(0xFF598398);
+  static const darkBlue = Color(0xFF0B4F6C);
   static const green = Color(0xFFFF4CAF50);
   static const orange = Color(0xFFFFA726);
+  static const grass = Color(0xFF8DC63F);
 }

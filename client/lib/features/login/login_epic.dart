@@ -12,7 +12,7 @@ Epic<AppState> loginEpic({@required UserService userService}) {
         .whereType<LoginAsyncAction>()
         .where((action) => action.isStarted)
         .flatMap((action) => userService
-            .login()
+            .login(email: action.email, password: action.password)
             .map<Action>(action.complete)
             .onErrorReturnWith(action.fail));
   };
