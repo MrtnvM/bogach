@@ -1,5 +1,5 @@
 import 'package:cash_flow/core/utils/app_store_connector.dart';
-import 'package:cash_flow/features/quests/possessions_state.dart';
+import 'package:cash_flow/features/game/game_state.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/business_asset_item.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/debenture_asset_item.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/insurance_asset_item.dart';
@@ -26,22 +26,22 @@ class CashFlowGrid extends StatefulWidget {
 class _CashFlowGridState extends State<CashFlowGrid> with ReduxState {
   @override
   Widget build(BuildContext context) {
-    return AppStateConnector<PossessionsState>(
-      converter: (s) => s.possessions,
+    return AppStateConnector<GameState>(
+      converter: (s) => s.gameState,
       builder: (context, state) => _buildBody(state),
     );
   }
 
-  Widget _buildBody(PossessionsState state) {
+  Widget _buildBody(GameState state) {
     return ListView(
       children: <Widget>[
-        _buildIncomes(state.userPossessionsState.incomes),
+        _buildIncomes(state.possessions.incomes),
         const SizedBox(height: 32),
-        _buildExpenses(state.userPossessionsState.expenses),
+        _buildExpenses(state.possessions.expenses),
         const SizedBox(height: 32),
-        _buildAssets(state.userPossessionsState.assets),
+        _buildAssets(state.possessions.assets),
         const SizedBox(height: 32),
-        _buildLiabilities(state.userPossessionsState.liabilities),
+        _buildLiabilities(state.possessions.liabilities),
         const SizedBox(height: 32),
       ],
     );
@@ -84,32 +84,32 @@ class _CashFlowGridState extends State<CashFlowGrid> with ReduxState {
       result: assets.sum.toPrice(),
       rows: <RowHeaderItem>[
         RowItem(name: Strings.cash, value: assets.cash.toPrice()),
-        RowHeaderAttributeItem(
+        const RowHeaderAttributeItem(
           name: Strings.insuranceTitle,
           attribute: Strings.cost,
           value: Strings.defence,
         ),
         ..._buildInsuranceItems(assets.insurances),
-        RowHeaderAttributeItem(
+        const RowHeaderAttributeItem(
           name: Strings.investments,
           attribute: Strings.count,
           value: Strings.sum,
         ),
         ..._buildDebentureItems(assets.debentures),
-        RowHeaderAttributeItem(
+        const RowHeaderAttributeItem(
             name: Strings.stock, attribute: Strings.count, value: Strings.sum),
         ..._buildStockItems(assets.stocks),
-        RowHeaderAttributeItem(
+        const RowHeaderAttributeItem(
             name: Strings.property,
             attribute: Strings.firstPayment,
             value: Strings.cost),
         ..._buildRealtyItems(assets.realty),
-        RowHeaderAttributeItem(
+        const RowHeaderAttributeItem(
             name: Strings.business,
             attribute: Strings.firstPayment,
             value: Strings.cost),
         ..._buildBusinessItems(assets.businesses),
-        RowHeaderAttributeItem(
+        const RowHeaderAttributeItem(
             name: Strings.other,
             attribute: Strings.firstPayment,
             value: Strings.cost),

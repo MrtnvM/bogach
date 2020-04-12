@@ -1,3 +1,5 @@
+import 'package:cash_flow/models/domain/game_data.dart';
+import 'package:cash_flow/models/domain/target_data.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/assets/asset_response_model.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/assets/business_asset_response_model.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/assets/cash_asset_response_model.dart';
@@ -9,6 +11,7 @@ import 'package:cash_flow/models/network/responses/possessions_state/assets/stoc
 import 'package:cash_flow/models/network/responses/possessions_state/expense_response_model.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/income_response_model.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/liability_response_model.dart';
+import 'package:cash_flow/models/network/responses/target_response_model.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/business_asset_item.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/cash_asset_item.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/debenture_asset_item.dart';
@@ -21,10 +24,28 @@ import 'package:cash_flow/models/state/posessions_state/possession_expense.dart'
 import 'package:cash_flow/models/state/posessions_state/possession_income.dart';
 import 'package:cash_flow/models/state/posessions_state/possession_liability.dart';
 import 'package:cash_flow/models/state/posessions_state/user_possession_state.dart';
+import 'package:cash_flow/utils/consts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-UserPossessionState mapToPossessionState(DocumentSnapshot response) {
-  final document = response.data['possessionState']['user1'];
+GameData mapToGameData(DocumentSnapshot response) {
+  final userPossessionState =
+      mapToPossessionState(response.data['possessionState']);
+  final target = mapToTargetState(response.data['target']);
+
+  return GameData(
+      possessions: userPossessionState,
+      target: target,
+  );
+}
+
+TargetData mapToTargetState(Map<String, dynamic> response) {
+  final target = TargetResponseModel.fromJson(response);
+
+  return TargetData(value: target.value, type: target.type);
+}
+
+UserPossessionState mapToPossessionState(Map<String, dynamic> response) {
+  final document = response[userName];
 
   return UserPossessionState((b) => b
     ..assets = _getAssets(document)

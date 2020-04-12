@@ -73,7 +73,7 @@ class NewBusinessGameEventState extends State<NewBusinessGameEvent> {
     return RichText(
       text: TextSpan(
         children: [
-          TextSpan(text: Strings.offeredPrice, style: Styles.body1),
+          const TextSpan(text: Strings.offeredPrice, style: Styles.body1),
           const WidgetSpan(
               child: SizedBox(
             width: 4,

@@ -1,6 +1,10 @@
 import 'dart:math';
 
+import 'package:cash_flow/core/utils/app_store_connector.dart';
+import 'package:cash_flow/models/network/responses/target_type.dart';
+import 'package:cash_flow/models/state/target_state.dart';
 import 'package:cash_flow/presentation/gameboard/models/game_event.dart';
+import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/containers/event_buttons.dart';
 import 'package:cash_flow/widgets/events/investment_game_event.dart';
 import 'package:cash_flow/widgets/events/property_game_event.dart';
@@ -44,7 +48,13 @@ class _GameEventPageState extends State<GameEventPage> {
   }
 
   Widget _buildGoalProgress() {
-    return const GameProgressBar('Капитал', 2772, 50000);
+    return AppStateConnector<TargetState>(
+        converter: (s) => s.gameState.target,
+        builder: (context, state) => GameProgressBar(
+              name: _getTargetType(state.type),
+              currentValue: state.currentValue,
+              maxValue: state.value,
+            ));
   }
 
   Widget _buildPropertyEvent() {
@@ -82,45 +92,40 @@ class _GameEventPageState extends State<GameEventPage> {
     print(nextInt);
     switch (nextInt) {
       case 0:
-        {
-          setState(() => currentEvent = _buildPropertyEvent());
-          break;
-        }
+        setState(() => currentEvent = _buildPropertyEvent());
+        break;
       case 1:
-        {
-          setState(() => currentEvent = _buildInvestmentEvent());
-          break;
-        }
+        setState(() => currentEvent = _buildInvestmentEvent());
+        break;
       case 2:
-        {
-          setState(() => currentEvent = _buildPropertyEvent());
-          break;
-        }
+        setState(() => currentEvent = _buildPropertyEvent());
+        break;
       case 3:
-        {
-          setState(() => currentEvent = _buildInvestmentEvent());
-          break;
-        }
+        setState(() => currentEvent = _buildInvestmentEvent());
+        break;
       case 4:
-        {
-          setState(() => currentEvent = _buildPropertyEvent());
-          break;
-        }
+        setState(() => currentEvent = _buildPropertyEvent());
+        break;
       case 5:
-        {
-          setState(() => currentEvent = _buildInvestmentEvent());
-          break;
-        }
+        setState(() => currentEvent = _buildInvestmentEvent());
+        break;
       case 6:
-        {
-          setState(() => currentEvent = _buildPropertyEvent());
-          break;
-        }
+        setState(() => currentEvent = _buildPropertyEvent());
+        break;
       default:
         setState(() {
           currentEvent = Container();
         });
         break;
+    }
+  }
+
+  String _getTargetType(TargetType type) {
+    switch (type) {
+      case TargetType.cash:
+        return Strings.targetTypeCash;
+      default:
+        return '';
     }
   }
 }

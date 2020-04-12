@@ -1,4 +1,4 @@
-import 'package:cash_flow/models/state/posessions_state/user_possession_state.dart';
+import 'package:cash_flow/models/domain/game_data.dart';
 import 'package:cash_flow/utils/mappers/possessions_mapper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,9 +9,9 @@ class FirebaseService {
 
   final Firestore firestore;
 
-  Observable<UserPossessionState> getPossessionsStates(String gameId) {
+  Observable<GameData> getGameData(String gameId) {
     return Observable(
             firestore.collection('games').document(gameId).snapshots())
-        .map(mapToPossessionState);
+        .map(mapToGameData);
   }
 }

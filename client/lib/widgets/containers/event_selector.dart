@@ -166,7 +166,7 @@ class GameEventSelectorState extends State<GameEventSelector> {
     return RichText(
       text: TextSpan(
         children: [
-          TextSpan(text: Strings.incomePerMonth, style: Styles.body1),
+          const TextSpan(text: Strings.incomePerMonth, style: Styles.body1),
           const WidgetSpan(
             child: SizedBox(
               width: 6,
@@ -255,7 +255,7 @@ class GameEventSelectorState extends State<GameEventSelector> {
     return RichText(
       text: TextSpan(
         children: [
-          TextSpan(text: Strings.incomePerMonth, style: Styles.body1),
+          const TextSpan(text: Strings.incomePerMonth, style: Styles.body1),
           const WidgetSpan(
             child: SizedBox(
               width: 6,

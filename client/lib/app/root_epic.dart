@@ -1,5 +1,5 @@
+import 'package:cash_flow/features/game/game_epic.dart';
 import 'package:cash_flow/features/login/login_epic.dart';
-import 'package:cash_flow/features/quests/possessions_epic.dart';
 import 'package:cash_flow/services/firebase_service.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:flutter/material.dart';

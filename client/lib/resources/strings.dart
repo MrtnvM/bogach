@@ -88,4 +88,6 @@ class Strings {
   static const other = 'Прочие';
 
   static String get gameBoardTitle => 'GameBoard';
+
+  static String get targetTypeCash => 'Капитал';
 }
