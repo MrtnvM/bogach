@@ -2,6 +2,7 @@ import * as functions from 'firebase-functions';
 import * as config from '../config';
 
 import { GameProvider } from '../providers/game_provider';
+import { GameService } from '../services/game_service';
 import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from '../providers/firestore_selector';
@@ -57,6 +58,40 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     return send(gameTemplate, response);
   });
 
+  const generateGameEvents = https.onRequest(async (request, response) => {
+    const apiRequest = APIRequest.from(request);
+
+    const gameId = apiRequest.queryParameter('game_id');
+
+    const gameProvider = new GameProvider(firestore, selector);
+    const gameService = new GameService(gameProvider);
+    const game = gameService.generateGameEvents(gameId);
+
+    return send(game, response);
+  });
+
+  const handleGameEvent = https.onRequest(async (request, response) => {
+    if (request.method !== 'POST') {
+      response.status(500).send('ERROR: Required should use POST method');
+      return;
+    }
+
+    const apiRequest = APIRequest.from(request);
+
+    const action = apiRequest.jsonField('action');
+    const context = apiRequest.jsonField('context');
+    const eventId = apiRequest.jsonField('eventId');
+
+    const gameProvider = new GameProvider(firestore, selector);
+    const gameService = new GameService(gameProvider);
+
+    const handleEvent = gameService
+      .handlePlayerAction(eventId, action, context)
+      .then(() => 'Player action handled');
+
+    return send(handleEvent, response);
+  });
+
   const send = <T>(data: Promise<T>, response: functions.Response) => {
     return data
       .then((result) => response.status(200).send(result))
@@ -66,5 +101,13 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
       });
   };
 
-  return { create: createGame, getAllGames, getGame, getAllGameTemplates, getGameTemplate };
+  return {
+    create: createGame,
+    getAllGames,
+    getGame,
+    getAllGameTemplates,
+    getGameTemplate,
+    generateGameEvents,
+    handleGameEvent,
+  };
 };

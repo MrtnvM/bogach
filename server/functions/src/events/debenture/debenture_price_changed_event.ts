@@ -3,7 +3,7 @@ import { Entity } from '../../core/domain/entity';
 import { BuySellAction, BuySellActionValues } from '../../models/domain/actions/buy_sell_action';
 
 export namespace DebenturePriceChangedEvent {
-  export const Type = 'debenture-price-changed-event';
+  export const Type: GameEventEntity.Type = 'debenture-price-changed-event';
 
   export type Event = GameEvent<Data>;
 

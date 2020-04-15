@@ -13,7 +13,7 @@ import produce from 'immer';
 type Event = DebenturePriceChangedEvent.Event;
 type Action = DebenturePriceChangedEvent.PlayerAction;
 
-export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Action> {
+export class DebenturePriceChangedHandler extends PlayerActionHandler {
   constructor(private gameProvider: GameProvider) {
     super();
   }
@@ -22,7 +22,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
     return DebenturePriceChangedEvent.Type;
   }
 
-  async validate(event: Event, action: Action): Promise<boolean> {
+  async validate(event: any, action: any): Promise<boolean> {
     try {
       DebenturePriceChangedEvent.validate(event);
       DebenturePriceChangedEvent.validateAction(action);
@@ -116,7 +116,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
         const isEnoughMoney = account.cash >= totalPrice;
 
         if (!isEnoughMoney) {
-          throw new Error('ERROR: Not enough money');
+          throw new Error('Not enough money');
         }
 
         newDebentureCount += count;
@@ -125,7 +125,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler<Event, Act
 
       case 'sell':
         if (currentDebentureCount < count) {
-          throw new Error('ERROR: Not enough debentures');
+          throw new Error('Not enough debentures');
         }
 
         newDebentureCount -= count;
