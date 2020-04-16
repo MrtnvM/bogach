@@ -1,12 +1,12 @@
+import 'package:cash_flow/models/domain/buy_sell_action.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
-import 'package:cash_flow/widgets/inputs/border_input_field.dart';
-import 'package:cash_flow/widgets/inputs/input_field_props.dart';
+import 'package:cash_flow/widgets/game_event/buy_sell_bar.dart';
+import 'package:cash_flow/widgets/game_event/price_input_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class GameEventSelector extends StatefulWidget {
   const GameEventSelector(this.viewModel) : assert(viewModel != null);
@@ -20,16 +20,10 @@ class GameEventSelector extends StatefulWidget {
 }
 
 class GameEventSelectorState extends State<GameEventSelector> {
-  final _countController = TextEditingController(text: '1');
   int _selectedCount = 0;
-  InvestmentState _state = InvestmentState.purchasing;
+  BuySellAction _buySellAction = const BuySellAction.buy();
 
-  @override
-  void initState() {
-    super.initState();
-
-    _countController.addListener(_onInputFieldChanged);
-  }
+  SelectorViewModel get vm => widget.viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -40,110 +34,17 @@ class GameEventSelectorState extends State<GameEventSelector> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (widget.viewModel.changeableType) _buildTabBar(),
+          if (widget.viewModel.changeableType)
+            BuySellBar(onActionChanged: _changeState),
           const SizedBox(height: 12),
-          _builtInputField(widget.viewModel),
-          _state == InvestmentState.purchasing
-              ? _buildPurchaseSelector(widget.viewModel)
-              : _buildSellingSelector(widget.viewModel),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTabBar() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        const SizedBox(width: 8),
-        GestureDetector(
-          onTap: () => _changeState(InvestmentState.purchasing),
-          child: Container(
-            padding: const EdgeInsets.only(right: 16),
-            color: _state == InvestmentState.purchasing
-                ? ColorRes.grey2
-                : ColorRes.scaffoldBackground,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Theme(
-                  data: Theme.of(context)
-                      .copyWith(unselectedWidgetColor: ColorRes.green),
-                  child: Radio(
-                    value: InvestmentState.purchasing,
-                    groupValue: _state,
-                    onChanged: _changeState,
-                    activeColor: ColorRes.green,
-                  ),
-                ),
-                const Text(Strings.purchasing),
-              ],
-            ),
+          PriceInputField(
+            initialCount: _selectedCount,
+            currentPrice: vm.currentPrice.toDouble(),
+            onCountChanged: _onCountInputFieldChanged,
           ),
-        ),
-        GestureDetector(
-          onTap: () => _changeState(InvestmentState.selling),
-          child: Container(
-            padding: const EdgeInsets.only(right: 16),
-            color: _state == InvestmentState.selling
-                ? ColorRes.grey2
-                : ColorRes.scaffoldBackground,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Theme(
-                  data: Theme.of(context)
-                      .copyWith(unselectedWidgetColor: ColorRes.orange),
-                  child: Radio(
-                    value: InvestmentState.selling,
-                    groupValue: _state,
-                    onChanged: _changeState,
-                    activeColor: ColorRes.orange,
-                  ),
-                ),
-                const Text(Strings.selling),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _builtInputField(SelectorViewModel viewModel) {
-    return Container(
-      color: ColorRes.grey2,
-      child: Row(
-        children: <Widget>[
-          const Text(
-            Strings.inputCount,
-            style: Styles.body1,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: BorderInputField(
-              props: InputFieldProps(
-                controller: _countController,
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: [
-                  WhitelistingTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(10),
-                ],
-              ),
-            ),
-          ),
-          RichText(
-            text: TextSpan(
-              children: [
-                const TextSpan(text: ' = ', style: Styles.body1),
-                TextSpan(
-                  text: (viewModel.currentPrice * _selectedCount).toPrice(),
-                  style: Styles.body2.copyWith(color: ColorRes.orange),
-                ),
-              ],
-            ),
-          )
+          _buySellAction == const BuySellAction.buy()
+              ? _buildPurchaseSelector(vm)
+              : _buildSellingSelector(vm),
         ],
       ),
     );
@@ -390,27 +291,22 @@ class GameEventSelectorState extends State<GameEventSelector> {
     );
   }
 
-  void _changeState(InvestmentState state) {
+  void _changeState(BuySellAction action) {
     setState(() {
-      _state = state;
+      _buySellAction = action;
       _selectedCount = 0;
     });
   }
 
-  void _onInputFieldChanged() {
-    final count = int.parse(_countController.text);
-
+  void _onCountInputFieldChanged(int count) {
     setState(() {
       _selectedCount = count > widget.viewModel.maxCount ? 0 : count;
     });
   }
 
-  void _onCountChanged(double value) {
+  void _onCountChanged(num count) {
     setState(() {
-      final convertedValue = value.toInt();
-
-      _countController.text = convertedValue.toString();
-      _selectedCount = convertedValue;
+      _selectedCount = count.toInt();
     });
   }
 
