@@ -45,6 +45,11 @@ dependencies:
       url: git://github.com/mobile-dualbootpartners/flutter-platform-loadable
       ref: v0.0.7
 
+  uikit:
+    git:
+      url: git://github.com/mobile-dualbootpartners/flutter-ui-kit
+      ref: v0.0.2
+
   cupertino_icons: ^0.1.2
 
 dev_dependencies:
