@@ -20,8 +20,7 @@ class GameEventSelector extends StatefulWidget {
 }
 
 class GameEventSelectorState extends State<GameEventSelector> {
-  final TextEditingController _countController =
-      TextEditingController(text: '1');
+  final _countController = TextEditingController(text: '1');
   int _selectedCount = 0;
   InvestmentState _state = InvestmentState.purchasing;
 
