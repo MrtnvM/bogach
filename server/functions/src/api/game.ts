@@ -50,7 +50,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const getGameTemplate = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request);
 
-    const templateId = apiRequest.queryParameter('templateId');
+    const templateId = apiRequest.queryParameter('template_id');
 
     const gameProvider = new GameProvider(firestore, selector);
     const gameTemplate = gameProvider.getGameTemplate(templateId);
