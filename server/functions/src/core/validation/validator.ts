@@ -33,7 +33,7 @@ export class Validator<T extends object> {
     const value = this.entity[field];
 
     if (value === undefined || value === null || typeof value !== 'object') {
-      this.throwError(`The entity does not have number value for '${field}' field`);
+      this.throwError(`The entity does not have object value for '${field}' field`);
     }
 
     validate(value);
