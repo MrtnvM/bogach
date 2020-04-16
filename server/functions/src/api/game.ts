@@ -72,7 +72,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
   const handleGameEvent = https.onRequest(async (request, response) => {
     if (request.method !== 'POST') {
-      response.status(500).send('ERROR: Required should use POST method');
+      response.status(400).send('ERROR: Required should use POST method');
       return;
     }
 
@@ -97,7 +97,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
       .then((result) => response.status(200).send(result))
       .catch((error) => {
         const errorMessage = error['message'] ? error.message : error;
-        response.status(500).send(errorMessage);
+        response.status(422).send(errorMessage);
       });
   };
 
