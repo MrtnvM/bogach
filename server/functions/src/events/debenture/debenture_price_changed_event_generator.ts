@@ -2,6 +2,7 @@ import * as uuid from 'uuid';
 import * as random from 'random';
 import { Strings } from '../../resources/strings';
 import { DebenturePriceChangedEvent } from './debenture_price_changed_event';
+import { formatPrice } from '../../utils/currency';
 
 export namespace DebenturePriceChangedEventGenerator {
   export const generate = (): DebenturePriceChangedEvent.Event => {
@@ -13,7 +14,7 @@ export namespace DebenturePriceChangedEventGenerator {
     return {
       id: uuid.v4(),
       name: Strings.debeturesTitle(),
-      description: Strings.currentPrice() + currentPrice + ' ₽',
+      description: Strings.currentPrice() + formatPrice(currentPrice),
       type: DebenturePriceChangedEvent.Type,
       data: {
         currentPrice,
