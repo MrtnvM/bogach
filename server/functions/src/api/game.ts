@@ -32,7 +32,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const getGame = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request);
 
-    const gameId = apiRequest.queryParameter('gameId');
+    const gameId = apiRequest.queryParameter('game_id');
 
     const gameProvider = new GameProvider(firestore, selector);
     const game = gameProvider.getGame(gameId);
