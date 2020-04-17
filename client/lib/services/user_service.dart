@@ -1,8 +1,8 @@
 import 'package:cash_flow/models/network/errors/email_has_been_taken_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
 import 'package:cash_flow/models/network/request/register_request_model.dart';
+import 'package:cash_flow/utils/error_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_platform_network/flutter_platform_network.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -26,16 +26,13 @@ class UserService {
         .doOnData((response) =>
             tokenStorage.saveTokens(accessToken: response.user.uid))
         .cast<void>()
-        .onErrorResume((error) {
-      if (error is PlatformException) {
-        if (error.code == 'ERROR_NETWORK_REQUEST_FAILED') {
-          return Stream.error(NetworkConnectionException(null));
-        } else if (error.code == 'ERROR_USER_NOT_FOUND') {
-          return Stream.error(const InvalidCredentialsException());
-        }
+        .transform(ErrorHandler((code) {
+      if (code == 'ERROR_USER_NOT_FOUND') {
+        return const InvalidCredentialsException();
       }
-      return Stream.error(error);
-    });
+
+      return null;
+    }));
   }
 
   Stream<void> logout() {
@@ -43,14 +40,13 @@ class UserService {
   }
 
   Stream<void> register({@required RegisterRequestModel model}) {
-    return Stream.fromFuture(signUpUser(model)).onErrorResume((error) {
-      if (error is PlatformException) {
-        if (error.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
-          return Stream.error(const EmailHasBeenTakenException());
-        }
+    return Stream.fromFuture(signUpUser(model)).transform(ErrorHandler((code) {
+      if (code == 'ERROR_EMAIL_ALREADY_IN_USE') {
+        return const EmailHasBeenTakenException();
       }
-      return Stream.error(error);
-    });
+
+      return null;
+    }));
   }
 
   Future<void> signUpUser(RegisterRequestModel model) async {
