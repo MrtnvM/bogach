@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_platform_network/flutter_platform_network.dart';
 
 Future<DialogResponse> showCashDialog({
@@ -86,6 +87,24 @@ void handleError({
         barrierDismissible: barrierDismissible,
         displayNegative: displayNegative,
       );
+      break;
+    case PlatformException:
+      if (exception.code == 'ERROR_NETWORK_REQUEST_FAILED') {
+        showErrorDialog(
+          context: context,
+          message: Strings.noInternetError,
+          onRetry: onRetry,
+          barrierDismissible: barrierDismissible,
+          displayNegative: displayNegative,
+        );
+      } else {
+        showErrorDialog(
+          context: context,
+          onRetry: onRetry,
+          barrierDismissible: barrierDismissible,
+          displayNegative: displayNegative,
+        );
+      }
       break;
 
     default:

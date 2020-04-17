@@ -1,3 +1,4 @@
+import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/core/utils/app_store_connector.dart';
 import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/features/game/game_state.dart';
@@ -18,6 +19,7 @@ class GameBoardState extends State<GameBoard> with ReduxState {
   @override
   void initState() {
     super.initState();
+    setOrientationLandscape();
 
     dispatch(
       ListenGameStateStartAction('c8d3e4b6-8f8c-45ae-8bad-f085101a1c0f'),
@@ -42,6 +44,7 @@ class GameBoardState extends State<GameBoard> with ReduxState {
   @override
   void dispose() {
     dispatch(StopListenGameStateAction());
+    setOrientationPortrait();
 
     super.dispose();
   }

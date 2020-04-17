@@ -1,6 +1,10 @@
+import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/resources/images.dart';
+import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_control_panel/control_panel.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CashAppBar extends StatelessWidget implements PreferredSizeWidget {
   CashAppBar({
@@ -14,6 +18,31 @@ class CashAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.titleSpacing = NavigationToolbar.kMiddleSpacing,
   }) : preferredSize = Size.fromHeight(
             kToolbarHeight + (bottom?.preferredSize?.height ?? 0.0));
+
+
+
+  factory CashAppBar.withBackButton({@required String title}) {
+    assert(title != null);
+
+    return CashAppBar(
+      title: Text(
+        title,
+        style: Styles.subhead.copyWith(color: ColorRes.black),
+      ),
+      centerTitle: true,
+      leading: GestureDetector(
+        onTap: appRouter.goBack,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SvgPicture.asset(
+              Images.icBack,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   final Color backgroundColor;
   final Widget title;
