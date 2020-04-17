@@ -15,11 +15,11 @@ class UserService {
   final TokenStorage tokenStorage;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  Observable<void> login({
+  Stream<void> login({
     @required String email,
     @required String password,
   }) {
-    return Observable.fromFuture(_firebaseAuth.signInWithEmailAndPassword(
+    return Stream.fromFuture(_firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
     ))
@@ -29,27 +29,27 @@ class UserService {
         .onErrorResume((error) {
       if (error is PlatformException) {
         if (error.code == 'ERROR_NETWORK_REQUEST_FAILED') {
-          return Observable.error(NetworkConnectionException(null));
+          return Stream.error(NetworkConnectionException(null));
         } else if (error.code == 'ERROR_USER_NOT_FOUND') {
-          return Observable.error(const InvalidCredentialsException());
+          return Stream.error(const InvalidCredentialsException());
         }
       }
-      return Observable.error(error);
+      return Stream.error(error);
     });
   }
 
-  Observable<void> logout() {
-    return Observable.just(_firebaseAuth.signOut());
+  Stream<void> logout() {
+    return Stream.value(_firebaseAuth.signOut());
   }
 
-  Observable<void> register({@required RegisterRequestModel model}) {
-    return Observable.fromFuture(signUpUser(model)).onErrorResume((error) {
+  Stream<void> register({@required RegisterRequestModel model}) {
+    return Stream.fromFuture(signUpUser(model)).onErrorResume((error) {
       if (error is PlatformException) {
         if (error.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
-          return Observable.error(const EmailHasBeenTakenException());
+          return Stream.error(const EmailHasBeenTakenException());
         }
       }
-      return Observable.error(error);
+      return Stream.error(error);
     });
   }
 

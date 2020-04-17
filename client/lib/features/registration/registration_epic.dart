@@ -8,7 +8,7 @@ import 'package:rxdart/rxdart.dart';
 
 Epic<AppState> registrationEpic({@required UserService userService}) {
   final Epic<AppState> registrationEpic = (action$, store) {
-    return Observable(action$)
+    return action$
         .whereType<RegisterAsyncAction>()
         .where((action) => action.isStarted)
         .flatMap((action) => userService

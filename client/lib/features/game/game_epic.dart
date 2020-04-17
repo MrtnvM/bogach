@@ -8,11 +8,11 @@ import 'package:rxdart/rxdart.dart';
 
 Epic<AppState> possessionsEpic({@required FirebaseService firebaseService}) {
   final Epic<AppState> getPossessionsEpic = (action$, store) {
-    return Observable(action$)
+    return action$
         .whereType<ListenGameStateStartAction>()
         .flatMap((action) => firebaseService
             .getGameData(action.gameId)
-            .takeUntil(Observable(action$)
+            .takeUntil(action$
                 .whereType<StopListenGameStateAction>())
             .map<Action>((state) => ListenGameStateSuccessAction(state))
             .onErrorReturnWith((e) => ListenGameStateErrorAction()));

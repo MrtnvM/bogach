@@ -8,7 +8,7 @@ import 'package:rxdart/rxdart.dart';
 
 Epic<AppState> loginEpic({@required UserService userService}) {
   final Epic<AppState> loginEpic = (action$, store) {
-    return Observable(action$)
+    return action$
         .whereType<LoginAsyncAction>()
         .where((action) => action.isStarted)
         .flatMap((action) => userService
@@ -18,7 +18,7 @@ Epic<AppState> loginEpic({@required UserService userService}) {
   };
 
   final Epic<AppState> logoutEpic = (action$, store) {
-    return Observable(action$)
+    return action$
         .whereType<LogoutAsyncAction>()
         .where((action) => action.isStarted)
         .flatMap((action) => userService

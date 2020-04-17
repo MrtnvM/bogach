@@ -20,7 +20,7 @@ bool validateEmail(String email) {
 
   final partsSplittedByDot = email.split('.');
   final domainMoreThanTwoLetters = partsSplittedByDot.isNotEmpty &&
-      partsSplittedByDot[partsSplittedByDot.length - 1].length >= 2;
+      partsSplittedByDot.last.length >= 2;
 
   return !EmailValidator.validate(email) || !domainMoreThanTwoLetters;
 }
