@@ -4,6 +4,8 @@ import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 
+typedef OnCountChangedCallback = void Function(int);
+
 class PriceCalculator extends StatelessWidget {
   const PriceCalculator({
     Key key,
@@ -16,7 +18,7 @@ class PriceCalculator extends StatelessWidget {
 
   final int count;
   final double currentPrice;
-  final void Function(int) onCountChanged;
+  final OnCountChangedCallback onCountChanged;
 
   @override
   Widget build(BuildContext context) {

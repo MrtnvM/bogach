@@ -40,13 +40,13 @@ analyzer:
     prefer_function_declarations_over_variables: ignore
     prefer_mixin: ignore
   exclude:
-    - "bin/cache/**"
+    - 'bin/cache/**'
     # the following two are relative to the stocks example and the flutter package respectively
     # see https://github.com/dart-lang/sdk/issues/28463
-    - "lib/i18n/stock_messages_*.dart"
-    - "lib/src/http/**"
-    - "**.g.dart"
-    - "**.freezed.dart"
+    - 'lib/i18n/stock_messages_*.dart'
+    - 'lib/src/http/**'
+    - '**.g.dart'
+    - '**.freezed.dart'
 
 linter:
   rules:

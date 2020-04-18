@@ -3,6 +3,8 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
 
+typedef OnActionChangedCallback = void Function(BuySellAction);
+
 class BuySellBar extends StatelessWidget {
   const BuySellBar({
     Key key,
@@ -12,7 +14,7 @@ class BuySellBar extends StatelessWidget {
         super(key: key);
 
   final BuySellAction selectedAction;
-  final void Function(BuySellAction) onActionChanged;
+  final OnActionChangedCallback onActionChanged;
 
   @override
   Widget build(BuildContext context) {

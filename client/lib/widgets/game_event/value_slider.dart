@@ -1,6 +1,8 @@
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 
+typedef OnCountChangedCallback = void Function(int);
+
 class ValueSlider extends StatelessWidget {
   const ValueSlider({
     Key key,
@@ -13,7 +15,7 @@ class ValueSlider extends StatelessWidget {
   final int selectedCount;
   final int minCount;
   final int maxCount;
-  final void Function(int) onCountChanged;
+  final OnCountChangedCallback onCountChanged;
 
   @override
   Widget build(BuildContext context) {
