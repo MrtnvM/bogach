@@ -17,14 +17,14 @@ class AppRouter {
           isInitialRoute: true,
         ),
       ),
-      (Route<dynamic> route) => false,
+      (route) => false,
     );
   }
 
   Future<Widget> goTo(Widget route) {
     return navigatorKey.currentState.push<Widget>(
       MaterialPageRoute(
-          builder: (BuildContext context) => route,
+          builder: (context) => route,
           settings: RouteSettings(
             name: route.runtimeType.toString(),
             isInitialRoute: false,

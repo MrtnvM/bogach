@@ -17,7 +17,7 @@ class ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
-      onPressed: onPressed ?? () {},
+      onPressed: onPressed,
       color: color,
       child: Text(text, style: Styles.body1.copyWith(color: ColorRes.white)),
     );

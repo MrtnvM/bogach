@@ -6,7 +6,6 @@ import 'package:cash_flow/models/state/target_state.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/containers/event_buttons.dart';
 import 'package:cash_flow/widgets/events/investment_game_event.dart';
-import 'package:cash_flow/widgets/events/property_game_event.dart';
 import 'package:cash_flow/widgets/progress/game_progress_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -51,22 +50,6 @@ class _GameEventPageState extends State<GameEventPage> {
       name: _getTargetType(target.type),
       currentValue: target.currentValue,
       maxValue: target.value,
-    );
-  }
-
-  Widget _buildPropertyEvent() {
-    return PropertyGameEvent(
-      PropertyViewModel(
-        name: 'киоск',
-        price: 83000,
-        marketPrice: 100000,
-        downPayment: 16500,
-        debt: 66500,
-        passiveIncomePerMonth: -100,
-        roi: -7.3,
-        saleRate: 14,
-        buttonsProperties: buttonsProperties,
-      ),
     );
   }
 

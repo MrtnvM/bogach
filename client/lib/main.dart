@@ -18,7 +18,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   configureErrorReporting();
-  setOrientationModes();
+  setOrientationPortrait();
 
   final sharedPreferences = await SharedPreferences.getInstance();
   final tokenStorage = TokenStorage();
@@ -36,11 +36,12 @@ Future<void> main() async {
 
   Intl.defaultLocale = 'ru';
   await initializeDateFormatting('ru');
+  final isAuthorized = await tokenStorage.isAuthorized();
 
   runZoned<Future<void>>(() async {
     runApp(CashFlowApp(
       store: storeProvider.store,
-      isAuthorised: false,
+      isAuthorised: isAuthorized,
     ));
   }, onError: Crashlytics.instance.recordError);
 }

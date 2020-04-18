@@ -19,7 +19,10 @@ class InputFieldProps {
     this.autoValidate = false,
     this.maxLines = 1,
     this.lines = 1,
+    this.maxLength = 64,
     this.inputFormatters,
+    this.onChanged,
+    this.initialValue,
   });
 
   final String hint;
@@ -37,5 +40,8 @@ class InputFieldProps {
   final bool autoValidate;
   final int maxLines;
   final int lines;
+  final int maxLength;
   final List<TextInputFormatter> inputFormatters;
+  final ValueChanged<String> onChanged;
+  final String initialValue;
 }

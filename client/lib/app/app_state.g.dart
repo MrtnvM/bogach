@@ -10,14 +10,19 @@ class _$AppState extends AppState {
   @override
   final LoginState login;
   @override
+  final RegistrationState registration;
+  @override
   final GameState gameState;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
 
-  _$AppState._({this.login, this.gameState}) : super._() {
+  _$AppState._({this.login, this.registration, this.gameState}) : super._() {
     if (login == null) {
       throw new BuiltValueNullFieldError('AppState', 'login');
+    }
+    if (registration == null) {
+      throw new BuiltValueNullFieldError('AppState', 'registration');
     }
     if (gameState == null) {
       throw new BuiltValueNullFieldError('AppState', 'gameState');
@@ -36,18 +41,21 @@ class _$AppState extends AppState {
     if (identical(other, this)) return true;
     return other is AppState &&
         login == other.login &&
+        registration == other.registration &&
         gameState == other.gameState;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, login.hashCode), gameState.hashCode));
+    return $jf($jc($jc($jc(0, login.hashCode), registration.hashCode),
+        gameState.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('AppState')
           ..add('login', login)
+          ..add('registration', registration)
           ..add('gameState', gameState))
         .toString();
   }
@@ -60,6 +68,12 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   LoginStateBuilder get login => _$this._login ??= new LoginStateBuilder();
   set login(LoginStateBuilder login) => _$this._login = login;
 
+  RegistrationStateBuilder _registration;
+  RegistrationStateBuilder get registration =>
+      _$this._registration ??= new RegistrationStateBuilder();
+  set registration(RegistrationStateBuilder registration) =>
+      _$this._registration = registration;
+
   GameStateBuilder _gameState;
   GameStateBuilder get gameState =>
       _$this._gameState ??= new GameStateBuilder();
@@ -70,6 +84,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   AppStateBuilder get _$this {
     if (_$v != null) {
       _login = _$v.login?.toBuilder();
+      _registration = _$v.registration?.toBuilder();
       _gameState = _$v.gameState?.toBuilder();
       _$v = null;
     }
@@ -94,12 +109,17 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
     _$AppState _$result;
     try {
       _$result = _$v ??
-          new _$AppState._(login: login.build(), gameState: gameState.build());
+          new _$AppState._(
+              login: login.build(),
+              registration: registration.build(),
+              gameState: gameState.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'login';
         login.build();
+        _$failedField = 'registration';
+        registration.build();
         _$failedField = 'gameState';
         gameState.build();
       } catch (e) {

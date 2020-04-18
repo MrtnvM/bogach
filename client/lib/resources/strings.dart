@@ -3,6 +3,46 @@ class Strings {
   static const unknownError =
       'An error occurred while performing the operation';
 
+  // Common
+  static String get email => 'Email';
+
+  static String get password => 'Пароль';
+
+  static String get loginTitle => 'Авторизоваться';
+
+  static String get signUpTitle => 'Зарегистрироваться';
+
+  static String get registrationTitle => 'Регистрация';
+
+  static String get emailHasBeenTaken => 'Пользователь с таким e-mail '
+      'адресом уже зарегистрирован';
+
+  static String get facebook => 'Facebook';
+
+  static String get labelRepeatPassword => 'Повторите пароль';
+
+  static String get labelPassword => 'Пароль';
+
+  static String get labelEmail => 'E-mail';
+
+  static String get labelNickName => 'Ник';
+
+  static String get hintRepeatPassword => 'Повторите желаемый пароль';
+
+  static String get hintPassword => 'Введите желаемый пароль';
+
+  static String get hintEmail => 'Введите свой email адрес';
+
+  static String get hintNickName => 'Введите желаемое имя';
+
+  static String get regAgreementStart => 'Я прочитал и принимаю ';
+
+  static String get regAgreementTermsOfUse => 'правила пользования';
+
+  static String get regAgreementAnd => ' и ';
+
+  static String get regAgreementPrivacyPolicy => 'политику конфиденциальности';
+
   static const title = '';
   static const confirm = 'ОК';
   static const cancel = 'Отмена';
@@ -90,4 +130,14 @@ class Strings {
   static String get gameBoardTitle => 'GameBoard';
 
   static String get targetTypeCash => 'Капитал';
+
+  // Log in errors
+  static String get invalidCredentials => 'Неправильный логин или пароль';
+
+  static String get passwordAreDifferent => 'Пароли не совпадают';
+
+  static String get incorrectEmail => 'Некорректный e-mail адрес';
+
+  static String get incorrectPassword =>
+      'Пароль должен быть более 6-ти символов';
 }

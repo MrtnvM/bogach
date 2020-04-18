@@ -1,5 +1,4 @@
 import 'package:cash_flow/navigation/app_router.dart';
-import 'package:cash_flow/widgets/uikit/ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_control_panel/control_panel.dart';
 import 'package:uikit/uikit.dart';
