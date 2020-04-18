@@ -100,7 +100,7 @@ class _BorderInputFieldState extends State<BorderInputField> {
               ? TextInputAction.done
               : TextInputAction.next,
           textCapitalization: widget.props.textCapitalization,
-          validator: (String value) {
+          validator: (value) {
             if (widget.props.focusNode?.hasFocus == true ||
                 widget.props.validatorRules == null) {
               _validationResult = null;

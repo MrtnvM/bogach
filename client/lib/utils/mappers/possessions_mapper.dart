@@ -78,13 +78,13 @@ UserPossessionState mapToPossessionState(Map<String, dynamic> response) {
 }
 
 PossessionAssetBuilder _getAssets(document) {
-  final List<InsuranceAssetItem> insurances = [];
-  final List<DebentureAssetItem> debentures = [];
-  final List<StockAssetItem> stocks = [];
-  final List<RealtyAssetItem> realty = [];
-  final List<BusinessAssetItem> businesses = [];
-  final List<CashAssetItem> cash = [];
-  final List<OtherAssetItem> other = [];
+  final insurances = <InsuranceAssetItem>[];
+  final debentures = <DebentureAssetItem>[];
+  final stocks = <StockAssetItem>[];
+  final realty = <RealtyAssetItem>[];
+  final businesses = <BusinessAssetItem>[];
+  final cash = <CashAssetItem>[];
+  final other = <OtherAssetItem>[];
 
   List.from(document['assets'])
       .map(
