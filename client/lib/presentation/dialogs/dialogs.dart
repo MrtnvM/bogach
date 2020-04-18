@@ -18,7 +18,7 @@ Future<DialogResponse> showCashDialog({
   return showDialog<DialogResponse>(
       context: context,
       barrierDismissible: barrierDismissible,
-      builder: (BuildContext context) {
+      builder: (context) {
         return BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
           child: AlertDialog(

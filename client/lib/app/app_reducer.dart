@@ -7,7 +7,7 @@ import 'package:flutter_platform_core/flutter_platform_core.dart';
 class AppReducer extends Reducer<AppState> {
   @override
   AppState reduce(AppState state, Action action) {
-    return state.rebuild((AppStateBuilder s) {
+    return state.rebuild((s) {
       s.login = loginReducer.reduce(state.login, action).toBuilder();
       s.registration =
           registrationReducer.reduce(state.registration, action).toBuilder();

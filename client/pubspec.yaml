@@ -54,6 +54,8 @@ dependencies:
   cupertino_icons: ^0.1.2
 
 dev_dependencies:
+  effective_dart: ^1.2.1
+
   flutter_test:
     sdk: flutter
 
