@@ -2,23 +2,22 @@ import 'package:cash_flow/models/domain/buy_sell_action.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
-class BuySellBar extends HookWidget {
-  const BuySellBar({Key key, this.onActionChanged}) : super(key: key);
+class BuySellBar extends StatelessWidget {
+  const BuySellBar({
+    Key key,
+    this.selectedAction = const BuySellAction.buy(),
+    this.onActionChanged,
+  })  : assert(selectedAction != null),
+        super(key: key);
 
+  final BuySellAction selectedAction;
   final void Function(BuySellAction) onActionChanged;
 
   @override
   Widget build(BuildContext context) {
     const buyAction = BuySellAction.buy();
     const sellAction = BuySellAction.sell();
-
-    final action = useState(const BuySellAction.buy());
-
-    useValueChanged(action.value, (oldValue, oldResult) {
-      onActionChanged(action.value);
-    });
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -27,14 +26,14 @@ class BuySellBar extends HookWidget {
         _buildBarButton(
           context,
           action: buyAction,
-          selectedAction: action.value,
-          onSelected: () => action.value = buyAction,
+          selectedAction: selectedAction,
+          onSelected: () => onActionChanged(buyAction),
         ),
         _buildBarButton(
           context,
           action: sellAction,
-          selectedAction: action.value,
-          onSelected: () => action.value = sellAction,
+          selectedAction: selectedAction,
+          onSelected: () => onActionChanged(sellAction),
         ),
       ],
     );

@@ -45,7 +45,7 @@ class Strings {
   static const sellAllAvailable = 'Продать все';
   static const purchasing = 'Покупка';
   static const selling = 'Продажа';
-  static const inputCount = 'Введите количество';
+  static const inputCount = 'Количество:';
 
   static const newBusinessTitle = 'Новый бизнесс';
   static const newBusinessDesc =
@@ -61,7 +61,7 @@ class Strings {
   static const insuranceDesc = 'Полис страхования имущества';
   static const insurance = 'Страховая компания предлагает вам купить полис и '
       'защитить свое имущество от неприятностей. Действие полиса 1 год.';
-  static const  coverage = 'Защита:';
+  static const coverage = 'Защита:';
 
   static const smallBusinessTitle = 'Малый бизнесс';
   static const smallBusinessDesc = 'Продается терминал платежных систем';

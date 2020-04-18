@@ -2,9 +2,10 @@ import 'package:cash_flow/models/domain/buy_sell_action.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
-import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:cash_flow/widgets/game_event/buy_sell_bar.dart';
-import 'package:cash_flow/widgets/game_event/price_input_field.dart';
+import 'package:cash_flow/widgets/game_event/monthly_income.dart';
+import 'package:cash_flow/widgets/game_event/price_calculator.dart';
+import 'package:cash_flow/widgets/game_event/value_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -20,8 +21,8 @@ class GameEventSelector extends StatefulWidget {
 }
 
 class GameEventSelectorState extends State<GameEventSelector> {
-  int _selectedCount = 0;
-  BuySellAction _buySellAction = const BuySellAction.buy();
+  var _selectedCount = 0;
+  var _buySellAction = const BuySellAction.buy();
 
   SelectorViewModel get vm => widget.viewModel;
 
@@ -34,66 +35,59 @@ class GameEventSelectorState extends State<GameEventSelector> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (widget.viewModel.changeableType)
-            BuySellBar(onActionChanged: _changeState),
+          if (vm.changeableType)
+            BuySellBar(
+              selectedAction: _buySellAction,
+              onActionChanged: _changeState,
+            ),
           const SizedBox(height: 12),
-          PriceInputField(
-            initialCount: _selectedCount,
+          PriceCalculator(
+            count: _selectedCount,
             currentPrice: vm.currentPrice.toDouble(),
             onCountChanged: _onCountInputFieldChanged,
           ),
           _buySellAction == const BuySellAction.buy()
-              ? _buildPurchaseSelector(vm)
-              : _buildSellingSelector(vm),
+              ? _buildPurchaseSelector()
+              : _buildSellingSelector(),
         ],
       ),
     );
   }
 
-  Widget _buildPurchaseSelector(SelectorViewModel viewModel) {
+  Widget _buildPurchaseSelector() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _buildSlider(viewModel),
-        if (viewModel.changeableType) _buildIncomePerMonth(viewModel),
-        _buildBuyButtons(viewModel),
+        ValueSlider(
+          selectedCount: _selectedCount,
+          maxCount: vm.maxCount,
+          onCountChanged: _onCountChanged,
+        ),
+        if (vm.changeableType)
+          MonthlyIncomeWidget(
+            action: const BuySellAction.buy(),
+            assetCount: _selectedCount,
+            passiveIncomePerMonth: vm.passiveIncomePerMonth.toDouble(),
+          ),
+        _buildBuyButtons(),
       ],
     );
   }
 
-  Widget _buildIncomePerMonth(SelectorViewModel viewModel) {
-    return RichText(
-      text: TextSpan(
-        children: [
-          const TextSpan(text: Strings.incomePerMonth, style: Styles.body1),
-          const WidgetSpan(
-            child: SizedBox(
-              width: 6,
-            ),
-          ),
-          TextSpan(
-            text: (_selectedCount * viewModel.passiveIncomePerMonth).toPrice(),
-            style: Styles.body1.copyWith(color: ColorRes.green),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBuyButtons(SelectorViewModel viewModel) {
+  Widget _buildBuyButtons() {
     return Row(
       children: <Widget>[
-        Expanded(child: _buildSelectAllButton(viewModel)),
-        Expanded(child: _buildBuyAvailableButton(viewModel)),
+        Expanded(child: _buildSelectAllButton()),
+        Expanded(child: _buildBuyAvailableButton()),
         const Spacer(),
       ],
     );
   }
 
-  Widget _buildBuyAvailableButton(SelectorViewModel viewModel) {
+  Widget _buildBuyAvailableButton() {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () => _onBuyAllAvailableClicked(viewModel),
+      onTap: () => _onBuyAllAvailableClicked(vm),
       child: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(8),
@@ -119,7 +113,7 @@ class GameEventSelectorState extends State<GameEventSelector> {
     });
   }
 
-  Widget _buildSellingSelector(SelectorViewModel viewModel) {
+  Widget _buildSellingSelector() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -132,57 +126,43 @@ class GameEventSelectorState extends State<GameEventSelector> {
             Expanded(
               child: Slider(
                 min: 0,
-                max: viewModel.alreadyHave.toDouble(),
+                max: vm.alreadyHave.toDouble(),
                 value: _selectedCount.toDouble(),
                 onChanged: _onCountChanged,
-                divisions: viewModel.alreadyHave.toInt(),
+                divisions: vm.alreadyHave.toInt(),
               ),
             ),
             Text(
-              viewModel.alreadyHave.toStringAsFixed(0),
+              vm.alreadyHave.toStringAsFixed(0),
               style: Styles.body1,
             ),
           ],
         ),
-        if (viewModel.changeableType) _buildSpendingPerMonth(viewModel),
-        _buildSellButtons(viewModel),
+        if (vm.changeableType)
+          MonthlyIncomeWidget(
+            action: const BuySellAction.sell(),
+            assetCount: _selectedCount,
+            passiveIncomePerMonth: vm.passiveIncomePerMonth.toDouble(),
+          ),
+        _buildSellButtons(),
       ],
     );
   }
 
-  Widget _buildSpendingPerMonth(SelectorViewModel viewModel) {
-    return RichText(
-      text: TextSpan(
-        children: [
-          const TextSpan(text: Strings.incomePerMonth, style: Styles.body1),
-          const WidgetSpan(
-            child: SizedBox(
-              width: 6,
-            ),
-          ),
-          TextSpan(
-            text: (-_selectedCount * viewModel.passiveIncomePerMonth).toPrice(),
-            style: Styles.body1.copyWith(color: ColorRes.orange),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSellButtons(SelectorViewModel viewModel) {
+  Widget _buildSellButtons() {
     return Row(
       children: <Widget>[
-        Expanded(child: _buildSellAllButton(viewModel)),
-        Expanded(child: _buildSellAvailableButton(viewModel)),
+        Expanded(child: _buildSellAllButton()),
+        Expanded(child: _buildSellAvailableButton()),
         const Spacer(),
       ],
     );
   }
 
-  Widget _buildSellAllButton(SelectorViewModel viewModel) {
+  Widget _buildSellAllButton() {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () => _onSelectAllClicked(viewModel.alreadyHave),
+      onTap: () => _onSelectAllClicked(vm.alreadyHave),
       child: Container(
         padding: const EdgeInsets.all(8),
         alignment: Alignment.center,
@@ -199,7 +179,7 @@ class GameEventSelectorState extends State<GameEventSelector> {
                 width: 4,
               )),
               TextSpan(
-                text: viewModel.alreadyHave.toStringAsFixed(0),
+                text: vm.alreadyHave.toStringAsFixed(0),
                 style: Styles.body1,
               ),
             ],
@@ -209,10 +189,10 @@ class GameEventSelectorState extends State<GameEventSelector> {
     );
   }
 
-  Widget _buildSellAvailableButton(SelectorViewModel viewModel) {
+  Widget _buildSellAvailableButton() {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () => _onSellAllAvailableClicked(viewModel),
+      onTap: () => _onSellAllAvailableClicked(vm),
       child: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(8),
@@ -231,16 +211,16 @@ class GameEventSelectorState extends State<GameEventSelector> {
     );
   }
 
-  void _onSellAllAvailableClicked(SelectorViewModel viewModel) {
+  void _onSellAllAvailableClicked(vm) {
     setState(() {
-      _selectedCount = viewModel.alreadyHave;
+      _selectedCount = vm.alreadyHave;
     });
   }
 
-  Widget _buildSelectAllButton(SelectorViewModel viewModel) {
+  Widget _buildSelectAllButton() {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () => _onSelectAllClicked(viewModel.maxCount),
+      onTap: () => _onSelectAllClicked(vm.maxCount),
       child: Container(
         padding: const EdgeInsets.all(8),
         alignment: Alignment.center,
@@ -257,37 +237,13 @@ class GameEventSelectorState extends State<GameEventSelector> {
                 width: 4,
               )),
               TextSpan(
-                text: viewModel.maxCount.toStringAsFixed(0),
+                text: vm.maxCount.toStringAsFixed(0),
                 style: Styles.body1,
               ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildSlider(SelectorViewModel viewModel) {
-    return Row(
-      children: <Widget>[
-        Text(
-          _selectedCount.toString(),
-          style: Styles.body1,
-        ),
-        Expanded(
-          child: Slider(
-            min: 0,
-            max: viewModel.maxCount.toDouble(),
-            value: _selectedCount.toDouble(),
-            onChanged: _onCountChanged,
-            divisions: viewModel.maxCount.toInt(),
-          ),
-        ),
-        Text(
-          viewModel.maxCount.toStringAsFixed(0),
-          style: Styles.body1,
-        ),
-      ],
     );
   }
 
