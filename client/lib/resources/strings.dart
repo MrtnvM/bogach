@@ -85,7 +85,7 @@ class Strings {
   static const sellAllAvailable = 'Продать все';
   static const purchasing = 'Покупка';
   static const selling = 'Продажа';
-  static const inputCount = 'Введите количество';
+  static const inputCount = 'Количество:';
 
   static const newBusinessTitle = 'Новый бизнесс';
   static const newBusinessDesc =

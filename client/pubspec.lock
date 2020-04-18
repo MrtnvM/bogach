@@ -302,6 +302,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_hooks:
+    dependency: "direct main"
+    description:
+      name: flutter_hooks
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.9.0"
   flutter_platform_control_panel:
     dependency: "direct main"
     description:
@@ -369,6 +376,20 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  freezed:
+    dependency: "direct main"
+    description:
+      name: freezed
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.10.6"
+  freezed_annotation:
+    dependency: transitive
+    description:
+      name: freezed_annotation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.7.1"
   glob:
     dependency: transitive
     description:
@@ -761,6 +782,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.6"
+  uikit:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "v0.0.2"
+      resolved-ref: bab0734a92563db7e4ed5fba210a93af3109ea48
+      url: "git://github.com/mobile-dualbootpartners/flutter-ui-kit"
+    source: git
+    version: "0.0.2"
   url_launcher:
     dependency: "direct main"
     description:
