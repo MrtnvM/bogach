@@ -15,3 +15,10 @@ class LoginAsyncAction extends AsyncAction<void> {
 class LogoutAsyncAction extends AsyncAction<void> {
   LogoutAsyncAction();
 }
+
+class LoginViaFacebookAsyncAction extends AsyncAction<void> {
+  LoginViaFacebookAsyncAction({@material.required this.token})
+      : assert(token != null);
+
+  final String token;
+}

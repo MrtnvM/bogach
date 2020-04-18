@@ -20,6 +20,7 @@ import 'package:cash_flow/widgets/inputs/input_field_props.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -81,7 +82,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
   }
 
   void _onSignUpClicked() {
-     appRouter.goTo(const RegistrationPage());
+    appRouter.goTo(const RegistrationPage());
   }
 
   void _onLoggedIn() {
@@ -198,7 +199,21 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     );
   }
 
-  void _onContinueWithFacebookPressed() {}
+  Future<void> _onContinueWithFacebookPressed() async {
+    final facebookLogin = FacebookLogin();
+    final result = await facebookLogin.logIn(['email']);
+
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        _loginViaFacebook(result.accessToken.token);
+        break;
+      case FacebookLoginStatus.error:
+        handleError(context: context, exception: null);
+        break;
+      default:
+        break;
+    }
+  }
 
   Widget _buildLoginButton() {
     return ActionButton(
@@ -215,5 +230,20 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
       color: ColorRes.grass,
       textColor: ColorRes.white,
     );
+  }
+
+  void _loginViaFacebook(String token) {
+    dispatchAsyncAction(LoginViaFacebookAsyncAction(token: token))
+        .listen((action) => action
+          ..onSuccess(_onLoginViaFacebookSuccess)
+          ..onError(_onLoginViaFacebookError));
+  }
+
+  void _onLoginViaFacebookSuccess(_) {
+    appRouter.startWith(const MainPage());
+  }
+
+  void _onLoginViaFacebookError(error) {
+    handleError(context: context, exception: error);
   }
 }

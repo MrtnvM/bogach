@@ -28,8 +28,19 @@ Epic<AppState> loginEpic({@required UserService userService}) {
             .onErrorReturnWith(action.fail));
   });
 
+  final loginViaFacebookEpic = epic((action$, store) {
+    return action$
+        .whereType<LoginViaFacebookAsyncAction>()
+        .where((action) => action.isStarted)
+        .flatMap((action) => userService
+            .loginViaFacebook(token: action.token)
+            .map<Action>(action.complete)
+            .onErrorReturnWith(action.fail));
+  });
+
   return combineEpics([
     loginEpic,
     logoutEpic,
+    loginViaFacebookEpic,
   ]);
 }
