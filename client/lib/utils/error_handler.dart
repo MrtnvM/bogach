@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_platform_network/flutter_platform_network.dart';
 import 'package:rxdart/transformers.dart';
@@ -13,7 +14,7 @@ class ErrorHandler<S> extends StreamTransformerBase<S, S> {
 
   @override
   Stream<S> bind(Stream<S> stream) {
-    return stream.onErrorResume((error) {
+    return stream.doOnError(_recordError).onErrorResume((error) {
       if (error is PlatformException) {
         if (error.code == 'ERROR_NETWORK_REQUEST_FAILED') {
           return Stream.error(NetworkConnectionException(null));
@@ -26,5 +27,9 @@ class ErrorHandler<S> extends StreamTransformerBase<S, S> {
 
       return Stream.error(error);
     });
+  }
+
+  void _recordError(error, stacktrace) {
+    Crashlytics.instance.recordError(error, stacktrace);
   }
 }
