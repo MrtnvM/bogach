@@ -8,6 +8,7 @@ import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/main/main_page.dart';
 import 'package:cash_flow/presentation/registration/registration_page.dart';
+import 'package:cash_flow/presentation/reset_password/reset_password_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -139,6 +140,8 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
             ),
           ),
           _buildLoginButton(),
+          const SizedBox(height: 24),
+          _buildForgotPasswordButton(),
           const SizedBox(height: 24),
           _buildSocialMedias(
             icon: Images.icFacebook,
@@ -333,8 +336,29 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
                 : Container());
   }
 
+  Widget _buildForgotPasswordButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        InkWell(
+            onTap: _onForgotPasswordClicked,
+            child: Container(
+              margin: const EdgeInsets.all(8),
+              child: Text(
+                Strings.forgotPasswordTitle,
+                style: Styles.body1,
+              ),
+            )),
+      ],
+    );
+  }
+
   void _onLoginViaAppleError(error) {
     handleError(context: context, exception: error);
+  }
+
+  void _onForgotPasswordClicked() {
+    appRouter.goTo(ResetPasswordPage(email: _emailController.text));
   }
 }
 

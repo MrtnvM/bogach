@@ -36,4 +36,8 @@ final loginReducer = Reducer<LoginState>()
   ..on<SetCurrentUserAction>(
     (state, action) => state.rebuild(
         (s) => s..currentUser = mapUserToCurrentUser(action.user)?.toBuilder()),
+  )
+  ..on<ResetPasswordAsyncAction>(
+        (state, action) =>
+        state.rebuild((s) => s.resetPasswordRequestState = action.requestState),
   );

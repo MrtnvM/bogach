@@ -66,11 +66,22 @@ Epic<AppState> loginEpic({@required UserService userService}) {
             .onErrorReturnWith(action.fail));
   });
 
+  final resetPasswordEpic = epic((action$, store) {
+    return action$
+        .whereType<ResetPasswordAsyncAction>()
+        .where((action) => action.isStarted)
+        .flatMap((action) => userService
+            .resetPassword(email: action.email)
+            .map<Action>(action.complete)
+            .onErrorReturnWith(action.fail));
+  });
+
   return combineEpics([
     loginEpic,
     logoutEpic,
     loginViaFacebookEpic,
     loginViaGoogleEpic,
     loginViaAppleEpic,
+    resetPasswordEpic,
   ]);
 }

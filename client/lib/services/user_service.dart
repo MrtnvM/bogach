@@ -1,6 +1,7 @@
 import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/models/network/errors/email_has_been_taken_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
+import 'package:cash_flow/models/network/errors/invalid_email_exception.dart';
 import 'package:cash_flow/models/network/request/register_request_model.dart';
 import 'package:cash_flow/models/state/user/current_user.dart';
 import 'package:cash_flow/utils/error_handler.dart';
@@ -29,13 +30,25 @@ class UserService {
   }
 
   Stream<void> logout() {
-    return Stream.value(_firebaseAuth.signOut());
+    return Stream.fromFuture(_firebaseAuth.signOut())
+        .map((_) => tokenStorage.clearTokens());
   }
 
   Stream<void> register({@required RegisterRequestModel model}) {
     return Stream.fromFuture(signUpUser(model)).transform(ErrorHandler((code) {
       if (code == 'ERROR_EMAIL_ALREADY_IN_USE') {
         return const EmailHasBeenTakenException();
+      }
+
+      return null;
+    }));
+  }
+
+  Stream<void> resetPassword({@required String email}) {
+    return Stream.fromFuture(_firebaseAuth.sendPasswordResetEmail(email: email))
+        .transform(ErrorHandler((code) {
+      if (code == 'ERROR_USER_NOT_FOUND') {
+        return const InvalidEmailException();
       }
 
       return null;

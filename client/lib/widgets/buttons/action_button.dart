@@ -7,7 +7,7 @@ class ActionButton extends StatelessWidget {
   const ActionButton({
     this.text,
     this.onPressed,
-    this.color,
+    this.color = ColorRes.grass,
   });
 
   final String text;

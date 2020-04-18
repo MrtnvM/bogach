@@ -56,3 +56,10 @@ class SetCurrentUserAction extends Action {
 
   final FirebaseUser user;
 }
+
+class ResetPasswordAsyncAction extends AsyncAction<void> {
+  ResetPasswordAsyncAction({@material.required this.email})
+      : assert(email != null);
+
+  final String email;
+}
