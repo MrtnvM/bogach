@@ -9,7 +9,7 @@ import { PossessionState, PossessionStateEntity } from '../models/domain/possess
 import { Possessions, PossessionsEntity } from '../models/domain/possessions';
 import { InsuranceAsset } from '../models/domain/assets/insurance_asset';
 import { DebentureAsset } from '../models/domain/assets/debenture_asset';
-import { StocksAsset } from '../models/domain/assets/stocks_asset';
+import { StockAsset } from '../models/domain/assets/stock_asset';
 import { RealtyAsset } from '../models/domain/assets/realty_asset';
 import { BusinessAsset } from '../models/domain/assets/business_asset';
 import { OtherAsset } from '../models/domain/assets/other_asset';
@@ -77,10 +77,10 @@ describe('Possession Service Tests', () => {
           profitabilityPercent: 8,
           nominal: 1000
         }),
-        create<StocksAsset>({
+        create<StockAsset>({
           id: 'stocks1',
           name: 'Яндекс',
-          count: 1,
+          maxCount: 1,
           type: 'stocks',
           purchasePrice: 1900
         }),
@@ -187,9 +187,9 @@ describe('Possession Service Tests', () => {
           profitabilityPercent: 8,
           nominal: 1000
         }),
-        create<StocksAsset>({
+        create<StockAsset>({
           name: 'Яндекс',
-          count: 1,
+          maxCount: 1,
           type: 'stocks',
           purchasePrice: 1900
         }),

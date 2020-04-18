@@ -1,7 +1,7 @@
 import { Entity } from '../../core/domain/entity';
 import { DebentureAssetEntity, DebentureAsset } from './assets/debenture_asset';
 import { InsuranceAsset } from './assets/insurance_asset';
-import { StocksAsset } from './assets/stocks_asset';
+import { StockAsset } from './assets/stock_asset';
 import { RealtyAsset } from './assets/realty_asset';
 import { BusinessAsset } from './assets/business_asset';
 import { CashAsset } from './assets/cash_asset';
@@ -19,6 +19,7 @@ export namespace AssetEntity {
   export type Type =
     | 'insurance'
     | 'debenture'
+    // TODO why stocks, not stock?
     | 'stocks'
     | 'realty'
     | 'business'
@@ -72,7 +73,7 @@ export namespace AssetEntity {
   };
 
   export const getStocks = (assets: Asset[]) => {
-    return filterAssets<StocksAsset>(assets, 'stocks');
+    return filterAssets<StockAsset>(assets, 'stocks');
   };
 
   export const getRealties = (assets: Asset[]) => {
