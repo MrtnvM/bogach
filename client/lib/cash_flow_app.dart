@@ -38,6 +38,12 @@ class CashFlowAppState extends State<CashFlowApp> with ReduxState {
         home: widget.isAuthorised ? const MainPage() : const LoginPage(),
         theme: Theme.of(context).copyWith(
           scaffoldBackgroundColor: ColorRes.scaffoldBackground,
+          pageTransitionsTheme: const PageTransitionsTheme(
+            builders: <TargetPlatform, PageTransitionsBuilder>{
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            },
+          ),
         ),
       ),
     );
