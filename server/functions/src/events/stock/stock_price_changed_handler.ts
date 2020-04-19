@@ -38,26 +38,20 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     const { gameId, userId } = context;
     const game = await this.gameProvider.getGame(gameId);
 
-    const { currentPrice, fairPrice, portfolioCount, maxCount } = event.data;
+    const { currentPrice, fairPrice, maxCount } = event.data;
     const { count, action: stockAction } = action;
 
     const assets = game.possessions[userId].assets;
     const stockAssets = AssetEntity.getStocks(assets);
 
     const theSameStock = stockAssets.find((d) => {
-      return (
-        d.name === name &&
-        d.fairPrice === fairPrice //&&
-        //d.profitabilityPercent === profitabilityPercent
-        // TODO need add other fields? 
-        // why not by id?
-      );
+      return d.name === name && d.fairPrice === fairPrice;
     });
 
-    const currentStockCount = theSameStock?.count || 0;
+    const currentStockCount = theSameStock?.countInPortfolio || 0;
+    const currentAveragePrice = theSameStock?.averagePrice || currentPrice;
 
-    //TODO function name applyAction?
-    const { newStockCount, newAccountBalance } = await this.getNewStockCount({
+    const { newStockCount, newAccountBalance, newAveragePrice } = await this.applyAction({
       game,
       stockAction,
       currentStockCount,
@@ -65,13 +59,13 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
       count,
       maxCount,
       currentPrice,
+      currentAveragePrice,
     });
 
-    // TODO slice?
     let newAssets = assets.slice();
 
     if (theSameStock) {
-      const newStock = { ...theSameStock, count: newStockCount };
+      const newStock = { ...theSameStock, count: newStockCount, averagePrice: newAveragePrice };
       const index = assets.findIndex((d) => d.id === newStock.id);
 
       if (index >= 0) {
@@ -82,16 +76,16 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
         newAssets = assets.filter((d) => d.id !== newStock.id);
       }
     } else {
-      const newStock: StockAsset = {
+      const newStock = {
         currentPrice,
         fairPrice,
-        count: newStockCount,
-        name: Strings.debetures(),
-        // TODO check stock or stocks
-        type: 'stocks',
+        averagePrice: newAveragePrice,
+        countInPortfolio: newStockCount,
+        name: Strings.stocks(),
+        type: 'stock',
       };
 
-      newAssets.push(newStock);
+      newAssets.push(newStock as StockAsset);
     }
 
     const updatedGame: Game = produce(game, (draft) => {
@@ -102,7 +96,7 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     await this.gameProvider.updateGame(updatedGame);
   }
 
-  async getNewStockCount(props: {
+  async applyAction(props: {
     game: Game;
     stockAction: BuySellAction;
     currentStockCount: number;
@@ -110,13 +104,23 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     count: number;
     maxCount: number;
     currentPrice: number;
+    currentAveragePrice: number;
   }) {
-    const { stockAction, currentStockCount, userId, count, maxCount, currentPrice } = props;
+    const {
+      stockAction,
+      currentStockCount,
+      userId,
+      count,
+      maxCount,
+      currentPrice,
+      currentAveragePrice,
+    } = props;
     const account = props.game.accounts[userId];
     const totalPrice = currentPrice * count;
 
     let newStockCount;
     let newAccountBalance;
+    let newAveragePrice;
 
     switch (stockAction) {
       case 'buy':
@@ -128,11 +132,15 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
 
         const isEnoughCountAvailable = maxCount < count;
         if (!isEnoughCountAvailable) {
-            throw new Error('Not enough count available');
+          throw new Error('Not enough count available');
         }
 
         newStockCount = currentStockCount + count;
         newAccountBalance = account.cash - totalPrice;
+
+        const wholePricesDifference = currentPrice - currentAveragePrice;
+        const priceDifferenceStep = wholePricesDifference / (currentStockCount + count);
+        newAveragePrice = currentAveragePrice + priceDifferenceStep * count;
         break;
 
       case 'sell':
@@ -142,9 +150,10 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
 
         newStockCount = currentStockCount - count;
         newAccountBalance = account.cash + totalPrice;
+        newAveragePrice = currentAveragePrice;
         break;
     }
 
-    return { newStockCount: newStockCount, newAccountBalance };
+    return { newStockCount, newAccountBalance, newAveragePrice };
   }
 }

@@ -19,8 +19,7 @@ export namespace AssetEntity {
   export type Type =
     | 'insurance'
     | 'debenture'
-    // TODO why stocks, not stock?
-    | 'stocks'
+    | 'stock'
     | 'realty'
     | 'business'
     | 'cash'
@@ -29,7 +28,7 @@ export namespace AssetEntity {
   export const TypeValues: Type[] = [
     'insurance',
     'debenture',
-    'stocks',
+    'stock',
     'realty',
     'business',
     'cash',
@@ -73,7 +72,7 @@ export namespace AssetEntity {
   };
 
   export const getStocks = (assets: Asset[]) => {
-    return filterAssets<StockAsset>(assets, 'stocks');
+    return filterAssets<StockAsset>(assets, 'stock');
   };
 
   export const getRealties = (assets: Asset[]) => {

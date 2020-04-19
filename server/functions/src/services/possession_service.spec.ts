@@ -80,9 +80,11 @@ describe('Possession Service Tests', () => {
         create<StockAsset>({
           id: 'stocks1',
           name: 'Яндекс',
-          maxCount: 1,
-          type: 'stocks',
-          purchasePrice: 1900
+          countInPortfolio: 1,
+          type: 'stock',
+          fairPrice: 100,
+          currentPrice: 120,
+          averagePrice: 100,
         }),
         create<RealtyAsset>({
           id: 'realty1',
@@ -189,9 +191,11 @@ describe('Possession Service Tests', () => {
         }),
         create<StockAsset>({
           name: 'Яндекс',
-          maxCount: 1,
-          type: 'stocks',
-          purchasePrice: 1900
+          countInPortfolio: 1,
+          type: 'stock',
+          fairPrice: 100,
+          currentPrice: 120,
+          averagePrice: 100,
         }),
         create<RealtyAsset>({
           name: 'Квартира',

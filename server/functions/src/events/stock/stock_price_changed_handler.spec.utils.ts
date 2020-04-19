@@ -1,7 +1,5 @@
 import { Game, GameEntity } from '../../models/domain/game/game';
 import { InsuranceAsset } from '../../models/domain/assets/insurance_asset';
-import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
-import { StockAsset } from '../../models/domain/assets/stock_asset';
 import { RealtyAsset } from '../../models/domain/assets/realty_asset';
 import { BusinessAsset } from '../../models/domain/assets/business_asset';
 import { OtherAsset } from '../../models/domain/assets/other_asset';
@@ -14,7 +12,8 @@ import { Possessions } from '../../models/domain/possessions';
 import { PossessionStateEntity } from '../../models/domain/possession_state';
 import { GameContext } from '../../models/domain/game/game_context';
 import { GameEventEntity } from '../../models/domain/game/game_event';
-import { DebenturePriceChangedEvent } from './debenture_price_changed_event';
+import { StockAsset } from '../../models/domain/assets/stock_asset';
+import { StockPriceChangedEvent } from './stock_price_changed_event';
 
 const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
@@ -24,14 +23,14 @@ const initialCash = 10000;
 
 const create = <T>(obj: T) => obj;
 
-const debenture1 = create<DebentureAsset>({
-  id: 'debenture1',
-  name: 'ОФЗ',
-  type: 'debenture',
-  count: 4,
-  currentPrice: 1100,
-  profitabilityPercent: 8,
-  nominal: 1000,
+const stock1 = create<StockAsset>({
+  id: 'stock1',
+  name: 'Акции Сбербанка',
+  type: 'stock',
+  currentPrice: 120,
+  averagePrice: 110,
+  countInPortfolio: 5,
+  fairPrice: 100,
 });
 
 const initialPossesssions: Possessions = {
@@ -45,7 +44,7 @@ const initialPossesssions: Possessions = {
     {
       id: 'income2',
       value: 1000,
-      name: 'Карманные от бабушки',
+      name: 'Карманные от дедушки',
       type: 'other',
     },
   ],
@@ -64,15 +63,15 @@ const initialPossesssions: Possessions = {
       value: 50000,
       downPayment: 5000,
     }),
-    debenture1,
+    stock1,
     create<StockAsset>({
       id: 'stocks1',
       name: 'Яндекс',
       type: 'stock',
-      averagePrice: 1000,
-      currentPrice: 1100,
-      countInPortfolio: 10,
+      currentPrice: 1000,
+      countInPortfolio: 100,
       fairPrice: 900,
+      averagePrice: 800,
     }),
     create<RealtyAsset>({
       id: 'realty1',
@@ -144,21 +143,40 @@ const game: Game = {
   currentEvents: [],
 };
 
-const debenturePriceChangedEvent = (data: DebenturePriceChangedEvent.Data) => {
-  const event: DebenturePriceChangedEvent.Event = {
+const stockPriceChangedEvent = (data: StockPriceChangedEvent.Data) => {
+  const event: StockPriceChangedEvent.Event = {
     id: eventId,
-    name: 'Debentures',
+    name: 'Stocks',
     description: 'Description',
-    type: DebenturePriceChangedEvent.Type,
+    type: StockPriceChangedEvent.Type,
     data: data,
   };
 
-  DebenturePriceChangedEvent.validate(event);
+  StockPriceChangedEvent.validate(event);
   return event;
 };
 
-const debenturePriceChangedPlayerAction = (action: DebenturePriceChangedEvent.PlayerAction) => {
-  DebenturePriceChangedEvent.validateAction(action);
+const stockSberbankPriceChangedEvent = (currentPrice: number, maxCount: number) => {
+  const stockPriceEventData: StockPriceChangedEvent.Data = {
+    currentPrice,
+    fairPrice: 100,
+    maxCount,
+  };
+
+  const event: StockPriceChangedEvent.Event = {
+    id: eventId,
+    name: 'Акции Сбербанка',
+    description: 'Description',
+    type: StockPriceChangedEvent.Type,
+    data: stockPriceEventData,
+  };
+
+  StockPriceChangedEvent.validate(event);
+  return event;
+};
+
+const stockPriceChangedPlayerAction = (action: StockPriceChangedEvent.PlayerAction) => {
+  StockPriceChangedEvent.validateAction(action);
   return action;
 };
 
@@ -168,11 +186,12 @@ export const stubs = {
   userId,
   context,
   game,
-  debenture1,
+  stock1,
   initialCash,
 };
 
 export const utils = {
-  debenturePriceChangedEvent,
-  debenturePriceChangedPlayerAction,
+  stockSberbankPriceChangedEvent,
+  stockPriceChangedEvent,
+  stockPriceChangedPlayerAction,
 };

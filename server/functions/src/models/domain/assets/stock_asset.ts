@@ -4,14 +4,15 @@ import { Entity } from '../../../core/domain/entity';
 export interface StockAsset extends Asset {
   readonly currentPrice: number;
   readonly fairPrice: number;
-  readonly count: number;
+  readonly averagePrice: number;
+  readonly countInPortfolio: number;
 }
 
 export namespace StockAssetEntity {
   export const parse = (asset: Asset, data: any): StockAsset => {
-    const { currentPrice, fairPrice, portfolioCount, count } = data;
+    const { currentPrice, fairPrice, averagePrice, countInPortfolio, maxCount } = data;
 
-    return { ...currentPrice, fairPrice, portfolioCount, maxCount: count };
+    return { ...currentPrice, fairPrice, averagePrice, countInPortfolio, maxCount };
   };
 
   export const validate = (asset: any) => {
@@ -19,12 +20,14 @@ export namespace StockAssetEntity {
 
     entity.hasNumberValue('currentPrice');
     entity.hasNumberValue('fairPrice');
-    entity.hasNumberValue('count');
+    entity.hasNumberValue('averagePrice');
+    entity.hasNumberValue('countInPortfolio');
 
     entity.checkWithRules([
       [a => a.currentPrice <= 0, "CurrentPrice price can't be <= 0"],
       [a => a.fairPrice <= 0, "FairPrice can't be <= 0"],
-      [a => a.count < 0, "Count can't be < 0"]
+      [a => a.averagePrice <= 0, "AveragePrice can't be <= 0"],
+      [a => a.countInPortfolio < 0, "CountInPortfolio can't be < 0"],
     ]);
   };
 }

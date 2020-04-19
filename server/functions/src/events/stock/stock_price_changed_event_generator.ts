@@ -6,13 +6,11 @@ import { StockPriceChangedEvent } from './stock_price_changed_event';
 
 export namespace StockPriceChangedEventGenerator {
   export const generate = (): StockPriceChangedEvent.Event => {
-      // params value?
     const fairPrice = random.int(20, 100);
-    const priceDifference = random.int(-20, 20) * fairPrice;
-    // TODO when we should generate current price
+    const minPercentRange = -0.3;
+    const maxPercentRange = 0.3;
+    const priceDifference = random.int(minPercentRange, maxPercentRange) * fairPrice;
     const currentPrice = fairPrice + priceDifference;
-    // TODO stub now.
-    const portfolioCount = 0;
     const maxCount = random.int(9, 14) * 10;
 
     return {
@@ -23,7 +21,6 @@ export namespace StockPriceChangedEventGenerator {
       data: {
         currentPrice,
         fairPrice,
-        portfolioCount,
         maxCount,
       },
     };
