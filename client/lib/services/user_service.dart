@@ -49,6 +49,16 @@ class UserService {
     }));
   }
 
+  Stream<void> loginViaFacebook({@required String token}) {
+    final authCredential =
+        FacebookAuthProvider.getCredential(accessToken: token);
+
+    return Stream.fromFuture(_firebaseAuth.signInWithCredential(authCredential))
+        .transform(ErrorHandler())
+        .doOnData((response) =>
+            tokenStorage.saveTokens(accessToken: response.user.uid));
+  }
+
   Future<void> signUpUser(RegisterRequestModel model) async {
     await _firebaseAuth.createUserWithEmailAndPassword(
       email: model.email,
