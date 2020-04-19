@@ -70,7 +70,6 @@ const initialPossesssions: Possessions = {
       name: 'Яндекс',
       type: 'stock',
       averagePrice: 1000,
-      currentPrice: 1100,
       countInPortfolio: 10,
       fairPrice: 900,
     }),

@@ -1,7 +1,7 @@
 import 'package:cash_flow/resources/colors.dart';
 import 'package:flutter/cupertino.dart';
 
-const Color _defaultTextColor = ColorRes.black;
+const Color _defaultTextColor = ColorRes.white;
 
 class Styles {
   static const TextStyle subhead = TextStyle(
@@ -37,5 +37,13 @@ class Styles {
     fontWeight: FontWeight.w600,
     fontSize: 10,
     color: _defaultTextColor,
+  );
+
+  static const error = TextStyle(
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w500,
+    fontSize: 10,
+    height: 1.6,
+    color: ColorRes.errorRed,
   );
 }

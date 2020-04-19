@@ -1,4 +1,4 @@
-/// <reference types="@types/jest"/>
+  /// <reference types="@types/jest"/>
 
 import { GameProvider } from '../../providers/game_provider';
 import { mock, instance, reset, when, capture } from 'ts-mockito';
@@ -38,11 +38,10 @@ describe('Stock price changed event handler', () => {
 
     await handler.handle(event, action, context);
 
-    const newStockAsset: StockAsset = {
+    const newStockAsset : StockAsset = {
       name: Strings.stocks(),
       type: 'stock',
-      currentPrice: 100,
-      averagePrice: 120,
+      averagePrice: 100,
       fairPrice: 120,
       countInPortfolio: 1,
     };
@@ -76,14 +75,14 @@ describe('Stock price changed event handler', () => {
 
     const newStockAsset = produce(stock1, (draft) => {
       draft.countInPortfolio = 10;
-      draft.averagePrice = 125;
+      draft.averagePrice = 120;
     });
 
     const expectedGame = produce(game, (draft) => {
       const index = draft.possessions[userId].assets.findIndex((d) => d.id === newStockAsset.id);
 
       draft.possessions[userId].assets[index] = newStockAsset;
-      draft.accounts[userId].cash = initialCash - 1250;
+      draft.accounts[userId].cash = initialCash - 650;
     });
 
     const [newGame] = capture(mockGameProvider.updateGame).last();

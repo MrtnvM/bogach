@@ -18,6 +18,8 @@
 # This file contains the analysis options used by Flutter tools, such as IntelliJ,
 # Android Studio, and the `flutter analyze` command.
 
+include: package:effective_dart/analysis_options.1.2.0.yaml
+
 analyzer:
   strong-mode:
     implicit-dynamic: true
@@ -32,14 +34,19 @@ analyzer:
     # Stream and not importing dart:async
     # Please see https://github.com/flutter/flutter/pull/24528 for details.
     sdk_version_async_exported_from_core: ignore
+    type_annotate_public_apis: ignore
+    public_member_api_docs: ignore
+    prefer_relative_imports: ignore
+    prefer_function_declarations_over_variables: ignore
+    prefer_mixin: ignore
   exclude:
-    - "bin/cache/**"
+    - 'bin/cache/**'
     # the following two are relative to the stocks example and the flutter package respectively
     # see https://github.com/dart-lang/sdk/issues/28463
-    - "lib/i18n/stock_messages_*.dart"
-    - "lib/src/http/**"
-    - "**.g.dart"
-    - "*.g.dart"
+    - 'lib/i18n/stock_messages_*.dart'
+    - 'lib/src/http/**'
+    - '**.g.dart'
+    - '**.freezed.dart'
 
 linter:
   rules:
@@ -157,7 +164,6 @@ linter:
     # - super_goes_last # no longer needed w/ Dart 2
     - test_types_in_equals
     - throw_in_finally
-    # - type_annotate_public_apis # subset of always_specify_types
     - type_init_formals
     # - unawaited_futures # too many false positives
     # - unnecessary_await_in_return # not yet tested

@@ -43,13 +43,14 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
 
     const assets = game.possessions[userId].assets;
     const stockAssets = AssetEntity.getStocks(assets);
+    const stockName = event.name;
 
     const theSameStock = stockAssets.find((d) => {
-      return d.name === name && d.fairPrice === fairPrice;
+      return d.name === stockName && d.fairPrice === fairPrice;
     });
 
     const currentStockCount = theSameStock?.countInPortfolio || 0;
-    const currentAveragePrice = theSameStock?.averagePrice || currentPrice;
+    const currentAveragePrice = theSameStock?.averagePrice || 0;
 
     const { newStockCount, newAccountBalance, newAveragePrice } = await this.applyAction({
       game,
@@ -65,19 +66,18 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     let newAssets = assets.slice();
 
     if (theSameStock) {
-      const newStock = { ...theSameStock, count: newStockCount, averagePrice: newAveragePrice };
+      const newStock = { ...theSameStock, countInPortfolio: newStockCount, averagePrice: newAveragePrice };
       const index = assets.findIndex((d) => d.id === newStock.id);
 
       if (index >= 0) {
         newAssets[index] = newStock;
       }
 
-      if (newStock.count === 0) {
+      if (newStock.countInPortfolio === 0) {
         newAssets = assets.filter((d) => d.id !== newStock.id);
       }
     } else {
-      const newStock = {
-        currentPrice,
+      const newStock: StockAsset = {
         fairPrice,
         averagePrice: newAveragePrice,
         countInPortfolio: newStockCount,
@@ -85,7 +85,7 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
         type: 'stock',
       };
 
-      newAssets.push(newStock as StockAsset);
+      newAssets.push(newStock);
     }
 
     const updatedGame: Game = produce(game, (draft) => {
@@ -130,7 +130,7 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
           throw new Error('Not enough money');
         }
 
-        const isEnoughCountAvailable = maxCount < count;
+        const isEnoughCountAvailable = maxCount >= count;
         if (!isEnoughCountAvailable) {
           throw new Error('Not enough count available');
         }
@@ -145,7 +145,7 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
 
       case 'sell':
         if (currentStockCount < count) {
-          throw new Error('Not enough debentures');
+          throw new Error('Not enough stocks');
         }
 
         newStockCount = currentStockCount - count;

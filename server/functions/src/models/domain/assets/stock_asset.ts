@@ -2,7 +2,6 @@ import { Asset } from '../asset';
 import { Entity } from '../../../core/domain/entity';
 
 export interface StockAsset extends Asset {
-  readonly currentPrice: number;
   readonly fairPrice: number;
   readonly averagePrice: number;
   readonly countInPortfolio: number;
@@ -18,13 +17,11 @@ export namespace StockAssetEntity {
   export const validate = (asset: any) => {
     const entity = Entity.createEntityValidator<StockAsset>(asset, 'Stock Asset');
 
-    entity.hasNumberValue('currentPrice');
     entity.hasNumberValue('fairPrice');
     entity.hasNumberValue('averagePrice');
     entity.hasNumberValue('countInPortfolio');
 
     entity.checkWithRules([
-      [a => a.currentPrice <= 0, "CurrentPrice price can't be <= 0"],
       [a => a.fairPrice <= 0, "FairPrice can't be <= 0"],
       [a => a.averagePrice <= 0, "AveragePrice can't be <= 0"],
       [a => a.countInPortfolio < 0, "CountInPortfolio can't be < 0"],

@@ -12,8 +12,8 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: "v0.0.5"
-      resolved-ref: f26504028232e3fc0388da72fff42a1499b452ac
+      ref: "v0.0.6"
+      resolved-ref: "60464976aa9c6760d2866a7cdad5ccb32256a54f"
       url: "git://github.com/MrtnvM/alice.git"
     source: git
     version: "0.0.15"
@@ -45,6 +45,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.0"
+  auto_size_text:
+    dependency: "direct main"
+    description:
+      name: auto_size_text
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -206,6 +213,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.9"
+  effective_dart:
+    dependency: "direct dev"
+    description:
+      name: effective_dart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.1"
   equatable:
     dependency: transitive
     description:
@@ -233,7 +247,7 @@ packages:
       name: firebase_auth
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.15.5+3"
+    version: "0.16.0"
   firebase_auth_platform_interface:
     dependency: transitive
     description:
@@ -288,21 +302,28 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_hooks:
+    dependency: "direct main"
+    description:
+      name: flutter_hooks
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.9.0"
   flutter_platform_control_panel:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.0.7"
-      resolved-ref: "40b20dd12ced2e6452caefc5db90a1429a0decfd"
+      ref: "v0.0.8"
+      resolved-ref: "5f774f40cdddaec9c4d5784c00cbfe64e974bd23"
       url: "git://github.com/mobile-dualbootpartners/flutter-platform-control-panel"
     source: git
-    version: "0.0.1"
+    version: "0.0.2"
   flutter_platform_core:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.0.17"
-      resolved-ref: "014566cbd57ce596b09e7c8fd8c23ed03b7b6175"
+      ref: "v0.0.18"
+      resolved-ref: "4500dfb33bfc8f4d52ad2b87a252b35cb6755852"
       url: "git://github.com/mobile-dualbootpartners/flutter-platform-core"
     source: git
     version: "0.0.1"
@@ -310,8 +331,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.0.7"
-      resolved-ref: aa1d608383732b2f649287b4da96e60a452aa3e3
+      ref: "v0.0.8"
+      resolved-ref: "8ce13f9a7f1021b7d4e405ddd828fcc7dda3eaef"
       url: "git://github.com/mobile-dualbootpartners/flutter-platform-loadable"
     source: git
     version: "0.0.3"
@@ -319,8 +340,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.0.12"
-      resolved-ref: "9c34e4829e1a35429407fb2ddfdebe1aece5f216"
+      ref: "v0.0.15"
+      resolved-ref: "7eac15cd5d96003cdc785baec387106630a83a7f"
       url: "git://github.com/mobile-dualbootpartners/flutter_platform_network"
     source: git
     version: "0.0.1"
@@ -330,7 +351,7 @@ packages:
       name: flutter_redux
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.4"
+    version: "0.6.0"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -338,6 +359,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.3.2"
+  flutter_svg:
+    dependency: "direct main"
+    description:
+      name: flutter_svg
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.15.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -348,6 +376,20 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  freezed:
+    dependency: "direct main"
+    description:
+      name: freezed
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.10.6"
+  freezed_annotation:
+    dependency: transitive
+    description:
+      name: freezed_annotation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.7.1"
   glob:
     dependency: transitive
     description:
@@ -432,6 +474,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.3.0"
+  logger:
+    dependency: transitive
+    description:
+      name: logger
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.3"
   logging:
     dependency: transitive
     description:
@@ -502,6 +551,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.4"
+  path_drawing:
+    dependency: transitive
+    description:
+      name: path_drawing
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.1"
+  path_parsing:
+    dependency: transitive
+    description:
+      name: path_parsing
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.4"
   path_provider:
     dependency: transitive
     description:
@@ -585,21 +648,23 @@ packages:
       name: redux
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "4.0.0"
   redux_epics:
     dependency: transitive
     description:
-      name: redux_epics
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.10.6"
+      path: "."
+      ref: HEAD
+      resolved-ref: "67758a8d5e72651f120b05414ce3502a31e3b483"
+      url: "git://github.com/w3ggy/dart_redux_epics"
+    source: git
+    version: "0.14.0"
   rxdart:
     dependency: "direct main"
     description:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.22.6"
+    version: "0.24.0"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -717,6 +782,43 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.6"
+  uikit:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "v0.0.2"
+      resolved-ref: bab0734a92563db7e4ed5fba210a93af3109ea48
+      url: "git://github.com/mobile-dualbootpartners/flutter-ui-kit"
+    source: git
+    version: "0.0.2"
+  url_launcher:
+    dependency: "direct main"
+    description:
+      name: url_launcher
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.4.2"
+  url_launcher_macos:
+    dependency: transitive
+    description:
+      name: url_launcher_macos
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1+4"
+  url_launcher_platform_interface:
+    dependency: transitive
+    description:
+      name: url_launcher_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.6"
+  url_launcher_web:
+    dependency: transitive
+    description:
+      name: url_launcher_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1+1"
   vector_math:
     dependency: transitive
     description:
