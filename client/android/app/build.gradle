@@ -42,8 +42,8 @@ android {
         applicationId "io.mobile.cashflow"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        versionCode 1
+        versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
