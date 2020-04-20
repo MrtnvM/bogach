@@ -39,7 +39,7 @@ class _MainPageState extends State<MainPage> with ReduxState {
           child: Center(
             child: Column(
               children: <Widget>[
-                Text('Welcome, ${user?.fullName ?? 'Username'}'),
+                Text('Welcome, ${user.fullName}'),
                 FlatButton(
                   onPressed: () => appRouter.goTo(GameBoard()),
                   child: const Text('Go to GameBoard'),

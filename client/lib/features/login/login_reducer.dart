@@ -10,22 +10,20 @@ final loginReducer = Reducer<LoginState>()
         state.rebuild((s) => s.loginRequestState = action.requestState),
   )
   ..on<LoginViaFacebookAsyncAction>(
-    (state, action) => state.rebuild((s) => action
-      ..onStart(() => s..loginRequestState = RequestState.inProgress)
-      ..onSuccess((currentUser) => s
-        ..loginRequestState = RequestState.success
-        ..currentUser = currentUser.toBuilder())
-      ..onError((_) => s..loginRequestState = RequestState.error)),
+    (state, action) => state.rebuild((s) {
+      s.loginRequestState = action.requestState;
+
+      action
+        ..onSuccess((currentUser) => s.currentUser = currentUser.toBuilder());
+    }),
   )
   ..on<LoginViaGoogleAsyncAction>(
-    (state, action) => state.rebuild((s) => action
-      ..onStart(() => s..loginRequestState = RequestState.inProgress)
-      ..onSuccess((currentUser) {
-        return s
-          ..loginRequestState = RequestState.success
-          ..currentUser = currentUser.toBuilder();
-      })
-      ..onError((_) => s..loginRequestState = RequestState.error)),
+    (state, action) => state.rebuild((s) {
+      s.loginRequestState = action.requestState;
+
+      action
+        ..onSuccess((currentUser) => s.currentUser = currentUser.toBuilder());
+    }),
   )
   ..on<SetCurrentUserAction>(
     (state, action) => state.rebuild(
