@@ -1,4 +1,4 @@
-package io.cashflow.cash_flow
+package io.mobile.cashflow
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
