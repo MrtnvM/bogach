@@ -38,9 +38,20 @@ Epic<AppState> loginEpic({@required UserService userService}) {
             .onErrorReturnWith(action.fail));
   });
 
+  final loginViaGoogleEpic = epic((action$, store) {
+    return action$
+        .whereType<LoginViaGoogleAsyncAction>()
+        .where((action) => action.isStarted)
+        .flatMap((action) => userService
+            .loginViaGoogle(token: action.token, idToken: action.idToken)
+            .map<Action>(action.complete)
+            .onErrorReturnWith(action.fail));
+  });
+
   return combineEpics([
     loginEpic,
     logoutEpic,
     loginViaFacebookEpic,
+    loginViaGoogleEpic,
   ]);
 }

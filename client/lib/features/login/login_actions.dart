@@ -22,3 +22,14 @@ class LoginViaFacebookAsyncAction extends AsyncAction<void> {
 
   final String token;
 }
+
+class LoginViaGoogleAsyncAction extends AsyncAction<void> {
+  LoginViaGoogleAsyncAction({
+    @material.required this.token,
+    @material.required this.idToken,
+  })  : assert(token != null),
+        assert(idToken != null);
+
+  final String token;
+  final String idToken;
+}

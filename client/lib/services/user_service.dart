@@ -59,6 +59,21 @@ class UserService {
             tokenStorage.saveTokens(accessToken: response.user.uid));
   }
 
+  Stream<void> loginViaGoogle({
+    @required String token,
+    @required String idToken,
+  }) {
+    final authCredential = GoogleAuthProvider.getCredential(
+      accessToken: token,
+      idToken: idToken,
+    );
+
+    return Stream.fromFuture(_firebaseAuth.signInWithCredential(authCredential))
+        .transform(ErrorHandler())
+        .doOnData((response) =>
+            tokenStorage.saveTokens(accessToken: response.user.uid));
+  }
+
   Future<void> signUpUser(RegisterRequestModel model) async {
     await _firebaseAuth.createUserWithEmailAndPassword(
       email: model.email,
