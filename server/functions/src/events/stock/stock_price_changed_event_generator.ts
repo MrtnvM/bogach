@@ -21,7 +21,7 @@ export namespace StockPriceChangedEventGenerator {
       data: {
         currentPrice,
         fairPrice,
-        maxCount,
+        availableCount: maxCount,
       },
     };
   };

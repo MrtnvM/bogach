@@ -1,4 +1,4 @@
-  /// <reference types="@types/jest"/>
+/// <reference types="@types/jest"/>
 
 import { GameProvider } from '../../providers/game_provider';
 import { mock, instance, reset, when, capture } from 'ts-mockito';
@@ -27,7 +27,7 @@ describe('Stock price changed event handler', () => {
     const event = utils.stockPriceChangedEvent({
       currentPrice: 100,
       fairPrice: 120,
-      maxCount: 10,
+      availableCount: 10,
     });
 
     const action = utils.stockPriceChangedPlayerAction({
@@ -38,7 +38,7 @@ describe('Stock price changed event handler', () => {
 
     await handler.handle(event, action, context);
 
-    const newStockAsset : StockAsset = {
+    const newStockAsset: StockAsset = {
       name: Strings.stocks(),
       type: 'stock',
       averagePrice: 100,
@@ -107,16 +107,14 @@ describe('Stock price changed event handler', () => {
 
     await handler.handle(event, action, context);
 
-    const newDebentureAsset = produce(stock1, (draft) => {
+    const newStockAsset = produce(stock1, (draft) => {
       draft.countInPortfolio = 2;
     });
 
     const expectedGame = produce(game, (draft) => {
-      const index = draft.possessions[userId].assets.findIndex(
-        (d) => d.id === newDebentureAsset.id
-      );
+      const index = draft.possessions[userId].assets.findIndex((d) => d.id === newStockAsset.id);
 
-      draft.possessions[userId].assets[index] = newDebentureAsset;
+      draft.possessions[userId].assets[index] = newStockAsset;
       draft.accounts[userId].cash = initialCash + 450;
     });
 
@@ -153,7 +151,7 @@ describe('Stock price changed event handler', () => {
     expect(newGame).toStrictEqual(expectedGame);
   });
 
-  test('Cannot sell more debentures than already have', async () => {
+  test('Cannot sell more stocks than already have', async () => {
     when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
 
     const gameProvider = instance(mockGameProvider);
@@ -173,7 +171,7 @@ describe('Stock price changed event handler', () => {
       await handler.handle(event, action, context);
       throw new Error('Shoud fail on previous line');
     } catch (error) {
-      expect(error).toStrictEqual(new Error('Not enough stocks'));
+      expect(error).toStrictEqual(new Error('Not enough stocks in portfolio'));
     }
   });
 });

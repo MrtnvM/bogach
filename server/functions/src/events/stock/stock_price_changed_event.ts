@@ -10,7 +10,7 @@ export namespace StockPriceChangedEvent {
   export interface Data {
     readonly currentPrice: number;
     readonly fairPrice: number;
-    readonly maxCount: number;
+    readonly availableCount: number;
   }
 
   export interface PlayerAction {
@@ -20,14 +20,14 @@ export namespace StockPriceChangedEvent {
   }
 
   export const parse = (gameEvent: GameEvent, eventData: any): Event => {
-    const { currentPrice, fairPrice, maxCount } = eventData.data;
+    const { currentPrice, fairPrice, availableCount } = eventData.data;
 
     return {
       ...gameEvent,
       data: {
         currentPrice,
         fairPrice,
-        maxCount,
+        availableCount,
       },
     };
   };
@@ -41,12 +41,12 @@ export namespace StockPriceChangedEvent {
 
     entity.hasNumberValue('currentPrice');
     entity.hasNumberValue('fairPrice');
-    entity.hasNumberValue('maxCount');
+    entity.hasNumberValue('availableCount');
 
     entity.checkWithRules([
       [(a) => a.currentPrice <= 0, "CurrentPrice can't be <= 0"],
       [(a) => a.fairPrice <= 0, "FairPrice can't be <= 0"],
-      [(a) => a.maxCount <= 0, "MaxCount can't be <= 0"],
+      [(a) => a.availableCount <= 0, "AvailableCount can't be <= 0"],
     ]);
   };
 

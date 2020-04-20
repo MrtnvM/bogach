@@ -1,7 +1,6 @@
 import { PlayerActionHandler } from '../../core/domain/player_action_handler';
-import { AssetEntity } from '../../models/domain/asset';
+import { AssetEntity, Asset } from '../../models/domain/asset';
 import { Strings } from '../../resources/strings';
-import { UserEntity } from '../../models/domain/user';
 import { BuySellAction } from '../../models/domain/actions/buy_sell_action';
 import { GameContext } from '../../models/domain/game/game_context';
 import { GameProvider } from '../../providers/game_provider';
@@ -9,9 +8,26 @@ import { Game } from '../../models/domain/game/game';
 import produce from 'immer';
 import { StockPriceChangedEvent } from './stock_price_changed_event';
 import { StockAsset } from '../../models/domain/assets/stock_asset';
+import { Account } from '../../models/domain/account';
 
 type Event = StockPriceChangedEvent.Event;
 type Action = StockPriceChangedEvent.PlayerAction;
+
+interface ActionResult {
+  readonly newStockCount: number;
+  readonly newAccountBalance: number;
+  readonly newAveragePrice: number;
+}
+
+interface ActionParameters {
+  userAccount: Account;
+  countInPortfolio: number;
+  actionCount: number;
+  availableCount: number;
+  currentPrice: number;
+  currentAveragePrice: number;
+  totalPrice: number;
+}
 
 export class StockPriceChangedHandler extends PlayerActionHandler {
   constructor(private gameProvider: GameProvider) {
@@ -38,8 +54,8 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     const { gameId, userId } = context;
     const game = await this.gameProvider.getGame(gameId);
 
-    const { currentPrice, fairPrice, maxCount } = event.data;
-    const { count, action: stockAction } = action;
+    const { currentPrice, fairPrice, availableCount } = event.data;
+    const { count: actionCount, action: stockAction } = action;
 
     const assets = game.possessions[userId].assets;
     const stockAssets = AssetEntity.getStocks(assets);
@@ -49,111 +65,136 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
       return d.name === stockName && d.fairPrice === fairPrice;
     });
 
-    const currentStockCount = theSameStock?.countInPortfolio || 0;
+    const countInPortfolio = theSameStock?.countInPortfolio || 0;
     const currentAveragePrice = theSameStock?.averagePrice || 0;
 
-    const { newStockCount, newAccountBalance, newAveragePrice } = await this.applyAction({
-      game,
-      stockAction,
-      currentStockCount,
-      userId,
-      count,
-      maxCount,
+    const userAccount = game.accounts[userId];
+    const totalPrice = currentPrice * actionCount;
+
+    const actionParameters: ActionParameters = {
+      userAccount,
+      countInPortfolio,
+      actionCount,
+      availableCount,
       currentPrice,
       currentAveragePrice,
-    });
+      totalPrice,
+    };
+    const actionResult = await this.applyAction(actionParameters, stockAction);
 
-    let newAssets = assets.slice();
-
+    let newAssets: Asset[];
     if (theSameStock) {
-      const newStock = { ...theSameStock, countInPortfolio: newStockCount, averagePrice: newAveragePrice };
-      const index = assets.findIndex((d) => d.id === newStock.id);
-
-      if (index >= 0) {
-        newAssets[index] = newStock;
-      }
-
-      if (newStock.countInPortfolio === 0) {
-        newAssets = assets.filter((d) => d.id !== newStock.id);
-      }
+      newAssets = this.updateAssets(actionResult, theSameStock, assets);
     } else {
-      const newStock: StockAsset = {
-        fairPrice,
-        averagePrice: newAveragePrice,
-        countInPortfolio: newStockCount,
-        name: Strings.stocks(),
-        type: 'stock',
-      };
-
-      newAssets.push(newStock);
+      newAssets = this.addNewItemToAssets(actionResult, assets, fairPrice);
     }
 
     const updatedGame: Game = produce(game, (draft) => {
-      draft.accounts[userId].cash = newAccountBalance;
+      draft.accounts[userId].cash = actionResult.newAccountBalance;
       draft.possessions[userId].assets = newAssets;
     });
 
     await this.gameProvider.updateGame(updatedGame);
   }
 
-  async applyAction(props: {
-    game: Game;
-    stockAction: BuySellAction;
-    currentStockCount: number;
-    userId: UserEntity.Id;
-    count: number;
-    maxCount: number;
-    currentPrice: number;
-    currentAveragePrice: number;
-  }) {
-    const {
-      stockAction,
-      currentStockCount,
-      userId,
-      count,
-      maxCount,
-      currentPrice,
-      currentAveragePrice,
-    } = props;
-    const account = props.game.accounts[userId];
-    const totalPrice = currentPrice * count;
+  async applyAction(actionParameters: ActionParameters, action: BuySellAction) {
+    if (action === 'buy') {
+      return this.applyBuyAction(actionParameters);
+    } else if (action === 'sell') {
+      return this.applySellAction(actionParameters);
+    } else {
+      throw new Error('Unknown action with stocks');
+    }
+  }
 
-    let newStockCount;
-    let newAccountBalance;
-    let newAveragePrice;
+  async applyBuyAction(actionParameters: ActionParameters): Promise<ActionResult> {
+    const isEnoughMoney = actionParameters.userAccount.cash >= actionParameters.totalPrice;
 
-    switch (stockAction) {
-      case 'buy':
-        const isEnoughMoney = account.cash >= totalPrice;
-
-        if (!isEnoughMoney) {
-          throw new Error('Not enough money');
-        }
-
-        const isEnoughCountAvailable = maxCount >= count;
-        if (!isEnoughCountAvailable) {
-          throw new Error('Not enough count available');
-        }
-
-        newStockCount = currentStockCount + count;
-        newAccountBalance = account.cash - totalPrice;
-
-        const wholePricesDifference = currentPrice - currentAveragePrice;
-        const priceDifferenceStep = wholePricesDifference / (currentStockCount + count);
-        newAveragePrice = currentAveragePrice + priceDifferenceStep * count;
-        break;
-
-      case 'sell':
-        if (currentStockCount < count) {
-          throw new Error('Not enough stocks');
-        }
-
-        newStockCount = currentStockCount - count;
-        newAccountBalance = account.cash + totalPrice;
-        newAveragePrice = currentAveragePrice;
-        break;
+    if (!isEnoughMoney) {
+      throw new Error('Not enough money');
     }
 
-    return { newStockCount, newAccountBalance, newAveragePrice };
+    const isEnoughCountAvailable = actionParameters.availableCount >= actionParameters.actionCount;
+    if (!isEnoughCountAvailable) {
+      throw new Error('Not enough count available');
+    }
+
+    let newStockCount = actionParameters.countInPortfolio + actionParameters.actionCount;
+    let newAccountBalance = actionParameters.userAccount.cash - actionParameters.totalPrice;
+
+    const pricesDifference = actionParameters.currentPrice - actionParameters.currentAveragePrice;
+    const commonCount = actionParameters.countInPortfolio + actionParameters.actionCount;
+    const priceDifferenceStep = pricesDifference / commonCount;
+
+    const newPriceOffset = priceDifferenceStep * actionParameters.actionCount;
+    let newAveragePrice = actionParameters.currentAveragePrice + newPriceOffset;
+
+    const actionResult: ActionResult = {
+      newStockCount,
+      newAccountBalance,
+      newAveragePrice,
+    };
+
+    return actionResult;
+  }
+
+  async applySellAction(actionParameters: ActionParameters): Promise<ActionResult> {
+    const isEnoughCountAvailable = actionParameters.availableCount >= actionParameters.actionCount;
+    if (!isEnoughCountAvailable) {
+      throw new Error('Not enough stocks available');
+    }
+
+    if (actionParameters.countInPortfolio < actionParameters.actionCount) {
+      throw new Error('Not enough stocks in portfolio');
+    }
+
+    const newStockCount = actionParameters.countInPortfolio - actionParameters.actionCount;
+    const newAccountBalance = actionParameters.userAccount.cash + actionParameters.totalPrice;
+    const newAveragePrice = actionParameters.currentAveragePrice;
+
+    const actionResult: ActionResult = {
+      newStockCount,
+      newAccountBalance,
+      newAveragePrice,
+    };
+
+    return actionResult;
+  }
+
+  updateAssets(actionResult: ActionResult, theSameStock: StockAsset, assets: Asset[]): Asset[] {
+    let newAssets = assets.slice();
+
+    const newStock = {
+      ...theSameStock,
+      countInPortfolio: actionResult.newStockCount,
+      averagePrice: actionResult.newAveragePrice,
+    };
+    const index = assets.findIndex((d) => d.id === newStock.id);
+
+    if (index >= 0) {
+      newAssets[index] = newStock;
+    }
+
+    if (newStock.countInPortfolio === 0) {
+      newAssets = assets.filter((d) => d.id !== newStock.id);
+    }
+
+    return newAssets;
+  }
+
+  addNewItemToAssets(actionResult: ActionResult, assets: Asset[], fairPrice: number): Asset[] {
+    let newAssets = assets.slice();
+
+    const newStock: StockAsset = {
+      fairPrice,
+      averagePrice: actionResult.newAveragePrice,
+      countInPortfolio: actionResult.newStockCount,
+      name: Strings.stocks(),
+      type: 'stock',
+    };
+
+    newAssets.push(newStock);
+
+    return newAssets;
   }
 }

@@ -39,7 +39,7 @@ describe('Debenture price changed event handler', () => {
 
     await handler.handle(event, action, context);
 
-    const newDebentureAsset : DebentureAsset = {
+    const newDebentureAsset: DebentureAsset = {
       name: Strings.debetures(),
       type: 'debenture',
       currentPrice: 1100,

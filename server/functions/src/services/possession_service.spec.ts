@@ -83,7 +83,6 @@ describe('Possession Service Tests', () => {
           countInPortfolio: 1,
           type: 'stock',
           fairPrice: 100,
-          currentPrice: 120,
           averagePrice: 100,
         }),
         create<RealtyAsset>({
@@ -194,7 +193,6 @@ describe('Possession Service Tests', () => {
           countInPortfolio: 1,
           type: 'stock',
           fairPrice: 100,
-          currentPrice: 120,
           averagePrice: 100,
         }),
         create<RealtyAsset>({
