@@ -1,18 +1,15 @@
+import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/models/network/errors/email_has_been_taken_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
 import 'package:cash_flow/models/network/request/register_request_model.dart';
+import 'package:cash_flow/models/state/user/current_user.dart';
 import 'package:cash_flow/utils/error_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_platform_network/flutter_platform_network.dart';
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
 
 class UserService {
-  UserService({
-    @required this.tokenStorage,
-  });
+  UserService();
 
-  final TokenStorage tokenStorage;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   Stream<void> login({
@@ -22,11 +19,7 @@ class UserService {
     return Stream.fromFuture(_firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
-    ))
-        .doOnData((response) =>
-            tokenStorage.saveTokens(accessToken: response.user.uid))
-        .cast<void>()
-        .transform(ErrorHandler((code) {
+    )).cast<void>().transform(ErrorHandler((code) {
       if (code == 'ERROR_USER_NOT_FOUND') {
         return const InvalidCredentialsException();
       }
@@ -49,14 +42,27 @@ class UserService {
     }));
   }
 
-  Stream<void> loginViaFacebook({@required String token}) {
+  Stream<CurrentUser> loginViaFacebook({@required String token}) {
     final authCredential =
         FacebookAuthProvider.getCredential(accessToken: token);
 
     return Stream.fromFuture(_firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
-        .doOnData((response) =>
-            tokenStorage.saveTokens(accessToken: response.user.uid));
+        .map(mapToCurrentUser);
+  }
+
+  Stream<CurrentUser> loginViaGoogle({
+    @required String token,
+    @required String idToken,
+  }) {
+    final authCredential = GoogleAuthProvider.getCredential(
+      accessToken: token,
+      idToken: idToken,
+    );
+
+    return Stream.fromFuture(_firebaseAuth.signInWithCredential(authCredential))
+        .transform(ErrorHandler())
+        .map(mapToCurrentUser);
   }
 
   Future<void> signUpUser(RegisterRequestModel model) async {

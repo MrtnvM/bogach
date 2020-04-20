@@ -19,6 +19,8 @@ class Strings {
 
   static String get facebook => 'Facebook';
 
+  static String get google => 'Google';
+
   static String get labelRepeatPassword => 'Повторите пароль';
 
   static String get labelPassword => 'Пароль';

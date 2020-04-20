@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/features/login/login_actions.dart';
+import 'package:cash_flow/models/errors/unknown_error.dart';
 import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
@@ -23,6 +24,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage();
@@ -137,7 +139,17 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
           ),
           _buildLoginButton(),
           const SizedBox(height: 24),
-          _buildSocialMedias(),
+          _buildSocialMedias(
+            icon: Images.icFacebook,
+            title: Strings.facebook,
+            type: _SocialButtonType.fb,
+          ),
+          const SizedBox(height: 16),
+          _buildSocialMedias(
+            icon: Images.icGoogle,
+            title: Strings.google,
+            type: _SocialButtonType.google,
+          ),
           const SizedBox(height: 16),
           _buildSignUpWidget(),
           const SafeArea(top: false, child: SizedBox(height: 16)),
@@ -146,12 +158,16 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     );
   }
 
-  Widget _buildSocialMedias() {
+  Widget _buildSocialMedias({
+    @required String icon,
+    @required String title,
+    @required _SocialButtonType type,
+  }) {
     return OutlineButton(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SvgPicture.asset(Images.icFacebook, width: 24, height: 24),
+          SvgPicture.asset(icon, width: 24, height: 24),
           const SizedBox(width: 12),
           Flexible(
             child: Container(
@@ -161,7 +177,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   AutoSizeText(
-                    Strings.facebook.toUpperCase(),
+                    title.toUpperCase(),
                     style: Styles.body1.copyWith(color: ColorRes.white),
                     maxFontSize: Styles.body1.fontSize,
                     maxLines: 1,
@@ -173,7 +189,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         ],
       ),
       color: ColorRes.grass,
-      onPressed: _onContinueWithFacebookPressed,
+      onPressed: () => loginViaSocial(type),
       borderSide: const BorderSide(color: ColorRes.grass),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(6.0),
@@ -199,22 +215,6 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     );
   }
 
-  Future<void> _onContinueWithFacebookPressed() async {
-    final facebookLogin = FacebookLogin();
-    final result = await facebookLogin.logIn(['email']);
-
-    switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        _loginViaFacebook(result.accessToken.token);
-        break;
-      case FacebookLoginStatus.error:
-        handleError(context: context, exception: null);
-        break;
-      default:
-        break;
-    }
-  }
-
   Widget _buildLoginButton() {
     return ActionButton(
       text: Strings.loginTitle,
@@ -232,6 +232,33 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     );
   }
 
+  void loginViaSocial(_SocialButtonType type) {
+    switch (type) {
+      case _SocialButtonType.fb:
+        _onLoginViaFacebookPressed();
+        break;
+      case _SocialButtonType.google:
+        _onLoginViaGoogleClicked();
+        break;
+    }
+  }
+
+  Future<void> _onLoginViaFacebookPressed() async {
+    final facebookLogin = FacebookLogin();
+    final result = await facebookLogin.logIn(['email']);
+
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        _loginViaFacebook(result.accessToken.token);
+        break;
+      case FacebookLoginStatus.error:
+        handleError(context: context, exception: UnknownErrorException());
+        break;
+      default:
+        break;
+    }
+  }
+
   void _loginViaFacebook(String token) {
     dispatchAsyncAction(LoginViaFacebookAsyncAction(token: token))
         .listen((action) => action
@@ -246,4 +273,25 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
   void _onLoginViaFacebookError(error) {
     handleError(context: context, exception: error);
   }
+
+  Future<void> _onLoginViaGoogleClicked() async {
+    final account = await GoogleSignIn().signIn();
+    final authentication = await account.authentication;
+
+    _loginViaGoogle(
+      token: authentication.accessToken,
+      idToken: authentication.idToken,
+    );
+  }
+
+  void _loginViaGoogle({String token, String idToken}) {
+    dispatchAsyncAction(LoginViaGoogleAsyncAction(
+      token: token,
+      idToken: idToken,
+    )).listen((action) => action
+      ..onSuccess(_onLoginViaFacebookSuccess)
+      ..onError(_onLoginViaFacebookError));
+  }
 }
+
+enum _SocialButtonType { fb, google }
