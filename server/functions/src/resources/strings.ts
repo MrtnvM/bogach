@@ -11,6 +11,7 @@ const strings: { [key: string]: string } = {
   currentPrice: 'Текущая цена: ',
 
   debetures: 'Облигации',
+  stocks: 'Акции',
   realty: 'Недвижимость',
 
   debeturesTitle: 'Вложения',

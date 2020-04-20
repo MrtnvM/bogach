@@ -20,13 +20,13 @@ interface ActionResult {
 }
 
 interface ActionParameters {
-  userAccount: Account;
-  countInPortfolio: number;
-  actionCount: number;
-  availableCount: number;
-  currentPrice: number;
-  currentAveragePrice: number;
-  totalPrice: number;
+  readonly userAccount: Account;
+  readonly countInPortfolio: number;
+  readonly actionCount: number;
+  readonly availableCount: number;
+  readonly currentPrice: number;
+  readonly currentAveragePrice: number;
+  readonly totalPrice: number;
 }
 
 export class StockPriceChangedHandler extends PlayerActionHandler {
@@ -108,26 +108,36 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
   }
 
   async applyBuyAction(actionParameters: ActionParameters): Promise<ActionResult> {
-    const isEnoughMoney = actionParameters.userAccount.cash >= actionParameters.totalPrice;
+    const {
+      userAccount,
+      countInPortfolio,
+      actionCount,
+      availableCount,
+      currentPrice,
+      currentAveragePrice,
+      totalPrice,
+    } = actionParameters;
+
+    const isEnoughMoney = userAccount.cash >= totalPrice;
 
     if (!isEnoughMoney) {
       throw new Error('Not enough money');
     }
 
-    const isEnoughCountAvailable = actionParameters.availableCount >= actionParameters.actionCount;
+    const isEnoughCountAvailable = availableCount >= actionCount;
     if (!isEnoughCountAvailable) {
       throw new Error('Not enough count available');
     }
 
-    let newStockCount = actionParameters.countInPortfolio + actionParameters.actionCount;
-    let newAccountBalance = actionParameters.userAccount.cash - actionParameters.totalPrice;
+    let newStockCount = countInPortfolio + actionCount;
+    let newAccountBalance = userAccount.cash - totalPrice;
 
-    const pricesDifference = actionParameters.currentPrice - actionParameters.currentAveragePrice;
-    const commonCount = actionParameters.countInPortfolio + actionParameters.actionCount;
+    const pricesDifference = currentPrice - currentAveragePrice;
+    const commonCount = countInPortfolio + actionCount;
     const priceDifferenceStep = pricesDifference / commonCount;
 
-    const newPriceOffset = priceDifferenceStep * actionParameters.actionCount;
-    let newAveragePrice = actionParameters.currentAveragePrice + newPriceOffset;
+    const newPriceOffset = priceDifferenceStep * actionCount;
+    let newAveragePrice = currentAveragePrice + newPriceOffset;
 
     const actionResult: ActionResult = {
       newStockCount,

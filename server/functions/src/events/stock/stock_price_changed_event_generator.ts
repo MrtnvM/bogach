@@ -9,7 +9,8 @@ export namespace StockPriceChangedEventGenerator {
     const fairPrice = random.int(20, 100);
     const minPercentRange = -0.3;
     const maxPercentRange = 0.3;
-    const priceDifference = random.int(minPercentRange, maxPercentRange) * fairPrice;
+    const priceDiffernceFloat = random.float(minPercentRange, maxPercentRange) * fairPrice;
+    const priceDifference = Math.round(priceDiffernceFloat);
     const currentPrice = fairPrice + priceDifference;
     const maxCount = random.int(9, 14) * 10;
 
