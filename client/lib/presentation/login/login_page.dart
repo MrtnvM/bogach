@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/features/login/login_actions.dart';
+import 'package:cash_flow/models/errors/unknown_error.dart';
 import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
@@ -238,6 +239,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         break;
       case _SocialButtonType.google:
         _onLoginViaGoogleClicked();
+        break;
     }
   }
 
@@ -250,7 +252,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         _loginViaFacebook(result.accessToken.token);
         break;
       case FacebookLoginStatus.error:
-        handleError(context: context, exception: null);
+        handleError(context: context, exception: UnknownErrorException());
         break;
       default:
         break;
