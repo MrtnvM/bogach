@@ -1,3 +1,4 @@
+import 'package:cash_flow/presentation/new_gameboard/new_gameboard.dart';
 import 'package:flutter/material.dart';
 
 class ColorRes {
@@ -27,5 +28,18 @@ class ColorRes {
   static const orange = Color(0xFFFFA726);
 
   static const newGameBoardHeaderBackground = Color(0xFFFFE21C);
-  static const newGameBoardPrimaryTextColor = Color(0xFF48A6D3);
+  static const newGameBoardPrimaryTextColor = Color(0xFF01BAEF);
+  static const newGameBoardProgressColor = Color(0xFF79C745);
+  static const newGameBoardProgressTextColor = Color(0xFF808080);
+  static const newGameBoardConditionDividerColor = Color(0xFFC4C4C4);
+  static const newGameBoardInvestmentInfoTitleColor = Color(0xFF79C745);
+  static const newGameBoardInvestmentsDividerColor = Color(0xFFEDEDED);
+
+  static const primaryWhiteColor = Color(0xFFFBFBFF);
+  static const primaryYellowColor = Color(0xFFFFE21C);
+
+  static const primaryBackgroundColor = Color(0xFF0B4F6C);
+  static const levelColor = Color(0xFFFDFDFF);
+  static const progressBarBorderColor = Color(0xFFDADADA);
+  static const gameButtonColor = Color(0xFF01BAEF);
 }

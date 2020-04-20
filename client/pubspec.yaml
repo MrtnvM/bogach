@@ -13,6 +13,7 @@ dependencies:
   flutter_secure_storage: ^3.3.1+1
   shared_preferences: ^0.5.6+1
   intl: ^0.16.1
+  google_fonts: ^0.5.0+1
 
   built_value: ^7.0.8
   built_collection: ^4.3.0
@@ -53,4 +54,14 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/
+    - assets/images/png/
+
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Regular.ttf
+        - asset: assets/fonts/Montserrat-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Montserrat-Light.ttf
+          weight: 200
+
