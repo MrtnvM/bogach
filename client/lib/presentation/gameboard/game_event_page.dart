@@ -54,19 +54,19 @@ class _GameEventPageState extends State<GameEventPage> {
   }
 
   String _getTargetType(TargetType type) {
-    switch (type) {
-      case TargetType.cash:
-        return Strings.targetTypeCash;
-      default:
-        return '';
-    }
+    final typeNames = {
+      TargetType.cash: Strings.targetTypeCash,
+    };
+
+    return typeNames[type] ?? '';
   }
 
   Widget _buildEventBody(GameEvent event) {
     return Expanded(
       child: ListView(
         children: <Widget>[
-          InvestmentGameEvent(InvestmentViewModel(
+          InvestmentGameEvent(
+            InvestmentViewModel(
               currentPrice: event.data.currentPrice,
               type: event.name,
               nominalCost: event.data.nominal,
@@ -76,7 +76,9 @@ class _GameEventPageState extends State<GameEventPage> {
               // TODO(Artem): How to calculate this
               alreadyHave: 1,
               maxCount: event.data.maxCount,
-              buttonsProperties: buttonsProperties)),
+              buttonsProperties: buttonsProperties,
+            ),
+          ),
         ],
       ),
     );

@@ -4,7 +4,7 @@ import 'package:cash_flow/widgets/containers/event_buttons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class GameEvent extends StatefulWidget {
+class GameEvent extends StatelessWidget {
   const GameEvent({
     @required this.icon,
     @required this.name,
@@ -20,13 +20,6 @@ class GameEvent extends StatefulWidget {
   final ButtonsProperties buttonsProperties;
 
   @override
-  State<StatefulWidget> createState() {
-    return GameEventState();
-  }
-}
-
-class GameEventState extends State<GameEvent> {
-  @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
@@ -37,19 +30,19 @@ class GameEventState extends State<GameEvent> {
           child: Row(
             children: <Widget>[
               Icon(
-                widget.icon,
+                icon,
                 color: ColorRes.white,
               ),
               const SizedBox(width: 12),
               Text(
-                widget.name.toUpperCase(),
+                name.toUpperCase(),
                 style: Styles.subhead.copyWith(color: ColorRes.white),
               ),
             ],
           ),
         ),
-        widget.child,
-        EventButtons(widget.buttonsState, widget.buttonsProperties),
+        child,
+        EventButtons(buttonsState, buttonsProperties),
       ],
     );
   }
