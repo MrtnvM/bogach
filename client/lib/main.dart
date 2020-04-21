@@ -9,13 +9,15 @@ import 'package:cash_flow/configuration/error_reporting.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/configuration/ui_kit.dart';
 import 'package:cash_flow/navigation/app_router.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
-import 'package:flutter_platform_network/flutter_platform_network.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'features/login/login_actions.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,22 +29,25 @@ Future<void> main() async {
 
   final alice = Alice(navigatorKey: appRouter.navigatorKey);
   final sharedPreferences = await SharedPreferences.getInstance();
-  final tokenStorage = TokenStorage();
   final environment = stagingEnvironment;
   final apiClient = configureApiClient(alice, environment);
 
   final rootEpic = createRootEpic(
     apiClient,
     sharedPreferences,
-    tokenStorage,
   );
 
   final storeProvider = configureStoreProvider(rootEpic);
   ReduxConfig.storeProvider = storeProvider;
+  final dispatch = ReduxConfig.storeProvider.store.dispatch;
 
   Intl.defaultLocale = 'ru';
   await initializeDateFormatting('ru');
-  final isAuthorized = await tokenStorage.isAuthorized();
+
+  final currentUser = await FirebaseAuth.instance.currentUser();
+
+  final isAuthorized = currentUser != null;
+  dispatch(SetCurrentUserAction(user: currentUser));
 
   runZoned<Future<void>>(() async {
     runApp(CashFlowApp(
