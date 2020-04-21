@@ -1,3 +1,6 @@
+import 'package:cash_flow/features/game_events/game_events_actions.dart';
+import 'package:cash_flow/models/domain/buy_sell_action.dart';
+import 'package:cash_flow/models/domain/player_actions/investment_player_action.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
@@ -8,6 +11,7 @@ import 'package:cash_flow/widgets/containers/info_table.dart';
 import 'package:cash_flow/widgets/events/game_event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 class InvestmentGameEvent extends StatefulWidget {
   const InvestmentGameEvent(this.viewModel);
@@ -20,14 +24,18 @@ class InvestmentGameEvent extends StatefulWidget {
   }
 }
 
-class InvestmentGameEventState extends State<InvestmentGameEvent> {
+class InvestmentGameEventState extends State<InvestmentGameEvent>
+    with ReduxState {
+  var _selectedCount = 0;
+  var _buySellAction = const BuySellAction.buy();
+
   @override
   Widget build(BuildContext context) {
     return GameEvent(
       icon: Icons.home,
       name: Strings.investments,
       buttonsState: ButtonsState.normal,
-      buttonsProperties: widget.viewModel.buttonsProperties,
+      buttonsProperties: ButtonsProperties(onConfirm: sendPlayerAction),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -91,12 +99,45 @@ class InvestmentGameEventState extends State<InvestmentGameEvent> {
       changeableType: true,
     );
 
-    return GameEventSelector(selectorViewModel);
+    return GameEventSelector(
+      viewModel: selectorViewModel,
+      onPlayerActionParamsChanged: (action, count) {
+        _selectedCount = count;
+        _buySellAction = action;
+      },
+    );
+  }
+
+  void sendPlayerAction() {
+    final eventId = widget.viewModel.eventId;
+
+    final playerAction = InvestmentPlayerAction(
+      _buySellAction,
+      _selectedCount,
+      eventId,
+    );
+
+    final action = SendGameEventPlayerActionAsyncAction(playerAction, eventId);
+
+    dispatchAsyncAction(action).listen(
+      (action) => action
+        ..onSuccess(
+          (_) => showDialog(
+              context: context,
+              child: const Text('Investment player action have sent')),
+        )
+        ..onError(
+          (error) => showDialog(
+              context: context,
+              child: Text('Investment player action faild with error $error')),
+        ),
+    );
   }
 }
 
 class InvestmentViewModel {
   const InvestmentViewModel({
+    this.eventId,
     this.currentPrice,
     this.type,
     this.nominalCost,
@@ -107,6 +148,7 @@ class InvestmentViewModel {
     this.buttonsProperties,
   });
 
+  final String eventId;
   final int currentPrice;
   final String type;
   final int nominalCost;

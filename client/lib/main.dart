@@ -1,11 +1,14 @@
 import 'dart:async';
 
+import 'package:alice/alice.dart';
 import 'package:cash_flow/app/store/store.dart';
 import 'package:cash_flow/cash_flow_app.dart';
+import 'package:cash_flow/configuration/api_client.dart';
 import 'package:cash_flow/configuration/control_panel.dart';
 import 'package:cash_flow/configuration/error_reporting.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/configuration/ui_kit.dart';
+import 'package:cash_flow/navigation/app_router.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
@@ -19,14 +22,17 @@ Future<void> main() async {
 
   configureErrorReporting();
   setOrientationPortrait();
-
-  final sharedPreferences = await SharedPreferences.getInstance();
-  final tokenStorage = TokenStorage();
-
   configureControlPanel();
   configureUiKit();
 
+  final alice = Alice(navigatorKey: appRouter.navigatorKey);
+  final sharedPreferences = await SharedPreferences.getInstance();
+  final tokenStorage = TokenStorage();
+  final environment = stagingEnvironment;
+  final apiClient = configureApiClient(alice, environment);
+
   final rootEpic = createRootEpic(
+    apiClient,
     sharedPreferences,
     tokenStorage,
   );

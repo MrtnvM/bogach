@@ -6,10 +6,20 @@ import 'package:cash_flow/widgets/game_event/price_calculator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+typedef OnPlayerActionParamsChanged = void Function(
+  BuySellAction action,
+  int selectedCount,
+);
+
 class GameEventSelector extends StatefulWidget {
-  const GameEventSelector(this.viewModel) : assert(viewModel != null);
+  const GameEventSelector({
+    @required this.viewModel,
+    @required this.onPlayerActionParamsChanged,
+  })  : assert(viewModel != null),
+        assert(onPlayerActionParamsChanged != null);
 
   final SelectorViewModel viewModel;
+  final OnPlayerActionParamsChanged onPlayerActionParamsChanged;
 
   @override
   State<StatefulWidget> createState() {
@@ -57,23 +67,31 @@ class GameEventSelectorState extends State<GameEventSelector> {
     );
   }
 
-  void _onSelectedCountChanged(int selectedCount) {
+  void _onSelectedCountChanged(int count) {
     setState(() {
-      _selectedCount = selectedCount;
+      _selectedCount = count;
     });
+
+    widget.onPlayerActionParamsChanged(_buySellAction, count);
   }
 
   void _changeState(BuySellAction action) {
+    const selectedCount = 0;
+
     setState(() {
       _buySellAction = action;
-      _selectedCount = 0;
+      _selectedCount = selectedCount;
     });
+
+    widget.onPlayerActionParamsChanged(action, selectedCount);
   }
 
   void _onCountInputFieldChanged(int count) {
     setState(() {
       _selectedCount = count > widget.viewModel.maxCount ? 0 : count;
     });
+
+    widget.onPlayerActionParamsChanged(_buySellAction, count);
   }
 }
 
@@ -91,9 +109,4 @@ class SelectorViewModel {
   final int alreadyHave;
   final int maxCount;
   final bool changeableType;
-}
-
-enum InvestmentState {
-  purchasing,
-  selling,
 }

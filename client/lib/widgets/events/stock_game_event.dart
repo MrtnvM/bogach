@@ -87,7 +87,10 @@ class StockGameEventState extends State<StockGameEvent> {
       changeableType: false,
     );
 
-    return GameEventSelector(selectorViewModel);
+    return GameEventSelector(
+      viewModel: selectorViewModel,
+      onPlayerActionParamsChanged: (action, count) => null,
+    );
   }
 }
 

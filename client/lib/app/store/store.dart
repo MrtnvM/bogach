@@ -1,7 +1,9 @@
+import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/app/app_reducer.dart';
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/root_epic.dart';
 import 'package:cash_flow/services/firebase_service.dart';
+import 'package:cash_flow/services/game_event_service.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
@@ -26,15 +28,19 @@ StoreProvider<AppState> configureStoreProvider(Epic<AppState> rootEpic) {
 }
 
 Epic<AppState> createRootEpic(
+  CashFlowApiClient apiClient,
   SharedPreferences sharedPreferences,
   TokenStorage tokenStorage,
 ) {
   final firestore = Firestore.instance;
 
-  final userService = UserService(
-    tokenStorage: tokenStorage,
-  );
+  final userService = UserService(tokenStorage: tokenStorage);
   final firebaseService = FirebaseService(firestore: firestore);
+  final gameEventService = GameEventService(apiClient: apiClient);
 
-  return rootEpic(userService: userService, firebaseService: firebaseService);
+  return rootEpic(
+    userService: userService,
+    firebaseService: firebaseService,
+    gameEventService: gameEventService,
+  );
 }

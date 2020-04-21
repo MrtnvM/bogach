@@ -15,12 +15,18 @@ class _$GameState extends GameState {
   final TargetState target;
   @override
   final BuiltList<GameEvent> events;
+  @override
+  final GameContext currentGameContext;
 
   factory _$GameState([void Function(GameStateBuilder) updates]) =>
       (new GameStateBuilder()..update(updates)).build();
 
   _$GameState._(
-      {this.getRequestState, this.possessions, this.target, this.events})
+      {this.getRequestState,
+      this.possessions,
+      this.target,
+      this.events,
+      this.currentGameContext})
       : super._() {
     if (getRequestState == null) {
       throw new BuiltValueNullFieldError('GameState', 'getRequestState');
@@ -44,15 +50,18 @@ class _$GameState extends GameState {
         getRequestState == other.getRequestState &&
         possessions == other.possessions &&
         target == other.target &&
-        events == other.events;
+        events == other.events &&
+        currentGameContext == other.currentGameContext;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, getRequestState.hashCode), possessions.hashCode),
-            target.hashCode),
-        events.hashCode));
+        $jc(
+            $jc($jc($jc(0, getRequestState.hashCode), possessions.hashCode),
+                target.hashCode),
+            events.hashCode),
+        currentGameContext.hashCode));
   }
 
   @override
@@ -61,7 +70,8 @@ class _$GameState extends GameState {
           ..add('getRequestState', getRequestState)
           ..add('possessions', possessions)
           ..add('target', target)
-          ..add('events', events))
+          ..add('events', events)
+          ..add('currentGameContext', currentGameContext))
         .toString();
   }
 }
@@ -89,6 +99,11 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
       _$this._events ??= new ListBuilder<GameEvent>();
   set events(ListBuilder<GameEvent> events) => _$this._events = events;
 
+  GameContext _currentGameContext;
+  GameContext get currentGameContext => _$this._currentGameContext;
+  set currentGameContext(GameContext currentGameContext) =>
+      _$this._currentGameContext = currentGameContext;
+
   GameStateBuilder();
 
   GameStateBuilder get _$this {
@@ -97,6 +112,7 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
       _possessions = _$v.possessions?.toBuilder();
       _target = _$v.target?.toBuilder();
       _events = _$v.events?.toBuilder();
+      _currentGameContext = _$v.currentGameContext;
       _$v = null;
     }
     return this;
@@ -124,7 +140,8 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
               getRequestState: getRequestState,
               possessions: _possessions?.build(),
               target: _target?.build(),
-              events: events.build());
+              events: events.build(),
+              currentGameContext: currentGameContext);
     } catch (_) {
       String _$failedField;
       try {
