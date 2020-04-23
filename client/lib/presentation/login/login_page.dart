@@ -1,3 +1,4 @@
+import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/features/login/login_actions.dart';
@@ -151,6 +152,8 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
             type: _SocialButtonType.google,
           ),
           const SizedBox(height: 16),
+          _buildAppleSignInButton(),
+          const SizedBox(height: 16),
           _buildSignUpWidget(),
           const SafeArea(top: false, child: SizedBox(height: 16)),
         ],
@@ -286,11 +289,60 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
 
   void _loginViaGoogle({String token, String idToken}) {
     dispatchAsyncAction(LoginViaGoogleAsyncAction(
-      token: token,
+      accessToken: token,
       idToken: idToken,
     )).listen((action) => action
       ..onSuccess(_onLoginViaFacebookSuccess)
       ..onError(_onLoginViaFacebookError));
+  }
+
+  Future<void> _onLoginViaAppleClicked() async {
+    final result = await AppleSignIn.performRequests([
+      AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+    ]);
+
+    switch (result.status) {
+      case AuthorizationStatus.authorized:
+        final identityToken =
+            String.fromCharCodes(result.credential.identityToken);
+        final accessToken =
+            String.fromCharCodes(result.credential.authorizationCode);
+        final firstName = result.credential.fullName.givenName;
+        final lastName = result.credential.fullName.givenName;
+
+        dispatchAsyncAction(LoginViaAppleAsyncAction(
+          idToken: identityToken,
+          accessToken: accessToken,
+          firstName: firstName,
+          lastName: lastName,
+        )).listen((action) => action
+          ..onSuccess(_onLoginViaAppleSuccess)
+          ..onError(_onLoginViaAppleError));
+        break;
+      case AuthorizationStatus.error:
+        // do something
+        break;
+
+      case AuthorizationStatus.cancelled:
+        break;
+    }
+  }
+
+  Widget _buildAppleSignInButton() {
+    return FutureBuilder(
+        future: AppleSignIn.isAvailable(),
+        builder: (context, snapShoot) =>
+            snapShoot.hasData && snapShoot.data == true
+                ? AppleSignInButton(onPressed: _onLoginViaAppleClicked)
+                : Container());
+  }
+
+  void _onLoginViaAppleSuccess(_) {
+    appRouter.goTo(const MainPage());
+  }
+
+  void _onLoginViaAppleError(error) {
+    handleError(context: context, exception: error);
   }
 }
 
