@@ -29,7 +29,7 @@ const debenture1 = create<DebentureAsset>({
   name: 'ОФЗ',
   type: 'debenture',
   count: 4,
-  currentPrice: 1100,
+  averagePrice: 1100,
   profitabilityPercent: 8,
   nominal: 1000,
 });
@@ -156,6 +156,26 @@ const debenturePriceChangedEvent = (data: DebenturePriceChangedEvent.Data) => {
   return event;
 };
 
+const debentureOFZPriceChangedEvent = (currentPrice: number, availableCount: number) => {
+  const eventData: DebenturePriceChangedEvent.Data = {
+    currentPrice,
+    profitabilityPercent: 8,
+    nominal: 1000,
+    availableCount,
+  };
+
+  const event: DebenturePriceChangedEvent.Event = {
+    id: eventId,
+    name: 'ОФЗ',
+    description: 'Description',
+    type: DebenturePriceChangedEvent.Type,
+    data: eventData,
+  };
+
+  DebenturePriceChangedEvent.validate(event);
+  return event;
+};
+
 const debenturePriceChangedPlayerAction = (action: DebenturePriceChangedEvent.PlayerAction) => {
   DebenturePriceChangedEvent.validateAction(action);
   return action;
@@ -174,4 +194,5 @@ export const stubs = {
 export const utils = {
   debenturePriceChangedEvent,
   debenturePriceChangedPlayerAction,
+  debentureOFZPriceChangedEvent,
 };

@@ -20,7 +20,7 @@ export namespace DebenturePriceChangedEventGenerator {
         currentPrice,
         nominal,
         profitabilityPercent,
-        maxCount,
+        availableCount: maxCount,
       },
     };
   };

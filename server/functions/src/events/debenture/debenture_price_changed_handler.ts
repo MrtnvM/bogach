@@ -1,17 +1,33 @@
 import { PlayerActionHandler } from '../../core/domain/player_action_handler';
 import { DebenturePriceChangedEvent } from './debenture_price_changed_event';
-import { AssetEntity } from '../../models/domain/asset';
+import { AssetEntity, Asset } from '../../models/domain/asset';
 import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
 import { Strings } from '../../resources/strings';
-import { UserEntity } from '../../models/domain/user';
 import { BuySellAction } from '../../models/domain/actions/buy_sell_action';
 import { GameContext } from '../../models/domain/game/game_context';
 import { GameProvider } from '../../providers/game_provider';
 import { Game } from '../../models/domain/game/game';
+import { Account } from '../../models/domain/account';
 import produce from 'immer';
 
 type Event = DebenturePriceChangedEvent.Event;
 type Action = DebenturePriceChangedEvent.PlayerAction;
+
+interface ActionResult {
+  readonly newDebentureCount: number;
+  readonly newAccountBalance: number;
+  readonly newAveragePrice: number;
+}
+
+interface ActionParameters {
+  readonly userAccount: Account;
+  readonly countInPortfolio: number;
+  readonly actionCount: number;
+  readonly availableCount: number;
+  readonly currentPrice: number;
+  readonly currentAveragePrice: number;
+  readonly totalPrice: number;
+}
 
 export class DebenturePriceChangedHandler extends PlayerActionHandler {
   constructor(private gameProvider: GameProvider) {
@@ -38,101 +54,180 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler {
     const { gameId, userId } = context;
     const game = await this.gameProvider.getGame(gameId);
 
-    const { currentPrice, nominal, profitabilityPercent } = event.data;
-    const { count, action: debentureAction } = action;
+    const { currentPrice, nominal, profitabilityPercent, availableCount } = event.data;
+    const { count: actionCount, action: debentureAction } = action;
 
     const assets = game.possessions[userId].assets;
     const debetureAssets = AssetEntity.getDebentures(assets);
 
+    const debentureName = event.name;
+
     const theSameDebenture = debetureAssets.find((d) => {
       return (
-        d.currentPrice === currentPrice &&
+        d.name === debentureName &&
         d.nominal === nominal &&
         d.profitabilityPercent === profitabilityPercent
       );
     });
 
-    const currentDebentureCount = theSameDebenture?.count || 0;
-    const { newDebentureCount, newAccountBalance } = await this.getNewDebentureCount({
-      game,
-      count,
-      debentureAction,
-      currentDebentureCount,
-      userId,
-      debenturePrice: currentPrice,
-    });
+    const countInPortfolio = theSameDebenture?.count || 0;
+    const currentAveragePrice = theSameDebenture?.averagePrice || 0;
 
-    let newAssets = assets.slice();
+    const userAccount = game.accounts[userId];
+    const totalPrice = currentPrice * actionCount;
 
+    const actionParameters: ActionParameters = {
+      userAccount,
+      countInPortfolio,
+      actionCount,
+      availableCount,
+      currentPrice,
+      currentAveragePrice,
+      totalPrice,
+    };
+
+    const actionResult = await this.applyAction(actionParameters, debentureAction);
+
+    let newAssets: Asset[];
     if (theSameDebenture) {
-      const newDebenture = { ...theSameDebenture, count: newDebentureCount };
-      const index = assets.findIndex((d) => d.id === newDebenture.id);
-
-      if (index >= 0) {
-        newAssets[index] = newDebenture;
-      }
-
-      if (newDebenture.count === 0) {
-        newAssets = assets.filter((d) => d.id !== newDebenture.id);
-      }
+      newAssets = this.updateAssets(actionResult, theSameDebenture, assets);
     } else {
-      const newDebenture: DebentureAsset = {
-        currentPrice,
-        nominal,
-        profitabilityPercent,
-        count: newDebentureCount,
-        name: Strings.debetures(),
-        type: 'debenture',
-      };
-
-      newAssets.push(newDebenture);
+      newAssets = this.addNewItemToAssets(actionResult, assets, nominal, profitabilityPercent);
     }
 
     const updatedGame: Game = produce(game, (draft) => {
-      draft.accounts[userId].cash = newAccountBalance;
+      draft.accounts[userId].cash = actionResult.newAccountBalance;
       draft.possessions[userId].assets = newAssets;
     });
 
     await this.gameProvider.updateGame(updatedGame);
   }
 
-  async getNewDebentureCount(props: {
-    game: Game;
-    debentureAction: BuySellAction;
-    currentDebentureCount: number;
-    userId: UserEntity.Id;
-    count: number;
-    debenturePrice: number;
-  }) {
-    const { debentureAction, currentDebentureCount, userId, count, debenturePrice } = props;
-    const account = props.game.accounts[userId];
-    const totalPrice = debenturePrice * count;
+  async applyAction(actionParameters: ActionParameters, action: BuySellAction) {
+    if (action === 'buy') {
+      return this.applyBuyAction(actionParameters);
+    } else if (action === 'sell') {
+      return this.applySellAction(actionParameters);
+    } else {
+      throw new Error('Unknown action with debentures');
+    }
+  }
 
-    let newDebentureCount = currentDebentureCount;
-    let newAccountBalance = account.cash;
+  async applyBuyAction(actionParameters: ActionParameters): Promise<ActionResult> {
+    const {
+      userAccount,
+      countInPortfolio,
+      actionCount,
+      availableCount,
+      currentPrice,
+      currentAveragePrice,
+      totalPrice,
+    } = actionParameters;
 
-    switch (debentureAction) {
-      case 'buy':
-        const isEnoughMoney = account.cash >= totalPrice;
-
-        if (!isEnoughMoney) {
-          throw new Error('Not enough money');
-        }
-
-        newDebentureCount += count;
-        newAccountBalance -= totalPrice;
-        break;
-
-      case 'sell':
-        if (currentDebentureCount < count) {
-          throw new Error('Not enough debentures');
-        }
-
-        newDebentureCount -= count;
-        newAccountBalance += totalPrice;
-        break;
+    const isEnoughMoney = userAccount.cash >= totalPrice;
+    if (!isEnoughMoney) {
+      throw new Error('Not enough money');
     }
 
-    return { newDebentureCount, newAccountBalance };
+    const isEnoughCountAvailable = availableCount >= actionCount;
+    if (!isEnoughCountAvailable) {
+      throw new Error('Not enough debentures available');
+    }
+
+    const newDebentureCount = countInPortfolio + actionCount;
+    const newAccountBalance = userAccount.cash - totalPrice;
+
+    const pricesDifference = currentPrice - currentAveragePrice;
+    const commonCount = countInPortfolio + actionCount;
+    const priceDifferenceStep = pricesDifference / commonCount;
+
+    const newPriceOffset = priceDifferenceStep * actionCount;
+    let newAveragePrice = currentAveragePrice + newPriceOffset;
+
+    const actionResult: ActionResult = {
+      newDebentureCount,
+      newAccountBalance,
+      newAveragePrice,
+    };
+
+    return actionResult;
+  }
+
+  async applySellAction(actionParameters: ActionParameters): Promise<ActionResult> {
+    const {
+      userAccount,
+      countInPortfolio,
+      actionCount,
+      availableCount,
+      currentAveragePrice,
+      totalPrice,
+    } = actionParameters;
+
+    const isEnoughCountAvailable = availableCount >= actionCount;
+    if (!isEnoughCountAvailable) {
+      throw new Error('Not enough debentures available');
+    }
+
+    if (countInPortfolio < actionCount) {
+      throw new Error('Not enough debentures in portfolio');
+    }
+
+    const newDebentureCount = countInPortfolio - actionCount;
+    const newAccountBalance = userAccount.cash + totalPrice;
+    const newAveragePrice = currentAveragePrice;
+
+    const actionResult: ActionResult = {
+      newDebentureCount,
+      newAccountBalance,
+      newAveragePrice,
+    };
+
+    return actionResult;
+  }
+
+  updateAssets(
+    actionResult: ActionResult,
+    theSameDebenture: DebentureAsset,
+    assets: Asset[]
+  ): Asset[] {
+    const newDebenture = {
+      ...theSameDebenture,
+      count: actionResult.newDebentureCount,
+      averagePrice: actionResult.newAveragePrice,
+    };
+    let newAssets = assets.slice();
+    const index = newAssets.findIndex((d) => d.id === newDebenture.id);
+
+    if (index >= 0) {
+      newAssets[index] = newDebenture;
+    }
+
+    if (newDebenture.count === 0) {
+      newAssets = newAssets.filter((d) => d.id !== newDebenture.id);
+    }
+
+    return newAssets;
+  }
+
+  addNewItemToAssets(
+    actionResult: ActionResult,
+    assets: Asset[],
+    nominal: number,
+    profitabilityPercent: number
+  ): Asset[] {
+    let newAssets = assets.slice();
+
+    const newDebenture: DebentureAsset = {
+      averagePrice: actionResult.newAveragePrice,
+      nominal,
+      profitabilityPercent,
+      count: actionResult.newDebentureCount,
+      name: Strings.debetures(),
+      type: 'debenture',
+    };
+
+    newAssets.push(newDebenture);
+
+    return newAssets;
   }
 }

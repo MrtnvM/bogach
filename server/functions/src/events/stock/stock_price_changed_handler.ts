@@ -119,18 +119,17 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     } = actionParameters;
 
     const isEnoughMoney = userAccount.cash >= totalPrice;
-
     if (!isEnoughMoney) {
       throw new Error('Not enough money');
     }
 
     const isEnoughCountAvailable = availableCount >= actionCount;
     if (!isEnoughCountAvailable) {
-      throw new Error('Not enough count available');
+      throw new Error('Not enough stocks available');
     }
 
-    let newStockCount = countInPortfolio + actionCount;
-    let newAccountBalance = userAccount.cash - totalPrice;
+    const newStockCount = countInPortfolio + actionCount;
+    const newAccountBalance = userAccount.cash - totalPrice;
 
     const pricesDifference = currentPrice - currentAveragePrice;
     const commonCount = countInPortfolio + actionCount;

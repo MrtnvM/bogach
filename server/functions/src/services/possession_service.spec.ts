@@ -73,7 +73,7 @@ describe('Possession Service Tests', () => {
           name: 'ОФЗ',
           type: 'debenture',
           count: 4,
-          currentPrice: 1100,
+          averagePrice: 1100,
           profitabilityPercent: 8,
           nominal: 1000
         }),
@@ -184,7 +184,7 @@ describe('Possession Service Tests', () => {
           name: 'ОФЗ',
           type: 'debenture',
           count: 4,
-          currentPrice: 1100,
+          averagePrice: 1100,
           profitabilityPercent: 8,
           nominal: 1000
         }),
