@@ -79,7 +79,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       )).listen((action) => action
-        ..onSuccess((_) => _onLoggedIn())
+        ..onSuccess(_onLoggedIn)
         ..onError(_onLoginError));
     }
   }
@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     appRouter.goTo(const RegistrationPage());
   }
 
-  void _onLoggedIn() {
+  void _onLoggedIn(_) {
     appRouter.startWith(const MainPage());
   }
 
@@ -265,12 +265,8 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
   void _loginViaFacebook(String token) {
     dispatchAsyncAction(LoginViaFacebookAsyncAction(token: token))
         .listen((action) => action
-          ..onSuccess(_onLoginViaFacebookSuccess)
+          ..onSuccess(_onLoggedIn)
           ..onError(_onLoginViaFacebookError));
-  }
-
-  void _onLoginViaFacebookSuccess(_) {
-    appRouter.startWith(const MainPage());
   }
 
   void _onLoginViaFacebookError(error) {
@@ -292,7 +288,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
       accessToken: token,
       idToken: idToken,
     )).listen((action) => action
-      ..onSuccess(_onLoginViaFacebookSuccess)
+      ..onSuccess(_onLoggedIn)
       ..onError(_onLoginViaFacebookError));
   }
 
@@ -316,11 +312,11 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
           firstName: firstName,
           lastName: lastName,
         )).listen((action) => action
-          ..onSuccess(_onLoginViaAppleSuccess)
+          ..onSuccess(_onLoggedIn)
           ..onError(_onLoginViaAppleError));
         break;
       case AuthorizationStatus.error:
-        // do something
+        handleError(context: context, exception: UnknownErrorException());
         break;
 
       case AuthorizationStatus.cancelled:
@@ -335,10 +331,6 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
             snapShoot.hasData && snapShoot.data == true
                 ? AppleSignInButton(onPressed: _onLoginViaAppleClicked)
                 : Container());
-  }
-
-  void _onLoginViaAppleSuccess(_) {
-    appRouter.goTo(const MainPage());
   }
 
   void _onLoginViaAppleError(error) {
