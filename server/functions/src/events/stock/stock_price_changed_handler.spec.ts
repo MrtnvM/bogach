@@ -3,7 +3,6 @@
 import { GameProvider } from '../../providers/game_provider';
 import { mock, instance, reset, when, capture } from 'ts-mockito';
 import { GameEntity } from '../../models/domain/game/game';
-import { Strings } from '../../resources/strings';
 import produce from 'immer';
 import { stubs, utils } from './stock_price_changed_handler.spec.utils';
 import { StockPriceChangedHandler } from './stock_price_changed_handler';
@@ -39,7 +38,7 @@ describe('Stock price changed event handler', () => {
     await handler.handle(event, action, context);
 
     const newStockAsset: StockAsset = {
-      name: Strings.stocks(),
+      name: 'stockName',
       type: 'stock',
       averagePrice: 100,
       fairPrice: 120,

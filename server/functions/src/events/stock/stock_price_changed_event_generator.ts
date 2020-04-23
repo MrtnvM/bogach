@@ -16,7 +16,7 @@ export namespace StockPriceChangedEventGenerator {
 
     return {
       id: uuid.v4(),
-      name: Strings.stocksTitle(),
+      name: 'Название акции',
       description: Strings.currentPrice() + formatPrice(currentPrice),
       type: StockPriceChangedEvent.Type,
       data: {

@@ -2,7 +2,6 @@ import { PlayerActionHandler } from '../../core/domain/player_action_handler';
 import { DebenturePriceChangedEvent } from './debenture_price_changed_event';
 import { AssetEntity, Asset } from '../../models/domain/asset';
 import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
-import { Strings } from '../../resources/strings';
 import { BuySellAction } from '../../models/domain/actions/buy_sell_action';
 import { GameContext } from '../../models/domain/game/game_context';
 import { GameProvider } from '../../providers/game_provider';
@@ -92,7 +91,13 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler {
     if (theSameDebenture) {
       newAssets = this.updateAssets(actionResult, theSameDebenture, assets);
     } else {
-      newAssets = this.addNewItemToAssets(actionResult, assets, nominal, profitabilityPercent);
+      newAssets = this.addNewItemToAssets(
+        actionResult,
+        assets,
+        nominal,
+        profitabilityPercent,
+        debentureName
+      );
     }
 
     const updatedGame: Game = produce(game, (draft) => {
@@ -213,7 +218,8 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler {
     actionResult: ActionResult,
     assets: Asset[],
     nominal: number,
-    profitabilityPercent: number
+    profitabilityPercent: number,
+    debentureName: string
   ): Asset[] {
     let newAssets = assets.slice();
 
@@ -222,7 +228,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler {
       nominal,
       profitabilityPercent,
       count: actionResult.newDebentureCount,
-      name: Strings.debetures(),
+      name: debentureName,
       type: 'debenture',
     };
 

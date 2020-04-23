@@ -1,6 +1,5 @@
 import { PlayerActionHandler } from '../../core/domain/player_action_handler';
 import { AssetEntity, Asset } from '../../models/domain/asset';
-import { Strings } from '../../resources/strings';
 import { BuySellAction } from '../../models/domain/actions/buy_sell_action';
 import { GameContext } from '../../models/domain/game/game_context';
 import { GameProvider } from '../../providers/game_provider';
@@ -86,7 +85,7 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     if (theSameStock) {
       newAssets = this.updateAssets(actionResult, theSameStock, assets);
     } else {
-      newAssets = this.addNewItemToAssets(actionResult, assets, fairPrice);
+      newAssets = this.addNewItemToAssets(actionResult, assets, fairPrice, stockName);
     }
 
     const updatedGame: Game = produce(game, (draft) => {
@@ -191,14 +190,19 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     return newAssets;
   }
 
-  addNewItemToAssets(actionResult: ActionResult, assets: Asset[], fairPrice: number): Asset[] {
+  addNewItemToAssets(
+    actionResult: ActionResult,
+    assets: Asset[],
+    fairPrice: number,
+    stockName: string
+  ): Asset[] {
     let newAssets = assets.slice();
 
     const newStock: StockAsset = {
       fairPrice,
       averagePrice: actionResult.newAveragePrice,
       countInPortfolio: actionResult.newStockCount,
-      name: Strings.stocks(),
+      name: stockName,
       type: 'stock',
     };
 

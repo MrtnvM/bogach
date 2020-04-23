@@ -146,7 +146,7 @@ const game: Game = {
 const debenturePriceChangedEvent = (data: DebenturePriceChangedEvent.Data) => {
   const event: DebenturePriceChangedEvent.Event = {
     id: eventId,
-    name: 'Debentures',
+    name: 'DebentureName',
     description: 'Description',
     type: DebenturePriceChangedEvent.Type,
     data: data,
