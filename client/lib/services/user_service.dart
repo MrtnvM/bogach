@@ -52,17 +52,47 @@ class UserService {
   }
 
   Stream<CurrentUser> loginViaGoogle({
-    @required String token,
+    @required String accessToken,
     @required String idToken,
   }) {
     final authCredential = GoogleAuthProvider.getCredential(
-      accessToken: token,
+      accessToken: accessToken,
       idToken: idToken,
     );
 
     return Stream.fromFuture(_firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
         .map(mapToCurrentUser);
+  }
+
+  Stream<CurrentUser> loginViaApple({
+    @required String accessToken,
+    @required String idToken,
+    @required String firstName,
+    @required String lastName,
+  }) {
+    const authProvider = OAuthProvider(providerId: 'apple.com');
+    final credential = authProvider.getCredential(
+      idToken: idToken,
+      accessToken: accessToken,
+    );
+
+    final future = Future(() async {
+      final response = await _firebaseAuth.signInWithCredential(credential);
+      final user = response.user;
+
+      if (firstName != null && lastName != null) {
+        final updateInfo = UserUpdateInfo();
+        updateInfo.displayName = '$firstName $lastName';
+        await user.updateProfile(updateInfo);
+      }
+
+      return _firebaseAuth.currentUser();
+    });
+
+    return Stream.fromFuture(future)
+        .transform(ErrorHandler())
+        .map(mapUserToCurrentUser);
   }
 
   Future<void> signUpUser(RegisterRequestModel model) async {

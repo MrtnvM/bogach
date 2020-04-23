@@ -1,3 +1,4 @@
+import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/features/login/login_actions.dart';
@@ -78,7 +79,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       )).listen((action) => action
-        ..onSuccess((_) => _onLoggedIn())
+        ..onSuccess(_onLoggedIn)
         ..onError(_onLoginError));
     }
   }
@@ -87,7 +88,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     appRouter.goTo(const RegistrationPage());
   }
 
-  void _onLoggedIn() {
+  void _onLoggedIn(_) {
     appRouter.startWith(const MainPage());
   }
 
@@ -150,6 +151,8 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
             title: Strings.google,
             type: _SocialButtonType.google,
           ),
+          const SizedBox(height: 16),
+          _buildAppleSignInButton(),
           const SizedBox(height: 16),
           _buildSignUpWidget(),
           const SafeArea(top: false, child: SizedBox(height: 16)),
@@ -262,12 +265,8 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
   void _loginViaFacebook(String token) {
     dispatchAsyncAction(LoginViaFacebookAsyncAction(token: token))
         .listen((action) => action
-          ..onSuccess(_onLoginViaFacebookSuccess)
+          ..onSuccess(_onLoggedIn)
           ..onError(_onLoginViaFacebookError));
-  }
-
-  void _onLoginViaFacebookSuccess(_) {
-    appRouter.startWith(const MainPage());
   }
 
   void _onLoginViaFacebookError(error) {
@@ -286,11 +285,56 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
 
   void _loginViaGoogle({String token, String idToken}) {
     dispatchAsyncAction(LoginViaGoogleAsyncAction(
-      token: token,
+      accessToken: token,
       idToken: idToken,
     )).listen((action) => action
-      ..onSuccess(_onLoginViaFacebookSuccess)
+      ..onSuccess(_onLoggedIn)
       ..onError(_onLoginViaFacebookError));
+  }
+
+  Future<void> _onLoginViaAppleClicked() async {
+    final result = await AppleSignIn.performRequests([
+      AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+    ]);
+
+    switch (result.status) {
+      case AuthorizationStatus.authorized:
+        final identityToken =
+            String.fromCharCodes(result.credential.identityToken);
+        final accessToken =
+            String.fromCharCodes(result.credential.authorizationCode);
+        final firstName = result.credential.fullName.givenName;
+        final lastName = result.credential.fullName.givenName;
+
+        dispatchAsyncAction(LoginViaAppleAsyncAction(
+          idToken: identityToken,
+          accessToken: accessToken,
+          firstName: firstName,
+          lastName: lastName,
+        )).listen((action) => action
+          ..onSuccess(_onLoggedIn)
+          ..onError(_onLoginViaAppleError));
+        break;
+      case AuthorizationStatus.error:
+        handleError(context: context, exception: UnknownErrorException());
+        break;
+
+      case AuthorizationStatus.cancelled:
+        break;
+    }
+  }
+
+  Widget _buildAppleSignInButton() {
+    return FutureBuilder(
+        future: AppleSignIn.isAvailable(),
+        builder: (context, snapShoot) =>
+            snapShoot.hasData && snapShoot.data == true
+                ? AppleSignInButton(onPressed: _onLoginViaAppleClicked)
+                : Container());
+  }
+
+  void _onLoginViaAppleError(error) {
+    handleError(context: context, exception: error);
   }
 }
 

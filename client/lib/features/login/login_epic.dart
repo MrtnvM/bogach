@@ -43,7 +43,25 @@ Epic<AppState> loginEpic({@required UserService userService}) {
         .whereType<LoginViaGoogleAsyncAction>()
         .where((action) => action.isStarted)
         .flatMap((action) => userService
-            .loginViaGoogle(token: action.token, idToken: action.idToken)
+            .loginViaGoogle(
+              accessToken: action.accessToken,
+              idToken: action.idToken,
+            )
+            .map<Action>(action.complete)
+            .onErrorReturnWith(action.fail));
+  });
+
+  final loginViaAppleEpic = epic((action$, store) {
+    return action$
+        .whereType<LoginViaAppleAsyncAction>()
+        .where((action) => action.isStarted)
+        .flatMap((action) => userService
+            .loginViaApple(
+              accessToken: action.accessToken,
+              idToken: action.idToken,
+              firstName: action.firstName,
+              lastName: action.lastName,
+            )
             .map<Action>(action.complete)
             .onErrorReturnWith(action.fail));
   });
@@ -53,5 +71,6 @@ Epic<AppState> loginEpic({@required UserService userService}) {
     logoutEpic,
     loginViaFacebookEpic,
     loginViaGoogleEpic,
+    loginViaAppleEpic,
   ]);
 }

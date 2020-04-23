@@ -25,6 +25,14 @@ final loginReducer = Reducer<LoginState>()
         ..onSuccess((currentUser) => s.currentUser = currentUser.toBuilder());
     }),
   )
+  ..on<LoginViaAppleAsyncAction>(
+    (state, action) => state.rebuild((s) {
+      s.loginRequestState = action.requestState;
+
+      action
+        ..onSuccess((currentUser) => s.currentUser = currentUser.toBuilder());
+    }),
+  )
   ..on<SetCurrentUserAction>(
     (state, action) => state.rebuild(
         (s) => s..currentUser = mapUserToCurrentUser(action.user)?.toBuilder()),
