@@ -30,8 +30,7 @@ class UserService {
   }
 
   Stream<void> logout() {
-    return Stream.fromFuture(_firebaseAuth.signOut())
-        .map((_) => tokenStorage.clearTokens());
+    return Stream.fromFuture(_firebaseAuth.signOut());
   }
 
   Stream<void> register({@required RegisterRequestModel model}) {
