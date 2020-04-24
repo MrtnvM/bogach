@@ -1,3 +1,4 @@
+import 'package:cash_flow/widgets/settings/device_preview_setting_provider.dart';
 import 'package:cash_flow/widgets/uikit/ui_kit_setting.dart';
 import 'package:flutter_platform_control_panel/control_panel.dart';
 
@@ -20,6 +21,7 @@ class SettingsProvider extends ControlPanelSettingsProvider {
       VersionSetting(),
       DemoSetting(demoProps),
       PushNotificationsSetting(pushProps),
+      const DevicePreviewSetting(),
       const LicenseSetting(),
       const UiKitSetting(),
     ];

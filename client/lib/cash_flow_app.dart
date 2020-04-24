@@ -3,6 +3,8 @@ import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/presentation/main/main_page.dart';
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/utils/core/device_preview.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:flutter_redux/flutter_redux.dart' as redux;
@@ -31,18 +33,24 @@ class CashFlowAppState extends State<CashFlowApp> with ReduxState {
   Widget build(BuildContext context) {
     return redux.StoreProvider(
       store: widget.store,
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        builder: (context, child) => child,
-        navigatorKey: appRouter.navigatorKey,
-        home: widget.isAuthorised ? const MainPage() : const LoginPage(),
-        theme: Theme.of(context).copyWith(
-          scaffoldBackgroundColor: ColorRes.scaffoldBackground,
-          pageTransitionsTheme: const PageTransitionsTheme(
-            builders: <TargetPlatform, PageTransitionsBuilder>{
-              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-            },
+      child: StreamBuilder(
+        stream: DevicePreviewMode.onModeChanged,
+        builder: (context, snapShoot) => DevicePreview(
+          enabled: snapShoot.hasData && snapShoot.data,
+          builder: (context) => MaterialApp(
+            debugShowCheckedModeBanner: false,
+            builder: DevicePreview.appBuilder,
+            navigatorKey: appRouter.navigatorKey,
+            home: widget.isAuthorised ? const MainPage() : const LoginPage(),
+            theme: Theme.of(context).copyWith(
+              scaffoldBackgroundColor: ColorRes.scaffoldBackground,
+              pageTransitionsTheme: const PageTransitionsTheme(
+                builders: <TargetPlatform, PageTransitionsBuilder>{
+                  TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                  TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+                },
+              ),
+            ),
           ),
         ),
       ),

@@ -37,6 +37,8 @@ dependencies:
 
   url_launcher: ^5.4.2
 
+  device_preview: ^0.4.4
+
   flutter_platform_core:
     git:
       url: git://github.com/mobile-dualbootpartners/flutter-platform-core
@@ -50,7 +52,7 @@ dependencies:
   flutter_platform_control_panel:
     git:
       url: git://github.com/mobile-dualbootpartners/flutter-platform-control-panel
-      ref: v0.0.8
+      ref: v0.0.10
 
   flutter_platform_loadable:
     git:
