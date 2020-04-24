@@ -4,6 +4,8 @@ class Strings {
       'An error occurred while performing the operation';
 
   // Common
+  static String get submit => 'Отправить';
+
   static String get email => 'Email';
 
   static String get password => 'Пароль';
@@ -142,4 +144,15 @@ class Strings {
 
   static String get incorrectPassword =>
       'Пароль должен быть более 6-ти символов';
+
+  // Reset Password
+  static String get forgotPasswordTitle => 'Забыли пароль?';
+
+  static String get recoveryPasswordTitle => 'Восстановление пароля';
+
+  static String get recoveryPasswordDesc =>
+      'Введите свой e-mail, указанный при регистрации';
+
+  static String get noSuchEmail =>
+      'Пользователь с таким e-mail не зарегистрирован';
 }
