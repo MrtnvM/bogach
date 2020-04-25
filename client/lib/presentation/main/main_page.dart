@@ -1,4 +1,6 @@
 import 'package:cash_flow/core/utils/app_store_connector.dart';
+import 'package:cash_flow/features/game/game_actions.dart';
+import 'package:cash_flow/models/domain/game_context.dart';
 import 'package:cash_flow/models/state/user/current_user.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/gameboard/game_board.dart';
@@ -41,7 +43,7 @@ class _MainPageState extends State<MainPage> with ReduxState {
               children: <Widget>[
                 Text('Welcome, ${user.fullName}'),
                 FlatButton(
-                  onPressed: () => appRouter.goTo(GameBoard()),
+                  onPressed: goToGame,
                   child: const Text('Go to GameBoard'),
                 ),
               ],
@@ -50,5 +52,15 @@ class _MainPageState extends State<MainPage> with ReduxState {
         ),
       ],
     );
+  }
+
+  void goToGame() {
+    const context = GameContext(
+      gameId: 'c8d3e4b6-8f8c-45ae-8bad-f085101a1c0f',
+      userId: 'user1',
+    );
+
+    dispatch(SetGameContextAction(context));
+    appRouter.goTo(GameBoard());
   }
 }

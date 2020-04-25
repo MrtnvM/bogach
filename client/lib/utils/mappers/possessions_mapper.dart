@@ -1,5 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:cash_flow/models/domain/game_data.dart';
+import 'package:cash_flow/models/domain/game_event.dart';
+import 'package:cash_flow/models/domain/game_event_type.dart';
 import 'package:cash_flow/models/domain/target_data.dart';
 import 'package:cash_flow/models/network/responses/game/game_event_response_model.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/assets/asset_response_model.dart';
@@ -14,8 +16,6 @@ import 'package:cash_flow/models/network/responses/possessions_state/expense_res
 import 'package:cash_flow/models/network/responses/possessions_state/income_response_model.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/liability_response_model.dart';
 import 'package:cash_flow/models/network/responses/target_response_model.dart';
-import 'package:cash_flow/models/state/game/game_event.dart';
-import 'package:cash_flow/models/state/game/game_event_data.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/business_asset_item.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/cash_asset_item.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/debenture_asset_item.dart';
@@ -32,8 +32,9 @@ import 'package:cash_flow/utils/consts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 GameData mapToGameData(DocumentSnapshot response) {
-  final userPossessionState =
-      mapToPossessionState(response.data['possessionState']);
+  final userPossessionState = mapToPossessionState(
+    response.data['possessionState'],
+  );
   final target = mapToTargetState(response.data['target']);
   final events = mapToGameEvents(response.data['currentEvents']);
 
@@ -47,18 +48,18 @@ GameData mapToGameData(DocumentSnapshot response) {
 BuiltList<GameEvent> mapToGameEvents(List response) {
   return response
       .map((json) => GameEventResponseModel.fromJson(json))
-      .map((event) => GameEvent((b) => b
-        ..id = event.id
-        ..name = event.name
-        ..description = event.description
-        ..type = event.type
-        ..data = GameEventData((b) => b
-              ..currentPrice = event.data.currentPrice
-              ..maxCount = event.data.maxCount
-              ..nominal = event.data.nominal
-              ..profitabilityPercent = event.data.profitabilityPercent)
-            .toBuilder()))
-      .toBuiltList();
+      .map((event) {
+    final type = GameEventType.fromJson(event.type);
+    final eventData = type.parseGameEventData(event.data);
+
+    return GameEvent(
+      id: event.id,
+      name: event.name,
+      description: event.description,
+      type: GameEventType.fromJson(event.type),
+      data: eventData,
+    );
+  }).toBuiltList();
 }
 
 TargetData mapToTargetState(Map<String, dynamic> response) {
@@ -86,36 +87,37 @@ PossessionAssetBuilder _getAssets(document) {
   final cash = <CashAssetItem>[];
   final other = <OtherAssetItem>[];
 
-  List.from(document['assets'])
-      .map(
-          (json) => _ResponsePair(AssetResponseModel.fromJson(json).type, json))
-      .forEach((pair) {
-    switch (pair.type) {
+  final allAssets = document['assets'];
+
+  for (final json in allAssets) {
+    final type = AssetResponseModel.fromJson(json).type;
+
+    switch (type) {
       case AssetType.insurance:
-        insurances.add(_buildInsurance(pair.json));
+        insurances.add(_buildInsurance(json));
         break;
       case AssetType.debenture:
-        debentures.add(_buildDebenture(pair.json));
+        debentures.add(_buildDebenture(json));
         break;
       case AssetType.stocks:
-        stocks.add(_buildStocks(pair.json));
+        stocks.add(_buildStocks(json));
         break;
       case AssetType.realty:
-        realty.add(_buildRealty(pair.json));
+        realty.add(_buildRealty(json));
         break;
       case AssetType.business:
-        businesses.add(_buildBusiness(pair.json));
+        businesses.add(_buildBusiness(json));
         break;
       case AssetType.cash:
-        cash.add(_buildCash(pair.json));
+        cash.add(_buildCash(json));
         break;
       case AssetType.other:
-        other.add(_buildOther(pair.json));
+        other.add(_buildOther(json));
         break;
       default:
         break;
     }
-  });
+  }
 
   final insurancesSum = insurances.fold(0, (sum, item) => sum += item.value);
   final debenturesSum = debentures.fold(0, (sum, item) => sum += item.total);
@@ -243,11 +245,4 @@ PossessionIncomeBuilder _getIncomes(document) {
     ..other = incomesList
         .where((income) => income.type == IncomeType.other)
         .fold(0, (sum, item) => sum + item.value);
-}
-
-class _ResponsePair {
-  const _ResponsePair(this.type, this.json);
-
-  final AssetType type;
-  final Map<String, dynamic> json;
 }

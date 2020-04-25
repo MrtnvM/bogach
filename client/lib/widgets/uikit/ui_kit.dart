@@ -1,7 +1,10 @@
+import 'package:cash_flow/game_events/investment/models/investment_event_data.dart';
+import 'package:cash_flow/game_events/investment/ui/investment_game_event.dart';
+import 'package:cash_flow/models/domain/game_event.dart';
+import 'package:cash_flow/models/domain/game_event_type.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/containers/indicators_table.dart';
 import 'package:cash_flow/widgets/events/insurance_game_event.dart';
-import 'package:cash_flow/widgets/events/investment_game_event.dart';
 import 'package:cash_flow/widgets/events/new_business_game_event.dart';
 import 'package:cash_flow/widgets/events/property_game_event.dart';
 import 'package:cash_flow/widgets/events/sale_business_game_event.dart';
@@ -124,8 +127,8 @@ class UiKit extends StatelessWidget {
 
   Widget _getGameEvents(BuildContext context) {
     return Column(
-      children: const <Widget>[
-        PropertyGameEvent(
+      children: <Widget>[
+        const PropertyGameEvent(
           PropertyViewModel(
             name: 'киоск',
             price: 83000,
@@ -138,17 +141,20 @@ class UiKit extends StatelessWidget {
           ),
         ),
         InvestmentGameEvent(
-          InvestmentViewModel(
-            currentPrice: 1200,
-            type: 'Облигации',
-            nominalCost: 1000,
-            passiveIncomePerMonth: 40,
-            roi: 40,
-            alreadyHave: 1,
-            maxCount: 15,
+          GameEvent(
+            id: 'event1',
+            name: 'Облигации',
+            description: 'Облигации',
+            type: GameEventType.debenture(),
+            data: InvestmentEventData(
+              currentPrice: 1300,
+              nominal: 1000,
+              profitabilityPercent: 8,
+              maxCount: 15,
+            ),
           ),
         ),
-        NewBusinessGameEvent(
+        const NewBusinessGameEvent(
           NewBusinessViewModel(
             passiveIncomePerMonth: 0,
             roi: 0,
@@ -156,12 +162,12 @@ class UiKit extends StatelessWidget {
             marketPrice: 900,
           ),
         ),
-        WindfallIncomeGameEvent(
+        const WindfallIncomeGameEvent(
           WindfallIncomeViewModel(
             income: 1000,
           ),
         ),
-        StockGameEvent(
+        const StockGameEvent(
           StockViewModel(
             currentPrice: 39,
             type: 'Инвестбанк',
@@ -170,7 +176,7 @@ class UiKit extends StatelessWidget {
             maxCount: 12520,
           ),
         ),
-        SaleBusinessGameEvent(
+        const SaleBusinessGameEvent(
           SaleBusinessViewModel(
             offeredPrice: 129000,
             marketPrice: 125000,
@@ -181,7 +187,7 @@ class UiKit extends StatelessWidget {
             saleRate: 10,
           ),
         ),
-        InsuranceGameEvent(
+        const InsuranceGameEvent(
           InsuranceViewModel(
             price: 387,
             coverage: 3367,

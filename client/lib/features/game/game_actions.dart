@@ -1,3 +1,4 @@
+import 'package:cash_flow/models/domain/game_context.dart';
 import 'package:cash_flow/models/domain/game_data.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
@@ -19,4 +20,10 @@ class ListenGameStateErrorAction extends Action {
 
 class StopListenGameStateAction extends Action {
   StopListenGameStateAction();
+}
+
+class SetGameContextAction extends Action {
+  SetGameContextAction(this.context);
+
+  final GameContext context;
 }

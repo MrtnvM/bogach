@@ -4,8 +4,8 @@ import 'package:cash_flow/widgets/containers/event_buttons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class GameEvent extends StatelessWidget {
-  const GameEvent({
+class GameEventWidget extends StatelessWidget {
+  const GameEventWidget({
     @required this.icon,
     @required this.name,
     @required this.child,

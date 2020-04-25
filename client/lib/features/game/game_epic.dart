@@ -13,8 +13,9 @@ Epic<AppState> possessionsEpic({@required FirebaseService firebaseService}) {
         .whereType<ListenGameStateStartAction>()
         .flatMap((action) => firebaseService
             .getGameData(action.gameId)
-            .takeUntil(action$
-                .whereType<StopListenGameStateAction>())
+            .takeUntil(
+              action$.whereType<StopListenGameStateAction>(),
+            )
             .map<Action>((state) => ListenGameStateSuccessAction(state))
             .onErrorReturnWith((e) => ListenGameStateErrorAction()));
   });

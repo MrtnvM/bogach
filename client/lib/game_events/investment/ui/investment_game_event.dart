@@ -1,6 +1,9 @@
 import 'package:cash_flow/features/game_events/game_events_actions.dart';
+import 'package:cash_flow/game_events/investment/models/investment_event_data.dart';
+import 'package:cash_flow/game_events/investment/models/investment_player_action.dart';
 import 'package:cash_flow/models/domain/buy_sell_action.dart';
-import 'package:cash_flow/models/domain/player_actions/investment_player_action.dart';
+import 'package:cash_flow/models/domain/game_event.dart';
+import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
@@ -8,15 +11,15 @@ import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:cash_flow/widgets/containers/event_buttons.dart';
 import 'package:cash_flow/widgets/containers/game_event_selector.dart';
 import 'package:cash_flow/widgets/containers/info_table.dart';
-import 'package:cash_flow/widgets/events/game_event.dart';
+import 'package:cash_flow/widgets/events/game_event_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 class InvestmentGameEvent extends StatefulWidget {
-  const InvestmentGameEvent(this.viewModel);
+  const InvestmentGameEvent(this.event);
 
-  final InvestmentViewModel viewModel;
+  final GameEvent event;
 
   @override
   State<StatefulWidget> createState() {
@@ -29,9 +32,12 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
   var _selectedCount = 0;
   var _buySellAction = const BuySellAction.buy();
 
+  GameEvent get event => widget.event;
+  InvestmentEventData get eventData => event.data;
+
   @override
   Widget build(BuildContext context) {
-    return GameEvent(
+    return GameEventWidget(
       icon: Icons.home,
       name: Strings.investments,
       buttonsState: ButtonsState.normal,
@@ -41,24 +47,27 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
         children: <Widget>[
           _buildSellingPrice(),
           const SizedBox(height: 8),
-          _buildInfo(widget.viewModel),
-          _buildSelector(widget.viewModel),
+          _buildInfo(),
+          _buildSelector(),
         ],
       ),
     );
   }
 
-  Widget _buildInfo(InvestmentViewModel viewModel) {
+  Widget _buildInfo() {
+    // TODO(maxim-martynov): Replace with real value
+    const alreadyHave = 0;
+
     final map = {
-      Strings.investmentType: viewModel.type,
-      Strings.nominalCost: viewModel.nominalCost.toPrice(),
-      Strings.passiveIncomePerMonth: viewModel.passiveIncomePerMonth.toPrice(),
-      Strings.roi: viewModel.roi.toPercent(),
-      Strings.alreadyHave: viewModel.alreadyHave == 0
-          ? viewModel.alreadyHave.toString()
+      Strings.investmentType: event.type.typeTitle(),
+      Strings.nominalCost: eventData.nominal.toPrice(),
+      Strings.passiveIncomePerMonth: eventData.profitabilityPercent.toPrice(),
+      Strings.roi: (eventData.profitabilityPercent * 12).toPercent(),
+      Strings.alreadyHave: alreadyHave == 0
+          ? alreadyHave.toString()
           : Strings.getUserAvailableCount(
-              viewModel.alreadyHave.toString(),
-              viewModel.currentPrice.toPrice(),
+              alreadyHave.toString(),
+              eventData.currentPrice.toPrice(),
             ),
     };
 
@@ -81,7 +90,7 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
               ),
             ),
             TextSpan(
-              text: widget.viewModel.currentPrice.toPrice(),
+              text: eventData.currentPrice.toPrice(),
               style: Styles.body2.copyWith(color: ColorRes.blue),
             ),
           ],
@@ -90,12 +99,14 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
     );
   }
 
-  Widget _buildSelector(InvestmentViewModel viewModel) {
+  Widget _buildSelector() {
+    const alreadyHave = 0;
+
     final selectorViewModel = SelectorViewModel(
-      currentPrice: viewModel.currentPrice,
-      passiveIncomePerMonth: viewModel.passiveIncomePerMonth,
-      alreadyHave: viewModel.alreadyHave,
-      maxCount: viewModel.maxCount,
+      currentPrice: eventData.currentPrice,
+      passiveIncomePerMonth: eventData.profitabilityPercent,
+      alreadyHave: alreadyHave,
+      maxCount: eventData.maxCount,
       changeableType: true,
     );
 
@@ -109,52 +120,30 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
   }
 
   void sendPlayerAction() {
-    final eventId = widget.viewModel.eventId;
-
     final playerAction = InvestmentPlayerAction(
       _buySellAction,
       _selectedCount,
-      eventId,
+      event.id,
     );
 
-    final action = SendGameEventPlayerActionAsyncAction(playerAction, eventId);
+    final action = SendGameEventPlayerActionAsyncAction(playerAction, event.id);
 
     dispatchAsyncAction(action).listen(
       (action) => action
         ..onSuccess(
-          (_) => showDialog(
-              context: context,
-              child: const Text('Investment player action have sent')),
+          (_) => showCashDialog(
+            context: context,
+            title: 'Еее, бой!',
+            message: 'Все прошло успешно, действие обработано',
+          ),
         )
         ..onError(
-          (error) => showDialog(
-              context: context,
-              child: Text('Investment player action faild with error $error')),
+          (error) => showCashDialog(
+            context: context,
+            title: 'Ееееепс!',
+            message: 'Вот это вот случилось: $error',
+          ),
         ),
     );
   }
-}
-
-class InvestmentViewModel {
-  const InvestmentViewModel({
-    this.eventId,
-    this.currentPrice,
-    this.type,
-    this.nominalCost,
-    this.passiveIncomePerMonth,
-    this.roi,
-    this.alreadyHave,
-    this.maxCount,
-    this.buttonsProperties,
-  });
-
-  final String eventId;
-  final int currentPrice;
-  final String type;
-  final int nominalCost;
-  final int passiveIncomePerMonth;
-  final double roi;
-  final int alreadyHave;
-  final int maxCount;
-  final ButtonsProperties buttonsProperties;
 }

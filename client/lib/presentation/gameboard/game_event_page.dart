@@ -1,11 +1,11 @@
 import 'package:cash_flow/core/utils/app_store_connector.dart';
 import 'package:cash_flow/features/game/game_state.dart';
+import 'package:cash_flow/game_events/investment/ui/investment_game_event.dart';
+import 'package:cash_flow/models/domain/game_event.dart';
 import 'package:cash_flow/models/network/responses/target_type.dart';
-import 'package:cash_flow/models/state/game/game_event.dart';
 import 'package:cash_flow/models/state/target_state.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/containers/event_buttons.dart';
-import 'package:cash_flow/widgets/events/investment_game_event.dart';
 import 'package:cash_flow/widgets/progress/game_progress_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -62,24 +62,14 @@ class _GameEventPageState extends State<GameEventPage> {
   }
 
   Widget _buildEventBody(GameEvent event) {
+    final eventWidget = event.type.map(
+      debenture: (_) => InvestmentGameEvent(event),
+      stock: (_) => null,
+    );
+
     return Expanded(
       child: ListView(
-        children: <Widget>[
-          InvestmentGameEvent(
-            InvestmentViewModel(
-              currentPrice: event.data.currentPrice,
-              type: event.name,
-              nominalCost: event.data.nominal,
-              // TODO(Artem): How to calculate this
-              passiveIncomePerMonth: 40,
-              roi: event.data.profitabilityPercent.toDouble(),
-              // TODO(Artem): How to calculate this
-              alreadyHave: 1,
-              maxCount: event.data.maxCount,
-              buttonsProperties: buttonsProperties,
-            ),
-          ),
-        ],
+        children: [eventWidget],
       ),
     );
   }

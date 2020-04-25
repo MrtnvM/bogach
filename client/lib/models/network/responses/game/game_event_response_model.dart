@@ -1,5 +1,3 @@
-import 'package:cash_flow/models/network/responses/game/game_event_data_response_model.dart';
-import 'package:cash_flow/models/network/responses/game/game_event_type.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'game_event_response_model.g.dart';
@@ -20,8 +18,8 @@ class GameEventResponseModel {
   final String id;
   final String name;
   final String description;
-  final GameEventDataResponseModel data;
-  final GameEventType type;
+  final Map<String, dynamic> data;
+  final String type;
 
   Map<String, dynamic> toJson() => _$GameEventResponseModelToJson(this);
 }

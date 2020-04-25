@@ -1,6 +1,10 @@
+import 'package:flutter/foundation.dart';
+
 class GameContext {
-  const GameContext(this.gameId, this.userId)
-      : assert(gameId != null && gameId != ''),
+  const GameContext({
+    @required this.gameId,
+    @required this.userId,
+  })  : assert(gameId != null && gameId != ''),
         assert(userId != null && userId != '');
 
   final String userId;
