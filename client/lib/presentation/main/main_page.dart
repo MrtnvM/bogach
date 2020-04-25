@@ -4,6 +4,7 @@ import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/gameboard/game_board.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/appbar/app_bar.dart';
+import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
@@ -40,6 +41,9 @@ class _MainPageState extends State<MainPage> with ReduxState {
             child: Column(
               children: <Widget>[
                 Text('Welcome, ${user.fullName}'),
+                const SizedBox(height: 16),
+                UserAvatar(url: user.avatarUrl),
+                const SizedBox(height: 16),
                 FlatButton(
                   onPressed: () => appRouter.goTo(GameBoard()),
                   child: const Text('Go to GameBoard'),
