@@ -27,17 +27,39 @@ class LoginViaFacebookAsyncAction extends AsyncAction<CurrentUser> {
 
 class LoginViaGoogleAsyncAction extends AsyncAction<CurrentUser> {
   LoginViaGoogleAsyncAction({
-    @material.required this.token,
+    @material.required this.accessToken,
     @material.required this.idToken,
-  })  : assert(token != null),
+  })  : assert(accessToken != null),
         assert(idToken != null);
 
-  final String token;
+  final String accessToken;
   final String idToken;
+}
+
+class LoginViaAppleAsyncAction extends AsyncAction<CurrentUser> {
+  LoginViaAppleAsyncAction({
+    @material.required this.accessToken,
+    @material.required this.idToken,
+    @material.required this.firstName,
+    @material.required this.lastName,
+  })  : assert(accessToken != null),
+        assert(idToken != null);
+
+  final String accessToken;
+  final String idToken;
+  final String firstName;
+  final String lastName;
 }
 
 class SetCurrentUserAction extends Action {
   SetCurrentUserAction({@material.required this.user});
 
   final FirebaseUser user;
+}
+
+class ResetPasswordAsyncAction extends AsyncAction<void> {
+  ResetPasswordAsyncAction({@material.required this.email})
+      : assert(email != null);
+
+  final String email;
 }

@@ -14,9 +14,12 @@ abstract class LoginState implements Built<LoginState, LoginStateBuilder> {
 
   RequestState get loginRequestState;
 
+  RequestState get resetPasswordRequestState;
+
   @nullable
   CurrentUser get currentUser;
 
   static LoginState initial() => LoginState((b) => b
-    ..loginRequestState = RequestState.idle);
+    ..loginRequestState = RequestState.idle
+    ..resetPasswordRequestState = RequestState.idle);
 }
