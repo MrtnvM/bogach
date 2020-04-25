@@ -21,6 +21,7 @@ final gameStateReducer = Reducer<GameState>()
           ..getRequestState = RequestState.success
           ..possessions = action.data.possessions.toBuilder()
           ..target = targetBuilder
+          ..account = action.data.account
           ..events = action.data.events.toBuilder();
       },
     ),

@@ -83,7 +83,7 @@ class _CashFlowGridState extends State<CashFlowGrid> with ReduxState {
       name: Strings.assets,
       result: assets.sum.toPrice(),
       rows: <RowHeaderItem>[
-        RowItem(name: Strings.cash, value: assets.cash.toPrice()),
+        RowItem(name: '${Strings.cash}:', value: assets.cash.toPrice()),
         const RowHeaderAttributeItem(
           name: Strings.insuranceTitle,
           attribute: Strings.cost,

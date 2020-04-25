@@ -3,9 +3,8 @@ import 'package:cash_flow/features/game/game_state.dart';
 import 'package:cash_flow/game_events/investment/ui/investment_game_event.dart';
 import 'package:cash_flow/models/domain/game_event.dart';
 import 'package:cash_flow/models/network/responses/target_type.dart';
-import 'package:cash_flow/models/state/target_state.dart';
 import 'package:cash_flow/resources/strings.dart';
-import 'package:cash_flow/widgets/containers/event_buttons.dart';
+import 'package:cash_flow/widgets/progress/account_bar.dart';
 import 'package:cash_flow/widgets/progress/game_progress_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -19,18 +18,6 @@ class GameEventPage extends StatefulWidget {
 }
 
 class _GameEventPageState extends State<GameEventPage> {
-  ButtonsProperties buttonsProperties;
-
-  @override
-  void initState() {
-    super.initState();
-    buttonsProperties = ButtonsProperties(
-      onConfirm: () {},
-      onBuy: () {},
-      onSkip: () {},
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return AppStateConnector<GameState>(
@@ -38,18 +25,15 @@ class _GameEventPageState extends State<GameEventPage> {
       builder: (context, state) => Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          _buildGoalProgress(state.target),
+          GameProgressBar(
+            name: _getTargetType(state.target.type),
+            currentValue: state.target.currentValue,
+            maxValue: state.target.value,
+          ),
+          AccountBar(account: state.account),
           _buildEventBody(state.events.first),
         ],
       ),
-    );
-  }
-
-  Widget _buildGoalProgress(TargetState target) {
-    return GameProgressBar(
-      name: _getTargetType(target.type),
-      currentValue: target.currentValue,
-      maxValue: target.value,
     );
   }
 

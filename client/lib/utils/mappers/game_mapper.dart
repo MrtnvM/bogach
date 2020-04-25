@@ -16,6 +16,7 @@ import 'package:cash_flow/models/network/responses/possessions_state/expense_res
 import 'package:cash_flow/models/network/responses/possessions_state/income_response_model.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/liability_response_model.dart';
 import 'package:cash_flow/models/network/responses/target_response_model.dart';
+import 'package:cash_flow/models/state/account.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/business_asset_item.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/cash_asset_item.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/debenture_asset_item.dart';
@@ -35,6 +36,7 @@ GameData mapToGameData(DocumentSnapshot response) {
   final userPossessionState = mapToPossessionState(
     response.data['possessionState'],
   );
+  final account = mapToAccountState(response.data['accounts']);
   final target = mapToTargetState(response.data['target']);
   final events = mapToGameEvents(response.data['currentEvents']);
 
@@ -42,6 +44,7 @@ GameData mapToGameData(DocumentSnapshot response) {
     possessions: userPossessionState,
     target: target,
     events: events,
+    account: account,
   );
 }
 
@@ -56,7 +59,7 @@ BuiltList<GameEvent> mapToGameEvents(List response) {
       id: event.id,
       name: event.name,
       description: event.description,
-      type: GameEventType.fromJson(event.type),
+      type: type,
       data: eventData,
     );
   }).toBuiltList();
@@ -66,6 +69,10 @@ TargetData mapToTargetState(Map<String, dynamic> response) {
   final target = TargetResponseModel.fromJson(response);
 
   return TargetData(value: target.value, type: target.type);
+}
+
+Account mapToAccountState(Map<String, dynamic> accountsData) {
+  return Account.fromJson(accountsData.values.first);
 }
 
 UserPossessionState mapToPossessionState(Map<String, dynamic> response) {

@@ -46,7 +46,7 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _buildSellingPrice(),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
           _buildInfo(),
           _buildSelector(),
         ],
@@ -72,7 +72,7 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
     };
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
       child: InfoTable(map),
     );
   }
@@ -83,12 +83,11 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
       child: RichText(
         text: TextSpan(
           children: [
-            const TextSpan(text: Strings.currentPrice, style: Styles.body1),
-            const WidgetSpan(
-              child: SizedBox(
-                width: 4,
-              ),
+            TextSpan(
+              text: Strings.currentPrice,
+              style: Styles.body1.copyWith(color: Colors.black87),
             ),
+            const WidgetSpan(child: SizedBox(width: 4)),
             TextSpan(
               text: eventData.currentPrice.toPrice(),
               style: Styles.body2.copyWith(color: ColorRes.blue),
@@ -130,13 +129,7 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
 
     dispatchAsyncAction(action).listen(
       (action) => action
-        ..onSuccess(
-          (_) => showCashDialog(
-            context: context,
-            title: 'Еее, бой!',
-            message: 'Все прошло успешно, действие обработано',
-          ),
-        )
+        ..onSuccess((_) => null)
         ..onError(
           (error) => showCashDialog(
             context: context,
