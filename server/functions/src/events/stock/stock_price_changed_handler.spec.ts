@@ -3,7 +3,6 @@
 import { GameProvider } from '../../providers/game_provider';
 import { mock, instance, reset, when, capture } from 'ts-mockito';
 import { GameEntity } from '../../models/domain/game/game';
-import { Strings } from '../../resources/strings';
 import produce from 'immer';
 import { stubs, utils } from './stock_price_changed_handler.spec.utils';
 import { StockPriceChangedHandler } from './stock_price_changed_handler';
@@ -39,7 +38,7 @@ describe('Stock price changed event handler', () => {
     await handler.handle(event, action, context);
 
     const newStockAsset: StockAsset = {
-      name: Strings.stocks(),
+      name: 'stockName',
       type: 'stock',
       averagePrice: 100,
       fairPrice: 120,
@@ -172,6 +171,54 @@ describe('Stock price changed event handler', () => {
       throw new Error('Shoud fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(new Error('Not enough stocks in portfolio'));
+    }
+  });
+
+  test('Cannot sell more stocks than in action', async () => {
+    when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
+
+    const gameProvider = instance(mockGameProvider);
+    const handler = new StockPriceChangedHandler(gameProvider);
+
+    const currentPrice = 140;
+    const maxCount = 5;
+    const event = utils.stockSberbankPriceChangedEvent(currentPrice, maxCount);
+
+    const action = utils.stockPriceChangedPlayerAction({
+      eventId,
+      action: 'sell',
+      count: 6,
+    });
+
+    try {
+      await handler.handle(event, action, context);
+      throw new Error('Shoud fail on previous line');
+    } catch (error) {
+      expect(error).toStrictEqual(new Error('Not enough stocks available'));
+    }
+  });
+
+  test('Cannot buy more stocks than in action', async () => {
+    when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
+
+    const gameProvider = instance(mockGameProvider);
+    const handler = new StockPriceChangedHandler(gameProvider);
+
+    const currentPrice = 140;
+    const maxCount = 5;
+    const event = utils.stockSberbankPriceChangedEvent(currentPrice, maxCount);
+
+    const action = utils.stockPriceChangedPlayerAction({
+      eventId,
+      action: 'buy',
+      count: 6,
+    });
+
+    try {
+      await handler.handle(event, action, context);
+      throw new Error('Shoud fail on previous line');
+    } catch (error) {
+      expect(error).toStrictEqual(new Error('Not enough stocks available'));
     }
   });
 });

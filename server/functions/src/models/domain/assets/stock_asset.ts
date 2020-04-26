@@ -22,9 +22,9 @@ export namespace StockAssetEntity {
     entity.hasNumberValue('countInPortfolio');
 
     entity.checkWithRules([
-      [a => a.fairPrice <= 0, "FairPrice can't be <= 0"],
-      [a => a.averagePrice <= 0, "AveragePrice can't be <= 0"],
-      [a => a.countInPortfolio < 0, "CountInPortfolio can't be < 0"],
+      [(a) => a.fairPrice <= 0, "FairPrice can't be <= 0"],
+      [(a) => a.averagePrice <= 0, "AveragePrice can't be <= 0"],
+      [(a) => a.countInPortfolio < 0, "CountInPortfolio can't be < 0"],
     ]);
   };
 }

@@ -144,7 +144,7 @@ const game: Game = {
 const stockPriceChangedEvent = (data: StockPriceChangedEvent.Data) => {
   const event: StockPriceChangedEvent.Event = {
     id: eventId,
-    name: 'Stocks',
+    name: 'stockName',
     description: 'Description',
     type: StockPriceChangedEvent.Type,
     data: data,
