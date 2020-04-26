@@ -2,6 +2,7 @@ library game_state;
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:cash_flow/models/domain/active_game_state.dart';
 import 'package:cash_flow/models/domain/game_context.dart';
 import 'package:cash_flow/models/domain/game_event.dart';
 import 'package:cash_flow/models/state/game/account/account.dart';
@@ -18,6 +19,8 @@ abstract class GameState implements Built<GameState, GameStateBuilder> {
   GameState._();
 
   RequestState get getRequestState;
+
+  ActiveGameState get activeGameState;
 
   @nullable
   UserPossessionState get possessions;
@@ -36,6 +39,7 @@ abstract class GameState implements Built<GameState, GameStateBuilder> {
   static GameState initial() => GameState(
         (b) => b
           ..getRequestState = RequestState.idle
+          ..activeGameState = ActiveGameState.waitingForStart()
           ..events = ListBuilder(),
       );
 }

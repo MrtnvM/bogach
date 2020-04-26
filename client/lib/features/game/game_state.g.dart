@@ -10,6 +10,8 @@ class _$GameState extends GameState {
   @override
   final RequestState getRequestState;
   @override
+  final ActiveGameState activeGameState;
+  @override
   final UserPossessionState possessions;
   @override
   final TargetState target;
@@ -25,6 +27,7 @@ class _$GameState extends GameState {
 
   _$GameState._(
       {this.getRequestState,
+      this.activeGameState,
       this.possessions,
       this.target,
       this.account,
@@ -33,6 +36,9 @@ class _$GameState extends GameState {
       : super._() {
     if (getRequestState == null) {
       throw new BuiltValueNullFieldError('GameState', 'getRequestState');
+    }
+    if (activeGameState == null) {
+      throw new BuiltValueNullFieldError('GameState', 'activeGameState');
     }
     if (events == null) {
       throw new BuiltValueNullFieldError('GameState', 'events');
@@ -51,6 +57,7 @@ class _$GameState extends GameState {
     if (identical(other, this)) return true;
     return other is GameState &&
         getRequestState == other.getRequestState &&
+        activeGameState == other.activeGameState &&
         possessions == other.possessions &&
         target == other.target &&
         account == other.account &&
@@ -63,7 +70,11 @@ class _$GameState extends GameState {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, getRequestState.hashCode), possessions.hashCode),
+                $jc(
+                    $jc(
+                        $jc($jc(0, getRequestState.hashCode),
+                            activeGameState.hashCode),
+                        possessions.hashCode),
                     target.hashCode),
                 account.hashCode),
             events.hashCode),
@@ -74,6 +85,7 @@ class _$GameState extends GameState {
   String toString() {
     return (newBuiltValueToStringHelper('GameState')
           ..add('getRequestState', getRequestState)
+          ..add('activeGameState', activeGameState)
           ..add('possessions', possessions)
           ..add('target', target)
           ..add('account', account)
@@ -90,6 +102,11 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
   RequestState get getRequestState => _$this._getRequestState;
   set getRequestState(RequestState getRequestState) =>
       _$this._getRequestState = getRequestState;
+
+  ActiveGameState _activeGameState;
+  ActiveGameState get activeGameState => _$this._activeGameState;
+  set activeGameState(ActiveGameState activeGameState) =>
+      _$this._activeGameState = activeGameState;
 
   UserPossessionStateBuilder _possessions;
   UserPossessionStateBuilder get possessions =>
@@ -120,6 +137,7 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
   GameStateBuilder get _$this {
     if (_$v != null) {
       _getRequestState = _$v.getRequestState;
+      _activeGameState = _$v.activeGameState;
       _possessions = _$v.possessions?.toBuilder();
       _target = _$v.target?.toBuilder();
       _account = _$v.account;
@@ -150,6 +168,7 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
       _$result = _$v ??
           new _$GameState._(
               getRequestState: getRequestState,
+              activeGameState: activeGameState,
               possessions: _possessions?.build(),
               target: _target?.build(),
               account: account,

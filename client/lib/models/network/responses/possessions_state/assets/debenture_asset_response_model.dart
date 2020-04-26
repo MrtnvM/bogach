@@ -9,20 +9,19 @@ class DebentureAssetResponseModel {
     this.name,
     this.type,
     this.count,
-    this.total,
+    this.currentPrice,
+    this.nominal,
   });
 
   factory DebentureAssetResponseModel.fromJson(Map<String, dynamic> json) =>
       _$DebentureAssetResponseModelFromJson(json);
 
-  @JsonKey(name: 'name')
   final String name;
   @JsonKey(name: 'type', defaultValue: AssetType.other)
   final AssetType type;
-  @JsonKey(name: 'count')
   final int count;
-  @JsonKey(name: 'total')
-  final int total;
+  final int nominal;
+  final int currentPrice;
 
   Map<String, dynamic> toJson() => _$DebentureAssetResponseModelToJson(this);
 }

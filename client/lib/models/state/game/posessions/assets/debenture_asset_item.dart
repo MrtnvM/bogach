@@ -12,11 +12,8 @@ abstract class DebentureAssetItem
 
   DebentureAssetItem._();
 
-  int get count;
-
   String get name;
-
-  int get purchasePrice;
-
-  int get total;
+  int get nominal;
+  int get currentPrice;
+  int get count;
 }

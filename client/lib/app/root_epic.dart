@@ -1,5 +1,4 @@
 import 'package:cash_flow/features/game/game_epic.dart';
-import 'package:cash_flow/features/game_events/game_events_epic.dart';
 import 'package:cash_flow/features/login/login_epic.dart';
 import 'package:cash_flow/features/registration/registration_epic.dart';
 import 'package:cash_flow/services/firebase_service.dart';
@@ -18,7 +17,9 @@ Epic<AppState> rootEpic({
   return combineEpics([
     loginEpic(userService: userService),
     registrationEpic(userService: userService),
-    possessionsEpic(firebaseService: firebaseService),
-    gameEventsEpic(gameEventService: gameEventService),
+    gameEpic(
+      firebaseService: firebaseService,
+      gameEventService: gameEventService,
+    ),
   ]);
 }

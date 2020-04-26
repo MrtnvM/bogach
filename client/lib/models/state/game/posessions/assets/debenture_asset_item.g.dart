@@ -8,32 +8,32 @@ part of debenture_asset_item;
 
 class _$DebentureAssetItem extends DebentureAssetItem {
   @override
-  final int count;
-  @override
   final String name;
   @override
-  final int purchasePrice;
+  final int nominal;
   @override
-  final int total;
+  final int currentPrice;
+  @override
+  final int count;
 
   factory _$DebentureAssetItem(
           [void Function(DebentureAssetItemBuilder) updates]) =>
       (new DebentureAssetItemBuilder()..update(updates)).build();
 
   _$DebentureAssetItem._(
-      {this.count, this.name, this.purchasePrice, this.total})
+      {this.name, this.nominal, this.currentPrice, this.count})
       : super._() {
-    if (count == null) {
-      throw new BuiltValueNullFieldError('DebentureAssetItem', 'count');
-    }
     if (name == null) {
       throw new BuiltValueNullFieldError('DebentureAssetItem', 'name');
     }
-    if (purchasePrice == null) {
-      throw new BuiltValueNullFieldError('DebentureAssetItem', 'purchasePrice');
+    if (nominal == null) {
+      throw new BuiltValueNullFieldError('DebentureAssetItem', 'nominal');
     }
-    if (total == null) {
-      throw new BuiltValueNullFieldError('DebentureAssetItem', 'total');
+    if (currentPrice == null) {
+      throw new BuiltValueNullFieldError('DebentureAssetItem', 'currentPrice');
+    }
+    if (count == null) {
+      throw new BuiltValueNullFieldError('DebentureAssetItem', 'count');
     }
   }
 
@@ -50,26 +50,27 @@ class _$DebentureAssetItem extends DebentureAssetItem {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is DebentureAssetItem &&
-        count == other.count &&
         name == other.name &&
-        purchasePrice == other.purchasePrice &&
-        total == other.total;
+        nominal == other.nominal &&
+        currentPrice == other.currentPrice &&
+        count == other.count;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, count.hashCode), name.hashCode), purchasePrice.hashCode),
-        total.hashCode));
+        $jc($jc($jc(0, name.hashCode), nominal.hashCode),
+            currentPrice.hashCode),
+        count.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('DebentureAssetItem')
-          ..add('count', count)
           ..add('name', name)
-          ..add('purchasePrice', purchasePrice)
-          ..add('total', total))
+          ..add('nominal', nominal)
+          ..add('currentPrice', currentPrice)
+          ..add('count', count))
         .toString();
   }
 }
@@ -78,30 +79,30 @@ class DebentureAssetItemBuilder
     implements Builder<DebentureAssetItem, DebentureAssetItemBuilder> {
   _$DebentureAssetItem _$v;
 
-  int _count;
-  int get count => _$this._count;
-  set count(int count) => _$this._count = count;
-
   String _name;
   String get name => _$this._name;
   set name(String name) => _$this._name = name;
 
-  int _purchasePrice;
-  int get purchasePrice => _$this._purchasePrice;
-  set purchasePrice(int purchasePrice) => _$this._purchasePrice = purchasePrice;
+  int _nominal;
+  int get nominal => _$this._nominal;
+  set nominal(int nominal) => _$this._nominal = nominal;
 
-  int _total;
-  int get total => _$this._total;
-  set total(int total) => _$this._total = total;
+  int _currentPrice;
+  int get currentPrice => _$this._currentPrice;
+  set currentPrice(int currentPrice) => _$this._currentPrice = currentPrice;
+
+  int _count;
+  int get count => _$this._count;
+  set count(int count) => _$this._count = count;
 
   DebentureAssetItemBuilder();
 
   DebentureAssetItemBuilder get _$this {
     if (_$v != null) {
-      _count = _$v.count;
       _name = _$v.name;
-      _purchasePrice = _$v.purchasePrice;
-      _total = _$v.total;
+      _nominal = _$v.nominal;
+      _currentPrice = _$v.currentPrice;
+      _count = _$v.count;
       _$v = null;
     }
     return this;
@@ -124,10 +125,10 @@ class DebentureAssetItemBuilder
   _$DebentureAssetItem build() {
     final _$result = _$v ??
         new _$DebentureAssetItem._(
-            count: count,
             name: name,
-            purchasePrice: purchasePrice,
-            total: total);
+            nominal: nominal,
+            currentPrice: currentPrice,
+            count: count);
     replace(_$result);
     return _$result;
   }

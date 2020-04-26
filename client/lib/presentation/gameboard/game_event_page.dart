@@ -22,18 +22,30 @@ class _GameEventPageState extends State<GameEventPage> {
   Widget build(BuildContext context) {
     return AppStateConnector<GameState>(
       converter: (s) => s.gameState,
-      builder: (context, state) => Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          GameProgressBar(
-            name: _getTargetType(state.target.type),
-            currentValue: state.target.currentValue,
-            maxValue: state.target.value,
+      builder: (context, state) {
+        final currentEvent = state.activeGameState.map(
+          waitingForStart: (_) => null,
+          gameEvent: (eventState) => state.events.firstWhere(
+            (e) => eventState.eventId == e.id,
           ),
-          AccountBar(account: state.account),
-          _buildEventBody(state.events.first),
-        ],
-      ),
+          waitingPlayers: (_) => null,
+          monthResult: (_) => null,
+          gameOver: (_) => null,
+        );
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            GameProgressBar(
+              name: _getTargetType(state.target.type),
+              currentValue: state.target.currentValue,
+              maxValue: state.target.value,
+            ),
+            AccountBar(account: state.account),
+            _buildEventBody(currentEvent),
+          ],
+        );
+      },
     );
   }
 
@@ -46,6 +58,10 @@ class _GameEventPageState extends State<GameEventPage> {
   }
 
   Widget _buildEventBody(GameEvent event) {
+    if (event == null) {
+      return Container();
+    }
+
     final eventWidget = event.type.map(
       debenture: (_) => InvestmentGameEvent(event),
       stock: (_) => null,

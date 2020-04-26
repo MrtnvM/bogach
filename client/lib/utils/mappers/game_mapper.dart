@@ -51,6 +51,9 @@ GameData mapToGameData(DocumentSnapshot response) {
 BuiltList<GameEvent> mapToGameEvents(List response) {
   return response
       .map((json) => GameEventResponseModel.fromJson(json))
+      .where(
+        (event) => event.type == 'debenture-price-changed-event',
+      ) // TODO(Robert): Remove filter; #tag new_game_event
       .map((event) {
     final type = GameEventType.fromJson(event.type);
     final eventData = type.parseGameEventData(event.data);
@@ -127,7 +130,10 @@ PossessionAssetBuilder _getAssets(document) {
   }
 
   final insurancesSum = insurances.fold(0, (sum, item) => sum += item.value);
-  final debenturesSum = debentures.fold(0, (sum, item) => sum += item.total);
+  final debenturesSum = debentures.fold(
+    0,
+    (sum, item) => sum += item.currentPrice * item.count,
+  );
   final stocksSum = stocks.fold(0, (sum, item) => sum += item.total);
   final realtySum = realty.fold(0, (sum, item) => sum += item.cost);
   final businessesSum = businesses.fold(0, (sum, item) => sum += item.cost);
@@ -198,10 +204,10 @@ DebentureAssetItem _buildDebenture(Map<String, dynamic> json) {
   final parsedItem = DebentureAssetResponseModel.fromJson(json);
 
   return DebentureAssetItem((b) => b
-    ..count = parsedItem.count
     ..name = parsedItem.name
-    ..purchasePrice = parsedItem.total ~/ parsedItem.count
-    ..total = parsedItem.total);
+    ..nominal = parsedItem.nominal
+    ..currentPrice = parsedItem.currentPrice
+    ..count = parsedItem.count);
 }
 
 InsuranceAssetItem _buildInsurance(Map<String, dynamic> json) {
