@@ -9,11 +9,13 @@ part of current_user;
 class _$CurrentUser extends CurrentUser {
   @override
   final String fullName;
+  @override
+  final String avatarUrl;
 
   factory _$CurrentUser([void Function(CurrentUserBuilder) updates]) =>
       (new CurrentUserBuilder()..update(updates)).build();
 
-  _$CurrentUser._({this.fullName}) : super._() {
+  _$CurrentUser._({this.fullName, this.avatarUrl}) : super._() {
     if (fullName == null) {
       throw new BuiltValueNullFieldError('CurrentUser', 'fullName');
     }
@@ -29,18 +31,21 @@ class _$CurrentUser extends CurrentUser {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is CurrentUser && fullName == other.fullName;
+    return other is CurrentUser &&
+        fullName == other.fullName &&
+        avatarUrl == other.avatarUrl;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, fullName.hashCode));
+    return $jf($jc($jc(0, fullName.hashCode), avatarUrl.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('CurrentUser')
-          ..add('fullName', fullName))
+          ..add('fullName', fullName)
+          ..add('avatarUrl', avatarUrl))
         .toString();
   }
 }
@@ -52,11 +57,16 @@ class CurrentUserBuilder implements Builder<CurrentUser, CurrentUserBuilder> {
   String get fullName => _$this._fullName;
   set fullName(String fullName) => _$this._fullName = fullName;
 
+  String _avatarUrl;
+  String get avatarUrl => _$this._avatarUrl;
+  set avatarUrl(String avatarUrl) => _$this._avatarUrl = avatarUrl;
+
   CurrentUserBuilder();
 
   CurrentUserBuilder get _$this {
     if (_$v != null) {
       _fullName = _$v.fullName;
+      _avatarUrl = _$v.avatarUrl;
       _$v = null;
     }
     return this;
@@ -77,7 +87,8 @@ class CurrentUserBuilder implements Builder<CurrentUser, CurrentUserBuilder> {
 
   @override
   _$CurrentUser build() {
-    final _$result = _$v ?? new _$CurrentUser._(fullName: fullName);
+    final _$result =
+        _$v ?? new _$CurrentUser._(fullName: fullName, avatarUrl: avatarUrl);
     replace(_$result);
     return _$result;
   }

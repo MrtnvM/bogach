@@ -1,3 +1,4 @@
+import 'package:cash_flow/app/environment.dart';
 import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/models/network/errors/email_has_been_taken_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
@@ -9,15 +10,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
 class UserService {
-  UserService();
+  UserService({
+    @required this.environment,
+    @required this.firebaseAuth,
+  })  : assert(environment != null),
+        assert(firebaseAuth != null);
 
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final Environment environment;
+  final FirebaseAuth firebaseAuth;
 
   Stream<void> login({
     @required String email,
     @required String password,
   }) {
-    return Stream.fromFuture(_firebaseAuth.signInWithEmailAndPassword(
+    return Stream.fromFuture(firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
     )).cast<void>().transform(ErrorHandler((code) {
@@ -30,7 +36,7 @@ class UserService {
   }
 
   Stream<void> logout() {
-    return Stream.fromFuture(_firebaseAuth.signOut());
+    return Stream.fromFuture(firebaseAuth.signOut());
   }
 
   Stream<void> register({@required RegisterRequestModel model}) {
@@ -44,7 +50,7 @@ class UserService {
   }
 
   Stream<void> resetPassword({@required String email}) {
-    return Stream.fromFuture(_firebaseAuth.sendPasswordResetEmail(email: email))
+    return Stream.fromFuture(firebaseAuth.sendPasswordResetEmail(email: email))
         .transform(ErrorHandler((code) {
       if (code == 'ERROR_USER_NOT_FOUND') {
         return const InvalidEmailException();
@@ -58,9 +64,9 @@ class UserService {
     final authCredential =
         FacebookAuthProvider.getCredential(accessToken: token);
 
-    return Stream.fromFuture(_firebaseAuth.signInWithCredential(authCredential))
+    return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
-        .map(mapToCurrentUser);
+        .map((authResponse) => mapToCurrentUser(authResponse.user));
   }
 
   Stream<CurrentUser> loginViaGoogle({
@@ -72,9 +78,9 @@ class UserService {
       idToken: idToken,
     );
 
-    return Stream.fromFuture(_firebaseAuth.signInWithCredential(authCredential))
+    return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
-        .map(mapToCurrentUser);
+        .map((authResponse) => mapToCurrentUser(authResponse.user));
   }
 
   Stream<CurrentUser> loginViaApple({
@@ -90,7 +96,7 @@ class UserService {
     );
 
     final future = Future(() async {
-      final response = await _firebaseAuth.signInWithCredential(credential);
+      final response = await firebaseAuth.signInWithCredential(credential);
       final user = response.user;
 
       if (firstName != null && lastName != null) {
@@ -99,21 +105,21 @@ class UserService {
         await user.updateProfile(updateInfo);
       }
 
-      return _firebaseAuth.currentUser();
+      return firebaseAuth.currentUser();
     });
 
     return Stream.fromFuture(future)
         .transform(ErrorHandler())
-        .map(mapUserToCurrentUser);
+        .map(mapToCurrentUser);
   }
 
   Future<void> signUpUser(RegisterRequestModel model) async {
-    await _firebaseAuth.createUserWithEmailAndPassword(
+    await firebaseAuth.createUserWithEmailAndPassword(
       email: model.email,
       password: model.password,
     );
 
-    final user = await _firebaseAuth.currentUser();
+    final user = await firebaseAuth.currentUser();
     final userUpdateInfo = UserUpdateInfo();
     userUpdateInfo.displayName = model.nickName;
     await user.updateProfile(userUpdateInfo);
