@@ -1,12 +1,15 @@
 import 'package:cash_flow/core/utils/app_store_connector.dart';
+import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/features/game/game_state.dart';
 import 'package:cash_flow/game_events/investment/ui/investment_game_event.dart';
 import 'package:cash_flow/models/domain/game_event.dart';
 import 'package:cash_flow/models/network/responses/target_type.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/progress/account_bar.dart';
 import 'package:cash_flow/widgets/progress/game_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 class GameEventPage extends StatefulWidget {
   const GameEventPage({Key key, this.event}) : super(key: key);
@@ -17,7 +20,7 @@ class GameEventPage extends StatefulWidget {
   _GameEventPageState createState() => _GameEventPageState();
 }
 
-class _GameEventPageState extends State<GameEventPage> {
+class _GameEventPageState extends State<GameEventPage> with ReduxState {
   @override
   Widget build(BuildContext context) {
     return AppStateConnector<GameState>(
@@ -33,6 +36,11 @@ class _GameEventPageState extends State<GameEventPage> {
           gameOver: (_) => null,
         );
 
+        final isMonthResult = state.activeGameState.maybeWhen(
+          monthResult: () => true,
+          orElse: () => false,
+        );
+
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -42,7 +50,8 @@ class _GameEventPageState extends State<GameEventPage> {
               maxValue: state.target.value,
             ),
             AccountBar(account: state.account),
-            _buildEventBody(currentEvent),
+            if (isMonthResult) _buildMonthResult(),
+            if (currentEvent != null) _buildEventBody(currentEvent),
           ],
         );
       },
@@ -70,6 +79,31 @@ class _GameEventPageState extends State<GameEventPage> {
     return Expanded(
       child: ListView(
         children: [eventWidget],
+      ),
+    );
+  }
+
+  Widget _buildMonthResult() {
+    return Container(
+      height: 250,
+      width: double.infinity,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              Strings.monthIsOver,
+              style: Styles.caption.copyWith(
+                color: Colors.blue,
+              ),
+            ),
+            const SizedBox(height: 32),
+            RaisedButton(
+              child: Text(Strings.continueGame),
+              onPressed: () => dispatch(GoToNewMonthAction()),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -24,8 +24,15 @@ final gameStateReducer = Reducer<GameState>()
 
         final currentState = s.activeGameState;
         var newGameState = currentState;
-        if (currentState == ActiveGameState.waitingForStart() &&
-            gameEvents.isNotEmpty) {
+
+        final isWaitingForStart =
+            currentState == ActiveGameState.waitingForStart();
+        final isEmptyGameEvent = currentState.maybeMap(
+          gameEvent: (e) => e.eventId == null,
+          orElse: () => false,
+        );
+
+        if ((isWaitingForStart || isEmptyGameEvent) && gameEvents.isNotEmpty) {
           newGameState = ActiveGameState.gameEvent(gameEvents.first.id);
         }
 
@@ -70,6 +77,14 @@ final gameStateReducer = Reducer<GameState>()
           s.activeGameState = ActiveGameState.monthResult();
           return;
         }
+      },
+    ),
+  )
+  ..on<GoToNewMonthAction>(
+    (state, action) => state.rebuild(
+      (s) {
+        final newFirstEvent = s.events.isNotEmpty ? s.events.first : null;
+        s.activeGameState = ActiveGameState.gameEvent(newFirstEvent?.id);
       },
     ),
   );

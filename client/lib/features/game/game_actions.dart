@@ -37,3 +37,5 @@ class SendGameEventPlayerActionAsyncAction extends AsyncAction<void> {
   final PlayerAction action;
   final String eventId;
 }
+
+class GoToNewMonthAction extends Action {}

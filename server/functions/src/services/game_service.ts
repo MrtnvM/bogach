@@ -34,12 +34,12 @@ export class GameService {
       DebenturePriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
+      StockPriceChangedEventGenerator.generate(),
+      StockPriceChangedEventGenerator.generate(),
+      StockPriceChangedEventGenerator.generate(),
+      StockPriceChangedEventGenerator.generate(),
+      StockPriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
-      StockPriceChangedEventGenerator.generate(),
-      StockPriceChangedEventGenerator.generate(),
-      StockPriceChangedEventGenerator.generate(),
-      StockPriceChangedEventGenerator.generate(),
-      StockPriceChangedEventGenerator.generate(),
     ];
 
     const gameWithNewEvents = produce(game, (draft) => {
@@ -64,5 +64,10 @@ export class GameService {
 
     await handler.validate(event, action);
     await handler.handle(event, action, context);
+
+    const lastEvent = game.currentEvents[game.currentEvents.length - 1];
+    if (lastEvent.id === eventId) {
+      await this.generateGameEvents(gameId);
+    }
   }
 }

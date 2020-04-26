@@ -129,15 +129,15 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
       throw new Error('Not enough count available');
     }
 
-    let newStockCount = countInPortfolio + actionCount;
-    let newAccountBalance = userAccount.cash - totalPrice;
+    const newStockCount = countInPortfolio + actionCount;
+    const newAccountBalance = userAccount.cash - totalPrice;
 
     const pricesDifference = currentPrice - currentAveragePrice;
     const commonCount = countInPortfolio + actionCount;
     const priceDifferenceStep = pricesDifference / commonCount;
 
     const newPriceOffset = priceDifferenceStep * actionCount;
-    let newAveragePrice = currentAveragePrice + newPriceOffset;
+    const newAveragePrice = currentAveragePrice + newPriceOffset;
 
     const actionResult: ActionResult = {
       newStockCount,
@@ -193,7 +193,7 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
   }
 
   addNewItemToAssets(actionResult: ActionResult, assets: Asset[], fairPrice: number): Asset[] {
-    let newAssets = assets.slice();
+    const newAssets = assets.slice();
 
     const newStock: StockAsset = {
       fairPrice,

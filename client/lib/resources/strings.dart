@@ -137,6 +137,9 @@ class Strings {
   static String get cashFlow => 'Денежный поток';
   static String get credit => 'Кредит';
 
+  static String get monthIsOver => 'Месяц завершен!';
+  static String get continueGame => 'Продолжить';
+
   // Log in errors
   static String get invalidCredentials => 'Неправильный логин или пароль';
 
