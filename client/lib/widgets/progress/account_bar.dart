@@ -1,4 +1,4 @@
-import 'package:cash_flow/models/state/account.dart';
+import 'package:cash_flow/models/state/game/account/account.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';

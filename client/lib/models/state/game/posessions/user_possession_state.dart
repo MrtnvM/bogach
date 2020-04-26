@@ -1,10 +1,10 @@
 library user_possession_state;
 
 import 'package:built_value/built_value.dart';
-import 'package:cash_flow/models/state/posessions_state/possession_asset.dart';
-import 'package:cash_flow/models/state/posessions_state/possession_expense.dart';
-import 'package:cash_flow/models/state/posessions_state/possession_income.dart';
-import 'package:cash_flow/models/state/posessions_state/possession_liability.dart';
+import 'package:cash_flow/models/state/game/posessions/possession_asset.dart';
+import 'package:cash_flow/models/state/game/posessions/possession_expense.dart';
+import 'package:cash_flow/models/state/game/posessions/possession_income.dart';
+import 'package:cash_flow/models/state/game/posessions/possession_liability.dart';
 
 part 'user_possession_state.g.dart';
 

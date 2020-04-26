@@ -1,6 +1,6 @@
 import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/features/game/game_state.dart';
-import 'package:cash_flow/models/state/target_state.dart';
+import 'package:cash_flow/models/state/game/target/target_state.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 final gameStateReducer = Reducer<GameState>()
