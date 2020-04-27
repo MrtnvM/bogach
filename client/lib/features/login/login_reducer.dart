@@ -39,7 +39,7 @@ final loginReducer = Reducer<LoginState>()
   )
   ..on<SetCurrentUserAction>(
     (state, action) => state.rebuild(
-        (s) => s..currentUser = mapUserToCurrentUser(action.user)?.toBuilder()),
+        (s) => s..currentUser = mapToCurrentUser(action.user)?.toBuilder()),
   )
   ..on<ResetPasswordAsyncAction>(
         (state, action) =>

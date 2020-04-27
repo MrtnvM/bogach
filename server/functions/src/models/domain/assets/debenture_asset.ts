@@ -4,7 +4,7 @@ import { Strings } from '../../../resources/strings';
 import { Entity } from '../../../core/domain/entity';
 
 export interface DebentureAsset extends Asset {
-  readonly currentPrice: number;
+  readonly averagePrice: number;
   readonly nominal: number;
   readonly profitabilityPercent: number;
   readonly count: number;
@@ -12,24 +12,24 @@ export interface DebentureAsset extends Asset {
 
 export namespace DebentureAssetEntity {
   export const parse = (asset: Asset, data: any): DebentureAsset => {
-    const { currentPrice, nominal, profitabilityPercent, count } = data;
+    const { averagePrice, nominal, profitabilityPercent, count } = data;
 
-    return { ...asset, currentPrice, nominal, profitabilityPercent, count };
+    return { ...asset, averagePrice, nominal, profitabilityPercent, count };
   };
 
   export const validate = (asset: any) => {
     const entity = Entity.createEntityValidator<DebentureAsset>(asset, 'Debenture Asset');
 
-    entity.hasNumberValue('currentPrice');
+    entity.hasNumberValue('averagePrice');
     entity.hasNumberValue('nominal');
     entity.hasNumberValue('profitabilityPercent');
     entity.hasNumberValue('count');
 
     entity.checkWithRules([
-      [a => a.count <= 0, "Count can't be <= 0"],
-      [a => a.nominal <= 0, "Nominal can't be <= 0"],
-      [a => a.profitabilityPercent < 0, "Profitability percent can't be < 0"],
-      [a => a.currentPrice <= 0, "Current price percent can't be <= 0"]
+      [(a) => a.count <= 0, "Count can't be <= 0"],
+      [(a) => a.nominal <= 0, "Nominal can't be <= 0"],
+      [(a) => a.profitabilityPercent < 0, "Profitability percent can't be < 0"],
+      [(a) => a.averagePrice <= 0, "AveragePrice price percent can't be <= 0"],
     ]);
   };
 
@@ -41,7 +41,7 @@ export namespace DebentureAssetEntity {
     return {
       name: Strings.debetures(),
       value: incomeValue,
-      type: 'investment'
+      type: 'investment',
     };
   };
 }

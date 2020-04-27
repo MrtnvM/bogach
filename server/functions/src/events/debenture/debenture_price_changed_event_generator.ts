@@ -9,18 +9,18 @@ export namespace DebenturePriceChangedEventGenerator {
     const currentPrice = random.int(8, 13) * 100;
     const nominal = 1000;
     const profitabilityPercent = random.int(6, 10);
-    const maxCount = random.int(9, 14) * 10;
+    const availableCount = random.int(9, 14) * 10;
 
     return {
       id: uuid.v4(),
-      name: Strings.debeturesTitle(),
+      name: 'Название облигации',
       description: Strings.currentPrice() + formatPrice(currentPrice),
       type: DebenturePriceChangedEvent.Type,
       data: {
         currentPrice,
         nominal,
         profitabilityPercent,
-        maxCount,
+        availableCount,
       },
     };
   };

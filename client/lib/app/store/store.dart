@@ -5,6 +5,7 @@ import 'package:cash_flow/app/root_epic.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,11 +31,15 @@ Epic<AppState> createRootEpic(
   SharedPreferences sharedPreferences,
 ) {
   final firestore = Firestore.instance;
+  final firebaseAuth = FirebaseAuth.instance;
 
-  final userService = UserService();
   final gameService = GameService(
     apiClient: apiClient,
     firestore: firestore,
+  );
+
+  final userService = UserService(
+    firebaseAuth: firebaseAuth,
   );
 
   return rootEpic(

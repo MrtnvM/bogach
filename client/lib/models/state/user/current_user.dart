@@ -11,4 +11,7 @@ abstract class CurrentUser implements Built<CurrentUser, CurrentUserBuilder> {
   CurrentUser._();
 
   String get fullName;
+
+  @nullable
+  String get avatarUrl;
 }

@@ -9,58 +9,67 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
 class UserService {
-  UserService();
+  UserService({@required this.firebaseAuth}) : assert(firebaseAuth != null);
 
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth firebaseAuth;
 
   Stream<void> login({
     @required String email,
     @required String password,
   }) {
-    return Stream.fromFuture(_firebaseAuth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    )).cast<void>().transform(ErrorHandler((code) {
+    final errorHandler = ErrorHandler((code) {
       if (code == 'ERROR_USER_NOT_FOUND') {
         return const InvalidCredentialsException();
       }
 
       return null;
-    }));
+    });
+
+    return Stream.fromFuture(
+      firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      ),
+    ).cast<void>().transform(errorHandler);
   }
 
   Stream<void> logout() {
-    return Stream.fromFuture(_firebaseAuth.signOut());
+    return Stream.fromFuture(firebaseAuth.signOut());
   }
 
   Stream<void> register({@required RegisterRequestModel model}) {
-    return Stream.fromFuture(signUpUser(model)).transform(ErrorHandler((code) {
+    final errorHandler = ErrorHandler((code) {
       if (code == 'ERROR_EMAIL_ALREADY_IN_USE') {
         return const EmailHasBeenTakenException();
       }
 
       return null;
-    }));
+    });
+
+    return Stream.fromFuture(signUpUser(model)).transform(errorHandler);
   }
 
   Stream<void> resetPassword({@required String email}) {
-    return Stream.fromFuture(_firebaseAuth.sendPasswordResetEmail(email: email))
-        .transform(ErrorHandler((code) {
+    final errorHandler = ErrorHandler((code) {
       if (code == 'ERROR_USER_NOT_FOUND') {
         return const InvalidEmailException();
       }
 
       return null;
-    }));
+    });
+
+    return Stream.fromFuture(firebaseAuth.sendPasswordResetEmail(email: email))
+        .transform(errorHandler);
   }
 
   Stream<CurrentUser> loginViaFacebook({@required String token}) {
-    final authCredential =
-        FacebookAuthProvider.getCredential(accessToken: token);
+    final authCredential = FacebookAuthProvider.getCredential(
+      accessToken: token,
+    );
 
-    return Stream.fromFuture(_firebaseAuth.signInWithCredential(authCredential))
+    return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
-        .map(mapToCurrentUser);
+        .map((authResponse) => mapToCurrentUser(authResponse.user));
   }
 
   Stream<CurrentUser> loginViaGoogle({
@@ -72,9 +81,9 @@ class UserService {
       idToken: idToken,
     );
 
-    return Stream.fromFuture(_firebaseAuth.signInWithCredential(authCredential))
+    return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
-        .map(mapToCurrentUser);
+        .map((authResponse) => mapToCurrentUser(authResponse.user));
   }
 
   Stream<CurrentUser> loginViaApple({
@@ -90,7 +99,7 @@ class UserService {
     );
 
     final future = Future(() async {
-      final response = await _firebaseAuth.signInWithCredential(credential);
+      final response = await firebaseAuth.signInWithCredential(credential);
       final user = response.user;
 
       if (firstName != null && lastName != null) {
@@ -99,21 +108,21 @@ class UserService {
         await user.updateProfile(updateInfo);
       }
 
-      return _firebaseAuth.currentUser();
+      return firebaseAuth.currentUser();
     });
 
     return Stream.fromFuture(future)
         .transform(ErrorHandler())
-        .map(mapUserToCurrentUser);
+        .map(mapToCurrentUser);
   }
 
   Future<void> signUpUser(RegisterRequestModel model) async {
-    await _firebaseAuth.createUserWithEmailAndPassword(
+    await firebaseAuth.createUserWithEmailAndPassword(
       email: model.email,
       password: model.password,
     );
 
-    final user = await _firebaseAuth.currentUser();
+    final user = await firebaseAuth.currentUser();
     final userUpdateInfo = UserUpdateInfo();
     userUpdateInfo.displayName = model.nickName;
     await user.updateProfile(userUpdateInfo);

@@ -11,7 +11,7 @@ export namespace DebenturePriceChangedEvent {
     readonly currentPrice: number;
     readonly nominal: number;
     readonly profitabilityPercent: number;
-    readonly maxCount: number;
+    readonly availableCount: number;
   }
 
   export interface PlayerAction {
@@ -21,7 +21,7 @@ export namespace DebenturePriceChangedEvent {
   }
 
   export const parse = (gameEvent: GameEvent, eventData: any): Event => {
-    const { currentPrice, nominal, profitabilityPercent, maxCount } = eventData.data;
+    const { currentPrice, nominal, profitabilityPercent, availableCount } = eventData.data;
 
     return {
       ...gameEvent,
@@ -29,7 +29,7 @@ export namespace DebenturePriceChangedEvent {
         currentPrice,
         nominal,
         profitabilityPercent,
-        maxCount,
+        availableCount,
       },
     };
   };
@@ -47,10 +47,10 @@ export namespace DebenturePriceChangedEvent {
     entity.hasNumberValue('currentPrice');
     entity.hasNumberValue('nominal');
     entity.hasNumberValue('profitabilityPercent');
-    entity.hasNumberValue('maxCount');
+    entity.hasNumberValue('availableCount');
 
     entity.checkWithRules([
-      [(a) => a.maxCount <= 0, "Count can't be <= 0"],
+      [(a) => a.availableCount <= 0, "AvailableCount can't be <= 0"],
       [(a) => a.nominal <= 0, "Nominal can't be <= 0"],
       [(a) => a.profitabilityPercent < 0, "Profitability percent can't be < 0"],
       [(a) => a.currentPrice <= 0, "Current price percent can't be <= 0"],
