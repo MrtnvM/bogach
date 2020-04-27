@@ -30,6 +30,7 @@ class _GameEventPageState extends State<GameEventPage> with ReduxState {
           waitingForStart: (_) => null,
           gameEvent: (eventState) => state.events.firstWhere(
             (e) => eventState.eventId == e.id,
+            orElse: () => null,
           ),
           waitingPlayers: (_) => null,
           monthResult: (_) => null,
