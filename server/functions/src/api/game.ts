@@ -17,19 +17,12 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const userId = apiRequest.jsonField('userId');
 
     const gameProvider = new GameProvider(firestore, selector);
-    const createdGame = gameProvider.createGame(templateId, userId);
+    const createdGame = await gameProvider.createGame(templateId, userId);
 
     const gameService = new GameService(gameProvider);
 
-    createdGame
-      .then((newGame) => {
-        const gameWithEvents = gameService.generateGameEvents(newGame.id);
-        return send(gameWithEvents, response);
-      })
-      .catch((error) => {
-        const errorMessage = error['message'] ? error.message : error;
-        response.status(422).send(errorMessage);
-      });
+    const gameWithEvents = gameService.generateGameEvents(createdGame.id);
+    return send(gameWithEvents, response);
   });
 
   const getAllGames = https.onRequest(async (request, response) => {
