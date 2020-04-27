@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/game_events/investment/models/investment_event_data.dart';
 import 'package:cash_flow/game_events/investment/models/investment_player_action.dart';
@@ -131,11 +133,19 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
       (action) => action
         ..onSuccess((_) => null)
         ..onError(
-          (error) => showCashDialog(
-            context: context,
-            title: 'Ееееепс!',
-            message: 'Вот это вот случилось: $error',
-          ),
+          (error) {
+            var errorDescription = error?.toString();
+            errorDescription = errorDescription?.substring(
+              0,
+              min(errorDescription.length - 1, 120),
+            );
+
+            return showCashDialog(
+              context: context,
+              title: 'Ееееепс!',
+              message: 'Вот это вот случилось: $errorDescription',
+            );
+          },
         ),
     );
   }

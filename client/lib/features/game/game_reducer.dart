@@ -25,14 +25,13 @@ final gameStateReducer = Reducer<GameState>()
         final currentState = s.activeGameState;
         var newGameState = currentState;
 
-        final isWaitingForStart =
-            currentState == ActiveGameState.waitingForStart();
-        final isEmptyGameEvent = currentState.maybeMap(
-          gameEvent: (e) => e.eventId == null,
+        final shouldUpdateGame = currentState.maybeWhen(
+          waitingForStart: () => true,
+          gameEvent: (eventId) => eventId == null,
           orElse: () => false,
         );
 
-        if ((isWaitingForStart || isEmptyGameEvent) && gameEvents.isNotEmpty) {
+        if (shouldUpdateGame && gameEvents.isNotEmpty) {
           newGameState = ActiveGameState.gameEvent(gameEvents.first.id);
         }
 

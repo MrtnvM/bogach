@@ -12,4 +12,11 @@ class ResponseErrorModel extends ResponseModel {
   const ResponseErrorModel(this.response);
 
   final Response response;
+
+  @override
+  String toString() {
+    return 'ResponseErrorModel:\n'
+        'Status code: ${response.statusCode} ${response.statusMessage}'
+        'Data: ${response.data}';
+  }
 }
