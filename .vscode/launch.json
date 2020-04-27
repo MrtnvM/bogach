@@ -2,15 +2,12 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Attach to API Process",
       "type": "node",
-      "request": "launch",
-      "name": "Start API Emulator",
-      "runtimeExecutable": "yarn",
-      "localRoot": "${workspaceFolder}/server/functions",
-      "remoteRoot": "${workspaceFolder}/server/functions",
-      "runtimeArgs": ["start-emulator"],
-      "port": 5001,
-      "skipFiles": ["<node_internals>/**"]
+      "request": "attach",
+      "processId": "${command:PickProcess}",
+      "sourceMaps": true,
+      "outFiles": ["${workspaceFolder}/server/functions/libs/*.js"]
     },
     {
       "name": "Flutter",
