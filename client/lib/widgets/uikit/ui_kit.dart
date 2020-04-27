@@ -150,7 +150,7 @@ class UiKit extends StatelessWidget {
               currentPrice: 1300,
               nominal: 1000,
               profitabilityPercent: 8,
-              maxCount: 15,
+              availableCount: 15,
             ),
           ),
         ),

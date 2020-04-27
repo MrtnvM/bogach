@@ -164,7 +164,7 @@ class _CashFlowGridState extends State<CashFlowGrid> with ReduxState {
         .map((item) => RowAttributeItem(
               name: item.name,
               attribute: '${item.count}',
-              value: item.currentPrice.toPrice(),
+              value: item.averagePrice.toPrice(),
             ))
         .toList();
   }

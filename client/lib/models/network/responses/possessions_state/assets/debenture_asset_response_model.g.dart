@@ -13,8 +13,9 @@ DebentureAssetResponseModel _$DebentureAssetResponseModelFromJson(
     type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type']) ??
         AssetType.other,
     count: json['count'] as int,
-    currentPrice: json['currentPrice'] as int,
+    averagePrice: json['averagePrice'] as int,
     nominal: json['nominal'] as int,
+    profitabilityPercent: (json['profitabilityPercent'] as num)?.toDouble(),
   );
 }
 
@@ -25,7 +26,8 @@ Map<String, dynamic> _$DebentureAssetResponseModelToJson(
       'type': _$AssetTypeEnumMap[instance.type],
       'count': instance.count,
       'nominal': instance.nominal,
-      'currentPrice': instance.currentPrice,
+      'averagePrice': instance.averagePrice,
+      'profitabilityPercent': instance.profitabilityPercent,
     };
 
 T _$enumDecode<T>(

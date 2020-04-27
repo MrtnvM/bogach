@@ -132,7 +132,7 @@ PossessionAssetBuilder _getAssets(document) {
   final insurancesSum = insurances.fold(0, (sum, item) => sum += item.value);
   final debenturesSum = debentures.fold(
     0,
-    (sum, item) => sum += item.currentPrice * item.count,
+    (sum, item) => sum += item.averagePrice * item.count,
   );
   final stocksSum = stocks.fold(0, (sum, item) => sum += item.total);
   final realtySum = realty.fold(0, (sum, item) => sum += item.cost);
@@ -206,8 +206,9 @@ DebentureAssetItem _buildDebenture(Map<String, dynamic> json) {
   return DebentureAssetItem((b) => b
     ..name = parsedItem.name
     ..nominal = parsedItem.nominal
-    ..currentPrice = parsedItem.currentPrice
-    ..count = parsedItem.count);
+    ..averagePrice = parsedItem.averagePrice
+    ..count = parsedItem.count
+    ..profitabilityPercent = parsedItem.profitabilityPercent);
 }
 
 InsuranceAssetItem _buildInsurance(Map<String, dynamic> json) {

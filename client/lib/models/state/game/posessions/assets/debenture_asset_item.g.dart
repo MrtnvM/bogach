@@ -12,16 +12,22 @@ class _$DebentureAssetItem extends DebentureAssetItem {
   @override
   final int nominal;
   @override
-  final int currentPrice;
+  final int averagePrice;
   @override
   final int count;
+  @override
+  final double profitabilityPercent;
 
   factory _$DebentureAssetItem(
           [void Function(DebentureAssetItemBuilder) updates]) =>
       (new DebentureAssetItemBuilder()..update(updates)).build();
 
   _$DebentureAssetItem._(
-      {this.name, this.nominal, this.currentPrice, this.count})
+      {this.name,
+      this.nominal,
+      this.averagePrice,
+      this.count,
+      this.profitabilityPercent})
       : super._() {
     if (name == null) {
       throw new BuiltValueNullFieldError('DebentureAssetItem', 'name');
@@ -29,11 +35,15 @@ class _$DebentureAssetItem extends DebentureAssetItem {
     if (nominal == null) {
       throw new BuiltValueNullFieldError('DebentureAssetItem', 'nominal');
     }
-    if (currentPrice == null) {
-      throw new BuiltValueNullFieldError('DebentureAssetItem', 'currentPrice');
+    if (averagePrice == null) {
+      throw new BuiltValueNullFieldError('DebentureAssetItem', 'averagePrice');
     }
     if (count == null) {
       throw new BuiltValueNullFieldError('DebentureAssetItem', 'count');
+    }
+    if (profitabilityPercent == null) {
+      throw new BuiltValueNullFieldError(
+          'DebentureAssetItem', 'profitabilityPercent');
     }
   }
 
@@ -52,16 +62,19 @@ class _$DebentureAssetItem extends DebentureAssetItem {
     return other is DebentureAssetItem &&
         name == other.name &&
         nominal == other.nominal &&
-        currentPrice == other.currentPrice &&
-        count == other.count;
+        averagePrice == other.averagePrice &&
+        count == other.count &&
+        profitabilityPercent == other.profitabilityPercent;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, name.hashCode), nominal.hashCode),
-            currentPrice.hashCode),
-        count.hashCode));
+        $jc(
+            $jc($jc($jc(0, name.hashCode), nominal.hashCode),
+                averagePrice.hashCode),
+            count.hashCode),
+        profitabilityPercent.hashCode));
   }
 
   @override
@@ -69,8 +82,9 @@ class _$DebentureAssetItem extends DebentureAssetItem {
     return (newBuiltValueToStringHelper('DebentureAssetItem')
           ..add('name', name)
           ..add('nominal', nominal)
-          ..add('currentPrice', currentPrice)
-          ..add('count', count))
+          ..add('averagePrice', averagePrice)
+          ..add('count', count)
+          ..add('profitabilityPercent', profitabilityPercent))
         .toString();
   }
 }
@@ -87,13 +101,18 @@ class DebentureAssetItemBuilder
   int get nominal => _$this._nominal;
   set nominal(int nominal) => _$this._nominal = nominal;
 
-  int _currentPrice;
-  int get currentPrice => _$this._currentPrice;
-  set currentPrice(int currentPrice) => _$this._currentPrice = currentPrice;
+  int _averagePrice;
+  int get averagePrice => _$this._averagePrice;
+  set averagePrice(int averagePrice) => _$this._averagePrice = averagePrice;
 
   int _count;
   int get count => _$this._count;
   set count(int count) => _$this._count = count;
+
+  double _profitabilityPercent;
+  double get profitabilityPercent => _$this._profitabilityPercent;
+  set profitabilityPercent(double profitabilityPercent) =>
+      _$this._profitabilityPercent = profitabilityPercent;
 
   DebentureAssetItemBuilder();
 
@@ -101,8 +120,9 @@ class DebentureAssetItemBuilder
     if (_$v != null) {
       _name = _$v.name;
       _nominal = _$v.nominal;
-      _currentPrice = _$v.currentPrice;
+      _averagePrice = _$v.averagePrice;
       _count = _$v.count;
+      _profitabilityPercent = _$v.profitabilityPercent;
       _$v = null;
     }
     return this;
@@ -127,8 +147,9 @@ class DebentureAssetItemBuilder
         new _$DebentureAssetItem._(
             name: name,
             nominal: nominal,
-            currentPrice: currentPrice,
-            count: count);
+            averagePrice: averagePrice,
+            count: count,
+            profitabilityPercent: profitabilityPercent);
     replace(_$result);
     return _$result;
   }

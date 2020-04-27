@@ -11,7 +11,7 @@ abstract class InvestmentEventData
     implements GameEventData {
   factory InvestmentEventData({
     int currentPrice,
-    int maxCount,
+    int availableCount,
     int nominal,
     int profitabilityPercent,
   }) = _InvestmentEventData;

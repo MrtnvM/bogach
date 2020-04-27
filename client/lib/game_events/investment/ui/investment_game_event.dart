@@ -107,7 +107,7 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
       currentPrice: eventData.currentPrice,
       passiveIncomePerMonth: eventData.profitabilityPercent,
       alreadyHave: alreadyHave,
-      maxCount: eventData.maxCount,
+      maxCount: eventData.availableCount,
       changeableType: true,
     );
 

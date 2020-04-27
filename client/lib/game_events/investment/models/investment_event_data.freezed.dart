@@ -16,10 +16,13 @@ class _$InvestmentEventDataTearOff {
   const _$InvestmentEventDataTearOff();
 
   _InvestmentEventData call(
-      {int currentPrice, int maxCount, int nominal, int profitabilityPercent}) {
+      {int currentPrice,
+      int availableCount,
+      int nominal,
+      int profitabilityPercent}) {
     return _InvestmentEventData(
       currentPrice: currentPrice,
-      maxCount: maxCount,
+      availableCount: availableCount,
       nominal: nominal,
       profitabilityPercent: profitabilityPercent,
     );
@@ -31,7 +34,7 @@ const $InvestmentEventData = _$InvestmentEventDataTearOff();
 
 mixin _$InvestmentEventData {
   int get currentPrice;
-  int get maxCount;
+  int get availableCount;
   int get nominal;
   int get profitabilityPercent;
 
@@ -44,7 +47,10 @@ abstract class $InvestmentEventDataCopyWith<$Res> {
           InvestmentEventData value, $Res Function(InvestmentEventData) then) =
       _$InvestmentEventDataCopyWithImpl<$Res>;
   $Res call(
-      {int currentPrice, int maxCount, int nominal, int profitabilityPercent});
+      {int currentPrice,
+      int availableCount,
+      int nominal,
+      int profitabilityPercent});
 }
 
 class _$InvestmentEventDataCopyWithImpl<$Res>
@@ -58,14 +64,16 @@ class _$InvestmentEventDataCopyWithImpl<$Res>
   @override
   $Res call({
     Object currentPrice = freezed,
-    Object maxCount = freezed,
+    Object availableCount = freezed,
     Object nominal = freezed,
     Object profitabilityPercent = freezed,
   }) {
     return _then(_value.copyWith(
       currentPrice:
           currentPrice == freezed ? _value.currentPrice : currentPrice as int,
-      maxCount: maxCount == freezed ? _value.maxCount : maxCount as int,
+      availableCount: availableCount == freezed
+          ? _value.availableCount
+          : availableCount as int,
       nominal: nominal == freezed ? _value.nominal : nominal as int,
       profitabilityPercent: profitabilityPercent == freezed
           ? _value.profitabilityPercent
@@ -81,7 +89,10 @@ abstract class _$InvestmentEventDataCopyWith<$Res>
       __$InvestmentEventDataCopyWithImpl<$Res>;
   @override
   $Res call(
-      {int currentPrice, int maxCount, int nominal, int profitabilityPercent});
+      {int currentPrice,
+      int availableCount,
+      int nominal,
+      int profitabilityPercent});
 }
 
 class __$InvestmentEventDataCopyWithImpl<$Res>
@@ -97,14 +108,16 @@ class __$InvestmentEventDataCopyWithImpl<$Res>
   @override
   $Res call({
     Object currentPrice = freezed,
-    Object maxCount = freezed,
+    Object availableCount = freezed,
     Object nominal = freezed,
     Object profitabilityPercent = freezed,
   }) {
     return _then(_InvestmentEventData(
       currentPrice:
           currentPrice == freezed ? _value.currentPrice : currentPrice as int,
-      maxCount: maxCount == freezed ? _value.maxCount : maxCount as int,
+      availableCount: availableCount == freezed
+          ? _value.availableCount
+          : availableCount as int,
       nominal: nominal == freezed ? _value.nominal : nominal as int,
       profitabilityPercent: profitabilityPercent == freezed
           ? _value.profitabilityPercent
@@ -119,7 +132,7 @@ class _$_InvestmentEventData
     implements _InvestmentEventData {
   _$_InvestmentEventData(
       {this.currentPrice,
-      this.maxCount,
+      this.availableCount,
       this.nominal,
       this.profitabilityPercent});
 
@@ -129,7 +142,7 @@ class _$_InvestmentEventData
   @override
   final int currentPrice;
   @override
-  final int maxCount;
+  final int availableCount;
   @override
   final int nominal;
   @override
@@ -137,7 +150,7 @@ class _$_InvestmentEventData
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'InvestmentEventData(currentPrice: $currentPrice, maxCount: $maxCount, nominal: $nominal, profitabilityPercent: $profitabilityPercent)';
+    return 'InvestmentEventData(currentPrice: $currentPrice, availableCount: $availableCount, nominal: $nominal, profitabilityPercent: $profitabilityPercent)';
   }
 
   @override
@@ -146,7 +159,7 @@ class _$_InvestmentEventData
     properties
       ..add(DiagnosticsProperty('type', 'InvestmentEventData'))
       ..add(DiagnosticsProperty('currentPrice', currentPrice))
-      ..add(DiagnosticsProperty('maxCount', maxCount))
+      ..add(DiagnosticsProperty('availableCount', availableCount))
       ..add(DiagnosticsProperty('nominal', nominal))
       ..add(DiagnosticsProperty('profitabilityPercent', profitabilityPercent));
   }
@@ -158,9 +171,9 @@ class _$_InvestmentEventData
             (identical(other.currentPrice, currentPrice) ||
                 const DeepCollectionEquality()
                     .equals(other.currentPrice, currentPrice)) &&
-            (identical(other.maxCount, maxCount) ||
+            (identical(other.availableCount, availableCount) ||
                 const DeepCollectionEquality()
-                    .equals(other.maxCount, maxCount)) &&
+                    .equals(other.availableCount, availableCount)) &&
             (identical(other.nominal, nominal) ||
                 const DeepCollectionEquality()
                     .equals(other.nominal, nominal)) &&
@@ -173,7 +186,7 @@ class _$_InvestmentEventData
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(currentPrice) ^
-      const DeepCollectionEquality().hash(maxCount) ^
+      const DeepCollectionEquality().hash(availableCount) ^
       const DeepCollectionEquality().hash(nominal) ^
       const DeepCollectionEquality().hash(profitabilityPercent);
 
@@ -191,7 +204,7 @@ class _$_InvestmentEventData
 abstract class _InvestmentEventData implements InvestmentEventData {
   factory _InvestmentEventData(
       {int currentPrice,
-      int maxCount,
+      int availableCount,
       int nominal,
       int profitabilityPercent}) = _$_InvestmentEventData;
 
@@ -201,7 +214,7 @@ abstract class _InvestmentEventData implements InvestmentEventData {
   @override
   int get currentPrice;
   @override
-  int get maxCount;
+  int get availableCount;
   @override
   int get nominal;
   @override

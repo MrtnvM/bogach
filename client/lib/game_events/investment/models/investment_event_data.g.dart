@@ -10,7 +10,7 @@ _$_InvestmentEventData _$_$_InvestmentEventDataFromJson(
     Map<String, dynamic> json) {
   return _$_InvestmentEventData(
     currentPrice: json['currentPrice'] as int,
-    maxCount: json['maxCount'] as int,
+    availableCount: json['availableCount'] as int,
     nominal: json['nominal'] as int,
     profitabilityPercent: json['profitabilityPercent'] as int,
   );
@@ -20,7 +20,7 @@ Map<String, dynamic> _$_$_InvestmentEventDataToJson(
         _$_InvestmentEventData instance) =>
     <String, dynamic>{
       'currentPrice': instance.currentPrice,
-      'maxCount': instance.maxCount,
+      'availableCount': instance.availableCount,
       'nominal': instance.nominal,
       'profitabilityPercent': instance.profitabilityPercent,
     };

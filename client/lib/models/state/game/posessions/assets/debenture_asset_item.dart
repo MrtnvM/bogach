@@ -14,6 +14,7 @@ abstract class DebentureAssetItem
 
   String get name;
   int get nominal;
-  int get currentPrice;
+  int get averagePrice;
   int get count;
+  double get profitabilityPercent;
 }
