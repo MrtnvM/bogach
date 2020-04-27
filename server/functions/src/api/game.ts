@@ -17,9 +17,12 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const userId = apiRequest.jsonField('userId');
 
     const gameProvider = new GameProvider(firestore, selector);
-    const createdGame = gameProvider.createGame(templateId, userId);
+    const createdGame = await gameProvider.createGame(templateId, userId);
 
-    return send(createdGame, response);
+    const gameService = new GameService(gameProvider);
+
+    const gameWithEvents = gameService.generateGameEvents(createdGame.id);
+    return send(gameWithEvents, response);
   });
 
   const getAllGames = https.onRequest(async (request, response) => {
