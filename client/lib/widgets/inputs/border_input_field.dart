@@ -60,7 +60,7 @@ class _BorderInputFieldState extends State<BorderInputField> {
               if (_validationResult?.isNotEmpty == true)
                 Text(
                   _validationResult,
-                  style: Styles.overline,
+                  style: Styles.overline.copyWith(color: ColorRes.errorRed),
                 ),
             ],
           ),
@@ -77,8 +77,8 @@ class _BorderInputFieldState extends State<BorderInputField> {
                 ? Icon(Icons.error, color: ColorRes.errorRed, size: 14)
                 : null,
             contentPadding: const EdgeInsets.symmetric(
-              horizontal: 6,
-              vertical: 4,
+              horizontal: 16,
+              vertical: 12,
             ),
             hintText: widget.props.hint,
             hintStyle: Styles.body1
@@ -100,7 +100,7 @@ class _BorderInputFieldState extends State<BorderInputField> {
               ? TextInputAction.done
               : TextInputAction.next,
           textCapitalization: widget.props.textCapitalization,
-          validator: (String value) {
+          validator: (value) {
             if (widget.props.focusNode?.hasFocus == true ||
                 widget.props.validatorRules == null) {
               _validationResult = null;
@@ -120,7 +120,7 @@ class _BorderInputFieldState extends State<BorderInputField> {
 
             widget.props.onSubmitted?.call(value);
           },
-          style: Styles.body1,
+          style: Styles.body1.copyWith(color: ColorRes.black),
           obscureText: widget.props.obscureText,
           keyboardType: widget.props.keyboardType,
           autovalidate: widget.props.autoValidate,

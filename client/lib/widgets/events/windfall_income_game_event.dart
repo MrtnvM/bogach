@@ -49,7 +49,7 @@ class WindfallIncomeGameEventState extends State<WindfallIncomeGameEvent> {
   }
 
   Widget _buildDescription() {
-    return Text(
+    return const Text(
       Strings.windfallIncomeDesc,
       style: Styles.body2,
     );

@@ -1,7 +1,8 @@
+import 'package:cash_flow/presentation/new_gameboard/widgets/action_button.dart';
 import 'package:cash_flow/presentation/new_gameboard/widgets/condition.dart';
+import 'package:cash_flow/presentation/new_gameboard/widgets/footer_button.dart';
 import 'package:cash_flow/presentation/new_gameboard/widgets/investments_info.dart';
 import 'package:cash_flow/presentation/new_gameboard/widgets/progress_bar.dart';
-import 'package:cash_flow/presentation/new_gameboard/widgets/stack_train.dart';
 import 'package:cash_flow/resources/colors.dart';
 
 import 'package:flutter/material.dart';
@@ -31,6 +32,17 @@ class NewGameBoard extends StatelessWidget {
             child: Image(
               key: backgroundImageKey,
               image: const AssetImage('assets/images/png/many_money.png'),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(top: 70, left: 16),
+            height: 20,
+            child: GestureDetector(
+              onTap: () {},
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: ColorRes.primaryWhiteColor,
+              ),
             ),
           ),
           Container(
@@ -78,23 +90,59 @@ class NewGameBoard extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Container(
+                  alignment: Alignment.center,
                   height: 46,
                   child: Row(
-                    children: <Widget>[
-                      GestureDetector(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: ColorRes.gameButtonColor,
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(5)),
-                          ),
-                          child: const Text('Купить'),
+                    children: [
+                      Expanded(
+                        child: ActionButton(
+                          color: Colors.orange,
+                          text: 'Взять\nкредит',
+                          maxLines: 2,
+                        ),
+                      ),
+                      const SizedBox(width: 9),
+                      Expanded(
+                        child: ActionButton(
+                          color: Colors.green,
+                          text: 'Ок',
+                          maxLines: 1,
+                        ),
+                      ),
+                      const SizedBox(width: 9),
+                      Expanded(
+                        child: ActionButton(
+                          color: Colors.grey,
+                          text: 'Пропустить',
+                          maxLines: 1,
                         ),
                       ),
                     ],
                   ),
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Row(
+        children: const <Widget>[
+          Expanded(
+            child: FooterButton(
+              image: 'assets/images/png/footer_financal.png',
+              text: 'Финансы',
+            ),
+          ),
+          Expanded(
+            child: FooterButton(
+              image: 'assets/images/png/footer_action.png',
+              text: 'Действия',
+            ),
+          ),
+          Expanded(
+            child: FooterButton(
+              image: 'assets/images/png/footer_history.png',
+              text: 'История',
             ),
           ),
         ],

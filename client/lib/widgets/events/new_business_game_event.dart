@@ -63,7 +63,7 @@ class NewBusinessGameEventState extends State<NewBusinessGameEvent> {
   }
 
   Widget _buildTitle() {
-    return Text(
+    return const Text(
       Strings.newBusinessDesc,
       style: Styles.body2,
     );
@@ -73,7 +73,7 @@ class NewBusinessGameEventState extends State<NewBusinessGameEvent> {
     return RichText(
       text: TextSpan(
         children: [
-          TextSpan(text: Strings.offeredPrice, style: Styles.body1),
+          const TextSpan(text: Strings.offeredPrice, style: Styles.body1),
           const WidgetSpan(
               child: SizedBox(
             width: 4,

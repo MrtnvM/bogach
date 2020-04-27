@@ -1,3 +1,7 @@
+import 'package:built_collection/built_collection.dart';
+import 'package:cash_flow/models/domain/game_data.dart';
+import 'package:cash_flow/models/domain/target_data.dart';
+import 'package:cash_flow/models/network/responses/game/game_event_response_model.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/assets/asset_response_model.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/assets/business_asset_response_model.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/assets/cash_asset_response_model.dart';
@@ -9,6 +13,9 @@ import 'package:cash_flow/models/network/responses/possessions_state/assets/stoc
 import 'package:cash_flow/models/network/responses/possessions_state/expense_response_model.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/income_response_model.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/liability_response_model.dart';
+import 'package:cash_flow/models/network/responses/target_response_model.dart';
+import 'package:cash_flow/models/state/game/game_event.dart';
+import 'package:cash_flow/models/state/game/game_event_data.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/business_asset_item.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/cash_asset_item.dart';
 import 'package:cash_flow/models/state/posessions_state/assets/debenture_asset_item.dart';
@@ -21,10 +28,47 @@ import 'package:cash_flow/models/state/posessions_state/possession_expense.dart'
 import 'package:cash_flow/models/state/posessions_state/possession_income.dart';
 import 'package:cash_flow/models/state/posessions_state/possession_liability.dart';
 import 'package:cash_flow/models/state/posessions_state/user_possession_state.dart';
+import 'package:cash_flow/utils/consts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-UserPossessionState mapToPossessionState(DocumentSnapshot response) {
-  final document = response.data['possessionState'];
+GameData mapToGameData(DocumentSnapshot response) {
+  final userPossessionState =
+      mapToPossessionState(response.data['possessionState']);
+  final target = mapToTargetState(response.data['target']);
+  final events = mapToGameEvents(response.data['currentEvents']);
+
+  return GameData(
+    possessions: userPossessionState,
+    target: target,
+    events: events,
+  );
+}
+
+BuiltList<GameEvent> mapToGameEvents(List response) {
+  return response
+      .map((json) => GameEventResponseModel.fromJson(json))
+      .map((event) => GameEvent((b) => b
+        ..id = event.id
+        ..name = event.name
+        ..description = event.description
+        ..type = event.type
+        ..data = GameEventData((b) => b
+              ..currentPrice = event.data.currentPrice
+              ..maxCount = event.data.maxCount
+              ..nominal = event.data.nominal
+              ..profitabilityPercent = event.data.profitabilityPercent)
+            .toBuilder()))
+      .toBuiltList();
+}
+
+TargetData mapToTargetState(Map<String, dynamic> response) {
+  final target = TargetResponseModel.fromJson(response);
+
+  return TargetData(value: target.value, type: target.type);
+}
+
+UserPossessionState mapToPossessionState(Map<String, dynamic> response) {
+  final document = response[userName];
 
   return UserPossessionState((b) => b
     ..assets = _getAssets(document)
@@ -34,13 +78,13 @@ UserPossessionState mapToPossessionState(DocumentSnapshot response) {
 }
 
 PossessionAssetBuilder _getAssets(document) {
-  final List<InsuranceAssetItem> insurances = [];
-  final List<DebentureAssetItem> debentures = [];
-  final List<StockAssetItem> stocks = [];
-  final List<RealtyAssetItem> realty = [];
-  final List<BusinessAssetItem> businesses = [];
-  final List<CashAssetItem> cash = [];
-  final List<OtherAssetItem> other = [];
+  final insurances = <InsuranceAssetItem>[];
+  final debentures = <DebentureAssetItem>[];
+  final stocks = <StockAssetItem>[];
+  final realty = <RealtyAssetItem>[];
+  final businesses = <BusinessAssetItem>[];
+  final cash = <CashAssetItem>[];
+  final other = <OtherAssetItem>[];
 
   List.from(document['assets'])
       .map(

@@ -6,12 +6,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class GameProgressBar extends StatelessWidget {
-  const GameProgressBar(this.name, this.currentValue, this.maxValue)
-      : percent = currentValue / maxValue,
-        assert(
-          currentValue <= maxValue,
-          'currentValue value cannot be greater then maxValue',
-        );
+  const GameProgressBar({
+    @required this.name,
+    @required this.currentValue,
+    @required this.maxValue,
+  })  : percent = (currentValue / maxValue) > 1 ? 1 : currentValue / maxValue,
+        assert(name != null),
+        assert(currentValue != null),
+        assert(maxValue != null);
 
   final String name;
   final int currentValue;

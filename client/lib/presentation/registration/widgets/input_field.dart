@@ -30,7 +30,7 @@ class InputField extends StatelessWidget {
               return text;
             }
             if (value.isEmpty) {
-              final String lowerText = text.toLowerCase();
+              final lowerText = text.toLowerCase();
               return 'Введитe $lowerText';
             }
             return null;

@@ -54,14 +54,14 @@ class InsuranceGameEventState extends State<InsuranceGameEvent> {
   }
 
   Widget _buildTitle() {
-    return Text(
+    return const Text(
       Strings.insuranceDesc,
       style: Styles.body2,
     );
   }
 
   Widget _buildDescription() {
-    return Text(
+    return const Text(
       Strings.insurance,
       style: Styles.body1,
     );
@@ -71,7 +71,7 @@ class InsuranceGameEventState extends State<InsuranceGameEvent> {
     return RichText(
       text: TextSpan(
         children: [
-          TextSpan(text: Strings.price, style: Styles.body1),
+          const TextSpan(text: Strings.price, style: Styles.body1),
           const WidgetSpan(
               child: SizedBox(
             width: 4,
