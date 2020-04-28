@@ -7,6 +7,7 @@ import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:flutter_platform_network/flutter_platform_network.dart';
 import 'package:redux_epics/redux_epics.dart';
@@ -34,11 +35,13 @@ Epic<AppState> createRootEpic(
   TokenStorage tokenStorage,
 ) {
   final firestore = Firestore.instance;
+  final firebaseDatabase = FirebaseDatabase.instance;
   final firebaseAuth = FirebaseAuth.instance;
 
   final gameService = GameService(
     apiClient: apiClient,
     firestore: firestore,
+    firebaseDatabase: firebaseDatabase,
   );
 
   final userService = UserService(
