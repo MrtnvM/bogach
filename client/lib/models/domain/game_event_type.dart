@@ -1,4 +1,4 @@
-import 'package:cash_flow/game_events/investment/models/investment_event_data.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/investment/models/investment_event_data.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';

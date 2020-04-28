@@ -1,9 +1,9 @@
 import 'package:cash_flow/core/utils/app_store_connector.dart';
 import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/features/game/game_state.dart';
-import 'package:cash_flow/game_events/investment/ui/investment_game_event.dart';
 import 'package:cash_flow/models/domain/game_event.dart';
 import 'package:cash_flow/models/network/responses/target_type.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/investment/ui/investment_game_event.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/progress/account_bar.dart';
