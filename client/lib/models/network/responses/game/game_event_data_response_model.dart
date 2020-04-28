@@ -6,7 +6,6 @@ part 'game_event_data_response_model.g.dart';
 class GameEventDataResponseModel {
   const GameEventDataResponseModel({
     this.currentPrice,
-    this.maxCount,
     this.nominal,
     this.profitabilityPercent,
   });
@@ -15,7 +14,6 @@ class GameEventDataResponseModel {
       _$GameEventDataResponseModelFromJson(json);
 
   final int currentPrice;
-  final int maxCount;
   final int nominal;
   final int profitabilityPercent;
 
