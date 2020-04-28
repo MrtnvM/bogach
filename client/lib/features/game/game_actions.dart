@@ -26,15 +26,15 @@ class OnGameErrorAction extends Action {
 }
 
 class SetGameContextAction extends Action {
-  SetGameContextAction(this.context);
+  SetGameContextAction(this.gameContext);
 
-  final GameContext context;
+  final GameContext gameContext;
 }
 
-class SendGameEventPlayerActionAsyncAction extends AsyncAction<void> {
-  SendGameEventPlayerActionAsyncAction(this.action, this.eventId);
+class SendPlayerMoveAsyncAction extends AsyncAction<void> {
+  SendPlayerMoveAsyncAction(this.playerAction, this.eventId);
 
-  final PlayerAction action;
+  final PlayerAction playerAction;
   final String eventId;
 }
 

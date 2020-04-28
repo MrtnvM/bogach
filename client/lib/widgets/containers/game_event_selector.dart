@@ -56,7 +56,7 @@ class GameEventSelectorState extends State<GameEventSelector> {
           GameEventValueSelector(
             action: _buySellAction,
             selectedCount: _selectedCount,
-            availableCount: 0, // vm.maxCount,
+            countInPortfolio: 0, // vm.maxCount,
             maxCount: vm.maxCount,
             onCountChanged: _onSelectedCountChanged,
             isChangeableType: vm.changeableType,
@@ -87,8 +87,10 @@ class GameEventSelectorState extends State<GameEventSelector> {
   }
 
   void _onCountInputFieldChanged(int count) {
+    final maxCount = widget.viewModel.maxCount;
+
     setState(() {
-      _selectedCount = count > widget.viewModel.maxCount ? 0 : count;
+      _selectedCount = count > maxCount ? maxCount : count;
     });
 
     widget.onPlayerActionParamsChanged(_buySellAction, count);

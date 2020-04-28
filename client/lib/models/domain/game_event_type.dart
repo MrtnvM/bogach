@@ -5,6 +5,9 @@ import 'package:flutter/foundation.dart';
 
 part 'game_event_type.freezed.dart';
 
+const _debentureEventType = 'debenture-price-changed-event';
+const _stockEventType = 'stock-price-changed-event';
+
 @freezed
 abstract class GameEventType implements _$GameEventType {
   GameEventType._();
@@ -25,19 +28,20 @@ abstract class GameEventType implements _$GameEventType {
   }
 
   String jsonValue() => map(
-        debenture: (_) => 'debenture-price-changed-event',
-        stock: (_) => 'stock-price-changed-event',
+        debenture: (_) => _debentureEventType,
+        stock: (_) => _stockEventType,
       );
 
   static GameEventType fromJson(String json) {
     switch (json) {
-      case 'debenture-price-changed-event':
+      case _debentureEventType:
         return GameEventType.debenture();
 
-      case 'stock-price-changed-event':
+      case _stockEventType:
         return GameEventType.stock();
 
       default:
+        // TODO(Maxim): Add non fatal error; Remove throwing exception
         throw Exception('Unknown GameEventType value');
     }
   }

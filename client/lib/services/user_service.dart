@@ -13,11 +13,11 @@ class UserService {
 
   final FirebaseAuth firebaseAuth;
 
-  Stream<void> login({
+  Stream<CurrentUser> login({
     @required String email,
     @required String password,
   }) {
-    final errorHandler = ErrorHandler((code) {
+    final errorHandler = ErrorHandler<CurrentUser>((code) {
       if (code == 'ERROR_USER_NOT_FOUND') {
         return const InvalidCredentialsException();
       }
@@ -25,12 +25,14 @@ class UserService {
       return null;
     });
 
-    return Stream.fromFuture(
-      firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      ),
-    ).cast<void>().transform(errorHandler);
+    final logInOperation = firebaseAuth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    return Stream.fromFuture(logInOperation)
+        .map((result) => mapToCurrentUser(result.user))
+        .transform(errorHandler);
   }
 
   Stream<void> logout() {

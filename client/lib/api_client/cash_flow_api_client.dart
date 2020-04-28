@@ -1,5 +1,4 @@
-import 'package:cash_flow/models/domain/game_context.dart';
-import 'package:cash_flow/models/domain/player_action.dart';
+import 'package:cash_flow/models/network/request/game/player_action_request_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_platform_network/flutter_platform_network.dart';
 import 'package:cash_flow/api_client/response_mappers.dart' as rm;
@@ -10,18 +9,9 @@ class CashFlowApiClient extends ApiClient {
     @required Dio dio,
   }) : super(environment: environment, dio: dio, delegate: null);
 
-  Stream<void> sendPlayerAction(
-    GameContext context,
-    PlayerAction action,
-    String eventId,
-  ) =>
-      post(
+  Stream<void> sendPlayerAction(PlayerActionRequestModel playerAction) => post(
         path: 'handleGameEvent',
-        body: {
-          'eventId': eventId,
-          'context': context.toMap(),
-          'action': action.toMap(),
-        },
+        body: playerAction.toMap(),
         responseMapper: rm.voidResponse,
       );
 }

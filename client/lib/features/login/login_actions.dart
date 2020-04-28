@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
-class LoginAsyncAction extends AsyncAction<void> {
+class LoginAsyncAction extends AsyncAction<CurrentUser> {
   LoginAsyncAction({
     @material.required this.email,
     @material.required this.password,

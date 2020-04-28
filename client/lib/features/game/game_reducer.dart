@@ -15,8 +15,6 @@ final gameStateReducer = Reducer<GameState>()
   ..on<OnGameStateChangedAction>(
     (state, action) => state.rebuild(
       (s) {
-        final gameEvents = action.data.events;
-
         final targetBuilder = TargetStateBuilder()
           ..value = action.data.target.value
           ..currentValue = action.data.possessions.assets.sum
@@ -25,6 +23,7 @@ final gameStateReducer = Reducer<GameState>()
         final currentState = s.activeGameState;
         var newGameState = currentState;
 
+        final gameEvents = action.data.events;
         final shouldUpdateGame = currentState.maybeWhen(
           waitingForStart: () => true,
           gameEvent: (eventId) => eventId == null,
@@ -52,10 +51,10 @@ final gameStateReducer = Reducer<GameState>()
   )
   ..on<SetGameContextAction>(
     (state, action) => state.rebuild(
-      (s) => s.currentGameContext = action.context,
+      (s) => s.currentGameContext = action.gameContext,
     ),
   )
-  ..on<SendGameEventPlayerActionAsyncAction>(
+  ..on<SendPlayerMoveAsyncAction>(
     (state, action) => state.rebuild(
       (s) {
         final eventIndex = s.events.build().indexWhere(

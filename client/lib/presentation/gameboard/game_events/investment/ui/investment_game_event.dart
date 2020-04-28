@@ -59,12 +59,14 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
   Widget _buildInfo() {
     // TODO(maxim-martynov): Replace with real value
     const alreadyHave = 0;
+    const monthInYear = 12;
+    final roi = eventData.profitabilityPercent * monthInYear;
 
     final map = {
       Strings.investmentType: event.type.typeTitle(),
       Strings.nominalCost: eventData.nominal.toPrice(),
       Strings.passiveIncomePerMonth: eventData.profitabilityPercent.toPrice(),
-      Strings.roi: (eventData.profitabilityPercent * 12).toPercent(),
+      Strings.roi: roi.toPercent(),
       Strings.alreadyHave: alreadyHave == 0
           ? alreadyHave.toString()
           : Strings.getUserAvailableCount(
@@ -127,7 +129,7 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
       event.id,
     );
 
-    final action = SendGameEventPlayerActionAsyncAction(playerAction, event.id);
+    final action = SendPlayerMoveAsyncAction(playerAction, event.id);
 
     dispatchAsyncAction(action).listen(
       (action) => action

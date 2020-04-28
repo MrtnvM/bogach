@@ -1,17 +1,16 @@
 import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/features/login/login_actions.dart';
 import 'package:cash_flow/features/login/login_state.dart';
-import 'package:cash_flow/models/state/user/current_user.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 final loginReducer = Reducer<LoginState>()
   ..on<LoginAsyncAction>(
-    (state, action) => state.rebuild(
-      (s) => s
-        ..loginRequestState = action.requestState
-        ..currentUser = CurrentUser((b) => b.fullName = '').toBuilder(),
-    ),
+    (state, action) => state.rebuild((s) {
+      s..loginRequestState = action.requestState;
+
+      action.onSuccess((user) => s.currentUser = user.toBuilder());
+    }),
   )
   ..on<LoginViaFacebookAsyncAction>(
     (state, action) => state.rebuild((s) {
@@ -42,6 +41,6 @@ final loginReducer = Reducer<LoginState>()
         (s) => s..currentUser = mapToCurrentUser(action.user)?.toBuilder()),
   )
   ..on<ResetPasswordAsyncAction>(
-        (state, action) =>
+    (state, action) =>
         state.rebuild((s) => s.resetPasswordRequestState = action.requestState),
   );

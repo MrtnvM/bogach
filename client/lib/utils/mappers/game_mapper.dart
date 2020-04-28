@@ -75,6 +75,7 @@ TargetData mapToTargetState(Map<String, dynamic> response) {
 }
 
 Account mapToAccountState(Map<String, dynamic> accountsData) {
+  // TODO(Maxim): Take user by id
   return Account.fromJson(accountsData.values.first);
 }
 
