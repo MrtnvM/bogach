@@ -1,7 +1,11 @@
+import 'package:cash_flow/presentation/new_game/single_game_page.dart';
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/appbar/app_bar.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/gameboard/game_board.dart';
+import 'package:cash_flow/widgets/buttons/color_button.dart';
+import 'package:cash_flow/widgets/texts/title_test.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -19,23 +23,35 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CashAppBar(
-        title: const Text('Main page'),
-        backgroundColor: ColorRes.primary,
+        title: null,
+        backgroundColor: ColorRes.darkBlue,
+        elevation: 0,
       ),
-      body: Column(
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    return Container(
+      color: ColorRes.darkBlue,
+      padding: const EdgeInsets.only(top: 80, left: 32, right: 32),
+      child: Column(
         children: <Widget>[
-          Expanded(
-            child: Center(
-              child: Column(
-                children: <Widget>[
-                  const Text('Welcome!'),
-                  FlatButton(
-                    onPressed: () => appRouter.goTo(GameBoard()),
-                    child: const Text('Go to GameBoard'),
-                  ),
-                ],
-              ),
-            ),
+          const TitleText(Strings.chooseGame),
+          const SizedBox(height: 24),
+          ColorButton(
+            onPressed: () => appRouter.goTo(SingleGamePage()),
+            text: Strings.singleGame,
+          ),
+          const SizedBox(height: 24),
+          ColorButton(
+            onPressed: () => appRouter.goTo(GameBoard()),
+            text: Strings.multiPlayerGame,
+          ),
+          const SizedBox(height: 24),
+          ColorButton(
+            onPressed: () => appRouter.goTo(GameBoard()),
+            text: Strings.continueGame,
           ),
         ],
       ),

@@ -63,6 +63,8 @@ class Strings {
   static const firstPayment = 'Первый взнос';
 
   static const commonError = 'Произошла ошибка';
+  static const commonReload = 'Обновить';
+  static const emptyData = 'Ничего не найдено';
 
   static const propertyName = 'Малая недвижимость';
   static const offeredPrice = 'Предложенная цена:';
@@ -140,4 +142,11 @@ class Strings {
 
   static String get incorrectPassword =>
       'Пароль должен быть более 6-ти символов';
+
+  //New Game
+  static const chooseGame = 'Выберите игру';
+  static const singleGame = 'Одиночная игра';
+  static const multiPlayerGame = 'Игра с друзьями';
+  static const continueGame = 'Продолжить игру';
+  static const chooseLevel = 'Выберите уровень';
 }

@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:alice/alice.dart';
 import 'package:cash_flow/app/store/store.dart';
 import 'package:cash_flow/cash_flow_app.dart';
+import 'package:cash_flow/configuration/api_client.dart';
 import 'package:cash_flow/configuration/control_panel.dart';
 import 'package:cash_flow/configuration/error_reporting.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
@@ -23,12 +25,19 @@ Future<void> main() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   final tokenStorage = TokenStorage();
 
+  final alice = Alice();
+  final apiClient = configureApiClient(
+    environment: _getApiEnvironment(),
+    alice: alice,
+  );
+
   configureControlPanel();
   configureUiKit();
 
   final rootEpic = createRootEpic(
     sharedPreferences,
     tokenStorage,
+    apiClient,
   );
 
   final storeProvider = configureStoreProvider(rootEpic);
@@ -44,4 +53,10 @@ Future<void> main() async {
       isAuthorised: isAuthorized,
     ));
   }, onError: Crashlytics.instance.recordError);
+}
+
+ApiEnvironment _getApiEnvironment() {
+  return const ApiEnvironment(
+    baseUrl: 'https://europe-west2-cash-flow-staging.cloudfunctions.net/',
+  );
 }
