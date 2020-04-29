@@ -2,6 +2,8 @@ import 'package:cash_flow/models/domain/game_context.dart';
 import 'package:cash_flow/models/domain/player_action.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'player_action_request_model.g.dart';
+
 @JsonSerializable()
 class PlayerActionRequestModel {
   PlayerActionRequestModel({
@@ -12,15 +14,14 @@ class PlayerActionRequestModel {
         assert(playerAction != null),
         assert(eventId != null && eventId != '');
 
+  factory PlayerActionRequestModel.fromJson(Map<String, dynamic> json) =>
+      _$PlayerActionRequestModelFromJson(json);
+
+  @JsonKey(name: 'context')
   final GameContext gameContext;
+  @JsonKey(name: 'action')
   final PlayerAction playerAction;
   final String eventId;
 
-  Map<String, dynamic> toMap() {
-    return {
-      'eventId': eventId,
-      'context': gameContext.toMap(),
-      'action': playerAction.toMap(),
-    };
-  }
+  Map<String, dynamic> toJson() => _$PlayerActionRequestModelToJson(this);
 }

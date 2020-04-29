@@ -1,5 +1,9 @@
 abstract class PlayerAction {
   const PlayerAction();
 
-  Map<String, dynamic> toMap();
+  factory PlayerAction.fromJson(Map<String, dynamic> json) {
+    throw Exception('Not implemented');
+  }
+
+  Map<String, dynamic> toJson();
 }

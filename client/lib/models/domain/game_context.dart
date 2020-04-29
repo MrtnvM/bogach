@@ -1,5 +1,9 @@
 import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'game_context.g.dart';
+
+@JsonSerializable()
 class GameContext {
   const GameContext({
     @required this.gameId,
@@ -7,8 +11,11 @@ class GameContext {
   })  : assert(gameId != null && gameId != ''),
         assert(userId != null && userId != '');
 
+  factory GameContext.fromJson(Map<String, dynamic> json) =>
+      _$GameContextFromJson(json);
+
   final String userId;
   final String gameId;
 
-  Map<String, dynamic> toMap() => {'gameId': gameId, 'userId': userId};
+  Map<String, dynamic> toJson() => _$GameContextToJson(this);
 }
