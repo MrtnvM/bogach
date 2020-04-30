@@ -1,13 +1,14 @@
 import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/app/app_reducer.dart';
 import 'package:cash_flow/app/app_state.dart';
+import 'package:cash_flow/app/environment.dart';
 import 'package:cash_flow/app/root_epic.dart';
 import 'package:cash_flow/services/firebase_service.dart';
 import 'package:cash_flow/services/new_game_servise.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
-import 'package:flutter_platform_network/flutter_platform_network.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,9 +34,15 @@ Epic<AppState> createRootEpic(
   CashFlowApiClient apiClient,
 ) {
   final firestore = Firestore.instance;
+  final firebaseAuth = FirebaseAuth.instance;
+
+  const environment = Environment(
+    baseUrl: 'https://cash-flow-staging.appspot.com',
+  );
 
   final userService = UserService(
-    tokenStorage: tokenStorage,
+    environment: environment,
+    firebaseAuth: firebaseAuth,
   );
   final firebaseService = FirebaseService(firestore: firestore);
 

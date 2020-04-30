@@ -4,6 +4,8 @@ class Strings {
       'An error occurred while performing the operation';
 
   // Common
+  static String get submit => 'Отправить';
+
   static String get email => 'Email';
 
   static String get password => 'Пароль';
@@ -18,6 +20,8 @@ class Strings {
       'адресом уже зарегистрирован';
 
   static String get facebook => 'Facebook';
+
+  static String get google => 'Google';
 
   static String get labelRepeatPassword => 'Повторите пароль';
 
@@ -149,4 +153,14 @@ class Strings {
   static const multiPlayerGame = 'Игра с друзьями';
   static const continueGame = 'Продолжить игру';
   static const chooseLevel = 'Выберите уровень';
+  // Reset Password
+  static String get forgotPasswordTitle => 'Забыли пароль?';
+
+  static String get recoveryPasswordTitle => 'Восстановление пароля';
+
+  static String get recoveryPasswordDesc =>
+      'Введите свой e-mail, указанный при регистрации';
+
+  static String get noSuchEmail =>
+      'Пользователь с таким e-mail не зарегистрирован';
 }

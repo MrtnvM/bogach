@@ -9,13 +9,25 @@ part of login_state;
 class _$LoginState extends LoginState {
   @override
   final RequestState loginRequestState;
+  @override
+  final RequestState resetPasswordRequestState;
+  @override
+  final CurrentUser currentUser;
 
   factory _$LoginState([void Function(LoginStateBuilder) updates]) =>
       (new LoginStateBuilder()..update(updates)).build();
 
-  _$LoginState._({this.loginRequestState}) : super._() {
+  _$LoginState._(
+      {this.loginRequestState,
+      this.resetPasswordRequestState,
+      this.currentUser})
+      : super._() {
     if (loginRequestState == null) {
       throw new BuiltValueNullFieldError('LoginState', 'loginRequestState');
+    }
+    if (resetPasswordRequestState == null) {
+      throw new BuiltValueNullFieldError(
+          'LoginState', 'resetPasswordRequestState');
     }
   }
 
@@ -29,18 +41,26 @@ class _$LoginState extends LoginState {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is LoginState && loginRequestState == other.loginRequestState;
+    return other is LoginState &&
+        loginRequestState == other.loginRequestState &&
+        resetPasswordRequestState == other.resetPasswordRequestState &&
+        currentUser == other.currentUser;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, loginRequestState.hashCode));
+    return $jf($jc(
+        $jc($jc(0, loginRequestState.hashCode),
+            resetPasswordRequestState.hashCode),
+        currentUser.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('LoginState')
-          ..add('loginRequestState', loginRequestState))
+          ..add('loginRequestState', loginRequestState)
+          ..add('resetPasswordRequestState', resetPasswordRequestState)
+          ..add('currentUser', currentUser))
         .toString();
   }
 }
@@ -53,11 +73,25 @@ class LoginStateBuilder implements Builder<LoginState, LoginStateBuilder> {
   set loginRequestState(RequestState loginRequestState) =>
       _$this._loginRequestState = loginRequestState;
 
+  RequestState _resetPasswordRequestState;
+  RequestState get resetPasswordRequestState =>
+      _$this._resetPasswordRequestState;
+  set resetPasswordRequestState(RequestState resetPasswordRequestState) =>
+      _$this._resetPasswordRequestState = resetPasswordRequestState;
+
+  CurrentUserBuilder _currentUser;
+  CurrentUserBuilder get currentUser =>
+      _$this._currentUser ??= new CurrentUserBuilder();
+  set currentUser(CurrentUserBuilder currentUser) =>
+      _$this._currentUser = currentUser;
+
   LoginStateBuilder();
 
   LoginStateBuilder get _$this {
     if (_$v != null) {
       _loginRequestState = _$v.loginRequestState;
+      _resetPasswordRequestState = _$v.resetPasswordRequestState;
+      _currentUser = _$v.currentUser?.toBuilder();
       _$v = null;
     }
     return this;
@@ -78,8 +112,24 @@ class LoginStateBuilder implements Builder<LoginState, LoginStateBuilder> {
 
   @override
   _$LoginState build() {
-    final _$result =
-        _$v ?? new _$LoginState._(loginRequestState: loginRequestState);
+    _$LoginState _$result;
+    try {
+      _$result = _$v ??
+          new _$LoginState._(
+              loginRequestState: loginRequestState,
+              resetPasswordRequestState: resetPasswordRequestState,
+              currentUser: _currentUser?.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'currentUser';
+        _currentUser?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'LoginState', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

@@ -8,7 +8,7 @@ import 'package:rxdart/transformers.dart';
 typedef HandleErrorCallback = Exception Function(String);
 
 class ErrorHandler<S> extends StreamTransformerBase<S, S> {
-  ErrorHandler(this.handleErrorCallback);
+  ErrorHandler([this.handleErrorCallback]);
 
   final HandleErrorCallback handleErrorCallback;
 
