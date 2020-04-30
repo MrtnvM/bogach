@@ -9,7 +9,7 @@ import { PossessionState, PossessionStateEntity } from '../models/domain/possess
 import { Possessions, PossessionsEntity } from '../models/domain/possessions';
 import { InsuranceAsset } from '../models/domain/assets/insurance_asset';
 import { DebentureAsset } from '../models/domain/assets/debenture_asset';
-import { StocksAsset } from '../models/domain/assets/stocks_asset';
+import { StockAsset } from '../models/domain/assets/stock_asset';
 import { RealtyAsset } from '../models/domain/assets/realty_asset';
 import { BusinessAsset } from '../models/domain/assets/business_asset';
 import { OtherAsset } from '../models/domain/assets/other_asset';
@@ -28,11 +28,11 @@ describe('Possession Service Tests', () => {
     participants: [userId],
     possessions: { [userId]: PossessionsEntity.createEmpty() },
     possessionState: {
-      [userId]: PossessionStateEntity.createEmpty()
+      [userId]: PossessionStateEntity.createEmpty(),
     },
     accounts: {},
     target: { type: 'cash', value: 1000000 },
-    currentEvents: []
+    currentEvents: [],
   };
 
   const create = <T>(obj: T) => obj;
@@ -44,21 +44,21 @@ describe('Possession Service Tests', () => {
           id: 'income1',
           value: 92000,
           name: 'Зарплата',
-          type: 'salary'
+          type: 'salary',
         },
         {
           id: 'income2',
           value: 1000,
           name: 'Карманные от бабушки',
-          type: 'other'
-        }
+          type: 'other',
+        },
       ],
       expenses: [
         {
           id: 'expense1',
           name: 'Общее',
-          value: 20000
-        }
+          value: 20000,
+        },
       ],
       assets: [
         create<InsuranceAsset>({
@@ -66,51 +66,52 @@ describe('Possession Service Tests', () => {
           name: 'Страховка квартиры',
           type: 'insurance',
           value: 50000,
-          downPayment: 5000
+          downPayment: 5000,
         }),
         create<DebentureAsset>({
           id: 'debenture1',
           name: 'ОФЗ',
           type: 'debenture',
           count: 4,
-          currentPrice: 1100,
+          averagePrice: 1100,
           profitabilityPercent: 8,
-          nominal: 1000
+          nominal: 1000,
         }),
-        create<StocksAsset>({
+        create<StockAsset>({
           id: 'stocks1',
           name: 'Яндекс',
-          count: 1,
-          type: 'stocks',
-          purchasePrice: 1900
+          countInPortfolio: 1,
+          type: 'stock',
+          fairPrice: 100,
+          averagePrice: 100,
         }),
         create<RealtyAsset>({
           id: 'realty1',
           name: 'Квартира',
           type: 'realty',
           cost: 2000000,
-          downPayment: 1000000
+          downPayment: 1000000,
         }),
         create<BusinessAsset>({
           id: 'business1',
           name: 'Ларек с шавой',
           type: 'business',
           cost: 200000,
-          downPayment: 100000
+          downPayment: 100000,
         }),
         create<OtherAsset>({
           id: 'other_asset1',
           name: 'Биткойны',
           type: 'other',
           value: 30000,
-          downPayment: 30000
+          downPayment: 30000,
         }),
         create<CashAsset>({
           id: 'cash1',
           type: 'cash',
           value: 500,
-          name: 'Наличные'
-        })
+          name: 'Наличные',
+        }),
       ],
       liabilities: [
         create<MortgageLiability>({
@@ -118,30 +119,30 @@ describe('Possession Service Tests', () => {
           name: 'Ипотека',
           type: 'mortgage',
           value: 2000000,
-          monthlyPayment: 20000
+          monthlyPayment: 20000,
         }),
         create<OtherLiability>({
           id: 'other_libility1',
           name: 'Долг другу',
           type: 'other',
           value: 5000,
-          monthlyPayment: 500
+          monthlyPayment: 500,
         }),
         create<BusinessCreditLiability>({
           id: 'business_credit1',
           value: 40000,
           name: 'Кредит за ларек',
           type: 'business_credit',
-          monthlyPayment: 5000
-        })
-      ]
+          monthlyPayment: 5000,
+        }),
+      ],
     };
 
     const mockedGameProvider: GameProvider = mock(GameProvider);
 
     when(mockedGameProvider.getGame(gameId)).thenResolve({
       ...game,
-      possessions: { [userId]: initialPossesssions }
+      possessions: { [userId]: initialPossesssions },
     });
 
     const gameProvider: GameProvider = instance(mockedGameProvider);
@@ -153,90 +154,91 @@ describe('Possession Service Tests', () => {
         {
           value: 92000,
           name: 'Зарплата',
-          type: 'salary'
+          type: 'salary',
         },
         {
           value: 1000,
           name: 'Карманные от бабушки',
-          type: 'other'
+          type: 'other',
         },
         {
           name: 'Облигации',
           type: 'investment',
-          value: 320
-        }
+          value: 320,
+        },
       ],
       expenses: [
         {
           name: 'Общее',
-          value: 20000
-        }
+          value: 20000,
+        },
       ],
       assets: [
         create<InsuranceAsset>({
           name: 'Страховка квартиры',
           type: 'insurance',
           value: 50000,
-          downPayment: 5000
+          downPayment: 5000,
         }),
         create<DebentureAsset>({
           name: 'ОФЗ',
           type: 'debenture',
           count: 4,
-          currentPrice: 1100,
+          averagePrice: 1100,
           profitabilityPercent: 8,
-          nominal: 1000
+          nominal: 1000,
         }),
-        create<StocksAsset>({
+        create<StockAsset>({
           name: 'Яндекс',
-          count: 1,
-          type: 'stocks',
-          purchasePrice: 1900
+          countInPortfolio: 1,
+          type: 'stock',
+          fairPrice: 100,
+          averagePrice: 100,
         }),
         create<RealtyAsset>({
           name: 'Квартира',
           type: 'realty',
           cost: 2000000,
-          downPayment: 1000000
+          downPayment: 1000000,
         }),
         create<BusinessAsset>({
           name: 'Ларек с шавой',
           type: 'business',
           cost: 200000,
-          downPayment: 100000
+          downPayment: 100000,
         }),
         create<OtherAsset>({
           name: 'Биткойны',
           type: 'other',
           value: 30000,
-          downPayment: 30000
+          downPayment: 30000,
         }),
         create<CashAsset>({
           type: 'cash',
           value: 500,
-          name: 'Наличные'
-        })
+          name: 'Наличные',
+        }),
       ],
       liabilities: [
         create<MortgageLiability>({
           name: 'Ипотека',
           type: 'mortgage',
           value: 2000000,
-          monthlyPayment: 20000
+          monthlyPayment: 20000,
         }),
         create<OtherLiability>({
           name: 'Долг другу',
           type: 'other',
           value: 5000,
-          monthlyPayment: 500
+          monthlyPayment: 500,
         }),
         create<BusinessCreditLiability>({
           value: 40000,
           name: 'Кредит за ларек',
           type: 'business_credit',
-          monthlyPayment: 5000
-        })
-      ]
+          monthlyPayment: 5000,
+        }),
+      ],
     };
 
     expect(newPossessionState).toStrictEqual(expectedPossessionState);

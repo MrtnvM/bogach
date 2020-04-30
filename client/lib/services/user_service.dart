@@ -1,71 +1,130 @@
+import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/models/network/errors/email_has_been_taken_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
+import 'package:cash_flow/models/network/errors/invalid_email_exception.dart';
 import 'package:cash_flow/models/network/request/register_request_model.dart';
+import 'package:cash_flow/models/state/user/current_user.dart';
 import 'package:cash_flow/utils/error_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_platform_network/flutter_platform_network.dart';
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
 
 class UserService {
-  UserService({
-    @required this.tokenStorage,
-  });
+  UserService({@required this.firebaseAuth}) : assert(firebaseAuth != null);
 
-  final TokenStorage tokenStorage;
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth firebaseAuth;
 
-  Stream<void> login({
+  Stream<CurrentUser> login({
     @required String email,
     @required String password,
   }) {
-    return Stream.fromFuture(_firebaseAuth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    ))
-        .doOnData((response) =>
-            tokenStorage.saveTokens(accessToken: response.user.uid))
-        .cast<void>()
-        .transform(ErrorHandler((code) {
+    final errorHandler = ErrorHandler<CurrentUser>((code) {
       if (code == 'ERROR_USER_NOT_FOUND') {
         return const InvalidCredentialsException();
       }
 
       return null;
-    }));
+    });
+
+    final logInOperation = firebaseAuth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    return Stream.fromFuture(logInOperation)
+        .map((result) => mapToCurrentUser(result.user))
+        .transform(errorHandler);
   }
 
   Stream<void> logout() {
-    return Stream.value(_firebaseAuth.signOut());
+    return Stream.fromFuture(firebaseAuth.signOut());
   }
 
   Stream<void> register({@required RegisterRequestModel model}) {
-    return Stream.fromFuture(signUpUser(model)).transform(ErrorHandler((code) {
+    final errorHandler = ErrorHandler((code) {
       if (code == 'ERROR_EMAIL_ALREADY_IN_USE') {
         return const EmailHasBeenTakenException();
       }
 
       return null;
-    }));
+    });
+
+    return Stream.fromFuture(signUpUser(model)).transform(errorHandler);
   }
 
-  Stream<void> loginViaFacebook({@required String token}) {
-    final authCredential =
-        FacebookAuthProvider.getCredential(accessToken: token);
+  Stream<void> resetPassword({@required String email}) {
+    final errorHandler = ErrorHandler((code) {
+      if (code == 'ERROR_USER_NOT_FOUND') {
+        return const InvalidEmailException();
+      }
 
-    return Stream.fromFuture(_firebaseAuth.signInWithCredential(authCredential))
+      return null;
+    });
+
+    return Stream.fromFuture(firebaseAuth.sendPasswordResetEmail(email: email))
+        .transform(errorHandler);
+  }
+
+  Stream<CurrentUser> loginViaFacebook({@required String token}) {
+    final authCredential = FacebookAuthProvider.getCredential(
+      accessToken: token,
+    );
+
+    return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
-        .doOnData((response) =>
-            tokenStorage.saveTokens(accessToken: response.user.uid));
+        .map((authResponse) => mapToCurrentUser(authResponse.user));
+  }
+
+  Stream<CurrentUser> loginViaGoogle({
+    @required String accessToken,
+    @required String idToken,
+  }) {
+    final authCredential = GoogleAuthProvider.getCredential(
+      accessToken: accessToken,
+      idToken: idToken,
+    );
+
+    return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
+        .transform(ErrorHandler())
+        .map((authResponse) => mapToCurrentUser(authResponse.user));
+  }
+
+  Stream<CurrentUser> loginViaApple({
+    @required String accessToken,
+    @required String idToken,
+    @required String firstName,
+    @required String lastName,
+  }) {
+    const authProvider = OAuthProvider(providerId: 'apple.com');
+    final credential = authProvider.getCredential(
+      idToken: idToken,
+      accessToken: accessToken,
+    );
+
+    final future = Future(() async {
+      final response = await firebaseAuth.signInWithCredential(credential);
+      final user = response.user;
+
+      if (firstName != null && lastName != null) {
+        final updateInfo = UserUpdateInfo();
+        updateInfo.displayName = '$firstName $lastName';
+        await user.updateProfile(updateInfo);
+      }
+
+      return firebaseAuth.currentUser();
+    });
+
+    return Stream.fromFuture(future)
+        .transform(ErrorHandler())
+        .map(mapToCurrentUser);
   }
 
   Future<void> signUpUser(RegisterRequestModel model) async {
-    await _firebaseAuth.createUserWithEmailAndPassword(
+    await firebaseAuth.createUserWithEmailAndPassword(
       email: model.email,
       password: model.password,
     );
 
-    final user = await _firebaseAuth.currentUser();
+    final user = await firebaseAuth.currentUser();
     final userUpdateInfo = UserUpdateInfo();
     userUpdateInfo.displayName = model.nickName;
     await user.updateProfile(userUpdateInfo);

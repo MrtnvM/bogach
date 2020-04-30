@@ -5,7 +5,6 @@ import { mock, instance, reset, when, capture } from 'ts-mockito';
 import { GameEntity } from '../../models/domain/game/game';
 import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
 import { DebenturePriceChangedHandler } from './debenture_price_changed_handler';
-import { Strings } from '../../resources/strings';
 import { stubs, utils } from './debenture_price_changed_handler.spec.utils';
 import produce from 'immer';
 
@@ -28,7 +27,7 @@ describe('Debenture price changed event handler', () => {
       currentPrice: 1100,
       profitabilityPercent: 10,
       nominal: 1000,
-      maxCount: 10,
+      availableCount: 10,
     });
 
     const action = utils.debenturePriceChangedPlayerAction({
@@ -40,9 +39,9 @@ describe('Debenture price changed event handler', () => {
     await handler.handle(event, action, context);
 
     const newDebentureAsset: DebentureAsset = {
-      name: Strings.debetures(),
+      name: 'DebentureName',
       type: 'debenture',
-      currentPrice: 1100,
+      averagePrice: 1100,
       profitabilityPercent: 10,
       nominal: 1000,
       count: 1,
@@ -63,23 +62,21 @@ describe('Debenture price changed event handler', () => {
     const gameProvider = instance(mockGameProvider);
     const handler = new DebenturePriceChangedHandler(gameProvider);
 
-    const event = utils.debenturePriceChangedEvent({
-      currentPrice: 1100,
-      profitabilityPercent: 8,
-      nominal: 1000,
-      maxCount: 10,
-    });
+    const currentPrice = 1200;
+    const availableCount = 20;
+    const event = utils.debentureOFZPriceChangedEvent(currentPrice, availableCount);
 
     const action = utils.debenturePriceChangedPlayerAction({
       eventId,
       action: 'buy',
-      count: 5,
+      count: 6,
     });
 
     await handler.handle(event, action, context);
 
     const newDebentureAsset = produce(debenture1, (draft) => {
-      draft.count = 9;
+      draft.count = 10;
+      draft.averagePrice = 1160;
     });
 
     const expectedGame = produce(game, (draft) => {
@@ -88,7 +85,7 @@ describe('Debenture price changed event handler', () => {
       );
 
       draft.possessions[userId].assets[index] = newDebentureAsset;
-      draft.accounts[userId].cash = initialCash - 5500;
+      draft.accounts[userId].cash = initialCash - 7200;
     });
 
     const [newGame] = capture(mockGameProvider.updateGame).last();
@@ -101,12 +98,9 @@ describe('Debenture price changed event handler', () => {
     const gameProvider = instance(mockGameProvider);
     const handler = new DebenturePriceChangedHandler(gameProvider);
 
-    const event = utils.debenturePriceChangedEvent({
-      currentPrice: 1100,
-      profitabilityPercent: 8,
-      nominal: 1000,
-      maxCount: 10,
-    });
+    const currentPrice = 1100;
+    const availableCount = 4;
+    const event = utils.debentureOFZPriceChangedEvent(currentPrice, availableCount);
 
     const action = utils.debenturePriceChangedPlayerAction({
       eventId,
@@ -139,12 +133,9 @@ describe('Debenture price changed event handler', () => {
     const gameProvider = instance(mockGameProvider);
     const handler = new DebenturePriceChangedHandler(gameProvider);
 
-    const event = utils.debenturePriceChangedEvent({
-      currentPrice: 1100,
-      profitabilityPercent: 8,
-      nominal: 1000,
-      maxCount: 10,
-    });
+    const currentPrice = 1100;
+    const availableCount = 4;
+    const event = utils.debentureOFZPriceChangedEvent(currentPrice, availableCount);
 
     const action = utils.debenturePriceChangedPlayerAction({
       eventId,
@@ -175,7 +166,7 @@ describe('Debenture price changed event handler', () => {
       currentPrice: 1100,
       profitabilityPercent: 8,
       nominal: 1000,
-      maxCount: 10,
+      availableCount: 10,
     });
 
     const action = utils.debenturePriceChangedPlayerAction({
@@ -188,7 +179,61 @@ describe('Debenture price changed event handler', () => {
       await handler.handle(event, action, context);
       throw new Error('Shoud fail on previous line');
     } catch (error) {
-      expect(error).toStrictEqual(new Error('Not enough debentures'));
+      expect(error).toStrictEqual(new Error('Not enough debentures in portfolio'));
+    }
+  });
+
+  test('Cannot sell more debentures than in action have', async () => {
+    when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
+
+    const gameProvider = instance(mockGameProvider);
+    const handler = new DebenturePriceChangedHandler(gameProvider);
+
+    const event = utils.debenturePriceChangedEvent({
+      currentPrice: 1100,
+      profitabilityPercent: 8,
+      nominal: 1000,
+      availableCount: 10,
+    });
+
+    const action = utils.debenturePriceChangedPlayerAction({
+      eventId,
+      action: 'sell',
+      count: 11,
+    });
+
+    try {
+      await handler.handle(event, action, context);
+      throw new Error('Shoud fail on previous line');
+    } catch (error) {
+      expect(error).toStrictEqual(new Error('Not enough debentures available'));
+    }
+  });
+
+  test('Cannot buy more debentures than in action have', async () => {
+    when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
+
+    const gameProvider = instance(mockGameProvider);
+    const handler = new DebenturePriceChangedHandler(gameProvider);
+
+    const event = utils.debenturePriceChangedEvent({
+      currentPrice: 1100,
+      profitabilityPercent: 8,
+      nominal: 1000,
+      availableCount: 10,
+    });
+
+    const action = utils.debenturePriceChangedPlayerAction({
+      eventId,
+      action: 'buy',
+      count: 11,
+    });
+
+    try {
+      await handler.handle(event, action, context);
+      throw new Error('Shoud fail on previous line');
+    } catch (error) {
+      expect(error).toStrictEqual(new Error('Not enough debentures available'));
     }
   });
 });

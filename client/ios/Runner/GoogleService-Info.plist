@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>911577434143-k0vrlbolohp90vm3j0r9iah84g6bio98.apps.googleusercontent.com</string>
+	<string>911577434143-oaotur9dmsek2ckagj3n6iiskm6ldo42.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.911577434143-k0vrlbolohp90vm3j0r9iah84g6bio98</string>
+	<string>com.googleusercontent.apps.911577434143-oaotur9dmsek2ckagj3n6iiskm6ldo42</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDELGVXSdWy_1pVaTEByEOHjn5SUJDrMw8</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>io.cashflow.cash-flow</string>
+	<string>io.mobile.cashflow</string>
 	<key>PROJECT_ID</key>
 	<string>cash-flow-staging</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:911577434143:ios:a6e782d68fb8450b0dad2a</string>
+	<string>1:911577434143:ios:81135ef0c4f4e86c0dad2a</string>
 	<key>DATABASE_URL</key>
 	<string>https://cash-flow-staging.firebaseio.com</string>
 </dict>

@@ -6,6 +6,8 @@ import { GameEventEntity } from '../models/domain/game/game_event';
 import { GameContext } from '../models/domain/game/game_context';
 import { PlayerActionHandler } from '../core/domain/player_action_handler';
 import { DebenturePriceChangedHandler } from '../events/debenture/debenture_price_changed_handler';
+import { StockPriceChangedHandler } from '../events/stock/stock_price_changed_handler';
+import { StockPriceChangedEventGenerator } from '../events/stock/stock_price_changed_event_generator';
 
 export class GameService {
   constructor(private gameProvider: GameProvider) {
@@ -14,7 +16,11 @@ export class GameService {
     });
   }
 
-  private handlers: PlayerActionHandler[] = [new DebenturePriceChangedHandler(this.gameProvider)];
+  private handlers: PlayerActionHandler[] = [
+    new DebenturePriceChangedHandler(this.gameProvider),
+    new StockPriceChangedHandler(this.gameProvider),
+  ];
+
   private handlerMap: { [type: string]: PlayerActionHandler } = {};
 
   async generateGameEvents(gameId: GameEntity.Id): Promise<Game> {
@@ -28,6 +34,11 @@ export class GameService {
       DebenturePriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
+      StockPriceChangedEventGenerator.generate(),
+      StockPriceChangedEventGenerator.generate(),
+      StockPriceChangedEventGenerator.generate(),
+      StockPriceChangedEventGenerator.generate(),
+      StockPriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
     ];
 
@@ -53,5 +64,10 @@ export class GameService {
 
     await handler.validate(event, action);
     await handler.handle(event, action, context);
+
+    const lastEvent = game.currentEvents[game.currentEvents.length - 1];
+    if (lastEvent.id === eventId) {
+      await this.generateGameEvents(gameId);
+    }
   }
 }

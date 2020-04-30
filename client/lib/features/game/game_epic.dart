@@ -1,25 +1,47 @@
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/features/game/game_actions.dart';
-import 'package:cash_flow/services/firebase_service.dart';
+import 'package:cash_flow/models/network/request/game/player_action_request_model.dart';
+import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/utils/core/epic.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:meta/meta.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:rxdart/rxdart.dart';
 
-Epic<AppState> possessionsEpic({@required FirebaseService firebaseService}) {
+Epic<AppState> gameEpic({@required GameService gameService}) {
   final getPossessionsEpic = epic((action$, store) {
     return action$
-        .whereType<ListenGameStateStartAction>()
-        .flatMap((action) => firebaseService
+        .whereType<StartGameAction>() //
+        .flatMap((action) => gameService
             .getGameData(action.gameId)
-            .takeUntil(action$
-                .whereType<StopListenGameStateAction>())
-            .map<Action>((state) => ListenGameStateSuccessAction(state))
-            .onErrorReturnWith((e) => ListenGameStateErrorAction()));
+            .takeUntil(
+              action$.whereType<StopActiveGameAction>(),
+            )
+            .map<Action>((state) => OnGameStateChangedAction(state))
+            .onErrorReturnWith((e) => OnGameErrorAction(e)));
+  });
+
+  final sendGameEventPlayerActionAction = epic((action$, store) {
+    return action$
+        .whereType<SendPlayerMoveAsyncAction>()
+        .where((action) => action.isStarted)
+        .flatMap((action) {
+      final context = store.state.gameState.currentGameContext;
+      final eventId = action.eventId;
+
+      return gameService
+          .sendPlayerAction(PlayerActionRequestModel(
+            playerAction: action.playerAction,
+            gameContext: context,
+            eventId: eventId,
+          ))
+          .map(action.complete)
+          .onErrorReturnWith(action.fail);
+    });
   });
 
   return combineEpics([
     getPossessionsEpic,
+    sendGameEventPlayerActionAction,
   ]);
 }

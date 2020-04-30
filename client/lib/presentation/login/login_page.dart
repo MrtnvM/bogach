@@ -1,11 +1,14 @@
+import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/features/login/login_actions.dart';
+import 'package:cash_flow/models/errors/unknown_error.dart';
 import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/main/main_page.dart';
 import 'package:cash_flow/presentation/registration/registration_page.dart';
+import 'package:cash_flow/presentation/reset_password/reset_password_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -23,6 +26,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage();
@@ -76,7 +80,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       )).listen((action) => action
-        ..onSuccess((_) => _onLoggedIn())
+        ..onSuccess(_onLoggedIn)
         ..onError(_onLoginError));
     }
   }
@@ -85,7 +89,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     appRouter.goTo(const RegistrationPage());
   }
 
-  void _onLoggedIn() {
+  void _onLoggedIn(_) {
     appRouter.startWith(const MainPage());
   }
 
@@ -137,7 +141,21 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
           ),
           _buildLoginButton(),
           const SizedBox(height: 24),
-          _buildSocialMedias(),
+          _buildForgotPasswordButton(),
+          const SizedBox(height: 24),
+          _buildSocialMedias(
+            icon: Images.icFacebook,
+            title: Strings.facebook,
+            type: _SocialButtonType.fb,
+          ),
+          const SizedBox(height: 16),
+          _buildSocialMedias(
+            icon: Images.icGoogle,
+            title: Strings.google,
+            type: _SocialButtonType.google,
+          ),
+          const SizedBox(height: 16),
+          _buildAppleSignInButton(),
           const SizedBox(height: 16),
           _buildSignUpWidget(),
           const SafeArea(top: false, child: SizedBox(height: 16)),
@@ -146,12 +164,16 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     );
   }
 
-  Widget _buildSocialMedias() {
+  Widget _buildSocialMedias({
+    @required String icon,
+    @required String title,
+    @required _SocialButtonType type,
+  }) {
     return OutlineButton(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SvgPicture.asset(Images.icFacebook, width: 24, height: 24),
+          SvgPicture.asset(icon, width: 24, height: 24),
           const SizedBox(width: 12),
           Flexible(
             child: Container(
@@ -161,7 +183,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   AutoSizeText(
-                    Strings.facebook.toUpperCase(),
+                    title.toUpperCase(),
                     style: Styles.body1.copyWith(color: ColorRes.white),
                     maxFontSize: Styles.body1.fontSize,
                     maxLines: 1,
@@ -173,7 +195,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         ],
       ),
       color: ColorRes.grass,
-      onPressed: _onContinueWithFacebookPressed,
+      onPressed: () => loginViaSocial(type),
       borderSide: const BorderSide(color: ColorRes.grass),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(6.0),
@@ -199,22 +221,6 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     );
   }
 
-  Future<void> _onContinueWithFacebookPressed() async {
-    final facebookLogin = FacebookLogin();
-    final result = await facebookLogin.logIn(['email']);
-
-    switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        _loginViaFacebook(result.accessToken.token);
-        break;
-      case FacebookLoginStatus.error:
-        handleError(context: context, exception: null);
-        break;
-      default:
-        break;
-    }
-  }
-
   Widget _buildLoginButton() {
     return ActionButton(
       text: Strings.loginTitle,
@@ -232,18 +238,132 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     );
   }
 
+  void loginViaSocial(_SocialButtonType type) {
+    switch (type) {
+      case _SocialButtonType.fb:
+        _onLoginViaFacebookPressed();
+        break;
+      case _SocialButtonType.google:
+        _onLoginViaGoogleClicked();
+        break;
+    }
+  }
+
+  Future<void> _onLoginViaFacebookPressed() async {
+    final facebookLogin = FacebookLogin();
+    final result = await facebookLogin.logIn(['email']);
+
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        _loginViaFacebook(result.accessToken.token);
+        break;
+      case FacebookLoginStatus.error:
+        handleError(context: context, exception: UnknownErrorException());
+        break;
+      default:
+        break;
+    }
+  }
+
   void _loginViaFacebook(String token) {
     dispatchAsyncAction(LoginViaFacebookAsyncAction(token: token))
         .listen((action) => action
-          ..onSuccess(_onLoginViaFacebookSuccess)
+          ..onSuccess(_onLoggedIn)
           ..onError(_onLoginViaFacebookError));
-  }
-
-  void _onLoginViaFacebookSuccess(_) {
-    appRouter.startWith(const MainPage());
   }
 
   void _onLoginViaFacebookError(error) {
     handleError(context: context, exception: error);
   }
+
+  Future<void> _onLoginViaGoogleClicked() async {
+    final account = await GoogleSignIn().signIn();
+
+    if (account == null) {
+      //was cancelled by the user
+    }
+    final authentication = await account.authentication;
+
+    _loginViaGoogle(
+      token: authentication.accessToken,
+      idToken: authentication.idToken,
+    );
+  }
+
+  void _loginViaGoogle({String token, String idToken}) {
+    dispatchAsyncAction(LoginViaGoogleAsyncAction(
+      accessToken: token,
+      idToken: idToken,
+    )).listen((action) => action
+      ..onSuccess(_onLoggedIn)
+      ..onError(_onLoginViaFacebookError));
+  }
+
+  Future<void> _onLoginViaAppleClicked() async {
+    final result = await AppleSignIn.performRequests([
+      AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+    ]);
+
+    switch (result.status) {
+      case AuthorizationStatus.authorized:
+        final identityToken =
+            String.fromCharCodes(result.credential.identityToken);
+        final accessToken =
+            String.fromCharCodes(result.credential.authorizationCode);
+        final firstName = result.credential.fullName.givenName;
+        final lastName = result.credential.fullName.givenName;
+
+        dispatchAsyncAction(LoginViaAppleAsyncAction(
+          idToken: identityToken,
+          accessToken: accessToken,
+          firstName: firstName,
+          lastName: lastName,
+        )).listen((action) => action
+          ..onSuccess(_onLoggedIn)
+          ..onError(_onLoginViaAppleError));
+        break;
+      case AuthorizationStatus.error:
+        handleError(context: context, exception: UnknownErrorException());
+        break;
+
+      case AuthorizationStatus.cancelled:
+        break;
+    }
+  }
+
+  Widget _buildAppleSignInButton() {
+    return FutureBuilder(
+        future: AppleSignIn.isAvailable(),
+        builder: (context, snapShoot) =>
+            snapShoot.hasData && snapShoot.data == true
+                ? AppleSignInButton(onPressed: _onLoginViaAppleClicked)
+                : Container());
+  }
+
+  Widget _buildForgotPasswordButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        InkWell(
+            onTap: _onForgotPasswordClicked,
+            child: Container(
+              margin: const EdgeInsets.all(8),
+              child: Text(
+                Strings.forgotPasswordTitle,
+                style: Styles.body1,
+              ),
+            )),
+      ],
+    );
+  }
+
+  void _onLoginViaAppleError(error) {
+    handleError(context: context, exception: error);
+  }
+
+  void _onForgotPasswordClicked() {
+    appRouter.goTo(ResetPasswordPage(email: _emailController.text));
+  }
 }
+
+enum _SocialButtonType { fb, google }

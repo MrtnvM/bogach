@@ -2,6 +2,14 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Attach to API Process",
+      "type": "node",
+      "request": "attach",
+      "processId": "${command:PickProcess}",
+      "sourceMaps": true,
+      "outFiles": ["${workspaceFolder}/server/functions/libs/*.js"]
+    },
+    {
       "name": "Flutter",
       "type": "dart",
       "request": "launch",

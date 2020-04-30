@@ -1,7 +1,7 @@
 import { Game, GameEntity } from '../../models/domain/game/game';
 import { InsuranceAsset } from '../../models/domain/assets/insurance_asset';
 import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
-import { StocksAsset } from '../../models/domain/assets/stocks_asset';
+import { StockAsset } from '../../models/domain/assets/stock_asset';
 import { RealtyAsset } from '../../models/domain/assets/realty_asset';
 import { BusinessAsset } from '../../models/domain/assets/business_asset';
 import { OtherAsset } from '../../models/domain/assets/other_asset';
@@ -29,7 +29,7 @@ const debenture1 = create<DebentureAsset>({
   name: 'ОФЗ',
   type: 'debenture',
   count: 4,
-  currentPrice: 1100,
+  averagePrice: 1100,
   profitabilityPercent: 8,
   nominal: 1000,
 });
@@ -65,12 +65,13 @@ const initialPossesssions: Possessions = {
       downPayment: 5000,
     }),
     debenture1,
-    create<StocksAsset>({
+    create<StockAsset>({
       id: 'stocks1',
       name: 'Яндекс',
-      count: 1,
-      type: 'stocks',
-      purchasePrice: 1900,
+      type: 'stock',
+      averagePrice: 1000,
+      countInPortfolio: 10,
+      fairPrice: 900,
     }),
     create<RealtyAsset>({
       id: 'realty1',
@@ -145,10 +146,30 @@ const game: Game = {
 const debenturePriceChangedEvent = (data: DebenturePriceChangedEvent.Data) => {
   const event: DebenturePriceChangedEvent.Event = {
     id: eventId,
-    name: 'Debentures',
+    name: 'DebentureName',
     description: 'Description',
     type: DebenturePriceChangedEvent.Type,
     data: data,
+  };
+
+  DebenturePriceChangedEvent.validate(event);
+  return event;
+};
+
+const debentureOFZPriceChangedEvent = (currentPrice: number, availableCount: number) => {
+  const eventData: DebenturePriceChangedEvent.Data = {
+    currentPrice,
+    profitabilityPercent: 8,
+    nominal: 1000,
+    availableCount,
+  };
+
+  const event: DebenturePriceChangedEvent.Event = {
+    id: eventId,
+    name: 'ОФЗ',
+    description: 'Description',
+    type: DebenturePriceChangedEvent.Type,
+    data: eventData,
   };
 
   DebenturePriceChangedEvent.validate(event);
@@ -173,4 +194,5 @@ export const stubs = {
 export const utils = {
   debenturePriceChangedEvent,
   debenturePriceChangedPlayerAction,
+  debentureOFZPriceChangedEvent,
 };

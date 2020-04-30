@@ -24,6 +24,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.39.6"
+  apple_sign_in:
+    dependency: "direct main"
+    description:
+      name: apple_sign_in
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
   archive:
     dependency: transitive
     description:
@@ -206,6 +213,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.4"
+  device_preview:
+    dependency: "direct main"
+    description:
+      name: device_preview
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.4"
   dio:
     dependency: transitive
     description:
@@ -320,8 +334,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.0.8"
-      resolved-ref: "5f774f40cdddaec9c4d5784c00cbfe64e974bd23"
+      ref: "v0.0.10"
+      resolved-ref: "0e002247ae63739b24fa85f4f537ff226ffc5b0b"
       url: "git://github.com/mobile-dualbootpartners/flutter-platform-control-panel"
     source: git
     version: "0.0.2"
@@ -383,15 +397,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  font_awesome_flutter:
+    dependency: transitive
+    description:
+      name: font_awesome_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "8.8.1"
   freezed:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: freezed
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.6"
+    version: "0.10.7"
   freezed_annotation:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: freezed_annotation
       url: "https://pub.dartlang.org"
@@ -411,6 +432,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.5.0+1"
+  google_sign_in:
+    dependency: "direct main"
+    description:
+      name: google_sign_in
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.4.2"
+  google_sign_in_platform_interface:
+    dependency: transitive
+    description:
+      name: google_sign_in_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
+  google_sign_in_web:
+    dependency: transitive
+    description:
+      name: google_sign_in_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.4"
   graphs:
     dependency: transitive
     description:

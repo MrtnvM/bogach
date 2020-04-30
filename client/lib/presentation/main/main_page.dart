@@ -1,11 +1,16 @@
-import 'package:cash_flow/presentation/new_gameboard/new_gameboard.dart';
-import 'package:cash_flow/presentation/registration/registration.dart';
-import 'package:cash_flow/resources/colors.dart';
-import 'package:cash_flow/widgets/appbar/app_bar.dart';
+import 'package:cash_flow/core/utils/app_store_connector.dart';
+import 'package:cash_flow/features/game/game_actions.dart';
+import 'package:cash_flow/models/domain/game_context.dart';
+import 'package:cash_flow/models/state/user/current_user.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/gameboard/game_board.dart';
+import 'package:cash_flow/presentation/new_gameboard/new_gameboard.dart';
+import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/widgets/appbar/app_bar.dart';
+import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage();
@@ -16,39 +21,55 @@ class MainPage extends StatefulWidget {
   }
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage> with ReduxState {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CashAppBar(
-        title: const Text('Main page'),
-        backgroundColor: ColorRes.primary,
-      ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: Center(
-              child: Column(
-                children: <Widget>[
-                  const Text('Welcome!'),
-                  FlatButton(
-                    onPressed: () => appRouter.goTo(GameBoard()),
-                    child: const Text('Go to GameBoard'),
-                  ),
-                  FlatButton(
-                    onPressed: () => appRouter.goTo(NewGameBoard()),
-                    child: const Text('Go to New GameBoard'),
-                  ),
-                  FlatButton(
-                    onPressed: () => appRouter.goTo(RegistrationBoard()),
-                    child: const Text('Go to RegistrationBoard'),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+    return AppStateConnector<CurrentUser>(
+      converter: (s) => s.login.currentUser,
+      builder: (context, user) => Scaffold(
+        appBar: CashAppBar(
+          title: const Text('Main page'),
+          backgroundColor: ColorRes.primary,
+        ),
+        body: _buildBody(user),
       ),
     );
+  }
+
+  Widget _buildBody(CurrentUser user) {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Text('Welcome, ${user.fullName}'),
+                const SizedBox(height: 16),
+                UserAvatar(url: user.avatarUrl),
+                const SizedBox(height: 16),
+                FlatButton(
+                  onPressed: () => goToGame(GameBoard()),
+                  child: const Text('Go to GameBoard'),
+                ),
+                FlatButton(
+                  onPressed: () => goToGame(NewGameBoard()),
+                  child: const Text('Go to New GameBoard'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void goToGame(Widget route) {
+    const context = GameContext(
+      gameId: 'c8d3e4b6-8f8c-45ae-8bad-f085101a1c0f',
+      userId: 'user1',
+    );
+
+    dispatch(SetGameContextAction(context));
+    appRouter.goTo(route);
   }
 }
