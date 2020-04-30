@@ -1,12 +1,13 @@
 /// <reference types="@types/jest"/>
 
-import { GameProvider } from '../../providers/game_provider';
+import { GameProvider } from '../../../providers/game_provider';
 import { mock, instance, reset, when, capture } from 'ts-mockito';
-import { GameEntity } from '../../models/domain/game/game';
-import { stubs, utils } from './business_offer_event_handler.spec.utils';
+import { GameEntity } from '../../../models/domain/game/game';
+import { stubs, utils } from './business_buy_event_handler.spec.utils';
 import produce from 'immer';
-import { BusinessOfferEventHandler } from './business_offer_event_handler';
-import { BusinessAsset } from '../../models/domain/assets/business_asset';
+import { BusinessAsset } from '../../../models/domain/assets/business_asset';
+import { BusinessBuyEventHandler } from './business_buy_event_handler';
+import { Liability, LiabilityEntity } from '../../../models/domain/liability';
 
 describe('Debenture price changed event handler', () => {
   const { eventId, gameId, userId, context, game, business1, initialCash } = stubs;
@@ -21,7 +22,7 @@ describe('Debenture price changed event handler', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
 
     const gameProvider = instance(mockGameProvider);
-    const handler = new BusinessOfferEventHandler(gameProvider);
+    const handler = new BusinessBuyEventHandler(gameProvider);
 
     const event = utils.businessOfferEvent({
       currentPrice: 100_000,
@@ -41,7 +42,7 @@ describe('Debenture price changed event handler', () => {
     await handler.handle(event, action, context);
 
     const newBusinessAsset: BusinessAsset = {
-      name: 'Тест бизнес',
+      name: 'Торговая точка',
       type: 'business',
       buyPrice: 100_000,
       downPayment: 15_000,
@@ -51,9 +52,17 @@ describe('Debenture price changed event handler', () => {
       sellProbability: 7,
     };
 
+    const newLiability: Liability = {
+      name: 'Торговая точка',
+      type: LiabilityEntity.TypeValues[1],
+      monthlyPayment: 0,
+      value: 85_000,
+    };
+
     const expectedGame = produce(game, (draft) => {
       draft.possessions[userId].assets.push(newBusinessAsset);
       draft.accounts[userId].cash = initialCash - 15_000;
+      draft.possessions[userId].liabilities.push(newLiability);
     });
 
     const [newGame] = capture(mockGameProvider.updateGame).last();
@@ -64,7 +73,7 @@ describe('Debenture price changed event handler', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
 
     const gameProvider = instance(mockGameProvider);
-    const handler = new BusinessOfferEventHandler(gameProvider);
+    const handler = new BusinessBuyEventHandler(gameProvider);
 
     const currentPrice = 120_000;
     const event = utils.dryCleaningBusinessOfferEvent(currentPrice);
@@ -86,7 +95,7 @@ describe('Debenture price changed event handler', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
 
     const gameProvider = instance(mockGameProvider);
-    const handler = new BusinessOfferEventHandler(gameProvider);
+    const handler = new BusinessBuyEventHandler(gameProvider);
 
     const currentPrice = 120_000;
     const event = utils.dryCleaningBusinessOfferEvent(currentPrice);
@@ -113,7 +122,7 @@ describe('Debenture price changed event handler', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
 
     const gameProvider = instance(mockGameProvider);
-    const handler = new BusinessOfferEventHandler(gameProvider);
+    const handler = new BusinessBuyEventHandler(gameProvider);
 
     const event = utils.businessOfferEvent({
       currentPrice: 100_000,

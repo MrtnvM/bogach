@@ -1,20 +1,20 @@
-import { PlayerActionHandler } from '../../core/domain/player_action_handler';
-import { AssetEntity, Asset } from '../../models/domain/asset';
-import { GameContext } from '../../models/domain/game/game_context';
-import { GameProvider } from '../../providers/game_provider';
-import { Game } from '../../models/domain/game/game';
-import { Account } from '../../models/domain/account';
 import produce from 'immer';
-import { BusinessOfferEvent } from './business_offer_event';
-import { BusinessAsset } from '../../models/domain/assets/business_asset';
-import { LiabilityEntity, Liability } from '../../models/domain/liability';
+import { BusinessBuyEvent } from './business_buy_event_event';
+import { Asset, AssetEntity } from '../../../models/domain/asset';
+import { Liability, LiabilityEntity } from '../../../models/domain/liability';
+import { GameContext } from '../../../models/domain/game/game_context';
+import { GameProvider } from '../../../providers/game_provider';
+import { PlayerActionHandler } from '../../../core/domain/player_action_handler';
+import { Game } from '../../../models/domain/game/game';
+import { Account } from '../../../models/domain/account';
+import { BusinessAsset } from '../../../models/domain/assets/business_asset';
 
-type Event = BusinessOfferEvent.Event;
-type Action = BusinessOfferEvent.PlayerAction;
+type Event = BusinessBuyEvent.Event;
+type Action = BusinessBuyEvent.PlayerAction;
 
 interface ActionResult {
   readonly newAccountBalance: number;
-  readonly newUserCreditValue: number;
+  readonly newCreditValue: number;
   readonly newAssets: Asset[];
   readonly newLiabilities: Liability[];
 }
@@ -24,45 +24,29 @@ interface ActionBuyParameters {
   readonly assets: Asset[];
   readonly liabilities: Liability[];
   readonly currentPrice: number;
+  readonly priceToPay: number;
   readonly fairPrice: number;
   readonly downPayment: number;
   readonly businessName: string;
   readonly passiveIncomePerMonth: number;
   readonly payback: number;
   readonly sellProbability: number;
-  readonly theSameBusinessIndex: number;
-  readonly theSameLiabilityIndex: number;
   readonly debt: number;
 }
 
-interface ActionSellParameters {
-  readonly userAccount: Account;
-  readonly assets: Asset[];
-  readonly theSameBusinessIndex: number;
-  readonly liabilities: Liability[];
-  readonly theSameLiabilityIndex: number;
-  readonly currentPrice: number;
-}
-
-interface RemoveLiabilityResult {
-  readonly newLiabilities: Liability[];
-  readonly newUserCreditValue: number;
-  readonly newAccountBalance: number;
-}
-
-export class BusinessOfferEventHandler extends PlayerActionHandler {
+export class BusinessBuyEventHandler extends PlayerActionHandler {
   constructor(private gameProvider: GameProvider) {
     super();
   }
 
   get gameEventType(): string {
-    return BusinessOfferEvent.Type;
+    return BusinessBuyEvent.Type;
   }
 
   async validate(event: any, action: any): Promise<boolean> {
     try {
-      BusinessOfferEvent.validate(event);
-      BusinessOfferEvent.validateAction(action);
+      BusinessBuyEvent.validate(event);
+      BusinessBuyEvent.validateAction(action);
     } catch (error) {
       console.error(error);
       return false;
@@ -87,58 +71,44 @@ export class BusinessOfferEventHandler extends PlayerActionHandler {
 
     const { action: businessAction } = action;
 
+    if (businessAction !== 'buy') {
+      throw new Error(
+        'Error action type when dispatching ' +
+          businessAction +
+          ' in ' +
+          BusinessBuyEventHandler.name
+      );
+    }
+
     const businessName = event.name;
 
     const assets = game.possessions[userId].assets;
-    const businessAssets = AssetEntity.getBusinesses(assets);
-    const theSameBusinessIndex = businessAssets.findIndex((d) => {
-      return d.name === businessName && d.fairPrice === fairPrice;
-    });
+    this.checkExistingBusiness(assets, businessName, fairPrice);
 
     const liabilities = game.possessions[userId].liabilities;
-    const businessLiabilities = LiabilityEntity.getBusinessCredits(liabilities);
-    const theSameLiabilityIndex = businessLiabilities.findIndex((d) => {
-      return d.name === businessName && d.value === debt;
-    });
+    this.checkExistingLiability(liabilities, businessName, debt);
 
     const userAccount = game.accounts[userId];
+    const priceToPay = currentPrice - debt;
+    const actionBuyParameters: ActionBuyParameters = {
+      userAccount,
+      assets,
+      liabilities,
+      currentPrice,
+      priceToPay,
+      fairPrice,
+      downPayment,
+      businessName,
+      passiveIncomePerMonth,
+      payback,
+      sellProbability,
+      debt,
+    };
 
-    let actionResult: ActionResult;
-    if (businessAction === 'buy') {
-      const actionBuyParameters: ActionBuyParameters = {
-        userAccount,
-        assets,
-        liabilities,
-        currentPrice,
-        fairPrice,
-        downPayment,
-        businessName,
-        passiveIncomePerMonth,
-        payback,
-        sellProbability,
-        theSameBusinessIndex,
-        theSameLiabilityIndex,
-        debt,
-      };
-
-      actionResult = await this.applyBuyAction(actionBuyParameters);
-    } else if (businessAction === 'sell') {
-      const actionSellParameters: ActionSellParameters = {
-        userAccount,
-        assets,
-        theSameBusinessIndex,
-        currentPrice,
-        liabilities,
-        theSameLiabilityIndex,
-      };
-
-      actionResult = await this.applySellAction(actionSellParameters);
-    } else {
-      throw new Error('Unknown action with business');
-    }
+    const actionResult = await this.applyBuyAction(actionBuyParameters);
 
     const updatedGame: Game = produce(game, (draft) => {
-      // TODO add passive debt
+      draft.accounts[userId].credit = actionResult.newCreditValue;
       draft.accounts[userId].cash = actionResult.newAccountBalance;
       draft.possessions[userId].assets = actionResult.newAssets;
       draft.possessions[userId].liabilities = actionResult.newLiabilities;
@@ -147,28 +117,51 @@ export class BusinessOfferEventHandler extends PlayerActionHandler {
     await this.gameProvider.updateGame(updatedGame);
   }
 
-  async applyBuyAction(actionParameters: ActionBuyParameters): Promise<ActionResult> {
-    const {
-      userAccount,
-      currentPrice,
-      theSameBusinessIndex,
-      theSameLiabilityIndex,
-    } = actionParameters;
+  checkExistingBusiness(assets: Asset[], businessName: string, fairPrice: number) {
+    const businessAssets = AssetEntity.getBusinesses(assets);
+    const theSameBusinessIndex = businessAssets.findIndex((d) => {
+      return d.name === businessName && d.fairPrice === fairPrice;
+    });
 
     if (theSameBusinessIndex >= 0) {
-      throw new Error('Cant buy two the same businesses(Asset)');
+      throw new Error('Cant buy two the same businesses');
     }
+  }
+
+  checkExistingLiability(liabilities: Liability[], businessName: string, debt: number) {
+    const businessLiabilities = LiabilityEntity.getBusinessCredits(liabilities);
+    const theSameLiabilityIndex = businessLiabilities.findIndex((d) => {
+      return d.name === businessName && d.value === debt && d.type == 'business_credit';
+    });
 
     if (theSameLiabilityIndex >= 0) {
-      throw new Error('Cant buy two the same businesses(Liability)');
+      throw new Error('Cant buy two the same liabilities');
     }
+  }
 
-    const isEnoughMoney = userAccount.cash >= currentPrice;
+  async applyBuyAction(actionParameters: ActionBuyParameters): Promise<ActionResult> {
+    const { userAccount, priceToPay } = actionParameters;
+
+    const isEnoughMoney = userAccount.cash >= priceToPay;
     if (!isEnoughMoney) {
       throw new Error('Not enough money');
     }
 
-    const newAccountBalance = userAccount.cash - currentPrice;
+    let newAccountBalance = 0;
+    let newCreditValue = userAccount.credit;
+    //TODO implement credit and write tests
+    const canCredit = false;
+    if (priceToPay <= userAccount.cash) {
+      newAccountBalance = userAccount.cash - priceToPay;
+    } else if (canCredit) {
+      const sumToCredit = priceToPay - userAccount.cash;
+      newAccountBalance = 0;
+      newCreditValue += sumToCredit;
+    } else {
+      throw new Error(
+        'Unexpected behaviour on ' + BusinessBuyEventHandler.name + 'when counting sum'
+      );
+    }
 
     const newAssets = this.addNewItemToAssets(actionParameters);
     const newLiabilities = this.addNewLiability(actionParameters);
@@ -177,7 +170,7 @@ export class BusinessOfferEventHandler extends PlayerActionHandler {
       newAccountBalance,
       newAssets,
       newLiabilities,
-      newUserCreditValue: userAccount.credit,
+      newCreditValue,
     };
 
     return actionResult;
@@ -230,97 +223,4 @@ export class BusinessOfferEventHandler extends PlayerActionHandler {
 
     return newLiabilities;
   }
-
-  async applySellAction(actionParameters: ActionSellParameters): Promise<ActionResult> {
-    const {
-      userAccount,
-      assets,
-      theSameBusinessIndex,
-      currentPrice,
-      liabilities,
-      theSameLiabilityIndex,
-    } = actionParameters;
-
-    if (theSameBusinessIndex >= 0) {
-      throw new Error('Business was not found on assets(Business)');
-    }
-
-    if (theSameLiabilityIndex >= 0) {
-      throw new Error('Business was not found on assets(Liability)');
-    }
-
-    const newAssets = this.removeFromAssets(theSameBusinessIndex, assets);
-    const removeFromLiabiltiesResult = this.removeFromLiabilties(
-      theSameLiabilityIndex,
-      liabilities,
-      currentPrice,
-      userAccount
-    );
-
-    const actionResult: ActionResult = {
-      newAccountBalance: removeFromLiabiltiesResult.newAccountBalance,
-      newAssets,
-      newLiabilities: removeFromLiabiltiesResult.newLiabilities,
-      newUserCreditValue: removeFromLiabiltiesResult.newUserCreditValue,
-    };
-
-    return actionResult;
-  }
-
-  removeFromAssets(theSameBusinessIndex: number, assets: Asset[]): Asset[] {
-    if (theSameBusinessIndex < 0 || theSameBusinessIndex > assets.length - 1) {
-      throw new Error('Index not valid');
-    }
-
-    let newAssets = assets.slice();
-    const countItemsToRemove = 1;
-    newAssets.splice(theSameBusinessIndex, countItemsToRemove);
-
-    return newAssets;
-  }
-
-  removeFromLiabilties(
-    theSameLiabilityIndex: number,
-    liabilities: Liability[],
-    currentPrice: number,
-    userAccount: Account
-  ): RemoveLiabilityResult {
-    if (theSameLiabilityIndex < 0 || theSameLiabilityIndex > liabilities.length - 1) {
-      throw new Error('Index not valid');
-    }
-
-    const theSameLiability = liabilities[theSameLiabilityIndex];
-
-    let newAccountBalance; // = userAccount.cash + currentPrice;
-    let newUserCreditValue;
-    const difference = currentPrice - theSameLiability.value;
-
-    if (difference >= 0) {
-      newAccountBalance = userAccount.cash + currentPrice;
-      newUserCreditValue = userAccount.credit;
-    } else if (difference < 0 && userAccount.cash > -difference) {
-      newAccountBalance = userAccount.cash - -difference;
-      newUserCreditValue = userAccount.credit;
-    } else {
-      // user should sell and get credit
-      const emptyBalance = 0;
-      newAccountBalance = emptyBalance;
-      const currentUserAccountCash = userAccount.cash;
-      const addToCredit = -difference - currentUserAccountCash;
-      newUserCreditValue = userAccount.credit + addToCredit;
-    }
-
-    let newLiabilities = liabilities.slice();
-    const countItemsToRemove = 1;
-    newLiabilities.splice(theSameLiabilityIndex, countItemsToRemove);
-
-    const removeLiabilityResult: RemoveLiabilityResult = {
-      newLiabilities,
-      newUserCreditValue: userAccount.credit,
-      newAccountBalance,
-    };
-
-    return removeLiabilityResult;
-  }
-  // TODO не спутай currentPrice первый взнос и цену целиком
 }

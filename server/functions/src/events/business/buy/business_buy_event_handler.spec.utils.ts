@@ -1,25 +1,25 @@
-import { Game, GameEntity } from '../../models/domain/game/game';
-import { InsuranceAsset } from '../../models/domain/assets/insurance_asset';
-import { StockAsset } from '../../models/domain/assets/stock_asset';
-import { RealtyAsset } from '../../models/domain/assets/realty_asset';
-import { BusinessAsset } from '../../models/domain/assets/business_asset';
-import { OtherAsset } from '../../models/domain/assets/other_asset';
-import { CashAsset } from '../../models/domain/assets/cash_asset';
-import { MortgageLiability } from '../../models/domain/liabilities/mortgage_liability';
-import { BusinessCreditLiability } from '../../models/domain/liabilities/business_credit';
-import { OtherLiability } from '../../models/domain/liabilities/other_liability';
-import { UserEntity } from '../../models/domain/user';
-import { Possessions } from '../../models/domain/possessions';
-import { PossessionStateEntity } from '../../models/domain/possession_state';
-import { GameContext } from '../../models/domain/game/game_context';
-import { GameEventEntity } from '../../models/domain/game/game_event';
-import { BusinessOfferEvent } from './business_offer_event';
+import { Game, GameEntity } from '../../../models/domain/game/game';
+import { InsuranceAsset } from '../../../models/domain/assets/insurance_asset';
+import { StockAsset } from '../../../models/domain/assets/stock_asset';
+import { RealtyAsset } from '../../../models/domain/assets/realty_asset';
+import { BusinessAsset } from '../../../models/domain/assets/business_asset';
+import { OtherAsset } from '../../../models/domain/assets/other_asset';
+import { CashAsset } from '../../../models/domain/assets/cash_asset';
+import { MortgageLiability } from '../../../models/domain/liabilities/mortgage_liability';
+import { BusinessCreditLiability } from '../../../models/domain/liabilities/business_credit';
+import { OtherLiability } from '../../../models/domain/liabilities/other_liability';
+import { UserEntity } from '../../../models/domain/user';
+import { Possessions } from '../../../models/domain/possessions';
+import { PossessionStateEntity } from '../../../models/domain/possession_state';
+import { GameContext } from '../../../models/domain/game/game_context';
+import { GameEventEntity } from '../../../models/domain/game/game_event';
+import { BusinessBuyEvent } from './business_buy_event_event';
 
 const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
 const userId: UserEntity.Id = 'user1';
 const context: GameContext = { gameId, userId };
-const initialCash = 10000;
+const initialCash = 100_000;
 
 const create = <T>(obj: T) => obj;
 
@@ -148,21 +148,21 @@ const game: Game = {
   currentEvents: [],
 };
 
-const businessOfferEvent = (data: BusinessOfferEvent.Data) => {
-  const event: BusinessOfferEvent.Event = {
+const businessOfferEvent = (data: BusinessBuyEvent.Data) => {
+  const event: BusinessBuyEvent.Event = {
     id: eventId,
     name: 'Торговая точка',
     description: 'Description',
-    type: BusinessOfferEvent.Type,
+    type: BusinessBuyEvent.Type,
     data: data,
   };
 
-  BusinessOfferEvent.validate(event);
+  BusinessBuyEvent.validate(event);
   return event;
 };
 
 const dryCleaningBusinessOfferEvent = (currentPrice: number) => {
-  const eventData: BusinessOfferEvent.Data = {
+  const eventData: BusinessBuyEvent.Data = {
     currentPrice: currentPrice,
     downPayment: 21_000,
     fairPrice: 115_000,
@@ -172,20 +172,20 @@ const dryCleaningBusinessOfferEvent = (currentPrice: number) => {
     sellProbability: 7,
   };
 
-  const event: BusinessOfferEvent.Event = {
+  const event: BusinessBuyEvent.Event = {
     id: eventId,
     name: 'Химчистка',
     description: 'Description',
-    type: BusinessOfferEvent.Type,
+    type: BusinessBuyEvent.Type,
     data: eventData,
   };
 
-  BusinessOfferEvent.validate(event);
+  BusinessBuyEvent.validate(event);
   return event;
 };
 
-const businessOfferEventPlayerAction = (action: BusinessOfferEvent.PlayerAction) => {
-  BusinessOfferEvent.validateAction(action);
+const businessOfferEventPlayerAction = (action: BusinessBuyEvent.PlayerAction) => {
+  BusinessBuyEvent.validateAction(action);
   return action;
 };
 

@@ -1,13 +1,13 @@
-import { PlayerActionHandler } from '../../core/domain/player_action_handler';
-import { AssetEntity, Asset } from '../../models/domain/asset';
-import { GameContext } from '../../models/domain/game/game_context';
-import { GameProvider } from '../../providers/game_provider';
-import { Game } from '../../models/domain/game/game';
-import { Account } from '../../models/domain/account';
+import { PlayerActionHandler } from '../../../core/domain/player_action_handler';
+import { AssetEntity, Asset } from '../../../models/domain/asset';
+import { GameContext } from '../../../models/domain/game/game_context';
+import { GameProvider } from '../../../providers/game_provider';
+import { Game } from '../../../models/domain/game/game';
+import { Account } from '../../../models/domain/account';
 import produce from 'immer';
-import { BusinessOfferEvent } from './business_offer_event';
-import { BusinessAsset } from '../../models/domain/assets/business_asset';
-import { LiabilityEntity, Liability } from '../../models/domain/liability';
+import { BusinessOfferEvent } from './business_sell_event';
+import { BusinessAsset } from '../../../models/domain/assets/business_asset';
+import { LiabilityEntity, Liability } from '../../../models/domain/liability';
 
 type Event = BusinessOfferEvent.Event;
 type Action = BusinessOfferEvent.PlayerAction;
@@ -49,6 +49,7 @@ interface RemoveLiabilityResult {
   readonly newUserCreditValue: number;
   readonly newAccountBalance: number;
 }
+
 
 export class BusinessOfferEventHandler extends PlayerActionHandler {
   constructor(private gameProvider: GameProvider) {

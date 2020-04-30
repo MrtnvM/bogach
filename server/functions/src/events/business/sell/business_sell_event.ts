@@ -1,9 +1,9 @@
-import { GameEvent, GameEventEntity } from '../../models/domain/game/game_event';
-import { Entity } from '../../core/domain/entity';
-import { BuySellAction, BuySellActionValues } from '../../models/domain/actions/buy_sell_action';
+import { GameEvent, GameEventEntity } from '../../../models/domain/game/game_event';
+import { Entity } from '../../../core/domain/entity';
+import { BuySellAction, BuySellActionValues } from '../../../models/domain/actions/buy_sell_action';
 
-export namespace BusinessOfferEvent {
-  export const Type: GameEventEntity.Type = 'business-offer-event';
+export namespace BusinessSellEvent {
+  export const Type: GameEventEntity.Type = 'business-sell-event';
 
   export type Event = GameEvent<Data>;
 
@@ -30,7 +30,7 @@ export namespace BusinessOfferEvent {
       debt,
       passiveIncomePerMonth,
       payback,
-      sellProbability
+      sellProbability,
     } = eventData.data;
 
     return {
@@ -42,7 +42,7 @@ export namespace BusinessOfferEvent {
         debt,
         passiveIncomePerMonth,
         payback,
-        sellProbability
+        sellProbability,
       },
     };
   };

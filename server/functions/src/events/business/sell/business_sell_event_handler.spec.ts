@@ -1,12 +1,12 @@
 /// <reference types="@types/jest"/>
 
-import { GameProvider } from '../../providers/game_provider';
+import { GameProvider } from '../../../providers/game_provider';
 import { mock, instance, reset, when, capture } from 'ts-mockito';
-import { GameEntity } from '../../models/domain/game/game';
-import { stubs, utils } from './business_offer_event_handler.spec.utils';
+import { GameEntity } from '../../../models/domain/game/game';
+import { stubs, utils } from './business_sell_event_handler.spec.utils';
 import produce from 'immer';
-import { BusinessOfferEventHandler } from './business_offer_event_handler';
-import { BusinessAsset } from '../../models/domain/assets/business_asset';
+import { BusinessOfferEventHandler } from './business_sell_event_handler';
+import { BusinessAsset } from '../../../models/domain/assets/business_asset';
 
 describe('Debenture price changed event handler', () => {
   const { eventId, gameId, userId, context, game, business1, initialCash } = stubs;

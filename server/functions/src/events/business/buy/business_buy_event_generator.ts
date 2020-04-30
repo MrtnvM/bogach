@@ -1,11 +1,11 @@
 import * as uuid from 'uuid';
 import * as random from 'random';
-import { Strings } from '../../resources/strings';
-import { formatPrice } from '../../utils/currency';
-import { BusinessOfferEvent } from './business_offer_event';
+import { Strings } from '../../../resources/strings';
+import { formatPrice } from '../../../utils/currency';
+import { BusinessBuyEvent } from './business_buy_event_event';
 
-export namespace BusinessOfferEventGenerator {
-  export const generate = (): BusinessOfferEvent.Event => {
+export namespace BusinessBuyEventGenerator {
+  export const generate = (): BusinessBuyEvent.Event => {
     const currentPrice = random.int(7, 15) * 1000;
     const fairPrice = random.int(7, 15) * 1000;
     const downPayment = random.int(10, 25) * 1000;
@@ -19,7 +19,7 @@ export namespace BusinessOfferEventGenerator {
       id: uuid.v4(),
       name: 'Название бизнеса',
       description: Strings.currentPrice() + formatPrice(currentPrice),
-      type: BusinessOfferEvent.Type,
+      type: BusinessBuyEvent.Type,
       data: {
         currentPrice,
         fairPrice,

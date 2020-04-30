@@ -1,8 +1,8 @@
 import * as uuid from 'uuid';
 import * as random from 'random';
-import { Strings } from '../../resources/strings';
-import { formatPrice } from '../../utils/currency';
-import { BusinessOfferEvent } from './business_offer_event';
+import { Strings } from '../../../resources/strings';
+import { formatPrice } from '../../../utils/currency';
+import { BusinessOfferEvent } from './business_sell_event';
 
 export namespace BusinessOfferEventGenerator {
   export const generate = (): BusinessOfferEvent.Event => {
