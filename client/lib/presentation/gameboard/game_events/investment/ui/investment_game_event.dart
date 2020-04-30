@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/models/domain/buy_sell_action.dart';
 import 'package:cash_flow/models/domain/game_event.dart';
@@ -10,6 +8,7 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
+import 'package:cash_flow/utils/metrics/roi.dart';
 import 'package:cash_flow/widgets/containers/event_buttons.dart';
 import 'package:cash_flow/widgets/containers/game_event_selector.dart';
 import 'package:cash_flow/widgets/containers/info_table.dart';
@@ -59,14 +58,12 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
   Widget _buildInfo() {
     // TODO(maxim-martynov): Replace with real value
     const alreadyHave = 0;
-    const monthInYear = 12;
-    final roi = eventData.profitabilityPercent * monthInYear;
 
     final map = {
       Strings.investmentType: event.type.typeTitle(),
       Strings.nominalCost: eventData.nominal.toPrice(),
       Strings.passiveIncomePerMonth: eventData.profitabilityPercent.toPrice(),
-      Strings.roi: roi.toPercent(),
+      Strings.roi: ROI.fromInvestment(eventData).toPercent(),
       Strings.alreadyHave: alreadyHave == 0
           ? alreadyHave.toString()
           : Strings.getUserAvailableCount(
@@ -133,22 +130,7 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
 
     dispatchAsyncAction(action).listen(
       (action) => action
-        ..onSuccess((_) => null)
-        ..onError(
-          (error) {
-            var errorDescription = error?.toString();
-            errorDescription = errorDescription?.substring(
-              0,
-              min(errorDescription.length - 1, 120),
-            );
-
-            return showCashDialog(
-              context: context,
-              title: 'Ееееепс!',
-              message: 'Вот это вот случилось: $errorDescription',
-            );
-          },
-        ),
+        ..onError((error) => handleError(context: context, exception: error)),
     );
   }
 }

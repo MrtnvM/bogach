@@ -13,14 +13,14 @@ class GameEventValueSelector extends StatelessWidget {
     Key key,
     @required this.action,
     @required this.selectedCount,
-    @required this.countInPortfolio,
+    @required this.availableCount,
     @required this.maxCount,
     @required this.isChangeableType,
     @required this.onCountChanged,
     this.passiveIncomePerMonth = 0,
   })  : assert(action != null),
         assert(selectedCount != null),
-        assert(countInPortfolio != null),
+        assert(availableCount != null),
         assert(maxCount != null),
         assert(isChangeableType != null),
         assert(onCountChanged != null),
@@ -28,7 +28,7 @@ class GameEventValueSelector extends StatelessWidget {
 
   final BuySellAction action;
   final int selectedCount;
-  final int countInPortfolio;
+  final int availableCount;
   final int maxCount;
   final double passiveIncomePerMonth;
   final OnCountChangedCallback onCountChanged;
@@ -97,7 +97,7 @@ class GameEventValueSelector extends StatelessWidget {
   Widget _buildAvailableButton() {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () => onCountChanged(countInPortfolio),
+      onTap: () => onCountChanged(availableCount),
       child: Container(
         padding: const EdgeInsets.all(8),
         alignment: Alignment.center,
@@ -113,7 +113,7 @@ class GameEventValueSelector extends StatelessWidget {
               ),
               const WidgetSpan(child: SizedBox(width: 4)),
               TextSpan(
-                text: countInPortfolio.toStringAsFixed(0),
+                text: availableCount.toStringAsFixed(0),
                 style: Styles.body1,
               ),
             ],

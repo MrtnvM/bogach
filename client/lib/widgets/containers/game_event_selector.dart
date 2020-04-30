@@ -56,7 +56,7 @@ class GameEventSelectorState extends State<GameEventSelector> {
           GameEventValueSelector(
             action: _buySellAction,
             selectedCount: _selectedCount,
-            countInPortfolio: 0, // vm.maxCount,
+            availableCount: 0, // vm.maxCount,
             maxCount: vm.maxCount,
             onCountChanged: _onSelectedCountChanged,
             isChangeableType: vm.changeableType,
