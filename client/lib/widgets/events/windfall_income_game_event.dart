@@ -3,7 +3,7 @@ import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:cash_flow/widgets/containers/event_buttons.dart';
 import 'package:cash_flow/widgets/containers/info_table.dart';
-import 'package:cash_flow/widgets/events/game_event.dart';
+import 'package:cash_flow/widgets/events/game_event_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +21,7 @@ class WindfallIncomeGameEvent extends StatefulWidget {
 class WindfallIncomeGameEventState extends State<WindfallIncomeGameEvent> {
   @override
   Widget build(BuildContext context) {
-    return GameEvent(
+    return GameEventWidget(
       icon: Icons.mood,
       name: Strings.windfallIncomeTitle,
       buttonsState: ButtonsState.skip,

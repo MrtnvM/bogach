@@ -6,6 +6,7 @@ import { GameService } from '../services/game_service';
 import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from '../providers/firestore_selector';
+import { PossessionService } from '../services/possession_service';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
@@ -90,6 +91,10 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const handleEvent = gameService
       .handlePlayerAction(eventId, action, context)
+      .then(() => {
+        const possessionService = new PossessionService(gameProvider);
+        return possessionService.updatePossessionState(context);
+      })
       .then(() => 'Player action handled');
 
     return send(handleEvent, response);

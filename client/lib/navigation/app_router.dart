@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-final AppRouter appRouter = AppRouter();
+final appRouter = AppRouter();
 
 class AppRouter {
-  GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  final navigatorKey = GlobalKey<NavigatorState>();
+
   BuildContext get context {
     return navigatorKey.currentState.overlay.context;
   }
@@ -24,16 +25,19 @@ class AppRouter {
   Future<Widget> goTo(Widget route) {
     return navigatorKey.currentState.push<Widget>(
       MaterialPageRoute(
-          builder: (context) => route,
-          settings: RouteSettings(
-            name: route.runtimeType.toString(),
-            isInitialRoute: false,
-          )),
+        builder: (context) => route,
+        settings: RouteSettings(
+          name: route.runtimeType.toString(),
+          isInitialRoute: false,
+        ),
+      ),
     );
   }
 
   void goToRoot() {
-    navigatorKey.currentState.popUntil((predicate) => predicate.isFirst);
+    navigatorKey.currentState.popUntil(
+      (predicate) => predicate.isFirst,
+    );
   }
 
   void goBackUntil(String name) {

@@ -15,19 +15,19 @@ class InfoTable extends StatelessWidget {
       children: map.keys
           .map(
             (key) => Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Row(
-              children: <Widget>[Text(key), const Spacer(), Text(map[key])],
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[Text(key), const Spacer(), Text(map[key])],
+                ),
+                const SizedBox(height: 2),
+                const Divider(
+                  height: 0,
+                  color: ColorRes.black,
+                ),
+              ],
             ),
-            const SizedBox(height: 2),
-            const Divider(
-              height: 0,
-              color: ColorRes.black,
-            ),
-          ],
-        ),
-      )
+          )
           .toList(),
     );
   }

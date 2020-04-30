@@ -1,4 +1,3 @@
-import 'package:cash_flow/app/environment.dart';
 import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/models/network/errors/email_has_been_taken_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
@@ -10,29 +9,30 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
 class UserService {
-  UserService({
-    @required this.environment,
-    @required this.firebaseAuth,
-  })  : assert(environment != null),
-        assert(firebaseAuth != null);
+  UserService({@required this.firebaseAuth}) : assert(firebaseAuth != null);
 
-  final Environment environment;
   final FirebaseAuth firebaseAuth;
 
-  Stream<void> login({
+  Stream<CurrentUser> login({
     @required String email,
     @required String password,
   }) {
-    return Stream.fromFuture(firebaseAuth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    )).cast<void>().transform(ErrorHandler((code) {
+    final errorHandler = ErrorHandler<CurrentUser>((code) {
       if (code == 'ERROR_USER_NOT_FOUND') {
         return const InvalidCredentialsException();
       }
 
       return null;
-    }));
+    });
+
+    final logInOperation = firebaseAuth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    return Stream.fromFuture(logInOperation)
+        .map((result) => mapToCurrentUser(result.user))
+        .transform(errorHandler);
   }
 
   Stream<void> logout() {
@@ -40,29 +40,34 @@ class UserService {
   }
 
   Stream<void> register({@required RegisterRequestModel model}) {
-    return Stream.fromFuture(signUpUser(model)).transform(ErrorHandler((code) {
+    final errorHandler = ErrorHandler((code) {
       if (code == 'ERROR_EMAIL_ALREADY_IN_USE') {
         return const EmailHasBeenTakenException();
       }
 
       return null;
-    }));
+    });
+
+    return Stream.fromFuture(signUpUser(model)).transform(errorHandler);
   }
 
   Stream<void> resetPassword({@required String email}) {
-    return Stream.fromFuture(firebaseAuth.sendPasswordResetEmail(email: email))
-        .transform(ErrorHandler((code) {
+    final errorHandler = ErrorHandler((code) {
       if (code == 'ERROR_USER_NOT_FOUND') {
         return const InvalidEmailException();
       }
 
       return null;
-    }));
+    });
+
+    return Stream.fromFuture(firebaseAuth.sendPasswordResetEmail(email: email))
+        .transform(errorHandler);
   }
 
   Stream<CurrentUser> loginViaFacebook({@required String token}) {
-    final authCredential =
-        FacebookAuthProvider.getCredential(accessToken: token);
+    final authCredential = FacebookAuthProvider.getCredential(
+      accessToken: token,
+    );
 
     return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())

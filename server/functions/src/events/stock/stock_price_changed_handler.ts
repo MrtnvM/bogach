@@ -135,7 +135,7 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     const priceDifferenceStep = pricesDifference / commonCount;
 
     const newPriceOffset = priceDifferenceStep * actionCount;
-    let newAveragePrice = currentAveragePrice + newPriceOffset;
+    const newAveragePrice = currentAveragePrice + newPriceOffset;
 
     const actionResult: ActionResult = {
       newStockCount,

@@ -1,8 +1,8 @@
+import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/app/app_reducer.dart';
 import 'package:cash_flow/app/app_state.dart';
-import 'package:cash_flow/app/environment.dart';
 import 'package:cash_flow/app/root_epic.dart';
-import 'package:cash_flow/services/firebase_service.dart';
+import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,20 +27,23 @@ StoreProvider<AppState> configureStoreProvider(Epic<AppState> rootEpic) {
 }
 
 Epic<AppState> createRootEpic(
+  CashFlowApiClient apiClient,
   SharedPreferences sharedPreferences,
 ) {
   final firestore = Firestore.instance;
   final firebaseAuth = FirebaseAuth.instance;
 
-  const environment = Environment(
-    baseUrl: 'https://cash-flow-staging.appspot.com',
+  final gameService = GameService(
+    apiClient: apiClient,
+    firestore: firestore,
   );
 
   final userService = UserService(
-    environment: environment,
     firebaseAuth: firebaseAuth,
   );
-  final firebaseService = FirebaseService(firestore: firestore);
 
-  return rootEpic(userService: userService, firebaseService: firebaseService);
+  return rootEpic(
+    userService: userService,
+    gameService: gameService,
+  );
 }

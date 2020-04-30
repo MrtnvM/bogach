@@ -59,7 +59,7 @@ class Strings {
   static const price = 'Стоимость:';
   static const cost = 'Стоимость';
   static const defence = 'Защита';
-  static const cash = 'Наличные:';
+  static const cash = 'Наличные';
   static const count = 'Количество';
   static const sum = 'Сумма';
   static const stock = 'Акции/Фонды';
@@ -134,6 +134,11 @@ class Strings {
   static String get gameBoardTitle => 'GameBoard';
 
   static String get targetTypeCash => 'Капитал';
+  static String get cashFlow => 'Денежный поток';
+  static String get credit => 'Кредит';
+
+  static String get monthIsOver => 'Месяц завершен!';
+  static String get continueGame => 'Продолжить';
 
   // Log in errors
   static String get invalidCredentials => 'Неправильный логин или пароль';

@@ -10,8 +10,9 @@ class UserAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      backgroundImage:
-          url == null ? AssetImage(Images.defaultAvatar) : NetworkImage(url),
+      backgroundImage: url == null
+          ? const AssetImage(Images.defaultAvatar)
+          : NetworkImage(url),
       radius: 48,
     );
   }
