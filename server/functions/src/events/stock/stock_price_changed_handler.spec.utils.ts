@@ -82,7 +82,7 @@ const initialPossesssions: Possessions = {
       id: 'business1',
       name: 'Ларек с шавой',
       type: 'business',
-      cost: 200000,
+      fairPrice: 200000,
       downPayment: 100000,
     }),
     create<OtherAsset>({

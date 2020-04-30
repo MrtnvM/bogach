@@ -1,6 +1,5 @@
 import { Game, GameEntity } from '../../models/domain/game/game';
 import { InsuranceAsset } from '../../models/domain/assets/insurance_asset';
-import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
 import { StockAsset } from '../../models/domain/assets/stock_asset';
 import { RealtyAsset } from '../../models/domain/assets/realty_asset';
 import { BusinessAsset } from '../../models/domain/assets/business_asset';
@@ -14,7 +13,7 @@ import { Possessions } from '../../models/domain/possessions';
 import { PossessionStateEntity } from '../../models/domain/possession_state';
 import { GameContext } from '../../models/domain/game/game_context';
 import { GameEventEntity } from '../../models/domain/game/game_event';
-import { DebenturePriceChangedEvent } from './debenture_price_changed_event';
+import { BusinessOfferEvent } from './business_offer_event';
 
 const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
@@ -24,14 +23,16 @@ const initialCash = 10000;
 
 const create = <T>(obj: T) => obj;
 
-const debenture1 = create<DebentureAsset>({
-  id: 'debenture1',
-  name: 'ОФЗ',
-  type: 'debenture',
-  count: 4,
-  averagePrice: 1100,
-  profitabilityPercent: 8,
-  nominal: 1000,
+const business1 = create<BusinessAsset>({
+  id: 'business1',
+  name: 'Химчистка',
+  type: 'business',
+  buyPrice: 120_000,
+  downPayment: 21_000,
+  fairPrice: 115_000,
+  passiveIncomePerMonth: 2100,
+  payback: 21,
+  sellProbability: 7,
 });
 
 const initialPossesssions: Possessions = {
@@ -64,7 +65,7 @@ const initialPossesssions: Possessions = {
       value: 50000,
       downPayment: 5000,
     }),
-    debenture1,
+    business1,
     create<StockAsset>({
       id: 'stocks1',
       name: 'Яндекс',
@@ -81,11 +82,15 @@ const initialPossesssions: Possessions = {
       downPayment: 1000000,
     }),
     create<BusinessAsset>({
-      id: 'business1',
-      name: 'Ларек с шавой',
+      id: 'business2',
+      name: 'Птицеферма',
       type: 'business',
-      fairPrice: 200000,
-      downPayment: 100000,
+      buyPrice: 130_000,
+      downPayment: 15_000,
+      fairPrice: 135_000,
+      passiveIncomePerMonth: 2500,
+      payback: 22,
+      sellProbability: 10,
     }),
     create<OtherAsset>({
       id: 'other_asset1',
@@ -143,41 +148,44 @@ const game: Game = {
   currentEvents: [],
 };
 
-const debenturePriceChangedEvent = (data: DebenturePriceChangedEvent.Data) => {
-  const event: DebenturePriceChangedEvent.Event = {
+const businessOfferEvent = (data: BusinessOfferEvent.Data) => {
+  const event: BusinessOfferEvent.Event = {
     id: eventId,
-    name: 'DebentureName',
+    name: 'Торговая точка',
     description: 'Description',
-    type: DebenturePriceChangedEvent.Type,
+    type: BusinessOfferEvent.Type,
     data: data,
   };
 
-  DebenturePriceChangedEvent.validate(event);
+  BusinessOfferEvent.validate(event);
   return event;
 };
 
-const debentureOFZPriceChangedEvent = (currentPrice: number, availableCount: number) => {
-  const eventData: DebenturePriceChangedEvent.Data = {
-    currentPrice,
-    profitabilityPercent: 8,
-    nominal: 1000,
-    availableCount,
+const dryCleaningBusinessOfferEvent = (currentPrice: number) => {
+  const eventData: BusinessOfferEvent.Data = {
+    currentPrice: currentPrice,
+    downPayment: 21_000,
+    fairPrice: 115_000,
+    passiveIncomePerMonth: 2100,
+    payback: 21,
+    debt: 99_000,
+    sellProbability: 7,
   };
 
-  const event: DebenturePriceChangedEvent.Event = {
+  const event: BusinessOfferEvent.Event = {
     id: eventId,
-    name: 'ОФЗ',
+    name: 'Химчистка',
     description: 'Description',
-    type: DebenturePriceChangedEvent.Type,
+    type: BusinessOfferEvent.Type,
     data: eventData,
   };
 
-  DebenturePriceChangedEvent.validate(event);
+  BusinessOfferEvent.validate(event);
   return event;
 };
 
-const debenturePriceChangedPlayerAction = (action: DebenturePriceChangedEvent.PlayerAction) => {
-  DebenturePriceChangedEvent.validateAction(action);
+const businessOfferEventPlayerAction = (action: BusinessOfferEvent.PlayerAction) => {
+  BusinessOfferEvent.validateAction(action);
   return action;
 };
 
@@ -187,12 +195,12 @@ export const stubs = {
   userId,
   context,
   game,
-  debenture1,
+  business1,
   initialCash,
 };
 
 export const utils = {
-  debenturePriceChangedEvent,
-  debenturePriceChangedPlayerAction,
-  debentureOFZPriceChangedEvent,
+  dryCleaningBusinessOfferEvent,
+  businessOfferEvent,
+  businessOfferEventPlayerAction,
 };

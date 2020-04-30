@@ -35,4 +35,12 @@ export namespace LiabilityEntity {
   export const getExpense = (liability: Liability) => {
     return undefined;
   };
+
+  const filterAssets = <T extends Liability>(liabilities: Liability[], type: Type) => {
+    return (liabilities?.filter((a) => a.type === type) as T[]) ?? [];
+  };
+
+  export const getBusinessCredits = (liabilities: Liability[]) => {
+    return filterAssets<Liability>(liabilities, 'business_credit');
+  };
 }

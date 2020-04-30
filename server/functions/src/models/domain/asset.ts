@@ -42,6 +42,8 @@ export namespace AssetEntity {
     const assetType: Type = asset.type;
     asset = Entity.parse<Type>(asset, data, assetType, [['debenture', DebentureAssetEntity.parse]]);
 
+    // TODO add support for other types in another task
+
     validate(asset);
 
     return asset;
