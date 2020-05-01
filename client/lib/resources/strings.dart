@@ -47,6 +47,10 @@ class Strings {
 
   static String get regAgreementPrivacyPolicy => 'политику конфиденциальности';
 
+  static String get notImpelementedAlertTitle => 'Кек';
+  static String get notImpelementedAlertMessage =>
+      'Кажется ты нашел функционал, над которым мы усердно работаем';
+
   static const rubleSymbol = '₽';
   static const title = '';
   static const confirm = 'ОК';
