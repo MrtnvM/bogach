@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:cash_flow/features/new_game/new_game_actions.dart';
 import 'package:cash_flow/features/new_game/new_game_state.dart';
 import 'package:cash_flow/models/domain/game_template.dart';
@@ -18,5 +17,19 @@ final newGameReducer = Reducer<NewGameState>()
       })
       ..onError((_) {
         return s.getGameTemplatesRequestState = RefreshableRequestState.error;
+      })),
+  )
+  ..on<CreateNewGameAsyncAction>(
+    (state, action) => state.rebuild((s) => action
+      ..onStart(() {
+        return s.createNewGameRequestState = RequestState.inProgress;
+      })
+      ..onSuccess((newGameId) {
+        return s
+          ..createNewGameRequestState = RequestState.success
+          ..newGameId = newGameId;
+      })
+      ..onError((_) {
+        return s.createNewGameRequestState = RequestState.error;
       })),
   );

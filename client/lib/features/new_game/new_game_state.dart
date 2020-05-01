@@ -17,7 +17,13 @@ abstract class NewGameState
 
   StoreList<GameTemplate> get gameTemplates;
 
+  RequestState get createNewGameRequestState;
+  @nullable
+  String get newGameId;
+
   static NewGameState initial() => NewGameState((b) => b
     ..getGameTemplatesRequestState = RefreshableRequestState.idle
-    ..gameTemplates = StoreList<GameTemplate>());
+    ..gameTemplates = StoreList<GameTemplate>()
+    ..createNewGameRequestState = RequestState.idle
+    ..newGameId = null);
 }

@@ -20,3 +20,23 @@ T Function(Response) standard<T>(T Function(Map<String, dynamic>) mapper) {
     throw RequestCommonErrorException(response);
   };
 }
+
+T Function(Response) jsonArray<T>(T Function(List<dynamic>) mapper) {
+  return (response) {
+    final statusCode = response.statusCode;
+    final isRequestSuccessful = statusCode >= 200 && statusCode < 300;
+    final data = response.data;
+    final isEmptyString = data is String && data.isEmpty;
+    final isJsonResponse = data is List<dynamic>;
+
+    if (isRequestSuccessful) {
+      if (isJsonResponse) {
+        return mapper(data);
+      } else if (isEmptyString) {
+        return mapper([]);
+      }
+    }
+
+    throw RequestCommonErrorException(response);
+  };
+}

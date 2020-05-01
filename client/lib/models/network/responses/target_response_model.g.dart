@@ -8,10 +8,10 @@ part of 'target_response_model.dart';
 
 TargetResponseModel _$TargetResponseModelFromJson(Map<String, dynamic> json) {
   return TargetResponseModel(
-    name: json['name'] as String,
+    name: json['name'] as String ?? '',
     type: _$enumDecodeNullable(_$TargetTypeEnumMap, json['type']) ??
         TargetType.cash,
-    value: json['value'] as int,
+    value: json['value'] as int ?? 0,
   );
 }
 
@@ -57,4 +57,5 @@ T _$enumDecodeNullable<T>(
 
 const _$TargetTypeEnumMap = {
   TargetType.cash: 'cash',
+  TargetType.passiveIncome: 'passive_income',
 };

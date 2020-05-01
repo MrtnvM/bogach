@@ -47,6 +47,7 @@ class Strings {
 
   static String get regAgreementPrivacyPolicy => 'политику конфиденциальности';
 
+  static const rubleSymbol = '₽';
   static const title = '';
   static const confirm = 'ОК';
   static const cancel = 'Отмена';
@@ -153,6 +154,8 @@ class Strings {
   static const multiPlayerGame = 'Игра с друзьями';
   static const continueGame = 'Продолжить игру';
   static const chooseLevel = 'Выберите уровень';
+  static const goBack = 'Вернуться назад';
+
   // Reset Password
   static String get forgotPasswordTitle => 'Забыли пароль?';
 

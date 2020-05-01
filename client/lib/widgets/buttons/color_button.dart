@@ -5,10 +5,12 @@ class ColorButton extends StatelessWidget {
   const ColorButton({
     @required this.onPressed,
     @required this.text,
+    this.color = Colors.white,
   });
 
   final Function() onPressed;
   final String text;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class ColorButton extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4),
       ),
-      color: ColorRes.yellow,
+      color: color,
       padding: const EdgeInsets.all(14),
       child: Container(
         width: double.infinity,
@@ -27,8 +29,8 @@ class ColorButton extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'Montserrat',
             fontSize: 16,
-            color: Colors.black,
-            fontWeight: FontWeight.w500,
+            color: ColorRes.mainBlack,
+            fontWeight: FontWeight.w400,
           ),
         ),
       ),

@@ -1,9 +1,6 @@
-import 'package:built_collection/built_collection.dart';
-import 'package:cash_flow/app/app_state.dart';
-import 'package:cash_flow/core/utils/app_store_connector.dart';
-import 'package:cash_flow/models/domain/game_template.dart';
-import 'package:cash_flow/presentation/new_game/widgets/template_game_item.dart';
+import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/new_game/widgets/template_game_list.dart';
+import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:flutter/material.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -17,7 +14,7 @@ class SingleGamePage extends StatelessWidget with ReduxComponent {
     return Scaffold(
       appBar: CashAppBar(
         title: const TitleText(Strings.chooseLevel),
-        backgroundColor: ColorRes.darkBlue,
+        backgroundColor: ColorRes.mainGreen,
         elevation: 0,
       ),
       body: _buildBody(),
@@ -25,9 +22,26 @@ class SingleGamePage extends StatelessWidget with ReduxComponent {
   }
 
   Widget _buildBody() {
-    return Container(
-      color: ColorRes.darkBlue,
-      child: TemplateGameList(),
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        Container(
+          color: ColorRes.mainGreen,
+          child: TemplateGameList(),
+        ),
+        Positioned(
+          bottom: 40,
+          child: Container(
+            height: 50,
+            width: 200,
+            child: ColorButton(
+              text: Strings.goBack,
+              onPressed: appRouter.goBack,
+              color: ColorRes.yellow,
+            ),
+          ),
+        )
+      ],
     );
   }
 }

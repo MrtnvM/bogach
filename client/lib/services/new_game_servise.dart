@@ -13,4 +13,13 @@ class NewGameService {
   Stream<List<GameTemplate>> getGameTemplates() {
     return apiClient.getGameTemplates().map(mapToGameTemplates);
   }
+
+  Stream<String> createNewGame({
+    @required String templateId,
+    @required String userId,
+  }) {
+    return apiClient
+        .createNewGame(templateId: templateId, userId: userId)
+        .map((response) => response.id);
+  }
 }

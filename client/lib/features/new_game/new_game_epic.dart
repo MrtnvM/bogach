@@ -8,17 +8,37 @@ import 'package:redux_epics/redux_epics.dart';
 import 'package:rxdart/rxdart.dart';
 
 Epic<AppState> newGameEpic({@required NewGameService newGameService}) {
-  final getMageTemplates = epic((action$, store) {
+  final getGageTemplates = epic((action$, store) {
     return action$
         .whereType<GetGameTemplatesAsyncAction>()
         .where((action) => action.isStarted)
         .flatMap((action) => newGameService
-            .getGameTemplates()
-            .map<Action>(action.complete)
-            .onErrorReturnWith(action.fail));
+                .getGameTemplates()
+                .map<Action>(action.complete)
+                .doOnError((error, stacktrace) {
+              print(stacktrace);
+              print(error);
+            }).onErrorReturnWith(action.fail));
+  });
+
+  final createNewGame = epic((action$, store) {
+    return action$
+        .whereType<CreateNewGameAsyncAction>()
+        .where((action) => action.isStarted)
+        .flatMap((action) => newGameService
+                .createNewGame(
+                  templateId: action.templateId,
+                  userId: store.state.login.currentUser.fullName,
+                )
+                .map<Action>(action.complete)
+                .doOnError((error, stacktrace) {
+              print(stacktrace);
+              print(error);
+            }).onErrorReturnWith(action.fail));
   });
 
   return combineEpics([
-    getMageTemplates,
+    getGageTemplates,
+    createNewGame,
   ]);
 }

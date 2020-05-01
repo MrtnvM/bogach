@@ -3,6 +3,7 @@ library cash_flow_api;
 import 'package:cash_flow/api_client/headers.dart';
 import 'package:cash_flow/models/network/responses/game_template_response_model.dart';
 import 'package:cash_flow/api_client/response_mappers.dart' as response_mappers;
+import 'package:cash_flow/models/network/responses/new_game_response_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -15,12 +16,23 @@ class CashFlowApiClient extends ApiClient {
   }) : super(environment: environment, dio: dio);
 
   Stream<List<GameTemplateResponseModel>> getGameTemplates() => get(
-        path: 'v1/account/shifts',
-        // ignore: avoid_as
-        responseMapper: response_mappers.standard((json) => (json as List)
+        path: 'getAllGameTemplates',
+        responseMapper: response_mappers.jsonArray((json) => json
             .map((item) => GameTemplateResponseModel.fromJson(item))
             .toList()),
         headers: [contentJson],
-        isAuthorisedRequest: false,
+      );
+
+  Stream<NewGameResponseModel> createNewGame({
+    @required String templateId,
+    @required String userId,
+  }) =>
+      post(
+        path: 'createGame',
+        body: {'templateId': templateId, 'userId': userId},
+        responseMapper: response_mappers.standard(
+          (json) => NewGameResponseModel.fromJson(json),
+        ),
+        headers: [contentJson],
       );
 }
