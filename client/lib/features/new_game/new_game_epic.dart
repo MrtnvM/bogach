@@ -28,7 +28,7 @@ Epic<AppState> newGameEpic({@required NewGameService newGameService}) {
         .flatMap((action) => newGameService
                 .createNewGame(
                   templateId: action.templateId,
-                  userId: store.state.login.currentUser.fullName,
+                  userId: store.state.login.currentUser.userId,
                 )
                 .map<Action>(action.complete)
                 .doOnError((error, stacktrace) {
