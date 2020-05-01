@@ -18,6 +18,7 @@ class ColorRes {
   static const black32 = Color(0x51000000);
   static const black24 = Color(0x3D000000);
   static const black16 = Color(0x29000000);
+  static const mainBlack = Color(0xFF242424);
 
   static const grey = Color(0xFFBDBDBD);
   static const grey2 = Color(0xFFE0E0E0);
@@ -27,4 +28,6 @@ class ColorRes {
   static const green = Color(0xFFFF4CAF50);
   static const orange = Color(0xFFFFA726);
   static const grass = Color(0xFF8DC63F);
+  static const yellow = Color(0xFFFFE21C);
+  static const mainGreen = Color(0xFF08B675);
 }

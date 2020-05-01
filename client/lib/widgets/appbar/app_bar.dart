@@ -16,10 +16,9 @@ class CashAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.brightness = Brightness.dark,
     this.titleSpacing = NavigationToolbar.kMiddleSpacing,
+    this.elevation,
   }) : preferredSize = Size.fromHeight(
             kToolbarHeight + (bottom?.preferredSize?.height ?? 0.0));
-
-
 
   factory CashAppBar.withBackButton({@required String title}) {
     assert(title != null);
@@ -54,6 +53,7 @@ class CashAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget> actions;
   final Brightness brightness;
   final double titleSpacing;
+  final double elevation;
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +68,7 @@ class CashAppBar extends StatelessWidget implements PreferredSizeWidget {
         brightness: brightness,
         titleSpacing: titleSpacing,
         automaticallyImplyLeading: false,
+        elevation: elevation,
       ),
     );
   }

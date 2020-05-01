@@ -47,6 +47,7 @@ class Strings {
 
   static String get regAgreementPrivacyPolicy => 'политику конфиденциальности';
 
+  static const rubleSymbol = '₽';
   static const title = '';
   static const confirm = 'ОК';
   static const cancel = 'Отмена';
@@ -67,6 +68,8 @@ class Strings {
   static const firstPayment = 'Первый взнос';
 
   static const commonError = 'Произошла ошибка';
+  static const commonReload = 'Обновить';
+  static const emptyData = 'Ничего не найдено';
 
   static const propertyName = 'Малая недвижимость';
   static const offeredPrice = 'Предложенная цена:';
@@ -138,7 +141,6 @@ class Strings {
   static String get credit => 'Кредит';
 
   static String get monthIsOver => 'Месяц завершен!';
-  static String get continueGame => 'Продолжить';
 
   // Log in errors
   static String get invalidCredentials => 'Неправильный логин или пароль';
@@ -149,6 +151,14 @@ class Strings {
 
   static String get incorrectPassword =>
       'Пароль должен быть более 6-ти символов';
+
+  //New Game
+  static const chooseGame = 'Выберите игру';
+  static const singleGame = 'Одиночная игра';
+  static const multiPlayerGame = 'Игра с друзьями';
+  static const continueGame = 'Продолжить игру';
+  static const chooseLevel = 'Выберите уровень';
+  static const goBack = 'Вернуться назад';
 
   // Reset Password
   static String get forgotPasswordTitle => 'Забыли пароль?';

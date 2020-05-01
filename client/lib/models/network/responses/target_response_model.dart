@@ -14,11 +14,11 @@ class TargetResponseModel {
   factory TargetResponseModel.fromJson(Map<String, dynamic> json) =>
       _$TargetResponseModelFromJson(json);
 
-  @JsonKey(name: 'name')
+  @JsonKey(name: 'name', defaultValue: '')
   final String name;
   @JsonKey(name: 'type', defaultValue: TargetType.cash)
   final TargetType type;
-  @JsonKey(name: 'value')
+  @JsonKey(name: 'value', defaultValue: 0)
   final int value;
 
   Map<String, dynamic> toJson() => _$TargetResponseModelToJson(this);

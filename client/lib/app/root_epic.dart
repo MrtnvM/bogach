@@ -1,6 +1,8 @@
 import 'package:cash_flow/features/game/game_epic.dart';
 import 'package:cash_flow/features/login/login_epic.dart';
+import 'package:cash_flow/features/new_game/new_game_epic.dart';
 import 'package:cash_flow/features/registration/registration_epic.dart';
+import 'package:cash_flow/services/new_game_servise.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +12,13 @@ import 'app_state.dart';
 
 Epic<AppState> rootEpic({
   @required UserService userService,
+  @required NewGameService newGameService,
   @required GameService gameService,
 }) {
   return combineEpics([
     loginEpic(userService: userService),
     registrationEpic(userService: userService),
+    newGameEpic(newGameService: newGameService),
     gameEpic(gameService: gameService),
   ]);
 }

@@ -13,6 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:flutter_platform_network/flutter_platform_network.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,6 +28,7 @@ Future<void> main() async {
   configureControlPanel();
   configureUiKit();
 
+  final tokenStorage = TokenStorage();
   final alice = Alice(navigatorKey: appRouter.navigatorKey);
   final sharedPreferences = await SharedPreferences.getInstance();
   final environment = stagingEnvironment;
@@ -35,6 +37,7 @@ Future<void> main() async {
   final rootEpic = createRootEpic(
     apiClient,
     sharedPreferences,
+    tokenStorage,
   );
 
   final storeProvider = configureStoreProvider(rootEpic);
