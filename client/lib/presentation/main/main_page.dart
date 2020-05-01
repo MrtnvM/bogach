@@ -94,7 +94,7 @@ class _MainPageState extends State<MainPage> with ReduxState {
             GameBoard(
               gameContext: GameContext(
                 gameId: '669bbf80-c448-4a40-ae5b-db7c9049f79b',
-                userId: user.fullName,
+                userId: user.userId,
               ),
             ),
           ),
