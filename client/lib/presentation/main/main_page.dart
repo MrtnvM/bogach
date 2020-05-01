@@ -1,6 +1,6 @@
+import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/new_game/single_game_page.dart';
 import 'package:cash_flow/core/utils/app_store_connector.dart';
-import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/models/domain/game_context.dart';
 import 'package:cash_flow/models/state/user/current_user.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -13,6 +13,7 @@ import 'package:cash_flow/widgets/texts/title_test.dart';
 import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_control_panel/control_panel.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 class MainPage extends StatefulWidget {
@@ -44,40 +45,62 @@ class _MainPageState extends State<MainPage> with ReduxState {
     return Container(
       color: ColorRes.mainGreen,
       padding: const EdgeInsets.only(top: 80, left: 32, right: 32),
-      child: Column(
-        children: <Widget>[
-          Text('Welcome, ${user.fullName}'),
-          const SizedBox(height: 16),
-          UserAvatar(url: user.avatarUrl),
-          const SizedBox(height: 16),
-          const TitleText(Strings.chooseGame),
-          const SizedBox(height: 24),
-          ColorButton(
-            onPressed: () => appRouter.goTo(SingleGamePage()),
-            text: Strings.singleGame,
-          ),
-          const SizedBox(height: 24),
-          ColorButton(
-            onPressed: () => appRouter.goTo(GameBoard()),
-            text: Strings.multiPlayerGame,
-          ),
-          const SizedBox(height: 24),
-          ColorButton(
-            onPressed: () => appRouter.goTo(GameBoard()),
-            text: Strings.continueGame,
-          )
-        ],
+      child: OrientationBuilder(
+        builder: (context, orientation) {
+          if (orientation == Orientation.portrait) {
+            return Column(
+              children: <Widget>[
+                _buildUserInfo(user),
+                _buildGameActions(user),
+              ],
+            );
+          }
+
+          return Container();
+        },
       ),
     );
   }
 
-  void goToGame() {
-    const context = GameContext(
-      gameId: 'c8d3e4b6-8f8c-45ae-8bad-f085101a1c0f',
-      userId: 'user1',
+  Widget _buildUserInfo(CurrentUser user) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text('Welcome, ${user.fullName}'),
+        const SizedBox(height: 16),
+        ControlPanelGate(child: UserAvatar(url: user.avatarUrl)),
+        const SizedBox(height: 16),
+        const TitleText(Strings.chooseGame),
+        const SizedBox(height: 24),
+      ],
     );
+  }
 
-    dispatch(SetGameContextAction(context));
-    appRouter.goTo(GameBoard());
+  Widget _buildGameActions(CurrentUser user) {
+    return Column(
+      children: <Widget>[
+        ColorButton(
+          onPressed: () => appRouter.goTo(SingleGamePage()),
+          text: Strings.singleGame,
+        ),
+        const SizedBox(height: 24),
+        ColorButton(
+          onPressed: () => showNotImplementedDialog(context),
+          text: Strings.multiPlayerGame,
+        ),
+        const SizedBox(height: 24),
+        ColorButton(
+          onPressed: () => appRouter.goTo(
+            GameBoard(
+              gameContext: GameContext(
+                gameId: '669bbf80-c448-4a40-ae5b-db7c9049f79b',
+                userId: user.fullName,
+              ),
+            ),
+          ),
+          text: Strings.continueGame,
+        )
+      ],
+    );
   }
 }

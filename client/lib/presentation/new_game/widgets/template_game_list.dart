@@ -1,11 +1,14 @@
 import 'package:cash_flow/core/utils/app_store_connector.dart';
 import 'package:cash_flow/features/new_game/new_game_actions.dart';
 import 'package:cash_flow/features/new_game/new_game_state.dart';
+import 'package:cash_flow/models/domain/game_context.dart';
 import 'package:cash_flow/models/domain/game_template.dart';
+import 'package:cash_flow/models/state/user/current_user.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/gameboard/game_board.dart';
 import 'package:cash_flow/presentation/new_game/widgets/template_game_item.dart';
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/utils/core/tuple.dart';
 import 'package:cash_flow/utils/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
@@ -20,48 +23,68 @@ class TemplateGameListState extends State<TemplateGameList>
     with ReduxComponent {
   @override
   Widget build(BuildContext context) {
-    return AppStateConnector<NewGameState>(
-      converter: (state) => state.newGameState,
-      builder: (context, state) => Loadable(
-        isLoading: state.createNewGameRequestState.isInProgress,
-        backgroundColor: ColorRes.mainGreen,
-        child: LoadableList<GameTemplate>(
-          viewModel: LoadableListViewModel(
-            items: state.gameTemplates,
-            itemBuilder: (i) => _buildListItem(state.gameTemplates.items[i]),
-            loadListRequestState: state.getGameTemplatesRequestState,
-            loadList: () => dispatchAsyncAction(GetGameTemplatesAsyncAction()),
-            padding: const EdgeInsets.all(16),
+    return AppStateConnector<Tuple<NewGameState, CurrentUser>>(
+      converter: (state) => Tuple(
+        state.newGameState,
+        state.login.currentUser,
+      ),
+      builder: (context, state) => _buildTemplateList(
+        gameState: state.item1,
+        user: state.item2,
+      ),
+    );
+  }
+
+  Widget _buildTemplateList({NewGameState gameState, CurrentUser user}) {
+    return Loadable(
+      isLoading: gameState.createNewGameRequestState.isInProgress,
+      backgroundColor: ColorRes.mainGreen,
+      child: LoadableList<GameTemplate>(
+        viewModel: LoadableListViewModel(
+          items: gameState.gameTemplates,
+          itemBuilder: (i) => _buildListItem(
+            gameState.gameTemplates.items[i],
+            user,
           ),
+          loadListRequestState: gameState.getGameTemplatesRequestState,
+          loadList: () => dispatchAsyncAction(GetGameTemplatesAsyncAction()),
+          padding: const EdgeInsets.all(16),
         ),
       ),
     );
   }
 
-  Widget _buildListItem(GameTemplate item) {
+  Widget _buildListItem(GameTemplate item, CurrentUser user) {
     return TemplateGameItem(
       game: item,
-      onGamePressed: _createNewGame,
+      onGamePressed: (template) => _createNewGame(template, user),
     );
   }
 
-  void _createNewGame(GameTemplate game) {
-    dispatchAsyncAction(CreateNewGameAsyncAction(templateId: game.id))
+  void _createNewGame(GameTemplate template, CurrentUser user) {
+    dispatchAsyncAction(CreateNewGameAsyncAction(templateId: template.id))
         .listen((action) => action
-          ..onSuccess(_openGameScreen)
-          ..onError((e) => _showAlertErrorNewGame(e, game)));
+          ..onSuccess((createdGameId) => _openGameScreen(createdGameId, user))
+          ..onError((e) => _showAlertErrorNewGame(e, template, user)));
   }
 
-  void _openGameScreen(_) {
-    appRouter.startWith(GameBoard());
+  void _openGameScreen(String gameId, CurrentUser user) {
+    final gameContext = GameContext(gameId: gameId, userId: user.userId);
+
+    appRouter.goToRoot();
+    appRouter.goTo(GameBoard(gameContext: gameContext));
   }
 
-  void _showAlertErrorNewGame(dynamic e, GameTemplate game) {
+  void _showAlertErrorNewGame(
+    dynamic e,
+    GameTemplate gameTemplate,
+    CurrentUser user,
+  ) {
     showWarningAlertDialog(
       context: context,
       errorMessage: e.toString(),
       needCancelButton: true,
-      onSubmit: () => _createNewGame(game),
+      onSubmit: () => _createNewGame(gameTemplate, user),
     );
   }
 }
