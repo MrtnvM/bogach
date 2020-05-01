@@ -20,7 +20,7 @@ const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
 const userId: UserEntity.Id = 'user1';
 const context: GameContext = { gameId, userId };
-const initialCash = 10000;
+const initialCash = 10_000;
 
 const create = <T>(obj: T) => obj;
 
@@ -86,6 +86,10 @@ const initialPossesssions: Possessions = {
       type: 'business',
       fairPrice: 200000,
       downPayment: 100000,
+      buyPrice: 210_000,
+      payback: 20,
+      passiveIncomePerMonth: 2000,
+      sellProbability: 5,
     }),
     create<OtherAsset>({
       id: 'other_asset1',

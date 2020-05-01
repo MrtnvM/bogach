@@ -123,10 +123,17 @@ const initialPossesssions: Possessions = {
     }),
     create<BusinessCreditLiability>({
       id: 'business_credit1',
-      value: 40000,
-      name: 'Кредит за ларек',
+      value: 20_000,
+      name: 'Химчистка',
       type: 'business_credit',
-      monthlyPayment: 5000,
+      monthlyPayment: 0,
+    }),
+    create<BusinessCreditLiability>({
+      id: 'business_credit2',
+      value: 10_000,
+      name: 'Бизнес у которого совпадет долг',
+      type: 'business_credit',
+      monthlyPayment: 0,
     }),
   ],
 };
@@ -142,9 +149,9 @@ const game: Game = {
     [userId]: PossessionStateEntity.createEmpty(),
   },
   accounts: {
-    [userId]: { cashFlow: 10000, cash: initialCash, credit: 0 },
+    [userId]: { cashFlow: 10_000, cash: initialCash, credit: 0 },
   },
-  target: { type: 'cash', value: 1000000 },
+  target: { type: 'cash', value: 1_000_000 },
   currentEvents: [],
 };
 
@@ -195,7 +202,6 @@ export const stubs = {
   userId,
   context,
   game,
-  business1,
   initialCash,
 };
 

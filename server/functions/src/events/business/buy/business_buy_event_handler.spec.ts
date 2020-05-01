@@ -8,9 +8,10 @@ import produce from 'immer';
 import { BusinessAsset } from '../../../models/domain/assets/business_asset';
 import { BusinessBuyEventHandler } from './business_buy_event_handler';
 import { Liability, LiabilityEntity } from '../../../models/domain/liability';
+import { BusinessBuyEvent } from './business_buy_event_event';
 
-describe('Debenture price changed event handler', () => {
-  const { eventId, gameId, userId, context, game, business1, initialCash } = stubs;
+describe('Business buy event event handler', () => {
+  const { eventId, gameId, userId, context, game, initialCash } = stubs;
   const mockGameProvider = mock(GameProvider);
 
   beforeEach(() => {
@@ -91,7 +92,43 @@ describe('Debenture price changed event handler', () => {
     }
   });
 
-  test('Successfully remove existing business on sell', async () => {
+  test('Cant buy two the same businesses if liability present', async () => {
+    when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
+
+    const gameProvider = instance(mockGameProvider);
+    const handler = new BusinessBuyEventHandler(gameProvider);
+
+    const newBusinessData: BusinessBuyEvent.Data = {
+      currentPrice: 100_000,
+      fairPrice: 30_000,
+      downPayment: 20_000,
+      debt: 10_000,
+      passiveIncomePerMonth: 2100,
+      payback: 40,
+      sellProbability: 7,
+    };
+    const event: BusinessBuyEvent.Event = {
+      id: eventId,
+      name: 'Бизнес у которого совпадет долг',
+      description: 'Description',
+      type: BusinessBuyEvent.Type,
+      data: newBusinessData,
+    };
+
+    const action = utils.businessOfferEventPlayerAction({
+      eventId,
+      action: 'buy',
+    });
+
+    try {
+      await handler.handle(event, action, context);
+      throw new Error('Shoud fail on previous line');
+    } catch (error) {
+      expect(error).toStrictEqual(new Error('Cant buy business with two the same liabilities'));
+    }
+  });
+
+  test('Can not handle sell action', async () => {
     when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
 
     const gameProvider = instance(mockGameProvider);
@@ -105,30 +142,29 @@ describe('Debenture price changed event handler', () => {
       action: 'sell',
     });
 
-    await handler.handle(event, action, context);
-
-    const expectedGame = produce(game, (draft) => {
-      const index = draft.possessions[userId].assets.findIndex((d) => d.id === business1.id);
-
-      draft.possessions[userId].assets.splice(index, 1);
-      draft.accounts[userId].cash = initialCash + 0;
-    });
-
-    const [newGame] = capture(mockGameProvider.updateGame).last();
-    expect(newGame).toStrictEqual(expectedGame);
+    try {
+      await handler.handle(event, action, context);
+      throw new Error('Shoud fail on previous line');
+    } catch (error) {
+      expect(error).toStrictEqual(
+        new Error(
+          'Error action type when dispatching ' + 'sell' + ' in ' + BusinessBuyEventHandler.name
+        )
+      );
+    }
   });
 
-  test('Cannot sell business if it not present', async () => {
+  test('Can not new business if not enough money', async () => {
     when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
 
     const gameProvider = instance(mockGameProvider);
     const handler = new BusinessBuyEventHandler(gameProvider);
 
     const event = utils.businessOfferEvent({
-      currentPrice: 100_000,
-      fairPrice: 90_000,
-      downPayment: 15_000,
-      debt: 85_000,
+      currentPrice: 130_000,
+      fairPrice: 120_000,
+      downPayment: 115_000,
+      debt: 15_000,
       passiveIncomePerMonth: 2100,
       payback: 40,
       sellProbability: 7,
@@ -136,14 +172,14 @@ describe('Debenture price changed event handler', () => {
 
     const action = utils.businessOfferEventPlayerAction({
       eventId,
-      action: 'sell',
+      action: 'buy',
     });
 
     try {
       await handler.handle(event, action, context);
       throw new Error('Shoud fail on previous line');
     } catch (error) {
-      expect(error).toStrictEqual(new Error('Business was not found on assets'));
+      expect(error).toStrictEqual(new Error('Not enough money'));
     }
   });
 });

@@ -135,22 +135,22 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     });
 
     if (theSameLiabilityIndex >= 0) {
-      throw new Error('Cant buy two the same liabilities');
+      throw new Error('Cant buy business with two the same liabilities');
     }
   }
 
   async applyBuyAction(actionParameters: ActionBuyParameters): Promise<ActionResult> {
     const { userAccount, priceToPay } = actionParameters;
 
+    //TODO implement credit and write tests
+    const canCredit = false;
     const isEnoughMoney = userAccount.cash >= priceToPay;
-    if (!isEnoughMoney) {
+    if (!isEnoughMoney && !canCredit) {
       throw new Error('Not enough money');
     }
 
     let newAccountBalance = 0;
     let newCreditValue = userAccount.credit;
-    //TODO implement credit and write tests
-    const canCredit = false;
     if (priceToPay <= userAccount.cash) {
       newAccountBalance = userAccount.cash - priceToPay;
     } else if (canCredit) {
@@ -188,7 +188,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
       sellProbability,
     } = actionBuyParameters;
 
-    let newAssets = assets.slice();
+    const newAssets = assets.slice();
 
     const newBusiness: BusinessAsset = {
       buyPrice: currentPrice,
@@ -209,7 +209,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
   addNewLiability(actionBuyParameters: ActionBuyParameters): Liability[] {
     const { liabilities, businessName, debt } = actionBuyParameters;
 
-    let newLiabilities = liabilities.slice();
+    const newLiabilities = liabilities.slice();
 
     const newLiability: Liability = {
       name: businessName,
