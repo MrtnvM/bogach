@@ -6,11 +6,18 @@ import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/gameboard/game_board.dart';
 import 'package:cash_flow/presentation/new_game/widgets/template_game_item.dart';
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/utils/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:flutter_platform_loadable/flutter_platform_loadable.dart';
 
-class TemplateGameList extends StatelessWidget with ReduxComponent {
+class TemplateGameList extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => TemplateGameListState();
+}
+
+class TemplateGameListState extends State<TemplateGameList>
+    with ReduxComponent {
   @override
   Widget build(BuildContext context) {
     return AppStateConnector<NewGameState>(
@@ -42,10 +49,19 @@ class TemplateGameList extends StatelessWidget with ReduxComponent {
     dispatchAsyncAction(CreateNewGameAsyncAction(templateId: game.id))
         .listen((action) => action
           ..onSuccess(_openGameScreen)
-          ..onError(_openGameScreen));
+          ..onError((e) => _showAlertErrorNewGame(e, game)));
   }
 
   void _openGameScreen(_) {
     appRouter.startWith(GameBoard());
+  }
+
+  void _showAlertErrorNewGame(dynamic e, GameTemplate game) {
+    showWarningAlertDialog(
+      context: context,
+      errorMessage: e.toString(),
+      needCancelButton: true,
+      onSubmit: () => _createNewGame(game),
+    );
   }
 }

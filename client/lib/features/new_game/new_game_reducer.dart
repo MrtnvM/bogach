@@ -1,6 +1,7 @@
 import 'package:cash_flow/features/new_game/new_game_actions.dart';
 import 'package:cash_flow/features/new_game/new_game_state.dart';
 import 'package:cash_flow/models/domain/game_template.dart';
+import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 final newGameReducer = Reducer<NewGameState>()
@@ -20,16 +21,9 @@ final newGameReducer = Reducer<NewGameState>()
       })),
   )
   ..on<CreateNewGameAsyncAction>(
-    (state, action) => state.rebuild((s) => action
-      ..onStart(() {
-        return s.createNewGameRequestState = RequestState.inProgress;
-      })
-      ..onSuccess((newGameId) {
-        return s
-          ..createNewGameRequestState = RequestState.success
-          ..newGameId = newGameId;
-      })
-      ..onError((_) {
-        return s.createNewGameRequestState = RequestState.error;
-      })),
+    (state, action) => state.rebuild((s) {
+      s.createNewGameRequestState = action.requestState;
+
+      action..onSuccess((newGameId) => s.newGameId = newGameId);
+    }),
   );
