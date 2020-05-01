@@ -1,4 +1,5 @@
 import 'package:cash_flow/models/network/request/request_common_error_exception.dart';
+import 'package:cash_flow/models/network/responses/response_model.dart';
 import 'package:flutter_platform_network/flutter_platform_network.dart';
 
 T Function(Response) standard<T>(T Function(Map<String, dynamic>) mapper) {
@@ -39,4 +40,12 @@ T Function(Response) jsonArray<T>(T Function(List<dynamic>) mapper) {
 
     throw RequestCommonErrorException(response);
   };
+}
+
+VoidResponseModel voidResponse(Response response) {
+  if ([200, 201, 204].contains(response.statusCode)) {
+    return VoidResponseModel();
+  }
+
+  throw ResponseErrorModel(response);
 }

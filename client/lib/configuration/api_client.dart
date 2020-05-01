@@ -1,13 +1,21 @@
-import 'package:cash_flow/utils/debug.dart';
 import 'package:alice/alice.dart';
 import 'package:cash_flow/api_client/cash_flow_api_client.dart';
-import 'package:dio/dio.dart';
+import 'package:cash_flow/utils/debug.dart';
 import 'package:flutter_platform_network/flutter_platform_network.dart';
 
-ApiClient configureApiClient({
-  Alice alice,
-  ApiEnvironment environment,
-}) {
+const developmentEnvironment = ApiEnvironment(
+  baseUrl: 'http://localhost:5001/cash-flow-staging/europe-west2/',
+  validateRequestsByDefaut: false,
+  isRequestsAuthorisedByDefault: false,
+);
+
+const stagingEnvironment = ApiEnvironment(
+  baseUrl: 'https://europe-west2-cash-flow-staging.cloudfunctions.net/',
+  validateRequestsByDefaut: false,
+  isRequestsAuthorisedByDefault: false,
+);
+
+CashFlowApiClient configureApiClient(Alice alice, ApiEnvironment environment) {
   final apiDio = _createApiDio(alice);
 
   final client = CashFlowApiClient(
@@ -27,12 +35,12 @@ Dio _createApiDio(Alice alice) {
 
   apiDio.interceptors.add(alice.getDioInterceptor());
 
-  if (Debug.isDebugModeEnabled()) {
+  debug(() {
     apiDio.interceptors.add(LogInterceptor(
       requestBody: true,
       responseBody: true,
     ));
-  }
+  });
 
   return apiDio;
 }

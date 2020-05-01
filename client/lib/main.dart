@@ -8,6 +8,7 @@ import 'package:cash_flow/configuration/control_panel.dart';
 import 'package:cash_flow/configuration/error_reporting.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/configuration/ui_kit.dart';
+import 'package:cash_flow/navigation/app_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -24,23 +25,19 @@ Future<void> main() async {
 
   configureErrorReporting();
   setOrientationPortrait();
-
-  final sharedPreferences = await SharedPreferences.getInstance();
-  final tokenStorage = TokenStorage();
-
-  final alice = Alice();
-  final apiClient = configureApiClient(
-    environment: _getApiEnvironment(),
-    alice: alice,
-  );
-
   configureControlPanel();
   configureUiKit();
 
+  final tokenStorage = TokenStorage();
+  final alice = Alice(navigatorKey: appRouter.navigatorKey);
+  final sharedPreferences = await SharedPreferences.getInstance();
+  final environment = stagingEnvironment;
+  final apiClient = configureApiClient(alice, environment);
+
   final rootEpic = createRootEpic(
+    apiClient,
     sharedPreferences,
     tokenStorage,
-    apiClient,
   );
 
   final storeProvider = configureStoreProvider(rootEpic);
@@ -61,10 +58,4 @@ Future<void> main() async {
       isAuthorised: isAuthorized,
     ));
   }, onError: Crashlytics.instance.recordError);
-}
-
-ApiEnvironment _getApiEnvironment() {
-  return const ApiEnvironment(
-    baseUrl: 'https://europe-west2-cash-flow-staging.cloudfunctions.net/',
-  );
 }
