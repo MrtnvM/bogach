@@ -10,20 +10,35 @@ class _$GameState extends GameState {
   @override
   final RequestState getRequestState;
   @override
+  final ActiveGameState activeGameState;
+  @override
   final UserPossessionState possessions;
   @override
   final TargetState target;
   @override
+  final Account account;
+  @override
   final BuiltList<GameEvent> events;
+  @override
+  final GameContext currentGameContext;
 
   factory _$GameState([void Function(GameStateBuilder) updates]) =>
       (new GameStateBuilder()..update(updates)).build();
 
   _$GameState._(
-      {this.getRequestState, this.possessions, this.target, this.events})
+      {this.getRequestState,
+      this.activeGameState,
+      this.possessions,
+      this.target,
+      this.account,
+      this.events,
+      this.currentGameContext})
       : super._() {
     if (getRequestState == null) {
       throw new BuiltValueNullFieldError('GameState', 'getRequestState');
+    }
+    if (activeGameState == null) {
+      throw new BuiltValueNullFieldError('GameState', 'activeGameState');
     }
     if (events == null) {
       throw new BuiltValueNullFieldError('GameState', 'events');
@@ -42,26 +57,40 @@ class _$GameState extends GameState {
     if (identical(other, this)) return true;
     return other is GameState &&
         getRequestState == other.getRequestState &&
+        activeGameState == other.activeGameState &&
         possessions == other.possessions &&
         target == other.target &&
-        events == other.events;
+        account == other.account &&
+        events == other.events &&
+        currentGameContext == other.currentGameContext;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, getRequestState.hashCode), possessions.hashCode),
-            target.hashCode),
-        events.hashCode));
+        $jc(
+            $jc(
+                $jc(
+                    $jc(
+                        $jc($jc(0, getRequestState.hashCode),
+                            activeGameState.hashCode),
+                        possessions.hashCode),
+                    target.hashCode),
+                account.hashCode),
+            events.hashCode),
+        currentGameContext.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('GameState')
           ..add('getRequestState', getRequestState)
+          ..add('activeGameState', activeGameState)
           ..add('possessions', possessions)
           ..add('target', target)
-          ..add('events', events))
+          ..add('account', account)
+          ..add('events', events)
+          ..add('currentGameContext', currentGameContext))
         .toString();
   }
 }
@@ -74,6 +103,11 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
   set getRequestState(RequestState getRequestState) =>
       _$this._getRequestState = getRequestState;
 
+  ActiveGameState _activeGameState;
+  ActiveGameState get activeGameState => _$this._activeGameState;
+  set activeGameState(ActiveGameState activeGameState) =>
+      _$this._activeGameState = activeGameState;
+
   UserPossessionStateBuilder _possessions;
   UserPossessionStateBuilder get possessions =>
       _$this._possessions ??= new UserPossessionStateBuilder();
@@ -84,19 +118,31 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
   TargetStateBuilder get target => _$this._target ??= new TargetStateBuilder();
   set target(TargetStateBuilder target) => _$this._target = target;
 
+  Account _account;
+  Account get account => _$this._account;
+  set account(Account account) => _$this._account = account;
+
   ListBuilder<GameEvent> _events;
   ListBuilder<GameEvent> get events =>
       _$this._events ??= new ListBuilder<GameEvent>();
   set events(ListBuilder<GameEvent> events) => _$this._events = events;
+
+  GameContext _currentGameContext;
+  GameContext get currentGameContext => _$this._currentGameContext;
+  set currentGameContext(GameContext currentGameContext) =>
+      _$this._currentGameContext = currentGameContext;
 
   GameStateBuilder();
 
   GameStateBuilder get _$this {
     if (_$v != null) {
       _getRequestState = _$v.getRequestState;
+      _activeGameState = _$v.activeGameState;
       _possessions = _$v.possessions?.toBuilder();
       _target = _$v.target?.toBuilder();
+      _account = _$v.account;
       _events = _$v.events?.toBuilder();
+      _currentGameContext = _$v.currentGameContext;
       _$v = null;
     }
     return this;
@@ -122,9 +168,12 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
       _$result = _$v ??
           new _$GameState._(
               getRequestState: getRequestState,
+              activeGameState: activeGameState,
               possessions: _possessions?.build(),
               target: _target?.build(),
-              events: events.build());
+              account: account,
+              events: events.build(),
+              currentGameContext: currentGameContext);
     } catch (_) {
       String _$failedField;
       try {
@@ -132,6 +181,7 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
         _possessions?.build();
         _$failedField = 'target';
         _target?.build();
+
         _$failedField = 'events';
         events.build();
       } catch (e) {

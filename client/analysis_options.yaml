@@ -39,6 +39,7 @@ analyzer:
     prefer_relative_imports: ignore
     prefer_function_declarations_over_variables: ignore
     prefer_mixin: ignore
+    one_member_abstracts: ignore
   exclude:
     - 'bin/cache/**'
     # the following two are relative to the stocks example and the flutter package respectively

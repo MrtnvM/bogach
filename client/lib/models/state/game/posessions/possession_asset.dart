@@ -1,12 +1,12 @@
 library possession_asset;
 
 import 'package:built_value/built_value.dart';
-import 'package:cash_flow/models/state/posessions_state/assets/business_asset_item.dart';
-import 'package:cash_flow/models/state/posessions_state/assets/debenture_asset_item.dart';
-import 'package:cash_flow/models/state/posessions_state/assets/insurance_asset_item.dart';
-import 'package:cash_flow/models/state/posessions_state/assets/other_asset_item.dart';
-import 'package:cash_flow/models/state/posessions_state/assets/realty_asset_item.dart';
-import 'package:cash_flow/models/state/posessions_state/assets/stock_asset_item.dart';
+import 'package:cash_flow/models/state/game/posessions/assets/business_asset_item.dart';
+import 'package:cash_flow/models/state/game/posessions/assets/debenture_asset_item.dart';
+import 'package:cash_flow/models/state/game/posessions/assets/insurance_asset_item.dart';
+import 'package:cash_flow/models/state/game/posessions/assets/other_asset_item.dart';
+import 'package:cash_flow/models/state/game/posessions/assets/realty_asset_item.dart';
+import 'package:cash_flow/models/state/game/posessions/assets/stock_asset_item.dart';
 
 part 'possession_asset.g.dart';
 

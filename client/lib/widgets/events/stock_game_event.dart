@@ -3,9 +3,9 @@ import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:cash_flow/widgets/containers/event_buttons.dart';
-import 'package:cash_flow/widgets/containers/event_selector.dart';
+import 'package:cash_flow/widgets/containers/game_event_selector.dart';
 import 'package:cash_flow/widgets/containers/info_table.dart';
-import 'package:cash_flow/widgets/events/game_event.dart';
+import 'package:cash_flow/widgets/events/game_event_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +23,7 @@ class StockGameEvent extends StatefulWidget {
 class StockGameEventState extends State<StockGameEvent> {
   @override
   Widget build(BuildContext context) {
-    return GameEvent(
+    return GameEventWidget(
       icon: Icons.home,
       name: Strings.stockMarketTitle,
       buttonsState: ButtonsState.normal,
@@ -87,7 +87,10 @@ class StockGameEventState extends State<StockGameEvent> {
       changeableType: false,
     );
 
-    return GameEventSelector(selectorViewModel);
+    return GameEventSelector(
+      viewModel: selectorViewModel,
+      onPlayerActionParamsChanged: (action, count) => null,
+    );
   }
 }
 

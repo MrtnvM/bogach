@@ -23,7 +23,7 @@ class GameBoardState extends State<GameBoard> with ReduxState {
     setOrientationLandscape();
 
     dispatch(
-      ListenGameStateStartAction('c8d3e4b6-8f8c-45ae-8bad-f085101a1c0f'),
+      StartGameAction('c8d3e4b6-8f8c-45ae-8bad-f085101a1c0f'),
     );
   }
 
@@ -45,7 +45,7 @@ class GameBoardState extends State<GameBoard> with ReduxState {
 
   @override
   void dispose() {
-    dispatch(StopListenGameStateAction());
+    dispatch(StopActiveGameAction());
     setOrientationPortrait();
 
     super.dispose();

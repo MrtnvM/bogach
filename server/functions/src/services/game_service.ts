@@ -42,6 +42,7 @@ export class GameService {
       BusinessBuyEventGenerator.generate(),
       BusinessBuyEventGenerator.generate(),
       BusinessBuyEventGenerator.generate(),
+      DebenturePriceChangedEventGenerator.generate(),
     ];
 
     const gameWithNewEvents = produce(game, (draft) => {
@@ -66,5 +67,10 @@ export class GameService {
 
     await handler.validate(event, action);
     await handler.handle(event, action, context);
+
+    const lastEvent = game.currentEvents[game.currentEvents.length - 1];
+    if (lastEvent.id === eventId) {
+      await this.generateGameEvents(gameId);
+    }
   }
 }

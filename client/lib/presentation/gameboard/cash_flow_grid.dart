@@ -1,15 +1,15 @@
 import 'package:cash_flow/core/utils/app_store_connector.dart';
 import 'package:cash_flow/features/game/game_state.dart';
-import 'package:cash_flow/models/state/posessions_state/assets/business_asset_item.dart';
-import 'package:cash_flow/models/state/posessions_state/assets/debenture_asset_item.dart';
-import 'package:cash_flow/models/state/posessions_state/assets/insurance_asset_item.dart';
-import 'package:cash_flow/models/state/posessions_state/assets/other_asset_item.dart';
-import 'package:cash_flow/models/state/posessions_state/assets/realty_asset_item.dart';
-import 'package:cash_flow/models/state/posessions_state/assets/stock_asset_item.dart';
-import 'package:cash_flow/models/state/posessions_state/possession_asset.dart';
-import 'package:cash_flow/models/state/posessions_state/possession_expense.dart';
-import 'package:cash_flow/models/state/posessions_state/possession_income.dart';
-import 'package:cash_flow/models/state/posessions_state/possession_liability.dart';
+import 'package:cash_flow/models/state/game/posessions/assets/business_asset_item.dart';
+import 'package:cash_flow/models/state/game/posessions/assets/debenture_asset_item.dart';
+import 'package:cash_flow/models/state/game/posessions/assets/insurance_asset_item.dart';
+import 'package:cash_flow/models/state/game/posessions/assets/other_asset_item.dart';
+import 'package:cash_flow/models/state/game/posessions/assets/realty_asset_item.dart';
+import 'package:cash_flow/models/state/game/posessions/assets/stock_asset_item.dart';
+import 'package:cash_flow/models/state/game/posessions/possession_asset.dart';
+import 'package:cash_flow/models/state/game/posessions/possession_expense.dart';
+import 'package:cash_flow/models/state/game/posessions/possession_income.dart';
+import 'package:cash_flow/models/state/game/posessions/possession_liability.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:cash_flow/widgets/containers/indicators_table.dart';
@@ -83,7 +83,7 @@ class _CashFlowGridState extends State<CashFlowGrid> with ReduxState {
       name: Strings.assets,
       result: assets.sum.toPrice(),
       rows: <RowHeaderItem>[
-        RowItem(name: Strings.cash, value: assets.cash.toPrice()),
+        RowItem(name: '${Strings.cash}:', value: assets.cash.toPrice()),
         const RowHeaderAttributeItem(
           name: Strings.insuranceTitle,
           attribute: Strings.cost,
@@ -164,7 +164,7 @@ class _CashFlowGridState extends State<CashFlowGrid> with ReduxState {
         .map((item) => RowAttributeItem(
               name: item.name,
               attribute: '${item.count}',
-              value: item.purchasePrice.toPrice(),
+              value: item.averagePrice.toPrice(),
             ))
         .toList();
   }
