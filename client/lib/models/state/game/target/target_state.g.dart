@@ -8,9 +8,9 @@ part of target_state;
 
 class _$TargetState extends TargetState {
   @override
-  final int value;
+  final double value;
   @override
-  final int currentValue;
+  final double currentValue;
   @override
   final TargetType type;
 
@@ -64,13 +64,13 @@ class _$TargetState extends TargetState {
 class TargetStateBuilder implements Builder<TargetState, TargetStateBuilder> {
   _$TargetState _$v;
 
-  int _value;
-  int get value => _$this._value;
-  set value(int value) => _$this._value = value;
+  double _value;
+  double get value => _$this._value;
+  set value(double value) => _$this._value = value;
 
-  int _currentValue;
-  int get currentValue => _$this._currentValue;
-  set currentValue(int currentValue) => _$this._currentValue = currentValue;
+  double _currentValue;
+  double get currentValue => _$this._currentValue;
+  set currentValue(double currentValue) => _$this._currentValue = currentValue;
 
   TargetType _type;
   TargetType get type => _$this._type;

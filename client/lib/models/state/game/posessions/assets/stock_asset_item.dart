@@ -11,11 +11,7 @@ abstract class StockAssetItem
 
   StockAssetItem._();
 
-  int get count;
-
   String get name;
-
-  int get itemPrice;
-
-  int get total;
+  double get averagePrice;
+  int get countInPortfolio;
 }

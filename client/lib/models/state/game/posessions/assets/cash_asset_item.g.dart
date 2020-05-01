@@ -10,7 +10,7 @@ class _$CashAssetItem extends CashAssetItem {
   @override
   final String name;
   @override
-  final int value;
+  final double value;
 
   factory _$CashAssetItem([void Function(CashAssetItemBuilder) updates]) =>
       (new CashAssetItemBuilder()..update(updates)).build();
@@ -59,9 +59,9 @@ class CashAssetItemBuilder
   String get name => _$this._name;
   set name(String name) => _$this._name = name;
 
-  int _value;
-  int get value => _$this._value;
-  set value(int value) => _$this._value = value;
+  double _value;
+  double get value => _$this._value;
+  set value(double value) => _$this._value = value;
 
   CashAssetItemBuilder();
 

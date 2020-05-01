@@ -14,11 +14,11 @@ class AccountStateResponseModel {
       _$AccountStateResponseModelFromJson(json);
 
   @JsonKey(name: 'cash')
-  final int cash;
+  final double cash;
   @JsonKey(name: 'cashFlow')
-  final int cashFlow;
+  final double cashFlow;
   @JsonKey(name: 'credit')
-  final int credit;
+  final double credit;
 
   Map<String, dynamic> toJson() => _$AccountStateResponseModelToJson(this);
 }

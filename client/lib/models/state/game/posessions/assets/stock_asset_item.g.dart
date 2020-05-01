@@ -8,30 +8,25 @@ part of stock_asset_item;
 
 class _$StockAssetItem extends StockAssetItem {
   @override
-  final int count;
-  @override
   final String name;
   @override
-  final int itemPrice;
+  final double averagePrice;
   @override
-  final int total;
+  final int countInPortfolio;
 
   factory _$StockAssetItem([void Function(StockAssetItemBuilder) updates]) =>
       (new StockAssetItemBuilder()..update(updates)).build();
 
-  _$StockAssetItem._({this.count, this.name, this.itemPrice, this.total})
+  _$StockAssetItem._({this.name, this.averagePrice, this.countInPortfolio})
       : super._() {
-    if (count == null) {
-      throw new BuiltValueNullFieldError('StockAssetItem', 'count');
-    }
     if (name == null) {
       throw new BuiltValueNullFieldError('StockAssetItem', 'name');
     }
-    if (itemPrice == null) {
-      throw new BuiltValueNullFieldError('StockAssetItem', 'itemPrice');
+    if (averagePrice == null) {
+      throw new BuiltValueNullFieldError('StockAssetItem', 'averagePrice');
     }
-    if (total == null) {
-      throw new BuiltValueNullFieldError('StockAssetItem', 'total');
+    if (countInPortfolio == null) {
+      throw new BuiltValueNullFieldError('StockAssetItem', 'countInPortfolio');
     }
   }
 
@@ -47,26 +42,23 @@ class _$StockAssetItem extends StockAssetItem {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is StockAssetItem &&
-        count == other.count &&
         name == other.name &&
-        itemPrice == other.itemPrice &&
-        total == other.total;
+        averagePrice == other.averagePrice &&
+        countInPortfolio == other.countInPortfolio;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc(0, count.hashCode), name.hashCode), itemPrice.hashCode),
-        total.hashCode));
+    return $jf($jc($jc($jc(0, name.hashCode), averagePrice.hashCode),
+        countInPortfolio.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('StockAssetItem')
-          ..add('count', count)
           ..add('name', name)
-          ..add('itemPrice', itemPrice)
-          ..add('total', total))
+          ..add('averagePrice', averagePrice)
+          ..add('countInPortfolio', countInPortfolio))
         .toString();
   }
 }
@@ -75,30 +67,26 @@ class StockAssetItemBuilder
     implements Builder<StockAssetItem, StockAssetItemBuilder> {
   _$StockAssetItem _$v;
 
-  int _count;
-  int get count => _$this._count;
-  set count(int count) => _$this._count = count;
-
   String _name;
   String get name => _$this._name;
   set name(String name) => _$this._name = name;
 
-  int _itemPrice;
-  int get itemPrice => _$this._itemPrice;
-  set itemPrice(int itemPrice) => _$this._itemPrice = itemPrice;
+  double _averagePrice;
+  double get averagePrice => _$this._averagePrice;
+  set averagePrice(double averagePrice) => _$this._averagePrice = averagePrice;
 
-  int _total;
-  int get total => _$this._total;
-  set total(int total) => _$this._total = total;
+  int _countInPortfolio;
+  int get countInPortfolio => _$this._countInPortfolio;
+  set countInPortfolio(int countInPortfolio) =>
+      _$this._countInPortfolio = countInPortfolio;
 
   StockAssetItemBuilder();
 
   StockAssetItemBuilder get _$this {
     if (_$v != null) {
-      _count = _$v.count;
       _name = _$v.name;
-      _itemPrice = _$v.itemPrice;
-      _total = _$v.total;
+      _averagePrice = _$v.averagePrice;
+      _countInPortfolio = _$v.countInPortfolio;
       _$v = null;
     }
     return this;
@@ -121,7 +109,9 @@ class StockAssetItemBuilder
   _$StockAssetItem build() {
     final _$result = _$v ??
         new _$StockAssetItem._(
-            count: count, name: name, itemPrice: itemPrice, total: total);
+            name: name,
+            averagePrice: averagePrice,
+            countInPortfolio: countInPortfolio);
     replace(_$result);
     return _$result;
   }

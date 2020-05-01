@@ -8,7 +8,8 @@ part of 'asset_response_model.dart';
 
 AssetResponseModel _$AssetResponseModelFromJson(Map<String, dynamic> json) {
   return AssetResponseModel(
-    type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type']) ??
+    type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type'],
+            unknownValue: AssetType.other) ??
         AssetType.other,
   );
 }
@@ -53,7 +54,7 @@ T _$enumDecodeNullable<T>(
 const _$AssetTypeEnumMap = {
   AssetType.debenture: 'debenture',
   AssetType.insurance: 'insurance',
-  AssetType.stocks: 'stocks',
+  AssetType.stock: 'stock',
   AssetType.realty: 'realty',
   AssetType.business: 'business',
   AssetType.cash: 'cash',

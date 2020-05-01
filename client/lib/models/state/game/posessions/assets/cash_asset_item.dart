@@ -12,6 +12,5 @@ abstract class CashAssetItem
   CashAssetItem._();
 
   String get name;
-
-  int get value;
+  double get value;
 }

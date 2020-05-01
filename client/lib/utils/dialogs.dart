@@ -43,17 +43,17 @@ Future<dynamic> showAlert({
   thirdButtonText ??= '';
   onThirdButtonPressed ??= () => null;
 
-  final Widget thirdButton = _buildDialogButton(
+  final thirdButton = _buildDialogButton(
     thirdButtonText,
     onThirdButtonPressed,
   );
 
-  final Widget cancelButton = _buildDialogButton(
+  final cancelButton = _buildDialogButton(
     cancelButtonText,
     onCancel,
   );
 
-  final Widget continueButton = _buildDialogButton(
+  final continueButton = _buildDialogButton(
     submitButtonText,
     onSubmit != null ? onSubmit : () {},
   );
@@ -74,9 +74,7 @@ Future<dynamic> showAlert({
 
   return await showDialog<dynamic>(
     context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
+    builder: (context) => alert,
   );
 }
 

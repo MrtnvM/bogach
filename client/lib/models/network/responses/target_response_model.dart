@@ -19,7 +19,7 @@ class TargetResponseModel {
   @JsonKey(name: 'type', defaultValue: TargetType.cash)
   final TargetType type;
   @JsonKey(name: 'value', defaultValue: 0)
-  final int value;
+  final double value;
 
   Map<String, dynamic> toJson() => _$TargetResponseModelToJson(this);
 }

@@ -13,8 +13,8 @@ abstract class DebentureAssetItem
   DebentureAssetItem._();
 
   String get name;
-  int get nominal;
-  int get averagePrice;
+  double get nominal;
+  double get averagePrice;
   int get count;
   double get profitabilityPercent;
 }

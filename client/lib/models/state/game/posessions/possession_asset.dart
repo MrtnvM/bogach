@@ -17,19 +17,13 @@ abstract class PossessionAsset
 
   PossessionAsset._();
 
-  int get sum;
-
-  int get cash;
+  double get sum;
+  double get cash;
 
   List<InsuranceAssetItem> get insurances;
-
   List<DebentureAssetItem> get debentures;
-
   List<StockAssetItem> get stocks;
-
   List<RealtyAssetItem> get realty;
-
   List<BusinessAssetItem> get businesses;
-
   List<OtherAssetItem> get other;
 }

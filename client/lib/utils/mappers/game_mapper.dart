@@ -110,7 +110,7 @@ PossessionAssetBuilder _getAssets(document) {
       case AssetType.debenture:
         debentures.add(_buildDebenture(json));
         break;
-      case AssetType.stocks:
+      case AssetType.stock:
         stocks.add(_buildStocks(json));
         break;
       case AssetType.realty:
@@ -130,18 +130,21 @@ PossessionAssetBuilder _getAssets(document) {
     }
   }
 
-  final insurancesSum = insurances.fold(0, (sum, item) => sum += item.value);
+  final insurancesSum = insurances.fold(0.0, (sum, item) => sum += item.value);
   final debenturesSum = debentures.fold(
-    0,
+    0.0,
     (sum, item) => sum += item.averagePrice * item.count,
   );
-  final stocksSum = stocks.fold(0, (sum, item) => sum += item.total);
-  final realtySum = realty.fold(0, (sum, item) => sum += item.cost);
-  final businessesSum = businesses.fold(0, (sum, item) => sum += item.cost);
-  final otherSum = other.fold(0, (sum, item) => sum += item.cost);
+  final stocksSum = stocks.fold(
+    0.0,
+    (sum, item) => sum += item.averagePrice * item.countInPortfolio,
+  );
+  final realtySum = realty.fold(0.0, (sum, item) => sum += item.cost);
+  final businessesSum = businesses.fold(0.0, (sum, item) => sum += item.cost);
+  final otherSum = other.fold(0.0, (sum, item) => sum += item.cost);
 
   return PossessionAssetBuilder()
-    ..cash = cash.fold(0, (sum, item) => sum += item.value)
+    ..cash = cash.fold(0.0, (sum, item) => sum += item.value)
     ..sum = insurancesSum +
         debenturesSum +
         stocksSum +
@@ -195,10 +198,9 @@ StockAssetItem _buildStocks(Map<String, dynamic> json) {
   final parsedItem = StockAssetResponseModel.fromJson(json);
 
   return StockAssetItem((b) => b
-    ..count = parsedItem.count
+    ..countInPortfolio = parsedItem.countInPortfolio
     ..name = parsedItem.name
-    ..itemPrice = parsedItem.purchasePrice
-    ..total = parsedItem.total);
+    ..averagePrice = parsedItem.averagePrice);
 }
 
 DebentureAssetItem _buildDebenture(Map<String, dynamic> json) {

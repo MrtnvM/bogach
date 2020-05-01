@@ -5,16 +5,13 @@ import 'package:cash_flow/models/network/responses/target_type.dart';
 
 part 'target_state.g.dart';
 
-abstract class TargetState
-    implements Built<TargetState, TargetStateBuilder> {
+abstract class TargetState implements Built<TargetState, TargetStateBuilder> {
   factory TargetState([void Function(TargetStateBuilder b) updates]) =
-  _$TargetState;
+      _$TargetState;
 
   TargetState._();
 
-  int get value;
-
-  int get currentValue;
-
+  double get value;
+  double get currentValue;
   TargetType get type;
 }
