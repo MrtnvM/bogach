@@ -6,13 +6,14 @@ import { BusinessBuyEvent } from './business_buy_event_event';
 
 export namespace BusinessBuyEventGenerator {
   export const generate = (): BusinessBuyEvent.Event => {
-    const currentPrice = random.int(7, 15) * 1000;
-    const fairPrice = random.int(7, 15) * 1000;
+    const currentPrice = random.int(70, 150) * 1000;
+    const fairPrice = random.int(70, 150) * 1000;
     const downPayment = random.int(10, 25) * 1000;
     const debt = currentPrice - downPayment;
     const passiveIncomePerMonth = random.int(1, 3) * 1000;
     const incomePerYear = passiveIncomePerMonth * 12;
-    const payback = (incomePerYear / currentPrice) * 100;
+    const payBackValue = (incomePerYear / currentPrice) * 100;
+    const payback = Math.round(payBackValue);
     const sellProbability = random.int(7, 13);
 
     return {
