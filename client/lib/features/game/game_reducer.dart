@@ -57,26 +57,19 @@ final gameStateReducer = Reducer<GameState>()
   ..on<SendPlayerMoveAsyncAction>(
     (state, action) => state.rebuild(
       (s) {
-        final eventIndex = s.events.build().indexWhere(
-              (e) => e.id == action.eventId,
-            );
-
-        if (eventIndex < 0) {
-          return;
-        }
-
-        if (eventIndex < s.events.length - 1) {
-          final nextEventId = s.events[eventIndex + 1].id;
-          s.activeGameState = ActiveGameState.gameEvent(nextEventId);
-          return;
-        }
-
-        if (eventIndex == s.events.length - 1) {
-          s.activeGameState = ActiveGameState.monthResult();
-          return;
-        }
+        _goToNextGameEvent(s, action.eventId);
       },
     ),
+  )
+  ..on<SkipPlayerMoveAction>(
+    (state, action) => state.rebuild((s) {
+      final currentEventId = s.activeGameState.maybeWhen(
+        gameEvent: (eventId) => eventId,
+        orElse: () => null,
+      );
+
+      _goToNextGameEvent(s, currentEventId);
+    }),
   )
   ..on<GoToNewMonthAction>(
     (state, action) => state.rebuild(
@@ -86,3 +79,28 @@ final gameStateReducer = Reducer<GameState>()
       },
     ),
   );
+
+void _goToNextGameEvent(GameStateBuilder s, String currentEventId) {
+  if (currentEventId == null) {
+    return;
+  }
+
+  final eventIndex = s.events.build().indexWhere(
+        (e) => e.id == currentEventId,
+      );
+
+  if (eventIndex < 0) {
+    return;
+  }
+
+  if (eventIndex < s.events.length - 1) {
+    final nextEventId = s.events[eventIndex + 1].id;
+    s.activeGameState = ActiveGameState.gameEvent(nextEventId);
+    return;
+  }
+
+  if (eventIndex == s.events.length - 1) {
+    s.activeGameState = ActiveGameState.monthResult();
+    return;
+  }
+}
