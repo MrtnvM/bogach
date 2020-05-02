@@ -1,6 +1,9 @@
 import 'package:cash_flow/models/domain/game_template.dart';
+import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/utils/mappers/game_mapper.dart';
 import 'package:flutter/material.dart';
+import 'package:cash_flow/utils/extensions/extensions.dart';
 
 class TemplateGameItem extends StatelessWidget {
   const TemplateGameItem({
@@ -27,13 +30,27 @@ class TemplateGameItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              '${game.name} — ${game.accountState.cash}${Strings.rubleSymbol}',
+              '${game.name} — ${game.accountState.cash.round().toPrice()}',
+              style: _textStyle().merge(TextStyle(fontWeight: FontWeight.bold)),
             ),
             const SizedBox(height: 20),
-            Text('Цель — ${game.target.value}${Strings.rubleSymbol}'),
+            Text(
+              '${Strings.reach} '
+              '${mapTargetTypeToString(game.target.type).toLowerCase()}'
+              ' ${Strings.wordIn} ${game.target.value.round().toPrice()}',
+              style: _textStyle(),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  TextStyle _textStyle() {
+    return TextStyle(
+      fontFamily: 'Montserrat',
+      fontSize: 14,
+      color: ColorRes.mainBlack,
     );
   }
 }
