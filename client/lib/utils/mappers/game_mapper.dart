@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:built_collection/built_collection.dart';
 import 'package:cash_flow/models/domain/game_data.dart';
 import 'package:cash_flow/models/domain/game_event.dart';
@@ -31,6 +33,7 @@ import 'package:cash_flow/models/state/game/posessions/possession_liability.dart
 import 'package:cash_flow/models/state/game/posessions/user_possession_state.dart';
 import 'package:cash_flow/utils/consts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 GameData mapToGameData(DocumentSnapshot response) {
   final userPossessionState = mapToPossessionState(
@@ -39,6 +42,22 @@ GameData mapToGameData(DocumentSnapshot response) {
   final account = mapToAccountState(response.data['accounts']);
   final target = mapToTargetState(response.data['target']);
   final events = mapToGameEvents(response.data['currentEvents']);
+
+  return GameData(
+    possessions: userPossessionState,
+    target: target,
+    events: events,
+    account: account,
+  );
+}
+
+GameData mapToRealtimeGameData(Event event) {
+  final response = jsonDecode(jsonEncode(event.snapshot.value));
+
+  final userPossessionState = mapToPossessionState(response['possessionState']);
+  final account = mapToAccountState(response['accounts']);
+  final target = mapToTargetState(response['target']);
+  final events = mapToGameEvents(response['currentEvents']);
 
   return GameData(
     possessions: userPossessionState,
