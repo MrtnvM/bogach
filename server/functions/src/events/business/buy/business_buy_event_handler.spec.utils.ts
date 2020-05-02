@@ -24,7 +24,7 @@ const initialCash = 100_000;
 const create = <T>(obj: T) => obj;
 
 const business1 = create<BusinessAsset>({
-  id: 'business1',
+  id: 'id1',
   name: 'Химчистка',
   type: 'business',
   buyPrice: 120_000,
@@ -122,7 +122,7 @@ const initialPossesssions: Possessions = {
       monthlyPayment: 500,
     }),
     create<BusinessCreditLiability>({
-      id: 'business_credit1',
+      id: 'existingLiabilityId',
       value: 20_000,
       name: 'Химчистка',
       type: 'business_credit',
@@ -170,6 +170,7 @@ const businessOfferEvent = (data: BusinessBuyEvent.Data) => {
 
 const dryCleaningBusinessOfferEvent = (currentPrice: number) => {
   const eventData: BusinessBuyEvent.Data = {
+    businessId: 'id1',
     currentPrice: currentPrice,
     downPayment: 21_000,
     fairPrice: 115_000,

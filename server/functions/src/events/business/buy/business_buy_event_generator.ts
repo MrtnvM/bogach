@@ -4,8 +4,10 @@ import { Strings } from '../../../resources/strings';
 import { formatPrice } from '../../../utils/currency';
 import { BusinessBuyEvent } from './business_buy_event_event';
 
+// TODO добавить реальные данные
 export namespace BusinessBuyEventGenerator {
   export const generate = (): BusinessBuyEvent.Event => {
+    const businessId = uuid.v4();
     const currentPrice = random.int(70, 150) * 1000;
     const fairPrice = random.int(70, 150) * 1000;
     const downPayment = random.int(10, 25) * 1000;
@@ -22,6 +24,7 @@ export namespace BusinessBuyEventGenerator {
       description: Strings.currentPrice() + formatPrice(currentPrice),
       type: BusinessBuyEvent.Type,
       data: {
+        businessId,
         currentPrice,
         fairPrice,
         downPayment,

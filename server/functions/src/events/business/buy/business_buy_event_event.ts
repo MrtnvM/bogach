@@ -8,6 +8,7 @@ export namespace BusinessBuyEvent {
   export type Event = GameEvent<Data>;
 
   export interface Data {
+    readonly businessId: string;
     readonly currentPrice: number;
     readonly fairPrice: number;
     readonly downPayment: number;
@@ -24,6 +25,7 @@ export namespace BusinessBuyEvent {
 
   export const parse = (gameEvent: GameEvent, eventData: any): Event => {
     const {
+      businessId,
       currentPrice,
       fairPrice,
       downPayment,
@@ -36,6 +38,7 @@ export namespace BusinessBuyEvent {
     return {
       ...gameEvent,
       data: {
+        businessId,
         currentPrice,
         fairPrice,
         downPayment,
@@ -54,6 +57,7 @@ export namespace BusinessBuyEvent {
 
     const entity = Entity.createEntityValidator<Data>(event.data, 'BusinessOfferEvent.Data');
 
+    entity.hasValue('businessId');
     entity.hasNumberValue('currentPrice');
     entity.hasNumberValue('fairPrice');
     entity.hasNumberValue('downPayment');

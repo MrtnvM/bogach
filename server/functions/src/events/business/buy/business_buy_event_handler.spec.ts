@@ -26,6 +26,7 @@ describe('Business buy event event handler', () => {
     const handler = new BusinessBuyEventHandler(gameProvider);
 
     const event = utils.businessOfferEvent({
+      businessId: 'randomId',
       currentPrice: 100_000,
       fairPrice: 90_000,
       downPayment: 15_000,
@@ -43,6 +44,7 @@ describe('Business buy event event handler', () => {
     await handler.handle(event, action, context);
 
     const newBusinessAsset: BusinessAsset = {
+      id: 'randomId',
       name: 'Торговая точка',
       type: 'business',
       buyPrice: 100_000,
@@ -54,6 +56,7 @@ describe('Business buy event event handler', () => {
     };
 
     const newLiability: Liability = {
+      id: 'randomId',
       name: 'Торговая точка',
       type: LiabilityEntity.TypeValues[1],
       monthlyPayment: 0,
@@ -99,6 +102,7 @@ describe('Business buy event event handler', () => {
     const handler = new BusinessBuyEventHandler(gameProvider);
 
     const newBusinessData: BusinessBuyEvent.Data = {
+      businessId: 'existingLiabilityId',
       currentPrice: 100_000,
       fairPrice: 30_000,
       downPayment: 20_000,
@@ -154,13 +158,14 @@ describe('Business buy event event handler', () => {
     }
   });
 
-  test('Can not new business if not enough money', async () => {
+  test('Can not buy new business if not enough money', async () => {
     when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
 
     const gameProvider = instance(mockGameProvider);
     const handler = new BusinessBuyEventHandler(gameProvider);
 
     const event = utils.businessOfferEvent({
+      businessId: 'randomId',
       currentPrice: 130_000,
       fairPrice: 120_000,
       downPayment: 115_000,

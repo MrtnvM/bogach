@@ -20,6 +20,7 @@ interface ActionResult {
 }
 
 interface ActionBuyParameters {
+  readonly businessId: string;
   readonly userAccount: Account;
   readonly assets: Asset[];
   readonly liabilities: Liability[];
@@ -60,6 +61,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     const game = await this.gameProvider.getGame(gameId);
 
     const {
+      businessId,
       currentPrice,
       fairPrice,
       downPayment,
@@ -83,14 +85,15 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     const businessName = event.name;
 
     const assets = game.possessions[userId].assets;
-    this.checkExistingBusiness(assets, businessName, fairPrice);
+    this.checkExistingBusiness(assets, businessId);
 
     const liabilities = game.possessions[userId].liabilities;
-    this.checkExistingLiability(liabilities, businessName, debt);
+    this.checkExistingLiability(liabilities, businessId);
 
     const userAccount = game.accounts[userId];
     const priceToPay = currentPrice - debt;
     const actionBuyParameters: ActionBuyParameters = {
+      businessId,
       userAccount,
       assets,
       liabilities,
@@ -117,10 +120,10 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     await this.gameProvider.updateGame(updatedGame);
   }
 
-  checkExistingBusiness(assets: Asset[], businessName: string, fairPrice: number) {
+  checkExistingBusiness(assets: Asset[], businessId: string) {
     const businessAssets = AssetEntity.getBusinesses(assets);
     const theSameBusinessIndex = businessAssets.findIndex((d) => {
-      return d.name === businessName && d.fairPrice === fairPrice;
+      return d.id === businessId;
     });
 
     if (theSameBusinessIndex >= 0) {
@@ -128,10 +131,10 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     }
   }
 
-  checkExistingLiability(liabilities: Liability[], businessName: string, debt: number) {
+  checkExistingLiability(liabilities: Liability[], businessId: string) {
     const businessLiabilities = LiabilityEntity.getBusinessCredits(liabilities);
     const theSameLiabilityIndex = businessLiabilities.findIndex((d) => {
-      return d.name === businessName && d.value === debt && d.type == 'business_credit';
+      return d.id === businessId && d.type == 'business_credit';
     });
 
     if (theSameLiabilityIndex >= 0) {
@@ -178,6 +181,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
 
   addNewItemToAssets(actionBuyParameters: ActionBuyParameters): Asset[] {
     const {
+      businessId,
       assets,
       currentPrice,
       fairPrice,
@@ -191,6 +195,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     const newAssets = assets.slice();
 
     const newBusiness: BusinessAsset = {
+      id: businessId,
       buyPrice: currentPrice,
       downPayment,
       fairPrice,
@@ -207,11 +212,12 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
   }
 
   addNewLiability(actionBuyParameters: ActionBuyParameters): Liability[] {
-    const { liabilities, businessName, debt } = actionBuyParameters;
+    const { liabilities, businessId, businessName, debt } = actionBuyParameters;
 
     const newLiabilities = liabilities.slice();
 
     const newLiability: Liability = {
+      id: businessId,
       name: businessName,
       type: 'business_credit',
       // TODO temporary maybe, 0 now
