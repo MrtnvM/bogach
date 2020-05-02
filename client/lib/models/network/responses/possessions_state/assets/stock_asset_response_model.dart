@@ -6,24 +6,21 @@ part 'stock_asset_response_model.g.dart';
 @JsonSerializable()
 class StockAssetResponseModel {
   const StockAssetResponseModel({
-    this.count,
     this.name,
-    this.purchasePrice,
-    this.total,
+    this.countInPortfolio,
+    this.averagePrice,
     this.type,
   });
 
   factory StockAssetResponseModel.fromJson(Map<String, dynamic> json) =>
       _$StockAssetResponseModelFromJson(json);
 
-  @JsonKey(name: 'count')
-  final int count;
   @JsonKey(name: 'name')
   final String name;
-  @JsonKey(name: 'purchasePrice')
-  final int purchasePrice;
-  @JsonKey(name: 'total')
-  final int total;
+  @JsonKey(name: 'countInPortfolio')
+  final int countInPortfolio;
+  @JsonKey(name: 'averagePrice')
+  final double averagePrice;
   @JsonKey(name: 'type', defaultValue: AssetType.other)
   final AssetType type;
 

@@ -11,7 +11,7 @@ TargetResponseModel _$TargetResponseModelFromJson(Map<String, dynamic> json) {
     name: json['name'] as String ?? '',
     type: _$enumDecodeNullable(_$TargetTypeEnumMap, json['type']) ??
         TargetType.cash,
-    value: json['value'] as int ?? 0,
+    value: (json['value'] as num)?.toDouble() ?? 0,
   );
 }
 

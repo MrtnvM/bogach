@@ -59,7 +59,7 @@ T _$enumDecodeNullable<T>(
 const _$AssetTypeEnumMap = {
   AssetType.debenture: 'debenture',
   AssetType.insurance: 'insurance',
-  AssetType.stocks: 'stocks',
+  AssetType.stock: 'stock',
   AssetType.realty: 'realty',
   AssetType.business: 'business',
   AssetType.cash: 'cash',

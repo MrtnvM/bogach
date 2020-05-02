@@ -8,9 +8,9 @@ part of possession_asset;
 
 class _$PossessionAsset extends PossessionAsset {
   @override
-  final int sum;
+  final double sum;
   @override
-  final int cash;
+  final double cash;
   @override
   final List<InsuranceAssetItem> insurances;
   @override
@@ -120,13 +120,13 @@ class PossessionAssetBuilder
     implements Builder<PossessionAsset, PossessionAssetBuilder> {
   _$PossessionAsset _$v;
 
-  int _sum;
-  int get sum => _$this._sum;
-  set sum(int sum) => _$this._sum = sum;
+  double _sum;
+  double get sum => _$this._sum;
+  set sum(double sum) => _$this._sum = sum;
 
-  int _cash;
-  int get cash => _$this._cash;
-  set cash(int cash) => _$this._cash = cash;
+  double _cash;
+  double get cash => _$this._cash;
+  set cash(double cash) => _$this._cash = cash;
 
   List<InsuranceAssetItem> _insurances;
   List<InsuranceAssetItem> get insurances => _$this._insurances;

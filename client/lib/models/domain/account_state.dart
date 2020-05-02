@@ -9,7 +9,7 @@ class AccountState {
         assert(cashFlow != null),
         assert(credit != null);
 
-  final int cash;
-  final int cashFlow;
-  final int credit;
+  final double cash;
+  final double cashFlow;
+  final double credit;
 }

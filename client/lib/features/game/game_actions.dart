@@ -1,12 +1,18 @@
 import 'package:cash_flow/models/domain/game_context.dart';
 import 'package:cash_flow/models/domain/game_data.dart';
 import 'package:cash_flow/models/domain/player_action.dart';
+import 'package:cash_flow/models/errors/game_error.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 class StartGameAction extends Action {
   StartGameAction(this.gameId);
 
   final String gameId;
+
+  @override
+  String toString() {
+    return '${super.toString()} game_id = $gameId';
+  }
 }
 
 class StopActiveGameAction extends Action {
@@ -22,7 +28,12 @@ class OnGameStateChangedAction extends Action {
 class OnGameErrorAction extends Action {
   OnGameErrorAction(this.error);
 
-  final dynamic error;
+  final GameError error;
+
+  @override
+  String toString() {
+    return '${super.toString()}' '\n$error';
+  }
 }
 
 class SetGameContextAction extends Action {
@@ -37,5 +48,7 @@ class SendPlayerMoveAsyncAction extends AsyncAction<void> {
   final PlayerAction playerAction;
   final String eventId;
 }
+
+class SkipPlayerMoveAction extends Action {}
 
 class GoToNewMonthAction extends Action {}

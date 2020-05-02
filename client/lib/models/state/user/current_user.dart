@@ -14,4 +14,7 @@ abstract class CurrentUser implements Built<CurrentUser, CurrentUserBuilder> {
 
   @nullable
   String get avatarUrl;
+
+  // TODO(maxim): Replace with real User ID
+  String get userId => 'user1';
 }

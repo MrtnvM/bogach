@@ -19,7 +19,7 @@ class CashAssetResponseModel {
   @JsonKey(name: 'type', defaultValue: AssetType.other)
   final AssetType type;
   @JsonKey(name: 'value')
-  final int value;
+  final double value;
 
   Map<String, dynamic> toJson() => _$CashAssetResponseModelToJson(this);
 }

@@ -5,6 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_platform_network/flutter_platform_network.dart';
 
+void showNotImplementedDialog(BuildContext context) {
+  showCashDialog(
+    context: context,
+    title: Strings.notImpelementedAlertTitle,
+    message: Strings.notImpelementedAlertMessage,
+    displayNegative: false,
+  );
+}
+
 Future<DialogResponse> showCashDialog({
   @required BuildContext context,
   @required String title,

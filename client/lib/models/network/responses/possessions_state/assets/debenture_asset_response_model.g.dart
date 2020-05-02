@@ -13,8 +13,8 @@ DebentureAssetResponseModel _$DebentureAssetResponseModelFromJson(
     type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type']) ??
         AssetType.other,
     count: json['count'] as int,
-    averagePrice: json['averagePrice'] as int,
-    nominal: json['nominal'] as int,
+    averagePrice: (json['averagePrice'] as num)?.toDouble(),
+    nominal: (json['nominal'] as num)?.toDouble(),
     profitabilityPercent: (json['profitabilityPercent'] as num)?.toDouble(),
   );
 }
@@ -65,7 +65,7 @@ T _$enumDecodeNullable<T>(
 const _$AssetTypeEnumMap = {
   AssetType.debenture: 'debenture',
   AssetType.insurance: 'insurance',
-  AssetType.stocks: 'stocks',
+  AssetType.stock: 'stock',
   AssetType.realty: 'realty',
   AssetType.business: 'business',
   AssetType.cash: 'cash',

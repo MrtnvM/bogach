@@ -12,7 +12,7 @@ CashAssetResponseModel _$CashAssetResponseModelFromJson(
     name: json['name'] as String,
     type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type']) ??
         AssetType.other,
-    value: json['value'] as int,
+    value: (json['value'] as num)?.toDouble(),
   );
 }
 
@@ -59,7 +59,7 @@ T _$enumDecodeNullable<T>(
 const _$AssetTypeEnumMap = {
   AssetType.debenture: 'debenture',
   AssetType.insurance: 'insurance',
-  AssetType.stocks: 'stocks',
+  AssetType.stock: 'stock',
   AssetType.realty: 'realty',
   AssetType.business: 'business',
   AssetType.cash: 'cash',

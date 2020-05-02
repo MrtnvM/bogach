@@ -16,8 +16,8 @@ class GameProgressBar extends StatelessWidget {
         assert(maxValue != null);
 
   final String name;
-  final int currentValue;
-  final int maxValue;
+  final double currentValue;
+  final double maxValue;
   final double percent;
 
   @override

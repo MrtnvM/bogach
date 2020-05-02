@@ -11,7 +11,11 @@ class AssetResponseModel {
   factory AssetResponseModel.fromJson(Map<String, dynamic> json) =>
       _$AssetResponseModelFromJson(json);
 
-  @JsonKey(name: 'type', defaultValue: AssetType.other)
+  @JsonKey(
+    name: 'type',
+    defaultValue: AssetType.other,
+    unknownEnumValue: AssetType.other,
+  )
   final AssetType type;
 
   Map<String, dynamic> toJson() => _$AssetResponseModelToJson(this);
@@ -22,8 +26,8 @@ enum AssetType {
   debenture,
   @JsonValue('insurance')
   insurance,
-  @JsonValue('stocks')
-  stocks,
+  @JsonValue('stock')
+  stock,
   @JsonValue('realty')
   realty,
   @JsonValue('business')

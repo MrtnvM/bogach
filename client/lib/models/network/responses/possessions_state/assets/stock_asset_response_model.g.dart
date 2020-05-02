@@ -9,10 +9,9 @@ part of 'stock_asset_response_model.dart';
 StockAssetResponseModel _$StockAssetResponseModelFromJson(
     Map<String, dynamic> json) {
   return StockAssetResponseModel(
-    count: json['count'] as int,
     name: json['name'] as String,
-    purchasePrice: json['purchasePrice'] as int,
-    total: json['total'] as int,
+    countInPortfolio: json['countInPortfolio'] as int,
+    averagePrice: (json['averagePrice'] as num)?.toDouble(),
     type: _$enumDecodeNullable(_$AssetTypeEnumMap, json['type']) ??
         AssetType.other,
   );
@@ -21,10 +20,9 @@ StockAssetResponseModel _$StockAssetResponseModelFromJson(
 Map<String, dynamic> _$StockAssetResponseModelToJson(
         StockAssetResponseModel instance) =>
     <String, dynamic>{
-      'count': instance.count,
       'name': instance.name,
-      'purchasePrice': instance.purchasePrice,
-      'total': instance.total,
+      'countInPortfolio': instance.countInPortfolio,
+      'averagePrice': instance.averagePrice,
       'type': _$AssetTypeEnumMap[instance.type],
     };
 
@@ -63,7 +61,7 @@ T _$enumDecodeNullable<T>(
 const _$AssetTypeEnumMap = {
   AssetType.debenture: 'debenture',
   AssetType.insurance: 'insurance',
-  AssetType.stocks: 'stocks',
+  AssetType.stock: 'stock',
   AssetType.realty: 'realty',
   AssetType.business: 'business',
   AssetType.cash: 'cash',

@@ -10,9 +10,9 @@ class _$DebentureAssetItem extends DebentureAssetItem {
   @override
   final String name;
   @override
-  final int nominal;
+  final double nominal;
   @override
-  final int averagePrice;
+  final double averagePrice;
   @override
   final int count;
   @override
@@ -97,13 +97,13 @@ class DebentureAssetItemBuilder
   String get name => _$this._name;
   set name(String name) => _$this._name = name;
 
-  int _nominal;
-  int get nominal => _$this._nominal;
-  set nominal(int nominal) => _$this._nominal = nominal;
+  double _nominal;
+  double get nominal => _$this._nominal;
+  set nominal(double nominal) => _$this._nominal = nominal;
 
-  int _averagePrice;
-  int get averagePrice => _$this._averagePrice;
-  set averagePrice(int averagePrice) => _$this._averagePrice = averagePrice;
+  double _averagePrice;
+  double get averagePrice => _$this._averagePrice;
+  set averagePrice(double averagePrice) => _$this._averagePrice = averagePrice;
 
   int _count;
   int get count => _$this._count;

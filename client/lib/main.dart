@@ -23,16 +23,16 @@ import 'features/login/login_actions.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  configureErrorReporting();
-  setOrientationPortrait();
-  configureControlPanel();
-  configureUiKit();
-
   final tokenStorage = TokenStorage();
   final alice = Alice(navigatorKey: appRouter.navigatorKey);
   final sharedPreferences = await SharedPreferences.getInstance();
   final environment = stagingEnvironment;
   final apiClient = configureApiClient(alice, environment);
+
+  configureControlPanel(alice, apiClient);
+  configureErrorReporting();
+  setOrientationPortrait();
+  configureUiKit();
 
   final rootEpic = createRootEpic(
     apiClient,

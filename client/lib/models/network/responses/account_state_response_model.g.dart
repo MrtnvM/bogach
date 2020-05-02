@@ -9,9 +9,9 @@ part of 'account_state_response_model.dart';
 AccountStateResponseModel _$AccountStateResponseModelFromJson(
     Map<String, dynamic> json) {
   return AccountStateResponseModel(
-    cash: json['cash'] as int,
-    cashFlow: json['cashFlow'] as int,
-    credit: json['credit'] as int,
+    cash: (json['cash'] as num)?.toDouble(),
+    cashFlow: (json['cashFlow'] as num)?.toDouble(),
+    credit: (json['credit'] as num)?.toDouble(),
   );
 }
 

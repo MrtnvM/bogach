@@ -8,6 +8,6 @@ class TargetData {
   })  : assert(value != null),
         assert(type != null);
 
-  final int value;
+  final double value;
   final TargetType type;
 }

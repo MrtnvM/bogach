@@ -21,8 +21,8 @@ class DebentureAssetResponseModel {
   @JsonKey(name: 'type', defaultValue: AssetType.other)
   final AssetType type;
   final int count;
-  final int nominal;
-  final int averagePrice;
+  final double nominal;
+  final double averagePrice;
   final double profitabilityPercent;
 
   Map<String, dynamic> toJson() => _$DebentureAssetResponseModelToJson(this);
