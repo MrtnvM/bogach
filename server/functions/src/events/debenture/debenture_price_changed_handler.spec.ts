@@ -217,7 +217,7 @@ describe('Debenture price changed event handler', () => {
     const handler = new DebenturePriceChangedHandler(gameProvider);
 
     const event = utils.debenturePriceChangedEvent({
-      currentPrice: 1100,
+      currentPrice: 900,
       profitabilityPercent: 8,
       nominal: 1000,
       availableCount: 10,

@@ -8,6 +8,8 @@ import { PlayerActionHandler } from '../core/domain/player_action_handler';
 import { DebenturePriceChangedHandler } from '../events/debenture/debenture_price_changed_handler';
 import { StockPriceChangedHandler } from '../events/stock/stock_price_changed_handler';
 import { StockPriceChangedEventGenerator } from '../events/stock/stock_price_changed_event_generator';
+import { BusinessBuyEventGenerator } from '../events/business/buy/business_buy_event_generator';
+import { BusinessBuyEventHandler } from '../events/business/buy/business_buy_event_handler';
 
 export class GameService {
   constructor(private gameProvider: GameProvider) {
@@ -19,6 +21,7 @@ export class GameService {
   private handlers: PlayerActionHandler[] = [
     new DebenturePriceChangedHandler(this.gameProvider),
     new StockPriceChangedHandler(this.gameProvider),
+    new BusinessBuyEventHandler(this.gameProvider),
   ];
 
   private handlerMap: { [type: string]: PlayerActionHandler } = {};
@@ -33,12 +36,12 @@ export class GameService {
       DebenturePriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
-      DebenturePriceChangedEventGenerator.generate(),
       StockPriceChangedEventGenerator.generate(),
       StockPriceChangedEventGenerator.generate(),
       StockPriceChangedEventGenerator.generate(),
-      StockPriceChangedEventGenerator.generate(),
-      StockPriceChangedEventGenerator.generate(),
+      BusinessBuyEventGenerator.generate(),
+      BusinessBuyEventGenerator.generate(),
+      BusinessBuyEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
     ];
 

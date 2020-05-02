@@ -126,7 +126,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler {
       availableCount,
       currentPrice,
       currentAveragePrice,
-      totalPrice,
+    totalPrice,
     } = actionParameters;
 
     const isEnoughMoney = userAccount.cash >= totalPrice;

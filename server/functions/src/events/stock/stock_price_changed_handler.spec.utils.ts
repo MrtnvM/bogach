@@ -82,8 +82,12 @@ const initialPossesssions: Possessions = {
       id: 'business1',
       name: 'Ларек с шавой',
       type: 'business',
-      cost: 200000,
+      fairPrice: 200000,
       downPayment: 100000,
+      buyPrice: 210_000,
+      payback: 20,
+      passiveIncomePerMonth: 2000,
+      sellProbability: 5,
     }),
     create<OtherAsset>({
       id: 'other_asset1',
