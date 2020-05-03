@@ -4,6 +4,7 @@ import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/root_epic.dart';
 import 'package:cash_flow/services/new_game_servise.dart';
 import 'package:cash_flow/services/game_service.dart';
+import 'package:cash_flow/services/purchase_service.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -50,9 +51,12 @@ Epic<AppState> createRootEpic(
 
   final newGameService = NewGameService(apiClient: apiClient);
 
+  final purchaseService = PurchaseService();
+
   return rootEpic(
     userService: userService,
     newGameService: newGameService,
     gameService: gameService,
+    purchaseService: purchaseService,
   );
 }

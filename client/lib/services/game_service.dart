@@ -33,7 +33,7 @@ class GameService {
         .child('games')
         .child('2')
         .onValue
-        .map(mapToRealtimeGameData);
+        .map((event) => mapToRealtimeGameData(event, gameId));
   }
 
   Stream<void> sendPlayerAction(PlayerActionRequestModel playerAction) {

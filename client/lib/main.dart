@@ -13,6 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:flutter_platform_network/flutter_platform_network.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -29,6 +30,7 @@ Future<void> main() async {
   const environment = stagingEnvironment;
   final apiClient = configureApiClient(alice, environment);
 
+  configurePurchases();
   configureControlPanel(alice, apiClient);
   configureErrorReporting();
   setOrientationPortrait();
@@ -58,4 +60,8 @@ Future<void> main() async {
       isAuthorised: isAuthorized,
     ));
   }, Crashlytics.instance.recordError);
+}
+
+void configurePurchases() {
+  InAppPurchaseConnection.enablePendingPurchases();
 }
