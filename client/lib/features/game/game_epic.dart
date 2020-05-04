@@ -21,7 +21,7 @@ Epic<AppState> gameEpic({@required GameService gameService}) {
             ));
   });
 
-  final sendGameEventPlayerActionAction = epic((action$, store) {
+  final sendGameEventPlayerActionEpic = epic((action$, store) {
     return action$
         .whereType<SendPlayerMoveAsyncAction>()
         .where((action) => action.isStarted)
@@ -42,6 +42,6 @@ Epic<AppState> gameEpic({@required GameService gameService}) {
 
   return combineEpics([
     startGameEpic,
-    sendGameEventPlayerActionAction,
+    sendGameEventPlayerActionEpic,
   ]);
 }
