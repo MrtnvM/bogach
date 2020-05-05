@@ -16,9 +16,11 @@ class _$ActiveGameStateTearOff {
     return ActiveGameWaitingForStartState();
   }
 
-  ActiveGameGameEventState gameEvent(String eventId) {
+  ActiveGameGameEventState gameEvent(
+      {@required int eventIndex, @required bool isSent}) {
     return ActiveGameGameEventState(
-      eventId,
+      eventIndex: eventIndex,
+      isSent: isSent,
     );
   }
 
@@ -32,9 +34,11 @@ class _$ActiveGameStateTearOff {
     return ActiveGameMonthResultState();
   }
 
-  ActiveGameGameOverState gameOver(String winnerId) {
+  ActiveGameGameOverState gameOver(
+      {@required Map<int, String> winners, @required int monthNumber}) {
     return ActiveGameGameOverState(
-      winnerId,
+      winners: winners,
+      monthNumber: monthNumber,
     );
   }
 }
@@ -46,18 +50,18 @@ mixin _$ActiveGameState {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result waitingForStart(),
-    @required Result gameEvent(String eventId),
+    @required Result gameEvent(int eventIndex, bool isSent),
     @required Result waitingPlayers(List<String> playersIds),
     @required Result monthResult(),
-    @required Result gameOver(String winnerId),
+    @required Result gameOver(Map<int, String> winners, int monthNumber),
   });
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result waitingForStart(),
-    Result gameEvent(String eventId),
+    Result gameEvent(int eventIndex, bool isSent),
     Result waitingPlayers(List<String> playersIds),
     Result monthResult(),
-    Result gameOver(String winnerId),
+    Result gameOver(Map<int, String> winners, int monthNumber),
     @required Result orElse(),
   });
   @optionalTypeArgs
@@ -134,10 +138,10 @@ class _$ActiveGameWaitingForStartState extends ActiveGameWaitingForStartState {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result waitingForStart(),
-    @required Result gameEvent(String eventId),
+    @required Result gameEvent(int eventIndex, bool isSent),
     @required Result waitingPlayers(List<String> playersIds),
     @required Result monthResult(),
-    @required Result gameOver(String winnerId),
+    @required Result gameOver(Map<int, String> winners, int monthNumber),
   }) {
     assert(waitingForStart != null);
     assert(gameEvent != null);
@@ -151,10 +155,10 @@ class _$ActiveGameWaitingForStartState extends ActiveGameWaitingForStartState {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result waitingForStart(),
-    Result gameEvent(String eventId),
+    Result gameEvent(int eventIndex, bool isSent),
     Result waitingPlayers(List<String> playersIds),
     Result monthResult(),
-    Result gameOver(String winnerId),
+    Result gameOver(Map<int, String> winners, int monthNumber),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -208,7 +212,7 @@ abstract class $ActiveGameGameEventStateCopyWith<$Res> {
   factory $ActiveGameGameEventStateCopyWith(ActiveGameGameEventState value,
           $Res Function(ActiveGameGameEventState) then) =
       _$ActiveGameGameEventStateCopyWithImpl<$Res>;
-  $Res call({String eventId});
+  $Res call({int eventIndex, bool isSent});
 }
 
 class _$ActiveGameGameEventStateCopyWithImpl<$Res>
@@ -224,38 +228,48 @@ class _$ActiveGameGameEventStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object eventId = freezed,
+    Object eventIndex = freezed,
+    Object isSent = freezed,
   }) {
     return _then(ActiveGameGameEventState(
-      eventId == freezed ? _value.eventId : eventId as String,
+      eventIndex: eventIndex == freezed ? _value.eventIndex : eventIndex as int,
+      isSent: isSent == freezed ? _value.isSent : isSent as bool,
     ));
   }
 }
 
 class _$ActiveGameGameEventState extends ActiveGameGameEventState {
-  _$ActiveGameGameEventState(this.eventId)
-      : assert(eventId != null),
+  _$ActiveGameGameEventState({@required this.eventIndex, @required this.isSent})
+      : assert(eventIndex != null),
+        assert(isSent != null),
         super._();
 
   @override
-  final String eventId;
+  final int eventIndex;
+  @override
+  final bool isSent;
 
   @override
   String toString() {
-    return 'ActiveGameState.gameEvent(eventId: $eventId)';
+    return 'ActiveGameState.gameEvent(eventIndex: $eventIndex, isSent: $isSent)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is ActiveGameGameEventState &&
-            (identical(other.eventId, eventId) ||
-                const DeepCollectionEquality().equals(other.eventId, eventId)));
+            (identical(other.eventIndex, eventIndex) ||
+                const DeepCollectionEquality()
+                    .equals(other.eventIndex, eventIndex)) &&
+            (identical(other.isSent, isSent) ||
+                const DeepCollectionEquality().equals(other.isSent, isSent)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(eventId);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(eventIndex) ^
+      const DeepCollectionEquality().hash(isSent);
 
   @override
   $ActiveGameGameEventStateCopyWith<ActiveGameGameEventState> get copyWith =>
@@ -266,32 +280,32 @@ class _$ActiveGameGameEventState extends ActiveGameGameEventState {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result waitingForStart(),
-    @required Result gameEvent(String eventId),
+    @required Result gameEvent(int eventIndex, bool isSent),
     @required Result waitingPlayers(List<String> playersIds),
     @required Result monthResult(),
-    @required Result gameOver(String winnerId),
+    @required Result gameOver(Map<int, String> winners, int monthNumber),
   }) {
     assert(waitingForStart != null);
     assert(gameEvent != null);
     assert(waitingPlayers != null);
     assert(monthResult != null);
     assert(gameOver != null);
-    return gameEvent(eventId);
+    return gameEvent(eventIndex, isSent);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result waitingForStart(),
-    Result gameEvent(String eventId),
+    Result gameEvent(int eventIndex, bool isSent),
     Result waitingPlayers(List<String> playersIds),
     Result monthResult(),
-    Result gameOver(String winnerId),
+    Result gameOver(Map<int, String> winners, int monthNumber),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (gameEvent != null) {
-      return gameEvent(eventId);
+      return gameEvent(eventIndex, isSent);
     }
     return orElse();
   }
@@ -333,9 +347,12 @@ class _$ActiveGameGameEventState extends ActiveGameGameEventState {
 
 abstract class ActiveGameGameEventState extends ActiveGameState {
   ActiveGameGameEventState._() : super._();
-  factory ActiveGameGameEventState(String eventId) = _$ActiveGameGameEventState;
+  factory ActiveGameGameEventState(
+      {@required int eventIndex,
+      @required bool isSent}) = _$ActiveGameGameEventState;
 
-  String get eventId;
+  int get eventIndex;
+  bool get isSent;
   $ActiveGameGameEventStateCopyWith<ActiveGameGameEventState> get copyWith;
 }
 
@@ -404,10 +421,10 @@ class _$ActiveGameWaitingPlayersState extends ActiveGameWaitingPlayersState {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result waitingForStart(),
-    @required Result gameEvent(String eventId),
+    @required Result gameEvent(int eventIndex, bool isSent),
     @required Result waitingPlayers(List<String> playersIds),
     @required Result monthResult(),
-    @required Result gameOver(String winnerId),
+    @required Result gameOver(Map<int, String> winners, int monthNumber),
   }) {
     assert(waitingForStart != null);
     assert(gameEvent != null);
@@ -421,10 +438,10 @@ class _$ActiveGameWaitingPlayersState extends ActiveGameWaitingPlayersState {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result waitingForStart(),
-    Result gameEvent(String eventId),
+    Result gameEvent(int eventIndex, bool isSent),
     Result waitingPlayers(List<String> playersIds),
     Result monthResult(),
-    Result gameOver(String winnerId),
+    Result gameOver(Map<int, String> winners, int monthNumber),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -517,10 +534,10 @@ class _$ActiveGameMonthResultState extends ActiveGameMonthResultState {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result waitingForStart(),
-    @required Result gameEvent(String eventId),
+    @required Result gameEvent(int eventIndex, bool isSent),
     @required Result waitingPlayers(List<String> playersIds),
     @required Result monthResult(),
-    @required Result gameOver(String winnerId),
+    @required Result gameOver(Map<int, String> winners, int monthNumber),
   }) {
     assert(waitingForStart != null);
     assert(gameEvent != null);
@@ -534,10 +551,10 @@ class _$ActiveGameMonthResultState extends ActiveGameMonthResultState {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result waitingForStart(),
-    Result gameEvent(String eventId),
+    Result gameEvent(int eventIndex, bool isSent),
     Result waitingPlayers(List<String> playersIds),
     Result monthResult(),
-    Result gameOver(String winnerId),
+    Result gameOver(Map<int, String> winners, int monthNumber),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -591,7 +608,7 @@ abstract class $ActiveGameGameOverStateCopyWith<$Res> {
   factory $ActiveGameGameOverStateCopyWith(ActiveGameGameOverState value,
           $Res Function(ActiveGameGameOverState) then) =
       _$ActiveGameGameOverStateCopyWithImpl<$Res>;
-  $Res call({String winnerId});
+  $Res call({Map<int, String> winners, int monthNumber});
 }
 
 class _$ActiveGameGameOverStateCopyWithImpl<$Res>
@@ -606,39 +623,52 @@ class _$ActiveGameGameOverStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object winnerId = freezed,
+    Object winners = freezed,
+    Object monthNumber = freezed,
   }) {
     return _then(ActiveGameGameOverState(
-      winnerId == freezed ? _value.winnerId : winnerId as String,
+      winners:
+          winners == freezed ? _value.winners : winners as Map<int, String>,
+      monthNumber:
+          monthNumber == freezed ? _value.monthNumber : monthNumber as int,
     ));
   }
 }
 
 class _$ActiveGameGameOverState extends ActiveGameGameOverState {
-  _$ActiveGameGameOverState(this.winnerId)
-      : assert(winnerId != null),
+  _$ActiveGameGameOverState(
+      {@required this.winners, @required this.monthNumber})
+      : assert(winners != null),
+        assert(monthNumber != null),
         super._();
 
   @override
-  final String winnerId;
+  final Map<int, String> winners;
+  @override
+  final int monthNumber;
 
   @override
   String toString() {
-    return 'ActiveGameState.gameOver(winnerId: $winnerId)';
+    return 'ActiveGameState.gameOver(winners: $winners, monthNumber: $monthNumber)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is ActiveGameGameOverState &&
-            (identical(other.winnerId, winnerId) ||
+            (identical(other.winners, winners) ||
                 const DeepCollectionEquality()
-                    .equals(other.winnerId, winnerId)));
+                    .equals(other.winners, winners)) &&
+            (identical(other.monthNumber, monthNumber) ||
+                const DeepCollectionEquality()
+                    .equals(other.monthNumber, monthNumber)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(winnerId);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(winners) ^
+      const DeepCollectionEquality().hash(monthNumber);
 
   @override
   $ActiveGameGameOverStateCopyWith<ActiveGameGameOverState> get copyWith =>
@@ -649,32 +679,32 @@ class _$ActiveGameGameOverState extends ActiveGameGameOverState {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result waitingForStart(),
-    @required Result gameEvent(String eventId),
+    @required Result gameEvent(int eventIndex, bool isSent),
     @required Result waitingPlayers(List<String> playersIds),
     @required Result monthResult(),
-    @required Result gameOver(String winnerId),
+    @required Result gameOver(Map<int, String> winners, int monthNumber),
   }) {
     assert(waitingForStart != null);
     assert(gameEvent != null);
     assert(waitingPlayers != null);
     assert(monthResult != null);
     assert(gameOver != null);
-    return gameOver(winnerId);
+    return gameOver(winners, monthNumber);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result waitingForStart(),
-    Result gameEvent(String eventId),
+    Result gameEvent(int eventIndex, bool isSent),
     Result waitingPlayers(List<String> playersIds),
     Result monthResult(),
-    Result gameOver(String winnerId),
+    Result gameOver(Map<int, String> winners, int monthNumber),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (gameOver != null) {
-      return gameOver(winnerId);
+      return gameOver(winners, monthNumber);
     }
     return orElse();
   }
@@ -716,8 +746,11 @@ class _$ActiveGameGameOverState extends ActiveGameGameOverState {
 
 abstract class ActiveGameGameOverState extends ActiveGameState {
   ActiveGameGameOverState._() : super._();
-  factory ActiveGameGameOverState(String winnerId) = _$ActiveGameGameOverState;
+  factory ActiveGameGameOverState(
+      {@required Map<int, String> winners,
+      @required int monthNumber}) = _$ActiveGameGameOverState;
 
-  String get winnerId;
+  Map<int, String> get winners;
+  int get monthNumber;
   $ActiveGameGameOverStateCopyWith<ActiveGameGameOverState> get copyWith;
 }
