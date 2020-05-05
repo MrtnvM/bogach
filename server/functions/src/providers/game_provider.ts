@@ -22,7 +22,7 @@ export class GameProvider {
       name: template.name,
       type: 'singleplayer',
       state: {
-        gameState: 'players_move',
+        gameStatus: 'players_move',
         monthNumber: 1,
         participantProgress: {
           [userId]: 0,

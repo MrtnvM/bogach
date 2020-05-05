@@ -1,5 +1,4 @@
 import { GameEntity, Game } from '../models/domain/game/game';
-import { Account } from '../models/domain/account';
 import { GameProvider } from '../providers/game_provider';
 import { DebenturePriceChangedEventGenerator } from '../events/debenture/debenture_price_changed_event_generator';
 import { produce } from 'immer';
@@ -9,8 +8,9 @@ import { PlayerActionHandler } from '../core/domain/player_action_handler';
 import { DebenturePriceChangedHandler } from '../events/debenture/debenture_price_changed_handler';
 import { StockPriceChangedHandler } from '../events/stock/stock_price_changed_handler';
 import { BusinessBuyEventHandler } from '../events/business/buy/business_buy_event_handler';
-import { ParticipantGameState } from '../models/domain/game/participant_game_state';
 import { PossessionStateGenerator } from './possession_state_generator';
+import { GameTargetEntity } from '../models/domain/game/game_target';
+import { UserEntity } from '../models/domain/user';
 
 export class GameService {
   constructor(
@@ -34,7 +34,7 @@ export class GameService {
 
   private handlerMap: { [type: string]: PlayerActionHandler } = {};
 
-  async updateGameEvents(gameId: GameEntity.Id): Promise<Game> {
+  async updateEvents(gameId: GameEntity.Id): Promise<Game> {
     if (!gameId) throw new Error('Missing Game ID');
 
     const game = await this.gameProvider.getGame(gameId);
@@ -80,71 +80,122 @@ export class GameService {
     const handler = this.handlerMap[event.type];
     if (!handler) throw new Error('Event handler not found for event with ID: ' + eventId);
 
+    if (game.state.gameStatus === 'game_over') {
+      return;
+    }
+
     await handler.validate(event, action);
     game = await handler.handle(game, event, action, userId);
 
-    const isAllUsersCompletedMove = game.participants
-      .map((participantId) => {
-        const currentEventNumber = game.state.participantProgress[participantId];
-        const isLastEvent = currentEventNumber === game.currentEvents.length - 1;
-        return isLastEvent;
-      })
-      .reduce((prev, curr) => prev && curr, true);
+    const gameTransformers: ((game: Game) => Game)[] = [
+      (g) => this.updateParticipantsAccounts(g),
+      (g) => this.updateMonth(g),
+      (g) => this.updateWinners(g),
+      (g) => this.updateGameEvents(g),
+      (g) => this.updatePossessionState(g),
+      (g) => this.updateUserProgress(g, eventId, userId),
+    ];
 
-    const accounts = this.getUsersAccounts(game, isAllUsersCompletedMove);
-    const userProgress = this.getUserProgress(game, eventId, isAllUsersCompletedMove);
+    const updatedGame = gameTransformers.reduce((prev, func) => func(prev), game);
 
-    const monthNumber = isAllUsersCompletedMove
-      ? game.state.monthNumber + 1
-      : game.state.monthNumber;
-
-    const gameEvents = isAllUsersCompletedMove ? this.generateGameEvents(game) : game.currentEvents;
-    const possessionState = this.possessionStateGenerator.generateParticipantsPossessionState(game);
-
-    game = produce(game, (draft) => {
-      draft.accounts = accounts;
-      draft.state.participantProgress[userId] = userProgress;
-      draft.state.monthNumber = monthNumber;
-      draft.currentEvents = gameEvents;
-      draft.possessionState = possessionState;
-    });
-
-    await this.gameProvider.updateGame(game);
+    await this.gameProvider.updateGame(updatedGame);
   }
 
-  private getUserProgress(
-    game: Game,
-    eventId: GameEventEntity.Id,
-    isAllUsersCompletedMove: boolean
-  ): number {
-    const currentUserProgress = game.currentEvents.findIndex((e) => e.id === eventId);
-    let newUserProgress;
+  private updateUserProgress(game: Game, eventId: GameEntity.Id, userId: UserEntity.Id): Game {
+    const isMoveCompleted = this.isAllParticipantsCompletedMove(game);
 
-    if (currentUserProgress < game.currentEvents.length - 1) {
+    const currentUserProgress = game.currentEvents.findIndex((e) => e.id === eventId);
+    const isNotLastEvent = currentUserProgress < game.currentEvents.length - 1;
+    let newUserProgress: number;
+
+    if (isNotLastEvent) {
       newUserProgress = currentUserProgress + 1;
     } else {
-      newUserProgress = isAllUsersCompletedMove ? 0 : currentUserProgress;
+      newUserProgress = isMoveCompleted ? 0 : currentUserProgress;
     }
 
-    return newUserProgress;
+    return produce(game, (draft) => {
+      draft.state.participantProgress[userId] = newUserProgress;
+    });
   }
 
-  private getUsersAccounts(
-    game: Game,
-    isAllUsersCompletedMove: boolean
-  ): ParticipantGameState<Account> {
-    if (!isAllUsersCompletedMove) {
-      return game.accounts;
+  private updateMonth(game: Game): Game {
+    const isMoveCompleted = this.isAllParticipantsCompletedMove(game);
+    const monthNumber = game.state.monthNumber + (isMoveCompleted ? 1 : 0);
+
+    return produce(game, (draft) => {
+      draft.state.monthNumber = monthNumber;
+    });
+  }
+
+  private updateWinners(game: Game): Game {
+    const isMoveCompleted = this.isAllParticipantsCompletedMove(game);
+
+    const usersProgress = game.participants
+      .map((participantId) => ({
+        participantId,
+        progress: GameTargetEntity.calculateProgress(game, participantId),
+      }))
+      .sort((p1, p2) => p2.progress - p1.progress);
+
+    const winners: { [place: number]: string } = usersProgress.reduce((prev, curr, index) => {
+      return { ...prev, [index]: curr.participantId };
+    }, {});
+
+    const isTargetArchived = usersProgress[0].progress >= 1;
+
+    const gameStatus: GameEntity.Status =
+      isTargetArchived && isMoveCompleted ? 'game_over' : game.state.gameStatus;
+
+    return produce(game, (draft) => {
+      draft.state.gameStatus = gameStatus;
+      draft.state.winners = winners;
+    });
+  }
+
+  private updateParticipantsAccounts(game: Game): Game {
+    const isMoveCompleted = this.isAllParticipantsCompletedMove(game);
+
+    if (!isMoveCompleted) {
+      return game;
     }
 
-    const currentAccounts = game.accounts;
-    const updatedAccounts = produce(currentAccounts, (draft) => {
+    const accounts = produce(game.accounts, (draft) => {
       game.participants.forEach((participantId) => {
         const participantAccount = draft[participantId];
         participantAccount.cash += participantAccount.cashFlow;
       });
     });
 
-    return updatedAccounts;
+    return produce(game, (draft) => {
+      draft.accounts = accounts;
+    });
+  }
+
+  private updateGameEvents(game: Game): Game {
+    const isMoveCompleted = this.isAllParticipantsCompletedMove(game);
+    const gameEvents = isMoveCompleted ? this.generateGameEvents(game) : game.currentEvents;
+
+    return produce(game, (draft) => {
+      draft.currentEvents = gameEvents;
+    });
+  }
+
+  private updatePossessionState(game: Game): Game {
+    const possessionState = this.possessionStateGenerator.generateParticipantsPossessionState(game);
+
+    return produce(game, (draft) => {
+      draft.possessionState = possessionState;
+    });
+  }
+
+  private isAllParticipantsCompletedMove(game: Game): boolean {
+    return game.participants
+      .map((participantId) => {
+        const currentEventNumber = game.state.participantProgress[participantId];
+        const isLastEvent = currentEventNumber === game.currentEvents.length - 1;
+        return isLastEvent;
+      })
+      .reduce((prev, curr) => prev && curr, true);
   }
 }
