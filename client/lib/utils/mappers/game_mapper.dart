@@ -19,6 +19,7 @@ import 'package:cash_flow/models/network/responses/possessions_state/income_resp
 import 'package:cash_flow/models/network/responses/possessions_state/liability_response_model.dart';
 import 'package:cash_flow/models/network/responses/target_response_model.dart';
 import 'package:cash_flow/models/state/game/account/account.dart';
+import 'package:cash_flow/models/state/game/current_game_state/current_game_state.dart';
 import 'package:cash_flow/models/state/game/posessions/assets/business_asset_item.dart';
 import 'package:cash_flow/models/state/game/posessions/assets/cash_asset_item.dart';
 import 'package:cash_flow/models/state/game/posessions/assets/debenture_asset_item.dart';
@@ -31,39 +32,46 @@ import 'package:cash_flow/models/state/game/posessions/possession_expense.dart';
 import 'package:cash_flow/models/state/game/posessions/possession_income.dart';
 import 'package:cash_flow/models/state/game/posessions/possession_liability.dart';
 import 'package:cash_flow/models/state/game/posessions/user_possession_state.dart';
-import 'package:cash_flow/utils/consts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-GameData mapToGameData(DocumentSnapshot response) {
+GameData mapToGameData(DocumentSnapshot response, String userId) {
   final userPossessionState = mapToPossessionState(
     response.data['possessionState'],
+    userId,
   );
-  final account = mapToAccountState(response.data['accounts']);
+  final account = mapToAccountState(response.data['accounts'], userId);
   final target = mapToTargetState(response.data['target']);
   final events = mapToGameEvents(response.data['currentEvents']);
+  final gameState = mapToCurrentGameState(response['state']);
 
   return GameData(
     possessions: userPossessionState,
     target: target,
     events: events,
     account: account,
+    gameState: gameState,
   );
 }
 
-GameData mapToRealtimeGameData(Event event) {
+GameData mapToRealtimeGameData(Event event, String userId) {
   final response = jsonDecode(jsonEncode(event.snapshot.value));
 
-  final userPossessionState = mapToPossessionState(response['possessionState']);
-  final account = mapToAccountState(response['accounts']);
+  final userPossessionState = mapToPossessionState(
+    response['possessionState'],
+    userId,
+  );
+  final account = mapToAccountState(response['accounts'], userId);
   final target = mapToTargetState(response['target']);
   final events = mapToGameEvents(response['currentEvents']);
+  final gameState = mapToCurrentGameState(response['state']);
 
   return GameData(
     possessions: userPossessionState,
     target: target,
     events: events,
     account: account,
+    gameState: gameState,
   );
 }
 
@@ -93,13 +101,17 @@ TargetData mapToTargetState(Map<String, dynamic> response) {
   return TargetData(value: target.value, type: target.type);
 }
 
-Account mapToAccountState(Map<String, dynamic> accountsData) {
-  // TODO(Maxim): Take user by id
-  return Account.fromJson(accountsData.values.first);
+Account mapToAccountState(Map<String, dynamic> accountsData, String userId) {
+  return Account.fromJson(accountsData[userId]);
 }
 
-UserPossessionState mapToPossessionState(Map<String, dynamic> response) {
-  final document = response[userName];
+CurrentGameState mapToCurrentGameState(Map<String, dynamic> gameState) {
+  return CurrentGameState.fromJson(gameState);
+}
+
+UserPossessionState mapToPossessionState(
+    Map<String, dynamic> response, String userId) {
+  final document = response[userId];
 
   return UserPossessionState((b) => b
     ..assets = _getAssets(document)

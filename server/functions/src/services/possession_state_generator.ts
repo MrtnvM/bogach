@@ -1,15 +1,12 @@
-import produce from 'immer';
 import { AssetEntity } from '../models/domain/asset';
 import { LiabilityEntity } from '../models/domain/liability';
 import { Possessions } from '../models/domain/possessions';
 import { PossessionState, PossessionStateEntity } from '../models/domain/possession_state';
-import { GameProvider } from '../providers/game_provider';
-import { GameContext } from '../models/domain/game/game_context';
+import { Game } from '../models/domain/game/game';
+import { ParticipantGameState } from '../models/domain/game/participant_game_state';
 
-export class PossessionService {
-  constructor(private gameProvider: GameProvider) {}
-
-  async generatePossessionState(possessions: Possessions) {
+export class PossessionStateGenerator {
+  generatePossessionState(possessions: Possessions): PossessionState {
     const incomes = possessions.incomes.slice();
     const expenses = possessions.expenses.slice();
     const assets = possessions.assets.slice();
@@ -32,17 +29,13 @@ export class PossessionService {
     return PossessionStateEntity.normalize(newPossessionState);
   }
 
-  async updatePossessionState(context: GameContext): Promise<PossessionState> {
-    const { gameId, userId } = context;
-    const game = await this.gameProvider.getGame(gameId);
-    const possessions = game.possessions[userId];
+  generateParticipantsPossessionState(game: Game): ParticipantGameState<Possessions> {
+    const newPossessionState: ParticipantGameState<Possessions> = {};
 
-    const newPossessionState = await this.generatePossessionState(possessions);
-    const updatedGame = produce(game, (draft) => {
-      draft.possessionState[userId] = newPossessionState;
+    game.participants.forEach((participantId) => {
+      const possessionState = this.generatePossessionState(game.possessions[participantId]);
+      newPossessionState[participantId] = possessionState;
     });
-
-    await this.gameProvider.updateGame(updatedGame);
 
     return newPossessionState;
   }

@@ -1,12 +1,12 @@
+import produce from 'immer';
+
 import { PlayerActionHandler } from '../../../core/domain/player_action_handler';
 import { Asset } from '../../../models/domain/asset';
-import { GameContext } from '../../../models/domain/game/game_context';
-import { GameProvider } from '../../../providers/game_provider';
 import { Game } from '../../../models/domain/game/game';
 import { Account } from '../../../models/domain/account';
-import produce from 'immer';
 import { Liability } from '../../../models/domain/liability';
 import { BusinessSellEvent } from './business_sell_event';
+import { UserEntity } from '../../../models/domain/user';
 
 type Event = BusinessSellEvent.Event;
 type Action = BusinessSellEvent.PlayerAction;
@@ -28,10 +28,6 @@ interface ActionSellParameters {
 }
 
 export class BusinessSellEventHandler extends PlayerActionHandler {
-  constructor(private gameProvider: GameProvider) {
-    super();
-  }
-
   get gameEventType(): string {
     return BusinessSellEvent.Type;
   }
@@ -48,10 +44,7 @@ export class BusinessSellEventHandler extends PlayerActionHandler {
     return true;
   }
 
-  async handle(event: Event, action: Action, context: GameContext): Promise<void> {
-    const { gameId, userId } = context;
-    const game = await this.gameProvider.getGame(gameId);
-
+  async handle(game: Game, event: Event, action: Action, userId: UserEntity.Id): Promise<Game> {
     const { businessId, currentPrice } = event.data;
 
     const { action: businessAction } = action;
@@ -91,7 +84,7 @@ export class BusinessSellEventHandler extends PlayerActionHandler {
       draft.possessions[userId].liabilities = actionResult.newLiabilities;
     });
 
-    await this.gameProvider.updateGame(updatedGame);
+    return updatedGame;
   }
 
   getExistingBusiness(assets: Asset[], businessId: string): number {

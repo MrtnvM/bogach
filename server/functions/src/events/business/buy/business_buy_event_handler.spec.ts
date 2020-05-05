@@ -1,7 +1,5 @@
 /// <reference types="@types/jest"/>
 
-import { GameProvider } from '../../../providers/game_provider';
-import { mock, instance, reset, when, capture } from 'ts-mockito';
 import { GameEntity } from '../../../models/domain/game/game';
 import { stubs, utils } from './business_buy_event_handler.spec.utils';
 import produce from 'immer';
@@ -11,19 +9,14 @@ import { Liability, LiabilityEntity } from '../../../models/domain/liability';
 import { BusinessBuyEvent } from './business_buy_event_event';
 
 describe('Business buy event event handler', () => {
-  const { eventId, gameId, userId, context, game, initialCash } = stubs;
-  const mockGameProvider = mock(GameProvider);
+  const { eventId, userId, game, initialCash } = stubs;
 
   beforeEach(() => {
     GameEntity.validate(game);
-    reset(mockGameProvider);
   });
 
   test('Successfully bought new business', async () => {
-    when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
-
-    const gameProvider = instance(mockGameProvider);
-    const handler = new BusinessBuyEventHandler(gameProvider);
+    const handler = new BusinessBuyEventHandler();
 
     const event = utils.businessOfferEvent({
       businessId: 'randomId',
@@ -41,7 +34,7 @@ describe('Business buy event event handler', () => {
       action: 'buy',
     });
 
-    await handler.handle(event, action, context);
+    const newGame = await handler.handle(game, event, action, userId);
 
     const newBusinessAsset: BusinessAsset = {
       id: 'randomId',
@@ -69,15 +62,11 @@ describe('Business buy event event handler', () => {
       draft.possessions[userId].liabilities.push(newLiability);
     });
 
-    const [newGame] = capture(mockGameProvider.updateGame).last();
     expect(newGame).toStrictEqual(expectedGame);
   });
 
   test('Cant buy two the same businesses', async () => {
-    when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
-
-    const gameProvider = instance(mockGameProvider);
-    const handler = new BusinessBuyEventHandler(gameProvider);
+    const handler = new BusinessBuyEventHandler();
 
     const currentPrice = 120_000;
     const event = utils.dryCleaningBusinessOfferEvent(currentPrice);
@@ -88,7 +77,7 @@ describe('Business buy event event handler', () => {
     });
 
     try {
-      await handler.handle(event, action, context);
+      await handler.handle(game, event, action, userId);
       throw new Error('Shoud fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(new Error('Cant buy two the same businesses'));
@@ -96,10 +85,7 @@ describe('Business buy event event handler', () => {
   });
 
   test('Cant buy two the same businesses if liability present', async () => {
-    when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
-
-    const gameProvider = instance(mockGameProvider);
-    const handler = new BusinessBuyEventHandler(gameProvider);
+    const handler = new BusinessBuyEventHandler();
 
     const newBusinessData: BusinessBuyEvent.Data = {
       businessId: 'existingLiabilityId',
@@ -125,7 +111,7 @@ describe('Business buy event event handler', () => {
     });
 
     try {
-      await handler.handle(event, action, context);
+      await handler.handle(game, event, action, userId);
       throw new Error('Shoud fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(new Error('Cant buy business with two the same liabilities'));
@@ -133,10 +119,7 @@ describe('Business buy event event handler', () => {
   });
 
   test('Can not handle sell action', async () => {
-    when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
-
-    const gameProvider = instance(mockGameProvider);
-    const handler = new BusinessBuyEventHandler(gameProvider);
+    const handler = new BusinessBuyEventHandler();
 
     const currentPrice = 120_000;
     const event = utils.dryCleaningBusinessOfferEvent(currentPrice);
@@ -147,7 +130,7 @@ describe('Business buy event event handler', () => {
     });
 
     try {
-      await handler.handle(event, action, context);
+      await handler.handle(game, event, action, userId);
       throw new Error('Shoud fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(
@@ -159,10 +142,7 @@ describe('Business buy event event handler', () => {
   });
 
   test('Can not buy new business if not enough money', async () => {
-    when(mockGameProvider.getGame(gameId)).thenResolve({ ...game });
-
-    const gameProvider = instance(mockGameProvider);
-    const handler = new BusinessBuyEventHandler(gameProvider);
+    const handler = new BusinessBuyEventHandler();
 
     const event = utils.businessOfferEvent({
       businessId: 'randomId',
@@ -181,7 +161,7 @@ describe('Business buy event event handler', () => {
     });
 
     try {
-      await handler.handle(event, action, context);
+      await handler.handle(game, event, action, userId);
       throw new Error('Shoud fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(new Error('Not enough money'));

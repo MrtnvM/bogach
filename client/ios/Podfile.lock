@@ -202,6 +202,9 @@ PODS:
     - FirebaseAnalytics (= 6.2.2)
   - Firebase/CoreOnly (6.16.0):
     - FirebaseCore (= 6.6.1)
+  - Firebase/Database (6.16.0):
+    - Firebase/CoreOnly
+    - FirebaseDatabase (~> 6.1.4)
   - Firebase/Firestore (6.16.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 1.10.0)
@@ -224,6 +227,9 @@ PODS:
     - Crashlytics
     - Fabric
     - Firebase/Core
+    - Flutter
+  - firebase_database (0.0.1):
+    - Firebase/Database
     - Flutter
   - FirebaseAnalytics (6.2.2):
     - FirebaseCore (~> 6.6)
@@ -253,6 +259,10 @@ PODS:
     - GoogleUtilities/Logger (~> 6.5)
     - nanopb (~> 0.3.901)
   - FirebaseCoreDiagnosticsInterop (1.2.0)
+  - FirebaseDatabase (6.1.4):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.0)
+    - leveldb-library (~> 1.22)
   - FirebaseFirestore (1.10.1):
     - abseil/algorithm (= 0.20190808)
     - abseil/base (= 0.20190808)
@@ -382,6 +392,7 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_core_web (from `.symlinks/plugins/firebase_core_web/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
+  - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
   - Flutter (from `Flutter`)
   - flutter_facebook_login (from `.symlinks/plugins/flutter_facebook_login/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
@@ -414,6 +425,7 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseCoreDiagnostics
     - FirebaseCoreDiagnosticsInterop
+    - FirebaseDatabase
     - FirebaseFirestore
     - FirebaseInstallations
     - FirebaseInstanceID
@@ -451,6 +463,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core_web/ios"
   firebase_crashlytics:
     :path: ".symlinks/plugins/firebase_crashlytics/ios"
+  firebase_database:
+    :path: ".symlinks/plugins/firebase_database/ios"
   Flutter:
     :path: Flutter
   flutter_facebook_login:
@@ -501,12 +515,14 @@ SPEC CHECKSUMS:
   firebase_core: 0d8be0e0d14c4902953aeb5ac5d7316d1fe4b978
   firebase_core_web: d501d8b946b60c8af265428ce483b0fff5ad52d1
   firebase_crashlytics: bd8c58df07f107cb7e1a20cb190b9a468e0a69fd
+  firebase_database: ba12319259e324c8e52e5e4efc8c6f3d33da1ee3
   FirebaseAnalytics: cf95d3aab897612783020fbd98401d5366f135ee
   FirebaseAuth: 5ce2b03a3d7fe56b7a6e4c5ec7ff1522890b1d6f
   FirebaseAuthInterop: 0ffa57668be100582bb7643d4fcb7615496c41fc
   FirebaseCore: 85064903ed6c28e47fec9c7bd149d94ba1b6b6e7
   FirebaseCoreDiagnostics: 5e78803ab276bc5b50340e3c539c06c3de35c649
   FirebaseCoreDiagnosticsInterop: 296e2c5f5314500a850ad0b83e9e7c10b011a850
+  FirebaseDatabase: 0144e0706a4761f1b0e8679572eba8095ddb59be
   FirebaseFirestore: ff429edd15d5acdd2b8da02ea69483313e4ae0a7
   FirebaseInstallations: 575cd32f2aec0feeb0e44f5d0110a09e5e60b47b
   FirebaseInstanceID: 6668efc1655a4052c083f287a7141f1ead12f9c2
