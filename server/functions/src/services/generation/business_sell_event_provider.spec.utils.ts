@@ -123,7 +123,14 @@ const initialPossesssions: Possessions = {
 const game: Game = {
   id: gameId,
   name: 'Game 1',
+  type: 'singleplayer',
   participants: [userId],
+  state: {
+    gameState: 'players_move',
+    monthNumber: 1,
+    participantProgress: { [userId]: 0 },
+    winners: {},
+  },
   possessions: {
     [userId]: initialPossesssions,
   },
