@@ -28,6 +28,10 @@ export class GameService {
     new BusinessBuyEventHandler(),
   ];
 
+  // private sellBusinessEventProvider = new BusinessSellEventProvider(
+  //   new BusinessSellEventGenerator()
+  // );
+
   private handlerMap: { [type: string]: PlayerActionHandler } = {};
 
   async updateGameEvents(gameId: GameEntity.Id): Promise<Game> {
@@ -57,6 +61,7 @@ export class GameService {
       // BusinessBuyEventGenerator.generate(),
       // BusinessBuyEventGenerator.generate(),
       // BusinessBuyEventGenerator.generate(),
+      // ...this.sellBusinessEventProvider.generateBusinessSellEvent(game),
       DebenturePriceChangedEventGenerator.generate(),
     ];
 

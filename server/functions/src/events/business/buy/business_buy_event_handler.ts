@@ -74,7 +74,6 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
       );
     }
 
-    const businessName = event.name;
 
     const assets = game.possessions[userId].assets;
     this.checkExistingBusiness(assets, businessId);
@@ -84,6 +83,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
 
     const userAccount = game.accounts[userId];
     const priceToPay = currentPrice - debt;
+    const businessName = event.name;
     const actionBuyParameters: ActionBuyParameters = {
       businessId,
       userAccount,
