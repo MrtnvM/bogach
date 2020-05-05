@@ -59,13 +59,13 @@ describe('Business sell event handler', () => {
 
     const expectedGame = produce(game, (draft) => {
       const businessAssetIndex = draft.possessions[userId].assets.findIndex(
-        (b) => b.id == event.data.businessId
+        (b) => b.id === event.data.businessId
       );
 
       draft.possessions[userId].assets.splice(businessAssetIndex, 1);
 
       const businessLiabilityIndex = draft.possessions[userId].liabilities.findIndex(
-        (b) => b.id == event.data.businessId
+        (b) => b.id === event.data.businessId
       );
       draft.possessions[userId].liabilities.splice(businessLiabilityIndex, 1);
 

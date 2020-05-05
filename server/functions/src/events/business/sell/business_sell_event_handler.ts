@@ -49,7 +49,7 @@ export class BusinessSellEventHandler extends PlayerActionHandler {
 
     const { action: businessAction } = action;
 
-    if (businessAction != 'sell') {
+    if (businessAction !== 'sell') {
       throw new Error(
         'Error action type when dispatching ' +
           businessAction +
@@ -162,7 +162,7 @@ export class BusinessSellEventHandler extends PlayerActionHandler {
   }
 
   removeFromAssets(theSameBusinessIndex: number, assets: Asset[]): Asset[] {
-    let newAssets = assets.slice();
+    const newAssets = assets.slice();
     const countItemsToRemove = 1;
     newAssets.splice(theSameBusinessIndex, countItemsToRemove);
 
@@ -170,7 +170,7 @@ export class BusinessSellEventHandler extends PlayerActionHandler {
   }
 
   removeFromLiabilties(theSameLiabilityIndex: number, liabilities: Liability[]): Liability[] {
-    let newLiabilities = liabilities.slice();
+    const newLiabilities = liabilities.slice();
     const countItemsToRemove = 1;
     newLiabilities.splice(theSameLiabilityIndex, countItemsToRemove);
 

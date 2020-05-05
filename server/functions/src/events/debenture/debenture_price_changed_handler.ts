@@ -193,7 +193,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler {
       averagePrice: actionResult.newAveragePrice,
     };
     let newAssets = assets.slice();
-    const index = newAssets.findIndex((d) => d.id === newDebenture.id);
+    const index = assets.indexOf(theSameDebenture);
 
     if (index >= 0) {
       newAssets[index] = newDebenture;
