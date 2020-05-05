@@ -5,13 +5,13 @@ import 'package:cash_flow/models/errors/game_error.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 class StartGameAction extends Action {
-  StartGameAction(this.gameId);
+  StartGameAction(this.gameContext);
 
-  final String gameId;
+  final GameContext gameContext;
 
   @override
   String toString() {
-    return '${super.toString()} game_id = $gameId';
+    return '${super.toString()} $gameContext';
   }
 }
 
