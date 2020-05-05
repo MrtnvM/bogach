@@ -51,12 +51,12 @@ export class GameService {
       DebenturePriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
-      StockPriceChangedEventGenerator.generate(),
-      StockPriceChangedEventGenerator.generate(),
-      StockPriceChangedEventGenerator.generate(),
-      BusinessBuyEventGenerator.generate(),
-      BusinessBuyEventGenerator.generate(),
-      BusinessBuyEventGenerator.generate(),
+      // StockPriceChangedEventGenerator.generate(),
+      // StockPriceChangedEventGenerator.generate(),
+      // StockPriceChangedEventGenerator.generate(),
+      // BusinessBuyEventGenerator.generate(),
+      // BusinessBuyEventGenerator.generate(),
+      // BusinessBuyEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
     ];
 
@@ -87,7 +87,7 @@ export class GameService {
       .reduce((prev, curr) => prev && curr, true);
 
     const accounts = this.getUsersAccounts(game, isAllUsersCompletedMove);
-    const userProgress = this.getUserProgress(game, userId, isAllUsersCompletedMove);
+    const userProgress = this.getUserProgress(game, eventId, isAllUsersCompletedMove);
 
     const monthNumber = isAllUsersCompletedMove
       ? game.state.monthNumber + 1
@@ -109,10 +109,10 @@ export class GameService {
 
   private getUserProgress(
     game: Game,
-    userId: UserEntity.Id,
+    eventId: GameEventEntity.Id,
     isAllUsersCompletedMove: boolean
   ): number {
-    const currentUserProgress = game.state.participantProgress[userId];
+    const currentUserProgress = game.currentEvents.findIndex((e) => e.id === eventId);
     let newUserProgress;
 
     if (currentUserProgress < game.currentEvents.length - 1) {
