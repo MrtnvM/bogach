@@ -25,7 +25,14 @@ describe('Possession Service Tests', () => {
   const game: Game = {
     id: gameId,
     name: 'Game 1',
+    type: 'singleplayer',
     participants: [userId],
+    state: {
+      gameState: 'players_move',
+      monthNumber: 1,
+      participantProgress: { [userId]: 1 },
+      winners: {},
+    },
     possessions: { [userId]: PossessionsEntity.createEmpty() },
     possessionState: {
       [userId]: PossessionStateEntity.createEmpty(),
