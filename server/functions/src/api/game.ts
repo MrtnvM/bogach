@@ -22,7 +22,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const gameService = new GameService(gameProvider);
 
-    const gameWithEvents = gameService.generateGameEvents(createdGame.id);
+    const gameWithEvents = gameService.updateGameEvents(createdGame.id);
     return send(gameWithEvents, response);
   });
 
@@ -69,7 +69,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const gameProvider = new GameProvider(firestore, selector);
     const gameService = new GameService(gameProvider);
-    const game = gameService.generateGameEvents(gameId);
+    const game = gameService.updateGameEvents(gameId);
 
     return send(game, response);
   });

@@ -19,19 +19,30 @@ export class GameService {
   }
 
   private handlers: PlayerActionHandler[] = [
-    new DebenturePriceChangedHandler(this.gameProvider),
-    new StockPriceChangedHandler(this.gameProvider),
-    new BusinessBuyEventHandler(this.gameProvider),
+    new DebenturePriceChangedHandler(),
+    new StockPriceChangedHandler(),
+    new BusinessBuyEventHandler(),
   ];
 
   private handlerMap: { [type: string]: PlayerActionHandler } = {};
 
-  async generateGameEvents(gameId: GameEntity.Id): Promise<Game> {
+  async updateGameEvents(gameId: GameEntity.Id): Promise<Game> {
     if (!gameId) throw new Error('Missing Game ID');
 
     const game = await this.gameProvider.getGame(gameId);
     if (!game) throw new Error('No game with ID: ' + gameId);
 
+    const gameEvents = this.generateGameEvents(game);
+
+    const gameWithNewEvents = produce(game, (draft) => {
+      draft.currentEvents = gameEvents;
+    });
+
+    const updatedGame = await this.gameProvider.updateGame(gameWithNewEvents);
+    return updatedGame;
+  }
+
+  generateGameEvents(game: Game): GameEvent[] {
     const gameEvents = [
       DebenturePriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
@@ -45,12 +56,7 @@ export class GameService {
       DebenturePriceChangedEventGenerator.generate(),
     ];
 
-    const gameWithNewEvents = produce(game, (draft) => {
-      draft.currentEvents = gameEvents;
-    });
-
-    const updatedGame = await this.gameProvider.updateGame(gameWithNewEvents);
-    return updatedGame;
+    return gameEvents;
   }
 
   async handlePlayerAction(eventId: GameEventEntity.Id, action: any, context: GameContext) {

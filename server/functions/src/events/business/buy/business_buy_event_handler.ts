@@ -2,12 +2,11 @@ import produce from 'immer';
 import { BusinessBuyEvent } from './business_buy_event_event';
 import { Asset, AssetEntity } from '../../../models/domain/asset';
 import { Liability, LiabilityEntity } from '../../../models/domain/liability';
-import { GameContext } from '../../../models/domain/game/game_context';
-import { GameProvider } from '../../../providers/game_provider';
 import { PlayerActionHandler } from '../../../core/domain/player_action_handler';
 import { Game } from '../../../models/domain/game/game';
 import { Account } from '../../../models/domain/account';
 import { BusinessAsset } from '../../../models/domain/assets/business_asset';
+import { UserEntity } from '../../../models/domain/user';
 
 type Event = BusinessBuyEvent.Event;
 type Action = BusinessBuyEvent.PlayerAction;
@@ -36,10 +35,6 @@ interface ActionBuyParameters {
 }
 
 export class BusinessBuyEventHandler extends PlayerActionHandler {
-  constructor(private gameProvider: GameProvider) {
-    super();
-  }
-
   get gameEventType(): string {
     return BusinessBuyEvent.Type;
   }
@@ -56,10 +51,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     return true;
   }
 
-  async handle(event: Event, action: Action, context: GameContext): Promise<void> {
-    const { gameId, userId } = context;
-    const game = await this.gameProvider.getGame(gameId);
-
+  async handle(game: Game, event: Event, action: Action, userId: UserEntity.Id): Promise<Game> {
     const {
       businessId,
       currentPrice,
@@ -108,7 +100,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
       debt,
     };
 
-    const actionResult = await this.applyBuyAction(actionBuyParameters);
+    const actionResult = this.applyBuyAction(actionBuyParameters);
 
     const updatedGame: Game = produce(game, (draft) => {
       draft.accounts[userId].credit = actionResult.newCreditValue;
@@ -117,7 +109,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
       draft.possessions[userId].liabilities = actionResult.newLiabilities;
     });
 
-    await this.gameProvider.updateGame(updatedGame);
+    return updatedGame;
   }
 
   checkExistingBusiness(assets: Asset[], businessId: string) {
@@ -142,7 +134,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     }
   }
 
-  async applyBuyAction(actionParameters: ActionBuyParameters): Promise<ActionResult> {
+  applyBuyAction(actionParameters: ActionBuyParameters): ActionResult {
     const { userAccount, priceToPay } = actionParameters;
 
     //TODO implement credit and write tests

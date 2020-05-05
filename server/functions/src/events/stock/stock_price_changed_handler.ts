@@ -1,13 +1,12 @@
 import { PlayerActionHandler } from '../../core/domain/player_action_handler';
 import { AssetEntity, Asset } from '../../models/domain/asset';
 import { BuySellAction } from '../../models/domain/actions/buy_sell_action';
-import { GameContext } from '../../models/domain/game/game_context';
-import { GameProvider } from '../../providers/game_provider';
 import { Game } from '../../models/domain/game/game';
 import produce from 'immer';
 import { StockPriceChangedEvent } from './stock_price_changed_event';
 import { StockAsset } from '../../models/domain/assets/stock_asset';
 import { Account } from '../../models/domain/account';
+import { UserEntity } from '../../models/domain/user';
 
 type Event = StockPriceChangedEvent.Event;
 type Action = StockPriceChangedEvent.PlayerAction;
@@ -29,10 +28,6 @@ interface ActionParameters {
 }
 
 export class StockPriceChangedHandler extends PlayerActionHandler {
-  constructor(private gameProvider: GameProvider) {
-    super();
-  }
-
   get gameEventType(): string {
     return StockPriceChangedEvent.Type;
   }
@@ -49,10 +44,7 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     return true;
   }
 
-  async handle(event: Event, action: Action, context: GameContext): Promise<void> {
-    const { gameId, userId } = context;
-    const game = await this.gameProvider.getGame(gameId);
-
+  async handle(game: Game, event: Event, action: Action, userId: UserEntity.Id): Promise<Game> {
     const { currentPrice, fairPrice, availableCount } = event.data;
     const { count: actionCount, action: stockAction } = action;
 
@@ -79,7 +71,7 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
       currentAveragePrice,
       totalPrice,
     };
-    const actionResult = await this.applyAction(actionParameters, stockAction);
+    const actionResult = this.applyAction(actionParameters, stockAction);
 
     let newAssets: Asset[];
     if (theSameStock) {
@@ -93,10 +85,10 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
       draft.possessions[userId].assets = newAssets;
     });
 
-    await this.gameProvider.updateGame(updatedGame);
+    return updatedGame;
   }
 
-  async applyAction(actionParameters: ActionParameters, action: BuySellAction) {
+  applyAction(actionParameters: ActionParameters, action: BuySellAction) {
     if (action === 'buy') {
       return this.applyBuyAction(actionParameters);
     } else if (action === 'sell') {
@@ -106,7 +98,7 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     }
   }
 
-  async applyBuyAction(actionParameters: ActionParameters): Promise<ActionResult> {
+  applyBuyAction(actionParameters: ActionParameters): ActionResult {
     const {
       userAccount,
       countInPortfolio,
@@ -146,7 +138,7 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     return actionResult;
   }
 
-  async applySellAction(actionParameters: ActionParameters): Promise<ActionResult> {
+  applySellAction(actionParameters: ActionParameters): ActionResult {
     const isEnoughCountAvailable = actionParameters.availableCount >= actionParameters.actionCount;
     if (!isEnoughCountAvailable) {
       throw new Error('Not enough stocks available');
