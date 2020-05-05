@@ -23,7 +23,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const templateId = apiRequest.jsonField('templateId');
     const userId = apiRequest.jsonField('userId');
 
-    const createGame = async () => {
+    const createNewGame = async () => {
       const createdGame = await gameProvider.createGame(templateId, userId);
 
       const gameEvents = gameService.generateGameEvents(createdGame);
@@ -31,16 +31,16 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
         createdGame
       );
 
-      const game = produce(createdGame, (draft) => {
+      const newGame = produce(createdGame, (draft) => {
         draft.currentEvents = gameEvents;
         draft.possessionState = possessionState;
       });
 
-      await gameProvider.updateGame(game);
-      return game;
+      await gameProvider.updateGame(newGame);
+      return newGame;
     };
 
-    const game = createGame();
+    const game = createNewGame();
     return send(game, response);
   });
 

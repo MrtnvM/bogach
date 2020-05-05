@@ -139,7 +139,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler {
     const priceDifferenceStep = pricesDifference / commonCount;
 
     const newPriceOffset = priceDifferenceStep * actionCount;
-    let newAveragePrice = currentAveragePrice + newPriceOffset;
+    const newAveragePrice = currentAveragePrice + newPriceOffset;
 
     const actionResult: ActionResult = {
       newDebentureCount,
@@ -213,7 +213,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler {
     profitabilityPercent: number,
     debentureName: string
   ): Asset[] {
-    let newAssets = assets.slice();
+    const newAssets = assets.slice();
 
     const newDebenture: DebentureAsset = {
       averagePrice: actionResult.newAveragePrice,

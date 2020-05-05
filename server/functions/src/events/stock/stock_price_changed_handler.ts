@@ -188,7 +188,7 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     fairPrice: number,
     stockName: string
   ): Asset[] {
-    let newAssets = assets.slice();
+    const newAssets = assets.slice();
 
     const newStock: StockAsset = {
       fairPrice,

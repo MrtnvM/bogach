@@ -23,15 +23,15 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
       const possessionService = new PossessionStateGenerator();
 
       const game = await gameProvider.getGame(context.gameId);
-      const possisionState = possessionService.generateParticipantsPossessionState(game);
+      const newPossisionState = possessionService.generateParticipantsPossessionState(game);
 
       const updatedGame = produce(game, (draft) => {
-        draft.possessionState = possisionState;
+        draft.possessionState = newPossisionState;
       });
 
       await gameProvider.updateGame(updatedGame);
 
-      return possisionState;
+      return newPossisionState;
     };
 
     const possisionState = updatePossessionState();

@@ -126,7 +126,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
   checkExistingLiability(liabilities: Liability[], businessId: string) {
     const businessLiabilities = LiabilityEntity.getBusinessCredits(liabilities);
     const theSameLiabilityIndex = businessLiabilities.findIndex((d) => {
-      return d.id === businessId && d.type == 'business_credit';
+      return d.id === businessId && d.type === 'business_credit';
     });
 
     if (theSameLiabilityIndex >= 0) {
