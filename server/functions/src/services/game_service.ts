@@ -8,14 +8,15 @@ import { GameContext } from '../models/domain/game/game_context';
 import { PlayerActionHandler } from '../core/domain/player_action_handler';
 import { DebenturePriceChangedHandler } from '../events/debenture/debenture_price_changed_handler';
 import { StockPriceChangedHandler } from '../events/stock/stock_price_changed_handler';
-import { StockPriceChangedEventGenerator } from '../events/stock/stock_price_changed_event_generator';
-import { BusinessBuyEventGenerator } from '../events/business/buy/business_buy_event_generator';
 import { BusinessBuyEventHandler } from '../events/business/buy/business_buy_event_handler';
-import { UserEntity } from '../models/domain/user';
 import { ParticipantGameState } from '../models/domain/game/participant_game_state';
+import { PossessionStateGenerator } from './possession_state_generator';
 
 export class GameService {
-  constructor(private gameProvider: GameProvider) {
+  constructor(
+    private gameProvider: GameProvider,
+    private possessionStateGenerator: PossessionStateGenerator
+  ) {
     this.handlers.forEach((handler) => {
       this.handlerMap[handler.gameEventType] = handler;
     });
@@ -93,12 +94,14 @@ export class GameService {
       : game.state.monthNumber;
 
     const gameEvents = isAllUsersCompletedMove ? this.generateGameEvents(game) : game.currentEvents;
+    const possessionState = this.possessionStateGenerator.generateParticipantsPossessionState(game);
 
     game = produce(game, (draft) => {
       draft.accounts = accounts;
       draft.state.participantProgress[userId] = userProgress;
       draft.state.monthNumber = monthNumber;
       draft.currentEvents = gameEvents;
+      draft.possessionState = possessionState;
     });
 
     await this.gameProvider.updateGame(game);

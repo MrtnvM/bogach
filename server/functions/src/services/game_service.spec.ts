@@ -6,6 +6,7 @@ import { GameService } from './game_service';
 import { GameContext } from '../models/domain/game/game_context';
 import { TestData } from './game_service.spec.utils';
 import produce from 'immer';
+import { PossessionStateGenerator } from './possession_state_generator';
 
 describe('Game Service - Singleplayer game', () => {
   test('Successfully handle not last game event', async () => {
@@ -15,7 +16,8 @@ describe('Game Service - Singleplayer game', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
 
     const gameProvider: GameProvider = instance(mockGameProvider);
-    const gameService = new GameService(gameProvider);
+    const possesssionStateGenerator = new PossessionStateGenerator();
+    const gameService = new GameService(gameProvider, possesssionStateGenerator);
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(firstEventId, firstEventPlayerAction, gameContext);
@@ -47,7 +49,8 @@ describe('Game Service - Singleplayer game', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
 
     const gameProvider: GameProvider = instance(mockGameProvider);
-    const gameService = new GameService(gameProvider);
+    const possesssionStateGenerator = new PossessionStateGenerator();
+    const gameService = new GameService(gameProvider, possesssionStateGenerator);
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);

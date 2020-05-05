@@ -1,12 +1,8 @@
 /// <reference types="@types/jest"/>
 
-import { GameProvider } from '../providers/game_provider';
-import { mock, instance, when } from 'ts-mockito';
-import { GameEntity, Game } from '../models/domain/game/game';
-import { UserEntity } from '../models/domain/user';
-import { PossessionService } from '../services/possession_service';
-import { PossessionState, PossessionStateEntity } from '../models/domain/possession_state';
-import { Possessions, PossessionsEntity } from '../models/domain/possessions';
+import { PossessionStateGenerator } from './possession_state_generator';
+import { PossessionState } from '../models/domain/possession_state';
+import { Possessions } from '../models/domain/possessions';
 import { InsuranceAsset } from '../models/domain/assets/insurance_asset';
 import { DebentureAsset } from '../models/domain/assets/debenture_asset';
 import { StockAsset } from '../models/domain/assets/stock_asset';
@@ -19,29 +15,6 @@ import { BusinessCreditLiability } from '../models/domain/liabilities/business_c
 import { OtherLiability } from '../models/domain/liabilities/other_liability';
 
 describe('Possession Service Tests', () => {
-  const gameId: GameEntity.Id = 'game1';
-  const userId: UserEntity.Id = 'user1';
-
-  const game: Game = {
-    id: gameId,
-    name: 'Game 1',
-    type: 'singleplayer',
-    participants: [userId],
-    state: {
-      gameState: 'players_move',
-      monthNumber: 1,
-      participantProgress: { [userId]: 1 },
-      winners: {},
-    },
-    possessions: { [userId]: PossessionsEntity.createEmpty() },
-    possessionState: {
-      [userId]: PossessionStateEntity.createEmpty(),
-    },
-    accounts: {},
-    target: { type: 'cash', value: 1000000 },
-    currentEvents: [],
-  };
-
   const create = <T>(obj: T) => obj;
 
   test('Generation of possession state', async () => {
@@ -149,16 +122,8 @@ describe('Possession Service Tests', () => {
       ],
     };
 
-    const mockedGameProvider: GameProvider = mock(GameProvider);
-
-    when(mockedGameProvider.getGame(gameId)).thenResolve({
-      ...game,
-      possessions: { [userId]: initialPossesssions },
-    });
-
-    const gameProvider: GameProvider = instance(mockedGameProvider);
-    const possessionService = new PossessionService(gameProvider);
-    const newPossessionState = await possessionService.generatePossessionState(initialPossesssions);
+    const possessionService = new PossessionStateGenerator();
+    const newPossessionState = possessionService.generatePossessionState(initialPossesssions);
 
     const expectedPossessionState: PossessionState = {
       incomes: [
