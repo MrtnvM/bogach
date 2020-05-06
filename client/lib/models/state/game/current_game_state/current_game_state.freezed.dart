@@ -16,7 +16,7 @@ class _$CurrentGameStateTearOff {
   const _$CurrentGameStateTearOff();
 
   _CurrentGameState call(
-      {@JsonKey(name: 'gameState') GameStatus gameStatus,
+      {GameStatus gameStatus,
       int monthNumber,
       Map<String, int> participantProgress,
       Map<int, String> winners}) {
@@ -33,7 +33,6 @@ class _$CurrentGameStateTearOff {
 const $CurrentGameState = _$CurrentGameStateTearOff();
 
 mixin _$CurrentGameState {
-  @JsonKey(name: 'gameState')
   GameStatus get gameStatus;
   int get monthNumber;
   Map<String, int> get participantProgress;
@@ -48,7 +47,7 @@ abstract class $CurrentGameStateCopyWith<$Res> {
           CurrentGameState value, $Res Function(CurrentGameState) then) =
       _$CurrentGameStateCopyWithImpl<$Res>;
   $Res call(
-      {@JsonKey(name: 'gameState') GameStatus gameStatus,
+      {GameStatus gameStatus,
       int monthNumber,
       Map<String, int> participantProgress,
       Map<int, String> winners});
@@ -90,7 +89,7 @@ abstract class _$CurrentGameStateCopyWith<$Res>
       __$CurrentGameStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@JsonKey(name: 'gameState') GameStatus gameStatus,
+      {GameStatus gameStatus,
       int monthNumber,
       Map<String, int> participantProgress,
       Map<int, String> winners});
@@ -130,7 +129,7 @@ class __$CurrentGameStateCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_CurrentGameState implements _CurrentGameState {
   _$_CurrentGameState(
-      {@JsonKey(name: 'gameState') this.gameStatus,
+      {this.gameStatus,
       this.monthNumber,
       this.participantProgress,
       this.winners});
@@ -139,7 +138,6 @@ class _$_CurrentGameState implements _CurrentGameState {
       _$_$_CurrentGameStateFromJson(json);
 
   @override
-  @JsonKey(name: 'gameState')
   final GameStatus gameStatus;
   @override
   final int monthNumber;
@@ -190,7 +188,7 @@ class _$_CurrentGameState implements _CurrentGameState {
 
 abstract class _CurrentGameState implements CurrentGameState {
   factory _CurrentGameState(
-      {@JsonKey(name: 'gameState') GameStatus gameStatus,
+      {GameStatus gameStatus,
       int monthNumber,
       Map<String, int> participantProgress,
       Map<int, String> winners}) = _$_CurrentGameState;
@@ -199,7 +197,6 @@ abstract class _CurrentGameState implements CurrentGameState {
       _$_CurrentGameState.fromJson;
 
   @override
-  @JsonKey(name: 'gameState')
   GameStatus get gameStatus;
   @override
   int get monthNumber;

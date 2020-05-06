@@ -8,7 +8,7 @@ part of 'current_game_state.dart';
 
 _$_CurrentGameState _$_$_CurrentGameStateFromJson(Map<String, dynamic> json) {
   return _$_CurrentGameState(
-    gameStatus: _$enumDecodeNullable(_$GameStatusEnumMap, json['gameState']),
+    gameStatus: _$enumDecodeNullable(_$GameStatusEnumMap, json['gameStatus']),
     monthNumber: json['monthNumber'] as int,
     participantProgress:
         (json['participantProgress'] as Map<String, dynamic>)?.map(
@@ -23,7 +23,7 @@ _$_CurrentGameState _$_$_CurrentGameStateFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$_$_CurrentGameStateToJson(
         _$_CurrentGameState instance) =>
     <String, dynamic>{
-      'gameState': _$GameStatusEnumMap[instance.gameStatus],
+      'gameStatus': _$GameStatusEnumMap[instance.gameStatus],
       'monthNumber': instance.monthNumber,
       'participantProgress': instance.participantProgress,
       'winners': instance.winners?.map((k, e) => MapEntry(k.toString(), e)),

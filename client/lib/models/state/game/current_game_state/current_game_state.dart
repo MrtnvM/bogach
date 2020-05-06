@@ -6,7 +6,7 @@ part 'current_game_state.g.dart';
 @freezed
 abstract class CurrentGameState with _$CurrentGameState {
   factory CurrentGameState({
-    @JsonKey(name: 'gameState') GameStatus gameStatus,
+    GameStatus gameStatus,
     int monthNumber,
     Map<String, int> participantProgress,
     Map<int, String> winners,
