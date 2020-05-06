@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 // ignore: avoid_classes_with_only_static_members
 class Strings {
   static const unknownError =
@@ -174,4 +176,20 @@ class Strings {
 
   static String get noSuchEmail =>
       'Пользователь с таким e-mail не зарегистрирован';
+
+  // Winners Page
+
+  static String get winnersPageTitle => 'Еее, бой!';
+  static String get winnersPageDescription =>
+      'Поздравляем! \n' 'Ты достиг своей цели всего за';
+  static String months(int number) => Intl.plural(
+        number,
+        zero: 'месяцев',
+        one: 'месяц',
+        two: 'месяца',
+        few: 'месяца',
+        many: 'месяцев',
+        other: 'месяцев',
+      );
+  static String get goToMainMenu => 'В главное меню';
 }
