@@ -5,6 +5,7 @@ import 'package:cash_flow/features/game/game_state.dart';
 import 'package:cash_flow/models/domain/game_context.dart';
 import 'package:cash_flow/presentation/gameboard/cash_flow_grid.dart';
 import 'package:cash_flow/presentation/gameboard/game_event_page.dart';
+import 'package:cash_flow/presentation/gameboard/winners_page.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/appbar/app_bar.dart';
 import 'package:cash_flow/widgets/inputs/drop_focus.dart';
@@ -43,7 +44,7 @@ class GameBoardState extends State<GameBoard> with ReduxState {
         body: DropFocus(
           child: Loadable(
             isLoading: state.getRequestState.isInProgress,
-            child: state.possessions == null ? Container() : _buildBody(),
+            child: _buildContent(state),
           ),
         ),
       ),
@@ -58,7 +59,19 @@ class GameBoardState extends State<GameBoard> with ReduxState {
     super.dispose();
   }
 
-  Widget _buildBody() {
+  Widget _buildContent(GameState s) {
+    if (s.possessions == null) {
+      return Container();
+    }
+
+    return s.activeGameState.maybeMap(
+      gameEvent: (_) => _buildGameBoard(),
+      gameOver: (_) => WinnersPage(),
+      orElse: () => Container(),
+    );
+  }
+
+  Widget _buildGameBoard() {
     return Row(
       children: const [
         Expanded(child: CashFlowGrid()),
