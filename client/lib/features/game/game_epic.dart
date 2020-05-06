@@ -13,7 +13,7 @@ Epic<AppState> gameEpic({@required GameService gameService}) {
     return action$
         .whereType<StartGameAction>() //
         .flatMap((action) => gameService
-            .getGameData(action.gameId)
+            .getGameData(action.gameContext)
             .map<Action>((state) => OnGameStateChangedAction(state))
             .onErrorReturnWith((e) => OnGameErrorAction(e))
             .takeUntil(

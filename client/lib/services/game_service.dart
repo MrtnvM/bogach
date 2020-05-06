@@ -1,4 +1,5 @@
 import 'package:cash_flow/api_client/cash_flow_api_client.dart';
+import 'package:cash_flow/models/domain/game_context.dart';
 import 'package:cash_flow/models/domain/game_data.dart';
 import 'package:cash_flow/models/network/request/game/player_action_request_model.dart';
 import 'package:cash_flow/utils/mappers/game_mapper.dart';
@@ -15,12 +16,12 @@ class GameService {
   final CashFlowApiClient apiClient;
   final Firestore firestore;
 
-  Stream<GameData> getGameData(String gameId) {
+  Stream<GameData> getGameData(GameContext gameContext) {
     return firestore
         .collection('games')
-        .document(gameId)
+        .document(gameContext.gameId)
         .snapshots()
-        .map(mapToGameData);
+        .map((snapshot) => mapToGameData(snapshot, gameContext.userId));
   }
 
   Stream<void> sendPlayerAction(PlayerActionRequestModel playerAction) {

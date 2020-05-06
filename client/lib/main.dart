@@ -26,7 +26,7 @@ Future<void> main() async {
   final tokenStorage = TokenStorage();
   final alice = Alice(navigatorKey: appRouter.navigatorKey);
   final sharedPreferences = await SharedPreferences.getInstance();
-  final environment = stagingEnvironment;
+  final environment = developmentEnvironment;
   final apiClient = configureApiClient(alice, environment);
 
   configureControlPanel(alice, apiClient);

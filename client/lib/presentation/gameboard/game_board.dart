@@ -31,7 +31,7 @@ class GameBoardState extends State<GameBoard> with ReduxState {
 
     setOrientationLandscape();
     dispatch(SetGameContextAction(widget.gameContext));
-    dispatch(StartGameAction(widget.gameContext.gameId));
+    dispatch(StartGameAction(widget.gameContext));
   }
 
   @override

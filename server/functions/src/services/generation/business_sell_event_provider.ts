@@ -15,7 +15,6 @@ export class BusinessSellEventProvider {
     participants.forEach((participant) => {
       const possessions = game.possessions[participant];
       const businessSellEventForUser = this.generateEventsForUserPossessions(possessions);
-      console.log([1, 2, ...[3, 4]]);
       businessSellEvents = businessSellEvents.concat(businessSellEventForUser);
     });
 
