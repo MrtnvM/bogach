@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/features/game/game_state.dart';
 import 'package:cash_flow/models/domain/active_game_state.dart';
+import 'package:cash_flow/models/domain/game_data.dart';
+import 'package:cash_flow/models/network/responses/target_type.dart';
 import 'package:cash_flow/models/state/game/current_game_state/current_game_state.dart';
 import 'package:cash_flow/models/state/game/target/target_state.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
@@ -18,7 +22,7 @@ final gameStateReducer = Reducer<GameState>()
       (s) {
         final targetBuilder = TargetStateBuilder()
           ..value = action.data.target.value
-          ..currentValue = action.data.possessions.assets.sum
+          ..currentValue = _targetCurrentValue(action.data)
           ..type = action.data.target.type;
 
         var newActiveGameState = s.activeGameState;
@@ -84,3 +88,18 @@ final gameStateReducer = Reducer<GameState>()
       );
     }),
   );
+
+double _targetCurrentValue(GameData gameData) {
+  switch (gameData.target.type) {
+    case TargetType.cash:
+      return gameData.account.cash;
+
+    case TargetType.passiveIncome:
+      final incomes = gameData.possessions.incomes;
+      final passiveIncome = incomes.sum - incomes.salary;
+      return max(0.0, passiveIncome.toDouble());
+
+    default:
+      return 0.0;
+  }
+}
