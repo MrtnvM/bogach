@@ -67,12 +67,16 @@ GameData mapToRealtimeGameData(Event event) {
   );
 }
 
+final List<String> _gameEvents = [
+  'debenture-price-changed-event',
+  'stock-price-changed-event',
+];
 BuiltList<GameEvent> mapToGameEvents(List response) {
   return response
       .map((json) => GameEventResponseModel.fromJson(json))
       .where(
-        (event) => event.type == 'debenture-price-changed-event',
-      ) // TODO(Robert): Remove filter; #tag new_game_event
+        (event) => _gameEvents.contains(event.type),
+      )
       .map((event) {
     final type = GameEventType.fromJson(event.type);
     final eventData = type.parseGameEventData(event.data);
