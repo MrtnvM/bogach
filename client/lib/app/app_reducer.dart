@@ -2,7 +2,6 @@ import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/features/game/game_reducer.dart';
 import 'package:cash_flow/features/login/login_reducer.dart';
 import 'package:cash_flow/features/new_game/new_game_reducer.dart';
-import 'package:cash_flow/features/registration/registration_reducer.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 class AppReducer extends Reducer<AppState> {
@@ -10,8 +9,6 @@ class AppReducer extends Reducer<AppState> {
   AppState reduce(AppState state, Action action) {
     return state.rebuild((s) {
       s.login = loginReducer.reduce(state.login, action).toBuilder();
-      s.registration =
-          registrationReducer.reduce(state.registration, action).toBuilder();
       s.gameState =
           gameStateReducer.reduce(state.gameState, action).toBuilder();
       s.newGameState =
