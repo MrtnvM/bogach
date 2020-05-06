@@ -277,11 +277,15 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
   }
 
   Future<void> _onLoginViaGoogleClicked() async {
-    final account = await GoogleSignIn().signIn();
+    final account = await GoogleSignIn()
+        .signIn()
+        .catchError((e) => showErrorDialog(context: context));
 
     if (account == null) {
       //was cancelled by the user
+      return;
     }
+
     final authentication = await account.authentication;
 
     _loginViaGoogle(
