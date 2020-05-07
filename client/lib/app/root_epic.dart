@@ -1,7 +1,6 @@
 import 'package:cash_flow/features/game/game_epic.dart';
 import 'package:cash_flow/features/login/login_epic.dart';
 import 'package:cash_flow/features/new_game/new_game_epic.dart';
-import 'package:cash_flow/features/registration/registration_epic.dart';
 import 'package:cash_flow/services/new_game_servise.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/user_service.dart';
@@ -17,7 +16,6 @@ Epic<AppState> rootEpic({
 }) {
   return combineEpics([
     loginEpic(userService: userService),
-    registrationEpic(userService: userService),
     newGameEpic(newGameService: newGameService),
     gameEpic(gameService: gameService),
   ]);

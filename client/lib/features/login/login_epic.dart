@@ -7,16 +7,6 @@ import 'package:redux_epics/redux_epics.dart';
 import 'package:rxdart/rxdart.dart';
 
 Epic<AppState> loginEpic({@required UserService userService}) {
-  final loginEpic = epic((action$, store) {
-    return action$
-        .whereType<LoginAsyncAction>()
-        .where((action) => action.isStarted)
-        .flatMap((action) => userService
-            .login(email: action.email, password: action.password)
-            .map(action.complete)
-            .onErrorReturnWith(action.fail));
-  });
-
   final logoutEpic = epic((action$, store) {
     return action$
         .whereType<LogoutAsyncAction>()
@@ -65,22 +55,10 @@ Epic<AppState> loginEpic({@required UserService userService}) {
             .onErrorReturnWith(action.fail));
   });
 
-  final resetPasswordEpic = epic((action$, store) {
-    return action$
-        .whereType<ResetPasswordAsyncAction>()
-        .where((action) => action.isStarted)
-        .flatMap((action) => userService
-            .resetPassword(email: action.email)
-            .map(action.complete)
-            .onErrorReturnWith(action.fail));
-  });
-
   return combineEpics([
-    loginEpic,
     logoutEpic,
     loginViaFacebookEpic,
     loginViaGoogleEpic,
     loginViaAppleEpic,
-    resetPasswordEpic,
   ]);
 }
