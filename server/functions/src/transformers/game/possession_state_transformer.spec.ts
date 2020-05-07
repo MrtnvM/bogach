@@ -1,18 +1,18 @@
 /// <reference types="@types/jest"/>
 
-import { PossessionStateGenerator } from './possession_state_generator';
-import { PossessionState } from '../models/domain/possession_state';
-import { Possessions } from '../models/domain/possessions';
-import { InsuranceAsset } from '../models/domain/assets/insurance_asset';
-import { DebentureAsset } from '../models/domain/assets/debenture_asset';
-import { StockAsset } from '../models/domain/assets/stock_asset';
-import { RealtyAsset } from '../models/domain/assets/realty_asset';
-import { BusinessAsset } from '../models/domain/assets/business_asset';
-import { OtherAsset } from '../models/domain/assets/other_asset';
-import { CashAsset } from '../models/domain/assets/cash_asset';
-import { MortgageLiability } from '../models/domain/liabilities/mortgage_liability';
-import { BusinessCreditLiability } from '../models/domain/liabilities/business_credit';
-import { OtherLiability } from '../models/domain/liabilities/other_liability';
+import { PossessionState } from '../../models/domain/possession_state';
+import { Possessions } from '../../models/domain/possessions';
+import { InsuranceAsset } from '../../models/domain/assets/insurance_asset';
+import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
+import { StockAsset } from '../../models/domain/assets/stock_asset';
+import { RealtyAsset } from '../../models/domain/assets/realty_asset';
+import { BusinessAsset } from '../../models/domain/assets/business_asset';
+import { OtherAsset } from '../../models/domain/assets/other_asset';
+import { CashAsset } from '../../models/domain/assets/cash_asset';
+import { MortgageLiability } from '../../models/domain/liabilities/mortgage_liability';
+import { BusinessCreditLiability } from '../../models/domain/liabilities/business_credit';
+import { OtherLiability } from '../../models/domain/liabilities/other_liability';
+import { PossessionStateTransformer } from './possession_state_transformer';
 
 describe('Possession Service Tests', () => {
   const create = <T>(obj: T) => obj;
@@ -122,8 +122,10 @@ describe('Possession Service Tests', () => {
       ],
     };
 
-    const possessionService = new PossessionStateGenerator();
-    const newPossessionState = possessionService.generatePossessionState(initialPossesssions);
+    const possessionStateTransformer = new PossessionStateTransformer();
+    const newPossessionState = possessionStateTransformer.generatePossessionState(
+      initialPossesssions
+    );
 
     const expectedPossessionState: PossessionState = {
       incomes: [
