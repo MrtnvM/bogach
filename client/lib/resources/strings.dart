@@ -1,3 +1,7 @@
+import 'package:cash_flow/models/domain/target_data.dart';
+import 'package:cash_flow/utils/extensions/extensions.dart';
+import 'package:cash_flow/utils/mappers/game_mapper.dart';
+
 // ignore: avoid_classes_with_only_static_members
 class Strings {
   static const unknownError =
@@ -166,6 +170,9 @@ class Strings {
   static const chooseLevel = 'Выберите уровень';
   static const reach = 'Набрать';
   static const goBack = 'Вернуться назад';
+  static String newGameTarget(TargetData target) =>
+      '$reach ${mapTargetTypeToString(target.type).toLowerCase()} '
+      '$wordIn ${target.value.round().toPrice()}';
 
   // Reset Password
   static String get forgotPasswordTitle => 'Забыли пароль?';
