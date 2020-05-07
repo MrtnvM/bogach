@@ -11,13 +11,18 @@ class _$CurrentUser extends CurrentUser {
   final String fullName;
   @override
   final String avatarUrl;
+  @override
+  final String userId;
 
   factory _$CurrentUser([void Function(CurrentUserBuilder) updates]) =>
       (new CurrentUserBuilder()..update(updates)).build();
 
-  _$CurrentUser._({this.fullName, this.avatarUrl}) : super._() {
+  _$CurrentUser._({this.fullName, this.avatarUrl, this.userId}) : super._() {
     if (fullName == null) {
       throw new BuiltValueNullFieldError('CurrentUser', 'fullName');
+    }
+    if (userId == null) {
+      throw new BuiltValueNullFieldError('CurrentUser', 'userId');
     }
   }
 
@@ -33,19 +38,22 @@ class _$CurrentUser extends CurrentUser {
     if (identical(other, this)) return true;
     return other is CurrentUser &&
         fullName == other.fullName &&
-        avatarUrl == other.avatarUrl;
+        avatarUrl == other.avatarUrl &&
+        userId == other.userId;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, fullName.hashCode), avatarUrl.hashCode));
+    return $jf($jc(
+        $jc($jc(0, fullName.hashCode), avatarUrl.hashCode), userId.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('CurrentUser')
           ..add('fullName', fullName)
-          ..add('avatarUrl', avatarUrl))
+          ..add('avatarUrl', avatarUrl)
+          ..add('userId', userId))
         .toString();
   }
 }
@@ -61,12 +69,17 @@ class CurrentUserBuilder implements Builder<CurrentUser, CurrentUserBuilder> {
   String get avatarUrl => _$this._avatarUrl;
   set avatarUrl(String avatarUrl) => _$this._avatarUrl = avatarUrl;
 
+  String _userId;
+  String get userId => _$this._userId;
+  set userId(String userId) => _$this._userId = userId;
+
   CurrentUserBuilder();
 
   CurrentUserBuilder get _$this {
     if (_$v != null) {
       _fullName = _$v.fullName;
       _avatarUrl = _$v.avatarUrl;
+      _userId = _$v.userId;
       _$v = null;
     }
     return this;
@@ -87,8 +100,9 @@ class CurrentUserBuilder implements Builder<CurrentUser, CurrentUserBuilder> {
 
   @override
   _$CurrentUser build() {
-    final _$result =
-        _$v ?? new _$CurrentUser._(fullName: fullName, avatarUrl: avatarUrl);
+    final _$result = _$v ??
+        new _$CurrentUser._(
+            fullName: fullName, avatarUrl: avatarUrl, userId: userId);
     replace(_$result);
     return _$result;
   }

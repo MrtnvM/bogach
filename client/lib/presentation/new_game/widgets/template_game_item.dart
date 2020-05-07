@@ -1,6 +1,8 @@
 import 'package:cash_flow/models/domain/game_template.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:cash_flow/utils/extensions/extensions.dart';
 
 class TemplateGameItem extends StatelessWidget {
   const TemplateGameItem({
@@ -27,10 +29,14 @@ class TemplateGameItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              '${game.name} — ${game.accountState.cash}${Strings.rubleSymbol}',
+              '${game.name} — ${game.accountState.cash.round().toPrice()}',
+              style: Styles.bodyBlackBold,
             ),
             const SizedBox(height: 20),
-            Text('Цель — ${game.target.value}${Strings.rubleSymbol}'),
+            Text(
+              Strings.newGameTarget(game.target),
+              style: Styles.bodyBlack,
+            ),
           ],
         ),
       ),
