@@ -13,7 +13,7 @@ import { Possessions } from '../../../models/domain/possessions';
 import { PossessionStateEntity } from '../../../models/domain/possession_state';
 import { GameContext } from '../../../models/domain/game/game_context';
 import { GameEventEntity } from '../../../models/domain/game/game_event';
-import { BusinessBuyEvent } from './business_buy_event_event';
+import { BusinessSellEvent } from './business_sell_event';
 
 const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
@@ -30,6 +30,30 @@ const business1 = create<BusinessAsset>({
   buyPrice: 120_000,
   downPayment: 21_000,
   fairPrice: 115_000,
+  passiveIncomePerMonth: 2100,
+  payback: 21,
+  sellProbability: 7,
+});
+
+const business2 = create<BusinessAsset>({
+  id: 'id2',
+  name: 'Автомойка',
+  type: 'business',
+  buyPrice: 150_000,
+  downPayment: 30_000,
+  fairPrice: 120_000,
+  passiveIncomePerMonth: 2100,
+  payback: 21,
+  sellProbability: 7,
+});
+
+const business3 = create<BusinessAsset>({
+  id: 'id3',
+  name: 'Бизнес без займа',
+  type: 'business',
+  buyPrice: 150_000,
+  downPayment: 30_000,
+  fairPrice: 120_000,
   passiveIncomePerMonth: 2100,
   payback: 21,
   sellProbability: 7,
@@ -66,6 +90,8 @@ const initialPossesssions: Possessions = {
       downPayment: 5000,
     }),
     business1,
+    business2,
+    business3,
     create<StockAsset>({
       id: 'stocks1',
       name: 'Яндекс',
@@ -111,7 +137,7 @@ const initialPossesssions: Possessions = {
       id: 'mortgage1',
       name: 'Ипотека',
       type: 'mortgage',
-      value: 2000000,
+      value: 2_000_000,
       monthlyPayment: 20000,
     }),
     create<OtherLiability>({
@@ -122,16 +148,16 @@ const initialPossesssions: Possessions = {
       monthlyPayment: 500,
     }),
     create<BusinessCreditLiability>({
-      id: 'existingLiabilityId',
-      value: 20_000,
+      id: 'id1',
+      value: 99_000,
       name: 'Химчистка',
       type: 'business_credit',
       monthlyPayment: 0,
     }),
     create<BusinessCreditLiability>({
-      id: 'business_credit2',
-      value: 10_000,
-      name: 'Бизнес у которого совпадет долг',
+      id: 'id2',
+      value: 120_000,
+      name: 'Автомойка',
       type: 'business_credit',
       monthlyPayment: 0,
     }),
@@ -164,45 +190,57 @@ const game: Game = {
   currentEvents: [],
 };
 
-const businessOfferEvent = (data: BusinessBuyEvent.Data) => {
-  const event: BusinessBuyEvent.Event = {
+const businessOfferEvent = (data: BusinessSellEvent.Data) => {
+  const event: BusinessSellEvent.Event = {
     id: eventId,
     name: 'Торговая точка',
     description: 'Description',
-    type: BusinessBuyEvent.Type,
+    type: BusinessSellEvent.Type,
     data: data,
   };
 
-  BusinessBuyEvent.validate(event);
+  BusinessSellEvent.validate(event);
   return event;
 };
 
 const dryCleaningBusinessOfferEvent = (currentPrice: number) => {
-  const eventData: BusinessBuyEvent.Data = {
+  const eventData: BusinessSellEvent.Data = {
     businessId: 'id1',
     currentPrice: currentPrice,
-    downPayment: 21_000,
-    fairPrice: 115_000,
-    passiveIncomePerMonth: 2100,
-    payback: 21,
-    debt: 99_000,
-    sellProbability: 7,
   };
 
-  const event: BusinessBuyEvent.Event = {
+  const event: BusinessSellEvent.Event = {
     id: eventId,
     name: 'Химчистка',
     description: 'Description',
-    type: BusinessBuyEvent.Type,
+    type: BusinessSellEvent.Type,
     data: eventData,
   };
 
-  BusinessBuyEvent.validate(event);
+  BusinessSellEvent.validate(event);
   return event;
 };
 
-const businessOfferEventPlayerAction = (action: BusinessBuyEvent.PlayerAction) => {
-  BusinessBuyEvent.validateAction(action);
+const carwashingBusinessSellEvent = (currentPrice: number) => {
+  const eventData: BusinessSellEvent.Data = {
+    businessId: 'id2',
+    currentPrice: currentPrice,
+  };
+
+  const event: BusinessSellEvent.Event = {
+    id: eventId,
+    name: 'Автомойка',
+    description: 'Description',
+    type: BusinessSellEvent.Type,
+    data: eventData,
+  };
+
+  BusinessSellEvent.validate(event);
+  return event;
+};
+
+const businessOfferEventPlayerAction = (action: BusinessSellEvent.PlayerAction) => {
+  BusinessSellEvent.validateAction(action);
   return action;
 };
 
@@ -217,6 +255,7 @@ export const stubs = {
 
 export const utils = {
   dryCleaningBusinessOfferEvent,
+  carwashingBusinessSellEvent,
   businessOfferEvent,
   businessOfferEventPlayerAction,
 };

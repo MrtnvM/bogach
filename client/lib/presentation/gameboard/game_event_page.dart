@@ -26,15 +26,9 @@ class _GameEventPageState extends State<GameEventPage> with ReduxState {
     return AppStateConnector<GameState>(
       converter: (s) => s.gameState,
       builder: (context, state) {
-        final currentEvent = state.activeGameState.map(
-          waitingForStart: (_) => null,
-          gameEvent: (eventState) => state.events.firstWhere(
-            (e) => eventState.eventId == e.id,
-            orElse: () => null,
-          ),
-          waitingPlayers: (_) => null,
-          monthResult: (_) => null,
-          gameOver: (_) => null,
+        final currentEvent = state.activeGameState.maybeMap(
+          gameEvent: (eventState) => state.events[eventState.eventIndex],
+          orElse: () => null,
         );
 
         final isMonthResult = state.activeGameState.maybeWhen(

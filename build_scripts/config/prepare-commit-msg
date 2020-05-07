@@ -1,0 +1,8 @@
+BRANCH_NAME=$(git symbolic-ref --short HEAD)
+BRANCH_NAME="${BRANCH_NAME##*/}"
+BRANCH_NAME=$(echo "$BRANCH_NAME" | cut -f1-2 -d"-")
+BRANCH_NAME=$(echo "$BRANCH_NAME" | cut -f1 -d"_")
+
+if [[ -n "${BRANCH_NAME}" ]]; then
+  sed -i.bak -e "1s/^/${BRANCH_NAME}: /" $1
+fi

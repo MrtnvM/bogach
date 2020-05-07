@@ -12,6 +12,8 @@ class _$GameState extends GameState {
   @override
   final ActiveGameState activeGameState;
   @override
+  final CurrentGameState currentGameState;
+  @override
   final UserPossessionState possessions;
   @override
   final TargetState target;
@@ -28,6 +30,7 @@ class _$GameState extends GameState {
   _$GameState._(
       {this.getRequestState,
       this.activeGameState,
+      this.currentGameState,
       this.possessions,
       this.target,
       this.account,
@@ -58,6 +61,7 @@ class _$GameState extends GameState {
     return other is GameState &&
         getRequestState == other.getRequestState &&
         activeGameState == other.activeGameState &&
+        currentGameState == other.currentGameState &&
         possessions == other.possessions &&
         target == other.target &&
         account == other.account &&
@@ -72,8 +76,10 @@ class _$GameState extends GameState {
             $jc(
                 $jc(
                     $jc(
-                        $jc($jc(0, getRequestState.hashCode),
-                            activeGameState.hashCode),
+                        $jc(
+                            $jc($jc(0, getRequestState.hashCode),
+                                activeGameState.hashCode),
+                            currentGameState.hashCode),
                         possessions.hashCode),
                     target.hashCode),
                 account.hashCode),
@@ -86,6 +92,7 @@ class _$GameState extends GameState {
     return (newBuiltValueToStringHelper('GameState')
           ..add('getRequestState', getRequestState)
           ..add('activeGameState', activeGameState)
+          ..add('currentGameState', currentGameState)
           ..add('possessions', possessions)
           ..add('target', target)
           ..add('account', account)
@@ -107,6 +114,11 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
   ActiveGameState get activeGameState => _$this._activeGameState;
   set activeGameState(ActiveGameState activeGameState) =>
       _$this._activeGameState = activeGameState;
+
+  CurrentGameState _currentGameState;
+  CurrentGameState get currentGameState => _$this._currentGameState;
+  set currentGameState(CurrentGameState currentGameState) =>
+      _$this._currentGameState = currentGameState;
 
   UserPossessionStateBuilder _possessions;
   UserPossessionStateBuilder get possessions =>
@@ -138,6 +150,7 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
     if (_$v != null) {
       _getRequestState = _$v.getRequestState;
       _activeGameState = _$v.activeGameState;
+      _currentGameState = _$v.currentGameState;
       _possessions = _$v.possessions?.toBuilder();
       _target = _$v.target?.toBuilder();
       _account = _$v.account;
@@ -169,6 +182,7 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
           new _$GameState._(
               getRequestState: getRequestState,
               activeGameState: activeGameState,
+              currentGameState: currentGameState,
               possessions: _possessions?.build(),
               target: _target?.build(),
               account: account,

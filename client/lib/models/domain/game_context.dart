@@ -18,4 +18,9 @@ class GameContext {
   final String gameId;
 
   Map<String, dynamic> toJson() => _$GameContextToJson(this);
+
+  @override
+  String toString() {
+    return 'GameContext: game_id = $gameId, user_id = $userId';
+  }
 }

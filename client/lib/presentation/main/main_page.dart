@@ -93,7 +93,7 @@ class _MainPageState extends State<MainPage> with ReduxState {
           onPressed: () => appRouter.goTo(
             GameBoard(
               gameContext: GameContext(
-                gameId: '669bbf80-c448-4a40-ae5b-db7c9049f79b',
+                gameId: '669f786f-fb51-46c4-8896-d9ae7dffa576',
                 userId: user.userId,
               ),
             ),
