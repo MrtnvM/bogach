@@ -6,6 +6,7 @@ import 'package:cash_flow/models/domain/active_game_state.dart';
 import 'package:cash_flow/models/domain/game_context.dart';
 import 'package:cash_flow/models/domain/game_event.dart';
 import 'package:cash_flow/models/state/game/account/account.dart';
+import 'package:cash_flow/models/state/game/current_game_state/current_game_state.dart';
 import 'package:cash_flow/models/state/game/posessions/user_possession_state.dart';
 import 'package:cash_flow/models/state/game/target/target_state.dart';
 
@@ -21,6 +22,9 @@ abstract class GameState implements Built<GameState, GameStateBuilder> {
   RequestState get getRequestState;
 
   ActiveGameState get activeGameState;
+
+  @nullable
+  CurrentGameState get currentGameState;
 
   @nullable
   UserPossessionState get possessions;

@@ -6,7 +6,7 @@ part 'current_game_state.g.dart';
 @freezed
 abstract class CurrentGameState with _$CurrentGameState {
   factory CurrentGameState({
-    String gameState,
+    GameStatus gameStatus,
     int monthNumber,
     Map<String, int> participantProgress,
     Map<int, String> winners,
@@ -14,4 +14,11 @@ abstract class CurrentGameState with _$CurrentGameState {
 
   factory CurrentGameState.fromJson(Map<String, dynamic> json) =>
       _$CurrentGameStateFromJson(json);
+}
+
+enum GameStatus {
+  @JsonValue('players_move')
+  playersMove,
+  @JsonValue('game_over')
+  gameOver,
 }

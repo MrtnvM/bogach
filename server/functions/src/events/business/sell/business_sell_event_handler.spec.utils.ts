@@ -170,7 +170,7 @@ const game: Game = {
   type: 'singleplayer',
   participants: [userId],
   state: {
-    gameState: 'players_move',
+    gameStatus: 'players_move',
     monthNumber: 1,
     participantProgress: {
       [userId]: 0,

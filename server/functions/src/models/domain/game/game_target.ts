@@ -1,4 +1,6 @@
 import { Entity } from '../../../core/domain/entity';
+import { UserEntity } from '../user';
+import { Game } from './game';
 
 export interface GameTarget {
   readonly type: GameTargetEntity.Type;
@@ -27,5 +29,21 @@ export namespace GameTargetEntity {
     entity.hasValue('type');
     entity.checkUnion('type', TypeValues);
     entity.hasValue('value');
+  };
+
+  export const calculateProgress = (game: Game, userId: UserEntity.Id): number => {
+    switch (game.target.type) {
+      case 'passive_income':
+        const incomes = game.possessions[userId].incomes;
+        const passiveIncomes = incomes.filter((i) => i.type !== 'salary');
+        const passiveIncomeValue = passiveIncomes.reduce((prev, curr) => prev + curr.value, 0);
+        const passiveIncomeProgress = passiveIncomeValue / game.target.value;
+        return passiveIncomeProgress;
+
+      case 'cash':
+        const cash = game.accounts[userId].cash;
+        const cashProgress = cash / game.target.value;
+        return cashProgress;
+    }
   };
 }

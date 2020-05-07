@@ -78,7 +78,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const gameId = apiRequest.queryParameter('game_id');
 
-    const game = gameService.updateGameEvents(gameId);
+    const game = gameService.updateEvents(gameId);
     return send(game, response);
   });
 

@@ -7,9 +7,20 @@ abstract class ActiveGameState with _$ActiveGameState {
   ActiveGameState._();
 
   factory ActiveGameState.waitingForStart() = ActiveGameWaitingForStartState;
-  factory ActiveGameState.gameEvent(String eventId) = ActiveGameGameEventState;
-  factory ActiveGameState.waitingPlayers(List<String> playersIds) =
-      ActiveGameWaitingPlayersState;
+
+  factory ActiveGameState.gameEvent({
+    @required int eventIndex,
+    @required bool isSent,
+  }) = ActiveGameGameEventState;
+
+  factory ActiveGameState.waitingPlayers(
+    List<String> playersIds,
+  ) = ActiveGameWaitingPlayersState;
+
   factory ActiveGameState.monthResult() = ActiveGameMonthResultState;
-  factory ActiveGameState.gameOver(String winnerId) = ActiveGameGameOverState;
+
+  factory ActiveGameState.gameOver({
+    @required Map<int, String> winners,
+    @required int monthNumber,
+  }) = ActiveGameGameOverState;
 }
