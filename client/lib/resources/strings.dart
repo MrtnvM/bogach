@@ -160,7 +160,7 @@ class Strings {
   static String get incorrectPassword =>
       'Пароль должен быть более 6-ти символов';
 
-  //New Game
+  // New Game
   static const chooseGame = 'Выберите игру';
   static const singleGame = 'Одиночная игра';
   static const multiPlayerGame = 'Игра с друзьями';
