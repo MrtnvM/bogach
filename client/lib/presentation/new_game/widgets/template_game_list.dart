@@ -6,7 +6,7 @@ import 'package:cash_flow/models/domain/game_template.dart';
 import 'package:cash_flow/models/state/user/current_user.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/gameboard/game_board.dart';
-import 'package:cash_flow/presentation/new_game/widgets/template_game_item.dart';
+import 'package:cash_flow/presentation/new_game/widgets/game_template_item.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/utils/core/tuple.dart';
 import 'package:cash_flow/utils/dialogs.dart';
@@ -55,9 +55,9 @@ class TemplateGameListState extends State<TemplateGameList>
   }
 
   Widget _buildListItem(GameTemplate item, CurrentUser user) {
-    return TemplateGameItem(
-      game: item,
-      onGamePressed: (template) => _createNewGame(template, user),
+    return GameTemplateItem(
+      gameTemplate: item,
+      onTemplateSelected: (template) => _createNewGame(template, user),
     );
   }
 

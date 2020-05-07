@@ -5,13 +5,6 @@ import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 final loginReducer = Reducer<LoginState>()
-  ..on<LoginAsyncAction>(
-    (state, action) => state.rebuild((s) {
-      s..loginRequestState = action.requestState;
-
-      action.onSuccess((user) => s.currentUser = user.toBuilder());
-    }),
-  )
   ..on<LoginViaFacebookAsyncAction>(
     (state, action) => state.rebuild((s) {
       s.loginRequestState = action.requestState;
@@ -39,8 +32,4 @@ final loginReducer = Reducer<LoginState>()
   ..on<SetCurrentUserAction>(
     (state, action) => state.rebuild(
         (s) => s..currentUser = mapToCurrentUser(action.user)?.toBuilder()),
-  )
-  ..on<ResetPasswordAsyncAction>(
-    (state, action) =>
-        state.rebuild((s) => s.resetPasswordRequestState = action.requestState),
   );
