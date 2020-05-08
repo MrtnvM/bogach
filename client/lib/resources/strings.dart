@@ -1,6 +1,4 @@
-import 'package:cash_flow/models/domain/target_data.dart';
-import 'package:cash_flow/utils/extensions/extensions.dart';
-import 'package:cash_flow/utils/mappers/game_mapper.dart';
+import 'package:intl/intl.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class Strings {
@@ -170,9 +168,6 @@ class Strings {
   static const chooseLevel = 'Выберите уровень';
   static const reach = 'Набрать';
   static const goBack = 'Вернуться назад';
-  static String newGameTarget(TargetData target) =>
-      '$reach ${mapTargetTypeToString(target.type).toLowerCase()} '
-      '$wordIn ${target.value.round().toPrice()}';
 
   // Reset Password
   static String get forgotPasswordTitle => 'Забыли пароль?';
@@ -184,4 +179,19 @@ class Strings {
 
   static String get noSuchEmail =>
       'Пользователь с таким e-mail не зарегистрирован';
+
+  // Winners Page
+  static String get winnersPageTitle => 'Еее, бой!';
+  static String get winnersPageDescription =>
+      'Поздравляем! \n' 'Ты достиг своей цели всего за';
+  static String months(int number) => Intl.plural(
+        number,
+        zero: 'месяцев',
+        one: 'месяц',
+        two: 'месяца',
+        few: 'месяца',
+        many: 'месяцев',
+        other: 'месяцев',
+      );
+  static String get goToMainMenu => 'В главное меню';
 }

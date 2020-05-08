@@ -18,7 +18,6 @@ import 'package:cash_flow/models/network/responses/possessions_state/expense_res
 import 'package:cash_flow/models/network/responses/possessions_state/income_response_model.dart';
 import 'package:cash_flow/models/network/responses/possessions_state/liability_response_model.dart';
 import 'package:cash_flow/models/network/responses/target_response_model.dart';
-import 'package:cash_flow/models/network/responses/target_type.dart';
 import 'package:cash_flow/models/state/game/account/account.dart';
 import 'package:cash_flow/models/state/game/current_game_state/current_game_state.dart';
 import 'package:cash_flow/models/state/game/posessions/assets/business_asset_item.dart';
@@ -33,19 +32,20 @@ import 'package:cash_flow/models/state/game/posessions/possession_expense.dart';
 import 'package:cash_flow/models/state/game/posessions/possession_income.dart';
 import 'package:cash_flow/models/state/game/posessions/possession_liability.dart';
 import 'package:cash_flow/models/state/game/posessions/user_possession_state.dart';
-import 'package:cash_flow/resources/strings.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 GameData mapToGameData(DocumentSnapshot response, String userId) {
+  final data = response.data;
+
   final userPossessionState = mapToPossessionState(
-    response.data['possessionState'],
+    data['possessionState'],
     userId,
   );
-  final account = mapToAccountState(response.data['accounts'], userId);
-  final target = mapToTargetState(response.data['target']);
-  final events = mapToGameEvents(response.data['currentEvents']);
-  final gameState = mapToCurrentGameState(response['state']);
+  final account = mapToAccountState(data['accounts'], userId);
+  final target = mapToTargetState(data['target']);
+  final events = mapToGameEvents(data['currentEvents']);
+  final gameState = mapToCurrentGameState(data['state']);
 
   return GameData(
     possessions: userPossessionState,
@@ -101,17 +101,6 @@ TargetData mapToTargetState(Map<String, dynamic> response) {
   final target = TargetResponseModel.fromJson(response);
 
   return TargetData(value: target.value, type: target.type);
-}
-
-String mapTargetTypeToString(TargetType type) {
-  switch (type) {
-    case TargetType.cash:
-      return Strings.targetTypeCash;
-    case TargetType.passiveIncome:
-      return Strings.targetTypePassiveIncome;
-    default:
-      return '';
-  }
 }
 
 Account mapToAccountState(Map<String, dynamic> accountsData, String userId) {

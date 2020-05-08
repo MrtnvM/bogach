@@ -1,11 +1,22 @@
-import { AssetEntity } from '../models/domain/asset';
-import { LiabilityEntity } from '../models/domain/liability';
-import { Possessions } from '../models/domain/possessions';
-import { PossessionState, PossessionStateEntity } from '../models/domain/possession_state';
-import { Game } from '../models/domain/game/game';
-import { ParticipantGameState } from '../models/domain/game/participant_game_state';
+import produce from 'immer';
 
-export class PossessionStateGenerator {
+import { GameTransformer } from './game_transformer';
+import { Game } from '../../models/domain/game/game';
+import { LiabilityEntity } from '../../models/domain/liability';
+import { AssetEntity } from '../../models/domain/asset';
+import { PossessionState, PossessionStateEntity } from '../../models/domain/possession_state';
+import { ParticipantGameState } from '../../models/domain/game/participant_game_state';
+import { Possessions } from '../../models/domain/possessions';
+
+export class PossessionStateTransformer extends GameTransformer {
+  apply(game: Game): Game {
+    const possessionState = this.generateParticipantsPossessionState(game);
+
+    return produce(game, (draft) => {
+      draft.possessionState = possessionState;
+    });
+  }
+
   generatePossessionState(possessions: Possessions): PossessionState {
     const incomes = possessions.incomes.slice();
     const expenses = possessions.expenses.slice();
