@@ -26,7 +26,7 @@ Future<void> main() async {
   final tokenStorage = TokenStorage();
   final alice = Alice(navigatorKey: appRouter.navigatorKey);
   final sharedPreferences = await SharedPreferences.getInstance();
-  final environment = stagingEnvironment;
+  const environment = stagingEnvironment;
   final apiClient = configureApiClient(alice, environment);
 
   configureControlPanel(alice, apiClient);
@@ -52,10 +52,10 @@ Future<void> main() async {
   final isAuthorized = currentUser != null;
   dispatch(SetCurrentUserAction(user: currentUser));
 
-  runZoned<Future<void>>(() async {
+  runZonedGuarded<Future<void>>(() async {
     runApp(CashFlowApp(
       store: storeProvider.store,
       isAuthorised: isAuthorized,
     ));
-  }, onError: Crashlytics.instance.recordError);
+  }, Crashlytics.instance.recordError);
 }
