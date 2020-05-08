@@ -9,7 +9,7 @@ class IndicatorsTable extends StatelessWidget {
     this.name,
     this.result,
     this.rows,
-  })  : textStyle = Theme.of(context).textTheme.subhead,
+  })  : textStyle = Theme.of(context).textTheme.subtitle1,
         assert(rows is List<RowHeaderItem>);
 
   final String icon;
@@ -172,9 +172,12 @@ class IndicatorsTable extends StatelessWidget {
       color: ColorRes.grey,
       child: Row(
         children: <Widget>[
-          Text(name.toUpperCase(), style: Theme.of(context).textTheme.subhead),
+          Text(
+            name.toUpperCase(),
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
           const Spacer(),
-          Text(result, style: Theme.of(context).textTheme.subhead),
+          Text(result, style: Theme.of(context).textTheme.subtitle1),
         ],
       ),
     );

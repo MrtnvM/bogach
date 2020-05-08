@@ -88,7 +88,7 @@ Widget _buildDialogButton(String text, VoidCallback onPressed) {
   );
 }
 
-final _buttonsStyle = TextStyle(
+const _buttonsStyle = TextStyle(
   color: ColorRes.blue,
   fontWeight: FontWeight.normal,
   fontFamily: 'SFPro',
