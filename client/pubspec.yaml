@@ -28,7 +28,7 @@ dependencies:
   cloud_firestore: ^0.13.4+2
 
   flutter_facebook_login: ^3.0.0
-  google_sign_in: ^4.4.2
+  google_sign_in: ^4.4.4
   apple_sign_in: ^0.1.0
 
   auto_size_text: ^2.1.0
