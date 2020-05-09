@@ -1,4 +1,5 @@
 import 'package:cash_flow/app/app_state.dart';
+import 'package:cash_flow/features/purchase/purchase_actions.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/presentation/main/main_page.dart';
@@ -27,6 +28,8 @@ class CashFlowAppState extends State<CashFlowApp> with ReduxState {
   @override
   void initState() {
     super.initState();
+
+    dispatch(StartListeningPurchasesAction());
   }
 
   @override
@@ -55,5 +58,12 @@ class CashFlowAppState extends State<CashFlowApp> with ReduxState {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    dispatch(StopListeningPurchasesAction());
+
+    super.dispose();
   }
 }

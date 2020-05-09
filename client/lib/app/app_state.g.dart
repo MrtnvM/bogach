@@ -13,11 +13,15 @@ class _$AppState extends AppState {
   final GameState gameState;
   @override
   final NewGameState newGameState;
+  @override
+  final PurchaseState purchaseState;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
 
-  _$AppState._({this.login, this.gameState, this.newGameState}) : super._() {
+  _$AppState._(
+      {this.login, this.gameState, this.newGameState, this.purchaseState})
+      : super._() {
     if (login == null) {
       throw new BuiltValueNullFieldError('AppState', 'login');
     }
@@ -26,6 +30,9 @@ class _$AppState extends AppState {
     }
     if (newGameState == null) {
       throw new BuiltValueNullFieldError('AppState', 'newGameState');
+    }
+    if (purchaseState == null) {
+      throw new BuiltValueNullFieldError('AppState', 'purchaseState');
     }
   }
 
@@ -42,13 +49,16 @@ class _$AppState extends AppState {
     return other is AppState &&
         login == other.login &&
         gameState == other.gameState &&
-        newGameState == other.newGameState;
+        newGameState == other.newGameState &&
+        purchaseState == other.purchaseState;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc($jc(0, login.hashCode), gameState.hashCode),
-        newGameState.hashCode));
+    return $jf($jc(
+        $jc($jc($jc(0, login.hashCode), gameState.hashCode),
+            newGameState.hashCode),
+        purchaseState.hashCode));
   }
 
   @override
@@ -56,7 +66,8 @@ class _$AppState extends AppState {
     return (newBuiltValueToStringHelper('AppState')
           ..add('login', login)
           ..add('gameState', gameState)
-          ..add('newGameState', newGameState))
+          ..add('newGameState', newGameState)
+          ..add('purchaseState', purchaseState))
         .toString();
   }
 }
@@ -79,6 +90,12 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   set newGameState(NewGameStateBuilder newGameState) =>
       _$this._newGameState = newGameState;
 
+  PurchaseStateBuilder _purchaseState;
+  PurchaseStateBuilder get purchaseState =>
+      _$this._purchaseState ??= new PurchaseStateBuilder();
+  set purchaseState(PurchaseStateBuilder purchaseState) =>
+      _$this._purchaseState = purchaseState;
+
   AppStateBuilder();
 
   AppStateBuilder get _$this {
@@ -86,6 +103,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _login = _$v.login?.toBuilder();
       _gameState = _$v.gameState?.toBuilder();
       _newGameState = _$v.newGameState?.toBuilder();
+      _purchaseState = _$v.purchaseState?.toBuilder();
       _$v = null;
     }
     return this;
@@ -112,7 +130,8 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
           new _$AppState._(
               login: login.build(),
               gameState: gameState.build(),
-              newGameState: newGameState.build());
+              newGameState: newGameState.build(),
+              purchaseState: purchaseState.build());
     } catch (_) {
       String _$failedField;
       try {
@@ -122,6 +141,8 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
         gameState.build();
         _$failedField = 'newGameState';
         newGameState.build();
+        _$failedField = 'purchaseState';
+        purchaseState.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AppState', _$failedField, e.toString());

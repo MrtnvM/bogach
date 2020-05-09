@@ -144,8 +144,11 @@ class Strings {
   static String get gameBoardTitle => 'GameBoard';
 
   static String get targetTypeCash => 'Капитал';
+
   static String get targetTypePassiveIncome => 'Пассивный доход';
+
   static String get cashFlow => 'Денежный поток';
+
   static String get credit => 'Кредит';
 
   static String get monthIsOver => 'Месяц завершен!';
@@ -179,6 +182,11 @@ class Strings {
 
   static String get noSuchEmail =>
       'Пользователь с таким e-mail не зарегистрирован';
+
+  static String get purchases => 'Покупки';
+
+  static String get storesUnavailable => 'Не удалось подключиться к магазину '
+      'приложений.\nПожалуйста, Повторите попытку позже.';
 
   // Winners Page
   static String get winnersPageTitle => 'Еее, бой!';
