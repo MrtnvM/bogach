@@ -1,4 +1,4 @@
-import 'package:cash_flow/models/state/game/account/account.dart';
+import 'package:cash_flow/models/domain/game/account/account.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
@@ -6,9 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AccountBar extends StatelessWidget {
-  const AccountBar({
-    @required this.account,
-  }) : assert(account != null);
+  const AccountBar({@required this.account}) : assert(account != null);
 
   final Account account;
 

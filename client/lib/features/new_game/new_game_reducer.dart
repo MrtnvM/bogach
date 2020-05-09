@@ -1,6 +1,6 @@
 import 'package:cash_flow/features/new_game/new_game_actions.dart';
 import 'package:cash_flow/features/new_game/new_game_state.dart';
-import 'package:cash_flow/models/domain/game_template.dart';
+import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 

@@ -1,8 +1,8 @@
+import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
+import 'package:cash_flow/models/domain/user/current_user.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/new_game/single_game_page.dart';
 import 'package:cash_flow/core/utils/app_store_connector.dart';
-import 'package:cash_flow/models/domain/game_context.dart';
-import 'package:cash_flow/models/state/user/current_user.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/gameboard/game_board.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -93,7 +93,7 @@ class _MainPageState extends State<MainPage> with ReduxState {
           onPressed: () => appRouter.goTo(
             GameBoard(
               gameContext: GameContext(
-                gameId: '669f786f-fb51-46c4-8896-d9ae7dffa576',
+                gameId: '26c6bf10-5c1a-4b22-aa5a-db6e1ecbb441',
                 userId: user.userId,
               ),
             ),

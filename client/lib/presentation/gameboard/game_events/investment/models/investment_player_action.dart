@@ -1,5 +1,5 @@
-import 'package:cash_flow/models/domain/buy_sell_action.dart';
-import 'package:cash_flow/models/domain/player_action.dart';
+import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
+import 'package:cash_flow/models/domain/player_action/player_action.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'investment_player_action.g.dart';

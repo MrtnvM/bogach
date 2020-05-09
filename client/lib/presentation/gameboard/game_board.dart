@@ -2,9 +2,9 @@ import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/core/utils/app_store_connector.dart';
 import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/features/game/game_state.dart';
-import 'package:cash_flow/models/domain/game_context.dart';
-import 'package:cash_flow/presentation/gameboard/cash_flow_grid.dart';
+import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/presentation/gameboard/game_event_page.dart';
+import 'package:cash_flow/presentation/gameboard/possessions_grid.dart';
 import 'package:cash_flow/presentation/gameboard/winners_page.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/appbar/app_bar.dart';
@@ -60,7 +60,7 @@ class GameBoardState extends State<GameBoard> with ReduxState {
   }
 
   Widget _buildContent(GameState s) {
-    if (s.possessions == null) {
+    if (s.currentGame?.possessionState == null) {
       return Container();
     }
 
@@ -73,10 +73,10 @@ class GameBoardState extends State<GameBoard> with ReduxState {
 
   Widget _buildGameBoard() {
     return Row(
-      children: const [
-        Expanded(child: CashFlowGrid()),
-        VerticalDivider(width: 0, thickness: 0),
-        Expanded(child: GameEventPage()),
+      children: [
+        Expanded(child: PossessionsGrid()),
+        const VerticalDivider(width: 0, thickness: 0),
+        const Expanded(child: GameEventPage()),
       ],
     );
   }
