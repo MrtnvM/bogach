@@ -1,6 +1,6 @@
 /// <reference types="@types/jest"/>
 
-import { PossessionStateEntity } from '../../models/domain/possession_state';
+import { PossessionState } from '../../models/domain/possession_state';
 import { Possessions } from '../../models/domain/possessions';
 import { ParticipantAccountsTransformer } from './participant_accounts_transformer';
 import { Game } from '../../models/domain/game/game';
@@ -11,6 +11,13 @@ const userId: UserEntity.Id = 'user1';
 describe('Participant Accounts Transformer Tests', () => {
     test('Generation of possession state', async () => {
         const initialPossesssions: Possessions = {
+            incomes: [],
+            expenses: [],
+            assets: [],
+            liabilities: [],
+        };
+
+        const possessionState: PossessionState = {
             incomes: [
                 {
                     id: 'income1',
@@ -53,7 +60,7 @@ describe('Participant Accounts Transformer Tests', () => {
                 [userId]: initialPossesssions,
             },
             possessionState: {
-                [userId]: PossessionStateEntity.createEmpty(),
+                [userId]: possessionState,
             },
             accounts: {
                 [userId]: { cashFlow: 10000, cash: 10000, credit: 0 },
@@ -63,8 +70,8 @@ describe('Participant Accounts Transformer Tests', () => {
         };
 
         const accountsStateTransformer = new ParticipantAccountsTransformer();
-        const newPossessionState = accountsStateTransformer.apply(game);
+        const newGameState = accountsStateTransformer.apply(game);
 
-        expect(newPossessionState.accounts[userId].cashFlow).toStrictEqual(73000);
+        expect(newGameState.accounts[userId].cashFlow).toStrictEqual(73000);
     });
 });
