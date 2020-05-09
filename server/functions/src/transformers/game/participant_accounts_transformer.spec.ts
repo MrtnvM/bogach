@@ -10,13 +10,6 @@ const userId: UserEntity.Id = 'user1';
 
 describe('Participant Accounts Transformer Tests', () => {
     test('Positive cashflow count', async () => {
-        const initialPossesssions: Possessions = {
-            incomes: [],
-            expenses: [],
-            assets: [],
-            liabilities: [],
-        };
-
         const possessionState: PossessionState = {
             incomes: [
                 {
@@ -43,31 +36,7 @@ describe('Participant Accounts Transformer Tests', () => {
             liabilities: [],
         };
 
-        const game: Game = {
-            id: 'game1',
-            name: 'Game 1',
-            type: 'singleplayer',
-            participants: [userId],
-            state: {
-                gameStatus: 'players_move',
-                monthNumber: 1,
-                participantProgress: {
-                    [userId]: 0,
-                },
-                winners: {},
-            },
-            possessions: {
-                [userId]: initialPossesssions,
-            },
-            possessionState: {
-                [userId]: possessionState,
-            },
-            accounts: {
-                [userId]: { cashFlow: 10000, cash: 10000, credit: 0 },
-            },
-            target: { type: 'cash', value: 1000000 },
-            currentEvents: [],
-        };
+        const game = buildGameEntity(possessionState);
 
         const accountsStateTransformer = new ParticipantAccountsTransformer();
         const newGameState = accountsStateTransformer.apply(game);
@@ -76,13 +45,6 @@ describe('Participant Accounts Transformer Tests', () => {
     });
 
     test('Negative cashflow count', async () => {
-        const initialPossesssions: Possessions = {
-            incomes: [],
-            expenses: [],
-            assets: [],
-            liabilities: [],
-        };
-
         const possessionState: PossessionState = {
             incomes: [
                 {
@@ -103,31 +65,7 @@ describe('Participant Accounts Transformer Tests', () => {
             liabilities: [],
         };
 
-        const game: Game = {
-            id: 'game1',
-            name: 'Game 1',
-            type: 'singleplayer',
-            participants: [userId],
-            state: {
-                gameStatus: 'players_move',
-                monthNumber: 1,
-                participantProgress: {
-                    [userId]: 0,
-                },
-                winners: {},
-            },
-            possessions: {
-                [userId]: initialPossesssions,
-            },
-            possessionState: {
-                [userId]: possessionState,
-            },
-            accounts: {
-                [userId]: { cashFlow: 10000, cash: 10000, credit: 0 },
-            },
-            target: { type: 'cash', value: 1000000 },
-            currentEvents: [],
-        };
+        const game = buildGameEntity(possessionState);
 
         const accountsStateTransformer = new ParticipantAccountsTransformer();
         const newGameState = accountsStateTransformer.apply(game);
@@ -135,3 +73,40 @@ describe('Participant Accounts Transformer Tests', () => {
         expect(newGameState.accounts[userId].cashFlow).toStrictEqual(-19000);
     });
 });
+
+function buildGameEntity(possessionState: PossessionState) {
+    const initialPossesssions: Possessions = {
+        incomes: [],
+        expenses: [],
+        assets: [],
+        liabilities: [],
+    };
+
+    const game: Game = {
+        id: 'game1',
+        name: 'Game 1',
+        type: 'singleplayer',
+        participants: [userId],
+        state: {
+            gameStatus: 'players_move',
+            monthNumber: 1,
+            participantProgress: {
+                [userId]: 0,
+            },
+            winners: {},
+        },
+        possessions: {
+            [userId]: initialPossesssions,
+        },
+        possessionState: {
+            [userId]: possessionState,
+        },
+        accounts: {
+            [userId]: { cashFlow: 10000, cash: 10000, credit: 0 },
+        },
+        target: { type: 'cash', value: 1000000 },
+        currentEvents: [],
+    };
+
+    return game;
+}
