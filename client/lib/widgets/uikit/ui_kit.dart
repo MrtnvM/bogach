@@ -1,5 +1,5 @@
-import 'package:cash_flow/models/domain/game_event.dart';
 import 'package:cash_flow/models/domain/game_event_type.dart';
+import 'package:cash_flow/models/state/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/investment/models/investment_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/investment/ui/investment_game_event.dart';
 import 'package:cash_flow/resources/colors.dart';

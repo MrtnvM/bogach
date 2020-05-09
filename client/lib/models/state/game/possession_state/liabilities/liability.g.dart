@@ -1,20 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'target.dart';
+part of 'liability.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Target _$_$_TargetFromJson(Map<String, dynamic> json) {
-  return _$_Target(
-    _$enumDecodeNullable(_$TargetTypeEnumMap, json['type']),
-    (json['value'] as num)?.toDouble(),
+_$_Liability _$_$_LiabilityFromJson(Map<String, dynamic> json) {
+  return _$_Liability(
+    name: json['name'] as String,
+    type: _$enumDecodeNullable(_$LiabilityTypeEnumMap, json['type']),
+    monthlyPayment: (json['monthlyPayment'] as num)?.toDouble(),
+    value: (json['value'] as num)?.toDouble(),
   );
 }
 
-Map<String, dynamic> _$_$_TargetToJson(_$_Target instance) => <String, dynamic>{
-      'type': _$TargetTypeEnumMap[instance.type],
+Map<String, dynamic> _$_$_LiabilityToJson(_$_Liability instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'type': _$LiabilityTypeEnumMap[instance.type],
+      'monthlyPayment': instance.monthlyPayment,
       'value': instance.value,
     };
 
@@ -50,7 +55,8 @@ T _$enumDecodeNullable<T>(
   return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
 }
 
-const _$TargetTypeEnumMap = {
-  TargetType.cash: 'cash',
-  TargetType.passiveIncome: 'passive_income',
+const _$LiabilityTypeEnumMap = {
+  LiabilityType.mortgage: 'mortgage',
+  LiabilityType.businessCredit: 'business_credit',
+  LiabilityType.other: 'other',
 };

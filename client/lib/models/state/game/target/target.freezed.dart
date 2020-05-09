@@ -15,8 +15,11 @@ Target _$TargetFromJson(Map<String, dynamic> json) {
 class _$TargetTearOff {
   const _$TargetTearOff();
 
-  _Target call() {
-    return _Target();
+  _Target call(@required TargetType type, @required double value) {
+    return _Target(
+      type,
+      value,
+    );
   }
 }
 
@@ -24,12 +27,17 @@ class _$TargetTearOff {
 const $Target = _$TargetTearOff();
 
 mixin _$Target {
+  TargetType get type;
+  double get value;
+
   Map<String, dynamic> toJson();
+  $TargetCopyWith<Target> get copyWith;
 }
 
 abstract class $TargetCopyWith<$Res> {
   factory $TargetCopyWith(Target value, $Res Function(Target) then) =
       _$TargetCopyWithImpl<$Res>;
+  $Res call({TargetType type, double value});
 }
 
 class _$TargetCopyWithImpl<$Res> implements $TargetCopyWith<$Res> {
@@ -38,11 +46,24 @@ class _$TargetCopyWithImpl<$Res> implements $TargetCopyWith<$Res> {
   final Target _value;
   // ignore: unused_field
   final $Res Function(Target) _then;
+
+  @override
+  $Res call({
+    Object type = freezed,
+    Object value = freezed,
+  }) {
+    return _then(_value.copyWith(
+      type: type == freezed ? _value.type : type as TargetType,
+      value: value == freezed ? _value.value : value as double,
+    ));
+  }
 }
 
-abstract class _$TargetCopyWith<$Res> {
+abstract class _$TargetCopyWith<$Res> implements $TargetCopyWith<$Res> {
   factory _$TargetCopyWith(_Target value, $Res Function(_Target) then) =
       __$TargetCopyWithImpl<$Res>;
+  @override
+  $Res call({TargetType type, double value});
 }
 
 class __$TargetCopyWithImpl<$Res> extends _$TargetCopyWithImpl<$Res>
@@ -52,27 +73,57 @@ class __$TargetCopyWithImpl<$Res> extends _$TargetCopyWithImpl<$Res>
 
   @override
   _Target get _value => super._value as _Target;
+
+  @override
+  $Res call({
+    Object type = freezed,
+    Object value = freezed,
+  }) {
+    return _then(_Target(
+      type == freezed ? _value.type : type as TargetType,
+      value == freezed ? _value.value : value as double,
+    ));
+  }
 }
 
 @JsonSerializable()
 class _$_Target implements _Target {
-  _$_Target();
+  _$_Target(@required this.type, @required this.value)
+      : assert(type != null),
+        assert(value != null);
 
   factory _$_Target.fromJson(Map<String, dynamic> json) =>
       _$_$_TargetFromJson(json);
 
   @override
+  final TargetType type;
+  @override
+  final double value;
+
+  @override
   String toString() {
-    return 'Target()';
+    return 'Target(type: $type, value: $value)';
   }
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is _Target);
+    return identical(this, other) ||
+        (other is _Target &&
+            (identical(other.type, type) ||
+                const DeepCollectionEquality().equals(other.type, type)) &&
+            (identical(other.value, value) ||
+                const DeepCollectionEquality().equals(other.value, value)));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode =>
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(type) ^
+      const DeepCollectionEquality().hash(value);
+
+  @override
+  _$TargetCopyWith<_Target> get copyWith =>
+      __$TargetCopyWithImpl<_Target>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -81,7 +132,15 @@ class _$_Target implements _Target {
 }
 
 abstract class _Target implements Target {
-  factory _Target() = _$_Target;
+  factory _Target(@required TargetType type, @required double value) =
+      _$_Target;
 
   factory _Target.fromJson(Map<String, dynamic> json) = _$_Target.fromJson;
+
+  @override
+  TargetType get type;
+  @override
+  double get value;
+  @override
+  _$TargetCopyWith<_Target> get copyWith;
 }

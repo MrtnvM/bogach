@@ -1,6 +1,6 @@
 import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/models/domain/buy_sell_action.dart';
-import 'package:cash_flow/models/domain/game_event.dart';
+import 'package:cash_flow/models/state/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/investment/models/investment_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/investment/models/investment_player_action.dart';

@@ -30,6 +30,10 @@ _$_Game _$_$_GameFromJson(Map<String, dynamic> json) {
     target: json['target'] == null
         ? null
         : Target.fromJson(json['target'] as Map<String, dynamic>),
+    currentEvents: (json['currentEvents'] as List)
+        ?.map((e) =>
+            e == null ? null : GameEvent.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
@@ -43,4 +47,6 @@ Map<String, dynamic> _$_$_GameToJson(_$_Game instance) => <String, dynamic>{
           instance.possessionState?.map((k, e) => MapEntry(k, e?.toJson())),
       'accounts': instance.accounts?.map((k, e) => MapEntry(k, e?.toJson())),
       'target': instance.target?.toJson(),
+      'currentEvents':
+          instance.currentEvents?.map((e) => e?.toJson())?.toList(),
     };

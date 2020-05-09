@@ -23,7 +23,8 @@ class _$GameTearOff {
       @required List<String> participants,
       @required Map<String, PossessionState> possessionState,
       @required Map<String, Account> accounts,
-      @required Target target}) {
+      @required Target target,
+      @required List<GameEvent> currentEvents}) {
     return _Game(
       id: id,
       name: name,
@@ -33,6 +34,7 @@ class _$GameTearOff {
       possessionState: possessionState,
       accounts: accounts,
       target: target,
+      currentEvents: currentEvents,
     );
   }
 }
@@ -49,6 +51,7 @@ mixin _$Game {
   Map<String, PossessionState> get possessionState;
   Map<String, Account> get accounts;
   Target get target;
+  List<GameEvent> get currentEvents;
 
   Map<String, dynamic> toJson();
   $GameCopyWith<Game> get copyWith;
@@ -65,7 +68,8 @@ abstract class $GameCopyWith<$Res> {
       List<String> participants,
       Map<String, PossessionState> possessionState,
       Map<String, Account> accounts,
-      Target target});
+      Target target,
+      List<GameEvent> currentEvents});
 
   $CurrentGameStateCopyWith<$Res> get state;
   $TargetCopyWith<$Res> get target;
@@ -88,6 +92,7 @@ class _$GameCopyWithImpl<$Res> implements $GameCopyWith<$Res> {
     Object possessionState = freezed,
     Object accounts = freezed,
     Object target = freezed,
+    Object currentEvents = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed ? _value.id : id as String,
@@ -104,6 +109,9 @@ class _$GameCopyWithImpl<$Res> implements $GameCopyWith<$Res> {
           ? _value.accounts
           : accounts as Map<String, Account>,
       target: target == freezed ? _value.target : target as Target,
+      currentEvents: currentEvents == freezed
+          ? _value.currentEvents
+          : currentEvents as List<GameEvent>,
     ));
   }
 
@@ -140,7 +148,8 @@ abstract class _$GameCopyWith<$Res> implements $GameCopyWith<$Res> {
       List<String> participants,
       Map<String, PossessionState> possessionState,
       Map<String, Account> accounts,
-      Target target});
+      Target target,
+      List<GameEvent> currentEvents});
 
   @override
   $CurrentGameStateCopyWith<$Res> get state;
@@ -166,6 +175,7 @@ class __$GameCopyWithImpl<$Res> extends _$GameCopyWithImpl<$Res>
     Object possessionState = freezed,
     Object accounts = freezed,
     Object target = freezed,
+    Object currentEvents = freezed,
   }) {
     return _then(_Game(
       id: id == freezed ? _value.id : id as String,
@@ -182,6 +192,9 @@ class __$GameCopyWithImpl<$Res> extends _$GameCopyWithImpl<$Res>
           ? _value.accounts
           : accounts as Map<String, Account>,
       target: target == freezed ? _value.target : target as Target,
+      currentEvents: currentEvents == freezed
+          ? _value.currentEvents
+          : currentEvents as List<GameEvent>,
     ));
   }
 }
@@ -196,7 +209,8 @@ class _$_Game implements _Game {
       @required this.participants,
       @required this.possessionState,
       @required this.accounts,
-      @required this.target})
+      @required this.target,
+      @required this.currentEvents})
       : assert(id != null),
         assert(name != null),
         assert(type != null),
@@ -204,7 +218,8 @@ class _$_Game implements _Game {
         assert(participants != null),
         assert(possessionState != null),
         assert(accounts != null),
-        assert(target != null);
+        assert(target != null),
+        assert(currentEvents != null);
 
   factory _$_Game.fromJson(Map<String, dynamic> json) =>
       _$_$_GameFromJson(json);
@@ -225,10 +240,12 @@ class _$_Game implements _Game {
   final Map<String, Account> accounts;
   @override
   final Target target;
+  @override
+  final List<GameEvent> currentEvents;
 
   @override
   String toString() {
-    return 'Game(id: $id, name: $name, type: $type, state: $state, participants: $participants, possessionState: $possessionState, accounts: $accounts, target: $target)';
+    return 'Game(id: $id, name: $name, type: $type, state: $state, participants: $participants, possessionState: $possessionState, accounts: $accounts, target: $target, currentEvents: $currentEvents)';
   }
 
   @override
@@ -253,7 +270,10 @@ class _$_Game implements _Game {
                 const DeepCollectionEquality()
                     .equals(other.accounts, accounts)) &&
             (identical(other.target, target) ||
-                const DeepCollectionEquality().equals(other.target, target)));
+                const DeepCollectionEquality().equals(other.target, target)) &&
+            (identical(other.currentEvents, currentEvents) ||
+                const DeepCollectionEquality()
+                    .equals(other.currentEvents, currentEvents)));
   }
 
   @override
@@ -266,7 +286,8 @@ class _$_Game implements _Game {
       const DeepCollectionEquality().hash(participants) ^
       const DeepCollectionEquality().hash(possessionState) ^
       const DeepCollectionEquality().hash(accounts) ^
-      const DeepCollectionEquality().hash(target);
+      const DeepCollectionEquality().hash(target) ^
+      const DeepCollectionEquality().hash(currentEvents);
 
   @override
   _$GameCopyWith<_Game> get copyWith =>
@@ -287,7 +308,8 @@ abstract class _Game implements Game {
       @required List<String> participants,
       @required Map<String, PossessionState> possessionState,
       @required Map<String, Account> accounts,
-      @required Target target}) = _$_Game;
+      @required Target target,
+      @required List<GameEvent> currentEvents}) = _$_Game;
 
   factory _Game.fromJson(Map<String, dynamic> json) = _$_Game.fromJson;
 
@@ -307,6 +329,8 @@ abstract class _Game implements Game {
   Map<String, Account> get accounts;
   @override
   Target get target;
+  @override
+  List<GameEvent> get currentEvents;
   @override
   _$GameCopyWith<_Game> get copyWith;
 }

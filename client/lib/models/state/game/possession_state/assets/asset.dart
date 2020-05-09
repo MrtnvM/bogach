@@ -7,8 +7,12 @@ import 'package:cash_flow/models/state/game/possession_state/assets/realty/realt
 import 'package:cash_flow/models/state/game/possession_state/assets/stock/stock_asset.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'asset.g.dart';
+
 @JsonSerializable()
-abstract class Asset {
+class Asset {
+  Asset();
+
   factory Asset.fromJson(Map<String, dynamic> json) {
     final typeString = json['type'];
     final type = AssetType.values.firstWhere(
@@ -21,11 +25,11 @@ abstract class Asset {
     }
 
     switch (type) {
-      case AssetType.insurance:
-        return InsuranceAsset.fromJson(json);
-
       case AssetType.debenture:
         return DebentureAsset.fromJson(json);
+
+      case AssetType.insurance:
+        return InsuranceAsset.fromJson(json);
 
       case AssetType.stock:
         return StockAsset.fromJson(json);
@@ -46,10 +50,10 @@ abstract class Asset {
     return null;
   }
 
-  String get name;
-  AssetType get type;
+  String get name => null;
+  AssetType get type => null;
 
-  Map<String, dynamic> toJson();
+  Map<String, dynamic> toJson() => {};
 }
 
 enum AssetType { insurance, debenture, stock, realty, business, cash, other }
