@@ -97,6 +97,7 @@ class Strings {
   static const purchasing = 'Покупка';
   static const selling = 'Продажа';
   static const inputCount = 'Количество:';
+  static const fairPrice = 'Справедливая цена:';
 
   static const newBusinessTitle = 'Новый бизнесс';
   static const newBusinessDesc =
@@ -121,8 +122,6 @@ class Strings {
       '$count по $cost';
 
   static String getSelling(String name) => 'Продается $name';
-
-  static String stocks(String name) => 'Акции "$name"';
 
   static String itemsPerPrice({int count, String price}) => '$count по $price';
 

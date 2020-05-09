@@ -6,6 +6,7 @@ import 'package:cash_flow/models/network/responses/target_type.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/investment/ui/investment_game_event.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
+import 'package:cash_flow/widgets/events/stock_game_event.dart';
 import 'package:cash_flow/widgets/progress/account_bar.dart';
 import 'package:cash_flow/widgets/progress/game_progress_bar.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +28,7 @@ class _GameEventPageState extends State<GameEventPage> with ReduxState {
       converter: (s) => s.gameState,
       builder: (context, state) {
         final currentEvent = state.activeGameState.maybeMap(
-          gameEvent: (eventState) => state.events.firstWhere(
-            (e) => eventState.eventId == e.id,
-            orElse: () => null,
-          ),
+          gameEvent: (eventState) => state.events[0],
           orElse: () => null,
         );
 
@@ -71,7 +69,7 @@ class _GameEventPageState extends State<GameEventPage> with ReduxState {
 
     final eventWidget = event.type.map(
       debenture: (_) => InvestmentGameEvent(event),
-      stock: (_) => null, //StockGameEvent(event),
+      stock: (_) => StockGameEvent(event),
     );
 
     return Expanded(

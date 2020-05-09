@@ -11,7 +11,7 @@ abstract class StockEventData
   factory StockEventData({
     int currentPrice,
     int availableCount,
-    int nominal,
+    int fairPrice,
   }) = _StockEventData;
 
   factory StockEventData.fromJson(Map<String, dynamic> json) =>

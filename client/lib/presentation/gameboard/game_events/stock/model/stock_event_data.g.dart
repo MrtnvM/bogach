@@ -10,7 +10,7 @@ _$_StockEventData _$_$_StockEventDataFromJson(Map<String, dynamic> json) {
   return _$_StockEventData(
     currentPrice: json['currentPrice'] as int,
     availableCount: json['availableCount'] as int,
-    nominal: json['nominal'] as int,
+    fairPrice: json['fairPrice'] as int,
   );
 }
 
@@ -18,5 +18,5 @@ Map<String, dynamic> _$_$_StockEventDataToJson(_$_StockEventData instance) =>
     <String, dynamic>{
       'currentPrice': instance.currentPrice,
       'availableCount': instance.availableCount,
-      'nominal': instance.nominal,
+      'fairPrice': instance.fairPrice,
     };

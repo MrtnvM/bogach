@@ -15,11 +15,11 @@ StockEventData _$StockEventDataFromJson(Map<String, dynamic> json) {
 class _$StockEventDataTearOff {
   const _$StockEventDataTearOff();
 
-  _StockEventData call({int currentPrice, int availableCount, int nominal}) {
+  _StockEventData call({int currentPrice, int availableCount, int fairPrice}) {
     return _StockEventData(
       currentPrice: currentPrice,
       availableCount: availableCount,
-      nominal: nominal,
+      fairPrice: fairPrice,
     );
   }
 }
@@ -30,7 +30,7 @@ const $StockEventData = _$StockEventDataTearOff();
 mixin _$StockEventData {
   int get currentPrice;
   int get availableCount;
-  int get nominal;
+  int get fairPrice;
 
   Map<String, dynamic> toJson();
   $StockEventDataCopyWith<StockEventData> get copyWith;
@@ -40,7 +40,7 @@ abstract class $StockEventDataCopyWith<$Res> {
   factory $StockEventDataCopyWith(
           StockEventData value, $Res Function(StockEventData) then) =
       _$StockEventDataCopyWithImpl<$Res>;
-  $Res call({int currentPrice, int availableCount, int nominal});
+  $Res call({int currentPrice, int availableCount, int fairPrice});
 }
 
 class _$StockEventDataCopyWithImpl<$Res>
@@ -55,7 +55,7 @@ class _$StockEventDataCopyWithImpl<$Res>
   $Res call({
     Object currentPrice = freezed,
     Object availableCount = freezed,
-    Object nominal = freezed,
+    Object fairPrice = freezed,
   }) {
     return _then(_value.copyWith(
       currentPrice:
@@ -63,7 +63,7 @@ class _$StockEventDataCopyWithImpl<$Res>
       availableCount: availableCount == freezed
           ? _value.availableCount
           : availableCount as int,
-      nominal: nominal == freezed ? _value.nominal : nominal as int,
+      fairPrice: fairPrice == freezed ? _value.fairPrice : fairPrice as int,
     ));
   }
 }
@@ -74,7 +74,7 @@ abstract class _$StockEventDataCopyWith<$Res>
           _StockEventData value, $Res Function(_StockEventData) then) =
       __$StockEventDataCopyWithImpl<$Res>;
   @override
-  $Res call({int currentPrice, int availableCount, int nominal});
+  $Res call({int currentPrice, int availableCount, int fairPrice});
 }
 
 class __$StockEventDataCopyWithImpl<$Res>
@@ -91,7 +91,7 @@ class __$StockEventDataCopyWithImpl<$Res>
   $Res call({
     Object currentPrice = freezed,
     Object availableCount = freezed,
-    Object nominal = freezed,
+    Object fairPrice = freezed,
   }) {
     return _then(_StockEventData(
       currentPrice:
@@ -99,14 +99,14 @@ class __$StockEventDataCopyWithImpl<$Res>
       availableCount: availableCount == freezed
           ? _value.availableCount
           : availableCount as int,
-      nominal: nominal == freezed ? _value.nominal : nominal as int,
+      fairPrice: fairPrice == freezed ? _value.fairPrice : fairPrice as int,
     ));
   }
 }
 
 @JsonSerializable()
 class _$_StockEventData implements _StockEventData {
-  _$_StockEventData({this.currentPrice, this.availableCount, this.nominal});
+  _$_StockEventData({this.currentPrice, this.availableCount, this.fairPrice});
 
   factory _$_StockEventData.fromJson(Map<String, dynamic> json) =>
       _$_$_StockEventDataFromJson(json);
@@ -116,11 +116,11 @@ class _$_StockEventData implements _StockEventData {
   @override
   final int availableCount;
   @override
-  final int nominal;
+  final int fairPrice;
 
   @override
   String toString() {
-    return 'StockEventData(currentPrice: $currentPrice, availableCount: $availableCount, nominal: $nominal)';
+    return 'StockEventData(currentPrice: $currentPrice, availableCount: $availableCount, fairPrice: $fairPrice)';
   }
 
   @override
@@ -133,8 +133,9 @@ class _$_StockEventData implements _StockEventData {
             (identical(other.availableCount, availableCount) ||
                 const DeepCollectionEquality()
                     .equals(other.availableCount, availableCount)) &&
-            (identical(other.nominal, nominal) ||
-                const DeepCollectionEquality().equals(other.nominal, nominal)));
+            (identical(other.fairPrice, fairPrice) ||
+                const DeepCollectionEquality()
+                    .equals(other.fairPrice, fairPrice)));
   }
 
   @override
@@ -142,7 +143,7 @@ class _$_StockEventData implements _StockEventData {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(currentPrice) ^
       const DeepCollectionEquality().hash(availableCount) ^
-      const DeepCollectionEquality().hash(nominal);
+      const DeepCollectionEquality().hash(fairPrice);
 
   @override
   _$StockEventDataCopyWith<_StockEventData> get copyWith =>
@@ -155,8 +156,10 @@ class _$_StockEventData implements _StockEventData {
 }
 
 abstract class _StockEventData implements StockEventData {
-  factory _StockEventData({int currentPrice, int availableCount, int nominal}) =
-      _$_StockEventData;
+  factory _StockEventData(
+      {int currentPrice,
+      int availableCount,
+      int fairPrice}) = _$_StockEventData;
 
   factory _StockEventData.fromJson(Map<String, dynamic> json) =
       _$_StockEventData.fromJson;
@@ -166,7 +169,7 @@ abstract class _StockEventData implements StockEventData {
   @override
   int get availableCount;
   @override
-  int get nominal;
+  int get fairPrice;
   @override
   _$StockEventDataCopyWith<_StockEventData> get copyWith;
 }
