@@ -9,7 +9,7 @@ import { UserEntity } from '../../models/domain/user';
 const userId: UserEntity.Id = 'user1';
 
 describe('Participant Accounts Transformer Tests', () => {
-    test('Generation of possession state', async () => {
+    test('Positive cashflow count', async () => {
         const initialPossesssions: Possessions = {
             incomes: [],
             expenses: [],
@@ -73,5 +73,65 @@ describe('Participant Accounts Transformer Tests', () => {
         const newGameState = accountsStateTransformer.apply(game);
 
         expect(newGameState.accounts[userId].cashFlow).toStrictEqual(73000);
+    });
+
+    test('Negative cashflow count', async () => {
+        const initialPossesssions: Possessions = {
+            incomes: [],
+            expenses: [],
+            assets: [],
+            liabilities: [],
+        };
+
+        const possessionState: PossessionState = {
+            incomes: [
+                {
+                    id: 'income2',
+                    value: 1000,
+                    name: 'Карманные от бабушки',
+                    type: 'other',
+                },
+            ],
+            expenses: [
+                {
+                    id: 'expense1',
+                    name: 'Общее',
+                    value: 20000,
+                },
+            ],
+            assets: [],
+            liabilities: [],
+        };
+
+        const game: Game = {
+            id: 'game1',
+            name: 'Game 1',
+            type: 'singleplayer',
+            participants: [userId],
+            state: {
+                gameStatus: 'players_move',
+                monthNumber: 1,
+                participantProgress: {
+                    [userId]: 0,
+                },
+                winners: {},
+            },
+            possessions: {
+                [userId]: initialPossesssions,
+            },
+            possessionState: {
+                [userId]: possessionState,
+            },
+            accounts: {
+                [userId]: { cashFlow: 10000, cash: 10000, credit: 0 },
+            },
+            target: { type: 'cash', value: 1000000 },
+            currentEvents: [],
+        };
+
+        const accountsStateTransformer = new ParticipantAccountsTransformer();
+        const newGameState = accountsStateTransformer.apply(game);
+
+        expect(newGameState.accounts[userId].cashFlow).toStrictEqual(-19000);
     });
 });
