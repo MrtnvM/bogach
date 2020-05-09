@@ -6,8 +6,25 @@ export class ParticipantAccountsTransformer extends GameTransformer {
   apply(game: Game): Game {
     const isMoveCompleted = this.isAllParticipantsCompletedMove(game);
 
+    const participants = produce(game.participants, (draft) => {
+      draft.forEach((participantId) => {
+
+        const incomes = game.possessionState[participantId].incomes
+          .map((item) => { return item.value })
+          .reduce((previous, current) => previous + current);
+
+        const expenses = game.possessionState[participantId].expenses
+          .map((item) => { return item.value })
+          .reduce((previous, current) => previous + current);
+
+        return incomes + expenses;
+      });
+    });
+
     if (!isMoveCompleted) {
-      return game;
+      return produce(game, (draft) => {
+        draft.participants = participants;
+      });
     }
 
     const accounts = produce(game.accounts, (draft) => {
@@ -19,6 +36,7 @@ export class ParticipantAccountsTransformer extends GameTransformer {
 
     return produce(game, (draft) => {
       draft.accounts = accounts;
+      draft.participants = participants;
     });
   }
 }
