@@ -4,6 +4,7 @@ import { GameTransformer } from './game_transformer';
 import { Game } from '../../models/domain/game/game';
 import { GameEvent } from '../../models/domain/game/game_event';
 import { DebenturePriceChangedEventGenerator } from '../../events/debenture/debenture_price_changed_event_generator';
+import { StockPriceChangedEventGenerator } from '../../events/stock/stock_price_changed_event_generator';
 
 export class GameEventsTransformer extends GameTransformer {
   constructor(private force: boolean = false) {
@@ -22,11 +23,11 @@ export class GameEventsTransformer extends GameTransformer {
 
   private generateGameEvents(game: Game): GameEvent[] {
     const gameEvents = [
-      DebenturePriceChangedEventGenerator.generate(),
-      DebenturePriceChangedEventGenerator.generate(),
-      DebenturePriceChangedEventGenerator.generate(),
-      // StockPriceChangedEventGenerator.generate(),
-      // StockPriceChangedEventGenerator.generate(),
+      //DebenturePriceChangedEventGenerator.generate(),
+      //DebenturePriceChangedEventGenerator.generate(),
+     // DebenturePriceChangedEventGenerator.generate(),
+       StockPriceChangedEventGenerator.generate(),
+       StockPriceChangedEventGenerator.generate(),
       // StockPriceChangedEventGenerator.generate(),
       // BusinessBuyEventGenerator.generate(),
       // BusinessBuyEventGenerator.generate(),
