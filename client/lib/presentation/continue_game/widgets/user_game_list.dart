@@ -28,9 +28,10 @@ class UserGameList extends HookWidget {
       appRouter.goTo(GameBoard(gameContext: gameContext));
     };
 
-    final dispatchAsyncAction = useAsyncActionDispatcher();
+    final actionRunner = useActionRunner();
+
     final loadUserGames = () {
-      dispatchAsyncAction(GetUserGamesAsyncAction(userId: userId));
+      actionRunner.runAction(GetUserGamesAsyncAction(userId: userId));
     };
 
     return Loadable(

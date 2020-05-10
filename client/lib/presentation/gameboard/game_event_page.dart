@@ -65,8 +65,8 @@ class GameEventPage extends HookWidget {
   }
 
   Widget _buildMonthResult() {
-    final dispatch = useActionDispatcher();
-    final goToNewMonth = () => dispatch(GoToNewMonthAction());
+    final actionRunner = useActionRunner();
+    final goToNewMonth = () => actionRunner.runAction(GoToNewMonthAction());
 
     return Container(
       height: 250,

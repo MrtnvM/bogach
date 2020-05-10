@@ -1,4 +1,5 @@
 import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/containers/indicators_table.dart';
 import 'package:cash_flow/models/domain/game/possession_state/incomes/income.dart';
