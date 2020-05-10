@@ -11,14 +11,14 @@ export class ParticipantAccountsTransformer extends GameTransformer {
         const participantAccount = draft[participantId];
 
         const incomes = game.possessionState[participantId].incomes
-          .map((item) => { return item.value })
+          .map((item) => item.value)
           .reduce((previous, current) => previous + current, 0);
 
         const expenses = game.possessionState[participantId].expenses
-          .map((item) => { return item.value })
+          .map((item) => item.value)
           .reduce((previous, current) => previous + current, 0);
 
-          participantAccount.cashFlow = incomes - expenses;
+        participantAccount.cashFlow = incomes - expenses;
       });
     });
 
