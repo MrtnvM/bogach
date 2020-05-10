@@ -13,11 +13,10 @@ GameTemplateResponseModel _$GameTemplateResponseModelFromJson(
     name: json['name'] as String,
     target: json['target'] == null
         ? null
-        : TargetResponseModel.fromJson(json['target'] as Map<String, dynamic>),
+        : Target.fromJson(json['target'] as Map<String, dynamic>),
     accountState: json['accountState'] == null
         ? null
-        : AccountStateResponseModel.fromJson(
-            json['accountState'] as Map<String, dynamic>),
+        : Account.fromJson(json['accountState'] as Map<String, dynamic>),
   );
 }
 

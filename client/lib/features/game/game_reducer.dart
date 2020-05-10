@@ -1,12 +1,7 @@
-import 'dart:math';
-
 import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/features/game/game_state.dart';
-import 'package:cash_flow/models/domain/active_game_state.dart';
-import 'package:cash_flow/models/domain/game_data.dart';
-import 'package:cash_flow/models/network/responses/target_type.dart';
-import 'package:cash_flow/models/state/game/current_game_state/current_game_state.dart';
-import 'package:cash_flow/models/state/game/target/target_state.dart';
+import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
+import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 final gameStateReducer = Reducer<GameState>()
@@ -20,17 +15,12 @@ final gameStateReducer = Reducer<GameState>()
   ..on<OnGameStateChangedAction>(
     (state, action) => state.rebuild(
       (s) {
-        final targetBuilder = TargetStateBuilder()
-          ..value = action.data.target.value
-          ..currentValue = _targetCurrentValue(action.data)
-          ..type = action.data.target.type;
-
         var newActiveGameState = s.activeGameState;
-        final gameState = action.data.gameState;
+        final game = action.game;
 
-        if (gameState.gameStatus == GameStatus.playersMove) {
+        if (game.state.gameStatus == GameStatus.playersMove) {
           final userId = s.currentGameContext.userId;
-          final currentEventIndex = gameState.participantProgress[userId];
+          final currentEventIndex = game.state.participantProgress[userId];
 
           newActiveGameState = s.activeGameState.maybeWhen(
             gameEvent: (eventIndex, isSent) => ActiveGameState.gameEvent(
@@ -44,21 +34,17 @@ final gameStateReducer = Reducer<GameState>()
           );
         }
 
-        if (gameState.gameStatus == GameStatus.gameOver) {
+        if (game.state.gameStatus == GameStatus.gameOver) {
           newActiveGameState = ActiveGameState.gameOver(
-            winners: gameState.winners,
-            monthNumber: gameState.monthNumber,
+            winners: game.state.winners,
+            monthNumber: game.state.monthNumber,
           );
         }
 
         return s
           ..getRequestState = RequestState.success
-          ..possessions = action.data.possessions.toBuilder()
-          ..target = targetBuilder
-          ..activeGameState = newActiveGameState
-          ..account = action.data.account
-          ..currentGameState = action.data.gameState
-          ..events = action.data.events.toBuilder();
+          ..currentGame = game
+          ..activeGameState = newActiveGameState;
       },
     ),
   )
@@ -88,18 +74,3 @@ final gameStateReducer = Reducer<GameState>()
       );
     }),
   );
-
-double _targetCurrentValue(GameData gameData) {
-  switch (gameData.target.type) {
-    case TargetType.cash:
-      return gameData.account.cash;
-
-    case TargetType.passiveIncome:
-      final incomes = gameData.possessions.incomes;
-      final passiveIncome = incomes.sum - incomes.salary;
-      return max(0.0, passiveIncome.toDouble());
-
-    default:
-      return 0.0;
-  }
-}

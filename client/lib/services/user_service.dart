@@ -1,9 +1,9 @@
 import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
+import 'package:cash_flow/models/domain/user/current_user.dart';
 import 'package:cash_flow/models/network/errors/email_has_been_taken_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_email_exception.dart';
 import 'package:cash_flow/models/network/request/register_request_model.dart';
-import 'package:cash_flow/models/state/user/current_user.dart';
 import 'package:cash_flow/utils/error_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';

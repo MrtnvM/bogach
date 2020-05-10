@@ -1,5 +1,5 @@
-import 'package:cash_flow/models/network/responses/account_state_response_model.dart';
-import 'package:cash_flow/models/network/responses/target_response_model.dart';
+import 'package:cash_flow/models/domain/game/account/account.dart';
+import 'package:cash_flow/models/domain/game/target/target.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'game_template_response_model.g.dart';
@@ -21,9 +21,9 @@ class GameTemplateResponseModel {
   @JsonKey(name: 'name')
   final String name;
   @JsonKey(name: 'target')
-  final TargetResponseModel target;
+  final Target target;
   @JsonKey(name: 'accountState')
-  final AccountStateResponseModel accountState;
+  final Account accountState;
 
   Map<String, dynamic> toJson() => _$GameTemplateResponseModelToJson(this);
 }

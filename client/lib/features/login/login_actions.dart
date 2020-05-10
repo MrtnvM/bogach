@@ -1,4 +1,4 @@
-import 'package:cash_flow/models/state/user/current_user.dart';
+import 'package:cash_flow/models/domain/user/current_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter_platform_core/flutter_platform_core.dart';

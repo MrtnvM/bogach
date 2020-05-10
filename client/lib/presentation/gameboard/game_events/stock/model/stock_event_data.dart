@@ -1,13 +1,11 @@
-import 'package:cash_flow/models/domain/game_event.dart';
+import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'stock_event_data.freezed.dart';
 part 'stock_event_data.g.dart';
 
 @freezed
-abstract class StockEventData
-    with _$StockEventData
-    implements GameEventData {
+abstract class StockEventData with _$StockEventData implements GameEventData {
   factory StockEventData({
     int currentPrice,
     int availableCount,

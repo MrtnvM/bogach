@@ -1,4 +1,4 @@
-import 'package:cash_flow/models/domain/buy_sell_action.dart';
+import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/game_event/buy_sell_bar.dart';
 import 'package:cash_flow/widgets/game_event/game_event_value_selector.dart';

@@ -6,9 +6,8 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/appbar/app_bar.dart';
 import 'package:cash_flow/widgets/texts/title_test.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
 
-class SingleGamePage extends StatelessWidget with ReduxComponent {
+class SingleGamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

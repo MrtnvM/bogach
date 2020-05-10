@@ -1,5 +1,5 @@
-import 'package:cash_flow/models/domain/game_template.dart';
-import 'package:cash_flow/models/network/responses/target_type.dart';
+import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
+import 'package:cash_flow/models/domain/game/target/target.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
