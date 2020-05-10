@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
 import 'package:cash_flow/models/domain/game/possession_state/incomes/income.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -39,13 +40,13 @@ class ConnectedGameProgressBar extends HookWidget {
         return account.cash;
 
       case TargetType.passiveIncome:
-        final salary = incomes.fold(
+        final salary = incomes.fold<double>(
           0.0,
           (sum, income) =>
-              sum + income.type == IncomeType.salary ? income.value : 0,
+              sum + (income.type == IncomeType.salary ? income.value : 0),
         );
 
-        final totalIncome = incomes.fold(
+        final totalIncome = incomes.fold<double>(
           0.0,
           (sum, income) => sum + income.value,
         );
