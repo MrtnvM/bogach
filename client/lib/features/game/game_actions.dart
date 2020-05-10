@@ -28,7 +28,7 @@ class OnGameStateChangedAction extends Action {
 class OnGameErrorAction extends Action {
   OnGameErrorAction(this.error);
 
-  final GameError error;
+  final dynamic error;
 
   @override
   String toString() {
