@@ -28,7 +28,7 @@ class _GameEventPageState extends State<GameEventPage> with ReduxState {
       converter: (s) => s.gameState,
       builder: (context, state) {
         final currentEvent = state.activeGameState.maybeMap(
-          gameEvent: (eventState) => state.events[0],
+          gameEvent: (eventState) => state.events[eventState.eventIndex],
           orElse: () => null,
         );
 

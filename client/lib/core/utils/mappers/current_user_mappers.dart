@@ -5,6 +5,7 @@ CurrentUser mapToCurrentUser(FirebaseUser user) {
   return user == null
       ? null
       : CurrentUser((b) => b
+        ..userId = user.uid
         ..fullName = user.displayName
         ..avatarUrl = user.photoUrl);
 }

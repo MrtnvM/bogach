@@ -15,7 +15,6 @@ class AppRouter {
         builder: (context) => route,
         settings: RouteSettings(
           name: route.runtimeType.toString(),
-          isInitialRoute: true,
         ),
       ),
       (route) => false,
@@ -28,7 +27,6 @@ class AppRouter {
         builder: (context) => route,
         settings: RouteSettings(
           name: route.runtimeType.toString(),
-          isInitialRoute: false,
         ),
       ),
     );

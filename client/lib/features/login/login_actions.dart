@@ -3,17 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
-class LoginAsyncAction extends AsyncAction<CurrentUser> {
-  LoginAsyncAction({
-    @material.required this.email,
-    @material.required this.password,
-  })  : assert(email != null),
-        assert(password != null);
-
-  final String email;
-  final String password;
-}
-
 class LogoutAsyncAction extends AsyncAction<void> {
   LogoutAsyncAction();
 }
@@ -55,11 +44,4 @@ class SetCurrentUserAction extends Action {
   SetCurrentUserAction({@material.required this.user});
 
   final FirebaseUser user;
-}
-
-class ResetPasswordAsyncAction extends AsyncAction<void> {
-  ResetPasswordAsyncAction({@material.required this.email})
-      : assert(email != null);
-
-  final String email;
 }

@@ -26,7 +26,7 @@ class ColorButton extends StatelessWidget {
         alignment: Alignment.center,
         child: Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Montserrat',
             fontSize: 16,
             color: ColorRes.mainBlack,

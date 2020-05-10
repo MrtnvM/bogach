@@ -27,10 +27,11 @@ export namespace GameEntity {
   export type Id = string;
 
   export type Type = 'singleplayer' | 'multiplayer';
+  export type Status = 'players_move' | 'game_over';
   export type GameEventIndex = number;
 
   export type State = {
-    readonly gameState: 'players_move' | 'game_over';
+    readonly gameStatus: Status;
     readonly monthNumber: number;
     readonly participantProgress: { [userId: string]: GameEventIndex };
     readonly winners: { [place: number]: UserEntity.Id };
@@ -95,7 +96,7 @@ export namespace GameEntity {
 
     const stateEntity = Entity.createEntityValidator<State>(gameEntity.state, 'Game State');
 
-    stateEntity.checkUnion('gameState', GameStateValues);
+    stateEntity.checkUnion('gameStatus', GameStateValues);
     stateEntity.hasNumberValue('monthNumber');
     stateEntity.hasValuesForKeys('participantProgress', gameEntity.participants);
   };

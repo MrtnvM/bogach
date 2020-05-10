@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 // ignore: avoid_classes_with_only_static_members
 class Strings {
   static const unknownError =
@@ -53,6 +55,7 @@ class Strings {
 
   static const rubleSymbol = '₽';
   static const title = '';
+  static const wordIn = 'в';
   static const confirm = 'ОК';
   static const cancel = 'Отмена';
   static const warning = 'Внимание';
@@ -140,7 +143,11 @@ class Strings {
   static String get gameBoardTitle => 'GameBoard';
 
   static String get targetTypeCash => 'Капитал';
+
+  static String get targetTypePassiveIncome => 'Пассивный доход';
+
   static String get cashFlow => 'Денежный поток';
+
   static String get credit => 'Кредит';
 
   static String get monthIsOver => 'Месяц завершен!';
@@ -161,6 +168,7 @@ class Strings {
   static const multiPlayerGame = 'Игра с друзьями';
   static const continueGame = 'Продолжить игру';
   static const chooseLevel = 'Выберите уровень';
+  static const reach = 'Набрать';
   static const goBack = 'Вернуться назад';
 
   // Reset Password
@@ -173,4 +181,24 @@ class Strings {
 
   static String get noSuchEmail =>
       'Пользователь с таким e-mail не зарегистрирован';
+
+  static String get purchases => 'Покупки';
+
+  static String get storesUnavailable => 'Не удалось подключиться к магазину '
+      'приложений.\nПожалуйста, Повторите попытку позже.';
+
+  // Winners Page
+  static String get winnersPageTitle => 'Еее, бой!';
+  static String get winnersPageDescription =>
+      'Поздравляем! \n' 'Ты достиг своей цели всего за';
+  static String months(int number) => Intl.plural(
+        number,
+        zero: 'месяцев',
+        one: 'месяц',
+        two: 'месяца',
+        few: 'месяца',
+        many: 'месяцев',
+        other: 'месяцев',
+      );
+  static String get goToMainMenu => 'В главное меню';
 }

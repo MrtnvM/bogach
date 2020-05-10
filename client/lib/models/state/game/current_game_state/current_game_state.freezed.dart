@@ -16,12 +16,12 @@ class _$CurrentGameStateTearOff {
   const _$CurrentGameStateTearOff();
 
   _CurrentGameState call(
-      {String gameState,
+      {GameStatus gameStatus,
       int monthNumber,
       Map<String, int> participantProgress,
       Map<int, String> winners}) {
     return _CurrentGameState(
-      gameState: gameState,
+      gameStatus: gameStatus,
       monthNumber: monthNumber,
       participantProgress: participantProgress,
       winners: winners,
@@ -33,7 +33,7 @@ class _$CurrentGameStateTearOff {
 const $CurrentGameState = _$CurrentGameStateTearOff();
 
 mixin _$CurrentGameState {
-  String get gameState;
+  GameStatus get gameStatus;
   int get monthNumber;
   Map<String, int> get participantProgress;
   Map<int, String> get winners;
@@ -47,7 +47,7 @@ abstract class $CurrentGameStateCopyWith<$Res> {
           CurrentGameState value, $Res Function(CurrentGameState) then) =
       _$CurrentGameStateCopyWithImpl<$Res>;
   $Res call(
-      {String gameState,
+      {GameStatus gameStatus,
       int monthNumber,
       Map<String, int> participantProgress,
       Map<int, String> winners});
@@ -63,13 +63,14 @@ class _$CurrentGameStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object gameState = freezed,
+    Object gameStatus = freezed,
     Object monthNumber = freezed,
     Object participantProgress = freezed,
     Object winners = freezed,
   }) {
     return _then(_value.copyWith(
-      gameState: gameState == freezed ? _value.gameState : gameState as String,
+      gameStatus:
+          gameStatus == freezed ? _value.gameStatus : gameStatus as GameStatus,
       monthNumber:
           monthNumber == freezed ? _value.monthNumber : monthNumber as int,
       participantProgress: participantProgress == freezed
@@ -88,7 +89,7 @@ abstract class _$CurrentGameStateCopyWith<$Res>
       __$CurrentGameStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String gameState,
+      {GameStatus gameStatus,
       int monthNumber,
       Map<String, int> participantProgress,
       Map<int, String> winners});
@@ -106,13 +107,14 @@ class __$CurrentGameStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object gameState = freezed,
+    Object gameStatus = freezed,
     Object monthNumber = freezed,
     Object participantProgress = freezed,
     Object winners = freezed,
   }) {
     return _then(_CurrentGameState(
-      gameState: gameState == freezed ? _value.gameState : gameState as String,
+      gameStatus:
+          gameStatus == freezed ? _value.gameStatus : gameStatus as GameStatus,
       monthNumber:
           monthNumber == freezed ? _value.monthNumber : monthNumber as int,
       participantProgress: participantProgress == freezed
@@ -127,7 +129,7 @@ class __$CurrentGameStateCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_CurrentGameState implements _CurrentGameState {
   _$_CurrentGameState(
-      {this.gameState,
+      {this.gameStatus,
       this.monthNumber,
       this.participantProgress,
       this.winners});
@@ -136,7 +138,7 @@ class _$_CurrentGameState implements _CurrentGameState {
       _$_$_CurrentGameStateFromJson(json);
 
   @override
-  final String gameState;
+  final GameStatus gameStatus;
   @override
   final int monthNumber;
   @override
@@ -146,16 +148,16 @@ class _$_CurrentGameState implements _CurrentGameState {
 
   @override
   String toString() {
-    return 'CurrentGameState(gameState: $gameState, monthNumber: $monthNumber, participantProgress: $participantProgress, winners: $winners)';
+    return 'CurrentGameState(gameStatus: $gameStatus, monthNumber: $monthNumber, participantProgress: $participantProgress, winners: $winners)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _CurrentGameState &&
-            (identical(other.gameState, gameState) ||
+            (identical(other.gameStatus, gameStatus) ||
                 const DeepCollectionEquality()
-                    .equals(other.gameState, gameState)) &&
+                    .equals(other.gameStatus, gameStatus)) &&
             (identical(other.monthNumber, monthNumber) ||
                 const DeepCollectionEquality()
                     .equals(other.monthNumber, monthNumber)) &&
@@ -169,7 +171,7 @@ class _$_CurrentGameState implements _CurrentGameState {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(gameState) ^
+      const DeepCollectionEquality().hash(gameStatus) ^
       const DeepCollectionEquality().hash(monthNumber) ^
       const DeepCollectionEquality().hash(participantProgress) ^
       const DeepCollectionEquality().hash(winners);
@@ -186,7 +188,7 @@ class _$_CurrentGameState implements _CurrentGameState {
 
 abstract class _CurrentGameState implements CurrentGameState {
   factory _CurrentGameState(
-      {String gameState,
+      {GameStatus gameStatus,
       int monthNumber,
       Map<String, int> participantProgress,
       Map<int, String> winners}) = _$_CurrentGameState;
@@ -195,7 +197,7 @@ abstract class _CurrentGameState implements CurrentGameState {
       _$_CurrentGameState.fromJson;
 
   @override
-  String get gameState;
+  GameStatus get gameStatus;
   @override
   int get monthNumber;
   @override

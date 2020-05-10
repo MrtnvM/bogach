@@ -36,14 +36,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 GameData mapToGameData(DocumentSnapshot response, String userId) {
+  final data = response.data;
+
   final userPossessionState = mapToPossessionState(
-    response.data['possessionState'],
+    data['possessionState'],
     userId,
   );
-  final account = mapToAccountState(response.data['accounts'], userId);
-  final target = mapToTargetState(response.data['target']);
-  final events = mapToGameEvents(response.data['currentEvents']);
-  final gameState = mapToCurrentGameState(response['state']);
+  final account = mapToAccountState(data['accounts'], userId);
+  final target = mapToTargetState(data['target']);
+  final events = mapToGameEvents(data['currentEvents']);
+  final gameState = mapToCurrentGameState(data['state']);
 
   return GameData(
     possessions: userPossessionState,

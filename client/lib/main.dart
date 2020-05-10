@@ -13,6 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:flutter_platform_network/flutter_platform_network.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -26,9 +27,10 @@ Future<void> main() async {
   final tokenStorage = TokenStorage();
   final alice = Alice(navigatorKey: appRouter.navigatorKey);
   final sharedPreferences = await SharedPreferences.getInstance();
-  final environment = developmentEnvironment;
+  final environment = stagingEnvironment;
   final apiClient = configureApiClient(alice, environment);
 
+  configurePurchases();
   configureControlPanel(alice, apiClient);
   configureErrorReporting();
   setOrientationPortrait();
@@ -52,10 +54,14 @@ Future<void> main() async {
   final isAuthorized = currentUser != null;
   dispatch(SetCurrentUserAction(user: currentUser));
 
-  runZoned<Future<void>>(() async {
+  runZonedGuarded<Future<void>>(() async {
     runApp(CashFlowApp(
       store: storeProvider.store,
       isAuthorised: isAuthorized,
     ));
-  }, onError: Crashlytics.instance.recordError);
+  }, Crashlytics.instance.recordError);
+}
+
+void configurePurchases() {
+  InAppPurchaseConnection.enablePendingPurchases();
 }
