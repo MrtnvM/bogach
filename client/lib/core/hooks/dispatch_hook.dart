@@ -3,55 +3,32 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:rxdart/rxdart.dart';
 
-typedef ActionDispatcher = void Function(Action);
-typedef AsyncActionDispatcher = Stream<T> Function<T extends AsyncAction>(
-  T action,
-);
-
-ActionDispatcher useActionDispatcher() {
-  return useMemoized(() => ReduxConfig.storeProvider.store.dispatch);
+_ActionRunner useActionRunner() {
+  final reduxComponent = useReduxComponent();
+  final actionRunner = useMemoized(() => _ActionRunner(reduxComponent));
+  return actionRunner;
 }
 
-AsyncActionDispatcher useAsyncActionDispatcher() {
-  return Hook.use(_ReduxComponentHook()).dispatchAsyncAction;
+class _ActionRunner {
+  _ActionRunner(this._reduxComponent);
+  final _ReduxComponent _reduxComponent;
+
+  void runAction(Action action) {
+    _reduxComponent.dispatch(action);
+  }
+
+  Future<R> runAsyncAction<R>(AsyncAction<R> action) {
+    return _reduxComponent.dispatchAsyncActionAsFuture(action);
+  }
 }
 
-ReduxComponent useReduxComponent() {
+_ReduxComponent useReduxComponent() {
   return Hook.use(_ReduxComponentHook());
 }
 
-void Function(T) useAsyncAction<T, Result>({
-  @required AsyncAction<Result> Function(T) action,
-  void Function(Result) onSuccess,
-  void Function(dynamic error, VoidCallback retry) onError,
-}) {
-  final dispatchAsyncAction = useAsyncActionDispatcher();
-
-  void Function(T) dispatch;
-
-  dispatch = (arg1) {
-    dispatchAsyncAction(action(arg1)).listen(
-      (action) => action
-        ..onSuccess((result) => onSuccess?.call(result))
-        ..onError((error) => onError?.call(error, () => dispatch(arg1))),
-    );
-  };
-
-  return dispatch;
-}
-
-abstract class ReduxComponent {
-  void dispatch(Action action) {}
-
-  Stream<T> dispatchAsyncAction<T extends AsyncAction>(T action);
-
-  Stream<T> onAction<T extends Action>();
-}
-
-class _ReduxComponentImpl implements ReduxComponent {
+class _ReduxComponent {
   final _onDisposed = PublishSubject();
 
-  @override
   void dispatch(Action action) {
     assert(
       ReduxConfig.storeProvider != null,
@@ -62,8 +39,7 @@ class _ReduxComponentImpl implements ReduxComponent {
     ReduxConfig.storeProvider.store.dispatch(action);
   }
 
-  @override
-  Stream<T> dispatchAsyncAction<T extends AsyncAction>(T action) {
+  Stream<T> dispatchAsyncAction<R, T extends AsyncAction<R>>(T action) {
     dispatch(action);
 
     return onAction<T>()
@@ -72,7 +48,16 @@ class _ReduxComponentImpl implements ReduxComponent {
         .takeUntil(_onDisposed);
   }
 
-  @override
+  Future<R> dispatchAsyncActionAsFuture<R>(AsyncAction<R> action) {
+    return dispatchAsyncAction(action).map((a) {
+      if (a.isSucceed) {
+        return a.successModel;
+      }
+
+      throw a.errorModel;
+    }).first;
+  }
+
   Stream<T> onAction<T extends Action>() {
     assert(
       ReduxConfig.storeProvider != null,
@@ -90,19 +75,19 @@ class _ReduxComponentImpl implements ReduxComponent {
   }
 }
 
-class _ReduxComponentHook extends Hook<ReduxComponent> {
+class _ReduxComponentHook extends Hook<_ReduxComponent> {
   @override
-  HookState<ReduxComponent, Hook<ReduxComponent>> createState() {
+  HookState<_ReduxComponent, Hook<_ReduxComponent>> createState() {
     return _ReduxComponentStateHook();
   }
 }
 
 class _ReduxComponentStateHook
-    extends HookState<ReduxComponent, _ReduxComponentHook> {
-  var _reduxComponent = _ReduxComponentImpl();
+    extends HookState<_ReduxComponent, _ReduxComponentHook> {
+  var _reduxComponent = _ReduxComponent();
 
   @override
-  ReduxComponent build(BuildContext context) {
+  _ReduxComponent build(BuildContext context) {
     return _reduxComponent;
   }
 
