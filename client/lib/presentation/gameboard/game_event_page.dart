@@ -5,6 +5,7 @@ import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/investment/ui/investment_game_event.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
+import 'package:cash_flow/widgets/events/stock_game_event.dart';
 import 'package:cash_flow/widgets/progress/account_bar.dart';
 import 'package:cash_flow/widgets/progress/connected_game_progress_bar.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,7 @@ class GameEventPage extends HookWidget {
 
     final eventWidget = event.type.map(
       debenture: (_) => InvestmentGameEvent(event),
-      stock: (_) => null,
+      stock: (_) => StockGameEvent(event),
     );
 
     return Expanded(

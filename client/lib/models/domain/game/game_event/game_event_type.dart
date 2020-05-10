@@ -1,4 +1,5 @@
 import 'package:cash_flow/presentation/gameboard/game_events/investment/models/investment_event_data.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/stock/model/stock_event_data.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
@@ -23,7 +24,7 @@ abstract class GameEventType implements _$GameEventType {
   dynamic parseGameEventData(Map<String, dynamic> json) {
     return map(
       debenture: (_) => InvestmentEventData.fromJson(json),
-      stock: (_) => throw Exception('Not implemented'),
+      stock: (_) => StockEventData.fromJson(json),
     );
   }
 
