@@ -10,7 +10,11 @@ class _$NewGameState extends NewGameState {
   @override
   final RefreshableRequestState getGameTemplatesRequestState;
   @override
+  final RefreshableRequestState getUserGamesRequestState;
+  @override
   final StoreList<GameTemplate> gameTemplates;
+  @override
+  final StoreList<Game> userGames;
   @override
   final RequestState createNewGameRequestState;
   @override
@@ -21,7 +25,9 @@ class _$NewGameState extends NewGameState {
 
   _$NewGameState._(
       {this.getGameTemplatesRequestState,
+      this.getUserGamesRequestState,
       this.gameTemplates,
+      this.userGames,
       this.createNewGameRequestState,
       this.newGameId})
       : super._() {
@@ -29,8 +35,15 @@ class _$NewGameState extends NewGameState {
       throw new BuiltValueNullFieldError(
           'NewGameState', 'getGameTemplatesRequestState');
     }
+    if (getUserGamesRequestState == null) {
+      throw new BuiltValueNullFieldError(
+          'NewGameState', 'getUserGamesRequestState');
+    }
     if (gameTemplates == null) {
       throw new BuiltValueNullFieldError('NewGameState', 'gameTemplates');
+    }
+    if (userGames == null) {
+      throw new BuiltValueNullFieldError('NewGameState', 'userGames');
     }
     if (createNewGameRequestState == null) {
       throw new BuiltValueNullFieldError(
@@ -50,7 +63,9 @@ class _$NewGameState extends NewGameState {
     if (identical(other, this)) return true;
     return other is NewGameState &&
         getGameTemplatesRequestState == other.getGameTemplatesRequestState &&
+        getUserGamesRequestState == other.getUserGamesRequestState &&
         gameTemplates == other.gameTemplates &&
+        userGames == other.userGames &&
         createNewGameRequestState == other.createNewGameRequestState &&
         newGameId == other.newGameId;
   }
@@ -59,8 +74,12 @@ class _$NewGameState extends NewGameState {
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc(0, getGameTemplatesRequestState.hashCode),
-                gameTemplates.hashCode),
+            $jc(
+                $jc(
+                    $jc($jc(0, getGameTemplatesRequestState.hashCode),
+                        getUserGamesRequestState.hashCode),
+                    gameTemplates.hashCode),
+                userGames.hashCode),
             createNewGameRequestState.hashCode),
         newGameId.hashCode));
   }
@@ -69,7 +88,9 @@ class _$NewGameState extends NewGameState {
   String toString() {
     return (newBuiltValueToStringHelper('NewGameState')
           ..add('getGameTemplatesRequestState', getGameTemplatesRequestState)
+          ..add('getUserGamesRequestState', getUserGamesRequestState)
           ..add('gameTemplates', gameTemplates)
+          ..add('userGames', userGames)
           ..add('createNewGameRequestState', createNewGameRequestState)
           ..add('newGameId', newGameId))
         .toString();
@@ -87,10 +108,21 @@ class NewGameStateBuilder
           RefreshableRequestState getGameTemplatesRequestState) =>
       _$this._getGameTemplatesRequestState = getGameTemplatesRequestState;
 
+  RefreshableRequestState _getUserGamesRequestState;
+  RefreshableRequestState get getUserGamesRequestState =>
+      _$this._getUserGamesRequestState;
+  set getUserGamesRequestState(
+          RefreshableRequestState getUserGamesRequestState) =>
+      _$this._getUserGamesRequestState = getUserGamesRequestState;
+
   StoreList<GameTemplate> _gameTemplates;
   StoreList<GameTemplate> get gameTemplates => _$this._gameTemplates;
   set gameTemplates(StoreList<GameTemplate> gameTemplates) =>
       _$this._gameTemplates = gameTemplates;
+
+  StoreList<Game> _userGames;
+  StoreList<Game> get userGames => _$this._userGames;
+  set userGames(StoreList<Game> userGames) => _$this._userGames = userGames;
 
   RequestState _createNewGameRequestState;
   RequestState get createNewGameRequestState =>
@@ -107,7 +139,9 @@ class NewGameStateBuilder
   NewGameStateBuilder get _$this {
     if (_$v != null) {
       _getGameTemplatesRequestState = _$v.getGameTemplatesRequestState;
+      _getUserGamesRequestState = _$v.getUserGamesRequestState;
       _gameTemplates = _$v.gameTemplates;
+      _userGames = _$v.userGames;
       _createNewGameRequestState = _$v.createNewGameRequestState;
       _newGameId = _$v.newGameId;
       _$v = null;
@@ -133,7 +167,9 @@ class NewGameStateBuilder
     final _$result = _$v ??
         new _$NewGameState._(
             getGameTemplatesRequestState: getGameTemplatesRequestState,
+            getUserGamesRequestState: getUserGamesRequestState,
             gameTemplates: gameTemplates,
+            userGames: userGames,
             createNewGameRequestState: createNewGameRequestState,
             newGameId: newGameId);
     replace(_$result);

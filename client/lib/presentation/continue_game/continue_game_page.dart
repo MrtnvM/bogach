@@ -1,5 +1,5 @@
 import 'package:cash_flow/navigation/app_router.dart';
-import 'package:cash_flow/presentation/new_game/widgets/template_game_list.dart';
+import 'package:cash_flow/presentation/continue_game/widgets/user_game_list.dart';
 import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:flutter/material.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -26,7 +26,7 @@ class ContinueGamePage extends StatelessWidget {
       children: <Widget>[
         Container(
           color: ColorRes.mainGreen,
-          child: TemplateGameList(),
+          child: UserGameList(),
         ),
         Positioned(
           bottom: 40,

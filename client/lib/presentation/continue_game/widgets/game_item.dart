@@ -1,27 +1,32 @@
-import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
+import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class GameTemplateItem extends StatelessWidget {
-  const GameTemplateItem({
-    @required this.gameTemplate,
-    @required this.onTemplateSelected,
+class GameItem extends HookWidget {
+  const GameItem({
+    @required this.game,
+    @required this.onGameSelected,
   });
 
-  final GameTemplate gameTemplate;
-  final void Function(GameTemplate) onTemplateSelected;
+  final Game game;
+  final void Function(Game) onGameSelected;
 
   @override
   Widget build(BuildContext context) {
-    final gameTarget = gameTemplate.target;
+    final userId = useUserId();
+    final cash = game.accounts[userId].cash;
+
+    final gameTarget = game.target;
     final targetTitle = mapTargetTypeToString(gameTarget.type).toLowerCase();
     final targetValue = gameTarget.value.round().toPrice();
 
     return GestureDetector(
-      onTap: () => onTemplateSelected(gameTemplate),
+      onTap: () => onGameSelected(game),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -35,8 +40,7 @@ class GameTemplateItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              '${gameTemplate.name} — '
-              '${gameTemplate.accountState.cash.round().toPrice()}',
+              '${game.name} — ${cash.round().toPrice()}',
               style: Styles.bodyBlackBold,
             ),
             const SizedBox(height: 20),
