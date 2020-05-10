@@ -167,14 +167,18 @@ class UiKit extends StatelessWidget {
             income: 1000,
           ),
         ),
-        const StockGameEvent(
-          StockViewModel(
-            currentPrice: 39,
-            type: 'Инвестбанк',
-            nominalCost: 40,
-            alreadyHave: 0,
-            maxCount: 12520,
-          ),
+        StockGameEvent(
+          GameEvent(
+              id: 'event1',
+              name: 'Название акции',
+              description: 'Описание акции',
+              type: GameEventType.stock(),
+              data: InvestmentEventData(
+                currentPrice: 1300,
+                nominal: 1000,
+                profitabilityPercent: 8,
+                availableCount: 15,
+              )),
         ),
         const SaleBusinessGameEvent(
           SaleBusinessViewModel(
