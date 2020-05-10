@@ -8,7 +8,9 @@ abstract class Income with _$Income {
   factory Income({
     @required String name,
     @required double value,
-    @JsonKey(unknownEnumValue: IncomeType.other) @required IncomeType type,
+    @JsonKey(unknownEnumValue: IncomeType.other, defaultValue: IncomeType.other)
+    @required
+        IncomeType type,
   }) = _Income;
 
   factory Income.fromJson(Map<String, dynamic> json) => _$IncomeFromJson(json);
