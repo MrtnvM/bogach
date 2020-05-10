@@ -1,3 +1,9 @@
+import 'package:cash_flow/features/game/game_actions.dart';
+import 'package:cash_flow/models/domain/buy_sell_action.dart';
+import 'package:cash_flow/models/domain/game_event.dart';
+import 'package:cash_flow/presentation/dialogs/dialogs.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/investment/models/investment_player_action.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/stock/model/stock_event_data.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
@@ -8,11 +14,12 @@ import 'package:cash_flow/widgets/containers/info_table.dart';
 import 'package:cash_flow/widgets/events/game_event_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 class StockGameEvent extends StatefulWidget {
-  const StockGameEvent(this.viewModel);
+  const StockGameEvent(this.event);
 
-  final StockViewModel viewModel;
+  final GameEvent event;
 
   @override
   State<StatefulWidget> createState() {
@@ -20,40 +27,51 @@ class StockGameEvent extends StatefulWidget {
   }
 }
 
-class StockGameEventState extends State<StockGameEvent> {
+class StockGameEventState extends State<StockGameEvent> with ReduxState {
+  var _selectedCount = 0;
+  var _buySellAction = const BuySellAction.buy();
+
+  GameEvent get event => widget.event;
+  StockEventData get eventData => event.data;
+
   @override
   Widget build(BuildContext context) {
     return GameEventWidget(
       icon: Icons.home,
       name: Strings.stockMarketTitle,
       buttonsState: ButtonsState.normal,
-      buttonsProperties: widget.viewModel.buttonsProperties,
+      buttonsProperties: ButtonsProperties(
+        onConfirm: sendPlayerAction,
+        onSkip: _skipPlayerAction,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _buildSellingPrice(),
           const SizedBox(height: 8),
-          _buildInfo(widget.viewModel),
-          _buildSelector(widget.viewModel),
+          _buildInfo(),
+          _buildSelector(),
         ],
       ),
     );
   }
 
-  Widget _buildInfo(StockViewModel viewModel) {
+  Widget _buildInfo() {
+    const alreadyHave = 0; // TODO (Robert) add real value
+
     final map = {
-      Strings.investmentType: Strings.stocks(viewModel.type),
-      Strings.nominalCost: viewModel.nominalCost.toPrice(),
-      Strings.alreadyHave: viewModel.alreadyHave == 0
-          ? viewModel.alreadyHave.toString()
+      Strings.investmentType: event.type.typeTitle(),
+      Strings.fairPrice: eventData.fairPrice.toPrice(),
+      Strings.alreadyHave: alreadyHave == 0
+          ? alreadyHave.toString()
           : Strings.getUserAvailableCount(
-              viewModel.alreadyHave.toString(),
-              viewModel.currentPrice.toPrice(),
+              alreadyHave.toString(),
+              eventData.currentPrice.toPrice(),
             ),
     };
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
       child: InfoTable(map),
     );
   }
@@ -64,50 +82,61 @@ class StockGameEventState extends State<StockGameEvent> {
       child: RichText(
         text: TextSpan(
           children: [
-            const TextSpan(text: Strings.currentPrice, style: Styles.body1),
-            const WidgetSpan(
-              child: SizedBox(
-                width: 4,
-              ),
-            ),
             TextSpan(
-                text: widget.viewModel.currentPrice.toPrice(),
-                style: Styles.body2.copyWith(color: ColorRes.blue)),
+              text: Strings.currentPrice,
+              style: Styles.body1.copyWith(color: Colors.black87),
+            ),
+            const WidgetSpan(child: SizedBox(width: 4)),
+            TextSpan(
+              text: eventData.currentPrice.toPrice(),
+              style: Styles.body2.copyWith(color: ColorRes.blue),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSelector(StockViewModel viewModel) {
+  Widget _buildSelector() {
+    const alreadyHave = 0;
+
     final selectorViewModel = SelectorViewModel(
-      currentPrice: viewModel.currentPrice,
-      alreadyHave: viewModel.alreadyHave,
-      maxCount: viewModel.maxCount,
-      changeableType: false,
+      currentPrice: eventData.currentPrice,
+      alreadyHave: alreadyHave,
+      maxCount: eventData.availableCount,
+      changeableType: true,
     );
 
     return GameEventSelector(
       viewModel: selectorViewModel,
-      onPlayerActionParamsChanged: (action, count) => null,
+      onPlayerActionParamsChanged: (action, count) {
+        _selectedCount = count;
+        _buySellAction = action;
+      },
     );
   }
-}
 
-class StockViewModel {
-  const StockViewModel({
-    this.currentPrice,
-    this.type,
-    this.nominalCost,
-    this.alreadyHave,
-    this.maxCount,
-    this.buttonsProperties,
-  });
+  void sendPlayerAction() {
+    if (_selectedCount == 0) {
+      _skipPlayerAction();
+      return;
+    }
 
-  final int currentPrice;
-  final String type;
-  final int nominalCost;
-  final int alreadyHave;
-  final int maxCount;
-  final ButtonsProperties buttonsProperties;
+    final playerAction = InvestmentPlayerAction(
+      _buySellAction,
+      _selectedCount,
+      event.id,
+    );
+
+    final action = SendPlayerMoveAsyncAction(playerAction, event.id);
+
+    dispatchAsyncAction(action).listen(
+      (action) => action
+        ..onError((error) => handleError(context: context, exception: error)),
+    );
+  }
+
+  void _skipPlayerAction() {
+    dispatch(SkipPlayerMoveAction());
+  }
 }
