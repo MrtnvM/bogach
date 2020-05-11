@@ -1,4 +1,4 @@
-import 'package:cash_flow/models/state/game/account/account.dart';
+import 'package:cash_flow/models/domain/game/account/account.dart';
 import 'package:cash_flow/widgets/progress/account_bar.dart';
 import 'package:uikit/uikit.dart';
 

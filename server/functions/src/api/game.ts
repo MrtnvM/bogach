@@ -6,10 +6,17 @@ import { GameService } from '../services/game_service';
 import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from '../providers/firestore_selector';
-import { PossessionService } from '../services/possession_service';
+import {
+  applyGameTransformers,
+  GameEventsTransformer,
+  PossessionStateTransformer,
+} from '../transformers/game_transformers';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
+
+  const gameProvider = new GameProvider(firestore, selector);
+  const gameService = new GameService(gameProvider);
 
   const createGame = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request);
@@ -17,17 +24,23 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const templateId = apiRequest.jsonField('templateId');
     const userId = apiRequest.jsonField('userId');
 
-    const gameProvider = new GameProvider(firestore, selector);
-    const createdGame = await gameProvider.createGame(templateId, userId);
+    const createNewGame = async () => {
+      const createdGame = await gameProvider.createGame(templateId, userId);
 
-    const gameService = new GameService(gameProvider);
+      const newGame = applyGameTransformers(createdGame, [
+        new GameEventsTransformer(true),
+        new PossessionStateTransformer(),
+      ]);
 
-    const gameWithEvents = gameService.generateGameEvents(createdGame.id);
-    return send(gameWithEvents, response);
+      await gameProvider.updateGame(newGame);
+      return newGame;
+    };
+
+    const game = createNewGame();
+    return send(game, response);
   });
 
   const getAllGames = https.onRequest(async (request, response) => {
-    const gameProvider = new GameProvider(firestore, selector);
     const games = gameProvider.getAllGames();
 
     return send(games, response);
@@ -38,16 +51,12 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const gameId = apiRequest.queryParameter('game_id');
 
-    const gameProvider = new GameProvider(firestore, selector);
     const game = gameProvider.getGame(gameId);
-
     return send(game, response);
   });
 
   const getAllGameTemplates = https.onRequest(async (request, response) => {
-    const gameProvider = new GameProvider(firestore, selector);
     const gameTemplates = gameProvider.getAllGameTemplates();
-
     return send(gameTemplates, response);
   });
 
@@ -56,22 +65,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const templateId = apiRequest.queryParameter('template_id');
 
-    const gameProvider = new GameProvider(firestore, selector);
     const gameTemplate = gameProvider.getGameTemplate(templateId);
-
     return send(gameTemplate, response);
-  });
-
-  const generateGameEvents = https.onRequest(async (request, response) => {
-    const apiRequest = APIRequest.from(request);
-
-    const gameId = apiRequest.queryParameter('game_id');
-
-    const gameProvider = new GameProvider(firestore, selector);
-    const gameService = new GameService(gameProvider);
-    const game = gameService.generateGameEvents(gameId);
-
-    return send(game, response);
   });
 
   const handleGameEvent = https.onRequest(async (request, response) => {
@@ -86,15 +81,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const context = apiRequest.jsonField('context');
     const eventId = apiRequest.jsonField('eventId');
 
-    const gameProvider = new GameProvider(firestore, selector);
-    const gameService = new GameService(gameProvider);
-
     const handleEvent = gameService
       .handlePlayerAction(eventId, action, context)
-      .then(() => {
-        const possessionService = new PossessionService(gameProvider);
-        return possessionService.updatePossessionState(context);
-      })
       .then(() => 'Player action handled');
 
     return send(handleEvent, response);
@@ -115,7 +103,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     getGame,
     getAllGameTemplates,
     getGameTemplate,
-    generateGameEvents,
     handleGameEvent,
   };
 };

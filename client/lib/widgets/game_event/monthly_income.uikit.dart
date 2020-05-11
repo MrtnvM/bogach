@@ -1,4 +1,4 @@
-import 'package:cash_flow/models/domain/buy_sell_action.dart';
+import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/widgets/game_event/monthly_income.dart';
 import 'package:uikit/uikit.dart';
 

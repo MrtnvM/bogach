@@ -25,4 +25,20 @@ extension RequestStateHelper on AsyncAction {
       return RequestState.idle;
     }
   }
+
+  RefreshableRequestState mapToRefreshableRequestState({bool isRefreshing}) {
+    if (isStarted) {
+      if (isRefreshing == true) {
+        return RefreshableRequestState.refreshing;
+      }
+
+      return RefreshableRequestState.inProgress;
+    } else if (isSucceed) {
+      return RefreshableRequestState.success;
+    } else if (isFailed) {
+      return RefreshableRequestState.error;
+    } else {
+      return RefreshableRequestState.idle;
+    }
+  }
 }

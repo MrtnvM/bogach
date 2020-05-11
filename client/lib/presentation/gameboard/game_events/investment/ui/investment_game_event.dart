@@ -1,6 +1,6 @@
 import 'package:cash_flow/features/game/game_actions.dart';
-import 'package:cash_flow/models/domain/buy_sell_action.dart';
-import 'package:cash_flow/models/domain/game_event.dart';
+import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
+import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/investment/models/investment_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/investment/models/investment_player_action.dart';
@@ -42,7 +42,10 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
       icon: Icons.home,
       name: Strings.investments,
       buttonsState: ButtonsState.normal,
-      buttonsProperties: ButtonsProperties(onConfirm: sendPlayerAction),
+      buttonsProperties: ButtonsProperties(
+        onConfirm: sendPlayerAction,
+        onSkip: _skipPlayerAction,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -120,6 +123,11 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
   }
 
   void sendPlayerAction() {
+    if (_selectedCount == 0) {
+      _skipPlayerAction();
+      return;
+    }
+
     final playerAction = InvestmentPlayerAction(
       _buySellAction,
       _selectedCount,
@@ -132,5 +140,9 @@ class InvestmentGameEventState extends State<InvestmentGameEvent>
       (action) => action
         ..onError((error) => handleError(context: context, exception: error)),
     );
+  }
+
+  void _skipPlayerAction() {
+    dispatch(SkipPlayerMoveAction());
   }
 }

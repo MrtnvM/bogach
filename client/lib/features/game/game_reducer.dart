@@ -1,7 +1,7 @@
 import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/features/game/game_state.dart';
-import 'package:cash_flow/models/domain/active_game_state.dart';
-import 'package:cash_flow/models/state/game/target/target_state.dart';
+import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
+import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 final gameStateReducer = Reducer<GameState>()
@@ -15,32 +15,36 @@ final gameStateReducer = Reducer<GameState>()
   ..on<OnGameStateChangedAction>(
     (state, action) => state.rebuild(
       (s) {
-        final targetBuilder = TargetStateBuilder()
-          ..value = action.data.target.value
-          ..currentValue = action.data.possessions.assets.sum
-          ..type = action.data.target.type;
+        var newActiveGameState = s.activeGameState;
+        final game = action.game;
 
-        final currentState = s.activeGameState;
-        var newGameState = currentState;
+        if (game.state.gameStatus == GameStatus.playersMove) {
+          final userId = s.currentGameContext.userId;
+          final currentEventIndex = game.state.participantProgress[userId];
 
-        final gameEvents = action.data.events;
-        final shouldUpdateGame = currentState.maybeWhen(
-          waitingForStart: () => true,
-          gameEvent: (eventId) => eventId == null,
-          orElse: () => false,
-        );
+          newActiveGameState = s.activeGameState.maybeWhen(
+            gameEvent: (eventIndex, isSent) => ActiveGameState.gameEvent(
+              eventIndex: currentEventIndex,
+              isSent: currentEventIndex == eventIndex,
+            ),
+            orElse: () => ActiveGameState.gameEvent(
+              eventIndex: currentEventIndex,
+              isSent: false,
+            ),
+          );
+        }
 
-        if (shouldUpdateGame && gameEvents.isNotEmpty) {
-          newGameState = ActiveGameState.gameEvent(gameEvents.first.id);
+        if (game.state.gameStatus == GameStatus.gameOver) {
+          newActiveGameState = ActiveGameState.gameOver(
+            winners: game.state.winners,
+            monthNumber: game.state.monthNumber,
+          );
         }
 
         return s
           ..getRequestState = RequestState.success
-          ..possessions = action.data.possessions.toBuilder()
-          ..target = targetBuilder
-          ..activeGameState = newGameState
-          ..account = action.data.account
-          ..events = action.data.events.toBuilder();
+          ..currentGame = game
+          ..activeGameState = newActiveGameState;
       },
     ),
   )
@@ -55,34 +59,18 @@ final gameStateReducer = Reducer<GameState>()
     ),
   )
   ..on<SendPlayerMoveAsyncAction>(
-    (state, action) => state.rebuild(
-      (s) {
-        final eventIndex = s.events.build().indexWhere(
-              (e) => e.id == action.eventId,
-            );
-
-        if (eventIndex < 0) {
-          return;
-        }
-
-        if (eventIndex < s.events.length - 1) {
-          final nextEventId = s.events[eventIndex + 1].id;
-          s.activeGameState = ActiveGameState.gameEvent(nextEventId);
-          return;
-        }
-
-        if (eventIndex == s.events.length - 1) {
-          s.activeGameState = ActiveGameState.monthResult();
-          return;
-        }
-      },
-    ),
+    (state, action) => state.rebuild((s) {
+      s.activeGameState = s.activeGameState.maybeMap(
+        gameEvent: (gameEventState) => gameEventState.copyWith(isSent: true),
+        orElse: () => s.activeGameState,
+      );
+    }),
   )
-  ..on<GoToNewMonthAction>(
-    (state, action) => state.rebuild(
-      (s) {
-        final newFirstEvent = s.events.isNotEmpty ? s.events.first : null;
-        s.activeGameState = ActiveGameState.gameEvent(newFirstEvent?.id);
-      },
-    ),
+  ..on<SkipPlayerMoveAction>(
+    (state, action) => state.rebuild((s) {
+      s.activeGameState = s.activeGameState.maybeMap(
+        gameEvent: (gameEventState) => gameEventState.copyWith(isSent: true),
+        orElse: () => s.activeGameState,
+      );
+    }),
   );

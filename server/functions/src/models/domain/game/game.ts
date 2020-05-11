@@ -5,15 +5,17 @@ import { Possessions } from '../possessions';
 import { PossessionState } from '../possession_state';
 import { Entity } from '../../../core/domain/entity';
 import { GameTarget, GameTargetEntity } from './game_target';
-import { GameState } from './game_state';
+import { ParticipantGameState } from './participant_game_state';
 
 export interface Game {
   readonly id: GameEntity.Id;
   readonly name: string;
+  readonly type: GameEntity.Type;
+  readonly state: GameEntity.State;
   readonly participants: UserEntity.Id[];
-  readonly possessions: GameState<Possessions>;
-  readonly possessionState: GameState<PossessionState>;
-  readonly accounts: GameState<Account>;
+  readonly possessions: ParticipantGameState<Possessions>;
+  readonly possessionState: ParticipantGameState<PossessionState>;
+  readonly accounts: ParticipantGameState<Account>;
   readonly target: GameTarget;
   readonly currentEvents: GameEvent[];
 
@@ -24,10 +26,25 @@ export interface Game {
 export namespace GameEntity {
   export type Id = string;
 
+  export type Type = 'singleplayer' | 'multiplayer';
+  export type Status = 'players_move' | 'game_over';
+  export type GameEventIndex = number;
+
+  export type State = {
+    readonly gameStatus: Status;
+    readonly monthNumber: number;
+    readonly participantProgress: { [userId: string]: GameEventIndex };
+    readonly winners: { [place: number]: UserEntity.Id };
+  };
+
+  const GameStateValues = ['players_move', 'game_over'];
+
   export const parse = (data: any): Game => {
     const {
       id,
       name,
+      type,
+      state,
       participants,
       possessions,
       possessionState,
@@ -41,6 +58,8 @@ export namespace GameEntity {
     const game: Game = {
       id,
       name,
+      type,
+      state,
       participants,
       possessions,
       possessionState,
@@ -60,6 +79,8 @@ export namespace GameEntity {
 
     entity.hasValue('id');
     entity.hasValue('name');
+    entity.hasValue('type');
+    entity.hasValue('state');
     entity.hasValue('participants');
     entity.hasValue('possessions');
     entity.hasValue('possessionState');
@@ -72,5 +93,11 @@ export namespace GameEntity {
     entity.hasValuesForKeys('possessions', gameEntity.participants);
     entity.hasValuesForKeys('possessionState', gameEntity.participants);
     entity.hasValuesForKeys('accounts', gameEntity.participants);
+
+    const stateEntity = Entity.createEntityValidator<State>(gameEntity.state, 'Game State');
+
+    stateEntity.checkUnion('gameStatus', GameStateValues);
+    stateEntity.hasNumberValue('monthNumber');
+    stateEntity.hasValuesForKeys('participantProgress', gameEntity.participants);
   };
 }

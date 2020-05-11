@@ -1,13 +1,9 @@
 library game_state;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
-import 'package:cash_flow/models/domain/active_game_state.dart';
-import 'package:cash_flow/models/domain/game_context.dart';
-import 'package:cash_flow/models/domain/game_event.dart';
-import 'package:cash_flow/models/state/game/account/account.dart';
-import 'package:cash_flow/models/state/game/posessions/user_possession_state.dart';
-import 'package:cash_flow/models/state/game/target/target_state.dart';
+import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
+import 'package:cash_flow/models/domain/game/game/game.dart';
+import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
@@ -23,15 +19,7 @@ abstract class GameState implements Built<GameState, GameStateBuilder> {
   ActiveGameState get activeGameState;
 
   @nullable
-  UserPossessionState get possessions;
-
-  @nullable
-  TargetState get target;
-
-  @nullable
-  Account get account;
-
-  BuiltList<GameEvent> get events;
+  Game get currentGame;
 
   @nullable
   GameContext get currentGameContext;
@@ -39,7 +27,6 @@ abstract class GameState implements Built<GameState, GameStateBuilder> {
   static GameState initial() => GameState(
         (b) => b
           ..getRequestState = RequestState.idle
-          ..activeGameState = ActiveGameState.waitingForStart()
-          ..events = ListBuilder(),
+          ..activeGameState = ActiveGameState.waitingForStart(),
       );
 }

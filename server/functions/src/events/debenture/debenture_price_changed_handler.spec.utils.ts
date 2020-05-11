@@ -12,15 +12,13 @@ import { OtherLiability } from '../../models/domain/liabilities/other_liability'
 import { UserEntity } from '../../models/domain/user';
 import { Possessions } from '../../models/domain/possessions';
 import { PossessionStateEntity } from '../../models/domain/possession_state';
-import { GameContext } from '../../models/domain/game/game_context';
 import { GameEventEntity } from '../../models/domain/game/game_event';
 import { DebenturePriceChangedEvent } from './debenture_price_changed_event';
 
 const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
 const userId: UserEntity.Id = 'user1';
-const context: GameContext = { gameId, userId };
-const initialCash = 10000;
+const initialCash = 10_000;
 
 const create = <T>(obj: T) => obj;
 
@@ -84,8 +82,12 @@ const initialPossesssions: Possessions = {
       id: 'business1',
       name: 'Ларек с шавой',
       type: 'business',
-      cost: 200000,
+      fairPrice: 200000,
       downPayment: 100000,
+      buyPrice: 210_000,
+      payback: 20,
+      passiveIncomePerMonth: 2000,
+      sellProbability: 5,
     }),
     create<OtherAsset>({
       id: 'other_asset1',
@@ -129,7 +131,16 @@ const initialPossesssions: Possessions = {
 const game: Game = {
   id: gameId,
   name: 'Game 1',
+  type: 'singleplayer',
   participants: [userId],
+  state: {
+    gameStatus: 'players_move',
+    monthNumber: 1,
+    participantProgress: {
+      [userId]: 0,
+    },
+    winners: {},
+  },
   possessions: {
     [userId]: initialPossesssions,
   },
@@ -185,7 +196,6 @@ export const stubs = {
   eventId,
   gameId,
   userId,
-  context,
   game,
   debenture1,
   initialCash,

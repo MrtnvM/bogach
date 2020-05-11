@@ -20,6 +20,15 @@ export class GameProvider {
     const game: Game = {
       id: gameId,
       name: template.name,
+      type: 'singleplayer',
+      state: {
+        gameStatus: 'players_move',
+        monthNumber: 1,
+        participantProgress: {
+          [userId]: 0,
+        },
+        winners: {},
+      },
       participants: [userId],
       possessions: {
         [userId]: template.possessions,

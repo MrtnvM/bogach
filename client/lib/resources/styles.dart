@@ -25,6 +25,21 @@ class Styles {
     color: _defaultTextColor,
   );
 
+  static const bodyBlack = TextStyle(
+    fontFamily: 'Montserrat',
+    fontSize: 14,
+    fontStyle: FontStyle.normal,
+    color: ColorRes.mainBlack,
+  );
+
+  static const bodyBlackBold = TextStyle(
+    fontFamily: 'Montserrat',
+    fontSize: 14,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.bold,
+    color: ColorRes.mainBlack,
+  );
+
   static const caption = TextStyle(
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w600,

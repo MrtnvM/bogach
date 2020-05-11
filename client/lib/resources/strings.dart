@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 // ignore: avoid_classes_with_only_static_members
 class Strings {
   static const unknownError =
@@ -47,7 +49,13 @@ class Strings {
 
   static String get regAgreementPrivacyPolicy => 'политику конфиденциальности';
 
+  static String get notImpelementedAlertTitle => 'Кек';
+  static String get notImpelementedAlertMessage =>
+      'Кажется ты нашел функционал, над которым мы усердно работаем';
+
+  static const rubleSymbol = '₽';
   static const title = '';
+  static const wordIn = 'в';
   static const confirm = 'ОК';
   static const cancel = 'Отмена';
   static const warning = 'Внимание';
@@ -67,6 +75,8 @@ class Strings {
   static const firstPayment = 'Первый взнос';
 
   static const commonError = 'Произошла ошибка';
+  static const commonReload = 'Обновить';
+  static const emptyData = 'Ничего не найдено';
 
   static const propertyName = 'Малая недвижимость';
   static const offeredPrice = 'Предложенная цена:';
@@ -90,6 +100,7 @@ class Strings {
   static const purchasing = 'Покупка';
   static const selling = 'Продажа';
   static const inputCount = 'Количество:';
+  static const fairPrice = 'Справедливая цена:';
 
   static const newBusinessTitle = 'Новый бизнесс';
   static const newBusinessDesc =
@@ -115,8 +126,6 @@ class Strings {
 
   static String getSelling(String name) => 'Продается $name';
 
-  static String stocks(String name) => 'Акции "$name"';
-
   static String itemsPerPrice({int count, String price}) => '$count по $price';
 
   static const noInternetError = 'Не удалось подключиться к серверу. '
@@ -134,11 +143,14 @@ class Strings {
   static String get gameBoardTitle => 'GameBoard';
 
   static String get targetTypeCash => 'Капитал';
+
+  static String get targetTypePassiveIncome => 'Пассивный доход';
+
   static String get cashFlow => 'Денежный поток';
+
   static String get credit => 'Кредит';
 
   static String get monthIsOver => 'Месяц завершен!';
-  static String get continueGame => 'Продолжить';
 
   // Log in errors
   static String get invalidCredentials => 'Неправильный логин или пароль';
@@ -150,6 +162,15 @@ class Strings {
   static String get incorrectPassword =>
       'Пароль должен быть более 6-ти символов';
 
+  // New Game
+  static const chooseGame = 'Выберите игру';
+  static const singleGame = 'Одиночная игра';
+  static const multiPlayerGame = 'Игра с друзьями';
+  static const continueGame = 'Продолжить игру';
+  static const chooseLevel = 'Выберите уровень';
+  static const reach = 'Набрать';
+  static const goBack = 'Вернуться назад';
+
   // Reset Password
   static String get forgotPasswordTitle => 'Забыли пароль?';
 
@@ -160,4 +181,24 @@ class Strings {
 
   static String get noSuchEmail =>
       'Пользователь с таким e-mail не зарегистрирован';
+
+  static String get purchases => 'Покупки';
+
+  static String get storesUnavailable => 'Не удалось подключиться к магазину '
+      'приложений.\nПожалуйста, Повторите попытку позже.';
+
+  // Winners Page
+  static String get winnersPageTitle => 'Еее, бой!';
+  static String get winnersPageDescription =>
+      'Поздравляем! \n' 'Ты достиг своей цели всего за';
+  static String months(int number) => Intl.plural(
+        number,
+        zero: 'месяцев',
+        one: 'месяц',
+        two: 'месяца',
+        few: 'месяца',
+        many: 'месяцев',
+        other: 'месяцев',
+      );
+  static String get goToMainMenu => 'В главное меню';
 }

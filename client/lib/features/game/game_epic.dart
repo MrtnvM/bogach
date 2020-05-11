@@ -9,19 +9,19 @@ import 'package:redux_epics/redux_epics.dart';
 import 'package:rxdart/rxdart.dart';
 
 Epic<AppState> gameEpic({@required GameService gameService}) {
-  final getPossessionsEpic = epic((action$, store) {
+  final startGameEpic = epic((action$, store) {
     return action$
         .whereType<StartGameAction>() //
         .flatMap((action) => gameService
-            .getGameData(action.gameId)
+            .getGame(action.gameContext)
+            .map<Action>((state) => OnGameStateChangedAction(state))
+            .onErrorReturnWith((e) => OnGameErrorAction(e))
             .takeUntil(
               action$.whereType<StopActiveGameAction>(),
-            )
-            .map<Action>((state) => OnGameStateChangedAction(state))
-            .onErrorReturnWith((e) => OnGameErrorAction(e)));
+            ));
   });
 
-  final sendGameEventPlayerActionAction = epic((action$, store) {
+  final sendGameEventPlayerActionEpic = epic((action$, store) {
     return action$
         .whereType<SendPlayerMoveAsyncAction>()
         .where((action) => action.isStarted)
@@ -41,7 +41,7 @@ Epic<AppState> gameEpic({@required GameService gameService}) {
   });
 
   return combineEpics([
-    getPossessionsEpic,
-    sendGameEventPlayerActionAction,
+    startGameEpic,
+    sendGameEventPlayerActionEpic,
   ]);
 }

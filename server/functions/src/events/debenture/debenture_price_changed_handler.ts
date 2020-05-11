@@ -3,11 +3,10 @@ import { DebenturePriceChangedEvent } from './debenture_price_changed_event';
 import { AssetEntity, Asset } from '../../models/domain/asset';
 import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
 import { BuySellAction } from '../../models/domain/actions/buy_sell_action';
-import { GameContext } from '../../models/domain/game/game_context';
-import { GameProvider } from '../../providers/game_provider';
 import { Game } from '../../models/domain/game/game';
 import { Account } from '../../models/domain/account';
 import produce from 'immer';
+import { UserEntity } from '../../models/domain/user';
 
 type Event = DebenturePriceChangedEvent.Event;
 type Action = DebenturePriceChangedEvent.PlayerAction;
@@ -29,10 +28,6 @@ interface ActionParameters {
 }
 
 export class DebenturePriceChangedHandler extends PlayerActionHandler {
-  constructor(private gameProvider: GameProvider) {
-    super();
-  }
-
   get gameEventType(): string {
     return DebenturePriceChangedEvent.Type;
   }
@@ -49,10 +44,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler {
     return true;
   }
 
-  async handle(event: Event, action: Action, context: GameContext): Promise<void> {
-    const { gameId, userId } = context;
-    const game = await this.gameProvider.getGame(gameId);
-
+  async handle(game: Game, event: Event, action: Action, userId: UserEntity.Id): Promise<Game> {
     const { currentPrice, nominal, profitabilityPercent, availableCount } = event.data;
     const { count: actionCount, action: debentureAction } = action;
 
@@ -105,7 +97,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler {
       draft.possessions[userId].assets = newAssets;
     });
 
-    await this.gameProvider.updateGame(updatedGame);
+    return updatedGame;
   }
 
   async applyAction(actionParameters: ActionParameters, action: BuySellAction) {
@@ -147,7 +139,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler {
     const priceDifferenceStep = pricesDifference / commonCount;
 
     const newPriceOffset = priceDifferenceStep * actionCount;
-    let newAveragePrice = currentAveragePrice + newPriceOffset;
+    const newAveragePrice = currentAveragePrice + newPriceOffset;
 
     const actionResult: ActionResult = {
       newDebentureCount,
@@ -201,7 +193,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler {
       averagePrice: actionResult.newAveragePrice,
     };
     let newAssets = assets.slice();
-    const index = newAssets.findIndex((d) => d.id === newDebenture.id);
+    const index = assets.indexOf(theSameDebenture);
 
     if (index >= 0) {
       newAssets[index] = newDebenture;
@@ -221,7 +213,7 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler {
     profitabilityPercent: number,
     debentureName: string
   ): Asset[] {
-    let newAssets = assets.slice();
+    const newAssets = assets.slice();
 
     const newDebenture: DebentureAsset = {
       averagePrice: actionResult.newAveragePrice,

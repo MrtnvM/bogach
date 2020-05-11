@@ -1,7 +1,7 @@
-import 'package:cash_flow/models/domain/game_event.dart';
-import 'package:cash_flow/models/domain/game_event_type.dart';
+import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/investment/models/investment_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/investment/ui/investment_game_event.dart';
+import 'package:cash_flow/models/domain/game/game_event/game_event_type.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/containers/indicators_table.dart';
 import 'package:cash_flow/widgets/events/insurance_game_event.dart';
@@ -167,14 +167,18 @@ class UiKit extends StatelessWidget {
             income: 1000,
           ),
         ),
-        const StockGameEvent(
-          StockViewModel(
-            currentPrice: 39,
-            type: 'Инвестбанк',
-            nominalCost: 40,
-            alreadyHave: 0,
-            maxCount: 12520,
-          ),
+        StockGameEvent(
+          GameEvent(
+              id: 'event1',
+              name: 'Название акции',
+              description: 'Описание акции',
+              type: GameEventType.stock(),
+              data: InvestmentEventData(
+                currentPrice: 1300,
+                nominal: 1000,
+                profitabilityPercent: 8,
+                availableCount: 15,
+              )),
         ),
         const SaleBusinessGameEvent(
           SaleBusinessViewModel(
