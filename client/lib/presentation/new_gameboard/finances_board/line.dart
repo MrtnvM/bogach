@@ -1,5 +1,5 @@
-import 'package:cash_flow/presentation/finances_board/detail_row.dart';
-import 'package:cash_flow/presentation/finances_board/table_row.dart';
+import 'package:cash_flow/presentation/new_gameboard/finances_board/detail_row.dart';
+import 'package:cash_flow/presentation/new_gameboard/finances_board/table_row.dart';
 import 'package:flutter/material.dart' hide TableRow;
 
 class Line {

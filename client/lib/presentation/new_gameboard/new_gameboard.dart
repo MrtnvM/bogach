@@ -1,22 +1,36 @@
+import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/features/game/game_hooks.dart';
+import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/new_gameboard/widgets/action_button.dart';
-import 'package:cash_flow/presentation/new_gameboard/widgets/condition.dart';
-import 'package:cash_flow/presentation/new_gameboard/widgets/footer_button.dart';
+import 'package:cash_flow/presentation/new_gameboard/widgets/bottom_bar/bottom_bar.dart';
 import 'package:cash_flow/presentation/new_gameboard/widgets/investments_info.dart';
 import 'package:cash_flow/presentation/new_gameboard/widgets/progress_bar.dart';
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/resources/images.dart';
+import 'package:cash_flow/widgets/progress/account_bar.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class NewGameBoard extends StatelessWidget {
-  final Key backgroundImageKey = GlobalKey();
+class NewGameBoard extends HookWidget {
+  final backgroundImageKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
+    final userId = useUserId();
+    final account = useCurrentGame((g) => g.accounts[userId]);
+
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
     const imageAspectRatio = 2.03;
     final imageHeight = screenWidth / imageAspectRatio;
     final contentOffset = imageHeight * 0.76;
+
+    final items = [
+      BottomBarItem(title: 'Финансы', image: Images.financesBarIcon),
+      BottomBarItem(title: 'Действия', image: Images.gameBoardBarIcon),
+      BottomBarItem(title: 'История', image: Images.historyBarIcon),
+    ];
 
     return Scaffold(
       body: Stack(
@@ -31,14 +45,14 @@ class NewGameBoard extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: Image(
               key: backgroundImageKey,
-              image: const AssetImage('assets/images/png/many_money.png'),
+              image: const AssetImage(Images.money),
             ),
           ),
           Container(
             padding: const EdgeInsets.only(top: 70, left: 16),
             height: 20,
             child: GestureDetector(
-              onTap: () {},
+              onTap: appRouter.goBack,
               child: Icon(
                 Icons.arrow_back_ios,
                 color: ColorRes.primaryWhiteColor,
@@ -78,7 +92,7 @@ class NewGameBoard extends StatelessWidget {
               children: <Widget>[
                 const ProgressBar('20 000₽', '80 000₽'),
                 const SizedBox(height: 16),
-                const Condition('7 000₽', '100 000₽', '200 000₽'),
+                AccountBar(account: account),
                 const SizedBox(height: 20),
                 const InvestmentsInfo(
                   currentPrice: '7 000₽',
@@ -125,28 +139,7 @@ class NewGameBoard extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: Row(
-        children: const <Widget>[
-          Expanded(
-            child: FooterButton(
-              image: 'assets/images/png/footer_financal.png',
-              text: 'Финансы',
-            ),
-          ),
-          Expanded(
-            child: FooterButton(
-              image: 'assets/images/png/footer_action.png',
-              text: 'Действия',
-            ),
-          ),
-          Expanded(
-            child: FooterButton(
-              image: 'assets/images/png/footer_history.png',
-              text: 'История',
-            ),
-          ),
-        ],
-      ),
+      bottomNavigationBar: BottomBar(items: items),
     );
   }
 }

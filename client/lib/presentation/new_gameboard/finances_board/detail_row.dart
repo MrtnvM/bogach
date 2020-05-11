@@ -1,4 +1,4 @@
-import 'package:cash_flow/presentation/finances_board/styles.dart';
+import 'package:cash_flow/presentation/new_gameboard/finances_board/styles.dart';
 import 'package:flutter/material.dart';
 
 class DetailRow extends StatelessWidget {
@@ -9,7 +9,7 @@ class DetailRow extends StatelessWidget {
 
   final List<String> details;
 
-  final Stylez stylez = Stylez();
+  final stylez = Stylez();
 
   @override
   Widget build(BuildContext context) {

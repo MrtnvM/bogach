@@ -1,4 +1,4 @@
-import 'package:cash_flow/presentation/finances_board/title_row.dart';
+import 'package:cash_flow/presentation/new_gameboard/finances_board/title_row.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -49,8 +49,9 @@ class TableDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Divider(
-        height: 24,
-        thickness: 1,
-        color: ColorRes.newGameBoardInvestmentsDividerColor);
+      height: 24,
+      thickness: 1,
+      color: ColorRes.newGameBoardInvestmentsDividerColor,
+    );
   }
 }

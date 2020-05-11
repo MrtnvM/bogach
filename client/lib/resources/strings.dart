@@ -148,6 +148,8 @@ class Strings {
 
   static String get cashFlow => 'Денежный поток';
 
+  static String get cashFlowShort => 'Поток';
+
   static String get credit => 'Кредит';
 
   static String get monthIsOver => 'Месяц завершен!';

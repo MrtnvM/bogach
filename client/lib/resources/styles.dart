@@ -16,6 +16,7 @@ class Styles {
     fontWeight: FontWeight.normal,
     fontStyle: FontStyle.normal,
     color: _defaultTextColor,
+    fontFamily: 'Montserrat',
   );
 
   static const TextStyle body2 = TextStyle(

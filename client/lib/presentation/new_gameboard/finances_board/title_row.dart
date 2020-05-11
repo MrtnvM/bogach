@@ -1,4 +1,4 @@
-import 'package:cash_flow/presentation/finances_board/styles.dart';
+import 'package:cash_flow/presentation/new_gameboard/finances_board/styles.dart';
 import 'package:flutter/material.dart';
 
 class TitleRow extends StatelessWidget {
@@ -7,7 +7,7 @@ class TitleRow extends StatelessWidget {
   final String title;
   final String value;
 
-  final Stylez stylez = Stylez();
+  final stylez = Stylez();
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +15,8 @@ class TitleRow extends StatelessWidget {
       children: <Widget>[
         Row(
           children: [
-            Expanded(
-              child: Text(title, style: stylez.title),
-            ),
-            Text(
-              value,
-              style: stylez.title,
-            ),
+            Expanded(child: Text(title, style: stylez.title)),
+            Text(value, style: stylez.title),
           ],
         ),
       ],

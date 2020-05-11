@@ -1,4 +1,4 @@
-import 'package:cash_flow/presentation/bottom_bar/bottom_bar.dart';
+import 'package:cash_flow/presentation/new_gameboard/widgets/bottom_bar/bottom_bar.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:flutter/material.dart' hide Table;
 
