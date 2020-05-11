@@ -49,3 +49,6 @@ android/app/.project
 
 ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 
+*.g.dart
+*.freezed.dart
+
