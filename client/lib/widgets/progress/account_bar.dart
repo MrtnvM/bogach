@@ -1,18 +1,21 @@
-import 'package:cash_flow/models/domain/game/account/account.dart';
+import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class AccountBar extends StatelessWidget {
-  const AccountBar({@required this.account}) : assert(account != null);
-
-  final Account account;
+class AccountBar extends HookWidget {
+  const AccountBar({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final userId = useUserId();
+    final account = useCurrentGame((g) => g.accounts[userId]);
+
     return Container(
       width: double.infinity,
       height: 35,
@@ -22,7 +25,6 @@ class AccountBar extends StatelessWidget {
         children: [
           Expanded(
             child: _buildItem(
-              context,
               title: '${Strings.cashFlowShort}',
               value: account.cashFlow,
             ),
@@ -30,7 +32,6 @@ class AccountBar extends StatelessWidget {
           _buildDivider(),
           Expanded(
             child: _buildItem(
-              context,
               title: '${Strings.cash}',
               value: account.cash,
             ),
@@ -38,7 +39,6 @@ class AccountBar extends StatelessWidget {
           _buildDivider(),
           Expanded(
             child: _buildItem(
-              context,
               title: '${Strings.credit}',
               value: account.credit,
             ),
@@ -48,7 +48,7 @@ class AccountBar extends StatelessWidget {
     );
   }
 
-  Widget _buildItem(BuildContext context, {String title, double value}) {
+  Widget _buildItem({String title, double value}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[

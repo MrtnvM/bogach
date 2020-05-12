@@ -1,6 +1,7 @@
 import 'package:cash_flow/core/hooks/dispatch_hook.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_actions.dart';
+import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/investment/ui/investment_game_event.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -18,14 +19,8 @@ class GameEventPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userId = useGlobalState((s) => s.login.currentUser.userId);
     final activeGameState = useGlobalState((s) => s.gameState.activeGameState);
-    final account = useGlobalState(
-      (s) => s.gameState.currentGame.accounts[userId],
-    );
-    final gameEvents = useGlobalState(
-      (s) => s.gameState.currentGame.currentEvents,
-    );
+    final gameEvents = useCurrentGame((g) => g.currentEvents);
 
     final currentEvent = activeGameState.maybeMap(
       gameEvent: (eventState) => gameEvents[eventState.eventIndex],
@@ -41,7 +36,7 @@ class GameEventPage extends HookWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         ConnectedGameProgressBar(),
-        AccountBar(account: account),
+        const AccountBar(),
         if (isMonthResult) _buildMonthResult(),
         if (currentEvent != null) _buildEventBody(currentEvent),
       ],

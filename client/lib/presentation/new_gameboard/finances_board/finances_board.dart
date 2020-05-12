@@ -1,9 +1,10 @@
-import 'package:cash_flow/presentation/new_gameboard/widgets/bottom_bar/bottom_bar.dart';
+import 'package:cash_flow/presentation/new_gameboard/widgets/bars/bottom_bar.dart';
+
 import 'package:cash_flow/resources/colors.dart';
 import 'package:flutter/material.dart' hide Table;
 
+import 'info_table.dart';
 import 'line.dart';
-import 'new_table.dart';
 
 class FinancesBoard extends StatelessWidget {
   final Key backgroundImageKey = GlobalKey();
@@ -68,7 +69,7 @@ class FinancesBoard extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.only(
                         top: contentOffset, left: 16, right: 16),
-                    child: Table(
+                    child: InfoTable(
                       title: 'Доходы',
                       titleValue: '1Р',
                       rows: lines.incomes,
@@ -77,7 +78,7 @@ class FinancesBoard extends StatelessWidget {
                   Container(
                     padding:
                         const EdgeInsets.only(top: 16, left: 16, right: 16),
-                    child: Table(
+                    child: InfoTable(
                       title: 'Расходы',
                       titleValue: '1 000Р',
                       rows: lines.expanses,
@@ -86,7 +87,7 @@ class FinancesBoard extends StatelessWidget {
                   Container(
                     padding:
                         const EdgeInsets.only(top: 16, left: 16, right: 16),
-                    child: Table(
+                    child: InfoTable(
                       title: 'Активы',
                       titleValue: '1 000Р',
                       rows: lines.actives,
@@ -95,7 +96,7 @@ class FinancesBoard extends StatelessWidget {
                   Container(
                     padding:
                         const EdgeInsets.only(top: 16, left: 16, right: 16),
-                    child: Table(
+                    child: InfoTable(
                       title: 'Пассивы',
                       titleValue: '1 000Р',
                       rows: lines.passives,
@@ -108,7 +109,7 @@ class FinancesBoard extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomBar(),
+      bottomNavigationBar: const BottomBar(),
     );
   }
 }

@@ -2,8 +2,8 @@ import 'package:cash_flow/presentation/new_gameboard/finances_board/title_row.da
 import 'package:cash_flow/resources/colors.dart';
 import 'package:flutter/material.dart';
 
-class Table extends StatelessWidget {
-  const Table({
+class InfoTable extends StatelessWidget {
+  const InfoTable({
     Key key,
     this.title,
     this.titleValue,
@@ -22,9 +22,10 @@ class Table extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withAlpha(40),
-              blurRadius: 2.0,
-              spreadRadius: 2.0),
+            color: Colors.black.withAlpha(40),
+            blurRadius: 2.0,
+            spreadRadius: 2.0,
+          ),
         ],
         color: ColorRes.primaryWhiteColor,
       ),
@@ -34,10 +35,10 @@ class Table extends StatelessWidget {
             title: title,
             value: titleValue,
           ),
-          TableDivider(),
+          _TableDivider(),
           for (var i = 0; i < rows.length; i++) ...[
             rows[i],
-            if (i != rows.length - 1) TableDivider(),
+            if (i != rows.length - 1) _TableDivider(),
           ]
         ],
       ),
@@ -45,7 +46,7 @@ class Table extends StatelessWidget {
   }
 }
 
-class TableDivider extends StatelessWidget {
+class _TableDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Divider(

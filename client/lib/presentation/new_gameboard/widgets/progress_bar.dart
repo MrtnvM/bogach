@@ -1,14 +1,24 @@
+import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/features/game/game_hooks.dart';
+import 'package:cash_flow/models/domain/game/target/target.dart';
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:cash_flow/utils/extensions/extensions.dart';
 
-class ProgressBar extends StatelessWidget {
-  const ProgressBar(this.value1, this.value2);
-
-  final String value1;
-  final String value2;
+class ProgressBar extends HookWidget {
+  const ProgressBar({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final userId = useUserId();
+    final target = useCurrentGame((g) => g.target);
+    final currentTargetValue = useCurrentGame(
+      (g) => mapGameToCurrentTargetValue(g, userId),
+    );
+    final progress = currentTargetValue / target.value;
+
     return Container(
       padding: const EdgeInsets.only(left: 16.0, top: 14.0, right: 16),
       decoration: BoxDecoration(
@@ -17,20 +27,19 @@ class ProgressBar extends StatelessWidget {
       ),
       child: Column(
         children: [
-          TextContainer(value1),
+          _ProgressTitle(target: target, currentValue: currentTargetValue),
           Container(
             height: 20,
             child: Stack(
               children: [
-                const ProgressLine(30),
+                _ProgressLine(progress),
                 Container(
-                  //height: 2,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(5)),
                     border: Border.all(color: ColorRes.progressBarBorderColor),
                   ),
                 ),
-                ProgressBarText(value2),
+                _MaxProgressValue(target.value),
               ],
             ),
           ),
@@ -40,10 +49,15 @@ class ProgressBar extends StatelessWidget {
   }
 }
 
-class TextContainer extends StatelessWidget {
-  const TextContainer(this.value);
+class _ProgressTitle extends StatelessWidget {
+  const _ProgressTitle({
+    Key key,
+    this.target,
+    this.currentValue,
+  }) : super(key: key);
 
-  final String value;
+  final Target target;
+  final double currentValue;
 
   @override
   Widget build(BuildContext context) {
@@ -53,23 +67,19 @@ class TextContainer extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Text(
-            'Капитал: ',
+            '${mapTargetTypeToString(target.type)}: ',
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: Styles.bodyBlack.copyWith(
               color: ColorRes.primaryBackgroundColor,
               fontWeight: FontWeight.bold,
-              fontSize: 14,
-              fontFamily: 'Montserrat',
             ),
           ),
           Text(
-            value,
+            currentValue.toPrice(),
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: Styles.bodyBlack.copyWith(
               color: ColorRes.newGameBoardPrimaryTextColor,
               fontWeight: FontWeight.bold,
-              fontSize: 14,
-              fontFamily: 'Montserrat',
             ),
           ),
         ],
@@ -78,32 +88,37 @@ class TextContainer extends StatelessWidget {
   }
 }
 
-class ProgressLine extends StatelessWidget {
-  const ProgressLine(this.progress);
+class _ProgressLine extends StatelessWidget {
+  const _ProgressLine(this.progress);
   final double progress;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: progress,
-        //height: 19.0,
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
-          color: ColorRes.primaryYellowColor,
-        ));
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          width: constraints.maxWidth * progress,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
+            color: ColorRes.primaryYellowColor,
+          ),
+        );
+      },
+    );
   }
 }
 
-class ProgressBarText extends StatelessWidget {
-  const ProgressBarText(this.value);
-  final String value;
+class _MaxProgressValue extends StatelessWidget {
+  const _MaxProgressValue(this.value);
+  final double value;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.centerRight,
       padding: const EdgeInsets.only(right: 16),
       child: Text(
-        value,
+        value.toPrice(),
         style: const TextStyle(
           fontSize: 12,
           fontFamily: 'Montserrat',

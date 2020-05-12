@@ -1,4 +1,5 @@
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 
 class BottomBarItem {
@@ -40,9 +41,8 @@ class BottomBar extends StatelessWidget {
             Image(image: AssetImage(item.image)),
             Text(
               item.title,
-              style: TextStyle(
+              style: Styles.body1.copyWith(
                 color: ColorRes.primaryWhiteColor,
-                fontFamily: 'Montserrat',
                 fontSize: 8,
               ),
             ),
