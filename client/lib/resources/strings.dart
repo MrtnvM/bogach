@@ -103,8 +103,6 @@ class Strings {
   static const fairPrice = 'Справедливая цена:';
 
   static const newBusinessTitle = 'Новый бизнесс';
-  static const newBusinessDesc =
-      'Возможность попробовать себя в бизнесе прямых продаж.';
 
   static const windfallIncomeTitle = 'Непредвиденные доходы';
   static const windfallIncomeDesc = 'Получили премию на работе';

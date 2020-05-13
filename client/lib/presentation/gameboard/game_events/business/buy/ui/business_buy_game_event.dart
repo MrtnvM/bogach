@@ -4,7 +4,6 @@ import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/business/buy/model/business_buy_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/business/buy/model/business_buy_player_action.dart';
-import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
@@ -35,7 +34,7 @@ class BusinessBuyGameEventState extends State<BusinessBuyGameEvent>
   Widget build(BuildContext context) {
     return GameEventWidget(
       icon: Icons.business,
-      name: Strings.newBusinessTitle,
+      name: event.name,
       buttonsState: ButtonsState.normal,
       buttonsProperties: ButtonsProperties(
         onConfirm: _sendPlayerAction,
@@ -77,9 +76,9 @@ class BusinessBuyGameEventState extends State<BusinessBuyGameEvent>
   }
 
   Widget _buildTitle() {
-    return const Text(
-      Strings.newBusinessDesc,
-      style: Styles.body2,
+    return Text(
+      event.description,
+      style: Styles.bodyBlack,
     );
   }
 
@@ -87,14 +86,14 @@ class BusinessBuyGameEventState extends State<BusinessBuyGameEvent>
     return RichText(
       text: TextSpan(
         children: [
-          const TextSpan(text: Strings.offeredPrice, style: Styles.body1),
+          const TextSpan(text: Strings.offeredPrice, style: Styles.bodyBlack),
           const WidgetSpan(
               child: SizedBox(
             width: 4,
           )),
           TextSpan(
             text: eventData.fairPrice.toPrice(),
-            style: Styles.body2.copyWith(color: ColorRes.blue),
+            style: Styles.bodyBlack,
           ),
         ],
       ),
