@@ -1,15 +1,14 @@
-import 'package:cash_flow/presentation/new_gameboard/finances_board/styles.dart';
+import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 
 class DetailRow extends StatelessWidget {
-  DetailRow({this.title, this.value, this.details = const []});
+  const DetailRow({this.title, this.value, this.details = const []});
 
   final String title;
   final String value;
 
   final List<String> details;
-
-  final stylez = Stylez();
 
   @override
   Widget build(BuildContext context) {
@@ -20,15 +19,27 @@ class DetailRow extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: stylez.normal16,
+              style: Styles.body1.copyWith(
+                fontSize: 16,
+              ),
             ),
           ),
           Text(
             value,
-            style: stylez.normal16,
+            style: Styles.body1.copyWith(
+              fontSize: 16,
+            ),
           ),
         ]),
-        for (var detail in details) Text(detail, style: stylez.detail)
+        for (var detail in details)
+          Text(
+            detail,
+            style: Styles.body1.copyWith(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: ColorRes.primaryGreyColor,
+            ),
+          )
       ],
     );
   }

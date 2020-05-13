@@ -4,7 +4,6 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:flutter/material.dart' hide Table;
 
 import 'info_table.dart';
-import 'line.dart';
 
 class FinancesBoard extends StatelessWidget {
   final Key backgroundImageKey = GlobalKey();
@@ -16,8 +15,6 @@ class FinancesBoard extends StatelessWidget {
     const imageAspectRatio = 2.03;
     final imageHeight = screenWidth / imageAspectRatio;
     final contentOffset = imageHeight * 0.21;
-
-    final lines = Line();
 
     return Scaffold(
       body: Stack(
@@ -69,37 +66,37 @@ class FinancesBoard extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.only(
                         top: contentOffset, left: 16, right: 16),
-                    child: InfoTable(
+                    child: const InfoTable(
                       title: 'Доходы',
                       titleValue: '1Р',
-                      rows: lines.incomes,
+                      rows: [],
                     ),
                   ),
                   Container(
                     padding:
                         const EdgeInsets.only(top: 16, left: 16, right: 16),
-                    child: InfoTable(
+                    child: const InfoTable(
                       title: 'Расходы',
                       titleValue: '1 000Р',
-                      rows: lines.expanses,
+                      rows: [],
                     ),
                   ),
                   Container(
                     padding:
                         const EdgeInsets.only(top: 16, left: 16, right: 16),
-                    child: InfoTable(
+                    child: const InfoTable(
                       title: 'Активы',
                       titleValue: '1 000Р',
-                      rows: lines.actives,
+                      rows: [],
                     ),
                   ),
                   Container(
                     padding:
                         const EdgeInsets.only(top: 16, left: 16, right: 16),
-                    child: InfoTable(
+                    child: const InfoTable(
                       title: 'Пассивы',
                       titleValue: '1 000Р',
-                      rows: lines.passives,
+                      rows: [],
                     ),
                   ),
                   const SizedBox(height: 16),

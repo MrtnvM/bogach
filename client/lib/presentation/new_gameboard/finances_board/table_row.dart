@@ -1,13 +1,11 @@
-import 'package:cash_flow/presentation/new_gameboard/finances_board/styles.dart';
+import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 
 class TableRow extends StatelessWidget {
-  TableRow({this.title, this.value});
+  const TableRow({this.title, this.value});
 
   final String title;
   final String value;
-
-  final stylez = Stylez();
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +13,16 @@ class TableRow extends StatelessWidget {
       Expanded(
         child: Text(
           title,
-          style: stylez.normal16,
+          style: Styles.body1.copyWith(
+            fontSize: 16,
+          ),
         ),
       ),
       Text(
         value,
-        style: stylez.normal16,
+        style: Styles.body1.copyWith(
+          fontSize: 16,
+        ),
       ),
     ]);
   }

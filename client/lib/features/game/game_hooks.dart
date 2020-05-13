@@ -1,5 +1,4 @@
 import 'package:cash_flow/app/state_hooks.dart';
-import 'package:cash_flow/core/hooks/dispatch_hook.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/features/new_game/new_game_actions.dart';
@@ -7,6 +6,7 @@ import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/models/domain/player_action/player_action.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 T useCurrentGame<T>(T Function(Game) convertor) {
   return useGlobalState((s) => convertor(s.gameState.currentGame));

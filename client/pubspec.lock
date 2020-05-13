@@ -350,8 +350,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.0.18"
-      resolved-ref: "4500dfb33bfc8f4d52ad2b87a252b35cb6755852"
+      ref: "v0.0.19"
+      resolved-ref: f6f3e1f77a46007632ac55aef0fd4af7ef00c011
       url: "git://github.com/mobile-dualbootpartners/flutter-platform-core"
     source: git
     version: "0.0.1"
@@ -359,8 +359,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.0.8"
-      resolved-ref: "8ce13f9a7f1021b7d4e405ddd828fcc7dda3eaef"
+      ref: "v0.0.10"
+      resolved-ref: "8a8a41b39d1b37f1abdaf1f062f99ffb49cd0d95"
       url: "git://github.com/mobile-dualbootpartners/flutter-platform-loadable"
     source: git
     version: "0.0.3"
