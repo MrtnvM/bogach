@@ -1,3 +1,4 @@
+import 'package:cash_flow/core/hooks/dispatch_hook.dart';
 import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
@@ -12,23 +13,14 @@ import 'package:cash_flow/widgets/containers/info_table.dart';
 import 'package:cash_flow/widgets/events/game_event_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class BusinessBuyGameEvent extends StatefulWidget {
-  const BusinessBuyGameEvent(this.event) : assert(event != null);
+class BusinessBuyGameEvent extends HookWidget {
+  BusinessBuyGameEvent(this.event) : assert(event != null);
 
   final GameEvent event;
-
-  @override
-  State<StatefulWidget> createState() {
-    return BusinessBuyGameEventState();
-  }
-}
-
-class BusinessBuyGameEventState extends State<BusinessBuyGameEvent>
-    with ReduxState {
-  GameEvent get event => widget.event;
   BusinessBuyEventData get eventData => event.data;
+  final actionRunner = useActionRunner();
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +29,7 @@ class BusinessBuyGameEventState extends State<BusinessBuyGameEvent>
       name: event.name,
       buttonsState: ButtonsState.normal,
       buttonsProperties: ButtonsProperties(
-        onConfirm: _sendPlayerAction,
+        onConfirm: () => _sendPlayerAction(context),
         onSkip: _skipPlayerAction,
       ),
       child: Column(
@@ -100,7 +92,7 @@ class BusinessBuyGameEventState extends State<BusinessBuyGameEvent>
     );
   }
 
-  void _sendPlayerAction() {
+  void _sendPlayerAction(BuildContext context) {
     final playerAction = BusinessBuyPlayerAction(
       const BuySellAction.buy(),
       event.id,
@@ -108,13 +100,12 @@ class BusinessBuyGameEventState extends State<BusinessBuyGameEvent>
 
     final action = SendPlayerMoveAsyncAction(playerAction, event.id);
 
-    dispatchAsyncAction(action).listen(
-      (action) => action
-        ..onError((error) => handleError(context: context, exception: error)),
-    );
+    actionRunner
+        .runAsyncAction(action)
+        .catchError((error) => handleError(context: context, exception: error));
   }
 
   void _skipPlayerAction() {
-    dispatch(SkipPlayerMoveAction());
+    actionRunner.runAction(SkipPlayerMoveAction());
   }
 }
