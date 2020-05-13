@@ -5,7 +5,7 @@ import 'package:cash_flow/features/new_game/new_game_actions.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/continue_game/widgets/game_item.dart';
-import 'package:cash_flow/presentation/new_gameboard/new_gameboard.dart';
+import 'package:cash_flow/presentation/gameboard/gameboard.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -26,7 +26,7 @@ class UserGameList extends HookWidget {
       gameActions.startGame(gameId);
 
       appRouter.goToRoot();
-      appRouter.goTo(NewGameBoard());
+      appRouter.goTo(GameBoard());
     };
 
     final actionRunner = useActionRunner();

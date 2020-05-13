@@ -1,8 +1,8 @@
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
 import 'package:cash_flow/presentation/gameboard/game_event_page.dart';
-import 'package:cash_flow/presentation/new_gameboard/widgets/bars/navigation_bar.dart';
-import 'package:cash_flow/presentation/new_gameboard/widgets/bars/progress_bar.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/bars/navigation_bar.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/bars/progress_bar.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/widgets/containers/card_container.dart';

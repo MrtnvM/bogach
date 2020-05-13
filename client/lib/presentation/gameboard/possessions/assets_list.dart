@@ -8,9 +8,9 @@ import 'package:cash_flow/models/domain/game/possession_state/assets/insurance/i
 import 'package:cash_flow/models/domain/game/possession_state/assets/other/other_asset.dart';
 import 'package:cash_flow/models/domain/game/possession_state/assets/realty/realty_asset.dart';
 import 'package:cash_flow/models/domain/game/possession_state/assets/stock/stock_asset.dart';
-import 'package:cash_flow/presentation/new_gameboard/widgets/table/detail_row.dart';
-import 'package:cash_flow/presentation/new_gameboard/widgets/table/info_table.dart';
-import 'package:cash_flow/presentation/new_gameboard/widgets/table/title_row.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/table/detail_row.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';

@@ -2,7 +2,7 @@ import 'package:cash_flow/presentation/gameboard/possessions/assets_list.dart';
 import 'package:cash_flow/presentation/gameboard/possessions/expenses_list.dart';
 import 'package:cash_flow/presentation/gameboard/possessions/incomes_list.dart';
 import 'package:cash_flow/presentation/gameboard/possessions/liabilities_list.dart';
-import 'package:cash_flow/presentation/new_gameboard/widgets/bars/navigation_bar.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/bars/navigation_bar.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,7 @@ class FinancesTab extends StatelessWidget {
         _buildHeaderImage(imageHeight),
         ListView(
           controller: scrollController,
-          padding: EdgeInsets.only(top: contentOffset, left: 16, right: 16),
+          padding: EdgeInsets.only(top: contentOffset),
           children: <Widget>[
             _buildList(IncomesList()),
             _buildList(ExpensesList()),
