@@ -53,6 +53,10 @@ class Strings {
   static String get notImpelementedAlertMessage =>
       'Кажется ты нашел функционал, над которым мы усердно работаем';
 
+  static String get financesTabTitle => 'Финансы';
+  static String get actionsTabTitle => 'Действия';
+  static String get historyTabTitle => 'История';
+
   static const rubleSymbol = '₽';
   static const title = '';
   static const wordIn = 'в';
@@ -84,9 +88,9 @@ class Strings {
   static const downPayment = 'Первый взнос:';
   static const debt = 'Долг:';
   static const passiveIncomePerMonth = 'Пассивный доход за месяц:';
-  static const roi = 'ROI за год';
+  static const roi = 'ROI за год:';
   static const saleRate = 'Вероятность продажи';
-  static const takeLoan = 'Взять кредит';
+  static const takeLoan = 'Взять\nкредит';
 
   static const investments = 'Вложения';
   static const currentPrice = 'Текущая цена:';

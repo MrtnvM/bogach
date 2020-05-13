@@ -3,19 +3,25 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:flutter/material.dart';
 
 class ActionButton extends StatelessWidget {
-  const ActionButton({this.text, this.color, this.maxLines});
+  const ActionButton({
+    this.text,
+    this.color,
+    this.maxTitleLines,
+    this.onPressed,
+  });
+
   final String text;
   final Color color;
-  final int maxLines;
+  final int maxTitleLines;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
-      onPressed: () {
-        print('You pressed $text button');
-      },
+      onPressed: onPressed,
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(5))),
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
       color: color,
       child: Container(
         alignment: Alignment.center,
@@ -25,7 +31,7 @@ class ActionButton extends StatelessWidget {
           minFontSize: 10,
           overflow: TextOverflow.visible,
           textAlign: TextAlign.center,
-          maxLines: maxLines,
+          maxLines: maxTitleLines,
           style: TextStyle(
             color: ColorRes.primaryWhiteColor,
             fontFamily: 'Montserrat',

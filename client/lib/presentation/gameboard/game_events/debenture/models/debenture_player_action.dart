@@ -2,11 +2,11 @@ import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/models/domain/player_action/player_action.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'investment_player_action.g.dart';
+part 'debenture_player_action.g.dart';
 
 @JsonSerializable()
-class InvestmentPlayerAction extends PlayerAction {
-  const InvestmentPlayerAction(this.action, this.count, this.eventId);
+class DebenturePlayerAction extends PlayerAction {
+  const DebenturePlayerAction(this.action, this.count, this.eventId);
 
   @JsonKey(fromJson: BuySellAction.fromJson, toJson: BuySellAction.toJson)
   final BuySellAction action;
@@ -14,5 +14,5 @@ class InvestmentPlayerAction extends PlayerAction {
   final String eventId;
 
   @override
-  Map<String, dynamic> toJson() => _$InvestmentPlayerActionToJson(this);
+  Map<String, dynamic> toJson() => _$DebenturePlayerActionToJson(this);
 }

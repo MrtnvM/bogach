@@ -1,5 +1,5 @@
-import 'package:cash_flow/presentation/new_gameboard/finances_board/title_row.dart';
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 
 class InfoTable extends StatelessWidget {
@@ -31,10 +31,7 @@ class InfoTable extends StatelessWidget {
       ),
       child: Column(
         children: <Widget>[
-          TitleRow(
-            title: title,
-            value: titleValue,
-          ),
+          _buildHeader(),
           _TableDivider(),
           for (var i = 0; i < rows.length; i++) ...[
             rows[i],
@@ -42,6 +39,23 @@ class InfoTable extends StatelessWidget {
           ]
         ],
       ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            title,
+            style: Styles.body1.copyWith(
+              color: ColorRes.darkBlue,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

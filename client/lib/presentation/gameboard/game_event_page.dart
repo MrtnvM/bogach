@@ -3,19 +3,15 @@ import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
-import 'package:cash_flow/presentation/gameboard/game_events/investment/ui/investment_game_event.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/stock/ui/stock_game_event.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
-import 'package:cash_flow/widgets/events/stock_game_event.dart';
-import 'package:cash_flow/widgets/progress/account_bar.dart';
-import 'package:cash_flow/widgets/progress/connected_game_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class GameEventPage extends HookWidget {
-  const GameEventPage({Key key, this.event}) : super(key: key);
-
-  final GameEvent event;
+  const GameEventPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,38 +28,27 @@ class GameEventPage extends HookWidget {
       orElse: () => false,
     );
 
+    final actionRunner = useActionRunner();
+    final goToNewMonth = () => actionRunner.runAction(GoToNewMonthAction());
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        ConnectedGameProgressBar(),
-        const AccountBar(),
-        if (isMonthResult) _buildMonthResult(),
+        if (isMonthResult) _buildMonthResult(goToNewMonth),
         if (currentEvent != null) _buildEventBody(currentEvent),
       ],
     );
   }
 
   Widget _buildEventBody(GameEvent event) {
-    if (event == null) {
-      return Container();
-    }
-
-    final eventWidget = event.type.map(
-      debenture: (_) => InvestmentGameEvent(event),
+    return event.type.map(
+      debenture: (_) => DebentureGameEvent(event: event),
       stock: (_) => StockGameEvent(event),
-    );
-
-    return Expanded(
-      child: ListView(
-        children: [eventWidget],
-      ),
     );
   }
 
-  Widget _buildMonthResult() {
-    final actionRunner = useActionRunner();
-    final goToNewMonth = () => actionRunner.runAction(GoToNewMonthAction());
-
+  Widget _buildMonthResult(VoidCallback goToNewMonth) {
     return Container(
       height: 250,
       width: double.infinity,
