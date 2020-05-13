@@ -1,5 +1,6 @@
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/styles.dart';
+import 'package:cash_flow/widgets/containers/card_container.dart';
 import 'package:flutter/material.dart';
 
 class InfoTable extends StatelessWidget {
@@ -16,19 +17,8 @@ class InfoTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return CardContainer(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(40),
-            blurRadius: 2.0,
-            spreadRadius: 2.0,
-          ),
-        ],
-        color: ColorRes.primaryWhiteColor,
-      ),
       child: Column(
         children: <Widget>[
           _buildHeader(),

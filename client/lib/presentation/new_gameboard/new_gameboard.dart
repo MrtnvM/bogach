@@ -1,5 +1,6 @@
 import 'package:cash_flow/presentation/gameboard/game_event_page.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/widgets/containers/card_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:cash_flow/presentation/new_gameboard/widgets/bars/progress_bar.dart';
@@ -48,36 +49,23 @@ class NewGameBoard extends HookWidget {
         children: <Widget>[
           _buildHeaderImage(imageHeight),
           NavigationBar(title: targetTitle),
-          Container(
-            child: ListView(
-              padding: EdgeInsets.only(top: contentOffset, left: 16, right: 16),
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    color: ColorRes.primaryWhiteColor,
-                    borderRadius: BorderRadius.circular(5),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withAlpha(40),
-                        blurRadius: 2.0,
-                        spreadRadius: 2.0,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: const <Widget>[
-                      ProgressBar(),
-                      SizedBox(height: 16),
-                      AccountBar(),
-                    ],
-                  ),
+          ListView(
+            padding: EdgeInsets.only(top: contentOffset, left: 16, right: 16),
+            children: <Widget>[
+              CardContainer(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: Column(
+                  children: const <Widget>[
+                    ProgressBar(),
+                    SizedBox(height: 16),
+                    AccountBar(),
+                  ],
                 ),
-                const SizedBox(height: 20),
-                const GameEventPage(),
-                const SizedBox(height: 16),
-              ],
-            ),
+              ),
+              const SizedBox(height: 20),
+              const GameEventPage(),
+              const SizedBox(height: 16),
+            ],
           ),
         ],
       ),
