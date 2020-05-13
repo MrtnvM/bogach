@@ -15,38 +15,71 @@ class BottomBarItem {
 }
 
 class BottomBar extends StatelessWidget {
-  const BottomBar({Key key, this.items = const []}) : super(key: key);
+  const BottomBar({
+    Key key,
+    this.items = const [],
+    this.selectedItemIndex = 0,
+  })  : assert(selectedItemIndex >= 0 && selectedItemIndex < items.length),
+        super(key: key);
+
   final List<BottomBarItem> items;
+  final int selectedItemIndex;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        color: ColorRes.primaryBackgroundColor,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(50),
+            blurRadius: 3.0,
+            spreadRadius: 3.0,
+          ),
+        ],
+      ),
       child: Row(
         children: <Widget>[
-          for (var item in items) Expanded(child: _buildBarButton(item)),
+          for (var i = 0; i < items.length; i++)
+            Expanded(
+              child: _buildBarButton(
+                item: items[i],
+                isSelected: i == selectedItemIndex,
+              ),
+            ),
         ],
       ),
     );
   }
 
-  Widget _buildBarButton(BottomBarItem item) {
-    return GestureDetector(
-      onTap: item.onPressed,
-      child: Container(
-        color: ColorRes.primaryBackgroundColor,
-        height: 55,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image(image: AssetImage(item.image)),
-            Text(
-              item.title,
-              style: Styles.body1.copyWith(
-                color: ColorRes.primaryWhiteColor,
-                fontSize: 8,
-              ),
+  Widget _buildBarButton({BottomBarItem item, bool isSelected}) {
+    return Container(
+      child: GestureDetector(
+        onTap: item.onPressed,
+        child: SafeArea(
+          child: Container(
+            height: 55,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image(
+                  image: AssetImage(item.image),
+                  color: isSelected
+                      ? ColorRes.primaryWhiteColor
+                      : ColorRes.primaryWhiteColor.withAlpha(180),
+                ),
+                Text(
+                  item.title,
+                  style: Styles.body1.copyWith(
+                    color: isSelected
+                        ? ColorRes.primaryWhiteColor
+                        : ColorRes.primaryWhiteColor.withAlpha(120),
+                    fontSize: 8,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

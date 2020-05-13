@@ -1,4 +1,5 @@
-import 'package:cash_flow/presentation/new_gameboard/widgets/action_button.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,7 @@ class PlayerActionBar extends StatelessWidget {
         children: [
           if (takeLoan != null) ...[
             Expanded(
-              child: ActionButton(
+              child: _ActionButton(
                 color: Colors.orange,
                 text: Strings.takeLoan,
                 maxTitleLines: 2,
@@ -33,7 +34,7 @@ class PlayerActionBar extends StatelessWidget {
             const SizedBox(width: 9),
           ],
           Expanded(
-            child: ActionButton(
+            child: _ActionButton(
               color: Colors.green,
               text: Strings.confirm,
               maxTitleLines: 1,
@@ -43,7 +44,7 @@ class PlayerActionBar extends StatelessWidget {
           if (skip != null) ...[
             const SizedBox(width: 9),
             Expanded(
-              child: ActionButton(
+              child: _ActionButton(
                 color: Colors.grey,
                 text: Strings.skip,
                 maxTitleLines: 1,
@@ -52,6 +53,48 @@ class PlayerActionBar extends StatelessWidget {
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({
+    this.text,
+    this.color,
+    this.maxTitleLines,
+    this.onPressed,
+  });
+
+  final String text;
+  final Color color;
+  final int maxTitleLines;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      onPressed: onPressed,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
+      color: color,
+      child: Container(
+        alignment: Alignment.center,
+        constraints: const BoxConstraints.expand(),
+        child: AutoSizeText(
+          text,
+          minFontSize: 10,
+          overflow: TextOverflow.visible,
+          textAlign: TextAlign.center,
+          maxLines: maxTitleLines,
+          style: TextStyle(
+            color: ColorRes.primaryWhiteColor,
+            fontFamily: 'Montserrat',
+            fontWeight: FontWeight.w700,
+            fontSize: 12,
+          ),
+        ),
       ),
     );
   }
