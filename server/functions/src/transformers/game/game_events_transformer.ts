@@ -29,9 +29,9 @@ export class GameEventsTransformer extends GameTransformer {
       StockPriceChangedEventGenerator.generate(),
       StockPriceChangedEventGenerator.generate(),
       StockPriceChangedEventGenerator.generate(),
-      // BusinessBuyEventGenerator.generate(),
-      // BusinessBuyEventGenerator.generate(),
-      // BusinessBuyEventGenerator.generate(),
+      //BusinessBuyEventGenerator.generate(),
+      //BusinessBuyEventGenerator.generate(),
+      //BusinessBuyEventGenerator.generate(),
       // ...this.sellBusinessEventProvider.generateBusinessSellEvent(game),
       DebenturePriceChangedEventGenerator.generate(),
     ];
