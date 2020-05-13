@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class ActionsTab extends HookWidget {
+  final scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     final target = useCurrentGame((g) => g.target);
@@ -25,8 +27,8 @@ class ActionsTab extends HookWidget {
     return Stack(
       children: <Widget>[
         _buildHeaderImage(imageHeight),
-        NavigationBar(title: targetTitle),
         ListView(
+          controller: scrollController,
           padding: EdgeInsets.only(top: contentOffset, left: 16, right: 16),
           children: <Widget>[
             CardContainer(
@@ -44,11 +46,12 @@ class ActionsTab extends HookWidget {
             const SizedBox(height: 16),
           ],
         ),
+        NavigationBar(title: targetTitle, scrollController: scrollController),
       ],
     );
   }
 
-  Container _buildHeaderImage(double imageHeight) {
+  Widget _buildHeaderImage(double imageHeight) {
     return Container(
       color: ColorRes.primaryBackgroundColor,
       height: imageHeight,

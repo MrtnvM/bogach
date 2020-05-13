@@ -17,29 +17,21 @@ class DetailRow extends StatelessWidget {
       children: <Widget>[
         Row(children: [
           Expanded(
-            child: Text(
-              title,
-              style: Styles.body1.copyWith(
-                fontSize: 16,
-              ),
-            ),
+            child: Text(title, style: Styles.bodyBlack),
           ),
-          Text(
-            value,
-            style: Styles.body1.copyWith(
-              fontSize: 16,
-            ),
-          ),
+          Text(value, style: Styles.bodyBlack),
         ]),
-        for (var detail in details)
+        for (var detail in details) ...[
+          const SizedBox(height: 4),
           Text(
             detail,
             style: Styles.body1.copyWith(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w400,
               color: ColorRes.primaryGreyColor,
             ),
-          )
+          ),
+        ]
       ],
     );
   }

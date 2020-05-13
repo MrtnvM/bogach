@@ -8,8 +8,10 @@ import 'package:cash_flow/models/domain/game/possession_state/assets/insurance/i
 import 'package:cash_flow/models/domain/game/possession_state/assets/other/other_asset.dart';
 import 'package:cash_flow/models/domain/game/possession_state/assets/realty/realty_asset.dart';
 import 'package:cash_flow/models/domain/game/possession_state/assets/stock/stock_asset.dart';
+import 'package:cash_flow/presentation/new_gameboard/widgets/table/detail_row.dart';
+import 'package:cash_flow/presentation/new_gameboard/widgets/table/info_table.dart';
+import 'package:cash_flow/presentation/new_gameboard/widgets/table/title_row.dart';
 import 'package:cash_flow/resources/strings.dart';
-import 'package:cash_flow/widgets/containers/indicators_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
@@ -59,119 +61,79 @@ class AssetsList extends HookWidget {
       totalOtherAssets
     ].fold<double>(0.0, (s, i) => s + i);
 
-    return IndicatorsTable(
-      context: context,
-      name: Strings.assets,
-      result: totalAssets.toPrice(),
-      rows: <RowHeaderItem>[
-        RowItem(name: '${Strings.cash}:', value: totalCash.toPrice()),
-        const RowHeaderAttributeItem(
-          name: Strings.insuranceTitle,
-          attribute: Strings.cost,
-          value: Strings.defence,
+    return InfoTable(
+      title: Strings.assets,
+      titleValue: totalAssets.toPrice(),
+      rows: <Widget>[
+        TitleRow(title: '${Strings.cash}:', value: totalCash.toPrice()),
+        DetailRow(
+          title: Strings.insuranceTitle,
+          value: totalInsurance.toPrice(),
+          details: insuranses
+              .map(
+                (i) => '${i.name}; '
+                    '${Strings.defence} - ${i.value}; '
+                    '${Strings.firstPayment} - ${i.downPayment}',
+              )
+              .toList(),
         ),
-        ..._buildInsurances(insuranses),
-        const RowHeaderAttributeItem(
-          name: Strings.investments,
-          attribute: Strings.count,
-          value: Strings.sum,
+        DetailRow(
+          title: Strings.investments,
+          value: totalDebentures.toPrice(),
+          details: debentures.map(
+            (i) {
+              final description = Strings.itemsPerPrice(
+                count: i.count,
+                price: i.averagePrice.toPrice(),
+              );
+
+              return '${i.name} '
+                  '(${i.profitabilityPercent.toPercent()}); '
+                  '$description';
+            },
+          ).toList(),
         ),
-        ..._buildDebentures(debentures),
-        const RowHeaderAttributeItem(
-          name: Strings.stock,
-          attribute: Strings.count,
-          value: Strings.sum,
+        DetailRow(
+          title: Strings.stock,
+          value: totalStocks.toPrice(),
+          details: stocks.map(
+            (i) {
+              final description = Strings.itemsPerPrice(
+                count: i.countInPortfolio,
+                price: i.averagePrice.toPrice(),
+              );
+
+              return '${i.name}; $description';
+            },
+          ).toList(),
         ),
-        ..._buildStocks(stocks),
-        const RowHeaderAttributeItem(
-          name: Strings.property,
-          attribute: Strings.firstPayment,
-          value: Strings.cost,
+        DetailRow(
+          title: Strings.property,
+          value: totalRealties.toPrice(),
+          details: realties
+              .map((i) => '${i.name}; ${Strings.cost} - ${i.cost}')
+              .toList(),
         ),
-        ..._buildRealties(realties),
-        const RowHeaderAttributeItem(
-          name: Strings.business,
-          attribute: Strings.firstPayment,
-          value: Strings.cost,
+        DetailRow(
+          title: Strings.business,
+          value: totalBusinesses.toPrice(),
+          details: businesses
+              .map(
+                (i) => '${i.name}; ${Strings.firstPayment} - ${i.downPayment}',
+              )
+              .toList(),
         ),
-        ..._buildBusinesses(businesses),
-        const RowHeaderAttributeItem(
-          name: Strings.other,
-          attribute: Strings.firstPayment,
-          value: Strings.cost,
+        DetailRow(
+          title: Strings.other,
+          value: totalOtherAssets.toPrice(),
+          details: otherAssets
+              .map(
+                (i) => '${i.name}; ${Strings.firstPayment} - ${i.downPayment}',
+              )
+              .toList(),
         ),
-        ..._buildOtherAssets(otherAssets),
       ],
     );
-  }
-
-  List<RowAttributeItem> _buildInsurances(List<InsuranceAsset> insurances) {
-    return [
-      for (var insurance in insurances)
-        RowAttributeItem(
-          name: insurance.name,
-          attribute: insurance.value.toPrice(),
-          value: insurance.value.toPrice(),
-        )
-    ];
-  }
-
-  List<RowHeaderItem> _buildStocks(List<StockAsset> stocks) {
-    return [
-      for (var stock in stocks)
-        RowAttributeItem(
-          name: stock.name,
-          attribute: Strings.itemsPerPrice(
-            count: stock.countInPortfolio,
-            price: stock.averagePrice.toPrice(),
-          ),
-          value: (stock.averagePrice * stock.countInPortfolio).toPrice(),
-        )
-    ];
-  }
-
-  List<RowAttributeItem> _buildDebentures(List<DebentureAsset> debentures) {
-    return [
-      for (var debenture in debentures)
-        RowAttributeItem(
-          name: debenture.name,
-          attribute: '${debenture.count}',
-          value: debenture.averagePrice.toPrice(),
-        )
-    ];
-  }
-
-  List<RowAttributeItem> _buildRealties(List<RealtyAsset> realties) {
-    return [
-      for (var realty in realties)
-        RowAttributeItem(
-          name: realty.name,
-          attribute: '${realty.downPayment}',
-          value: realty.cost.toPrice(),
-        )
-    ];
-  }
-
-  List<RowAttributeItem> _buildBusinesses(List<BusinessAsset> businesses) {
-    return [
-      for (var business in businesses)
-        RowAttributeItem(
-          name: business.name,
-          attribute: '${business.downPayment}',
-          value: business.buyPrice.toPrice(),
-        )
-    ];
-  }
-
-  List<RowAttributeItem> _buildOtherAssets(List<OtherAsset> otherAssets) {
-    return [
-      for (var otherAsset in otherAssets)
-        RowAttributeItem(
-          name: otherAsset.name,
-          attribute: '${otherAsset.downPayment}',
-          value: otherAsset.value.toPrice(),
-        )
-    ];
   }
 
   List<T> _getAssets<T>(List<Asset> assets, AssetType type) {

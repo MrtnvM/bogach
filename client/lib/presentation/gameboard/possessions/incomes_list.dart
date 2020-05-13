@@ -1,7 +1,8 @@
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
+import 'package:cash_flow/presentation/new_gameboard/widgets/table/info_table.dart';
+import 'package:cash_flow/presentation/new_gameboard/widgets/table/title_row.dart';
 import 'package:cash_flow/resources/strings.dart';
-import 'package:cash_flow/widgets/containers/indicators_table.dart';
 import 'package:cash_flow/models/domain/game/possession_state/incomes/income.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -20,16 +21,15 @@ class IncomesList extends HookWidget {
     final realty = _calculateSum(incomes, IncomeType.realty);
     final other = _calculateSum(incomes, IncomeType.other);
 
-    return IndicatorsTable(
-      context: context,
-      name: Strings.incomes,
-      result: totalIncome.toPrice(),
+    return InfoTable(
+      title: Strings.incomes,
+      titleValue: totalIncome.toPrice(),
       rows: [
-        RowItem(name: Strings.salary, value: salary.toPrice()),
-        RowItem(name: Strings.investments, value: investment.toPrice()),
-        RowItem(name: Strings.business, value: business.toPrice()),
-        RowItem(name: Strings.realty, value: realty.toPrice()),
-        RowItem(name: Strings.other, value: other.toPrice()),
+        TitleRow(title: Strings.salary, value: salary.toPrice()),
+        TitleRow(title: Strings.investments, value: investment.toPrice()),
+        TitleRow(title: Strings.business, value: business.toPrice()),
+        TitleRow(title: Strings.realty, value: realty.toPrice()),
+        TitleRow(title: Strings.other, value: other.toPrice()),
       ],
     );
   }

@@ -33,7 +33,7 @@ class BottomBar extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(50),
-            blurRadius: 3.0,
+            blurRadius: 2.0,
             spreadRadius: 3.0,
           ),
         ],
@@ -56,6 +56,7 @@ class BottomBar extends StatelessWidget {
     return Container(
       child: GestureDetector(
         onTap: item.onPressed,
+        behavior: HitTestBehavior.translucent,
         child: SafeArea(
           child: Container(
             height: 55,

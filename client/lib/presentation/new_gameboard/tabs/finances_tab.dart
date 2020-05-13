@@ -1,10 +1,15 @@
+import 'package:cash_flow/presentation/gameboard/possessions/assets_list.dart';
+import 'package:cash_flow/presentation/gameboard/possessions/expenses_list.dart';
+import 'package:cash_flow/presentation/gameboard/possessions/incomes_list.dart';
+import 'package:cash_flow/presentation/gameboard/possessions/liabilities_list.dart';
+import 'package:cash_flow/presentation/new_gameboard/widgets/bars/navigation_bar.dart';
 import 'package:cash_flow/resources/images.dart';
+import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
-import 'package:cash_flow/presentation/new_gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/resources/colors.dart';
 
 class FinancesTab extends StatelessWidget {
-  final Key backgroundImageKey = GlobalKey();
+  final scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -12,93 +17,43 @@ class FinancesTab extends StatelessWidget {
     final screenWidth = mediaQuery.size.width;
     const imageAspectRatio = 2.03;
     final imageHeight = screenWidth / imageAspectRatio;
-    final contentOffset = imageHeight * 0.21;
+    final contentOffset = imageHeight * 0.76;
 
     return Stack(
       children: <Widget>[
-        Container(
-          constraints: const BoxConstraints.expand(),
-          color: ColorRes.primaryWhiteColor,
-        ),
-        Container(
-          color: ColorRes.primaryBackgroundColor,
-          height: imageHeight,
-          alignment: Alignment.bottomCenter,
-          child: Image(
-            key: backgroundImageKey,
-            image: const AssetImage(Images.money),
-          ),
-        ),
+        _buildHeaderImage(imageHeight),
         ListView(
+          controller: scrollController,
+          padding: EdgeInsets.only(top: contentOffset, left: 16, right: 16),
           children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.only(top: 60, left: 16),
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      color: ColorRes.primaryWhiteColor,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 60),
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Финансы',
-                    style: TextStyle(
-                      color: ColorRes.primaryYellowColor,
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Column(
-              children: <Widget>[
-                Container(
-                  padding:
-                      EdgeInsets.only(top: contentOffset, left: 16, right: 16),
-                  child: const InfoTable(
-                    title: 'Доходы',
-                    titleValue: '1Р',
-                    rows: [],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-                  child: const InfoTable(
-                    title: 'Расходы',
-                    titleValue: '1 000Р',
-                    rows: [],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-                  child: const InfoTable(
-                    title: 'Активы',
-                    titleValue: '1 000Р',
-                    rows: [],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-                  child: const InfoTable(
-                    title: 'Пассивы',
-                    titleValue: '1 000Р',
-                    rows: [],
-                  ),
-                ),
-                const SizedBox(height: 16),
-              ],
-            ),
+            _buildList(IncomesList()),
+            _buildList(ExpensesList()),
+            _buildList(AssetsList()),
+            _buildList(LiabilitiesList()),
+            const SizedBox(height: 16),
           ],
         ),
+        NavigationBar(
+          title: Strings.financesTabTitle,
+          scrollController: scrollController,
+        ),
       ],
+    );
+  }
+
+  Widget _buildHeaderImage(double imageHeight) {
+    return Container(
+      color: ColorRes.primaryBackgroundColor,
+      height: imageHeight,
+      alignment: Alignment.bottomCenter,
+      child: const Image(image: AssetImage(Images.money)),
+    );
+  }
+
+  Widget _buildList(Widget listWidget) {
+    return Container(
+      padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+      child: listWidget,
     );
   }
 }

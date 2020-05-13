@@ -45,6 +45,15 @@ class InfoTable extends StatelessWidget {
             ),
           ),
         ),
+        if (titleValue != null)
+          Text(
+            titleValue,
+            style: Styles.caption.copyWith(
+              color: ColorRes.newGameBoardPrimaryTextColor,
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
       ],
     );
   }

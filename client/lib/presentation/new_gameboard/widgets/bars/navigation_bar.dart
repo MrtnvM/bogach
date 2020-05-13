@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -11,25 +13,40 @@ class NavigationBar extends HookWidget {
     @required this.title,
     this.subtitle,
     this.goBack,
+    this.scrollController,
   }) : super(key: key);
 
   final String title;
   final String subtitle;
   final VoidCallback goBack;
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
     final notchSize = useNotchSize();
+    final opacity = useState(1.0);
 
-    return Container(
-      margin: EdgeInsets.only(top: notchSize.top),
-      constraints: const BoxConstraints.expand(height: 60),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          _buildBackButton(),
-          _buildTitle(),
-        ],
+    useEffect(() {
+      final listener = () {
+        return opacity.value = 1 - scrollController.offset / 50;
+      };
+
+      scrollController?.addListener(listener);
+      return () => scrollController?.removeListener(listener);
+    }, []);
+
+    return Opacity(
+      opacity: max(min(opacity.value, 1), 0),
+      child: Container(
+        margin: EdgeInsets.only(top: notchSize.top),
+        constraints: const BoxConstraints.expand(height: 60),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            _buildBackButton(),
+            _buildTitle(),
+          ],
+        ),
       ),
     );
   }

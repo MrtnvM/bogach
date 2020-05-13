@@ -57,6 +57,8 @@ class Strings {
   static String get actionsTabTitle => 'Действия';
   static String get historyTabTitle => 'История';
 
+  static String get monthlyPayment => 'Ежемесячный платеж:';
+
   static const rubleSymbol = '₽';
   static const title = '';
   static const wordIn = 'в';
