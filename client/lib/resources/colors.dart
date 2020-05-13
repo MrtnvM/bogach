@@ -36,6 +36,9 @@ class ColorRes {
   static const newGameBoardInvestmentInfoTitleColor = Color(0xFF79C745);
   static const newGameBoardInvestmentsDividerColor = Color(0xFFEDEDED);
 
+  static const gameEventSelectedTab = Color(0xFF01BAEF);
+  static const gameEventUnselectedTab = Color(0xFF86DCF4);
+
   static const primaryWhiteColor = Color(0xFFFBFBFF);
   static const primaryYellowColor = Color(0xFFFFE21C);
   static const primaryGreyColor = Color(0XFF939393);

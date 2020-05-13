@@ -50,6 +50,8 @@ class GameEventValueSelector extends StatelessWidget {
             assetCount: selectedCount,
             passiveIncomePerMonth: passiveIncomePerMonth,
           ),
+        const SizedBox(height: 10),
+        const Divider(),
         _buildBuySellButtons(),
       ],
     );
@@ -60,7 +62,6 @@ class GameEventValueSelector extends StatelessWidget {
       children: <Widget>[
         Expanded(child: _buildAvailableButton()),
         Expanded(child: _buildSelectAllButton()),
-        const Spacer(),
       ],
     );
   }
@@ -114,7 +115,7 @@ class GameEventValueSelector extends StatelessWidget {
               const WidgetSpan(child: SizedBox(width: 4)),
               TextSpan(
                 text: availableCount.toStringAsFixed(0),
-                style: Styles.body1,
+                style: Styles.bodyBlack,
               ),
             ],
           ),

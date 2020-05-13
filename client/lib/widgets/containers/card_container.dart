@@ -6,17 +6,19 @@ class CardContainer extends StatelessWidget {
     Key key,
     @required this.child,
     this.padding,
+    this.backgroundColor,
   }) : super(key: key);
 
   final Widget child;
   final EdgeInsets padding;
+  final Color backgroundColor;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: padding,
       decoration: BoxDecoration(
-        color: ColorRes.primaryWhiteColor,
+        color: backgroundColor ?? ColorRes.primaryWhiteColor,
         borderRadius: BorderRadius.circular(5),
         boxShadow: [
           BoxShadow(

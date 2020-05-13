@@ -1,5 +1,6 @@
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/widgets/containers/card_container.dart';
 import 'package:cash_flow/widgets/game_event/buy_sell_bar.dart';
 import 'package:cash_flow/widgets/game_event/game_event_value_selector.dart';
 import 'package:cash_flow/widgets/game_event/price_calculator.dart';
@@ -35,10 +36,7 @@ class GameEventSelectorState extends State<GameEventSelector> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: ColorRes.grey2,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      margin: const EdgeInsets.symmetric(horizontal: 8),
+    return CardContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -47,20 +45,26 @@ class GameEventSelectorState extends State<GameEventSelector> {
               selectedAction: _buySellAction,
               onActionChanged: _changeState,
             ),
-          const SizedBox(height: 12),
-          PriceCalculator(
-            count: _selectedCount,
-            currentPrice: vm.currentPrice.toDouble(),
-            onCountChanged: _onCountInputFieldChanged,
-          ),
-          GameEventValueSelector(
-            action: _buySellAction,
-            selectedCount: _selectedCount,
-            availableCount: 0, // vm.maxCount,
-            maxCount: vm.maxCount,
-            onCountChanged: _onSelectedCountChanged,
-            isChangeableType: vm.changeableType,
-            passiveIncomePerMonth: vm.passiveIncomePerMonth.toDouble(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Column(
+              children: <Widget>[
+                PriceCalculator(
+                  count: _selectedCount,
+                  currentPrice: vm.currentPrice.toDouble(),
+                  onCountChanged: _onCountInputFieldChanged,
+                ),
+                GameEventValueSelector(
+                  action: _buySellAction,
+                  selectedCount: _selectedCount,
+                  availableCount: 0, // vm.maxCount,
+                  maxCount: vm.maxCount,
+                  onCountChanged: _onSelectedCountChanged,
+                  isChangeableType: vm.changeableType,
+                  passiveIncomePerMonth: vm.passiveIncomePerMonth.toDouble(),
+                ),
+              ],
+            ),
           ),
         ],
       ),
