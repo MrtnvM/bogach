@@ -20,10 +20,13 @@ class BusinessBuyGameEvent extends HookWidget {
 
   final GameEvent event;
   BusinessBuyEventData get eventData => event.data;
-  final actionRunner = useActionRunner();
+
+  var _actionRunner;
 
   @override
   Widget build(BuildContext context) {
+    _actionRunner = useActionRunner();
+
     return GameEventWidget(
       icon: Icons.business,
       name: event.name,
@@ -100,12 +103,12 @@ class BusinessBuyGameEvent extends HookWidget {
 
     final action = SendPlayerMoveAsyncAction(playerAction, event.id);
 
-    actionRunner
+    _actionRunner
         .runAsyncAction(action)
         .catchError((error) => handleError(context: context, exception: error));
   }
 
   void _skipPlayerAction() {
-    actionRunner.runAction(SkipPlayerMoveAction());
+    _actionRunner.runAction(SkipPlayerMoveAction());
   }
 }
