@@ -1,4 +1,3 @@
-
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -6,11 +5,11 @@ part 'business_buy_event_data.freezed.dart';
 part 'business_buy_event_data.g.dart';
 
 @freezed
-abstract class BusinessBuyEventData 
-with _$BusinessBuyEventData 
-implements GameEventData {
+abstract class BusinessBuyEventData
+    with _$BusinessBuyEventData
+    implements GameEventData {
   factory BusinessBuyEventData({
-     String businessId,
+    String businessId,
     int currentPrice,
     int fairPrice,
     int downPayment,
