@@ -1,4 +1,3 @@
-
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/utils/email_validator.dart';
 
@@ -19,12 +18,11 @@ bool validateEmail(String email) {
   }
 
   final partsSplittedByDot = email.split('.');
-  final domainMoreThanTwoLetters = partsSplittedByDot.isNotEmpty &&
-      partsSplittedByDot.last.length >= 2;
+  final domainMoreThanTwoLetters =
+      partsSplittedByDot.isNotEmpty && partsSplittedByDot.last.length >= 2;
 
   return !EmailValidator.validate(email) || !domainMoreThanTwoLetters;
 }
-
 
 final ruleNotEmpty = FormatResult(validateEmpty, Strings.fieldIsRequired);
 final ruleEmail = FormatResult(validateEmail, Strings.incorrectEmail);
@@ -35,7 +33,7 @@ FormatResult rulePasswordsShouldMatch(bool Function(String) function) {
 }
 
 String validate(String value, List<FormatResult> validators) {
-  for (var item in validators) {
+  for (final item in validators) {
     if (item.function(value)) {
       return item.errorText;
     }

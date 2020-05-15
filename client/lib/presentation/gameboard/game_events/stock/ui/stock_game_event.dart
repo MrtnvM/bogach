@@ -44,7 +44,7 @@ class StockGameEvent extends HookWidget {
         InfoTable(
           title: Strings.stock,
           rows: <Widget>[
-            for (var item in infoTableData.entries)
+            for (final item in infoTableData.entries)
               TitleRow(title: item.key, value: item.value)
           ],
         ),

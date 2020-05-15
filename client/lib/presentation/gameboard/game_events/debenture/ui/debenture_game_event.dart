@@ -44,7 +44,7 @@ class DebentureGameEvent extends HookWidget {
         InfoTable(
           title: Strings.investments,
           rows: <Widget>[
-            for (var item in infoTableData.entries)
+            for (final item in infoTableData.entries)
               TitleRow(title: item.key, value: item.value)
           ],
         ),

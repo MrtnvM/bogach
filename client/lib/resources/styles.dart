@@ -4,14 +4,14 @@ import 'package:flutter/cupertino.dart';
 const Color _defaultTextColor = ColorRes.white;
 
 class Styles {
-  static const TextStyle subhead = TextStyle(
+  static const subhead = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.normal,
     fontStyle: FontStyle.normal,
     color: _defaultTextColor,
   );
 
-  static const TextStyle body1 = TextStyle(
+  static const body1 = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.normal,
     fontStyle: FontStyle.normal,
@@ -19,7 +19,14 @@ class Styles {
     fontFamily: 'Montserrat',
   );
 
-  static const TextStyle body2 = TextStyle(
+  static const bodyWhiteBold = TextStyle(
+    color: ColorRes.primaryWhiteColor,
+    fontFamily: 'Montserrat',
+    fontWeight: FontWeight.w700,
+    fontSize: 12,
+  );
+
+  static const body2 = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,

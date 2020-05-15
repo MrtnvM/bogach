@@ -70,11 +70,9 @@ class AssetsList extends HookWidget {
           title: Strings.insuranceTitle,
           value: totalInsurance.toPrice(),
           details: insuranses
-              .map(
-                (i) => '${i.name}; '
-                    '${Strings.defence} - ${i.value}; '
-                    '${Strings.firstPayment} - ${i.downPayment}',
-              )
+              .map((i) => '${i.name}; '
+                  '${Strings.defence} - ${i.value}; '
+                  '${Strings.firstPayment} - ${i.downPayment}')
               .toList(),
         ),
         DetailRow(
@@ -118,9 +116,8 @@ class AssetsList extends HookWidget {
           title: Strings.business,
           value: totalBusinesses.toPrice(),
           details: businesses
-              .map(
-                (i) => '${i.name}; ${Strings.firstPayment} - ${i.downPayment}',
-              )
+              .map((i) =>
+                  '${i.name}; ${Strings.firstPayment} - ${i.downPayment}')
               .toList(),
         ),
         DetailRow(

@@ -21,7 +21,7 @@ class ExpensesList extends HookWidget {
       title: Strings.expenses,
       titleValue: totalExpense.toPrice(),
       rows: [
-        for (var expense in expenses)
+        for (final expense in expenses)
           TitleRow(title: expense.name, value: expense.value.toPrice())
       ],
     );

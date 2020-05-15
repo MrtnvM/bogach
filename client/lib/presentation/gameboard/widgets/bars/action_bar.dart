@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 
 class PlayerActionBar extends StatelessWidget {
@@ -37,7 +37,6 @@ class PlayerActionBar extends StatelessWidget {
             child: _ActionButton(
               color: Colors.green,
               text: Strings.confirm,
-              maxTitleLines: 1,
               onPressed: confirm,
             ),
           ),
@@ -47,7 +46,6 @@ class PlayerActionBar extends StatelessWidget {
               child: _ActionButton(
                 color: Colors.grey,
                 text: Strings.skip,
-                maxTitleLines: 1,
                 onPressed: skip,
               ),
             ),
@@ -60,9 +58,9 @@ class PlayerActionBar extends StatelessWidget {
 
 class _ActionButton extends StatelessWidget {
   const _ActionButton({
-    this.text,
-    this.color,
-    this.maxTitleLines,
+    @required this.text,
+    @required this.color,
+    this.maxTitleLines = 1,
     this.onPressed,
   });
 
@@ -82,19 +80,12 @@ class _ActionButton extends StatelessWidget {
       child: Container(
         alignment: Alignment.center,
         constraints: const BoxConstraints.expand(),
-        child: AutoSizeText(
-          text,
-          minFontSize: 10,
-          overflow: TextOverflow.visible,
-          textAlign: TextAlign.center,
-          maxLines: maxTitleLines,
-          style: TextStyle(
-            color: ColorRes.primaryWhiteColor,
-            fontFamily: 'Montserrat',
-            fontWeight: FontWeight.w700,
-            fontSize: 12,
-          ),
-        ),
+        child: AutoSizeText(text,
+            minFontSize: 10,
+            overflow: TextOverflow.visible,
+            textAlign: TextAlign.center,
+            maxLines: maxTitleLines,
+            style: Styles.body1),
       ),
     );
   }

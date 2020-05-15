@@ -21,7 +21,7 @@ class LiabilitiesList extends HookWidget {
       title: Strings.liabilities,
       titleValue: totalLiability.toPrice(),
       rows: [
-        for (var liability in liabilities)
+        for (final liability in liabilities)
           DetailRow(
             title: liability.name,
             value: liability.value.toPrice(),

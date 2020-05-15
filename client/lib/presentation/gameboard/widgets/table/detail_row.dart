@@ -21,7 +21,7 @@ class DetailRow extends StatelessWidget {
           ),
           Text(value, style: Styles.bodyBlack),
         ]),
-        for (var detail in details) ...[
+        for (final detail in details) ...[
           const SizedBox(height: 4),
           Text(
             detail,
