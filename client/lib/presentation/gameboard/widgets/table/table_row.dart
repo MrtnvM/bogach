@@ -11,19 +11,9 @@ class TableRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(children: [
       Expanded(
-        child: Text(
-          title,
-          style: Styles.body1.copyWith(
-            fontSize: 16,
-          ),
-        ),
+        child: Text(title, style: Styles.tableRowTitle),
       ),
-      Text(
-        value,
-        style: Styles.body1.copyWith(
-          fontSize: 16,
-        ),
-      ),
+      Text(value, style: Styles.tableRowValue),
     ]);
   }
 }

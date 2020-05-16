@@ -17,6 +17,7 @@ class GameEventPage extends HookWidget {
   Widget build(BuildContext context) {
     final activeGameState = useGlobalState((s) => s.gameState.activeGameState);
     final gameEvents = useCurrentGame((g) => g.currentEvents);
+    final actionRunner = useActionRunner();
 
     final currentEvent = activeGameState.maybeMap(
       gameEvent: (eventState) => gameEvents[eventState.eventIndex],
@@ -28,7 +29,6 @@ class GameEventPage extends HookWidget {
       orElse: () => false,
     );
 
-    final actionRunner = useActionRunner();
     final goToNewMonth = () => actionRunner.runAction(GoToNewMonthAction());
 
     return Column(

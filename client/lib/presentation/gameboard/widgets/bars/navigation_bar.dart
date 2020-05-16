@@ -73,24 +73,10 @@ class NavigationBar extends HookWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              title,
-              style: Styles.body1.copyWith(
-                color: ColorRes.primaryYellowColor,
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
-              ),
-            ),
+            Text(title, style: Styles.navBarTitle),
             if (subtitle?.isNotEmpty ?? false) ...[
               const SizedBox(height: 10),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  color: ColorRes.levelColor,
-                  fontWeight: FontWeight.w200,
-                  fontSize: 16,
-                ),
-              ),
+              Text(subtitle, style: Styles.navBarSubtitle),
             ]
           ],
         ),

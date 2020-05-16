@@ -36,24 +36,10 @@ class InfoTable extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: Text(
-            title,
-            style: Styles.body1.copyWith(
-              color: ColorRes.darkBlue,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          child: Text(title, style: Styles.tableHeaderTitle),
         ),
         if (titleValue != null)
-          Text(
-            titleValue,
-            style: Styles.caption.copyWith(
-              color: ColorRes.newGameBoardPrimaryTextColor,
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
+          Text(titleValue, style: Styles.tableHeaderValue),
       ],
     );
   }

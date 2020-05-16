@@ -1,13 +1,16 @@
-import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 
 class DetailRow extends StatelessWidget {
-  const DetailRow({this.title, this.value, this.details = const []});
+  const DetailRow({
+    @required this.title,
+    @required this.value,
+    this.details = const [],
+  })  : assert(title != null),
+        assert(value != null);
 
   final String title;
   final String value;
-
   final List<String> details;
 
   @override
@@ -16,21 +19,12 @@ class DetailRow extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Row(children: [
-          Expanded(
-            child: Text(title, style: Styles.bodyBlack),
-          ),
+          Expanded(child: Text(title, style: Styles.bodyBlack)),
           Text(value, style: Styles.bodyBlack),
         ]),
         for (final detail in details) ...[
           const SizedBox(height: 4),
-          Text(
-            detail,
-            style: Styles.body1.copyWith(
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: ColorRes.primaryGreyColor,
-            ),
-          ),
+          Text(detail, style: Styles.tableRowDetails),
         ]
       ],
     );

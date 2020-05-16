@@ -21,8 +21,8 @@ class ProgressBar extends HookWidget {
 
     return Container(
       padding: const EdgeInsets.only(left: 16.0, top: 14.0, right: 16),
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(5)),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
         color: ColorRes.primaryWhiteColor,
       ),
       child: Column(
@@ -98,8 +98,8 @@ class _ProgressLine extends StatelessWidget {
       builder: (context, constraints) {
         return Container(
           width: constraints.maxWidth * progress,
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(5)),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
             color: ColorRes.primaryYellowColor,
           ),
         );

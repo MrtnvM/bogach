@@ -71,12 +71,7 @@ class BottomBar extends StatelessWidget {
                 ),
                 Text(
                   item.title,
-                  style: Styles.body1.copyWith(
-                    color: isSelected
-                        ? ColorRes.primaryWhiteColor
-                        : ColorRes.primaryWhiteColor.withAlpha(120),
-                    fontSize: 8,
-                  ),
+                  style: Styles.bottomNavBarButtonTitle(isSelected: isSelected),
                 ),
               ],
             ),

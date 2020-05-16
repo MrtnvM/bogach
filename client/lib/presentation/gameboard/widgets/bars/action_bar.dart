@@ -80,12 +80,14 @@ class _ActionButton extends StatelessWidget {
       child: Container(
         alignment: Alignment.center,
         constraints: const BoxConstraints.expand(),
-        child: AutoSizeText(text,
-            minFontSize: 10,
-            overflow: TextOverflow.visible,
-            textAlign: TextAlign.center,
-            maxLines: maxTitleLines,
-            style: Styles.body1),
+        child: AutoSizeText(
+          text,
+          minFontSize: 10,
+          overflow: TextOverflow.visible,
+          textAlign: TextAlign.center,
+          maxLines: maxTitleLines,
+          style: Styles.body1,
+        ),
       ),
     );
   }
