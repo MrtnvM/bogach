@@ -1,6 +1,5 @@
 import { GameEntity, Game } from '../models/domain/game/game';
 import { UserEntity } from '../models/domain/user';
-import { PossessionStateEntity } from '../models/domain/possession_state';
 import { PossessionsEntity } from '../models/domain/possessions';
 import { DebenturePriceChangedEvent } from '../events/debenture/debenture_price_changed_event';
 import { GameEventEntity } from '../models/domain/game/game_event';
@@ -38,7 +37,19 @@ export const game: Game = {
   },
   possessions: { [userId]: PossessionsEntity.createEmpty() },
   possessionState: {
-    [userId]: PossessionStateEntity.createEmpty(),
+    [userId]: {
+      incomes: [
+        {
+          id: 'income1',
+          value: 10_000,
+          name: 'Зарплата',
+          type: 'salary',
+        },
+      ],
+      expenses: [],
+      assets: [],
+      liabilities: [],
+    },
   },
   accounts: {
     [userId]: {
