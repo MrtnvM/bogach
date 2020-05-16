@@ -41,7 +41,7 @@ _GameActions useGameActions() {
         );
       },
       skipPlayerAction: () {
-        actionRunner.runAction(SkipPlayerMoveAction());
+        actionRunner.runAsyncAction(SkipPlayerMoveAction());
       },
     );
   }, [userId]);
