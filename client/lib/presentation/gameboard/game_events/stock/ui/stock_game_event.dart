@@ -21,7 +21,7 @@ class StockGameEvent extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final buySellAction = useState(const BuySellAction.buy());
-    final selectedCount = useState(0);
+    final selectedCount = useState(1);
     final infoTableData = useStockInfoTableData(event);
     final gameActions = useGameActions();
     final sendPlayerAction = useStockPlayerActionHandler(

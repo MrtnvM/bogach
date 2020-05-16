@@ -42,6 +42,7 @@ class GameEventValueSelector extends StatelessWidget {
         ValueSlider(
           selectedCount: selectedCount,
           maxCount: maxCount,
+          minCount: 1,
           onCountChanged: onCountChanged,
         ),
         if (isChangeableType)
@@ -98,7 +99,11 @@ class GameEventValueSelector extends StatelessWidget {
   Widget _buildAvailableButton() {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () => onCountChanged(availableCount),
+      onTap: () {
+        if (availableCount > 0) {
+          onCountChanged(availableCount);
+        }
+      },
       child: Container(
         padding: const EdgeInsets.all(8),
         alignment: Alignment.center,

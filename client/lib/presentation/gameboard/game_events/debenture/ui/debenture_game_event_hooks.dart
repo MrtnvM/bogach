@@ -44,11 +44,6 @@ VoidCallback useDebenturePlayerActionHandler({
   final context = useContext();
 
   return () {
-    if (selectedCount == 0) {
-      gameActions.skipPlayerAction();
-      return;
-    }
-
     final playerAction = DebenturePlayerAction(
       action,
       selectedCount,

@@ -39,11 +39,6 @@ VoidCallback useStockPlayerActionHandler({
   final context = useContext();
 
   return () {
-    if (selectedCount == 0) {
-      gameActions.skipPlayerAction();
-      return;
-    }
-
     final playerAction = StockPlayerAction(
       action,
       selectedCount,

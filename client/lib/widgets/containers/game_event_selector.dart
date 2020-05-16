@@ -28,7 +28,7 @@ class GameEventSelector extends StatefulWidget {
 }
 
 class GameEventSelectorState extends State<GameEventSelector> {
-  var _selectedCount = 0;
+  var _selectedCount = 1;
   var _buySellAction = const BuySellAction.buy();
 
   SelectorViewModel get vm => widget.viewModel;

@@ -20,7 +20,7 @@ class DebentureGameEvent extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final buySellAction = useState(const BuySellAction.buy());
-    final selectedCount = useState(0);
+    final selectedCount = useState(1);
     final infoTableData = useDebentureInfoTableData(event);
     final gameActions = useGameActions();
     final sendPlayerAction = useDebenturePlayerActionHandler(
