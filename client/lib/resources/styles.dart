@@ -1,24 +1,33 @@
 import 'package:cash_flow/resources/colors.dart';
 import 'package:flutter/cupertino.dart';
 
-const Color _defaultTextColor = ColorRes.white;
+const _defaultTextColor = ColorRes.white;
+const _defaultFontFamily = 'Montserrat';
 
 class Styles {
-  static const TextStyle subhead = TextStyle(
+  static const subhead = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.normal,
     fontStyle: FontStyle.normal,
     color: _defaultTextColor,
   );
 
-  static const TextStyle body1 = TextStyle(
+  static const body1 = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.normal,
     fontStyle: FontStyle.normal,
     color: _defaultTextColor,
+    fontFamily: _defaultFontFamily,
   );
 
-  static const TextStyle body2 = TextStyle(
+  static const bodyWhiteBold = TextStyle(
+    color: ColorRes.primaryWhiteColor,
+    fontFamily: _defaultFontFamily,
+    fontWeight: FontWeight.w700,
+    fontSize: 12,
+  );
+
+  static const body2 = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
@@ -26,14 +35,14 @@ class Styles {
   );
 
   static const bodyBlack = TextStyle(
-    fontFamily: 'Montserrat',
+    fontFamily: _defaultFontFamily,
     fontSize: 14,
     fontStyle: FontStyle.normal,
     color: ColorRes.mainBlack,
   );
 
   static const bodyBlackBold = TextStyle(
-    fontFamily: 'Montserrat',
+    fontFamily: _defaultFontFamily,
     fontSize: 14,
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.bold,
@@ -61,4 +70,61 @@ class Styles {
     height: 1.6,
     color: ColorRes.errorRed,
   );
+
+  static const navBarTitle = TextStyle(
+    fontFamily: _defaultFontFamily,
+    color: ColorRes.primaryYellowColor,
+    fontWeight: FontWeight.w700,
+    fontSize: 16,
+  );
+
+  static const navBarSubtitle = TextStyle(
+    fontFamily: _defaultFontFamily,
+    color: ColorRes.levelColor,
+    fontWeight: FontWeight.w200,
+    fontSize: 16,
+  );
+
+  static const tableRowTitle = TextStyle(
+    fontFamily: _defaultFontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.normal,
+    fontStyle: FontStyle.normal,
+    color: _defaultTextColor,
+  );
+
+  static const tableRowValue = Styles.tableRowTitle;
+
+  static const tableRowDetails = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: ColorRes.primaryGreyColor,
+    fontFamily: _defaultFontFamily,
+  );
+
+  static const tableHeaderTitle = TextStyle(
+    fontFamily: _defaultFontFamily,
+    color: ColorRes.darkBlue,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  );
+
+  static const tableHeaderValue = TextStyle(
+    fontFamily: _defaultFontFamily,
+    color: ColorRes.newGameBoardPrimaryTextColor,
+    fontSize: 15,
+    fontWeight: FontWeight.w700,
+  );
+
+  static TextStyle bottomNavBarButtonTitle({bool isSelected = false}) {
+    return TextStyle(
+      color: isSelected
+          ? ColorRes.primaryWhiteColor
+          : ColorRes.primaryWhiteColor.withAlpha(120),
+      fontSize: 8,
+      fontFamily: _defaultFontFamily,
+      fontWeight: FontWeight.normal,
+      fontStyle: FontStyle.normal,
+    );
+  }
 }

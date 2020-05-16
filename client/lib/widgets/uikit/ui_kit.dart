@@ -1,17 +1,15 @@
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
-import 'package:cash_flow/presentation/gameboard/game_events/investment/models/investment_event_data.dart';
-import 'package:cash_flow/presentation/gameboard/game_events/investment/ui/investment_game_event.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event_type.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/debenture_event_data.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/containers/indicators_table.dart';
 import 'package:cash_flow/widgets/events/insurance_game_event.dart';
 import 'package:cash_flow/widgets/events/new_business_game_event.dart';
 import 'package:cash_flow/widgets/events/property_game_event.dart';
 import 'package:cash_flow/widgets/events/sale_business_game_event.dart';
-import 'package:cash_flow/widgets/events/stock_game_event.dart';
 import 'package:cash_flow/widgets/events/windfall_income_game_event.dart';
 import 'package:cash_flow/widgets/inputs/drop_focus.dart';
-import 'package:cash_flow/widgets/progress/game_progress_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -24,8 +22,6 @@ class UiKit extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             _getTables(context),
-            _getGroupDivider(),
-            _getProgressBars(context),
             _getGroupDivider(),
             _getGameEvents(context),
             _getGroupDivider(),
@@ -117,14 +113,6 @@ class UiKit extends StatelessWidget {
     );
   }
 
-  Widget _getProgressBars(BuildContext context) {
-    return const GameProgressBar(
-      name: 'Капитал',
-      currentValue: 2772,
-      maxValue: 50000,
-    );
-  }
-
   Widget _getGameEvents(BuildContext context) {
     return Column(
       children: <Widget>[
@@ -140,13 +128,13 @@ class UiKit extends StatelessWidget {
             saleRate: 14,
           ),
         ),
-        InvestmentGameEvent(
-          GameEvent(
+        DebentureGameEvent(
+          event: GameEvent(
             id: 'event1',
             name: 'Облигации',
             description: 'Облигации',
             type: GameEventType.debenture(),
-            data: InvestmentEventData(
+            data: DebentureEventData(
               currentPrice: 1300,
               nominal: 1000,
               profitabilityPercent: 8,
@@ -166,19 +154,6 @@ class UiKit extends StatelessWidget {
           WindfallIncomeViewModel(
             income: 1000,
           ),
-        ),
-        StockGameEvent(
-          GameEvent(
-              id: 'event1',
-              name: 'Название акции',
-              description: 'Описание акции',
-              type: GameEventType.stock(),
-              data: InvestmentEventData(
-                currentPrice: 1300,
-                nominal: 1000,
-                profitabilityPercent: 8,
-                availableCount: 15,
-              )),
         ),
         const SaleBusinessGameEvent(
           SaleBusinessViewModel(

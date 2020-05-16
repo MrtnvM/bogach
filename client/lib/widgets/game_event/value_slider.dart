@@ -23,7 +23,7 @@ class ValueSlider extends StatelessWidget {
       children: <Widget>[
         Text(
           selectedCount.toString(),
-          style: Styles.body1,
+          style: Styles.bodyBlack,
         ),
         Expanded(
           child: Slider(
@@ -36,7 +36,7 @@ class ValueSlider extends StatelessWidget {
         ),
         Text(
           maxCount.toStringAsFixed(0),
-          style: Styles.body1,
+          style: Styles.bodyBlack,
         ),
       ],
     );

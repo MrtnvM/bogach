@@ -32,7 +32,7 @@ class MonthlyIncomeWidget extends StatelessWidget {
     return RichText(
       text: TextSpan(
         children: [
-          const TextSpan(text: Strings.incomePerMonth, style: Styles.body1),
+          const TextSpan(text: Strings.incomePerMonth, style: Styles.bodyBlack),
           const WidgetSpan(child: SizedBox(width: 6)),
           TextSpan(
             text: (multiplier * assetCount * passiveIncomePerMonth).toPrice(),

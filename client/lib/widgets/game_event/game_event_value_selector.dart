@@ -42,6 +42,7 @@ class GameEventValueSelector extends StatelessWidget {
         ValueSlider(
           selectedCount: selectedCount,
           maxCount: maxCount,
+          minCount: 1,
           onCountChanged: onCountChanged,
         ),
         if (isChangeableType)
@@ -50,6 +51,8 @@ class GameEventValueSelector extends StatelessWidget {
             assetCount: selectedCount,
             passiveIncomePerMonth: passiveIncomePerMonth,
           ),
+        const SizedBox(height: 10),
+        const Divider(),
         _buildBuySellButtons(),
       ],
     );
@@ -60,7 +63,6 @@ class GameEventValueSelector extends StatelessWidget {
       children: <Widget>[
         Expanded(child: _buildAvailableButton()),
         Expanded(child: _buildSelectAllButton()),
-        const Spacer(),
       ],
     );
   }
@@ -97,7 +99,11 @@ class GameEventValueSelector extends StatelessWidget {
   Widget _buildAvailableButton() {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () => onCountChanged(availableCount),
+      onTap: () {
+        if (availableCount > 0) {
+          onCountChanged(availableCount);
+        }
+      },
       child: Container(
         padding: const EdgeInsets.all(8),
         alignment: Alignment.center,
@@ -114,7 +120,7 @@ class GameEventValueSelector extends StatelessWidget {
               const WidgetSpan(child: SizedBox(width: 4)),
               TextSpan(
                 text: availableCount.toStringAsFixed(0),
-                style: Styles.body1,
+                style: Styles.bodyBlack,
               ),
             ],
           ),
