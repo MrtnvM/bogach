@@ -46,7 +46,7 @@ class GameService {
     return firebaseDatabase
         .reference()
         .child('games')
-        .child('2')
+        .child(gameId)
         .onValue
         .map((event) => Game.fromJson(event.snapshot.value));
   }

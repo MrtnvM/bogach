@@ -50,8 +50,10 @@ export class GameService {
       return;
     }
 
-    await handler.validate(event, action);
-    game = await handler.handle(game, event, action, userId);
+    if (action !== undefined) {
+      await handler.validate(event, action);
+      game = await handler.handle(game, event, action, userId);
+    }
 
     const updatedGame = applyGameTransformers(game, [
       new ParticipantAccountsTransformer(),

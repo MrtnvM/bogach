@@ -48,6 +48,6 @@ class SendPlayerMoveAsyncAction extends AsyncAction<void> {
   final String eventId;
 }
 
-class SkipPlayerMoveAction extends Action {}
+class SkipPlayerMoveAction extends AsyncAction<void> {}
 
 class GoToNewMonthAction extends Action {}
