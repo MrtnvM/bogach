@@ -77,6 +77,7 @@ class Strings {
   static const count = 'Количество';
   static const sum = 'Сумма';
   static const stock = 'Акции/Фонды';
+  static const income = 'Непредвиденный доход';
   static const property = 'Недвижимость';
   static const firstPayment = 'Первый взнос';
 
