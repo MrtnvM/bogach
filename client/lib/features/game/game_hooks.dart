@@ -37,11 +37,11 @@ _GameActions useGameActions() {
       },
       sendPlayerAction: (action, eventId) {
         return actionRunner.runAsyncAction(
-          SendPlayerMoveAsyncAction(action, eventId),
+          SendPlayerMoveAsyncAction(playerAction: action, eventId: eventId),
         );
       },
-      skipPlayerAction: () {
-        actionRunner.runAsyncAction(SkipPlayerMoveAction());
+      skipPlayerAction: (eventId) {
+        actionRunner.runAction(SendPlayerMoveAsyncAction(eventId: eventId));
       },
     );
   }, [userId]);
@@ -64,5 +64,5 @@ class _GameActions {
   final void Function(String gameId) startGame;
   final void Function() stopGame;
   final Future<void> Function(PlayerAction, String) sendPlayerAction;
-  final void Function() skipPlayerAction;
+  final void Function(String) skipPlayerAction;
 }

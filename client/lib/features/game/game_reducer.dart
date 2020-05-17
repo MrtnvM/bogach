@@ -65,12 +65,4 @@ final gameStateReducer = Reducer<GameState>()
         orElse: () => s.activeGameState,
       );
     }),
-  )
-  ..on<SkipPlayerMoveAction>(
-    (state, action) => state.rebuild((s) {
-      s.activeGameState = s.activeGameState.maybeMap(
-        gameEvent: (gameEventState) => gameEventState.copyWith(isSent: true),
-        orElse: () => s.activeGameState,
-      );
-    }),
   );
