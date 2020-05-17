@@ -1,4 +1,5 @@
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/debenture_event_data.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/income/models/income_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/model/stock_event_data.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -8,6 +9,7 @@ part 'game_event_type.freezed.dart';
 
 const _debentureEventType = 'debenture-price-changed-event';
 const _stockEventType = 'stock-price-changed-event';
+const _incomeEventType = 'income-event';
 
 @freezed
 abstract class GameEventType implements _$GameEventType {
@@ -15,22 +17,26 @@ abstract class GameEventType implements _$GameEventType {
 
   factory GameEventType.debenture() = DebentureGameEventType;
   factory GameEventType.stock() = StockGameEventType;
+  factory GameEventType.income() = IncomeGameEventType;
 
   String typeTitle() => map(
         debenture: (_) => Strings.investments,
         stock: (_) => Strings.stock,
+        income: (_) => Strings.income,
       );
 
   dynamic parseGameEventData(Map<String, dynamic> json) {
     return map(
       debenture: (_) => DebentureEventData.fromJson(json),
       stock: (_) => StockEventData.fromJson(json),
+      income: (_) => IncomeEventData.fromJson(json),
     );
   }
 
   String jsonValue() => map(
         debenture: (_) => _debentureEventType,
         stock: (_) => _stockEventType,
+        income: (_) => _incomeEventType,
       );
 
   static GameEventType fromJson(String json) {
@@ -40,6 +46,9 @@ abstract class GameEventType implements _$GameEventType {
 
       case _stockEventType:
         return GameEventType.stock();
+
+      case _incomeEventType:
+        return GameEventType.income();
 
       default:
         // TODO(Maxim): Add non fatal error; Remove throwing exception
