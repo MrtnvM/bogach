@@ -40,19 +40,8 @@ Epic<AppState> gameEpic({@required GameService gameService}) {
     });
   });
 
-  final skipPlayerActionEpic = epic((action$, store) {
-    return action$
-        .whereType<SkipPlayerMoveAction>()
-        .where((action) => action.isStarted)
-        .flatMap((action) => gameService
-            .sendPlayerAction(null)
-            .map(action.complete)
-            .onErrorReturnWith(action.fail));
-  });
-
   return combineEpics([
     startGameEpic,
     sendGameEventPlayerActionEpic,
-    skipPlayerActionEpic,
   ]);
 }

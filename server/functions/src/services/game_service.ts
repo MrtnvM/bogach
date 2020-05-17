@@ -52,7 +52,7 @@ export class GameService {
       return;
     }
 
-    if (action !== undefined) {
+    if (action) {
       await handler.validate(event, action);
       game = await handler.handle(game, event, action, userId);
     }
