@@ -350,8 +350,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.0.19"
-      resolved-ref: f6f3e1f77a46007632ac55aef0fd4af7ef00c011
+      ref: "v0.0.21"
+      resolved-ref: "60eb9ddc6d90d212923fda8377e088e6f031821f"
       url: "git://github.com/mobile-dualbootpartners/flutter-platform-core"
     source: git
     version: "0.0.1"
@@ -359,8 +359,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.0.10"
-      resolved-ref: "8a8a41b39d1b37f1abdaf1f062f99ffb49cd0d95"
+      ref: "v0.0.13"
+      resolved-ref: b987da848e7df720fb5a7b5e9c3425413bef2a75
       url: "git://github.com/mobile-dualbootpartners/flutter-platform-loadable"
     source: git
     version: "0.0.3"
@@ -715,11 +715,9 @@ packages:
   redux_epics:
     dependency: transitive
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "67758a8d5e72651f120b05414ce3502a31e3b483"
-      url: "git://github.com/w3ggy/dart_redux_epics"
-    source: git
+      name: redux_epics
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.14.0"
   rxdart:
     dependency: "direct main"
