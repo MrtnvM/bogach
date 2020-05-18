@@ -101,7 +101,10 @@ class BusinessBuyGameEvent extends HookWidget {
       event.id,
     );
 
-    final action = SendPlayerMoveAsyncAction(playerAction, event.id);
+    final action = SendPlayerMoveAsyncAction(
+      playerAction: playerAction,
+      eventId: event.id,
+    );
 
     _actionRunner
         .runAsyncAction(action)
@@ -109,6 +112,6 @@ class BusinessBuyGameEvent extends HookWidget {
   }
 
   void _skipPlayerAction() {
-    _actionRunner.runAction(SkipPlayerMoveAction());
+    //_actionRunner.runAction(SkipPlayerMoveAction());
   }
 }

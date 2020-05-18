@@ -1,5 +1,7 @@
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event_type.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/business/buy/model/business_buy_event_data.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/business/buy/ui/business_buy_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/debenture_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -141,12 +143,20 @@ class UiKit extends StatelessWidget {
             ),
           ),
         ),
-        const NewBusinessGameEvent(
-          NewBusinessViewModel(
-            passiveIncomePerMonth: 0,
-            roi: 0,
-            debt: 0,
-            marketPrice: 900,
+        BusinessBuyGameEvent(
+          GameEvent(
+            id: 'event2',
+            name: 'Можешь купить бизнес',
+            description: 'Купи ларек',
+            type: GameEventType.businessBuy(),
+            data: BusinessBuyEventData(
+                businessId: 'businessId',
+                currentPrice: 150000,
+                fairPrice: 130000,
+                downPayment: 30000,
+                debt: 20000,
+                passiveIncomePerMonth: 1500,
+                sellProbability: 7),
           ),
         ),
         const WindfallIncomeGameEvent(

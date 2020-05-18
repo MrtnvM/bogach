@@ -7,11 +7,6 @@ import 'package:cash_flow/presentation/gameboard/game_events/income/ui/income_ga
 import 'package:cash_flow/presentation/gameboard/game_events/stock/ui/stock_game_event.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
-<<<<<<< HEAD
-import 'package:cash_flow/widgets/progress/account_bar.dart';
-import 'package:cash_flow/widgets/progress/connected_game_progress_bar.dart';
-=======
->>>>>>> develop
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
@@ -53,17 +48,8 @@ class GameEventPage extends HookWidget {
     return event.type.map(
       debenture: (_) => DebentureGameEvent(event: event),
       stock: (_) => StockGameEvent(event),
-<<<<<<< HEAD
       businessBuy: (_) => BusinessBuyGameEvent(event),
-    );
-
-    return Expanded(
-      child: ListView(
-        children: [eventWidget],
-      ),
-=======
       income: (_) => IncomeGameEvent(event),
->>>>>>> develop
     );
   }
 
