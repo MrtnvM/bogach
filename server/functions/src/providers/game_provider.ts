@@ -6,39 +6,39 @@ import { GameTemplate, GameTemplateEntity } from '../models/domain/game/game_tem
 import { UserEntity } from '../models/domain/user';
 import { PossessionStateEntity } from '../models/domain/possession_state';
 import { assertExists } from '../utils/asserts';
+import { createParticipantsGameState } from '../models/domain/game/participant_game_state';
 
 export class GameProvider {
   constructor(private firestore: Firestore, private selector: FirestoreSelector) {}
 
-  async createGame(templateId: GameTemplateEntity.Id, userId: UserEntity.Id): Promise<Game> {
+  async createGame(
+    templateId: GameTemplateEntity.Id,
+    participantsIds: UserEntity.Id[]
+  ): Promise<Game> {
     const template = await this.getGameTemplate(templateId);
 
     if (!template) throw new Error('ERROR: No template on game creation');
-    if (!userId) throw new Error('ERROR: No user ID on game creation');
+    if (!participantsIds?.length) throw new Error('ERROR: No user IDs on game creation');
+
+    const participantsGameState = <T>(value: T) => {
+      return createParticipantsGameState(participantsIds, value);
+    };
 
     const gameId: GameEntity.Id = udid.v4();
     const game: Game = {
       id: gameId,
       name: template.name,
-      type: 'singleplayer',
+      type: participantsIds.length > 0 ? 'multiplayer' : 'singleplayer',
       state: {
         gameStatus: 'players_move',
         monthNumber: 1,
-        participantProgress: {
-          [userId]: 0,
-        },
+        participantProgress: participantsGameState(0),
         winners: {},
       },
-      participants: [userId],
-      possessions: {
-        [userId]: template.possessions,
-      },
-      possessionState: {
-        [userId]: PossessionStateEntity.createEmpty(),
-      },
-      accounts: {
-        [userId]: template.accountState,
-      },
+      participants: participantsIds,
+      possessions: participantsGameState(template.possessions),
+      possessionState: participantsGameState(PossessionStateEntity.createEmpty()),
+      accounts: participantsGameState(template.accountState),
       target: template.target,
       currentEvents: [],
     };
