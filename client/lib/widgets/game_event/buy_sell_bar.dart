@@ -1,6 +1,7 @@
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 
 typedef OnActionChangedCallback = void Function(BuySellAction);
@@ -24,7 +25,6 @@ class BuySellBar extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const SizedBox(width: 8),
         _buildBarButton(
           context,
           action: buyAction,
@@ -47,44 +47,38 @@ class BuySellBar extends StatelessWidget {
     @required BuySellAction selectedAction,
     @required VoidCallback onSelected,
   }) {
-    final theme = Theme.of(context).copyWith(
-      unselectedWidgetColor: action.map(
-        buy: (_) => ColorRes.green,
-        sell: (_) => ColorRes.orange,
-      ),
-    );
-
     final title = action.map(
       buy: (_) => Strings.purchasing,
       sell: (_) => Strings.selling,
     );
 
-    final radioButtonColor = action.map(
-      buy: (_) => ColorRes.green,
-      sell: (_) => ColorRes.orange,
-    );
-
-    return GestureDetector(
-      onTap: onSelected,
-      child: Container(
-        padding: const EdgeInsets.only(right: 16),
-        color: action == selectedAction
-            ? ColorRes.grey2
-            : ColorRes.scaffoldBackground,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Theme(
-              data: theme,
-              child: Radio(
-                value: selectedAction,
-                groupValue: action,
-                onChanged: (_) => onSelected(),
-                activeColor: radioButtonColor,
+    return Expanded(
+      child: GestureDetector(
+        onTap: onSelected,
+        child: Container(
+          height: 50,
+          decoration: BoxDecoration(
+            color: action == selectedAction
+                ? ColorRes.gameEventSelectedTab
+                : ColorRes.gameEventUnselectedTab,
+          ),
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                title,
+                style: Styles.body1.copyWith(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: action == selectedAction
+                      ? FontWeight.w700
+                      : FontWeight.w500,
+                  letterSpacing: 0.6,
+                ),
               ),
-            ),
-            Text(title),
-          ],
+            ],
+          ),
         ),
       ),
     );

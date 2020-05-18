@@ -5,6 +5,7 @@ import { GameContextEntity, GameContext } from '../../models/domain/game/game_co
 export namespace APIRequest {
   export const from = (request: functions.https.Request) => {
     const jsonField = apiUtils.jsonBodyField(request);
+    const optionalJsonField = apiUtils.optionalJsonBodyField(request);
     const queryParameter = apiUtils.queryParams(request);
 
     const getContext = () => {
@@ -24,6 +25,6 @@ export namespace APIRequest {
       return entity;
     };
 
-    return { getContext, parseEntity, jsonField, queryParameter };
+    return { getContext, parseEntity, jsonField, optionalJsonField, queryParameter };
   };
 }

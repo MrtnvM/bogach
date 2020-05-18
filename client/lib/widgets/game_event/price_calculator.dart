@@ -23,19 +23,21 @@ class PriceCalculator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: ColorRes.grey2,
       child: Row(
         children: <Widget>[
-          const Text(Strings.inputCount, style: Styles.body1),
+          const Text(Strings.inputCount, style: Styles.bodyBlack),
           const SizedBox(width: 12),
-          Expanded(child: Text('$count')),
+          Expanded(child: Text('$count', style: Styles.bodyBlack)),
           RichText(
             text: TextSpan(
               children: [
-                const TextSpan(text: ' = ', style: Styles.body1),
+                const TextSpan(text: ' = ', style: Styles.bodyBlack),
                 TextSpan(
                   text: (currentPrice * count.toDouble()).toPrice(),
-                  style: Styles.body2.copyWith(color: ColorRes.orange),
+                  style: Styles.body2.copyWith(
+                    color: ColorRes.orange,
+                    fontSize: 15,
+                  ),
                 ),
               ],
             ),

@@ -4,6 +4,7 @@ import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/features/new_game/new_game_actions.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
+import 'package:cash_flow/models/domain/player_action/player_action.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
@@ -31,7 +32,17 @@ _GameActions useGameActions() {
         actionRunner.runAction(SetGameContextAction(gameContext));
         actionRunner.runAction(StartGameAction(gameContext));
       },
-      stopGame: () => actionRunner.runAction(StopActiveGameAction()),
+      stopGame: () {
+        actionRunner.runAction(StopActiveGameAction());
+      },
+      sendPlayerAction: (action, eventId) {
+        return actionRunner.runAsyncAction(
+          SendPlayerMoveAsyncAction(playerAction: action, eventId: eventId),
+        );
+      },
+      skipPlayerAction: (eventId) {
+        actionRunner.runAction(SendPlayerMoveAsyncAction(eventId: eventId));
+      },
     );
   }, [userId]);
 
@@ -44,10 +55,14 @@ class _GameActions {
     this.createGame,
     this.startGame,
     this.stopGame,
+    this.sendPlayerAction,
+    this.skipPlayerAction,
   });
 
   final void Function() loadGameTemplates;
   final Future<String> Function(String templateId) createGame;
   final void Function(String gameId) startGame;
   final void Function() stopGame;
+  final Future<void> Function(PlayerAction, String) sendPlayerAction;
+  final void Function(String) skipPlayerAction;
 }

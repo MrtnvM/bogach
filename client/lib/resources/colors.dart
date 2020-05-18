@@ -27,6 +27,27 @@ class ColorRes {
   static const darkBlue = Color(0xFF0B4F6C);
   static const green = Color(0xFFFF4CAF50);
   static const orange = Color(0xFFFFA726);
+
+  static const newGameBoardHeaderBackground = Color(0xFFFFE21C);
+  static const newGameBoardPrimaryTextColor = Color(0xFF01BAEF);
+  static const newGameBoardProgressColor = Color(0xFF79C745);
+  static const newGameBoardProgressTextColor = Color(0xFF808080);
+  static const newGameBoardConditionDividerColor = Color(0xFFC4C4C4);
+  static const newGameBoardInvestmentInfoTitleColor = Color(0xFF79C745);
+  static const newGameBoardInvestmentsDividerColor = Color(0xFFEDEDED);
+
+  static const gameEventSelectedTab = Color(0xFF01BAEF);
+  static const gameEventUnselectedTab = Color(0xFF86DCF4);
+
+  static const primaryWhiteColor = Color(0xFFFBFBFF);
+  static const primaryYellowColor = Color(0xFFFFE21C);
+  static const primaryGreyColor = Color(0XFF939393);
+
+  static const primaryBackgroundColor = Color(0xFF0B4F6C);
+  static const levelColor = Color(0xFFFDFDFF);
+  static const progressBarBorderColor = Color(0xFFDADADA);
+  static const gameButtonColor = Color(0xFF01BAEF);
+
   static const grass = Color(0xFF8DC63F);
   static const yellow = Color(0xFFFFE21C);
   static const mainGreen = Color(0xFF08B675);

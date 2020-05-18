@@ -1,3 +1,5 @@
+import 'package:cash_flow/models/domain/game/game/game.dart';
+import 'package:cash_flow/models/domain/game/possession_state/incomes/income.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -30,5 +32,26 @@ String mapTargetTypeToString(TargetType type) {
 
     default:
       return '';
+  }
+}
+
+double mapGameToCurrentTargetValue(Game game, String userId) {
+  switch (game.target.type) {
+    case TargetType.cash:
+      return game.accounts[userId].cash;
+
+    case TargetType.passiveIncome:
+      final totalIncome = game.possessionState[userId].incomes
+          .fold<double>(0.0, (sum, i) => sum + i.value);
+
+      final salary = game.possessionState[userId].incomes
+          .where((i) => i.type == IncomeType.salary)
+          .fold<double>(0.0, (sum, i) => sum + i.value);
+
+      final passiveIncome = totalIncome - salary;
+      return passiveIncome;
+
+    default:
+      return 0;
   }
 }

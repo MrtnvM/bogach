@@ -1,42 +1,45 @@
-import 'package:cash_flow/models/domain/game/account/account.dart';
+import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class AccountBar extends StatelessWidget {
-  const AccountBar({@required this.account}) : assert(account != null);
-
-  final Account account;
+class AccountBar extends HookWidget {
+  const AccountBar({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final userId = useUserId();
+    final account = useCurrentGame((g) => g.accounts[userId]);
+
     return Container(
-      height: 48,
       width: double.infinity,
-      color: ColorRes.gallery,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      height: 35,
+      color: ColorRes.primaryWhiteColor,
+      padding: const EdgeInsets.only(left: 16, right: 16),
       child: Row(
         children: [
           Expanded(
             child: _buildItem(
-              context,
-              title: '${Strings.cashFlow}:',
+              title: '${Strings.cashFlowShort}',
               value: account.cashFlow,
             ),
           ),
+          _buildDivider(),
           Expanded(
             child: _buildItem(
-              context,
-              title: '${Strings.cash}:',
+              title: '${Strings.cash}',
               value: account.cash,
             ),
           ),
+          _buildDivider(),
           Expanded(
             child: _buildItem(
-              context,
-              title: '${Strings.credit}:',
+              title: '${Strings.credit}',
               value: account.credit,
             ),
           ),
@@ -45,25 +48,35 @@ class AccountBar extends StatelessWidget {
     );
   }
 
-  Column _buildItem(BuildContext context, {String title, double value}) {
+  Widget _buildItem({String title, double value}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          title,
-          style: DefaultTextStyle.of(context)
-              .style
-              .copyWith(fontWeight: FontWeight.w300),
+          value.toPrice(),
+          style: Styles.body1.copyWith(
+            color: ColorRes.newGameBoardPrimaryTextColor,
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+          ),
         ),
         const Spacer(),
         Text(
-          value.toPrice(),
-          style: DefaultTextStyle.of(context).style.copyWith(
-                color: ColorRes.darkBlue.withAlpha(230),
-                fontWeight: FontWeight.w600,
-              ),
+          title,
+          style: Styles.body1.copyWith(
+            fontSize: 12,
+            color: Colors.black,
+          ),
         ),
       ],
+    );
+  }
+
+  Widget _buildDivider() {
+    return Container(
+      width: 1,
+      height: 30,
+      color: ColorRes.newGameBoardConditionDividerColor,
     );
   }
 }

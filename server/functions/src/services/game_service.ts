@@ -14,6 +14,7 @@ import {
   UserProgressTransformer,
   applyGameTransformers,
 } from '../transformers/game_transformers';
+import { IncomeHandler } from '../events/income/income_handler';
 
 export class GameService {
   constructor(private gameProvider: GameProvider) {
@@ -26,6 +27,7 @@ export class GameService {
     new DebenturePriceChangedHandler(),
     new StockPriceChangedHandler(),
     new BusinessBuyEventHandler(),
+    new IncomeHandler(),
   ];
 
   // private sellBusinessEventProvider = new BusinessSellEventProvider(
@@ -50,8 +52,10 @@ export class GameService {
       return;
     }
 
-    await handler.validate(event, action);
-    game = await handler.handle(game, event, action, userId);
+    if (action) {
+      await handler.validate(event, action);
+      game = await handler.handle(game, event, action, userId);
+    }
 
     const updatedGame = applyGameTransformers(game, [
       new ParticipantAccountsTransformer(),

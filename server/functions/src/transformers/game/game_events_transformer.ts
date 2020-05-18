@@ -5,6 +5,7 @@ import { Game } from '../../models/domain/game/game';
 import { GameEvent } from '../../models/domain/game/game_event';
 import { DebenturePriceChangedEventGenerator } from '../../events/debenture/debenture_price_changed_event_generator';
 import { StockPriceChangedEventGenerator } from '../../events/stock/stock_price_changed_event_generator';
+import { IncomeEventGenerator } from '../../events/income/income_event_generator';
 
 export class GameEventsTransformer extends GameTransformer {
   constructor(private force: boolean = false) {
@@ -34,6 +35,7 @@ export class GameEventsTransformer extends GameTransformer {
       //BusinessBuyEventGenerator.generate(),
       // ...this.sellBusinessEventProvider.generateBusinessSellEvent(game),
       DebenturePriceChangedEventGenerator.generate(),
+      IncomeEventGenerator.generate(),
     ];
 
     return gameEvents;

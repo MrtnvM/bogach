@@ -9,7 +9,10 @@ extension PriceFormatting on num {
   }
 
   String toPercent() {
-    return '$this%';
+    final formatter = NumberFormat();
+    formatter.minimumFractionDigits = 0;
+    formatter.maximumFractionDigits = 1;
+    return '${formatter.format(this)}%';
   }
 }
 

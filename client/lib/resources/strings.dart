@@ -53,6 +53,12 @@ class Strings {
   static String get notImpelementedAlertMessage =>
       'Кажется ты нашел функционал, над которым мы усердно работаем';
 
+  static String get financesTabTitle => 'Финансы';
+  static String get actionsTabTitle => 'Действия';
+  static String get historyTabTitle => 'История';
+
+  static String get monthlyPayment => 'Ежемесячный платеж:';
+
   static const rubleSymbol = '₽';
   static const title = '';
   static const wordIn = 'в';
@@ -71,6 +77,7 @@ class Strings {
   static const count = 'Количество';
   static const sum = 'Сумма';
   static const stock = 'Акции/Фонды';
+  static const income = 'Непредвиденный доход';
   static const property = 'Недвижимость';
   static const firstPayment = 'Первый взнос';
 
@@ -84,9 +91,9 @@ class Strings {
   static const downPayment = 'Первый взнос:';
   static const debt = 'Долг:';
   static const passiveIncomePerMonth = 'Пассивный доход за месяц:';
-  static const roi = 'ROI за год';
+  static const roi = 'ROI за год:';
   static const saleRate = 'Вероятность продажи';
-  static const takeLoan = 'Взять кредит';
+  static const takeLoan = 'Взять\nкредит';
 
   static const investments = 'Вложения';
   static const currentPrice = 'Текущая цена:';
@@ -97,8 +104,8 @@ class Strings {
   static const available = 'Доступно:';
   static const buyAllAvailable = 'Купить на все';
   static const sellAllAvailable = 'Продать все';
-  static const purchasing = 'Покупка';
-  static const selling = 'Продажа';
+  static const purchasing = 'Купить';
+  static const selling = 'Продать';
   static const inputCount = 'Количество:';
   static const fairPrice = 'Справедливая цена:';
 
@@ -145,6 +152,8 @@ class Strings {
   static String get targetTypePassiveIncome => 'Пассивный доход';
 
   static String get cashFlow => 'Денежный поток';
+
+  static String get cashFlowShort => 'Поток';
 
   static String get credit => 'Кредит';
 

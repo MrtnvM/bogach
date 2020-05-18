@@ -1,6 +1,7 @@
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/models/domain/player_action/player_action.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 class StartGameAction extends Action {
@@ -42,12 +43,13 @@ class SetGameContextAction extends Action {
 }
 
 class SendPlayerMoveAsyncAction extends AsyncAction<void> {
-  SendPlayerMoveAsyncAction(this.playerAction, this.eventId);
+  SendPlayerMoveAsyncAction({
+    this.playerAction,
+    @required this.eventId,
+  });
 
   final PlayerAction playerAction;
   final String eventId;
 }
-
-class SkipPlayerMoveAction extends Action {}
 
 class GoToNewMonthAction extends Action {}

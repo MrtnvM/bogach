@@ -25,3 +25,11 @@ export function jsonBodyField(request: functions.https.Request) {
     return value;
   };
 }
+
+export function optionalJsonBodyField(request: functions.https.Request) {
+  return (path: string) => {
+    const value = request.body[path];
+
+    return value;
+  };
+}
