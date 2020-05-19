@@ -26,11 +26,11 @@ export class GameEventsTransformer extends GameTransformer {
   private generateGameEvents(game: Game): GameEvent[] {
     const gameEvents = [
       DebenturePriceChangedEventGenerator.generate(),
-      //DebenturePriceChangedEventGenerator.generate(),
-      // DebenturePriceChangedEventGenerator.generate(),
+      DebenturePriceChangedEventGenerator.generate(),
+      DebenturePriceChangedEventGenerator.generate(),
       StockPriceChangedEventGenerator.generate(),
-      // StockPriceChangedEventGenerator.generate(),
-      // StockPriceChangedEventGenerator.generate(),
+      StockPriceChangedEventGenerator.generate(),
+      StockPriceChangedEventGenerator.generate(),
       BusinessBuyEventGenerator.generate(),
       BusinessBuyEventGenerator.generate(),
       //BusinessBuyEventGenerator.generate(),
