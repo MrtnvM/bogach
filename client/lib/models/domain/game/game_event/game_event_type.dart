@@ -1,3 +1,4 @@
+import 'package:cash_flow/presentation/gameboard/game_events/business/buy/model/business_buy_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/debenture_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/income/models/income_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/model/stock_event_data.dart';
@@ -9,6 +10,7 @@ part 'game_event_type.freezed.dart';
 
 const _debentureEventType = 'debenture-price-changed-event';
 const _stockEventType = 'stock-price-changed-event';
+const _businessBuyEventType = 'business-buy-event';
 const _incomeEventType = 'income-event';
 
 @freezed
@@ -17,11 +19,13 @@ abstract class GameEventType implements _$GameEventType {
 
   factory GameEventType.debenture() = DebentureGameEventType;
   factory GameEventType.stock() = StockGameEventType;
+  factory GameEventType.businessBuy() = BusinessBuyEventType;
   factory GameEventType.income() = IncomeGameEventType;
 
   String typeTitle() => map(
         debenture: (_) => Strings.investments,
         stock: (_) => Strings.stock,
+        businessBuy: (_) => Strings.business,
         income: (_) => Strings.income,
       );
 
@@ -29,6 +33,7 @@ abstract class GameEventType implements _$GameEventType {
     return map(
       debenture: (_) => DebentureEventData.fromJson(json),
       stock: (_) => StockEventData.fromJson(json),
+      businessBuy: (_) => BusinessBuyEventData.fromJson(json),
       income: (_) => IncomeEventData.fromJson(json),
     );
   }
@@ -36,6 +41,7 @@ abstract class GameEventType implements _$GameEventType {
   String jsonValue() => map(
         debenture: (_) => _debentureEventType,
         stock: (_) => _stockEventType,
+        businessBuy: (_) => _businessBuyEventType,
         income: (_) => _incomeEventType,
       );
 
@@ -46,6 +52,9 @@ abstract class GameEventType implements _$GameEventType {
 
       case _stockEventType:
         return GameEventType.stock();
+
+      case _businessBuyEventType:
+        return GameEventType.businessBuy();
 
       case _incomeEventType:
         return GameEventType.income();

@@ -86,6 +86,7 @@ class Strings {
   static const emptyData = 'Ничего не найдено';
 
   static const propertyName = 'Малая недвижимость';
+  static const description = 'Описание';
   static const offeredPrice = 'Предложенная цена:';
   static const marketPrice = 'Среднерыночная цена:';
   static const downPayment = 'Первый взнос:';
@@ -110,8 +111,6 @@ class Strings {
   static const fairPrice = 'Справедливая цена:';
 
   static const newBusinessTitle = 'Новый бизнесс';
-  static const newBusinessDesc =
-      'Возможность попробовать себя в бизнесе прямых продаж.';
 
   static const windfallIncomeTitle = 'Непредвиденные доходы';
   static const windfallIncomeDesc = 'Получили премию на работе';

@@ -10,6 +10,8 @@ import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'game_events/business/buy/ui/business_buy_game_event.dart';
+import 'game_events/stock/ui/stock_game_event.dart';
 
 class GameEventPage extends HookWidget {
   const GameEventPage({Key key}) : super(key: key);
@@ -46,6 +48,7 @@ class GameEventPage extends HookWidget {
     return event.type.map(
       debenture: (_) => DebentureGameEvent(event: event),
       stock: (_) => StockGameEvent(event),
+      businessBuy: (_) => BusinessBuyGameEvent(event),
       income: (_) => IncomeGameEvent(event),
     );
   }
