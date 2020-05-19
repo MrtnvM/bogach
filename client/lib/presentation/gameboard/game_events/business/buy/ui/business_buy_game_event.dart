@@ -1,117 +1,48 @@
-import 'package:cash_flow/features/game/game_actions.dart';
+import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
-import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/business/buy/model/business_buy_event_data.dart';
-import 'package:cash_flow/presentation/gameboard/game_events/business/buy/model/business_buy_player_action.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
 import 'package:cash_flow/resources/strings.dart';
-import 'package:cash_flow/resources/styles.dart';
-import 'package:cash_flow/utils/extensions/extensions.dart';
-import 'package:cash_flow/widgets/containers/event_buttons.dart';
-import 'package:cash_flow/widgets/containers/info_table.dart';
-import 'package:cash_flow/widgets/events/game_event_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+
+import 'business_game_event_hooks.dart';
 
 class BusinessBuyGameEvent extends HookWidget {
-  BusinessBuyGameEvent(this.event) : assert(event != null);
+  const BusinessBuyGameEvent(this.event) : assert(event != null);
 
   final GameEvent event;
   BusinessBuyEventData get eventData => event.data;
 
-  var _actionRunner;
-
   @override
   Widget build(BuildContext context) {
-    _actionRunner = useActionRunner();
-
-    return GameEventWidget(
-      icon: Icons.business,
-      name: event.name,
-      buttonsState: ButtonsState.normal,
-      buttonsProperties: ButtonsProperties(
-        onConfirm: () => _sendPlayerAction(context),
-        onSkip: _skipPlayerAction,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _buildBody(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfo() {
-    final map = {
-      Strings.debt: eventData.debt.toPrice(),
-      Strings.passiveIncomePerMonth: eventData.passiveIncomePerMonth.toPrice(),
-      Strings.roi: eventData.payback.toPercent(),
-    };
-
-    return InfoTable(map);
-  }
-
-  Widget _buildBody() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _buildTitle(),
-          const SizedBox(height: 8),
-          _buildOfferedPrice(),
-          const SizedBox(height: 8),
-          _buildInfo(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTitle() {
-    return Text(
-      event.description,
-      style: Styles.bodyBlack,
-    );
-  }
-
-  Widget _buildOfferedPrice() {
-    return RichText(
-      text: TextSpan(
-        children: [
-          const TextSpan(text: Strings.offeredPrice, style: Styles.bodyBlack),
-          const WidgetSpan(
-              child: SizedBox(
-            width: 4,
-          )),
-          TextSpan(
-            text: eventData.fairPrice.toPrice(),
-            style: Styles.bodyBlack,
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _sendPlayerAction(BuildContext context) {
-    final playerAction = BusinessBuyPlayerAction(
-      const BuySellAction.buy(),
-      event.id,
+    final buySellAction = useState(const BuySellAction.buy());
+    final infoTableData = useBusinessBuyInfoTableData(event);
+    final gameActions = useGameActions();
+    final sendPlayerAction = useBusinessBuyPlayerActionHandler(
+      event: event,
+      action: buySellAction.value,
     );
 
-    final action = SendPlayerMoveAsyncAction(
-      playerAction: playerAction,
-      eventId: event.id,
+    return Column(
+      children: <Widget>[
+        InfoTable(
+          title: Strings.business,
+          rows: <Widget>[
+            for (final item in infoTableData.entries)
+              TitleRow(title: item.key, value: item.value)
+          ],
+        ),
+        const SizedBox(height: 28),
+        PlayerActionBar(
+          confirm: sendPlayerAction,
+          skip: () => gameActions.skipPlayerAction(event.id),
+        )
+      ],
     );
-
-    _actionRunner
-        .runAsyncAction(action)
-        .catchError((error) => handleError(context: context, exception: error));
-  }
-
-  void _skipPlayerAction() {
-    //_actionRunner.runAction(SkipPlayerMoveAction());
   }
 }

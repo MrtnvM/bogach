@@ -1,7 +1,5 @@
 import * as uuid from 'uuid';
 import * as random from 'random';
-import { Strings } from '../../../resources/strings';
-import { formatPrice } from '../../../utils/currency';
 import { BusinessBuyEvent } from './business_buy_event_event';
 
 // TODO добавить реальные данные
@@ -21,7 +19,7 @@ export namespace BusinessBuyEventGenerator {
     return {
       id: uuid.v4(),
       name: 'Название бизнеса',
-      description: Strings.currentPrice() + formatPrice(currentPrice),
+      description: 'Описание бизнеса',
       type: BusinessBuyEvent.Type,
       data: {
         businessId,
