@@ -3,6 +3,7 @@ import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/expense/ui/expense_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/income/ui/income_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/ui/stock_game_event.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -50,6 +51,7 @@ class GameEventPage extends HookWidget {
       stock: (_) => StockGameEvent(event),
       businessBuy: (_) => BusinessBuyGameEvent(event),
       income: (_) => IncomeGameEvent(event),
+      expense: (_) => ExpenseGameEvent(event),
     );
   }
 

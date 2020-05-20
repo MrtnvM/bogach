@@ -7,7 +7,7 @@ export namespace IncomeEventGenerator {
 
     return {
       id: uuid.v4(),
-      name: 'Название события',
+      name: 'Неожиданно нашли деньги',
       description: 'Что произошло',
       type: IncomeEvent.Type,
       data: {
