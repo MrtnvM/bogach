@@ -78,6 +78,7 @@ class Strings {
   static const sum = 'Сумма';
   static const stock = 'Акции/Фонды';
   static const income = 'Непредвиденный доход';
+  static const expense = 'Непредвиденный убыток';
   static const property = 'Недвижимость';
   static const firstPayment = 'Первый взнос';
 

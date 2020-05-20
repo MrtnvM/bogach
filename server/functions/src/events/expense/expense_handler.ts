@@ -3,10 +3,10 @@ import { Game } from '../../models/domain/game/game';
 import { Account } from '../../models/domain/account';
 import produce from 'immer';
 import { UserEntity } from '../../models/domain/user';
-import { IncomeEvent } from './income_event';
+import { ExpenseEvent } from './expense_event';
 
-type Event = IncomeEvent.Event;
-type Action = IncomeEvent.PlayerAction;
+type Event = ExpenseEvent.Event;
+type Action = ExpenseEvent.PlayerAction;
 
 interface ActionResult {
   readonly newAccountBalance: number;
@@ -14,18 +14,18 @@ interface ActionResult {
 
 interface ActionParameters {
   readonly userAccount: Account;
-  readonly income: number;
+  readonly expense: number;
 }
 
-export class IncomeHandler extends PlayerActionHandler {
+export class ExpenseHandler extends PlayerActionHandler {
   get gameEventType(): string {
-    return IncomeEvent.Type;
+    return ExpenseEvent.Type;
   }
 
   async validate(event: any, action: any): Promise<boolean> {
     try {
-      IncomeEvent.validate(event);
-      IncomeEvent.validateAction(action);
+      ExpenseEvent.validate(event);
+      ExpenseEvent.validateAction(action);
     } catch (error) {
       console.error(error);
       return false;
@@ -35,13 +35,13 @@ export class IncomeHandler extends PlayerActionHandler {
   }
 
   async handle(game: Game, event: Event, action: Action, userId: UserEntity.Id): Promise<Game> {
-    const { income } = event.data;
+    const { expense } = event.data;
 
     const userAccount = game.accounts[userId];
 
     const actionParameters: ActionParameters = {
       userAccount,
-      income,
+      expense,
     };
 
     const actionResult = this.applyAction(actionParameters);
@@ -54,9 +54,9 @@ export class IncomeHandler extends PlayerActionHandler {
   }
 
   applyAction(actionParameters: ActionParameters): ActionResult {
-    const { userAccount, income } = actionParameters;
+    const { userAccount, expense } = actionParameters;
 
-    const newAccountBalance = userAccount.cash + income;
+    const newAccountBalance = userAccount.cash - expense;
 
     const actionResult: ActionResult = {
       newAccountBalance,

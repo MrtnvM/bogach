@@ -3,7 +3,7 @@ import { UserEntity } from '../../models/domain/user';
 import { PossessionsEntity } from '../../models/domain/possessions';
 import { PossessionStateEntity } from '../../models/domain/possession_state';
 import { GameEventEntity } from '../../models/domain/game/game_event';
-import { IncomeEvent } from './income_event';
+import { ExpenseEvent } from './expense_event';
 
 const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
@@ -36,21 +36,21 @@ const game: Game = {
   currentEvents: [],
 };
 
-const incomeEvent = (data: IncomeEvent.Data) => {
-  const event: IncomeEvent.Event = {
+const expenseEvent = (data: ExpenseEvent.Data) => {
+  const event: ExpenseEvent.Event = {
     id: eventId,
-    name: 'IncomeName',
+    name: 'ExpenseName',
     description: 'Description',
-    type: IncomeEvent.Type,
+    type: ExpenseEvent.Type,
     data: data,
   };
 
-  IncomeEvent.validate(event);
+  ExpenseEvent.validate(event);
   return event;
 };
 
-const incomePlayerAction = (action: IncomeEvent.PlayerAction) => {
-  IncomeEvent.validateAction(action);
+const expensePlayerAction = (action: ExpenseEvent.PlayerAction) => {
+  ExpenseEvent.validateAction(action);
   return action;
 };
 
@@ -63,6 +63,6 @@ export const stubs = {
 };
 
 export const utils = {
-  incomeEvent,
-  incomePlayerAction,
+  expenseEvent,
+  expensePlayerAction,
 };
