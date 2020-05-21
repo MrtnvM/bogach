@@ -4,7 +4,17 @@ import 'package:flutter/cupertino.dart';
 const _defaultTextColor = ColorRes.white;
 const _defaultFontFamily = 'Montserrat';
 
+const List<Color> _gradientColors = [ColorRes.mainGreen, ColorRes.lightGreen];
+const List<double> _gradientStops = [0.0, 1.0];
+
 class Styles {
+  static const linearGradient = LinearGradient(
+    colors: _gradientColors,
+    stops: _gradientStops,
+    begin: Alignment(0.4, 0.7),
+    end: Alignment(2.2, 0.4),
+  );
+
   static const subhead = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.normal,

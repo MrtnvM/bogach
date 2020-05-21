@@ -3,17 +3,34 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class UserAvatar extends StatelessWidget {
-  const UserAvatar({@required this.url});
+  const UserAvatar({
+    @required this.url,
+    this.size = 32,
+    this.borderWidth = 2,
+  }) : avatarSize = size - borderWidth;
 
   final String url;
+  final double size;
+  final double borderWidth;
+  final double avatarSize;
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      backgroundImage: url == null
-          ? const AssetImage(Images.defaultAvatar)
-          : NetworkImage(url),
-      radius: 48,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(size),
+        border: Border.all(
+          width: borderWidth,
+          color: Colors.white,
+        ),
+      ),
+      child: CircleAvatar(
+        backgroundImage: url == null
+            ? const AssetImage(Images.defaultAvatar)
+            : NetworkImage(url),
+        backgroundColor: Colors.transparent,
+        radius: avatarSize,
+      ),
     );
   }
 }

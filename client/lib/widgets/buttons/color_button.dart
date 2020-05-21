@@ -30,7 +30,7 @@ class ColorButton extends StatelessWidget {
             fontFamily: 'Montserrat',
             fontSize: 16,
             color: ColorRes.mainBlack,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ),
