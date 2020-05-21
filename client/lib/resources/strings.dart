@@ -18,12 +18,19 @@ class Strings {
 
   static String get registrationTitle => 'Регистрация';
 
+  static String get doYouWantToLogin => 'Хотите авторизироваться?';
+
   static String get emailHasBeenTaken => 'Пользователь с таким e-mail '
       'адресом уже зарегистрирован';
 
   static String get facebook => 'Facebook';
 
   static String get google => 'Google';
+
+  static String get vk => 'Vk';
+
+  static String getAuthButtonTitle(String socialNetwork) =>
+      'Войти через $socialNetwork';
 
   static String get labelRepeatPassword => 'Повторите пароль';
 
