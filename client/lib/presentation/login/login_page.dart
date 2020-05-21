@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
 
   Widget _buildBody(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final paddingTop = screenHeight < 670 ? 50.0 : 80.0;
+    final paddingTop = screenHeight < 670 ? 40.0 : 80.0;
     return SafeArea(
       bottom: false,
       child: SafeArea(
@@ -91,7 +91,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         ),
         const SizedBox(height: 16),
         _buildAppleSignInButton(),
-        const SafeArea(top: false, child: SizedBox(height: 16)),
+        const SizedBox(height: 16),
       ],
     );
   }
@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
           const SizedBox(width: 12),
           Flexible(
             child: Container(
-              height: 44,
+              height: 50,
               child: Center(
                 child: Container(
                   width: 200,
@@ -130,6 +130,19 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         borderRadius: BorderRadius.circular(4.0),
       ),
     );
+  }
+
+  Widget _buildAppleSignInButton() {
+    return FutureBuilder(
+        future: AppleSignIn.isAvailable(),
+        builder: (context, snapShoot) =>
+            snapShoot.hasData && snapShoot.data == true
+                ? _buildSocialMedias(
+                    icon: Images.icApple,
+                    title: Strings.apple,
+                    type: _SocialButtonType.apple,
+                  )
+                : Container());
   }
 
   Widget _buildLaterButton() {
@@ -168,6 +181,9 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         break;
       case _SocialButtonType.google:
         _onLoginViaGoogleClicked();
+        break;
+      case _SocialButtonType.apple:
+        _onLoginViaAppleClicked();
         break;
       case _SocialButtonType.vk:
         // TODO(Vadim): Add vk integration
@@ -261,18 +277,9 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     }
   }
 
-  Widget _buildAppleSignInButton() {
-    return FutureBuilder(
-        future: AppleSignIn.isAvailable(),
-        builder: (context, snapShoot) =>
-            snapShoot.hasData && snapShoot.data == true
-                ? AppleSignInButton(onPressed: _onLoginViaAppleClicked)
-                : Container());
-  }
-
   void _onLoginViaAppleError(error) {
     handleError(context: context, exception: error);
   }
 }
 
-enum _SocialButtonType { fb, google, vk }
+enum _SocialButtonType { fb, google, vk, apple }

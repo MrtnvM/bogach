@@ -29,6 +29,8 @@ class Strings {
 
   static String get vk => 'Vk';
 
+  static String get apple => 'Apple';
+
   static String getAuthButtonTitle(String socialNetwork) =>
       'Войти через $socialNetwork';
 
