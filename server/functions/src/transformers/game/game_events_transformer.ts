@@ -8,6 +8,8 @@ import { StockPriceChangedEventGenerator } from '../../events/stock/stock_price_
 import { IncomeEventGenerator } from '../../events/income/income_event_generator';
 import { BusinessBuyEventGenerator } from '../../events/business/buy/business_buy_event_generator';
 import { ExpenseEventGenerator } from '../../events/expense/expense_event_generator';
+import { BusinessSellEventGenerator } from '../../events/business/sell/business_sell_event_generator';
+import { BusinessSellEventProvider } from '../../services/generation/business_sell_event_provider';
 
 export class GameEventsTransformer extends GameTransformer {
   constructor(private force: boolean = false) {
@@ -25,6 +27,9 @@ export class GameEventsTransformer extends GameTransformer {
   }
 
   private generateGameEvents(game: Game): GameEvent[] {
+    const businessSellEventGenerator = new BusinessSellEventGenerator()
+    const businessSellEventProvider = new BusinessSellEventProvider(businessSellEventGenerator);
+
     const gameEvents = [
       DebenturePriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
@@ -34,8 +39,7 @@ export class GameEventsTransformer extends GameTransformer {
       StockPriceChangedEventGenerator.generate(),
       BusinessBuyEventGenerator.generate(),
       BusinessBuyEventGenerator.generate(),
-      //BusinessBuyEventGenerator.generate(),
-      // ...this.sellBusinessEventProvider.generateBusinessSellEvent(game),
+      ...businessSellEventProvider.generateBusinessSellEvent(game),
       DebenturePriceChangedEventGenerator.generate(),
       IncomeEventGenerator.generate(),
       ExpenseEventGenerator.generate(),
