@@ -10,6 +10,7 @@ abstract class CurrentUser implements Built<CurrentUser, CurrentUserBuilder> {
 
   CurrentUser._();
 
+  @nullable
   String get fullName;
 
   @nullable
