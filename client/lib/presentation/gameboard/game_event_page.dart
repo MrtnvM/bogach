@@ -50,6 +50,7 @@ class GameEventPage extends HookWidget {
       debenture: (_) => DebentureGameEvent(event: event),
       stock: (_) => StockGameEvent(event),
       businessBuy: (_) => BusinessBuyGameEvent(event),
+      businessSell: (_) => BusinessSellGameEvent(event),
       income: (_) => IncomeGameEvent(event),
       expense: (_) => ExpenseGameEvent(event),
     );
