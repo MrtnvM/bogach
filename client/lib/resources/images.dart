@@ -4,6 +4,7 @@ class Images {
   static const icFacebook = 'assets/images/svg/ic_facebook.svg';
   static const icGoogle = 'assets/images/svg/ic_google.svg';
   static const icVk = 'assets/images/svg/ic_vk.svg';
+  static const icApple = 'assets/images/svg/ic_apple.svg';
   static const icBack = 'assets/images/svg/ic_back.svg';
   static const defaultAvatar = 'assets/images/png/default_avatar.png';
   static const money = 'assets/images/png/many_money.png';
