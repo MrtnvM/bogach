@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'game_events/business/buy/ui/business_buy_game_event.dart';
+import 'game_events/business/sell/ui/business_sell_game_event.dart';
 import 'game_events/stock/ui/stock_game_event.dart';
 
 class GameEventPage extends HookWidget {

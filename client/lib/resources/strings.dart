@@ -151,6 +151,7 @@ class Strings {
   static const liabilities = 'Пассивы';
   static const salary = 'Зарплата';
   static const business = 'Бизнес';
+  static const businessSell = 'Продажа бизнеса';
   static const realty = 'Недвижимость';
   static const other = 'Прочие';
 

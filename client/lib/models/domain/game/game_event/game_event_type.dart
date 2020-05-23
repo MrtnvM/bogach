@@ -1,4 +1,5 @@
 import 'package:cash_flow/presentation/gameboard/game_events/business/buy/model/business_buy_event_data.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/business/sell/model/business_sell_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/debenture_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/expense/models/expense_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/income/models/income_event_data.dart';
@@ -31,7 +32,7 @@ abstract class GameEventType implements _$GameEventType {
         debenture: (_) => Strings.investments,
         stock: (_) => Strings.stock,
         businessBuy: (_) => Strings.business,
-        businessSell: (_) => Strings.business,
+        businessSell: (_) => Strings.businessSell,
         income: (_) => Strings.income,
         expense: (_) => Strings.expense,
       );
