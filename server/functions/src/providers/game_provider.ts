@@ -15,20 +15,27 @@ export class GameProvider {
     templateId: GameTemplateEntity.Id,
     participantsIds: UserEntity.Id[]
   ): Promise<Game> {
+    if (!Array.isArray(participantsIds) || !participantsIds || participantsIds.length === 0) {
+      throw new Error('ERROR: No participants IDs on game creation');
+    }
+
     const template = await this.getGameTemplate(templateId);
 
-    if (!template) throw new Error('ERROR: No template on game creation');
-    if (!participantsIds?.length) throw new Error('ERROR: No user IDs on game creation');
+    if (!template) {
+      throw new Error('ERROR: No template on game creation');
+    }
 
     const participantsGameState = <T>(value: T) => {
       return createParticipantsGameState(participantsIds, value);
     };
 
     const gameId: GameEntity.Id = udid.v4();
+    const gameType: GameEntity.Type = participantsIds.length > 0 ? 'multiplayer' : 'singleplayer';
+
     const game: Game = {
       id: gameId,
       name: template.name,
-      type: participantsIds.length > 0 ? 'multiplayer' : 'singleplayer',
+      type: gameType,
       state: {
         gameStatus: 'players_move',
         monthNumber: 1,

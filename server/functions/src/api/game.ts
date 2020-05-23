@@ -22,10 +22,10 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const apiRequest = APIRequest.from(request);
 
     const templateId = apiRequest.jsonField('templateId');
-    const userId = apiRequest.jsonField('userId');
+    const participantsIds = apiRequest.jsonField('participantsIds');
 
     const createNewGame = async () => {
-      const createdGame = await gameProvider.createGame(templateId, [userId]);
+      const createdGame = await gameProvider.createGame(templateId, participantsIds);
 
       const newGame = applyGameTransformers(createdGame, [
         new GameEventsTransformer(true),
