@@ -67,7 +67,7 @@ BusinessesToSellData useBusinessToSellData(GameEvent event) {
           Strings.roi: businessToSell.payback.toPercent(),
         };
 
-        return BusinessToSellData(businessDatadasdsa);
+        return BusinessToSellTableData(businessDatadasdsa);
       }).toList();
 
       return BusinessesToSellData(
@@ -81,6 +81,7 @@ BusinessesToSellData useBusinessToSellData(GameEvent event) {
 VoidCallback useBusinessSellPlayerActionHandler({
   @required GameEvent event,
   @required BuySellAction action,
+  @required String businessId,
 }) {
   final gameActions = useGameActions();
   final context = useContext();
@@ -89,6 +90,7 @@ VoidCallback useBusinessSellPlayerActionHandler({
     final playerAction = BusinessSellPlayerAction(
       const BuySellAction.buy(),
       event.id,
+      businessId,
     );
 
     gameActions

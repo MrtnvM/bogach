@@ -218,4 +218,7 @@ class Strings {
         other: 'месяцев',
       );
   static String get goToMainMenu => 'В главное меню';
+
+  static String get sellBusinessNoChecked => 
+  'Чтобы продать бизнес нужно выбрать какой вы хотите продать';
 }

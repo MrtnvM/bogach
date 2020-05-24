@@ -1,14 +1,14 @@
 import 'package:cash_flow/models/domain/game/possession_state/assets/business/business_asset.dart';
 
 class BusinessesToSellData {
-  BusinessesToSellData(this.businessToSell, this.businessToSellData);
+  BusinessesToSellData(this.businessesAssets, this.businessesTableData);
 
-  final List<BusinessAsset> businessToSell;
-  final List<BusinessToSellData> businessToSellData;
+  final List<BusinessAsset> businessesAssets;
+  final List<BusinessToSellTableData> businessesTableData;
 }
 
-class BusinessToSellData {
-  BusinessToSellData(this.tableData);
+class BusinessToSellTableData {
+  BusinessToSellTableData(this.tableData);
 
   final Map<String, String> tableData;
 }
