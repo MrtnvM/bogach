@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
             children: <Widget>[
               TitleText(Strings.loginTitle),
               _buildLoginForm(),
-              _buildLaterButton(),
+              _buildLaterButton(context),
               _buildImage(),
             ],
           ),
@@ -145,13 +145,14 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
                 : Container());
   }
 
-  Widget _buildLaterButton() {
+  Widget _buildLaterButton(BuildContext context) {
     return Container(
       height: 46,
       width: 200,
       child: ColorButton(
         text: Strings.skip,
-        onPressed: () => _onLoggedIn(null),
+        // TODO(Vadim): Add anonymous auth
+        onPressed: () => showNotImplementedDialog(context),
         color: ColorRes.yellow,
       ),
     );

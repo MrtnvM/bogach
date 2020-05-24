@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class UserAvatar extends StatelessWidget {
   const UserAvatar({
     @required this.url,
-    this.size = 32,
+    this.size = 40,
     this.borderWidth = 2,
   }) : avatarSize = size - borderWidth;
 
@@ -24,6 +24,8 @@ class UserAvatar extends StatelessWidget {
           color: Colors.white,
         ),
       ),
+      width: size,
+      height: size,
       child: CircleAvatar(
         backgroundImage: url == null
             ? const AssetImage(Images.defaultAvatar)
