@@ -350,7 +350,7 @@ packages:
       path: "."
       ref: "v0.0.10"
       resolved-ref: "0e002247ae63739b24fa85f4f537ff226ffc5b0b"
-      url: "git://github.com/mobile-dualbootpartners/flutter-platform-control-panel"
+      url: "git://github.com/Cash-Flow-Team/flutter-platform-control-panel"
     source: git
     version: "0.0.2"
   flutter_platform_core:
@@ -359,25 +359,25 @@ packages:
       path: "."
       ref: "v0.0.21"
       resolved-ref: "60eb9ddc6d90d212923fda8377e088e6f031821f"
-      url: "git://github.com/mobile-dualbootpartners/flutter-platform-core"
+      url: "git://github.com/Cash-Flow-Team/flutter-platform-core"
     source: git
     version: "0.0.1"
   flutter_platform_loadable:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.0.13"
-      resolved-ref: b987da848e7df720fb5a7b5e9c3425413bef2a75
-      url: "git://github.com/mobile-dualbootpartners/flutter-platform-loadable"
+      ref: "v0.0.15"
+      resolved-ref: "78fec93f0406dee3225b18d7799b25fa508f3e50"
+      url: "git://github.com/Cash-Flow-Team/flutter-platform-loadable"
     source: git
-    version: "0.0.3"
+    version: "0.0.15"
   flutter_platform_network:
     dependency: "direct main"
     description:
       path: "."
       ref: "v0.0.15"
       resolved-ref: "7eac15cd5d96003cdc785baec387106630a83a7f"
-      url: "git://github.com/mobile-dualbootpartners/flutter_platform_network"
+      url: "git://github.com/Cash-Flow-Team/flutter_platform_network"
     source: git
     version: "0.0.1"
   flutter_redux:
@@ -856,7 +856,7 @@ packages:
       path: "."
       ref: "v0.0.2"
       resolved-ref: bab0734a92563db7e4ed5fba210a93af3109ea48
-      url: "git://github.com/mobile-dualbootpartners/flutter-ui-kit"
+      url: "git://github.com/Cash-Flow-Team/flutter-ui-kit"
     source: git
     version: "0.0.2"
   url_launcher:

@@ -8,10 +8,9 @@ part 'player_action_request_model.g.dart';
 class PlayerActionRequestModel {
   PlayerActionRequestModel({
     @required this.gameContext,
-    @required this.playerAction,
     @required this.eventId,
+    this.playerAction,
   })  : assert(gameContext != null),
-        assert(playerAction != null),
         assert(eventId != null && eventId != '');
 
   factory PlayerActionRequestModel.fromJson(Map<String, dynamic> json) =>

@@ -51,4 +51,5 @@ class ColorRes {
   static const grass = Color(0xFF8DC63F);
   static const yellow = Color(0xFFFFE21C);
   static const mainGreen = Color(0xFF08B675);
+  static const lightGreen = Color(0xFF80D7B5);
 }

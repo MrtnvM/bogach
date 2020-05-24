@@ -59,7 +59,7 @@ class DebentureGameEvent extends HookWidget {
         const SizedBox(height: 28),
         PlayerActionBar(
           confirm: sendPlayerAction,
-          skip: gameActions.skipPlayerAction,
+          skip: () => gameActions.skipPlayerAction(event.id),
         )
       ],
     );

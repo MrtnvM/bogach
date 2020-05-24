@@ -77,7 +77,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const apiRequest = APIRequest.from(request);
 
-    const action = apiRequest.jsonField('action');
+    const action = apiRequest.optionalJsonField('action');
     const context = apiRequest.jsonField('context');
     const eventId = apiRequest.jsonField('eventId');
 

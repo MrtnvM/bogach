@@ -14,6 +14,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class StockGameEvent extends HookWidget {
   const StockGameEvent(this.event);
+
   final GameEvent event;
 
   StockEventData get eventData => event.data;
@@ -59,7 +60,7 @@ class StockGameEvent extends HookWidget {
         const SizedBox(height: 28),
         PlayerActionBar(
           confirm: sendPlayerAction,
-          skip: gameActions.skipPlayerAction,
+          skip: () => gameActions.skipPlayerAction(event.id),
         )
       ],
     );

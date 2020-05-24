@@ -18,12 +18,21 @@ class Strings {
 
   static String get registrationTitle => 'Регистрация';
 
+  static String get doYouWantToLogin => 'Хотите авторизироваться?';
+
   static String get emailHasBeenTaken => 'Пользователь с таким e-mail '
       'адресом уже зарегистрирован';
 
   static String get facebook => 'Facebook';
 
   static String get google => 'Google';
+
+  static String get vk => 'Vk';
+
+  static String get apple => 'Apple';
+
+  static String getAuthButtonTitle(String socialNetwork) =>
+      'Войти через $socialNetwork';
 
   static String get labelRepeatPassword => 'Повторите пароль';
 
@@ -77,6 +86,8 @@ class Strings {
   static const count = 'Количество';
   static const sum = 'Сумма';
   static const stock = 'Акции/Фонды';
+  static const income = 'Непредвиденный доход';
+  static const expense = 'Непредвиденный убыток';
   static const property = 'Недвижимость';
   static const firstPayment = 'Первый взнос';
 
@@ -85,6 +96,7 @@ class Strings {
   static const emptyData = 'Ничего не найдено';
 
   static const propertyName = 'Малая недвижимость';
+  static const description = 'Описание';
   static const offeredPrice = 'Предложенная цена:';
   static const marketPrice = 'Среднерыночная цена:';
   static const downPayment = 'Первый взнос:';
@@ -109,8 +121,6 @@ class Strings {
   static const fairPrice = 'Справедливая цена:';
 
   static const newBusinessTitle = 'Новый бизнесс';
-  static const newBusinessDesc =
-      'Возможность попробовать себя в бизнесе прямых продаж.';
 
   static const windfallIncomeTitle = 'Непредвиденные доходы';
   static const windfallIncomeDesc = 'Получили премию на работе';

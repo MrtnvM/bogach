@@ -1,5 +1,4 @@
 import 'package:apple_sign_in/apple_sign_in.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/features/login/login_actions.dart';
 import 'package:cash_flow/models/errors/unknown_error.dart';
@@ -10,10 +9,13 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
+import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:cash_flow/widgets/inputs/drop_focus.dart';
+import 'package:cash_flow/widgets/texts/title_test.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_platform_control_panel/control_panel.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -38,20 +40,36 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
   Widget build(BuildContext context) {
     return DropFocus(
       child: Scaffold(
-        backgroundColor: ColorRes.darkBlue,
-        body: _buildBody(),
+        backgroundColor: ColorRes.mainGreen,
+        body: _buildBody(context),
       ),
     );
   }
 
-  void _onLoggedIn(_) {
-    appRouter.startWith(const MainPage());
+  Widget _buildBody(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final paddingTop = screenHeight < 670 ? 40.0 : 80.0;
+    return SafeArea(
+      bottom: false,
+      child: SafeArea(
+        child: Container(
+          padding: EdgeInsets.only(top: paddingTop, left: 32, right: 32),
+          child: Column(
+            children: <Widget>[
+              TitleText(Strings.loginTitle),
+              _buildLoginForm(),
+              _buildLaterButton(context),
+              _buildImage(),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildLoginForm() {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         const SizedBox(height: 24),
         _buildSocialMedias(
@@ -66,8 +84,14 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
           type: _SocialButtonType.google,
         ),
         const SizedBox(height: 16),
+        _buildSocialMedias(
+          icon: Images.icVk,
+          title: Strings.vk,
+          type: _SocialButtonType.vk,
+        ),
+        const SizedBox(height: 16),
         _buildAppleSignInButton(),
-        const SafeArea(top: false, child: SizedBox(height: 16)),
+        const SizedBox(height: 16),
       ],
     );
   }
@@ -77,56 +101,78 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     @required String title,
     @required _SocialButtonType type,
   }) {
-    return OutlineButton(
+    return FlatButton(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           SvgPicture.asset(icon, width: 24, height: 24),
           const SizedBox(width: 12),
           Flexible(
             child: Container(
-              height: 44,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  AutoSizeText(
-                    title.toUpperCase(),
-                    style: Styles.body1.copyWith(color: ColorRes.white),
-                    maxFontSize: Styles.body1.fontSize,
+              height: 50,
+              child: Center(
+                child: Container(
+                  width: 200,
+                  child: Text(
+                    Strings.getAuthButtonTitle(title),
+                    style: Styles.subhead.copyWith(color: ColorRes.mainBlack),
                     maxLines: 1,
                   ),
-                ],
+                ),
               ),
             ),
           ),
         ],
       ),
-      color: ColorRes.grass,
+      color: Colors.white,
       onPressed: () => loginViaSocial(type),
-      borderSide: const BorderSide(color: ColorRes.grass),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(6.0),
+        borderRadius: BorderRadius.circular(4.0),
       ),
-      highlightedBorderColor: ColorRes.grass,
     );
   }
 
-  Widget _buildBody() {
-    return SafeArea(
-      bottom: false,
-      child: LayoutBuilder(builder: (context, constraints) {
-        return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: constraints.maxHeight,
-            ),
-            child: _buildLoginForm(),
-          ),
-        );
-      }),
+  Widget _buildAppleSignInButton() {
+    return FutureBuilder(
+        future: AppleSignIn.isAvailable(),
+        builder: (context, snapShoot) =>
+            snapShoot.hasData && snapShoot.data == true
+                ? _buildSocialMedias(
+                    icon: Images.icApple,
+                    title: Strings.apple,
+                    type: _SocialButtonType.apple,
+                  )
+                : Container());
+  }
+
+  Widget _buildLaterButton(BuildContext context) {
+    return Container(
+      height: 46,
+      width: 200,
+      child: ColorButton(
+        text: Strings.skip,
+        // TODO(Vadim): Add anonymous auth
+        onPressed: () => showNotImplementedDialog(context),
+        color: ColorRes.yellow,
+      ),
     );
+  }
+
+  Widget _buildImage() {
+    return Expanded(
+      child: Center(
+        child: ControlPanelGate(
+          child: Image.asset(
+            Images.authImage,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _onLoggedIn(_) {
+    appRouter.startWith(const MainPage());
   }
 
   void loginViaSocial(_SocialButtonType type) {
@@ -136,6 +182,12 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         break;
       case _SocialButtonType.google:
         _onLoginViaGoogleClicked();
+        break;
+      case _SocialButtonType.apple:
+        _onLoginViaAppleClicked();
+        break;
+      case _SocialButtonType.vk:
+        // TODO(Vadim): Add vk integration
         break;
     }
   }
@@ -226,18 +278,9 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     }
   }
 
-  Widget _buildAppleSignInButton() {
-    return FutureBuilder(
-        future: AppleSignIn.isAvailable(),
-        builder: (context, snapShoot) =>
-            snapShoot.hasData && snapShoot.data == true
-                ? AppleSignInButton(onPressed: _onLoginViaAppleClicked)
-                : Container());
-  }
-
   void _onLoginViaAppleError(error) {
     handleError(context: context, exception: error);
   }
 }
 
-enum _SocialButtonType { fb, google }
+enum _SocialButtonType { fb, google, vk, apple }

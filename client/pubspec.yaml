@@ -46,27 +46,27 @@ dependencies:
 
   flutter_platform_core:
     git:
-      url: git://github.com/mobile-dualbootpartners/flutter-platform-core
+      url: git://github.com/Cash-Flow-Team/flutter-platform-core
       ref: v0.0.21
 
   flutter_platform_network:
     git:
-      url: git://github.com/mobile-dualbootpartners/flutter_platform_network
+      url: git://github.com/Cash-Flow-Team/flutter_platform_network
       ref: v0.0.15
 
   flutter_platform_control_panel:
     git:
-      url: git://github.com/mobile-dualbootpartners/flutter-platform-control-panel
+      url: git://github.com/Cash-Flow-Team/flutter-platform-control-panel
       ref: v0.0.10
 
   flutter_platform_loadable:
     git:
-      url: git://github.com/mobile-dualbootpartners/flutter-platform-loadable
-      ref: v0.0.13
+      url: git://github.com/Cash-Flow-Team/flutter-platform-loadable
+      ref: v0.0.15
 
   uikit:
     git:
-      url: git://github.com/mobile-dualbootpartners/flutter-ui-kit
+      url: git://github.com/Cash-Flow-Team/flutter-ui-kit
       ref: v0.0.2
 
   cupertino_icons: ^0.1.2
@@ -95,5 +95,7 @@ flutter:
         - asset: assets/fonts/Montserrat-Regular.ttf
         - asset: assets/fonts/Montserrat-Bold.ttf
           weight: 700
+        - asset: assets/fonts/Montserrat-SemiBold.ttf
+          weight: 500
         - asset: assets/fonts/Montserrat-Light.ttf
           weight: 200
