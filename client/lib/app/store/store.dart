@@ -46,6 +46,7 @@ Epic<AppState> createRootEpic(
 
   final userService = UserService(
     firebaseAuth: firebaseAuth,
+    firestore: firestore,
   );
 
   final purchaseService = PurchaseService();

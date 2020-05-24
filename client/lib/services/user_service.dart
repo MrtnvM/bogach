@@ -5,13 +5,19 @@ import 'package:cash_flow/models/network/errors/invalid_credentials_exception.da
 import 'package:cash_flow/models/network/errors/invalid_email_exception.dart';
 import 'package:cash_flow/models/network/request/register_request_model.dart';
 import 'package:cash_flow/utils/error_handler.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
 class UserService {
-  UserService({@required this.firebaseAuth}) : assert(firebaseAuth != null);
+  UserService({
+    @required this.firebaseAuth,
+    @required this.firestore,
+  })  : assert(firebaseAuth != null),
+        assert(firestore != null);
 
   final FirebaseAuth firebaseAuth;
+  final Firestore firestore;
 
   Stream<CurrentUser> login({
     @required String email,
@@ -32,6 +38,7 @@ class UserService {
 
     return Stream.fromFuture(logInOperation)
         .map((result) => mapToCurrentUser(result.user))
+        .asyncMap(_saveUserToFirestore)
         .transform(errorHandler);
   }
 
@@ -71,7 +78,8 @@ class UserService {
 
     return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
-        .map((authResponse) => mapToCurrentUser(authResponse.user));
+        .map((authResponse) => mapToCurrentUser(authResponse.user))
+        .asyncMap(_saveUserToFirestore);
   }
 
   Stream<CurrentUser> loginViaGoogle({
@@ -85,7 +93,8 @@ class UserService {
 
     return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
-        .map((authResponse) => mapToCurrentUser(authResponse.user));
+        .map((authResponse) => mapToCurrentUser(authResponse.user))
+        .asyncMap(_saveUserToFirestore);
   }
 
   Stream<CurrentUser> loginViaApple({
@@ -115,7 +124,8 @@ class UserService {
 
     return Stream.fromFuture(future)
         .transform(ErrorHandler())
-        .map(mapToCurrentUser);
+        .map(mapToCurrentUser)
+        .asyncMap(_saveUserToFirestore);
   }
 
   Future<void> signUpUser(RegisterRequestModel model) async {
@@ -128,6 +138,17 @@ class UserService {
     final userUpdateInfo = UserUpdateInfo();
     userUpdateInfo.displayName = model.nickName;
     await user.updateProfile(userUpdateInfo);
+    await _saveUserToFirestore(mapToCurrentUser(user));
+
+    return user;
+  }
+
+  Future<CurrentUser> _saveUserToFirestore(CurrentUser user) async {
+    await firestore.collection('users').document(user.userId).setData({
+      'userId': user.userId,
+      'userName': user.fullName,
+      'avatarUrl': user.avatarUrl,
+    });
 
     return user;
   }
