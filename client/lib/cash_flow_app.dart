@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:flutter_redux/flutter_redux.dart' as redux;
 import 'package:redux/redux.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class CashFlowApp extends StatefulWidget {
   CashFlowApp({
@@ -30,6 +31,14 @@ class CashFlowAppState extends State<CashFlowApp> with ReduxState {
     super.initState();
 
     dispatch(StartListeningPurchasesAction());
+
+    Future.delayed(const Duration(seconds: 2)).then((_) async {
+      final firebaseMessaging = FirebaseMessaging();
+      firebaseMessaging.requestNotificationPermissions();
+
+      final token = await firebaseMessaging.getToken();
+      print('Push token: $token');
+    });
   }
 
   @override
