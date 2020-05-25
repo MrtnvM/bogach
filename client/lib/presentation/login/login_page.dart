@@ -10,12 +10,10 @@ import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/buttons/color_button.dart';
-import 'package:cash_flow/widgets/inputs/drop_focus.dart';
-import 'package:cash_flow/widgets/texts/title_test.dart';
+import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:flutter_platform_control_panel/control_panel.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -38,31 +36,14 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
 
   @override
   Widget build(BuildContext context) {
-    return DropFocus(
-      child: Scaffold(
-        backgroundColor: ColorRes.mainGreen,
-        body: _buildBody(context),
-      ),
-    );
-  }
-
-  Widget _buildBody(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final paddingTop = screenHeight < 670 ? 40.0 : 80.0;
-    return SafeArea(
-      bottom: false,
-      child: SafeArea(
-        child: Container(
-          padding: EdgeInsets.only(top: paddingTop, left: 32, right: 32),
-          child: Column(
-            children: <Widget>[
-              TitleText(Strings.loginTitle),
-              _buildLoginForm(),
-              _buildLaterButton(context),
-              _buildImage(),
-            ],
-          ),
-        ),
+    return CashFlowScaffold(
+      title: Strings.loginTitle,
+      footerImage: Images.authImage,
+      child: Column(
+        children: <Widget>[
+          _buildLoginForm(),
+          _buildLaterButton(context),
+        ],
       ),
     );
   }
@@ -71,7 +52,6 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const SizedBox(height: 24),
         _buildSocialMedias(
           icon: Images.icFacebook,
           title: Strings.facebook,
@@ -109,7 +89,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
           const SizedBox(width: 12),
           Flexible(
             child: Container(
-              height: 50,
+              height: 44,
               child: Center(
                 child: Container(
                   width: 200,
@@ -134,15 +114,16 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
 
   Widget _buildAppleSignInButton() {
     return FutureBuilder(
-        future: AppleSignIn.isAvailable(),
-        builder: (context, snapShoot) =>
-            snapShoot.hasData && snapShoot.data == true
-                ? _buildSocialMedias(
-                    icon: Images.icApple,
-                    title: Strings.apple,
-                    type: _SocialButtonType.apple,
-                  )
-                : Container());
+      future: AppleSignIn.isAvailable(),
+      builder: (context, snapShoot) =>
+          snapShoot.hasData && snapShoot.data == true
+              ? _buildSocialMedias(
+                  icon: Images.icApple,
+                  title: Strings.apple,
+                  type: _SocialButtonType.apple,
+                )
+              : Container(),
+    );
   }
 
   Widget _buildLaterButton(BuildContext context) {
@@ -158,19 +139,6 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     );
   }
 
-  Widget _buildImage() {
-    return Expanded(
-      child: Center(
-        child: ControlPanelGate(
-          child: Image.asset(
-            Images.authImage,
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-    );
-  }
-
   void _onLoggedIn(_) {
     appRouter.startWith(const MainPage());
   }
@@ -180,14 +148,18 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
       case _SocialButtonType.fb:
         _onLoginViaFacebookPressed();
         break;
+
       case _SocialButtonType.google:
         _onLoginViaGoogleClicked();
         break;
+
       case _SocialButtonType.apple:
         _onLoginViaAppleClicked();
         break;
+
       case _SocialButtonType.vk:
         // TODO(Vadim): Add vk integration
+        showNotImplementedDialog(context);
         break;
     }
   }
@@ -200,9 +172,11 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
       case FacebookLoginStatus.loggedIn:
         _loginViaFacebook(result.accessToken.token);
         break;
+
       case FacebookLoginStatus.error:
         handleError(context: context, exception: UnknownErrorException());
         break;
+
       default:
         break;
     }
@@ -269,6 +243,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
           ..onSuccess(_onLoggedIn)
           ..onError(_onLoginViaAppleError));
         break;
+
       case AuthorizationStatus.error:
         handleError(context: context, exception: UnknownErrorException());
         break;
