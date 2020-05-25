@@ -1,5 +1,5 @@
 import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
-import 'package:cash_flow/models/domain/user/current_user.dart';
+import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/models/network/errors/email_has_been_taken_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_email_exception.dart';
@@ -19,11 +19,11 @@ class UserService {
   final FirebaseAuth firebaseAuth;
   final Firestore firestore;
 
-  Stream<CurrentUser> login({
+  Stream<UserProfile> login({
     @required String email,
     @required String password,
   }) {
-    final errorHandler = ErrorHandler<CurrentUser>((code) {
+    final errorHandler = ErrorHandler<UserProfile>((code) {
       if (code == 'ERROR_USER_NOT_FOUND') {
         return const InvalidCredentialsException();
       }
@@ -71,7 +71,7 @@ class UserService {
         .transform(errorHandler);
   }
 
-  Stream<CurrentUser> loginViaFacebook({@required String token}) {
+  Stream<UserProfile> loginViaFacebook({@required String token}) {
     final authCredential = FacebookAuthProvider.getCredential(
       accessToken: token,
     );
@@ -82,7 +82,7 @@ class UserService {
         .asyncMap(_saveUserToFirestore);
   }
 
-  Stream<CurrentUser> loginViaGoogle({
+  Stream<UserProfile> loginViaGoogle({
     @required String accessToken,
     @required String idToken,
   }) {
@@ -97,7 +97,7 @@ class UserService {
         .asyncMap(_saveUserToFirestore);
   }
 
-  Stream<CurrentUser> loginViaApple({
+  Stream<UserProfile> loginViaApple({
     @required String accessToken,
     @required String idToken,
     @required String firstName,
@@ -143,7 +143,7 @@ class UserService {
     return user;
   }
 
-  Future<CurrentUser> _saveUserToFirestore(CurrentUser user) async {
+  Future<UserProfile> _saveUserToFirestore(UserProfile user) async {
     await firestore.collection('users').document(user.userId).setData({
       'userId': user.userId,
       'userName': user.fullName,

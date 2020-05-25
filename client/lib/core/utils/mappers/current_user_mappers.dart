@@ -1,10 +1,10 @@
-import 'package:cash_flow/models/domain/user/current_user.dart';
+import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-CurrentUser mapToCurrentUser(FirebaseUser user) {
+UserProfile mapToCurrentUser(FirebaseUser user) {
   return user == null
       ? null
-      : CurrentUser((b) => b
+      : UserProfile((b) => b
         ..userId = user.uid
         ..fullName = user.displayName
         ..avatarUrl = user.photoUrl);

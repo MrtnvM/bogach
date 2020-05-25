@@ -1,5 +1,5 @@
 import 'package:cash_flow/app/state_hooks.dart';
-import 'package:cash_flow/models/domain/user/current_user.dart';
+import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/presentation/continue_game/continue_game_page.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
@@ -56,7 +56,7 @@ class MainPage extends HookWidget {
     );
   }
 
-  Widget _buildAuthButton(CurrentUser user) {
+  Widget _buildAuthButton(UserProfile user) {
     if (user == null) {
       return TextButton(
         onPressed: _goToLogin,
