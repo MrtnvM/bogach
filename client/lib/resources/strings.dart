@@ -219,6 +219,6 @@ class Strings {
       );
   static String get goToMainMenu => 'В главное меню';
 
-  static String get sellBusinessNoChecked => 
-  'Необхожимл выбрать бизнес для продажи';
+  static String get sellBusinessNoChecked =>
+      'Необходимо выбрать бизнес для продажи';
 }

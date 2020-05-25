@@ -38,25 +38,25 @@ BusinessesToSellData useBusinessToSellData(GameEvent event) {
 
     if (businessesToSell == null || businessesToSell.isEmpty) {
       return BusinessesToSellData(null);
-    } else {
-      final businessesToSellData = businessesToSell.map((businessToSell) {
-        final businessDatadasdsa = {
-          Strings.offeredPrice: eventData.currentPrice.toPrice(),
-          Strings.fairPrice: businessToSell.fairPrice.toPrice(),
-          Strings.downPayment: businessToSell.downPayment.toPrice(),
-          Strings.passiveIncomePerMonth:
-              businessToSell.passiveIncomePerMonth.toPrice(),
-          Strings.roi: businessToSell.payback.toPercent(),
-        };
-
-        return BusinessToSellTableData(
-          businessId: businessToSell.id,
-          tableData: businessDatadasdsa,
-        );
-      }).toList();
-
-      return BusinessesToSellData(businessesToSellData);
     }
+    
+    final businessesToSellData = businessesToSell.map((businessToSell) {
+      final businessDatadasdsa = {
+        Strings.offeredPrice: eventData.currentPrice.toPrice(),
+        Strings.fairPrice: businessToSell.fairPrice.toPrice(),
+        Strings.downPayment: businessToSell.downPayment.toPrice(),
+        Strings.passiveIncomePerMonth:
+            businessToSell.passiveIncomePerMonth.toPrice(),
+        Strings.roi: businessToSell.payback.toPercent(),
+      };
+
+      return BusinessToSellTableData(
+        businessId: businessToSell.id,
+        tableData: businessDatadasdsa,
+      );
+    }).toList();
+
+    return BusinessesToSellData(businessesToSellData);
   }, [event]);
 }
 

@@ -41,13 +41,13 @@ class BusinessSellGameEvent extends HookWidget {
           ],
         ),
         const SizedBox(height: 28),
-        BusinessesToSellGameEvent(event, (businessId) {
+        BusinessesDescriptionToSellGameEvent(event, (businessId) {
           checkedBusinessId.value = businessId;
         }),
         const SizedBox(height: 28),
         PlayerActionBar(
           confirm: () {
-            if (checkedBusinessId == null) {
+            if (checkedBusinessId.value == null) {
               showErrorDialog(
                 context: context,
                 message: Strings.sellBusinessNoChecked,
