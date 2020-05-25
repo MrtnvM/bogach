@@ -1,5 +1,4 @@
 import 'package:cash_flow/resources/colors.dart';
-import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/widgets/avatar/user_widget.dart';
 import 'package:cash_flow/widgets/inputs/drop_focus.dart';
 import 'package:cash_flow/widgets/texts/title_test.dart';
@@ -76,7 +75,7 @@ class CashFlowScaffold extends StatelessWidget {
         child: ControlPanelGate(
           child: Center(
             child: Image.asset(
-              Images.authImage,
+              footerImage,
               fit: BoxFit.cover,
             ),
           ),

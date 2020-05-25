@@ -6,6 +6,7 @@ class Images {
   static const icVk = 'assets/images/svg/ic_vk.svg';
   static const icApple = 'assets/images/svg/ic_apple.svg';
   static const icBack = 'assets/images/svg/ic_back.svg';
+  static const icCourier = 'assets/images/svg/ic_courier.svg';
   static const defaultAvatar = 'assets/images/png/default_avatar.png';
   static const money = 'assets/images/png/many_money.png';
   static const homeImage = 'assets/images/png/home_image.png';
