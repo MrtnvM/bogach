@@ -33,35 +33,40 @@ class BusinessesToSellGameEvent extends HookWidget {
   ) {
     final widgets = <Widget>[];
 
+    if (businessesToSellData.businessesTableData == null) {
+      return widgets;
+    }
+
     for (var i = 0; i < businessesToSellData.businessesTableData.length; i++) {
       final businessTableData = businessesToSellData.businessesTableData[i];
-      final businessAsset = businessesToSellData.businessesAssets[i];
-      final businessId = businessAsset.id;
-      final isChecked =
+      final businessId = businessTableData.businessId;
+      final onlyOneBusiness =
+          businessesToSellData.businessesTableData.length == 1;
+      final businessChecked =
           checkedItemId != null && checkedItemId.value == businessId;
+      final isChecked = businessChecked || onlyOneBusiness;
 
-      final businessInfo = Column(
-        children: <Widget>[
-          Wrap(children: <Widget>[
-            Checkbox(
-              value: isChecked,
-              onChanged: (value) {
-                if (value) {
-                  checkedItemId.value = businessId;
-                  onItemCheck.call(businessId);
-                }
-              },
+      final businessInfo = Column(children: <Widget>[
+        InfoTable(
+          title: Strings.businessSell,
+          rows: <Widget>[
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Checkbox(
+                value: isChecked,
+                onChanged: (value) {
+                  if (value) {
+                    checkedItemId.value = businessId;
+                    onItemCheck.call(businessId);
+                  }
+                },
+              ),
             ),
-            InfoTable(
-              title: Strings.businessSell,
-              rows: <Widget>[
-                for (final item in businessTableData.tableData.entries)
-                  TitleRow(title: item.key, value: item.value)
-              ],
-            ),
-          ])
-        ],
-      );
+            for (final item in businessTableData.tableData.entries)
+              TitleRow(title: item.key, value: item.value)
+          ],
+        ),
+      ]);
 
       widgets.add(businessInfo);
     }

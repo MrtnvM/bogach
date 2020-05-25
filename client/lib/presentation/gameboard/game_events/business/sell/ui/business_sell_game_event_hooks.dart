@@ -16,28 +16,10 @@ import 'business_sell_game_event_data.dart';
 
 Map<String, String> useBusinessSellInfoTableData(GameEvent event) {
   return useMemoized(() {
-    final userId = useUserId();
-    final assets = useCurrentGame((g) => g.possessionState[userId].assets);
-
-    final BusinessSellEventData eventData = event.data;
-
-    final businessesToSell = assets
-        .where((asset) => asset.type == AssetType.business)
-        .map((asset) => asset as BusinessAsset)
-        .where((asset) => asset.id == eventData.businessId);
-
-    if (businessesToSell == null || businessesToSell.isEmpty) {
-      final data = {
-        Strings.description: 'sell' + event.description + "но у вас нихуя нет",
-      };
-      return data;
-    } else {
-      final data = {
-        Strings.description: 'sell' + event.description,
-      };
-
-      return data;
-    }
+    final data = {
+      Strings.description: event.description,
+    };
+    return data;
   }, [event]);
 }
 
@@ -55,7 +37,7 @@ BusinessesToSellData useBusinessToSellData(GameEvent event) {
         .toList();
 
     if (businessesToSell == null || businessesToSell.isEmpty) {
-      return BusinessesToSellData(null, null);
+      return BusinessesToSellData(null);
     } else {
       final businessesToSellData = businessesToSell.map((businessToSell) {
         final businessDatadasdsa = {
@@ -67,13 +49,13 @@ BusinessesToSellData useBusinessToSellData(GameEvent event) {
           Strings.roi: businessToSell.payback.toPercent(),
         };
 
-        return BusinessToSellTableData(businessDatadasdsa);
+        return BusinessToSellTableData(
+          businessId: businessToSell.id,
+          tableData: businessDatadasdsa,
+        );
       }).toList();
 
-      return BusinessesToSellData(
-        businessesToSell,
-        businessesToSellData,
-      );
+      return BusinessesToSellData(businessesToSellData);
     }
   }, [event]);
 }
