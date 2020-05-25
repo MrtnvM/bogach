@@ -44,7 +44,6 @@ class CashFlowScaffold extends StatelessWidget {
                   Expanded(child: child)
                 else ...[
                   child,
-                  const SizedBox(height: 24),
                   _buildFooterImage(),
                 ]
               ],
@@ -57,7 +56,7 @@ class CashFlowScaffold extends StatelessWidget {
 
   Widget _buildHeader() {
     return Container(
-      height: 150,
+      height: 120,
       padding: const EdgeInsets.only(top: 36),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,9 +74,11 @@ class CashFlowScaffold extends StatelessWidget {
         constraints: const BoxConstraints(maxHeight: 220),
         alignment: Alignment.bottomCenter,
         child: ControlPanelGate(
-          child: Image.asset(
-            Images.authImage,
-            fit: BoxFit.cover,
+          child: Center(
+            child: Image.asset(
+              Images.authImage,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),
