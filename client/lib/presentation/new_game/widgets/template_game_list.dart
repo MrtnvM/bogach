@@ -14,10 +14,10 @@ class TemplateGameList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final requestState = useGlobalState(
-      (s) => s.newGameState.getGameTemplatesRequestState,
+      (s) => s.newGame.getGameTemplatesRequestState,
     );
 
-    final gameTemplates = useGlobalState((s) => s.newGameState.gameTemplates);
+    final gameTemplates = useGlobalState((s) => s.newGame.gameTemplates);
     final gameActions = useGameActions();
 
     final showCreateGameErrorAlert = useWarningAlert(

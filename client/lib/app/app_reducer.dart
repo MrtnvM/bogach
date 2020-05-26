@@ -10,12 +10,9 @@ class AppReducer extends Reducer<AppState> {
   AppState reduce(AppState state, Action action) {
     return state.rebuild((s) {
       s.login = loginReducer.reduce(state.login, action).toBuilder();
-      s.gameState =
-          gameStateReducer.reduce(state.gameState, action).toBuilder();
-      s.newGameState =
-          newGameReducer.reduce(state.newGameState, action).toBuilder();
-      s.purchaseState =
-          purchaseReducer.reduce(state.purchaseState, action).toBuilder();
+      s.game = gameReducer.reduce(state.game, action).toBuilder();
+      s.newGame = newGameReducer.reduce(state.newGame, action).toBuilder();
+      s.purchase = purchaseReducer.reduce(state.purchase, action).toBuilder();
     });
   }
 }

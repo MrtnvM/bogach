@@ -4,7 +4,7 @@ import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
-final gameStateReducer = Reducer<GameState>()
+final gameReducer = Reducer<GameState>()
   ..on<StartGameAction>(
     (state, action) => state.rebuild(
       (s) => s

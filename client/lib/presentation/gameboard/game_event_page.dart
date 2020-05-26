@@ -19,7 +19,7 @@ class GameEventPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeGameState = useGlobalState((s) => s.gameState.activeGameState);
+    final activeGameState = useGlobalState((s) => s.game.activeGameState);
     final gameEvents = useCurrentGame((g) => g.currentEvents);
     final actionRunner = useActionRunner();
 

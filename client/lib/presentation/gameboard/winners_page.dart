@@ -9,7 +9,7 @@ class WinnersPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final monthNumber = useGlobalState(
-      (s) => s.gameState.currentGame.state.monthNumber,
+      (s) => s.game.currentGame.state.monthNumber,
     );
 
     return Center(
