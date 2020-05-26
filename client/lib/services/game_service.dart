@@ -41,16 +41,7 @@ class GameService {
         .snapshots()
         .map((snapshot) => Game.fromJson(snapshot.data));
   }
-
-  Stream<Game> getGameFromRealtimeDb(String gameId) {
-    return firebaseDatabase
-        .reference()
-        .child('games')
-        .child(gameId)
-        .onValue
-        .map((event) => Game.fromJson(event.snapshot.value));
-  }
-
+  
   Future<List<Game>> getUserGames(String userId) async {
     final gameDocs = await firestore
         .collection('games')

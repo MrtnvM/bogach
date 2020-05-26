@@ -8,10 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class BusinessesDescriptionToSellGameEvent extends HookWidget {
-  BusinessesDescriptionToSellGameEvent(
-    this.event,
-    this.onItemCheck,
-  )   : assert(event != null),
+  BusinessesDescriptionToSellGameEvent({
+    @required this.event,
+    @required this.onItemCheck,
+  })  : assert(event != null),
         assert(onItemCheck != null);
 
   final GameEvent event;
@@ -42,9 +42,12 @@ class BusinessesDescriptionToSellGameEvent extends HookWidget {
       final businessId = businessTableData.businessId;
       final onlyOneBusiness =
           businessesToSellData.businessesTableData.length == 1;
-      final businessChecked =
-          checkedItemId != null && checkedItemId.value == businessId;
+      final businessChecked = checkedItemId.value == businessId;
       final isChecked = businessChecked || onlyOneBusiness;
+
+      if (onlyOneBusiness) {
+        selectBusiness(checkedItemId, businessId);
+      }
 
       final businessInfo = Column(children: <Widget>[
         InfoTable(
@@ -56,8 +59,7 @@ class BusinessesDescriptionToSellGameEvent extends HookWidget {
                 value: isChecked,
                 onChanged: (value) {
                   if (value) {
-                    checkedItemId.value = businessId;
-                    onItemCheck.call(businessId);
+                    selectBusiness(checkedItemId, businessId);
                   }
                 },
               ),
@@ -71,5 +73,10 @@ class BusinessesDescriptionToSellGameEvent extends HookWidget {
       widgets.add(businessInfo);
     }
     return widgets;
+  }
+
+  void selectBusiness(ValueNotifier checkedItemId, String businessId) {
+    checkedItemId.value = businessId;
+    onItemCheck.call(businessId);
   }
 }

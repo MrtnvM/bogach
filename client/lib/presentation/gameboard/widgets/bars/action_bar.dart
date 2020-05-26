@@ -33,14 +33,13 @@ class PlayerActionBar extends StatelessWidget {
             ),
             const SizedBox(width: 9),
           ],
-          if (confirm != null)
-            Expanded(
-              child: _ActionButton(
-                color: Colors.green,
-                text: Strings.confirm,
-                onPressed: confirm,
-              ),
+          Expanded(
+            child: _ActionButton(
+              color: Colors.green,
+              text: Strings.confirm,
+              onPressed: confirm,
             ),
+          ),
           if (skip != null) ...[
             const SizedBox(width: 9),
             Expanded(

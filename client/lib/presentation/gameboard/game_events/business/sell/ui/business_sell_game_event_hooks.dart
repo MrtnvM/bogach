@@ -39,9 +39,9 @@ BusinessesToSellData useBusinessToSellData(GameEvent event) {
     if (businessesToSell == null || businessesToSell.isEmpty) {
       return BusinessesToSellData(null);
     }
-    
+
     final businessesToSellData = businessesToSell.map((businessToSell) {
-      final businessDatadasdsa = {
+      final businessData = {
         Strings.offeredPrice: eventData.currentPrice.toPrice(),
         Strings.fairPrice: businessToSell.fairPrice.toPrice(),
         Strings.downPayment: businessToSell.downPayment.toPrice(),
@@ -52,7 +52,7 @@ BusinessesToSellData useBusinessToSellData(GameEvent event) {
 
       return BusinessToSellTableData(
         businessId: businessToSell.id,
-        tableData: businessDatadasdsa,
+        tableData: businessData,
       );
     }).toList();
 
@@ -62,7 +62,6 @@ BusinessesToSellData useBusinessToSellData(GameEvent event) {
 
 VoidCallback useBusinessSellPlayerActionHandler({
   @required GameEvent event,
-  @required BuySellAction action,
   @required String businessId,
 }) {
   final gameActions = useGameActions();
@@ -70,7 +69,7 @@ VoidCallback useBusinessSellPlayerActionHandler({
 
   return () {
     final playerAction = BusinessSellPlayerAction(
-      const BuySellAction.buy(),
+      const BuySellAction.sell(),
       event.id,
       businessId,
     );

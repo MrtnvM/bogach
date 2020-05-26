@@ -21,13 +21,11 @@ class BusinessSellGameEvent extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buySellAction = useState(const BuySellAction.buy());
     final infoTableData = useBusinessSellInfoTableData(event);
     final gameActions = useGameActions();
     final checkedBusinessId = useState<String>();
     final sendPlayerAction = useBusinessSellPlayerActionHandler(
       event: event,
-      action: buySellAction.value,
       businessId: checkedBusinessId.value,
     );
 
@@ -41,9 +39,12 @@ class BusinessSellGameEvent extends HookWidget {
           ],
         ),
         const SizedBox(height: 28),
-        BusinessesDescriptionToSellGameEvent(event, (businessId) {
-          checkedBusinessId.value = businessId;
-        }),
+        BusinessesDescriptionToSellGameEvent(
+          event: event,
+          onItemCheck: (businessId) {
+            checkedBusinessId.value = businessId;
+          },
+        ),
         const SizedBox(height: 28),
         PlayerActionBar(
           confirm: () {

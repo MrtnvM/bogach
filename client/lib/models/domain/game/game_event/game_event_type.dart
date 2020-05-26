@@ -68,7 +68,7 @@ abstract class GameEventType implements _$GameEventType {
       case _businessBuyEventType:
         return GameEventType.businessBuy();
 
-        case _businessSellEventType:
+      case _businessSellEventType:
         return GameEventType.businessSell();
 
       case _incomeEventType:
