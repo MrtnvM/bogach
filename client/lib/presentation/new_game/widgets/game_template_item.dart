@@ -1,9 +1,11 @@
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
+import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class GameTemplateItem extends StatelessWidget {
   const GameTemplateItem({
@@ -24,7 +26,12 @@ class GameTemplateItem extends StatelessWidget {
       onTap: () => onTemplateSelected(gameTemplate),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        padding: const EdgeInsets.only(
+          top: 14,
+          bottom: 22,
+          left: 16,
+          right: 16,
+        ),
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -34,12 +41,24 @@ class GameTemplateItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              '${gameTemplate.name} — '
-              '${gameTemplate.accountState.cash.round().toPrice()}',
-              style: Styles.bodyBlackBold,
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    '${gameTemplate.name} — '
+                    '${gameTemplate.accountState.cash.round().toPrice()}',
+                    style: Styles.bodyBlackBold,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                SvgPicture.asset(
+                  Images.icCourier,
+                  height: 38,
+                  width: 38,
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 8),
             Text(
               '${Strings.reach} $targetTitle '
               '${Strings.wordIn} $targetValue',
