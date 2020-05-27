@@ -219,4 +219,9 @@ class Strings {
         other: 'месяцев',
       );
   static String get goToMainMenu => 'В главное меню';
+
+  // Multiplayer
+  static String get selectPlayers => 'Выбрете игроков';
+  static String get selectedPlayers => 'Выбранные игроки';
+  static String get allPlayers => 'Все игроки';
 }

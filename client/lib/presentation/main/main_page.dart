@@ -3,6 +3,7 @@ import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/presentation/continue_game/continue_game_page.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
+import 'package:cash_flow/presentation/multiplayer/create_room_page.dart';
 import 'package:cash_flow/presentation/new_game/single_game_page.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/resources/images.dart';
@@ -43,7 +44,7 @@ class MainPage extends HookWidget {
         ),
         const SizedBox(height: 24),
         ColorButton(
-          onPressed: () => showNotImplementedDialog(context),
+          onPressed: () => appRouter.goTo(CreateRoomPage()),
           text: Strings.multiPlayerGame,
         ),
         const SizedBox(height: 24),

@@ -1,5 +1,6 @@
 import 'package:cash_flow/features/game/game_epic.dart';
 import 'package:cash_flow/features/login/login_epic.dart';
+import 'package:cash_flow/features/multiplayer/multiplayer_epics.dart';
 import 'package:cash_flow/features/new_game/new_game_epic.dart';
 import 'package:cash_flow/features/purchase/purchase_epic.dart';
 import 'package:cash_flow/services/game_service.dart';
@@ -20,5 +21,6 @@ Epic<AppState> rootEpic({
     newGameEpic(gameService: gameService),
     gameEpic(gameService: gameService),
     purchaseEpic(purchaseService: purchaseService),
+    multiplayerEpic(userService: userService),
   ]);
 }
