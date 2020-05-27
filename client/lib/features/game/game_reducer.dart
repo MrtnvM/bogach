@@ -60,18 +60,9 @@ final gameStateReducer = Reducer<GameState>()
   )
   ..on<SendPlayerMoveAsyncAction>(
     (state, action) => state.rebuild((s) {
-      action.onStart(() {
-        s.activeGameState = s.activeGameState.maybeMap(
-          gameEvent: (gameEventState) => gameEventState.copyWith(isSent: true),
-          orElse: () => s.activeGameState,
-        );
-      });
-
-      action.onError((error) {
-        s.activeGameState = s.activeGameState.maybeMap(
-          gameEvent: (gameEventState) => gameEventState.copyWith(isSent: false),
-          orElse: () => s.activeGameState,
-        );
-      });
+      s.activeGameState = s.activeGameState.maybeMap(
+        gameEvent: (gameEventState) => gameEventState.copyWith(isSent: true),
+        orElse: () => s.activeGameState,
+      );
     }),
   );

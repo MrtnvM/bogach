@@ -3,7 +3,7 @@ import 'package:cash_flow/presentation/gameboard/possessions/expenses_list.dart'
 import 'package:cash_flow/presentation/gameboard/possessions/incomes_list.dart';
 import 'package:cash_flow/presentation/gameboard/possessions/liabilities_list.dart';
 import 'package:cash_flow/resources/strings.dart';
-import 'package:cash_flow/widgets/containers/container_with_header_image/container_with_header_image.dart';
+import 'package:cash_flow/widgets/containers/container_with_header_image.dart';
 import 'package:flutter/material.dart';
 
 class FinancesTab extends StatelessWidget {
