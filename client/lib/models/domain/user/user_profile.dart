@@ -1,20 +1,22 @@
-library current_user;
+import 'package:flutter/foundation.dart';
+import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:built_value/built_value.dart';
-
+part 'user_profile.freezed.dart';
 part 'user_profile.g.dart';
 
-abstract class UserProfile implements Built<UserProfile, UserProfileBuilder> {
-  factory UserProfile([void Function(UserProfileBuilder b) updates]) =
-      _$UserProfile;
+@freezed
+abstract class UserProfile with _$UserProfile implements StoreListItem {
+  factory UserProfile({
+    @required String userId,
+    @JsonKey(name: 'userName') String fullName,
+    String avatarUrl,
+  }) = _UserProfile;
 
-  UserProfile._();
+  factory UserProfile.fromJson(Map<String, dynamic> json) =>
+      _$UserProfileFromJson(json);
 
-  String get userId;
-
-  @nullable
-  String get fullName;
-
-  @nullable
-  String get avatarUrl;
+  @override
+  @late
+  Object get id => userId;
 }

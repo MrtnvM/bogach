@@ -1,5 +1,6 @@
 import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
+import 'package:cash_flow/models/network/core/search_query_result.dart';
 import 'package:cash_flow/models/network/errors/email_has_been_taken_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_email_exception.dart';
@@ -37,7 +38,7 @@ class UserService {
     );
 
     return Stream.fromFuture(logInOperation)
-        .map((result) => mapToCurrentUser(result.user))
+        .map((result) => mapToUserProfile(result.user))
         .asyncMap(_saveUserToFirestore)
         .transform(errorHandler);
   }
@@ -78,7 +79,7 @@ class UserService {
 
     return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
-        .map((authResponse) => mapToCurrentUser(authResponse.user))
+        .map((authResponse) => mapToUserProfile(authResponse.user))
         .asyncMap(_saveUserToFirestore);
   }
 
@@ -93,7 +94,7 @@ class UserService {
 
     return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
-        .map((authResponse) => mapToCurrentUser(authResponse.user))
+        .map((authResponse) => mapToUserProfile(authResponse.user))
         .asyncMap(_saveUserToFirestore);
   }
 
@@ -124,7 +125,7 @@ class UserService {
 
     return Stream.fromFuture(future)
         .transform(ErrorHandler())
-        .map(mapToCurrentUser)
+        .map(mapToUserProfile)
         .asyncMap(_saveUserToFirestore);
   }
 
@@ -138,9 +139,28 @@ class UserService {
     final userUpdateInfo = UserUpdateInfo();
     userUpdateInfo.displayName = model.nickName;
     await user.updateProfile(userUpdateInfo);
-    await _saveUserToFirestore(mapToCurrentUser(user));
+    await _saveUserToFirestore(mapToUserProfile(user));
 
     return user;
+  }
+
+  Future<SearchQueryResult<UserProfile>> searchUsers(
+    String searchString,
+  ) async {
+    final users = await firestore
+        .collection('users')
+        .where('userName', isGreaterThanOrEqualTo: searchString)
+        .getDocuments()
+        .then(
+          (snapshot) => snapshot.documents
+              .map((d) => UserProfile.fromJson(d.data))
+              .toList(),
+        );
+
+    return SearchQueryResult(
+      searchString: searchString,
+      items: users,
+    );
   }
 
   Future<UserProfile> _saveUserToFirestore(UserProfile user) async {
