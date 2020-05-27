@@ -1,0 +1,45 @@
+{
+  "JSON model": {
+    "scope": "dart",
+    "prefix": "json_model",
+    "body": [
+      "import 'package:json_annotation/json_annotation.dart';",
+      "",
+      "part '$TM_FILENAME_BASE.g.dart';",
+      "",
+      "@JsonSerializable()",
+      "class ${1:JsonModel} {",
+      "  ${1}(${3});",
+      "",
+      "  factory ${1}.fromJson(Map<String, dynamic> json) => _$${1}FromJson(json);",
+      "",
+      "  ${2:fields}",
+      "",
+      "  Map<String, dynamic> toJson() => _$${1}ToJson(this);",
+      "}"
+    ],
+    "description": "Quick json model definition"
+  },
+  "Built Model": {
+    "scope": "dart",
+    "prefix": "built_value_model",
+    "body": [
+      "import 'package:built_value/built_value.dart';",
+      "",
+      "part '$TM_FILENAME_BASE.g.dart';",
+      "",
+      "abstract class ${1:Model} implements Built<${1}, ${1}Builder> {",
+      "  factory ${1}([void Function(${1}Builder) updates]) = _$${1};",
+      "  ${1}._();",
+      "",
+      "  ${2:fileds}",
+      "}"
+    ],
+    "description": "Quick built value model definition"
+  },
+  "String": {
+    "scope": "dart",
+    "prefix": "res_string",
+    "body": "static const $1 = '$2';"
+  }
+}
