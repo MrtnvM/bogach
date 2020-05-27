@@ -50,7 +50,14 @@ final gameStateReducer = Reducer<GameState>()
   )
   ..on<OnGameErrorAction>(
     (state, action) => state.rebuild(
-      (s) => s.getRequestState = RequestState.error,
+      (s) {
+        s.getRequestState = RequestState.error;
+
+        s.activeGameState = s.activeGameState.maybeMap(
+          gameEvent: (gameEventState) => gameEventState.copyWith(isSent: false),
+          orElse: () => s.activeGameState,
+        );
+      },
     ),
   )
   ..on<SetGameContextAction>(
@@ -60,8 +67,10 @@ final gameStateReducer = Reducer<GameState>()
   )
   ..on<SendPlayerMoveAsyncAction>(
     (state, action) => state.rebuild((s) {
+      final isSending = action.isStarted;
       s.activeGameState = s.activeGameState.maybeMap(
-        gameEvent: (gameEventState) => gameEventState.copyWith(isSent: true),
+        gameEvent: (gameEventState) =>
+            gameEventState.copyWith(isSent: isSending),
         orElse: () => s.activeGameState,
       );
     }),
