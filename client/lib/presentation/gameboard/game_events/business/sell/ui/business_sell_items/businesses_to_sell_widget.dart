@@ -31,48 +31,47 @@ class BusinessesDescriptionToSellGameEvent extends HookWidget {
     BusinessesToSellData businessesToSellData,
     ValueNotifier<String> checkedItemId,
   ) {
-    final widgets = <Widget>[];
-
     if (businessesToSellData.businessesTableData == null) {
-      return widgets;
+      return <Widget>[];
     }
 
-    for (var i = 0; i < businessesToSellData.businessesTableData.length; i++) {
-      final businessTableData = businessesToSellData.businessesTableData[i];
-      final businessId = businessTableData.businessId;
-      final onlyOneBusiness =
-          businessesToSellData.businessesTableData.length == 1;
-      final businessChecked = checkedItemId.value == businessId;
-      final isChecked = businessChecked || onlyOneBusiness;
+    return businessesToSellData.businessesTableData
+        .map((businessTableData) {
+          final businessId = businessTableData.businessId;
+          final onlyOneBusiness =
+              businessesToSellData.businessesTableData.length == 1;
+          final businessChecked = checkedItemId.value == businessId;
+          final isChecked = businessChecked || onlyOneBusiness;
 
-      if (onlyOneBusiness) {
-        selectBusiness(checkedItemId, businessId);
-      }
+          if (onlyOneBusiness) {
+            selectBusiness(checkedItemId, businessId);
+          }
 
-      final businessInfo = Column(children: <Widget>[
-        InfoTable(
-          title: Strings.businessSell,
-          rows: <Widget>[
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Checkbox(
-                value: isChecked,
-                onChanged: (value) {
-                  if (value) {
-                    selectBusiness(checkedItemId, businessId);
-                  }
-                },
+          return Column(
+            children: <Widget>[
+              InfoTable(
+                title: Strings.businessSell,
+                rows: <Widget>[
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Checkbox(
+                      value: isChecked,
+                      onChanged: (value) {
+                        if (value) {
+                          selectBusiness(checkedItemId, businessId);
+                        }
+                      },
+                    ),
+                  ),
+                  for (final item in businessTableData.tableData.entries)
+                    TitleRow(title: item.key, value: item.value)
+                ],
               ),
-            ),
-            for (final item in businessTableData.tableData.entries)
-              TitleRow(title: item.key, value: item.value)
-          ],
-        ),
-      ]);
-
-      widgets.add(businessInfo);
-    }
-    return widgets;
+            ],
+          );
+        })
+        .cast<Widget>()
+        .toList();
   }
 
   void selectBusiness(ValueNotifier checkedItemId, String businessId) {

@@ -24,15 +24,15 @@ Map<String, String> useBusinessSellInfoTableData(GameEvent event) {
 }
 
 BusinessesToSellData useBusinessToSellData(GameEvent event) {
-  return useMemoized(() {
-    final userId = useUserId();
-    final assets = useCurrentGame((g) => g.possessionState[userId].assets);
+  final userId = useUserId();
+  final assets = useCurrentGame((g) => g.possessionState[userId].assets);
 
+  return useMemoized(() {
     final BusinessSellEventData eventData = event.data;
 
     final businessesToSell = assets
         .where((asset) => asset.type == AssetType.business)
-        .map((asset) => asset as BusinessAsset)
+        .cast<BusinessAsset>()
         .where((asset) => asset.id == eventData.businessId)
         .toList();
 

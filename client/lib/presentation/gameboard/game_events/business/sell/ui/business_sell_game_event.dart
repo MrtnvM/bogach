@@ -54,7 +54,7 @@ class BusinessSellGameEvent extends HookWidget {
                 message: Strings.sellBusinessNoChecked,
               );
             } else {
-              sendPlayerAction.call();
+              sendPlayerAction();
             }
           },
           skip: () => gameActions.skipPlayerAction(event.id),

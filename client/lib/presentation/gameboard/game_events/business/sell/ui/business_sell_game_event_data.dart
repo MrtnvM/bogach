@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 class BusinessesToSellData {
   BusinessesToSellData(this.businessesTableData);
 
@@ -6,8 +8,8 @@ class BusinessesToSellData {
 
 class BusinessToSellTableData {
   BusinessToSellTableData({
-    this.businessId,
-    this.tableData,
+    @required this.businessId,
+    @required this.tableData,
   });
 
   final String businessId;
