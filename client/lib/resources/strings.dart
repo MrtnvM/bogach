@@ -153,6 +153,7 @@ class Strings {
   static const liabilities = 'Пассивы';
   static const salary = 'Зарплата';
   static const business = 'Бизнес';
+  static const businessSell = 'Продажа бизнеса';
   static const realty = 'Недвижимость';
   static const other = 'Прочие';
 
@@ -219,6 +220,9 @@ class Strings {
         other: 'месяцев',
       );
   static String get goToMainMenu => 'В главное меню';
+
+  static String get sellBusinessNoChecked =>
+      'Необходимо выбрать бизнес для продажи';
 
   // Multiplayer
   static String get selectPlayers => 'Выбрете игроков';

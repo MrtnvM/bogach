@@ -10,7 +10,7 @@ abstract class ActiveGameState with _$ActiveGameState {
 
   factory ActiveGameState.gameEvent({
     @required int eventIndex,
-    @required bool isSent,
+    @required bool isSending,
   }) = ActiveGameGameEventState;
 
   factory ActiveGameState.waitingPlayers(

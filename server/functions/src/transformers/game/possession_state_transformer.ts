@@ -4,7 +4,7 @@ import { GameTransformer } from './game_transformer';
 import { Game } from '../../models/domain/game/game';
 import { LiabilityEntity } from '../../models/domain/liability';
 import { AssetEntity } from '../../models/domain/asset';
-import { PossessionState, PossessionStateEntity } from '../../models/domain/possession_state';
+import { PossessionState } from '../../models/domain/possession_state';
 import { ParticipantGameState } from '../../models/domain/game/participant_game_state';
 import { Possessions } from '../../models/domain/possessions';
 
@@ -37,7 +37,7 @@ export class PossessionStateTransformer extends GameTransformer {
     });
 
     const newPossessionState: PossessionState = { incomes, expenses, assets, liabilities };
-    return PossessionStateEntity.normalize(newPossessionState);
+    return newPossessionState;
   }
 
   generateParticipantsPossessionState(game: Game): ParticipantGameState<Possessions> {

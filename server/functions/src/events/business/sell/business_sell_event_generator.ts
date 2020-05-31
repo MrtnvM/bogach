@@ -1,7 +1,5 @@
 import * as uuid from 'uuid';
 import * as random from 'random';
-import { Strings } from '../../../resources/strings';
-import { formatPrice } from '../../../utils/currency';
 import { BusinessSellEvent } from './business_sell_event';
 import { BusinessAsset } from '../../../models/domain/assets/business_asset';
 
@@ -15,7 +13,7 @@ export class BusinessSellEventGenerator {
     return {
       id: uuid.v4(),
       name: name,
-      description: Strings.currentPrice() + formatPrice(currentPrice),
+      description: 'Описание продаваемого бизнеса',
       type: BusinessSellEvent.Type,
       data: {
         businessId,

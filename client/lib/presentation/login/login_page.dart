@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
           const SizedBox(width: 12),
           Flexible(
             child: Container(
-              height: 50,
+              height: 44,
               child: Center(
                 child: Container(
                   width: 200,

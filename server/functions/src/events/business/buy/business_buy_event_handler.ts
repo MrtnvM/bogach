@@ -74,7 +74,6 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
       );
     }
 
-
     const assets = game.possessions[userId].assets;
     this.checkExistingBusiness(assets, businessId);
 

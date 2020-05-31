@@ -25,11 +25,11 @@ final gameReducer = Reducer<GameState>()
           newActiveGameState = s.activeGameState.maybeWhen(
             gameEvent: (eventIndex, isSent) => ActiveGameState.gameEvent(
               eventIndex: currentEventIndex,
-              isSent: currentEventIndex == eventIndex,
+              isSending: currentEventIndex == eventIndex,
             ),
             orElse: () => ActiveGameState.gameEvent(
               eventIndex: currentEventIndex,
-              isSent: false,
+              isSending: false,
             ),
           );
         }
@@ -49,9 +49,15 @@ final gameReducer = Reducer<GameState>()
     ),
   )
   ..on<OnGameErrorAction>(
-    (state, action) => state.rebuild(
-      (s) => s.getRequestState = RequestState.error,
-    ),
+    (state, action) => state.rebuild((s) {
+      s.getRequestState = RequestState.error;
+
+      s.activeGameState = s.activeGameState.maybeMap(
+        gameEvent: (gameEventState) =>
+            gameEventState.copyWith(isSending: false),
+        orElse: () => s.activeGameState,
+      );
+    }),
   )
   ..on<SetGameContextAction>(
     (state, action) => state.rebuild(
@@ -60,9 +66,20 @@ final gameReducer = Reducer<GameState>()
   )
   ..on<SendPlayerMoveAsyncAction>(
     (state, action) => state.rebuild((s) {
-      s.activeGameState = s.activeGameState.maybeMap(
-        gameEvent: (gameEventState) => gameEventState.copyWith(isSent: true),
-        orElse: () => s.activeGameState,
-      );
+      action.onStart(() {
+        s.activeGameState = s.activeGameState.maybeMap(
+          gameEvent: (gameEventState) =>
+              gameEventState.copyWith(isSending: true),
+          orElse: () => s.activeGameState,
+        );
+      });
+
+      action.onError((error) {
+        s.activeGameState = s.activeGameState.maybeMap(
+          gameEvent: (gameEventState) =>
+              gameEventState.copyWith(isSending: false),
+          orElse: () => s.activeGameState,
+        );
+      });
     }),
   );
