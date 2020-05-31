@@ -16,6 +16,7 @@ abstract class BusinessAsset with _$BusinessAsset implements Asset {
     @required double passiveIncomePerMonth,
     @required double payback,
     @required double sellProbability,
+    @required String id,
   }) = _BusinessAsset;
 
   factory BusinessAsset.fromJson(Map<String, dynamic> json) =>

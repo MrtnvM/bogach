@@ -1,9 +1,11 @@
+import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/navigation_bar.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class ContainerWithHeaderImage extends StatelessWidget {
+class ContainerWithHeaderImage extends HookWidget {
   ContainerWithHeaderImage({
     Key key,
     @required this.children,
@@ -17,6 +19,17 @@ class ContainerWithHeaderImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSendingTurnEvent = useGlobalState((state) {
+      final activeGameState = state.game.activeGameState;
+
+      final isSent = activeGameState.maybeWhen(
+        gameEvent: (_, isSent) => isSent,
+        orElse: () => false,
+      );
+
+      return isSent;
+    });
+
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
     const imageAspectRatio = 2;
@@ -31,6 +44,7 @@ class ContainerWithHeaderImage extends StatelessWidget {
           padding: EdgeInsets.only(top: contentOffset, bottom: 16),
           children: children,
         ),
+        if (isSendingTurnEvent) _buildLoader(),
         NavigationBar(
           title: navBarTitle,
           scrollController: scrollController,
@@ -45,6 +59,17 @@ class ContainerWithHeaderImage extends StatelessWidget {
       height: imageHeight,
       alignment: Alignment.bottomCenter,
       child: const Image(image: AssetImage(Images.money)),
+    );
+  }
+
+  Widget _buildLoader() {
+    return Container(
+      color: ColorRes.white64,
+      child: const Center(
+        child: CircularProgressIndicator(
+          backgroundColor: ColorRes.mainGreen,
+        ),
+      ),
     );
   }
 }

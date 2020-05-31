@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class SearchQueryResult<T> {
   const SearchQueryResult({
     this.searchString,
