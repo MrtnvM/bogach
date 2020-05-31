@@ -13,4 +13,9 @@ final multiplayerReducer = Reducer<MultiplayerState>()
         s.userProfilesQuery = result;
       });
     }),
+  )
+  ..on<SelectMultiplayerGameTemplateAction>(
+    (state, action) => state.rebuild((s) {
+      s.selectedGameTemplate = action.gameTemplate;
+    }),
   );

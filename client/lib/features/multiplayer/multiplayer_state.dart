@@ -1,4 +1,5 @@
 import 'package:built_value/built_value.dart';
+import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/models/network/core/search_query_result.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
@@ -14,6 +15,9 @@ abstract class MultiplayerState
   StoreList<UserProfile> get userProfiles;
   SearchQueryResult get userProfilesQuery;
   RequestState get userProfilesQueryRequestState;
+
+  @nullable
+  GameTemplate get selectedGameTemplate;
 
   static MultiplayerState initial() => MultiplayerState((b) => b
     ..userProfiles = StoreList<UserProfile>()
