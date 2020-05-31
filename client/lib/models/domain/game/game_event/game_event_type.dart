@@ -1,4 +1,5 @@
 import 'package:cash_flow/presentation/gameboard/game_events/business/buy/model/business_buy_event_data.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/business/sell/model/business_sell_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/debenture_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/expense/models/expense_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/income/models/income_event_data.dart';
@@ -12,6 +13,7 @@ part 'game_event_type.freezed.dart';
 const _debentureEventType = 'debenture-price-changed-event';
 const _stockEventType = 'stock-price-changed-event';
 const _businessBuyEventType = 'business-buy-event';
+const _businessSellEventType = 'business-sell-event';
 const _incomeEventType = 'income-event';
 const _expenseEventType = 'expense-event';
 
@@ -22,6 +24,7 @@ abstract class GameEventType implements _$GameEventType {
   factory GameEventType.debenture() = DebentureGameEventType;
   factory GameEventType.stock() = StockGameEventType;
   factory GameEventType.businessBuy() = BusinessBuyEventType;
+  factory GameEventType.businessSell() = BusinessSellEventType;
   factory GameEventType.income() = IncomeGameEventType;
   factory GameEventType.expense() = ExpenseGameEventType;
 
@@ -29,6 +32,7 @@ abstract class GameEventType implements _$GameEventType {
         debenture: (_) => Strings.investments,
         stock: (_) => Strings.stock,
         businessBuy: (_) => Strings.business,
+        businessSell: (_) => Strings.businessSell,
         income: (_) => Strings.income,
         expense: (_) => Strings.expense,
       );
@@ -38,6 +42,7 @@ abstract class GameEventType implements _$GameEventType {
       debenture: (_) => DebentureEventData.fromJson(json),
       stock: (_) => StockEventData.fromJson(json),
       businessBuy: (_) => BusinessBuyEventData.fromJson(json),
+      businessSell: (_) => BusinessSellEventData.fromJson(json),
       income: (_) => IncomeEventData.fromJson(json),
       expense: (_) => ExpenseEventData.fromJson(json),
     );
@@ -47,6 +52,7 @@ abstract class GameEventType implements _$GameEventType {
         debenture: (_) => _debentureEventType,
         stock: (_) => _stockEventType,
         businessBuy: (_) => _businessBuyEventType,
+        businessSell: (_) => _businessSellEventType,
         income: (_) => _incomeEventType,
         expense: (_) => _expenseEventType,
       );
@@ -61,6 +67,9 @@ abstract class GameEventType implements _$GameEventType {
 
       case _businessBuyEventType:
         return GameEventType.businessBuy();
+
+      case _businessSellEventType:
+        return GameEventType.businessSell();
 
       case _incomeEventType:
         return GameEventType.income();

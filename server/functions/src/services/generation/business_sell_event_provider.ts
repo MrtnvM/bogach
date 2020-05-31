@@ -30,7 +30,7 @@ export class BusinessSellEventProvider {
 
       const businessAsset = asset as BusinessAsset;
 
-      const sellProbability = random.int(0, 100);
+      const sellProbability = random.int(0, 101);
       if (sellProbability >= businessAsset.sellProbability) {
         continue;
       }

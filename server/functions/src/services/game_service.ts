@@ -16,6 +16,7 @@ import {
 } from '../transformers/game_transformers';
 import { IncomeHandler } from '../events/income/income_handler';
 import { ExpenseHandler } from '../events/expense/expense_handler';
+import { BusinessSellEventHandler } from '../events/business/sell/business_sell_event_handler';
 
 export class GameService {
   constructor(private gameProvider: GameProvider) {
@@ -28,13 +29,10 @@ export class GameService {
     new DebenturePriceChangedHandler(),
     new StockPriceChangedHandler(),
     new BusinessBuyEventHandler(),
+    new BusinessSellEventHandler(),
     new IncomeHandler(),
     new ExpenseHandler(),
   ];
-
-  // private sellBusinessEventProvider = new BusinessSellEventProvider(
-  //   new BusinessSellEventGenerator()
-  // );
 
   private handlerMap: { [type: string]: PlayerActionHandler } = {};
 
