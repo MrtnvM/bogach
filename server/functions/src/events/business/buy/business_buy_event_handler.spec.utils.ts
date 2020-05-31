@@ -13,7 +13,7 @@ import { Possessions } from '../../../models/domain/possessions';
 import { PossessionStateEntity } from '../../../models/domain/possession_state';
 import { GameContext } from '../../../models/domain/game/game_context';
 import { GameEventEntity } from '../../../models/domain/game/game_event';
-import { BusinessBuyEvent } from './business_buy_event_event';
+import { BusinessBuyEvent } from './business_buy_event';
 
 const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
@@ -55,6 +55,7 @@ const initialPossesssions: Possessions = {
       id: 'expense1',
       name: 'Общее',
       value: 20000,
+      type: 'child',
     },
   ],
   assets: [

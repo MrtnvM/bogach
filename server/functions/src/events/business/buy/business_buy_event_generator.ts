@@ -1,6 +1,6 @@
 import * as uuid from 'uuid';
 import * as random from 'random';
-import { BusinessBuyEvent } from './business_buy_event_event';
+import { BusinessBuyEvent } from './business_buy_event';
 
 // TODO добавить реальные данные
 export namespace BusinessBuyEventGenerator {

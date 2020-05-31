@@ -38,6 +38,7 @@ describe('Possession Service Tests', () => {
           id: 'expense1',
           name: 'Общее',
           value: 20000,
+          type: 'other',
         },
       ],
       assets: [
@@ -130,16 +131,19 @@ describe('Possession Service Tests', () => {
     const expectedPossessionState: PossessionState = {
       incomes: [
         {
+          id: 'income1',
           value: 92000,
           name: 'Зарплата',
           type: 'salary',
         },
         {
+          id: 'income2',
           value: 1000,
           name: 'Карманные от бабушки',
           type: 'other',
         },
         {
+          id: 'debenture1',
           name: 'Облигации',
           type: 'investment',
           value: 320,
@@ -147,18 +151,22 @@ describe('Possession Service Tests', () => {
       ],
       expenses: [
         {
+          id: 'expense1',
           name: 'Общее',
           value: 20000,
+          type: 'other',
         },
       ],
       assets: [
         create<InsuranceAsset>({
+          id: 'insurance1',
           name: 'Страховка квартиры',
           type: 'insurance',
           value: 50000,
           downPayment: 5000,
         }),
         create<DebentureAsset>({
+          id: 'debenture1',
           name: 'ОФЗ',
           type: 'debenture',
           count: 4,
@@ -167,6 +175,7 @@ describe('Possession Service Tests', () => {
           nominal: 1000,
         }),
         create<StockAsset>({
+          id: 'stocks1',
           name: 'Яндекс',
           countInPortfolio: 1,
           type: 'stock',
@@ -174,12 +183,14 @@ describe('Possession Service Tests', () => {
           averagePrice: 100,
         }),
         create<RealtyAsset>({
+          id: 'realty1',
           name: 'Квартира',
           type: 'realty',
           cost: 2000000,
           downPayment: 1000000,
         }),
         create<BusinessAsset>({
+          id: 'business1',
           name: 'Ларек с шавой',
           type: 'business',
           fairPrice: 200_000,
@@ -190,12 +201,14 @@ describe('Possession Service Tests', () => {
           sellProbability: 5,
         }),
         create<OtherAsset>({
+          id: 'other_asset1',
           name: 'Биткойны',
           type: 'other',
           value: 30000,
           downPayment: 30000,
         }),
         create<CashAsset>({
+          id: 'cash1',
           type: 'cash',
           value: 500,
           name: 'Наличные',
@@ -203,18 +216,21 @@ describe('Possession Service Tests', () => {
       ],
       liabilities: [
         create<MortgageLiability>({
+          id: 'mortgage1',
           name: 'Ипотека',
           type: 'mortgage',
           value: 2000000,
           monthlyPayment: 20000,
         }),
         create<OtherLiability>({
+          id: 'other_libility1',
           name: 'Долг другу',
           type: 'other',
           value: 5000,
           monthlyPayment: 500,
         }),
         create<BusinessCreditLiability>({
+          id: 'business_credit1',
           value: 40000,
           name: 'Кредит за ларек',
           type: 'business_credit',

@@ -1,6 +1,5 @@
 import { Game, GameEntity } from '../../models/domain/game/game';
 import { InsuranceAsset } from '../../models/domain/assets/insurance_asset';
-import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
 import { StockAsset } from '../../models/domain/assets/stock_asset';
 import { RealtyAsset } from '../../models/domain/assets/realty_asset';
 import { BusinessAsset } from '../../models/domain/assets/business_asset';
@@ -13,7 +12,7 @@ import { UserEntity } from '../../models/domain/user';
 import { Possessions } from '../../models/domain/possessions';
 import { PossessionStateEntity } from '../../models/domain/possession_state';
 import { GameEventEntity } from '../../models/domain/game/game_event';
-import { DebenturePriceChangedEvent } from './debenture_price_changed_event';
+import { ChildBornEvent } from './child_born_event';
 
 const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
@@ -21,16 +20,6 @@ const userId: UserEntity.Id = 'user1';
 const initialCash = 10_000;
 
 const create = <T>(obj: T) => obj;
-
-const debenture1 = create<DebentureAsset>({
-  id: 'debenture1',
-  name: 'ОФЗ',
-  type: 'debenture',
-  count: 4,
-  averagePrice: 1100,
-  profitabilityPercent: 8,
-  nominal: 1000,
-});
 
 const initialPossesssions: Possessions = {
   incomes: [
@@ -52,7 +41,7 @@ const initialPossesssions: Possessions = {
       id: 'expense1',
       name: 'Общее',
       value: 20000,
-      type: 'child',
+      type: 'other',
     },
   ],
   assets: [
@@ -63,7 +52,6 @@ const initialPossesssions: Possessions = {
       value: 50000,
       downPayment: 5000,
     }),
-    debenture1,
     create<StockAsset>({
       id: 'stocks1',
       name: 'Яндекс',
@@ -155,42 +143,17 @@ const game: Game = {
   currentEvents: [],
 };
 
-const debenturePriceChangedEvent = (data: DebenturePriceChangedEvent.Data) => {
-  const event: DebenturePriceChangedEvent.Event = {
+const childBornEvent = (data: ChildBornEvent.Data) => {
+  const event: ChildBornEvent.Event = {
     id: eventId,
-    name: 'DebentureName',
+    name: 'Name',
     description: 'Description',
-    type: DebenturePriceChangedEvent.Type,
+    type: ChildBornEvent.Type,
     data: data,
   };
 
-  DebenturePriceChangedEvent.validate(event);
+  ChildBornEvent.validate(event);
   return event;
-};
-
-const debentureOFZPriceChangedEvent = (currentPrice: number, availableCount: number) => {
-  const eventData: DebenturePriceChangedEvent.Data = {
-    currentPrice,
-    profitabilityPercent: 8,
-    nominal: 1000,
-    availableCount,
-  };
-
-  const event: DebenturePriceChangedEvent.Event = {
-    id: eventId,
-    name: 'ОФЗ',
-    description: 'Description',
-    type: DebenturePriceChangedEvent.Type,
-    data: eventData,
-  };
-
-  DebenturePriceChangedEvent.validate(event);
-  return event;
-};
-
-const debenturePriceChangedPlayerAction = (action: DebenturePriceChangedEvent.PlayerAction) => {
-  DebenturePriceChangedEvent.validateAction(action);
-  return action;
 };
 
 export const stubs = {
@@ -198,12 +161,9 @@ export const stubs = {
   gameId,
   userId,
   game,
-  debenture1,
   initialCash,
 };
 
 export const utils = {
-  debenturePriceChangedEvent,
-  debenturePriceChangedPlayerAction,
-  debentureOFZPriceChangedEvent,
+  childBornEvent,
 };
