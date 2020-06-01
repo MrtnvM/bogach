@@ -31,7 +31,6 @@ export class GameEventsTransformer extends GameTransformer {
     const businessSellEventProvider = new BusinessSellEventProvider(businessSellEventGenerator);
 
     const gameEvents = [
-      //ChildBornGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),

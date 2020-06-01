@@ -38,7 +38,6 @@ describe('Possession Service Tests', () => {
           id: 'expense1',
           name: 'Общее',
           value: 20000,
-          type: 'other',
         },
       ],
       assets: [
@@ -154,7 +153,6 @@ describe('Possession Service Tests', () => {
           id: 'expense1',
           name: 'Общее',
           value: 20000,
-          type: 'other',
         },
       ],
       assets: [

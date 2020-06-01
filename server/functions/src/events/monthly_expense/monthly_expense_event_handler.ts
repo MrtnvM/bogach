@@ -1,5 +1,5 @@
 import { MonthlyExpenseEvent } from './monthly_expense_event';
-import { Expense, ExpenseEntity } from '../../models/domain/expense';
+import { Expense } from '../../models/domain/expense';
 import { PlayerActionHandler } from '../../core/domain/player_action_handler';
 import { UserEntity } from '../../models/domain/user';
 import { Game } from '../../models/domain/game/game';
@@ -16,7 +16,6 @@ interface ActionParameters {
   readonly expenses: Expense[];
   readonly monthlyPayment: number;
   readonly expenseName: string;
-  readonly expenseType: ExpenseEntity.Type;
 }
 
 export class MonthlyExpenseEventHandler extends PlayerActionHandler {
@@ -37,7 +36,7 @@ export class MonthlyExpenseEventHandler extends PlayerActionHandler {
   }
 
   async handle(game: Game, event: Event, action: Action, userId: UserEntity.Id): Promise<Game> {
-    const { monthlyPayment, expenseType, expenseName } = event.data;
+    const { monthlyPayment, expenseName } = event.data;
 
     const expenses = game.possessions[userId].expenses;
 
@@ -45,7 +44,6 @@ export class MonthlyExpenseEventHandler extends PlayerActionHandler {
       expenses,
       monthlyPayment,
       expenseName,
-      expenseType,
     };
 
     const actionResult = await this.applyAction(actionChildBornParameters);
@@ -58,11 +56,10 @@ export class MonthlyExpenseEventHandler extends PlayerActionHandler {
   }
 
   async applyAction(actionParameters: ActionParameters): Promise<ActionResult> {
-    const { expenses, monthlyPayment, expenseType, expenseName } = actionParameters;
+    const { expenses, monthlyPayment, expenseName } = actionParameters;
 
     const newExpense: Expense = {
       name: expenseName,
-      type: expenseType,
       value: monthlyPayment,
     };
     const newExpenses = expenses.slice();

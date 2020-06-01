@@ -4,15 +4,10 @@ export interface Expense {
   readonly id?: ExpenseEntity.Id;
   readonly name: string;
   readonly value: number;
-  readonly type: ExpenseEntity.Type;
 }
-
-export const ExpenseTypeValues = ['child', 'other'];
 
 export namespace ExpenseEntity {
   export type Id = string;
-
-  export type Type = 'child' | 'other';
 
   export const parse = (data: any): Expense => {
     const { id, name, value, type } = data;

@@ -18,7 +18,6 @@ describe('Expense event handler', () => {
 
     const event = utils.monthlyExpenseEvent({
       monthlyPayment: 250,
-      expenseType: 'child',
       expenseName: 'Ребёнок',
     });
 
@@ -30,7 +29,6 @@ describe('Expense event handler', () => {
 
     const newExpense: Expense = {
       name: 'Ребёнок',
-      type: 'child',
       value: 250,
     };
     const expectedGame = produce(game, (draft) => {
@@ -45,7 +43,6 @@ describe('Expense event handler', () => {
 
     const event = utils.monthlyExpenseEvent({
       monthlyPayment: 250,
-      expenseType: 'child',
       expenseName: 'Игнат',
     });
 
@@ -55,7 +52,6 @@ describe('Expense event handler', () => {
 
     const firstChild: Expense = {
       name: 'Валера',
-      type: 'child',
       value: 250,
     };
 
@@ -67,7 +63,6 @@ describe('Expense event handler', () => {
 
     const secondChild: Expense = {
       name: 'Игнат',
-      type: 'child',
       value: 250,
     };
     const expectedGame = produce(gameWithChild, (draft) => {

@@ -55,7 +55,6 @@ const initialPossesssions: Possessions = {
       id: 'expense1',
       name: 'Общее',
       value: 20000,
-      type: 'child',
     },
   ],
   assets: [
