@@ -17,6 +17,7 @@ import {
 import { IncomeHandler } from '../events/income/income_handler';
 import { ExpenseHandler } from '../events/expense/expense_handler';
 import { BusinessSellEventHandler } from '../events/business/sell/business_sell_event_handler';
+import { MonthlyExpenseEventHandler } from '../events/monthly_expense/monthly_expense_event_handler';
 
 export class GameService {
   constructor(private gameProvider: GameProvider) {
@@ -32,6 +33,7 @@ export class GameService {
     new BusinessSellEventHandler(),
     new IncomeHandler(),
     new ExpenseHandler(),
+    new MonthlyExpenseEventHandler(),
   ];
 
   private handlerMap: { [type: string]: PlayerActionHandler } = {};

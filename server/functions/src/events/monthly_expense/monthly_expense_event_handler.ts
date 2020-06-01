@@ -16,6 +16,7 @@ interface ActionParameters {
   readonly expenses: Expense[];
   readonly monthlyPayment: number;
   readonly expenseName: string;
+  readonly expenseId: string;
 }
 
 export class MonthlyExpenseEventHandler extends PlayerActionHandler {
@@ -44,6 +45,7 @@ export class MonthlyExpenseEventHandler extends PlayerActionHandler {
       expenses,
       monthlyPayment,
       expenseName,
+      expenseId: event.id,
     };
 
     const actionResult = await this.applyAction(actionChildBornParameters);
@@ -56,9 +58,10 @@ export class MonthlyExpenseEventHandler extends PlayerActionHandler {
   }
 
   async applyAction(actionParameters: ActionParameters): Promise<ActionResult> {
-    const { expenses, monthlyPayment, expenseName } = actionParameters;
+    const { expenses, monthlyPayment, expenseName, expenseId } = actionParameters;
 
     const newExpense: Expense = {
+      id: expenseId,
       name: expenseName,
       value: monthlyPayment,
     };
