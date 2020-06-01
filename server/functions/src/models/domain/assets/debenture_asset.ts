@@ -39,6 +39,7 @@ export namespace DebentureAssetEntity {
     const incomeValue = (asset.nominal * asset.profitabilityPercent * asset.count) / 100;
 
     return {
+      id: asset.id,
       name: Strings.debetures(),
       value: incomeValue,
       type: 'investment',

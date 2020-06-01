@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { BusinessBuyEvent } from './business_buy_event_event';
+import { BusinessBuyEvent } from './business_buy_event';
 import { Asset, AssetEntity } from '../../../models/domain/asset';
 import { Liability, LiabilityEntity } from '../../../models/domain/liability';
 import { PlayerActionHandler } from '../../../core/domain/player_action_handler';

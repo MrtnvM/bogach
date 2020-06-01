@@ -6,7 +6,7 @@ import produce from 'immer';
 import { BusinessAsset } from '../../../models/domain/assets/business_asset';
 import { BusinessBuyEventHandler } from './business_buy_event_handler';
 import { Liability, LiabilityEntity } from '../../../models/domain/liability';
-import { BusinessBuyEvent } from './business_buy_event_event';
+import { BusinessBuyEvent } from './business_buy_event';
 
 describe('Business buy event event handler', () => {
   const { eventId, userId, game, initialCash } = stubs;
