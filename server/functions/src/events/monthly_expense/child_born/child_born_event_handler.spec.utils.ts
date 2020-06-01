@@ -143,7 +143,7 @@ const game: Game = {
   currentEvents: [],
 };
 
-const childBornEvent = (data: MonthlyExpenseEvent.Data) => {
+const monthlyExpenseEvent = (data: MonthlyExpenseEvent.Data) => {
   const event: MonthlyExpenseEvent.Event = {
     id: eventId,
     name: 'Name',
@@ -165,5 +165,5 @@ export const stubs = {
 };
 
 export const utils = {
-  childBornEvent,
+  monthlyExpenseEvent,
 };

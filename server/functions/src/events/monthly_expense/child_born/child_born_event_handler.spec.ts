@@ -16,7 +16,7 @@ describe('Expense event handler', () => {
   test('Successfully get one child', async () => {
     const handler = new MonthlyExpenseEventHandler();
 
-    const event = utils.childBornEvent({
+    const event = utils.monthlyExpenseEvent({
       monthlyPayment: 250,
       expenseType: 'child',
       expenseName: 'Ребёнок',
@@ -43,7 +43,7 @@ describe('Expense event handler', () => {
   test('Successfully get two child', async () => {
     const handler = new MonthlyExpenseEventHandler();
 
-    const event = utils.childBornEvent({
+    const event = utils.monthlyExpenseEvent({
       monthlyPayment: 250,
       expenseType: 'child',
       expenseName: 'Игнат',
