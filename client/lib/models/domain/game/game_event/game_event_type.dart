@@ -29,7 +29,7 @@ abstract class GameEventType implements _$GameEventType {
   factory GameEventType.businessSell() = BusinessSellEventType;
   factory GameEventType.income() = IncomeGameEventType;
   factory GameEventType.expense() = ExpenseGameEventType;
-  factory GameEventType.monthlyPayment() = MonthlyPaymentGameEventType;
+  factory GameEventType.monthlyExpense() = MonthlyExpenseGameEventType;
 
   String typeTitle() => map(
         debenture: (_) => Strings.investments,
@@ -38,7 +38,7 @@ abstract class GameEventType implements _$GameEventType {
         businessSell: (_) => Strings.businessSell,
         income: (_) => Strings.income,
         expense: (_) => Strings.expense,
-        monthlyPayment: (_) => Strings.monthlyPaymentEvent,
+        monthlyExpense: (_) => Strings.monthlyExpenseEvent,
       );
 
   dynamic parseGameEventData(Map<String, dynamic> json) {
@@ -49,7 +49,7 @@ abstract class GameEventType implements _$GameEventType {
       businessSell: (_) => BusinessSellEventData.fromJson(json),
       income: (_) => IncomeEventData.fromJson(json),
       expense: (_) => ExpenseEventData.fromJson(json),
-      monthlyPayment: (_) => MonthlyExpenseEventData.fromJson(json),
+      monthlyExpense: (_) => MonthlyExpenseEventData.fromJson(json),
     );
   }
 
@@ -60,7 +60,7 @@ abstract class GameEventType implements _$GameEventType {
         businessSell: (_) => _businessSellEventType,
         income: (_) => _incomeEventType,
         expense: (_) => _expenseEventType,
-        monthlyPayment: (_) => _monthlyExpenseEventType,
+        monthlyExpense: (_) => _monthlyExpenseEventType,
       );
 
   static GameEventType fromJson(String json) {
@@ -84,7 +84,7 @@ abstract class GameEventType implements _$GameEventType {
         return GameEventType.expense();
 
       case _monthlyExpenseEventType:
-        return GameEventType.monthlyPayment();
+        return GameEventType.monthlyExpense();
 
       default:
         // TODO(Maxim): Add non fatal error; Remove throwing exception

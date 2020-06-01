@@ -55,7 +55,7 @@ class GameEventPage extends HookWidget {
       businessSell: (_) => BusinessSellGameEvent(event),
       income: (_) => IncomeGameEvent(event),
       expense: (_) => ExpenseGameEvent(event),
-      monthlyPayment: (_) => MonthlyExpenseEvent(event),
+      monthlyExpense: (_) => MonthlyExpenseEvent(event),
     );
   }
 

@@ -29,7 +29,7 @@ class MonthlyExpenseEvent extends HookWidget {
         Text(event.description, style: Styles.tableHeaderValue),
         const SizedBox(height: 24),
         TitleRow(
-          title: Strings.monthlyPaymentTitle,
+          title: Strings.monthlyExpenseTitle,
           value: eventData.monthlyPayment.toPrice(),
         ),
         const SizedBox(height: 28),
