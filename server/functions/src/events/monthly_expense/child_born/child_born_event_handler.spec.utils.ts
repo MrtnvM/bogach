@@ -1,18 +1,18 @@
-import { Game, GameEntity } from '../../models/domain/game/game';
-import { InsuranceAsset } from '../../models/domain/assets/insurance_asset';
-import { StockAsset } from '../../models/domain/assets/stock_asset';
-import { RealtyAsset } from '../../models/domain/assets/realty_asset';
-import { BusinessAsset } from '../../models/domain/assets/business_asset';
-import { OtherAsset } from '../../models/domain/assets/other_asset';
-import { CashAsset } from '../../models/domain/assets/cash_asset';
-import { MortgageLiability } from '../../models/domain/liabilities/mortgage_liability';
-import { BusinessCreditLiability } from '../../models/domain/liabilities/business_credit';
-import { OtherLiability } from '../../models/domain/liabilities/other_liability';
-import { UserEntity } from '../../models/domain/user';
-import { Possessions } from '../../models/domain/possessions';
-import { PossessionStateEntity } from '../../models/domain/possession_state';
-import { GameEventEntity } from '../../models/domain/game/game_event';
-import { ChildBornEvent } from './child_born_event';
+import { Game, GameEntity } from '../../../models/domain/game/game';
+import { InsuranceAsset } from '../../../models/domain/assets/insurance_asset';
+import { StockAsset } from '../../../models/domain/assets/stock_asset';
+import { RealtyAsset } from '../../../models/domain/assets/realty_asset';
+import { BusinessAsset } from '../../../models/domain/assets/business_asset';
+import { OtherAsset } from '../../../models/domain/assets/other_asset';
+import { CashAsset } from '../../../models/domain/assets/cash_asset';
+import { MortgageLiability } from '../../../models/domain/liabilities/mortgage_liability';
+import { BusinessCreditLiability } from '../../../models/domain/liabilities/business_credit';
+import { OtherLiability } from '../../../models/domain/liabilities/other_liability';
+import { UserEntity } from '../../../models/domain/user';
+import { Possessions } from '../../../models/domain/possessions';
+import { PossessionStateEntity } from '../../../models/domain/possession_state';
+import { GameEventEntity } from '../../../models/domain/game/game_event';
+import { MonthlyExpenseEvent } from '../monthly_expense_event';
 
 const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
@@ -143,16 +143,16 @@ const game: Game = {
   currentEvents: [],
 };
 
-const childBornEvent = (data: ChildBornEvent.Data) => {
-  const event: ChildBornEvent.Event = {
+const childBornEvent = (data: MonthlyExpenseEvent.Data) => {
+  const event: MonthlyExpenseEvent.Event = {
     id: eventId,
     name: 'Name',
     description: 'Description',
-    type: ChildBornEvent.Type,
+    type: MonthlyExpenseEvent.Type,
     data: data,
   };
 
-  ChildBornEvent.validate(event);
+  MonthlyExpenseEvent.validate(event);
   return event;
 };
 

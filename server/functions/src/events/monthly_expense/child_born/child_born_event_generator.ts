@@ -1,9 +1,11 @@
 import uuid = require('uuid');
-import { ChildBornEvent } from './child_born_event';
+import { MonthlyExpenseEvent } from '../monthly_expense_event';
+import { Game } from '../../../models/domain/game/game';
 
 export namespace ChildBornGenerator {
-  export const generate = (): ChildBornEvent.Event => {
+  export const generate = (game: Game): MonthlyExpenseEvent.Event => {
     const eventId = uuid.v4();
+
     const name = 'Поздравляем с рождением ребёенка!';
     const description = 'В вашей семье пополнение';
     const monthlyPayment = 250;
@@ -12,9 +14,11 @@ export namespace ChildBornGenerator {
       id: eventId,
       name,
       description,
-      type: ChildBornEvent.Type,
+      type: MonthlyExpenseEvent.Type,
       data: {
         monthlyPayment,
+        expenseType: 'child',
+        expenseName: 'Ребёнок'
       },
     };
   };

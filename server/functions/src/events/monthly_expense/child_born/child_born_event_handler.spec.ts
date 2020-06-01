@@ -1,10 +1,10 @@
-import { GameEntity } from '../../models/domain/game/game';
-import { ChildBornEventHandler } from './child_born_event_handler';
+import { GameEntity } from '../../../models/domain/game/game';
+import { MonthlyExpenseEventHandler } from '../monthly_expense_event_handler';
 import { stubs, utils } from './child_born_event_handler.spec.utils';
-import { ChildBornEvent } from './child_born_event';
+import { MonthlyExpenseEvent } from '../monthly_expense_event';
 import uuid = require('uuid');
 import produce from 'immer';
-import { Expense } from '../../models/domain/expense';
+import { Expense } from '../../../models/domain/expense';
 
 describe('Expense event handler', () => {
   const { userId, game } = stubs;
@@ -14,20 +14,22 @@ describe('Expense event handler', () => {
   });
 
   test('Successfully get one child', async () => {
-    const handler = new ChildBornEventHandler();
+    const handler = new MonthlyExpenseEventHandler();
 
     const event = utils.childBornEvent({
       monthlyPayment: 250,
+      expenseType: 'child',
+      expenseName: 'Ребёнок',
     });
 
-    const action: ChildBornEvent.PlayerAction = {
+    const action: MonthlyExpenseEvent.PlayerAction = {
       eventId: uuid.v4(),
     };
 
     const newGame = await handler.handle(game, event, action, userId);
 
     const newExpense: Expense = {
-      name: 'Ребёнок 1',
+      name: 'Ребёнок',
       type: 'child',
       value: 250,
     };
@@ -39,18 +41,20 @@ describe('Expense event handler', () => {
   });
 
   test('Successfully get two child', async () => {
-    const handler = new ChildBornEventHandler();
+    const handler = new MonthlyExpenseEventHandler();
 
     const event = utils.childBornEvent({
       monthlyPayment: 250,
+      expenseType: 'child',
+      expenseName: 'Игнат',
     });
 
-    const action: ChildBornEvent.PlayerAction = {
+    const action: MonthlyExpenseEvent.PlayerAction = {
       eventId: uuid.v4(),
     };
 
     const firstChild: Expense = {
-      name: 'Ребёнок 1',
+      name: 'Валера',
       type: 'child',
       value: 250,
     };
@@ -62,7 +66,7 @@ describe('Expense event handler', () => {
     const newGame = await handler.handle(gameWithChild, event, action, userId);
 
     const secondChild: Expense = {
-      name: 'Ребёнок 2',
+      name: 'Игнат',
       type: 'child',
       value: 250,
     };

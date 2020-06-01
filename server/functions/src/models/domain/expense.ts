@@ -7,6 +7,8 @@ export interface Expense {
   readonly type: ExpenseEntity.Type;
 }
 
+export const ExpenseTypeValues = ['child', 'other'];
+
 export namespace ExpenseEntity {
   export type Id = string;
 
