@@ -17,6 +17,10 @@ import {
 import { IncomeHandler } from '../events/income/income_handler';
 import { ExpenseHandler } from '../events/expense/expense_handler';
 import { BusinessSellEventHandler } from '../events/business/sell/business_sell_event_handler';
+import { UserEntity } from '../models/domain/user';
+import { GameTemplateEntity } from '../models/domain/game/game_template';
+import { Room, RoomEntity } from '../models/domain/room';
+import { checkIds } from '../core/validation/type_checks';
 
 export class GameService {
   constructor(private gameProvider: GameProvider) {
@@ -67,5 +71,30 @@ export class GameService {
     ]);
 
     await this.gameProvider.updateGame(updatedGame);
+  }
+
+  createRoom(
+    gameTemplateId: GameTemplateEntity.Id,
+    participantsIds: UserEntity.Id[],
+    currentUserId: UserEntity.Id
+  ): Promise<Room> {
+    return this.gameProvider.createRoom(gameTemplateId, participantsIds, currentUserId);
+  }
+
+  async onParticipantReady(roomId: RoomEntity.Id, participantId: UserEntity.Id) {
+    checkIds([roomId, participantId]);
+
+    const room = await this.gameProvider.setParticipantReady(roomId, participantId);
+
+    const gameIsNotCreatedYet = !room.gameId;
+    const isAllParticipantsReady = room.participants.every((p) => p.status === 'ready');
+
+    if (gameIsNotCreatedYet && isAllParticipantsReady) {
+      this.gameProvider.createRoomGame(room.id);
+    }
+  }
+
+  async createRoomGame(roomId: RoomEntity.Id) {
+    this.gameProvider.createRoomGame(roomId);
   }
 }

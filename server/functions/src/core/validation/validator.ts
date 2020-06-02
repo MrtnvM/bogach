@@ -29,6 +29,14 @@ export class Validator<T extends object> {
     }
   }
 
+  hasStringValue(field: keyof T) {
+    const value = this.entity[field];
+
+    if (value === undefined || value === null || typeof value !== 'string') {
+      this.throwError(`The entity does not have string value for '${field}' field`);
+    }
+  }
+
   hasObjectValue(field: keyof T, validate: (obj: any) => void) {
     const value = this.entity[field];
 
