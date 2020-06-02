@@ -1,6 +1,8 @@
 library cash_flow_api;
 
 import 'package:cash_flow/api_client/headers.dart';
+import 'package:cash_flow/models/domain/room/room.dart';
+import 'package:cash_flow/models/network/request/game/create_room_request_model.dart';
 import 'package:cash_flow/models/network/responses/game_template_response_model.dart';
 import 'package:cash_flow/models/network/responses/new_game_response_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -40,6 +42,28 @@ class CashFlowApiClient extends ApiClient {
   Stream<void> sendPlayerAction(PlayerActionRequestModel playerAction) => post(
         path: 'handleGameEvent',
         body: playerAction.toJson(),
+        responseMapper: rm.voidResponse,
+      );
+
+  Stream<Room> createRoom(CreateRoomRequestModel requestModel) => post(
+        path: 'createRoom',
+        body: requestModel.toJson(),
+        responseMapper: rm.standard((json) => Room.fromJson(json)),
+      );
+
+  Stream<void> setRoomParticipantReady(String roomId, String participantId) =>
+      post(
+        path: 'setRoomParticipantReady',
+        body: {
+          'roomId': roomId,
+          'participantId': participantId,
+        },
+        responseMapper: rm.voidResponse,
+      );
+
+  Stream<void> createRoomGame(String roomId) => post(
+        path: 'createRoomGame',
+        body: {'roomId': roomId},
         responseMapper: rm.voidResponse,
       );
 }

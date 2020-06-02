@@ -94,6 +94,7 @@ export class GameService {
     }
   }
 
+  /// Creation of room game by force without waitng of all players
   async createRoomGame(roomId: RoomEntity.Id) {
     this.gameProvider.createRoomGame(roomId);
   }

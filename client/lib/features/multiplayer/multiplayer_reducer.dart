@@ -18,4 +18,16 @@ final multiplayerReducer = Reducer<MultiplayerState>()
     (state, action) => state.rebuild((s) {
       s.selectedGameTemplate = action.gameTemplate;
     }),
+  )
+  ..on<CreateRoomAsyncAction>(
+    (state, action) => state.rebuild((s) {
+      s.createRoomRequestState = action.requestState;
+
+      action.onSuccess((room) => s.currentRoom = room);
+    }),
+  )
+  ..on<CreateRoomGameAsyncAction>(
+    (state, action) => state.rebuild((s) {
+      s.createRoomGameRequestState = action.requestState;
+    }),
   );

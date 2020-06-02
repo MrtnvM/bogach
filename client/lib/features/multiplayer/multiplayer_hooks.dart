@@ -1,5 +1,6 @@
 import 'package:cash_flow/features/multiplayer/multiplayer_actions.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
+import 'package:cash_flow/models/domain/room/room.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
@@ -19,6 +20,22 @@ _MultiplayerActions useMultiplayerActions() {
           SelectMultiplayerGameTemplateAction(gameTemplate),
         );
       },
+      createRoom: (participantsIds) {
+        return actionRunner.runAsyncAction(
+          CreateRoomAsyncAction(participantsIds),
+        );
+      },
+      setPlayerReady: (participantId) {
+        return actionRunner.runAsyncAction(
+          SetRoomParticipantReadyAsyncAction(participantId),
+        );
+      },
+      createRoomGame: () {
+        return actionRunner.runAsyncAction(CreateRoomGameAsyncAction());
+      },
+      stopListeningRoomUpdates: (roomId) {
+        actionRunner.runAction(StopListeningRoomUpdatesAction(roomId));
+      },
     );
   });
 }
@@ -27,8 +44,17 @@ class _MultiplayerActions {
   _MultiplayerActions({
     @required this.searchUsers,
     @required this.selectGameTemplate,
+    @required this.createRoom,
+    @required this.setPlayerReady,
+    @required this.createRoomGame,
+    @required this.stopListeningRoomUpdates,
   });
 
   final void Function(String searchString) searchUsers;
   final void Function(GameTemplate gameTemplate) selectGameTemplate;
+
+  final Future<Room> Function(List<String> participantIds) createRoom;
+  final Future Function(String participantId) setPlayerReady;
+  final Future Function() createRoomGame;
+  final void Function(String) stopListeningRoomUpdates;
 }

@@ -21,6 +21,6 @@ Epic<AppState> rootEpic({
     newGameEpic(gameService: gameService),
     gameEpic(gameService: gameService),
     purchaseEpic(purchaseService: purchaseService),
-    multiplayerEpic(userService: userService),
+    multiplayerEpic(userService: userService, gameService: gameService),
   ]);
 }
