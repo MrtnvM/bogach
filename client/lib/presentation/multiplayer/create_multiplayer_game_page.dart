@@ -1,5 +1,5 @@
 import 'package:cash_flow/navigation/app_router.dart';
-import 'package:cash_flow/presentation/multiplayer/widgets/game_template_list.dart';
+import 'package:cash_flow/presentation/multiplayer/widgets/multiplayer_game_template_list.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/buttons/color_button.dart';
@@ -23,7 +23,7 @@ class CreateMultiplayerGamePage extends StatelessWidget {
       children: <Widget>[
         Container(
           color: ColorRes.mainGreen,
-          child: GameTemplateList(),
+          child: MultiplayerGameTemplateList(),
         ),
         Positioned(
           bottom: 16,

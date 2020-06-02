@@ -1,16 +1,19 @@
 import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/core/hooks/alert_hooks.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/multiplayer/multiplayer_hooks.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/navigation/app_router.dart';
+import 'package:cash_flow/presentation/multiplayer/room_page.dart';
+import 'package:cash_flow/presentation/multiplayer/widgets/horizontal_user_profiles_list.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
-import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
 import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_platform_loadable/flutter_platform_loadable.dart';
 
 class CreateRoomPage extends HookWidget {
   @override
@@ -23,6 +26,9 @@ class CreateRoomPage extends HookWidget {
           .where((u) => u.userId != userId)
           .toList(),
     );
+    final isRoomCreationInProgress = useGlobalState(
+      (s) => s.multiplayer.createRoomRequestState.isInProgress,
+    );
     final multiplayerActions = useMultiplayerActions();
 
     useEffect(() {
@@ -31,6 +37,10 @@ class CreateRoomPage extends HookWidget {
     }, []);
 
     final selectPlayer = (player) {
+      if (selectedPlayers.value.length > 5) {
+        return;
+      }
+
       selectedPlayers.value = {...selectedPlayers.value, player};
     };
 
@@ -39,81 +49,75 @@ class CreateRoomPage extends HookWidget {
       selectedPlayers.value = selectedPlayers.value.toSet();
     };
 
-    return CashFlowScaffold(
-      title: Strings.selectPlayers,
-      showUser: true,
-      child: Container(
-        height: 300,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text(
-              Strings.selectedPlayers,
-              style: Styles.caption.copyWith(fontSize: 19),
-            ),
-            const SizedBox(height: 24),
-            _buildPossiblePlayers(
-              profiles: selectedPlayers.value.toList(),
-              onProfileSelected: removeUser,
-            ),
-            const Spacer(),
-            Text(
-              Strings.allPlayers,
-              style: Styles.caption.copyWith(fontSize: 19),
-            ),
-            const SizedBox(height: 24),
-            _buildPossiblePlayers(
-              profiles: possiblePlayers
-                  .where((u) => !selectedPlayers.value.contains(u))
-                  .toList(),
-              onProfileSelected: selectPlayer,
-            ),
-            const SizedBox(height: 36),
-            _buildBackButton(),
-            const SizedBox(height: 16),
-          ],
+    final showRoomCreationFailedAlert = useWarningAlert(
+      errorMessage: (_) => Strings.roomCreationFailed,
+    );
+
+    VoidCallback createRoom;
+    createRoom = () {
+      if (selectedPlayers.value.isEmpty) {
+        return;
+      }
+
+      final participantIds = selectedPlayers.value.map((p) => p.id).toList();
+
+      multiplayerActions
+          .createRoom(participantIds)
+          .then((_) => appRouter.goTo(RoomPage()))
+          .catchError((e) => showRoomCreationFailedAlert(e, createRoom));
+    };
+
+    return Loadable(
+      isLoading: isRoomCreationInProgress,
+      child: CashFlowScaffold(
+        title: Strings.selectPlayers,
+        showUser: true,
+        child: Container(
+          height: 300,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                Strings.selectedPlayers,
+                style: Styles.caption.copyWith(fontSize: 19),
+              ),
+              const SizedBox(height: 24),
+              HorizontalUserProfileList(
+                profiles: selectedPlayers.value.toList(),
+                onProfileSelected: removeUser,
+              ),
+              const Spacer(),
+              Text(
+                Strings.allPlayers,
+                style: Styles.caption.copyWith(fontSize: 19),
+              ),
+              const SizedBox(height: 24),
+              HorizontalUserProfileList(
+                profiles: possiblePlayers
+                    .where((u) => !selectedPlayers.value.contains(u))
+                    .toList(),
+                onProfileSelected: selectPlayer,
+              ),
+              const SizedBox(height: 36),
+              _buildCreateRoomButton(createRoom),
+              const SizedBox(height: 16),
+              _buildBackButton(),
+              const SizedBox(height: 16),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildPossiblePlayers({
-    List<UserProfile> profiles,
-    void Function(UserProfile) onProfileSelected,
-  }) {
+  Widget _buildCreateRoomButton(VoidCallback createRoom) {
     return Container(
-      height: 100,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: profiles.length,
-        itemBuilder: (context, i) {
-          return GestureDetector(
-            onTap: () => onProfileSelected(profiles[i]),
-            child: _buildUserProfileItem(profiles[i]),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildUserProfileItem(UserProfile profile) {
-    return Container(
-      key: ValueKey(profile.userId),
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      width: 80,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          UserAvatar(url: profile.avatarUrl, size: 52),
-          const SizedBox(height: 8),
-          Text(
-            profile.fullName,
-            style: Styles.body1.copyWith(fontSize: 13),
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
+      height: 50,
+      width: 200,
+      child: ColorButton(
+        text: Strings.createRoom,
+        onPressed: createRoom,
+        color: ColorRes.white,
       ),
     );
   }

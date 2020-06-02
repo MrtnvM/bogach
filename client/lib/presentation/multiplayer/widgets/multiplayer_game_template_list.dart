@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_platform_loadable/flutter_platform_loadable.dart';
 
-class GameTemplateList extends HookWidget {
+class MultiplayerGameTemplateList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final requestState = useGlobalState(

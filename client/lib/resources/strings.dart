@@ -226,6 +226,11 @@ class Strings {
 
   // Multiplayer
   static String get selectPlayers => 'Выбрете игроков';
+  static String get waitingPlayers => 'Ожидание игроков';
   static String get selectedPlayers => 'Выбранные игроки';
   static String get allPlayers => 'Все игроки';
+  static String get createRoom => 'Создать комнату';
+  static String get startGame => 'Начать игру';
+  static String get roomCreationFailed =>
+      'При создании комнаты возникла ошибка';
 }
