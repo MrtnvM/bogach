@@ -88,6 +88,8 @@ class Strings {
   static const stock = 'Акции/Фонды';
   static const income = 'Непредвиденный доход';
   static const expense = 'Непредвиденный убыток';
+  static const monthlyExpenseEvent = 'Новое событие';
+  static const monthlyExpenseTitle = 'Ежемесячные расходы';
   static const property = 'Недвижимость';
   static const firstPayment = 'Первый взнос';
 
