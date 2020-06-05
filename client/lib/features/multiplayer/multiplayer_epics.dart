@@ -4,6 +4,7 @@ import 'package:cash_flow/models/network/request/game/create_room_request_model.
 import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:cash_flow/utils/core/epic.dart';
+import 'package:cash_flow/utils/core/tuple.dart';
 import 'package:flutter/foundation.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:rxdart/rxdart.dart';
@@ -32,7 +33,7 @@ Epic<AppState> multiplayerEpic({
           .createRoom(CreateRoomRequestModel(
             currentUserId: store.state.login.currentUser.id,
             gameTemplateId: store.state.multiplayer.selectedGameTemplate.id,
-            participantIds: action.participantIds,
+            participantsIds: action.participantIds,
           ))
           .shareReplay();
 
@@ -42,11 +43,14 @@ Epic<AppState> multiplayerEpic({
             createRoom.flatMap((room) => action$
                 .whereType<StopListeningRoomUpdatesAction>()
                 .where((action) => action.roomId == room.id)),
-          );
+          )
+          .map((room) => OnCurrentRoomUpdatedAction(room))
+          .onErrorReturnWith((error) => OnCurrentRoomUpdatedAction(null));
 
-      return Rx.concat([createRoom, onRoomUpdated])
-          .map(action.complete)
-          .onErrorReturnWith(action.fail);
+      return Rx.concat([
+        createRoom.take(1).map(action.complete).onErrorReturnWith(action.fail),
+        onRoomUpdated
+      ]);
     });
   });
 
@@ -75,10 +79,43 @@ Epic<AppState> multiplayerEpic({
             .onErrorReturnWith(action.fail));
   });
 
+  final joinRoomEpic = epic((action$, store) {
+    return action$
+        .whereType<JoinRoomAsyncAction>()
+        .where((action) => action.isStarted)
+        .flatMap((action) {
+      final room = gameService.getRoom(action.roomId).asStream().shareReplay();
+
+      final onRoomUpdated = room
+          .flatMap((room) => gameService.subscribeOnRoomUpdates(room.id))
+          .takeUntil(
+            room.flatMap((room) => action$
+                .whereType<StopListeningRoomUpdatesAction>()
+                .where((action) => action.roomId == room.id)),
+          )
+          .map((room) => OnCurrentRoomUpdatedAction(room))
+          .onErrorReturnWith((error) => OnCurrentRoomUpdatedAction(null));
+
+      final joinRoomResult = room
+          .asyncMap(
+            (room) => userService
+                .loadProfiles(room.participants.map((p) => p.id).toList())
+                .then((profiles) => Tuple(room, profiles)),
+          )
+          .take(1);
+
+      return Rx.concat([
+        joinRoomResult.map(action.complete).onErrorReturnWith(action.fail),
+        onRoomUpdated
+      ]);
+    });
+  });
+
   return combineEpics([
     queryUsersEpic,
     createRoomEpic,
     setPlayerReadyStatusEpic,
     createRoomGameEpic,
+    joinRoomEpic,
   ]);
 }

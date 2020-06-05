@@ -233,4 +233,5 @@ class Strings {
   static String get startGame => 'Начать игру';
   static String get roomCreationFailed =>
       'При создании комнаты возникла ошибка';
+  static String get join => 'Присоединиться';
 }

@@ -26,6 +26,7 @@ abstract class MultiplayerState
   RequestState get createRoomRequestState;
   RequestState get createRoomGameRequestState;
   RequestState get joinRoomRequestState;
+  RequestState get setPlayerReadyRequestState;
 
   static MultiplayerState initial() => MultiplayerState((b) => b
     ..userProfiles = StoreList<UserProfile>()
@@ -33,5 +34,6 @@ abstract class MultiplayerState
     ..userProfilesQueryRequestState = RequestState.idle
     ..createRoomRequestState = RequestState.idle
     ..createRoomGameRequestState = RequestState.idle
-    ..joinRoomRequestState = RequestState.idle);
+    ..joinRoomRequestState = RequestState.idle
+    ..setPlayerReadyRequestState = RequestState.idle);
 }

@@ -6,6 +6,7 @@ import { GameEntity } from './game/game';
 export interface Room {
   id: RoomEntity.Id;
   gameTemplateId: GameTemplateEntity.Id;
+  ownerId: UserEntity.Id;
   participants: RoomEntity.Participant[];
   gameId?: GameEntity.Id;
 }
@@ -19,11 +20,12 @@ export namespace RoomEntity {
   export type Participant = {
     id: UserEntity.Id;
     status: ParticipantStatus;
+    deviceToken: string;
   };
 
   export const parse = (data: any): Room => {
-    const { id, gameTemplateId, participants, gameId } = data;
-    const room: Room = { id, gameTemplateId, participants, gameId };
+    const { id, gameTemplateId, ownerId, participants, gameId } = data;
+    const room: Room = { id, gameTemplateId, ownerId, participants, gameId };
 
     validate(room);
     return room;
@@ -34,6 +36,7 @@ export namespace RoomEntity {
 
     entity.hasValue('id');
     entity.hasValue('gameTemplateId');
+    entity.hasValue('ownerId');
     entity.hasValue('participants');
 
     const roomEntity = room as Room;

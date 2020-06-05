@@ -1,4 +1,4 @@
-import * as udid from 'uuid';
+import * as uuid from 'uuid';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from './firestore_selector';
 import { Game, GameEntity } from '../models/domain/game/game';
@@ -8,7 +8,6 @@ import { UserEntity } from '../models/domain/user';
 import { PossessionStateEntity } from '../models/domain/possession_state';
 import { assertExists } from '../utils/asserts';
 import { createParticipantsGameState } from '../models/domain/game/participant_game_state';
-import * as uuid from 'uuid';
 import { produce } from 'immer';
 import { checkIds, checkId } from '../core/validation/type_checks';
 
@@ -33,7 +32,7 @@ export class GameProvider {
       return createParticipantsGameState(participantsIds, value);
     };
 
-    const gameId: GameEntity.Id = udid.v4();
+    const gameId: GameEntity.Id = uuid.v4();
     const gameType: GameEntity.Type = participantsIds.length > 0 ? 'multiplayer' : 'singleplayer';
 
     const game: Game = {
@@ -134,14 +133,28 @@ export class GameProvider {
       throw new Error('ERROR: No template on room creation');
     }
 
-    const participants = participantIds.map((participantsId) => {
+    console.warn('!!! Room creation');
+
+    const participantDevices = await Promise.all(
+      participantIds.map((id) => {
+        const deviceSelector = this.selector.device(id);
+        return this.firestore.getItem(deviceSelector).then((s) => s.data());
+      })
+    );
+
+    console.warn('!!! Devices: ' + JSON.stringify(participantDevices, null, 2));
+
+    const participants = participantIds.map((participantsId, index) => {
       const status: RoomEntity.ParticipantStatus =
         participantsId === currentUserId ? 'ready' : 'waiting';
 
       const participant: RoomEntity.Participant = {
         id: participantsId,
         status,
+        deviceToken: participantDevices[index]?.token || null,
       };
+
+      console.log(JSON.stringify(participant));
 
       return participant;
     });
@@ -150,6 +163,7 @@ export class GameProvider {
     const room: Room = {
       id: roomId,
       gameTemplateId,
+      ownerId: currentUserId,
       participants,
     };
 
@@ -177,7 +191,7 @@ export class GameProvider {
     return updatedRoom;
   }
 
-  async createRoomGame(roomId: RoomEntity.Id): Promise<Room> {
+  async createRoomGame(roomId: RoomEntity.Id): Promise<[Room, Game]> {
     checkId(roomId);
 
     const selector = this.selector.room(roomId);
@@ -203,6 +217,6 @@ export class GameProvider {
     RoomEntity.validate(room);
 
     const updatedRoom = await this.firestore.updateItem(selector, room);
-    return updatedRoom;
+    return [updatedRoom, game];
   }
 }

@@ -25,7 +25,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const participantsIds = apiRequest.jsonField('participantsIds');
     const currentUserId = apiRequest.jsonField('currentUserId');
 
-    const createRoomRequest = gameProvider.createRoom(
+    const createRoomRequest = gameService.createRoom(
       gameTemplateId,
       participantsIds,
       currentUserId
@@ -59,7 +59,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const roomId = apiRequest.jsonField('roomId');
 
-    const createRoomRequest = gameProvider.createRoomGame(roomId);
+    const createRoomRequest = gameService.createRoomGame(roomId);
     return send(createRoomRequest, response);
   });
 

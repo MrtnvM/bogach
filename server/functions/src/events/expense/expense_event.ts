@@ -35,5 +35,5 @@ export namespace ExpenseEvent {
     entity.checkWithRules([[(a) => a.expense <= 0, "Expense can't be <= 0"]]);
   };
 
-  export const validateAction = (action: any) => {};
+  export const validateAction = (action: any) => undefined;
 }

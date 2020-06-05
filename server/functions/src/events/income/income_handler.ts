@@ -25,7 +25,6 @@ export class IncomeHandler extends PlayerActionHandler {
   async validate(event: any, action: any): Promise<boolean> {
     try {
       IncomeEvent.validate(event);
-      IncomeEvent.validateAction(action);
     } catch (error) {
       console.error(error);
       return false;

@@ -59,7 +59,8 @@ class CreateRoomPage extends HookWidget {
         return;
       }
 
-      final participantIds = selectedPlayers.value.map((p) => p.id).toList();
+      final participantIds =
+          selectedPlayers.value.map((p) => p.userId).toList();
 
       multiplayerActions
           .createRoom(participantIds)
@@ -81,7 +82,7 @@ class CreateRoomPage extends HookWidget {
                 Strings.selectedPlayers,
                 style: Styles.caption.copyWith(fontSize: 19),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 8),
               HorizontalUserProfileList(
                 profiles: selectedPlayers.value.toList(),
                 onProfileSelected: removeUser,
@@ -98,9 +99,9 @@ class CreateRoomPage extends HookWidget {
                     .toList(),
                 onProfileSelected: selectPlayer,
               ),
-              const SizedBox(height: 36),
+              // // const SizedBox(height: 36),
               _buildCreateRoomButton(createRoom),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               _buildBackButton(),
               const SizedBox(height: 16),
             ],

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/models/network/core/search_query_result.dart';
@@ -8,6 +10,7 @@ import 'package:cash_flow/models/network/request/register_request_model.dart';
 import 'package:cash_flow/utils/error_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:meta/meta.dart';
 
 class UserService {
@@ -163,11 +166,30 @@ class UserService {
     );
   }
 
+  Future<List<UserProfile>> loadProfiles(List<String> profileIds) async {
+    final profiles = await Future.wait(
+      profileIds.map((id) => firestore.collection('users').document(id).get()),
+    );
+
+    return profiles
+        .map((snapshot) => UserProfile.fromJson(snapshot.data))
+        .toList();
+  }
+
   Future<UserProfile> _saveUserToFirestore(UserProfile user) async {
     await firestore.collection('users').document(user.userId).setData({
       'userId': user.userId,
       'userName': user.fullName,
       'avatarUrl': user.avatarUrl,
+    });
+
+    final firebaseMessaging = FirebaseMessaging();
+
+    firebaseMessaging.getToken().then((token) {
+      firestore
+          .collection('devices')
+          .document(user.userId)
+          .setData({'token': token, 'device': Platform.operatingSystem});
     });
 
     return user;

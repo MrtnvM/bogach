@@ -1,6 +1,8 @@
 import 'package:cash_flow/features/multiplayer/multiplayer_actions.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/models/domain/room/room.dart';
+import 'package:cash_flow/models/domain/user/user_profile.dart';
+import 'package:cash_flow/utils/core/tuple.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
@@ -36,6 +38,9 @@ _MultiplayerActions useMultiplayerActions() {
       stopListeningRoomUpdates: (roomId) {
         actionRunner.runAction(StopListeningRoomUpdatesAction(roomId));
       },
+      joinRoom: (roomId) {
+        return actionRunner.runAsyncAction(JoinRoomAsyncAction(roomId));
+      },
     );
   });
 }
@@ -48,6 +53,7 @@ class _MultiplayerActions {
     @required this.setPlayerReady,
     @required this.createRoomGame,
     @required this.stopListeningRoomUpdates,
+    @required this.joinRoom,
   });
 
   final void Function(String searchString) searchUsers;
@@ -57,4 +63,5 @@ class _MultiplayerActions {
   final Future Function(String participantId) setPlayerReady;
   final Future Function() createRoomGame;
   final void Function(String) stopListeningRoomUpdates;
+  final Future<Tuple<Room, List<UserProfile>>> Function(String) joinRoom;
 }

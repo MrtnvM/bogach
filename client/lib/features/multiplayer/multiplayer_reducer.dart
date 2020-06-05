@@ -30,4 +30,19 @@ final multiplayerReducer = Reducer<MultiplayerState>()
     (state, action) => state.rebuild((s) {
       s.createRoomGameRequestState = action.requestState;
     }),
+  )
+  ..on<JoinRoomAsyncAction>(
+    (state, action) => state.rebuild((s) {
+      s.joinRoomRequestState = action.requestState;
+
+      action.onSuccess((result) {
+        s.currentRoom = result.item1;
+        s.userProfiles.addAll(result.item2);
+      });
+    }),
+  )
+  ..on<OnCurrentRoomUpdatedAction>(
+    (state, action) => state.rebuild((s) {
+      s.currentRoom = action.room;
+    }),
   );

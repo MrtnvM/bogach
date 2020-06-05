@@ -6,11 +6,6 @@ import { GameService } from '../services/game_service';
 import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from '../providers/firestore_selector';
-import {
-  applyGameTransformers,
-  GameEventsTransformer,
-  PossessionStateTransformer,
-} from '../transformers/game_transformers';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
@@ -22,21 +17,10 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const apiRequest = APIRequest.from(request);
 
     const templateId = apiRequest.jsonField('templateId');
-    const participantsIds = apiRequest.jsonField('participantsIds');
+    const participantsIds = apiRequest.optionalJsonField('participantsIds');
+    const userId = apiRequest.optionalJsonField('userId');
 
-    const createNewGame = async () => {
-      const createdGame = await gameProvider.createGame(templateId, participantsIds);
-
-      const newGame = applyGameTransformers(createdGame, [
-        new GameEventsTransformer(true),
-        new PossessionStateTransformer(),
-      ]);
-
-      await gameProvider.updateGame(newGame);
-      return newGame;
-    };
-
-    const game = createNewGame();
+    const game = gameService.createNewGame(templateId, participantsIds || [userId]);
     return send(game, response);
   });
 

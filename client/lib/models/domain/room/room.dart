@@ -9,6 +9,7 @@ abstract class Room with _$Room {
   factory Room({
     @required String id,
     String gameTemplateId,
+    String ownerId,
     String gameId,
     List<RoomParticipant> participants,
   }) = _Room;

@@ -78,4 +78,12 @@ class GameService {
         .snapshots()
         .map((snapshot) => Room.fromJson(snapshot.data));
   }
+
+  Future<Room> getRoom(String roomId) {
+    return firestore
+        .collection('rooms')
+        .document(roomId)
+        .get()
+        .then((snapshot) => Room.fromJson(snapshot.data));
+  }
 }
