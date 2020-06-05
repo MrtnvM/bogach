@@ -68,6 +68,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
       .then((result) => response.status(200).send(result))
       .catch((error) => {
         const errorMessage = error['message'] ? error.message : error;
+        console.error('ERROR: ' + JSON.stringify(error));
+        console.error('ERROR MESSAGE: ' + errorMessage);
         response.status(422).send(errorMessage);
       });
   };

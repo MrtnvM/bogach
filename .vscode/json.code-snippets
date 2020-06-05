@@ -41,5 +41,10 @@
     "scope": "dart",
     "prefix": "res_string",
     "body": "static const $1 = '$2';"
+  },
+  "Log Object": {
+    "scope": "typescript",
+    "body": "console.log(JSON.stringify($1));",
+    "prefix": "log_obj"
   }
 }
