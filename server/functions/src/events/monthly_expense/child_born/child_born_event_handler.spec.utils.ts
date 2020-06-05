@@ -11,29 +11,15 @@ import { OtherLiability } from '../../../models/domain/liabilities/other_liabili
 import { UserEntity } from '../../../models/domain/user';
 import { Possessions } from '../../../models/domain/possessions';
 import { PossessionStateEntity } from '../../../models/domain/possession_state';
-import { GameContext } from '../../../models/domain/game/game_context';
 import { GameEventEntity } from '../../../models/domain/game/game_event';
-import { BusinessBuyEvent } from './business_buy_event';
+import { MonthlyExpenseEvent } from '../monthly_expense_event';
 
 const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
 const userId: UserEntity.Id = 'user1';
-const context: GameContext = { gameId, userId };
-const initialCash = 100_000;
+const initialCash = 10_000;
 
 const create = <T>(obj: T) => obj;
-
-const business1 = create<BusinessAsset>({
-  id: 'id1',
-  name: 'Химчистка',
-  type: 'business',
-  buyPrice: 120_000,
-  downPayment: 21_000,
-  fairPrice: 115_000,
-  passiveIncomePerMonth: 2100,
-  payback: 21,
-  sellProbability: 7,
-});
 
 const initialPossesssions: Possessions = {
   incomes: [
@@ -65,7 +51,6 @@ const initialPossesssions: Possessions = {
       value: 50000,
       downPayment: 5000,
     }),
-    business1,
     create<StockAsset>({
       id: 'stocks1',
       name: 'Яндекс',
@@ -82,15 +67,15 @@ const initialPossesssions: Possessions = {
       downPayment: 1000000,
     }),
     create<BusinessAsset>({
-      id: 'business2',
-      name: 'Птицеферма',
+      id: 'business1',
+      name: 'Ларек с шавой',
       type: 'business',
-      buyPrice: 130_000,
-      downPayment: 15_000,
-      fairPrice: 135_000,
-      passiveIncomePerMonth: 2500,
-      payback: 22,
-      sellProbability: 10,
+      fairPrice: 200000,
+      downPayment: 100000,
+      buyPrice: 210_000,
+      payback: 20,
+      passiveIncomePerMonth: 2000,
+      sellProbability: 5,
     }),
     create<OtherAsset>({
       id: 'other_asset1',
@@ -122,18 +107,11 @@ const initialPossesssions: Possessions = {
       monthlyPayment: 500,
     }),
     create<BusinessCreditLiability>({
-      id: 'existingLiabilityId',
-      value: 20_000,
-      name: 'Химчистка',
+      id: 'business_credit1',
+      value: 40000,
+      name: 'Кредит за ларек',
       type: 'business_credit',
-      monthlyPayment: 0,
-    }),
-    create<BusinessCreditLiability>({
-      id: 'business_credit2',
-      value: 10_000,
-      name: 'Бизнес у которого совпадет долг',
-      type: 'business_credit',
-      monthlyPayment: 0,
+      monthlyPayment: 5000,
     }),
   ],
 };
@@ -158,65 +136,33 @@ const game: Game = {
     [userId]: PossessionStateEntity.createEmpty(),
   },
   accounts: {
-    [userId]: { cashFlow: 10_000, cash: initialCash, credit: 0 },
+    [userId]: { cashFlow: 10000, cash: initialCash, credit: 0 },
   },
-  target: { type: 'cash', value: 1_000_000 },
+  target: { type: 'cash', value: 1000000 },
   currentEvents: [],
 };
 
-const businessOfferEvent = (data: BusinessBuyEvent.Data) => {
-  const event: BusinessBuyEvent.Event = {
+const monthlyExpenseEvent = (data: MonthlyExpenseEvent.Data) => {
+  const event: MonthlyExpenseEvent.Event = {
     id: eventId,
-    name: 'Торговая точка',
+    name: 'Name',
     description: 'Description',
-    type: BusinessBuyEvent.Type,
+    type: MonthlyExpenseEvent.Type,
     data: data,
   };
 
-  BusinessBuyEvent.validate(event);
+  MonthlyExpenseEvent.validate(event);
   return event;
-};
-
-const dryCleaningBusinessOfferEvent = (currentPrice: number) => {
-  const eventData: BusinessBuyEvent.Data = {
-    businessId: 'id1',
-    currentPrice: currentPrice,
-    downPayment: 21_000,
-    fairPrice: 115_000,
-    passiveIncomePerMonth: 2100,
-    payback: 21,
-    debt: 99_000,
-    sellProbability: 7,
-  };
-
-  const event: BusinessBuyEvent.Event = {
-    id: eventId,
-    name: 'Химчистка',
-    description: 'Description',
-    type: BusinessBuyEvent.Type,
-    data: eventData,
-  };
-
-  BusinessBuyEvent.validate(event);
-  return event;
-};
-
-const businessOfferEventPlayerAction = (action: BusinessBuyEvent.PlayerAction) => {
-  BusinessBuyEvent.validateAction(action);
-  return action;
 };
 
 export const stubs = {
   eventId,
   gameId,
   userId,
-  context,
   game,
   initialCash,
 };
 
 export const utils = {
-  dryCleaningBusinessOfferEvent,
-  businessOfferEvent,
-  businessOfferEventPlayerAction,
+  monthlyExpenseEvent,
 };

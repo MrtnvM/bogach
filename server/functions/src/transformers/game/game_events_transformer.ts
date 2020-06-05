@@ -10,6 +10,7 @@ import { IncomeEventGenerator } from '../../events/income/income_event_generator
 import { ExpenseEventGenerator } from '../../events/expense/expense_event_generator';
 import { StockPriceChangedEventGenerator } from '../../events/stock/stock_price_changed_event_generator';
 import { DebenturePriceChangedEventGenerator } from '../../events/debenture/debenture_price_changed_event_generator';
+import { ChildBornGenerator } from '../../events/monthly_expense/child_born/child_born_event_generator';
 
 export class GameEventsTransformer extends GameTransformer {
   constructor(private force: boolean = false) {
@@ -31,6 +32,7 @@ export class GameEventsTransformer extends GameTransformer {
     const businessSellEventProvider = new BusinessSellEventProvider(businessSellEventGenerator);
 
     const gameEvents = [
+      ChildBornGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),

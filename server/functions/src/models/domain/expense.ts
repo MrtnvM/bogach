@@ -10,8 +10,8 @@ export namespace ExpenseEntity {
   export type Id = string;
 
   export const parse = (data: any): Expense => {
-    const { id, name, value } = data;
-    const expense = { id, name, value };
+    const { id, name, value, type } = data;
+    const expense = { id, name, value, type };
 
     validate(expense);
 
@@ -24,7 +24,7 @@ export namespace ExpenseEntity {
     entity.hasValue('name');
     entity.hasValue('value');
 
-    entity.check(e => {
+    entity.check((e) => {
       if (e.value <= 0) {
         return 'Expense cannot be equal or lower than 0';
       }
