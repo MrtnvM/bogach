@@ -46,7 +46,9 @@ describe('Possession Service Tests', () => {
           name: 'Страховка квартиры',
           type: 'insurance',
           value: 50000,
-          downPayment: 5000,
+          cost: 5000,
+          movesLeft: 12,
+          insuranceType: 'health',
         }),
         create<DebentureAsset>({
           id: 'debenture1',
@@ -161,7 +163,9 @@ describe('Possession Service Tests', () => {
           name: 'Страховка квартиры',
           type: 'insurance',
           value: 50000,
-          downPayment: 5000,
+          cost: 5000,
+          movesLeft: 12,
+          insuranceType: 'health',
         }),
         create<DebentureAsset>({
           id: 'debenture1',

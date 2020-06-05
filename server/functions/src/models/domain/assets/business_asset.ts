@@ -45,7 +45,7 @@ export namespace BusinessAssetEntity {
     entity.checkWithRules([
       [(a) => a.buyPrice <= 0, "BuyPrice can't be <= 0"],
       [(a) => a.downPayment <= 0, "DownPayment can't be <= 0"],
-      [(a) => a.fairPrice <= 0, "FairProce can't be <= 0"],
+      [(a) => a.fairPrice <= 0, "FairPrice can't be <= 0"],
       [(a) => a.sellProbability <= 0, "SellProbability can't be <= 0"],
     ]);
   };
