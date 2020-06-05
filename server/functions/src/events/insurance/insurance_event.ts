@@ -10,7 +10,7 @@ export namespace InsuranceEvent {
   export interface Data {
     readonly cost: number;
     readonly value: number;
-    readonly movesLeft: number;
+    readonly duration: number;
     readonly insuranceType: InsuranceAssetEntity.InsuranceType;
   }
 
@@ -27,13 +27,13 @@ export namespace InsuranceEvent {
 
     entity.hasNumberValue('cost');
     entity.hasNumberValue('value');
-    entity.hasNumberValue('movesLeft');
+    entity.hasNumberValue('duration');
     entity.checkUnion('insuranceType', InsuranceAssetEntity.TypeValues);
 
     entity.checkWithRules([
       [(a) => a.cost <= 0, "Down payment can't be <= 0"],
       [(a) => a.value <= 0, "Insurance value can't be <= 0"],
-      [(a) => a.movesLeft <= 0, "MovesLeft value can't be <= 0"],
+      [(a) => a.duration <= 0, "Duration value can't be <= 0"],
     ]);
   };
 

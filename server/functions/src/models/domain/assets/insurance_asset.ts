@@ -4,19 +4,19 @@ import { Entity } from '../../../core/domain/entity';
 export interface InsuranceAsset extends Asset {
   readonly cost: number;
   readonly value: number;
-  readonly movesLeft: number;
+  readonly duration: number;
+  readonly fromMonth: number;
   readonly insuranceType: InsuranceAssetEntity.InsuranceType;
 }
-
 
 export namespace InsuranceAssetEntity {
   export type InsuranceType = 'health' | 'property';
   export const TypeValues = ['health', 'property'];
 
   export const parse = (asset: Asset, data: any): InsuranceAsset => {
-    const { cost, value, movesLeft, insuranceType } = data;
+    const { cost, value, duration, fromMonth, insuranceType } = data;
 
-    return { ...asset, cost, value, movesLeft, insuranceType };
+    return { ...asset, cost, value, duration, fromMonth, insuranceType };
   };
 
   export const validate = (asset: any) => {
@@ -24,13 +24,15 @@ export namespace InsuranceAssetEntity {
 
     entity.hasNumberValue('cost');
     entity.hasNumberValue('value');
-    entity.hasNumberValue('movesLeft');
+    entity.hasNumberValue('duration');
+    entity.hasNumberValue('fromMonth');
     entity.checkUnion('insuranceType', TypeValues);
 
     entity.checkWithRules([
       [(a) => a.cost <= 0, "Down payment can't be <= 0"],
       [(a) => a.value <= 0, "Insurance value can't be <= 0"],
-      [(a) => a.movesLeft <= 0, "MovesLeft value can't be <= 0"],
+      [(a) => a.duration <= 0, "Duration value can't be <= 0"],
+      [(a) => a.fromMonth < 0, "FromMonth value can't be < 0"],
     ]);
   };
 }

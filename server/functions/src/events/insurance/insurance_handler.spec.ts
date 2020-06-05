@@ -21,7 +21,8 @@ describe('Income event handler', () => {
       id: 'insuranceId1',
       type: 'insurance',
       cost: 1200,
-      movesLeft: 12,
+      duration: 12,
+      fromMonth: 1,
       value: 5000,
       insuranceType: 'health',
       name: 'СЖ',
@@ -30,7 +31,7 @@ describe('Income event handler', () => {
     const eventData = utils.insuranceChangedEvent(
       {
         cost: 1200,
-        movesLeft: 12,
+        duration: 12,
         insuranceType: 'health',
         value: 5000,
       },
@@ -57,7 +58,8 @@ describe('Income event handler', () => {
       id: 'insuranceId1',
       type: 'insurance',
       cost: 1200,
-      movesLeft: 12,
+      duration: 12,
+      fromMonth: 1,
       value: 5000,
       insuranceType: 'health',
       name: 'СЖ',
@@ -66,7 +68,8 @@ describe('Income event handler', () => {
       id: 'insuranceId2',
       type: 'insurance',
       cost: 1400,
-      movesLeft: 12,
+      duration: 12,
+      fromMonth: 1,
       value: 6000,
       insuranceType: 'health',
       name: 'СЖ',
@@ -75,7 +78,7 @@ describe('Income event handler', () => {
     const eventData1 = utils.insuranceChangedEvent(
       {
         cost: 1200,
-        movesLeft: 12,
+        duration: 12,
         insuranceType: 'health',
         value: 5000,
       },
@@ -84,7 +87,7 @@ describe('Income event handler', () => {
     const eventData2 = utils.insuranceChangedEvent(
       {
         cost: 1400,
-        movesLeft: 12,
+        duration: 12,
         insuranceType: 'health',
         value: 6000,
       },

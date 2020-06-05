@@ -17,7 +17,8 @@ interface ActionResult {
 interface ActionParameters {
   readonly cost: number;
   readonly value: number;
-  readonly movesLeft: number;
+  readonly duration: number;
+  readonly fromMonth: number;
   readonly insuranceType: InsuranceAssetEntity.InsuranceType;
   readonly userAccount: Account;
   readonly event: Event;
@@ -42,16 +43,18 @@ export class InsuranceHandler {
   }
 
   async handle(game: Game, event: Event, action: Action, userId: UserEntity.Id): Promise<Game> {
-    const { cost, value, movesLeft, insuranceType } = event.data;
+    const { cost, value, duration, insuranceType } = event.data;
 
     const userAccount = game.accounts[userId];
+    const currentMonth = game.state.monthNumber;
 
     const assets = game.possessions[userId].assets;
 
     const actionParameters: ActionParameters = {
       cost,
       value,
-      movesLeft,
+      duration,
+      fromMonth: currentMonth,
       insuranceType,
       userAccount,
       event,
@@ -69,7 +72,16 @@ export class InsuranceHandler {
   }
 
   applyAction(actionParameters: ActionParameters): ActionResult {
-    const { cost, value, movesLeft, insuranceType, userAccount, event, assets } = actionParameters;
+    const {
+      cost,
+      value,
+      fromMonth,
+      duration,
+      insuranceType,
+      userAccount,
+      event,
+      assets,
+    } = actionParameters;
 
     // TODO implement credit and test
     const isEnoughMoney = userAccount.cash >= cost;
@@ -85,7 +97,8 @@ export class InsuranceHandler {
       type: 'insurance',
       cost,
       value,
-      movesLeft,
+      fromMonth,
+      duration,
       insuranceType,
     };
 

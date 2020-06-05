@@ -48,7 +48,8 @@ const initialPossesssions: Possessions = {
       type: 'insurance',
       insuranceType: 'health',
       value: 50000,
-      movesLeft: 12,
+      duration: 12,
+      fromMonth: 1,
       cost: 5000,
     }),
     create<StockAsset>({
