@@ -1,5 +1,6 @@
 import { Game, GameEntity } from '../../models/domain/game/game';
 import { InsuranceAsset } from '../../models/domain/assets/insurance_asset';
+import { StockAsset } from '../../models/domain/assets/stock_asset';
 import { RealtyAsset } from '../../models/domain/assets/realty_asset';
 import { BusinessAsset } from '../../models/domain/assets/business_asset';
 import { OtherAsset } from '../../models/domain/assets/other_asset';
@@ -10,27 +11,13 @@ import { OtherLiability } from '../../models/domain/liabilities/other_liability'
 import { UserEntity } from '../../models/domain/user';
 import { Possessions } from '../../models/domain/possessions';
 import { PossessionStateEntity } from '../../models/domain/possession_state';
-import { GameContext } from '../../models/domain/game/game_context';
-import { GameEventEntity } from '../../models/domain/game/game_event';
-import { StockAsset } from '../../models/domain/assets/stock_asset';
-import { StockPriceChangedEvent } from './stock_price_changed_event';
+import { InsuranceEvent } from './insurance_event';
 
-const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
 const userId: UserEntity.Id = 'user1';
-const context: GameContext = { gameId, userId };
-const initialCash = 10000;
+const initialCash = 10_000;
 
 const create = <T>(obj: T) => obj;
-
-const stock1 = create<StockAsset>({
-  id: 'stock1',
-  name: 'Акции Сбербанка',
-  type: 'stock',
-  averagePrice: 110,
-  countInPortfolio: 5,
-  fairPrice: 100,
-});
 
 const initialPossesssions: Possessions = {
   incomes: [
@@ -43,7 +30,7 @@ const initialPossesssions: Possessions = {
     {
       id: 'income2',
       value: 1000,
-      name: 'Карманные от дедушки',
+      name: 'Карманные от бабушки',
       type: 'other',
     },
   ],
@@ -59,20 +46,19 @@ const initialPossesssions: Possessions = {
       id: 'insurance1',
       name: 'Страховка квартиры',
       type: 'insurance',
+      insuranceType: 'health',
       value: 50000,
-      cost: 5000,
       duration: 12,
       fromMonth: 1,
-      insuranceType: 'health',
+      cost: 5000,
     }),
-    stock1,
     create<StockAsset>({
       id: 'stocks1',
       name: 'Яндекс',
       type: 'stock',
-      countInPortfolio: 100,
+      averagePrice: 1000,
+      countInPortfolio: 10,
       fairPrice: 900,
-      averagePrice: 800,
     }),
     create<RealtyAsset>({
       id: 'realty1',
@@ -157,55 +143,26 @@ const game: Game = {
   currentEvents: [],
 };
 
-const stockPriceChangedEvent = (data: StockPriceChangedEvent.Data) => {
-  const event: StockPriceChangedEvent.Event = {
+const insuranceChangedEvent = (data: InsuranceEvent.Data, eventId: string) => {
+  const event: InsuranceEvent.Event = {
     id: eventId,
-    name: 'stockName',
+    name: 'СЖ',
     description: 'Description',
-    type: StockPriceChangedEvent.Type,
+    type: InsuranceEvent.Type,
     data: data,
   };
 
-  StockPriceChangedEvent.validate(event);
+  InsuranceEvent.validate(event);
   return event;
-};
-
-const stockSberbankPriceChangedEvent = (currentPrice: number, maxCount: number) => {
-  const stockPriceEventData: StockPriceChangedEvent.Data = {
-    currentPrice,
-    fairPrice: 100,
-    availableCount: maxCount,
-  };
-
-  const event: StockPriceChangedEvent.Event = {
-    id: eventId,
-    name: 'Акции Сбербанка',
-    description: 'Description',
-    type: StockPriceChangedEvent.Type,
-    data: stockPriceEventData,
-  };
-
-  StockPriceChangedEvent.validate(event);
-  return event;
-};
-
-const stockPriceChangedPlayerAction = (action: StockPriceChangedEvent.PlayerAction) => {
-  StockPriceChangedEvent.validateAction(action);
-  return action;
 };
 
 export const stubs = {
-  eventId,
   gameId,
   userId,
-  context,
   game,
-  stock1,
   initialCash,
 };
 
 export const utils = {
-  stockSberbankPriceChangedEvent,
-  stockPriceChangedEvent,
-  stockPriceChangedPlayerAction,
+  insuranceChangedEvent,
 };

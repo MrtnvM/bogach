@@ -49,7 +49,10 @@ const initialPossesssions: Possessions = {
       name: 'Страховка квартиры',
       type: 'insurance',
       value: 50000,
-      downPayment: 5000,
+      cost: 5000,
+      duration: 12,
+      fromMonth: 1,
+      insuranceType: 'health',
     }),
     create<StockAsset>({
       id: 'stocks1',

@@ -28,6 +28,7 @@ describe('Expense event handler', () => {
     const newGame = await handler.handle(game, event, action, userId);
 
     const newExpense: Expense = {
+      id: 'event1',
       name: 'Ребёнок',
       value: 250,
     };
@@ -51,6 +52,7 @@ describe('Expense event handler', () => {
     };
 
     const firstChild: Expense = {
+      id: 'childId1',
       name: 'Валера',
       value: 250,
     };
@@ -62,6 +64,7 @@ describe('Expense event handler', () => {
     const newGame = await handler.handle(gameWithChild, event, action, userId);
 
     const secondChild: Expense = {
+      id: 'event1',
       name: 'Игнат',
       value: 250,
     };
