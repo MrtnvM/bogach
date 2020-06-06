@@ -47,7 +47,8 @@ describe('Possession Service Tests', () => {
           type: 'insurance',
           value: 50000,
           cost: 5000,
-          movesLeft: 12,
+          duration: 12,
+          fromMonth: 1,
           insuranceType: 'health',
         }),
         create<DebentureAsset>({
@@ -164,7 +165,8 @@ describe('Possession Service Tests', () => {
           type: 'insurance',
           value: 50000,
           cost: 5000,
-          movesLeft: 12,
+          duration: 12,
+          fromMonth: 1,
           insuranceType: 'health',
         }),
         create<DebentureAsset>({
