@@ -19,4 +19,7 @@ abstract class UserProfile with _$UserProfile implements StoreListItem {
   @override
   @late
   Object get id => userId;
+
+  @late
+  bool get isAnonymous => fullName == null || fullName.isEmpty;
 }

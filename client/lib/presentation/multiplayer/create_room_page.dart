@@ -22,7 +22,7 @@ class CreateRoomPage extends HookWidget {
     final selectedPlayers = useState(<UserProfile>{});
     final possiblePlayers = useGlobalState(
       (s) => s.multiplayer.userProfiles.items
-          .where((u) => u.fullName?.isNotEmpty == true)
+          .where((u) => !u.isAnonymous)
           .where((u) => u.userId != userId)
           .toList(),
     );
@@ -69,6 +69,7 @@ class CreateRoomPage extends HookWidget {
     };
 
     return Loadable(
+      backgroundColor: ColorRes.black80,
       isLoading: isRoomCreationInProgress,
       child: CashFlowScaffold(
         title: Strings.selectPlayers,
