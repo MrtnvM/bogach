@@ -83,7 +83,7 @@ Epic<AppState> multiplayerEpic({
     return action$
         .whereType<JoinRoomAsyncAction>()
         .where((action) => action.isStarted)
-        .flatMap((action) {
+        .switchMap((action) {
       final room = gameService.getRoom(action.roomId).asStream().shareReplay();
 
       final onRoomUpdated = room
