@@ -149,6 +149,7 @@ class UserService {
     return user;
   }
 
+  // TODO(maxim): Remove searching players
   Future<SearchQueryResult<UserProfile>> searchUsers(
     String searchString,
   ) async {
@@ -156,11 +157,9 @@ class UserService {
         .collection('users')
         .where('userName', isGreaterThanOrEqualTo: searchString)
         .getDocuments()
-        .then(
-          (snapshot) => snapshot.documents
-              .map((d) => UserProfile.fromJson(d.data))
-              .toList(),
-        );
+        .then((snapshot) => snapshot.documents
+            .map((d) => UserProfile.fromJson(d.data))
+            .toList());
 
     return SearchQueryResult(
       searchString: searchString,

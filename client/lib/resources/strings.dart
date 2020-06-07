@@ -227,7 +227,7 @@ class Strings {
       'Необходимо выбрать бизнес для продажи';
 
   // Multiplayer
-  static String get selectPlayers => 'Выбрете игроков';
+  static String get selectPlayers => 'Выбeрете игроков';
   static String get waitingPlayers => 'Ожидание игроков';
   static String get selectedPlayers => 'Выбранные игроки';
   static String get allPlayers => 'Все игроки';

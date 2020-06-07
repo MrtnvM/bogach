@@ -22,6 +22,7 @@ export class FirestoreSelector {
   rooms = (): CollectionReference => this.firestore.collection('rooms');
   room = (roomId: RoomEntity.Id) => this.rooms().doc(roomId);
 
+  // TODO(Maxim): Implement support of several user devices
   device = (userId: UserEntity.Id) => this.firestore.collection('devices').doc(userId);
 
   users = (): CollectionReference => this.firestore.collection('users');

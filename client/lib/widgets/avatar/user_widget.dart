@@ -21,7 +21,7 @@ class UserWidget extends HookWidget {
         UserAvatar(url: user.avatarUrl),
         const SizedBox(width: 12),
         Container(
-          constraints: BoxConstraints(maxWidth: screenSize.width - 120),
+          constraints: BoxConstraints(maxWidth: screenSize.width * 0.8),
           child: Text(
             '${user.fullName}',
             style: Styles.body1,

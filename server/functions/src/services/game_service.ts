@@ -108,7 +108,10 @@ export class GameService {
         },
         pushTokens,
       })
-      .catch((e) => console.error('Failed sending room participant invites: ' + e));
+      .catch((e) => {
+        // TODO(Maxim): Process failed invites
+        console.error('Failed sending room participant invites: ' + e);
+      });
 
     return room;
   }
