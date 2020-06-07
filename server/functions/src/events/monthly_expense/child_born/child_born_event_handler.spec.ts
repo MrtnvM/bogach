@@ -1,9 +1,13 @@
+/// <reference types="@types/jest"/>
+
+import * as uuid from 'uuid';
+import produce from 'immer';
+
 import { GameEntity } from '../../../models/domain/game/game';
 import { MonthlyExpenseEventHandler } from '../monthly_expense_event_handler';
 import { stubs, utils } from './child_born_event_handler.spec.utils';
 import { MonthlyExpenseEvent } from '../monthly_expense_event';
-import uuid = require('uuid');
-import produce from 'immer';
+
 import { Expense } from '../../../models/domain/expense';
 
 describe('Expense event handler', () => {
@@ -28,6 +32,7 @@ describe('Expense event handler', () => {
     const newGame = await handler.handle(game, event, action, userId);
 
     const newExpense: Expense = {
+      id: 'event1',
       name: 'Ребёнок',
       value: 250,
     };
@@ -62,6 +67,7 @@ describe('Expense event handler', () => {
     const newGame = await handler.handle(gameWithChild, event, action, userId);
 
     const secondChild: Expense = {
+      id: 'event1',
       name: 'Игнат',
       value: 250,
     };

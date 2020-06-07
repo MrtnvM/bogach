@@ -10,7 +10,7 @@ export namespace ExpenseEvent {
     readonly expense: number;
   }
 
-  export interface PlayerAction {}
+  export type PlayerAction = {};
 
   export const parse = (gameEvent: GameEvent, eventData: any): Event => {
     const { expense } = eventData.data;
