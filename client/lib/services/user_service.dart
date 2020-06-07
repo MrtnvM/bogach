@@ -1,23 +1,35 @@
+import 'dart:io';
+
 import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
-import 'package:cash_flow/models/domain/user/current_user.dart';
+import 'package:cash_flow/models/domain/user/user_profile.dart';
+import 'package:cash_flow/models/network/core/search_query_result.dart';
 import 'package:cash_flow/models/network/errors/email_has_been_taken_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_email_exception.dart';
 import 'package:cash_flow/models/network/request/register_request_model.dart';
 import 'package:cash_flow/utils/error_handler.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:meta/meta.dart';
 
 class UserService {
-  UserService({@required this.firebaseAuth}) : assert(firebaseAuth != null);
+  UserService({
+    @required this.firebaseAuth,
+    @required this.firestore,
+    @required this.firebaseMessaging,
+  })  : assert(firebaseAuth != null),
+        assert(firestore != null);
 
   final FirebaseAuth firebaseAuth;
+  final Firestore firestore;
+  final FirebaseMessaging firebaseMessaging;
 
-  Stream<CurrentUser> login({
+  Stream<UserProfile> login({
     @required String email,
     @required String password,
   }) {
-    final errorHandler = ErrorHandler<CurrentUser>((code) {
+    final errorHandler = ErrorHandler<UserProfile>((code) {
       if (code == 'ERROR_USER_NOT_FOUND') {
         return const InvalidCredentialsException();
       }
@@ -31,7 +43,8 @@ class UserService {
     );
 
     return Stream.fromFuture(logInOperation)
-        .map((result) => mapToCurrentUser(result.user))
+        .map((result) => mapToUserProfile(result.user))
+        .asyncMap(_saveUserToFirestore)
         .transform(errorHandler);
   }
 
@@ -64,17 +77,18 @@ class UserService {
         .transform(errorHandler);
   }
 
-  Stream<CurrentUser> loginViaFacebook({@required String token}) {
+  Stream<UserProfile> loginViaFacebook({@required String token}) {
     final authCredential = FacebookAuthProvider.getCredential(
       accessToken: token,
     );
 
     return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
-        .map((authResponse) => mapToCurrentUser(authResponse.user));
+        .map((authResponse) => mapToUserProfile(authResponse.user))
+        .asyncMap(_saveUserToFirestore);
   }
 
-  Stream<CurrentUser> loginViaGoogle({
+  Stream<UserProfile> loginViaGoogle({
     @required String accessToken,
     @required String idToken,
   }) {
@@ -85,10 +99,11 @@ class UserService {
 
     return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
-        .map((authResponse) => mapToCurrentUser(authResponse.user));
+        .map((authResponse) => mapToUserProfile(authResponse.user))
+        .asyncMap(_saveUserToFirestore);
   }
 
-  Stream<CurrentUser> loginViaApple({
+  Stream<UserProfile> loginViaApple({
     @required String accessToken,
     @required String idToken,
     @required String firstName,
@@ -115,7 +130,8 @@ class UserService {
 
     return Stream.fromFuture(future)
         .transform(ErrorHandler())
-        .map(mapToCurrentUser);
+        .map(mapToUserProfile)
+        .asyncMap(_saveUserToFirestore);
   }
 
   Future<void> signUpUser(RegisterRequestModel model) async {
@@ -128,6 +144,59 @@ class UserService {
     final userUpdateInfo = UserUpdateInfo();
     userUpdateInfo.displayName = model.nickName;
     await user.updateProfile(userUpdateInfo);
+    await _saveUserToFirestore(mapToUserProfile(user));
+
+    return user;
+  }
+
+  // TODO(maxim): Remove searching players
+  Future<SearchQueryResult<UserProfile>> searchUsers(
+    String searchString,
+  ) async {
+    final users = await firestore
+        .collection('users')
+        .where('userName', isGreaterThanOrEqualTo: searchString)
+        .getDocuments()
+        .then((snapshot) => snapshot.documents
+            .map((d) => UserProfile.fromJson(d.data))
+            .toList());
+
+    return SearchQueryResult(
+      searchString: searchString,
+      items: users,
+    );
+  }
+
+  Future<List<UserProfile>> loadProfiles(List<String> profileIds) async {
+    final profiles = await Future.wait(
+      profileIds.map((id) => firestore.collection('users').document(id).get()),
+    );
+
+    return profiles
+        .map((snapshot) => UserProfile.fromJson(snapshot.data))
+        .toList();
+  }
+
+  Future<void> sendUserPushToken({
+    @required String userId,
+    @required String pushToken,
+  }) async {
+    await Firestore.instance
+        .collection('devices')
+        .document(userId)
+        .setData({'token': pushToken, 'device': Platform.operatingSystem});
+  }
+
+  Future<UserProfile> _saveUserToFirestore(UserProfile user) async {
+    await firestore.collection('users').document(user.userId).setData({
+      'userId': user.userId,
+      'userName': user.fullName,
+      'avatarUrl': user.avatarUrl,
+    });
+
+    firebaseMessaging.getToken().then((token) {
+      sendUserPushToken(userId: user.userId, pushToken: token);
+    });
 
     return user;
   }

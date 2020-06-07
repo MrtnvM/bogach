@@ -6,16 +6,18 @@ import { GameProvider } from '../providers/game_provider';
 import { GameService } from './game_service';
 import { GameContext } from '../models/domain/game/game_context';
 import { TestData } from './game_service.spec.utils';
+import { FirebaseMessaging } from '../core/firebase/firebase_messaging';
 
 describe('Game Service - Singleplayer game', () => {
   test('Successfully handle not last game event', async () => {
     const { gameId, userId, game, firstEventId, firstEventPlayerAction } = TestData;
 
-    const mockGameProvider: GameProvider = mock(GameProvider);
+    const mockGameProvider = mock(GameProvider);
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
 
-    const gameProvider: GameProvider = instance(mockGameProvider);
-    const gameService = new GameService(gameProvider);
+    const gameProvider = instance(mockGameProvider);
+    const firebaseMessaging = instance(mock(FirebaseMessaging));
+    const gameService = new GameService(gameProvider, firebaseMessaging);
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(firstEventId, firstEventPlayerAction, gameContext);
@@ -44,11 +46,12 @@ describe('Game Service - Singleplayer game', () => {
       draft.state.participantProgress[userId] = draft.currentEvents.length - 1;
     });
 
-    const mockGameProvider: GameProvider = mock(GameProvider);
+    const mockGameProvider = mock(GameProvider);
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
 
-    const gameProvider: GameProvider = instance(mockGameProvider);
-    const gameService = new GameService(gameProvider);
+    const gameProvider = instance(mockGameProvider);
+    const firebaseMessaging = instance(mock(FirebaseMessaging));
+    const gameService = new GameService(gameProvider, firebaseMessaging);
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
@@ -82,11 +85,12 @@ describe('Game Service - Singleplayer game', () => {
       draft.accounts[userId].cash = 999999;
     });
 
-    const mockGameProvider: GameProvider = mock(GameProvider);
+    const mockGameProvider = mock(GameProvider);
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
 
-    const gameProvider: GameProvider = instance(mockGameProvider);
-    const gameService = new GameService(gameProvider);
+    const gameProvider = instance(mockGameProvider);
+    const firebaseMessaging = instance(mock(FirebaseMessaging));
+    const gameService = new GameService(gameProvider, firebaseMessaging);
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
@@ -122,11 +126,12 @@ describe('Game Service - Singleplayer game', () => {
       draft.state.gameStatus = 'game_over';
     });
 
-    const mockGameProvider: GameProvider = mock(GameProvider);
+    const mockGameProvider = mock(GameProvider);
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
 
-    const gameProvider: GameProvider = instance(mockGameProvider);
-    const gameService = new GameService(gameProvider);
+    const gameProvider = instance(mockGameProvider);
+    const firebaseMessaging = instance(mock(FirebaseMessaging));
+    const gameService = new GameService(gameProvider, firebaseMessaging);
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);

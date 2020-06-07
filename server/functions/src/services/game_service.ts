@@ -1,3 +1,4 @@
+import { FirebaseMessaging } from '../core/firebase/firebase_messaging';
 import { GameProvider } from '../providers/game_provider';
 import { GameEventEntity } from '../models/domain/game/game_event';
 import { GameContext } from '../models/domain/game/game_context';
@@ -18,9 +19,15 @@ import { IncomeHandler } from '../events/income/income_handler';
 import { ExpenseHandler } from '../events/expense/expense_handler';
 import { BusinessSellEventHandler } from '../events/business/sell/business_sell_event_handler';
 import { MonthlyExpenseEventHandler } from '../events/monthly_expense/monthly_expense_event_handler';
+import { UserEntity } from '../models/domain/user';
+import { GameTemplateEntity } from '../models/domain/game/game_template';
+import { Room, RoomEntity } from '../models/domain/room';
+import { checkIds } from '../core/validation/type_checks';
+import { Strings } from '../resources/strings';
+import { Game } from '../models/domain/game/game';
 
 export class GameService {
-  constructor(private gameProvider: GameProvider) {
+  constructor(private gameProvider: GameProvider, private firebaseMessaging: FirebaseMessaging) {
     this.handlers.forEach((handler) => {
       this.handlerMap[handler.gameEventType] = handler;
     });
@@ -37,6 +44,14 @@ export class GameService {
   ];
 
   private handlerMap: { [type: string]: PlayerActionHandler } = {};
+
+  async createNewGame(templateId: GameTemplateEntity.Id, participantsIds: UserEntity.Id[]) {
+    const createdGame = await this.gameProvider.createGame(templateId, participantsIds);
+    const newGame = this.intializeGame(createdGame);
+
+    await this.gameProvider.updateGame(newGame);
+    return newGame;
+  }
 
   async handlePlayerAction(eventId: GameEventEntity.Id, action: any, context: GameContext) {
     const { gameId, userId } = context;
@@ -69,5 +84,67 @@ export class GameService {
     ]);
 
     await this.gameProvider.updateGame(updatedGame);
+  }
+
+  async createRoom(
+    gameTemplateId: GameTemplateEntity.Id,
+    participantsIds: UserEntity.Id[],
+    currentUserId: UserEntity.Id
+  ): Promise<Room> {
+    const room = await this.gameProvider.createRoom(gameTemplateId, participantsIds, currentUserId);
+
+    const pushTokens = room.participants
+      .filter((p) => p.id !== room.owner.id)
+      .map((p) => p.deviceToken)
+      .filter((token) => token);
+
+    this.firebaseMessaging
+      .sendMulticastNotification({
+        title: Strings.battleInvitationNotificationTitle(),
+        body: room.owner.userName + ' ' + Strings.battleInvitationNotificationBody(),
+        data: {
+          roomId: room.id,
+          type: 'go_to_room',
+        },
+        pushTokens,
+      })
+      .catch((e) => {
+        // TODO(Maxim): Process failed invites
+        console.error('Failed sending room participant invites: ' + e);
+      });
+
+    return room;
+  }
+
+  async onParticipantReady(roomId: RoomEntity.Id, participantId: UserEntity.Id) {
+    checkIds([roomId, participantId]);
+
+    const room = await this.gameProvider.setParticipantReady(roomId, participantId);
+
+    const gameIsNotCreatedYet = !room.gameId;
+    const isAllParticipantsReady = room.participants.every((p) => p.status === 'ready');
+
+    if (gameIsNotCreatedYet && isAllParticipantsReady) {
+      await this.createRoomGame(room.id);
+    }
+  }
+
+  /// Creation of room game by force without waitng of all players
+  async createRoomGame(roomId: RoomEntity.Id) {
+    const [room, game] = await this.gameProvider.createRoomGame(roomId);
+
+    const newGame = this.intializeGame(game);
+    await this.gameProvider.updateGame(newGame);
+
+    return room;
+  }
+
+  private intializeGame(game: Game): Game {
+    const newGame = applyGameTransformers(game, [
+      new GameEventsTransformer(true),
+      new PossessionStateTransformer(),
+    ]);
+
+    return newGame;
   }
 }

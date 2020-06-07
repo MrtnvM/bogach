@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class ContainerWithHeaderImage extends HookWidget {
-  ContainerWithHeaderImage({
+  const ContainerWithHeaderImage({
     Key key,
     @required this.children,
     @required this.navBarTitle,
@@ -15,15 +15,16 @@ class ContainerWithHeaderImage extends HookWidget {
   final List<Widget> children;
   final String navBarTitle;
 
-  final scrollController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
+    final scrollController = useMemoized(() => ScrollController());
+
     final isSendingTurnEvent = useGlobalState((state) {
-      final activeGameState = state.gameState.activeGameState;
+      final activeGameState = state.game.activeGameState;
 
       final isSent = activeGameState.maybeWhen(
-        gameEvent: (_, isSent) => isSent,
+        gameEvent: (eventIndex, sendingEventIndex) =>
+            eventIndex == sendingEventIndex,
         orElse: () => false,
       );
 

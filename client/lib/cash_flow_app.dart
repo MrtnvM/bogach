@@ -1,5 +1,7 @@
+import 'package:cash_flow/app/app_hooks.dart';
 import 'package:cash_flow/app/app_state.dart';
-import 'package:cash_flow/features/purchase/purchase_actions.dart';
+import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/core/hooks/push_notification_hooks.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/presentation/main/main_page.dart';
@@ -7,64 +9,63 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/utils/core/device_preview.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:flutter_hooks/flutter_hooks.dart' hide Store;
+import 'package:flutter_platform_loadable/flutter_platform_loadable.dart';
 import 'package:flutter_redux/flutter_redux.dart' as redux;
 import 'package:redux/redux.dart';
 
-class CashFlowApp extends StatefulWidget {
+class CashFlowApp extends HookWidget {
   CashFlowApp({
     @required this.store,
     @required this.isAuthorised,
-  }) : super(key: GlobalKey<CashFlowAppState>());
+  }) : super(key: GlobalKey());
 
   final Store<AppState> store;
   final bool isAuthorised;
 
   @override
-  State<StatefulWidget> createState() => CashFlowAppState();
-}
-
-class CashFlowAppState extends State<CashFlowApp> with ReduxState {
-  @override
-  void initState() {
-    super.initState();
-
-    dispatch(StartListeningPurchasesAction());
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final isJoiningToRoom = useGlobalState(
+      (s) => s.multiplayer.joinRoomRequestState.isInProgress,
+    );
+
+    useSubscriptionToPurchases();
+    usePushNotificationsPermissionRequest(useDelay: true);
+    useUserPushTokenUploader();
+    usePushNotificationsHandler();
+
+    final theme = Theme.of(context).copyWith(
+      scaffoldBackgroundColor: ColorRes.scaffoldBackground,
+      accentColor: Colors.white,
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        },
+      ),
+    );
+
+    final homePage = isAuthorised ? const MainPage() : const LoginPage();
+
     return redux.StoreProvider(
-      store: widget.store,
+      store: store,
       child: StreamBuilder(
         stream: DevicePreviewMode.onModeChanged,
         builder: (context, snapShoot) => DevicePreview(
           enabled: snapShoot.hasData && snapShoot.data,
           builder: (context) => MaterialApp(
             debugShowCheckedModeBanner: false,
-            builder: DevicePreview.appBuilder,
-            navigatorKey: appRouter.navigatorKey,
-            home: widget.isAuthorised ? const MainPage() : const LoginPage(),
-            theme: Theme.of(context).copyWith(
-              scaffoldBackgroundColor: ColorRes.scaffoldBackground,
-              accentColor: Colors.white,
-              pageTransitionsTheme: const PageTransitionsTheme(
-                builders: <TargetPlatform, PageTransitionsBuilder>{
-                  TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-                  TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-                },
-              ),
+            builder: (context, widget) => Loadable(
+              backgroundColor: ColorRes.black80,
+              isLoading: isJoiningToRoom,
+              child: DevicePreview.appBuilder(context, widget),
             ),
+            navigatorKey: appRouter.navigatorKey,
+            home: homePage,
+            theme: theme,
           ),
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    dispatch(StopListeningPurchasesAction());
-
-    super.dispose();
   }
 }

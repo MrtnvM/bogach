@@ -10,7 +10,7 @@ export namespace IncomeEvent {
     readonly income: number;
   }
 
-  export interface PlayerAction {}
+  export type PlayerAction = {};
 
   export const parse = (gameEvent: GameEvent, eventData: any): Event => {
     const { income } = eventData.data;
@@ -35,5 +35,5 @@ export namespace IncomeEvent {
     entity.checkWithRules([[(a) => a.income <= 0, "Income can't be <= 0"]]);
   };
 
-  export const validateAction = (action: any) => {};
+  export const validateAction = (action: any) => undefined;
 }

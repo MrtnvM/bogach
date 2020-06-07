@@ -26,7 +26,7 @@ Epic<AppState> gameEpic({@required GameService gameService}) {
         .whereType<SendPlayerMoveAsyncAction>()
         .where((action) => action.isStarted)
         .flatMap((action) {
-      final context = store.state.gameState.currentGameContext;
+      final context = store.state.game.currentGameContext;
       final eventId = action.eventId;
 
       return gameService

@@ -31,7 +31,7 @@ class _PurchaseListPageState extends State<PurchaseListPage> with ReduxState {
     return Scaffold(
       appBar: CashAppBar.withBackButton(title: Strings.purchases),
       body: AppStateConnector<PurchaseState>(
-        converter: (s) => s.purchaseState,
+        converter: (s) => s.purchase,
         builder: (context, state) => Loadable(
           isLoading: state.getPastPurchasesRequestState.isInProgress,
           child: _buildBody(state),

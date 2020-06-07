@@ -8,18 +8,18 @@ typedef RetriableShowAlertFunction = void Function(
 );
 
 RetriableShowAlertFunction useWarningAlert({
-  String Function(dynamic) errorMessage,
+  String Function(dynamic) message,
   String submitButtonText,
   bool needCancelButton,
 }) {
   final context = useContext();
 
   return (error, retry) {
-    final message = errorMessage?.call(error) ?? error?.toString();
+    final errorMessage = message?.call(error) ?? error?.toString();
 
     showWarningAlertDialog(
       context: context,
-      errorMessage: message,
+      errorMessage: errorMessage,
       needCancelButton: false,
       onSubmit: retry,
     );

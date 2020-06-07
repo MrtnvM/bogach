@@ -6,7 +6,7 @@ export function queryParams(request: functions.https.Request) {
   return (name: string) => {
     const value = request.query[name];
 
-    if (!value) {
+    if (value === undefined) {
       throw new MissingQueryParamError(name);
     }
 
@@ -18,7 +18,7 @@ export function jsonBodyField(request: functions.https.Request) {
   return (path: string) => {
     const value = request.body[path];
 
-    if (!value) {
+    if (value === undefined) {
       throw new MissingJsonBodyFieldError(path);
     }
 

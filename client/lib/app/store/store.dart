@@ -8,6 +8,7 @@ import 'package:cash_flow/services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:flutter_platform_network/flutter_platform_network.dart';
 import 'package:redux_epics/redux_epics.dart';
@@ -37,6 +38,7 @@ Epic<AppState> createRootEpic(
   final firestore = Firestore.instance;
   final firebaseDatabase = FirebaseDatabase.instance;
   final firebaseAuth = FirebaseAuth.instance;
+  final firebaseMessaging = FirebaseMessaging();
 
   final gameService = GameService(
     apiClient: apiClient,
@@ -46,6 +48,8 @@ Epic<AppState> createRootEpic(
 
   final userService = UserService(
     firebaseAuth: firebaseAuth,
+    firestore: firestore,
+    firebaseMessaging: firebaseMessaging,
   );
 
   final purchaseService = PurchaseService();
