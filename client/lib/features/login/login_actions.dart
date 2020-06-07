@@ -44,3 +44,14 @@ class SetCurrentUserAction extends Action {
 
   final FirebaseUser user;
 }
+
+class SendDevicePushTokenAsyncAction extends AsyncAction {
+  SendDevicePushTokenAsyncAction({
+    @required this.userId,
+    @required this.pushToken,
+  })  : assert(userId != null),
+        assert(pushToken != null);
+
+  final String userId;
+  final String pushToken;
+}

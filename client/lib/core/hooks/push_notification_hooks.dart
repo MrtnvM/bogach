@@ -1,6 +1,10 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+FirebaseMessaging useFirebaseMessaging() {
+  return useMemoized(() => FirebaseMessaging());
+}
+
 void usePushNotificationsPermissionRequest({
   bool useDelay = false,
   Duration delay = const Duration(seconds: 2),
@@ -18,39 +22,37 @@ void usePushNotificationsPermissionRequest({
   }, []);
 }
 
-void usePushTokenSubscription(
-  String userId,
-  void Function(String) onTokenUpdated,
-) {
+void usePushTokenSubscription(void onTokenUpdated(String token), [List keys]) {
   final firebaseMessaging = useFirebaseMessaging();
 
   useEffect(() {
-    firebaseMessaging.getToken().then((token) {
-      print('Push token: $token');
-      onTokenUpdated(token);
-    });
+    firebaseMessaging.getToken().then(onTokenUpdated);
 
     final tokenRefreshingSubscription =
         firebaseMessaging.onTokenRefresh.listen(onTokenUpdated);
 
     return tokenRefreshingSubscription.cancel;
-  }, [userId]);
+  }, keys);
 }
 
 void usePushMessageSubscription(void onMessage(Map<String, dynamic> message)) {
   final firebaseMessaging = useFirebaseMessaging();
 
+  final void Function(Map<String, dynamic>) onPushNotification = (message) {
+    final Map<String, dynamic> data = message['data'] ?? message;
+
+    if (data != null) {
+      onMessage(data);
+    }
+  };
+
   useEffect(() {
     firebaseMessaging.configure(
-      onMessage: onMessage,
-      onLaunch: onMessage,
-      onResume: onMessage,
+      onMessage: onPushNotification,
+      onLaunch: onPushNotification,
+      onResume: onPushNotification,
     );
 
     return null;
   }, []);
-}
-
-FirebaseMessaging useFirebaseMessaging() {
-  return useMemoized(() => FirebaseMessaging());
 }

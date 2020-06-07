@@ -17,11 +17,13 @@ class UserService {
   UserService({
     @required this.firebaseAuth,
     @required this.firestore,
+    @required this.firebaseMessaging,
   })  : assert(firebaseAuth != null),
         assert(firestore != null);
 
   final FirebaseAuth firebaseAuth;
   final Firestore firestore;
+  final FirebaseMessaging firebaseMessaging;
 
   Stream<UserProfile> login({
     @required String email,
@@ -176,6 +178,16 @@ class UserService {
         .toList();
   }
 
+  Future<void> sendUserPushToken({
+    @required String userId,
+    @required String pushToken,
+  }) async {
+    await Firestore.instance
+        .collection('devices')
+        .document(userId)
+        .setData({'token': pushToken, 'device': Platform.operatingSystem});
+  }
+
   Future<UserProfile> _saveUserToFirestore(UserProfile user) async {
     await firestore.collection('users').document(user.userId).setData({
       'userId': user.userId,
@@ -183,13 +195,8 @@ class UserService {
       'avatarUrl': user.avatarUrl,
     });
 
-    final firebaseMessaging = FirebaseMessaging();
-
     firebaseMessaging.getToken().then((token) {
-      firestore
-          .collection('devices')
-          .document(user.userId)
-          .setData({'token': token, 'device': Platform.operatingSystem});
+      sendUserPushToken(userId: user.userId, pushToken: token);
     });
 
     return user;

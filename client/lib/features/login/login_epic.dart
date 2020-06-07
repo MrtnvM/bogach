@@ -55,10 +55,25 @@ Epic<AppState> loginEpic({@required UserService userService}) {
             .onErrorReturnWith(action.fail));
   });
 
+  final sendUserPushTokenEpic = epic((action$, store) {
+    return action$
+        .whereType<SendDevicePushTokenAsyncAction>()
+        .where((action) => action.isStarted)
+        .flatMap((action) => userService
+            .sendUserPushToken(
+              userId: action.userId,
+              pushToken: action.pushToken,
+            )
+            .asStream()
+            .map(action.complete)
+            .onErrorReturnWith(action.fail));
+  });
+
   return combineEpics([
     logoutEpic,
     loginViaFacebookEpic,
     loginViaGoogleEpic,
     loginViaAppleEpic,
+    sendUserPushTokenEpic,
   ]);
 }
