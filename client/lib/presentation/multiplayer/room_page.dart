@@ -17,13 +17,7 @@ class RoomPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final userId = useUserId();
-    final roomGameId = useGlobalState((s) => s.multiplayer.currentRoom?.gameId);
-    final roomOwnerId = useGlobalState(
-      (s) => s.multiplayer.currentRoom?.ownerId,
-    );
-    final roomParticipantsIds = useGlobalState(
-      (s) => s.multiplayer.currentRoom?.participants?.map((p) => p.id),
-    );
+    final room = useGlobalState((s) => s.multiplayer.currentRoom);
     final userProfiles = useGlobalState((s) => s.multiplayer.userProfiles);
     final isActionInProgress = useGlobalState(
       (s) =>
@@ -35,17 +29,19 @@ class RoomPage extends HookWidget {
     final gameActions = useGameActions();
 
     useEffect(() {
-      if (roomGameId != null) {
-        gameActions.startGame(roomGameId);
+      if (room?.gameId != null) {
+        gameActions.startGame(room.gameId);
 
         Future.delayed(const Duration(milliseconds: 100)).then((_) async {
           appRouter.goToRoot();
           appRouter.goTo(GameBoard());
+
+          multiplayerActions.stopListeningRoomUpdates(room.id);
         });
       }
 
-      return () => multiplayerActions.stopListeningRoomUpdates(roomGameId);
-    }, [roomGameId]);
+      return null;
+    }, [room?.gameId]);
 
     return Loadable(
       backgroundColor: ColorRes.black80,
@@ -62,12 +58,12 @@ class RoomPage extends HookWidget {
                 direction: Axis.horizontal,
                 alignment: WrapAlignment.center,
                 children: <Widget>[
-                  for (final participantId in roomParticipantsIds)
-                    UserProfileItem(userProfiles.itemsMap[participantId])
+                  for (final participant in room?.participants ?? [])
+                    UserProfileItem(userProfiles.itemsMap[participant.id])
                 ],
               ),
               const SizedBox(height: 36),
-              if (roomOwnerId == userId)
+              if (room?.owner?.id == userId)
                 _buildStartGameButton(
                   startGame: multiplayerActions.createRoomGame,
                 )

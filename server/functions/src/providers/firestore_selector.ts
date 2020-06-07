@@ -23,4 +23,7 @@ export class FirestoreSelector {
   room = (roomId: RoomEntity.Id) => this.rooms().doc(roomId);
 
   device = (userId: UserEntity.Id) => this.firestore.collection('devices').doc(userId);
+
+  users = (): CollectionReference => this.firestore.collection('users');
+  user = (userId: UserEntity.Id) => this.users().doc(userId);
 }

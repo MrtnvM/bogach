@@ -1,12 +1,12 @@
 import { Entity } from '../../core/domain/entity';
-import { UserEntity } from './user';
+import { UserEntity, User } from './user';
 import { GameTemplateEntity } from './game/game_template';
 import { GameEntity } from './game/game';
 
 export interface Room {
   id: RoomEntity.Id;
   gameTemplateId: GameTemplateEntity.Id;
-  ownerId: UserEntity.Id;
+  owner: User;
   participants: RoomEntity.Participant[];
   gameId?: GameEntity.Id;
 }
@@ -24,8 +24,8 @@ export namespace RoomEntity {
   };
 
   export const parse = (data: any): Room => {
-    const { id, gameTemplateId, ownerId, participants, gameId } = data;
-    const room: Room = { id, gameTemplateId, ownerId, participants, gameId };
+    const { id, gameTemplateId, owner, participants, gameId } = data;
+    const room: Room = { id, gameTemplateId, owner, participants, gameId };
 
     validate(room);
     return room;
@@ -36,7 +36,7 @@ export namespace RoomEntity {
 
     entity.hasValue('id');
     entity.hasValue('gameTemplateId');
-    entity.hasValue('ownerId');
+    entity.hasValue('owner');
     entity.hasValue('participants');
 
     const roomEntity = room as Room;

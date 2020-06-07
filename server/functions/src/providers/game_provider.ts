@@ -4,7 +4,7 @@ import { FirestoreSelector } from './firestore_selector';
 import { Game, GameEntity } from '../models/domain/game/game';
 import { RoomEntity, Room } from '../models/domain/room';
 import { GameTemplate, GameTemplateEntity } from '../models/domain/game/game_template';
-import { UserEntity } from '../models/domain/user';
+import { UserEntity, User } from '../models/domain/user';
 import { PossessionStateEntity } from '../models/domain/possession_state';
 import { assertExists } from '../utils/asserts';
 import { createParticipantsGameState } from '../models/domain/game/participant_game_state';
@@ -159,11 +159,14 @@ export class GameProvider {
       return participant;
     });
 
+    const ownerSelector = this.selector.user(currentUserId);
+    const owner = (await this.firestore.getItem(ownerSelector)).data() as User;
+
     const roomId: RoomEntity.Id = uuid.v4();
     const room: Room = {
       id: roomId,
       gameTemplateId,
-      ownerId: currentUserId,
+      owner,
       participants,
     };
 

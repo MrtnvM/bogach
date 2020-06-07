@@ -1,4 +1,5 @@
 import 'package:cash_flow/models/domain/room/room_participant.dart';
+import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'room.freezed.dart';
@@ -9,7 +10,7 @@ abstract class Room with _$Room {
   factory Room({
     @required String id,
     String gameTemplateId,
-    String ownerId,
+    UserProfile owner,
     String gameId,
     List<RoomParticipant> participants,
   }) = _Room;
