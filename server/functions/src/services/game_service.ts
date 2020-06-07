@@ -1,4 +1,4 @@
-import * as admin from 'firebase-admin';
+import { FirebaseMessaging } from '../core/firebase/firebase_messaging';
 import { GameProvider } from '../providers/game_provider';
 import { GameEventEntity } from '../models/domain/game/game_event';
 import { GameContext } from '../models/domain/game/game_context';
@@ -27,7 +27,7 @@ import { Strings } from '../resources/strings';
 import { Game } from '../models/domain/game/game';
 
 export class GameService {
-  constructor(private gameProvider: GameProvider) {
+  constructor(private gameProvider: GameProvider, private firebaseMessaging: FirebaseMessaging) {
     this.handlers.forEach((handler) => {
       this.handlerMap[handler.gameEventType] = handler;
     });
@@ -93,37 +93,22 @@ export class GameService {
   ): Promise<Room> {
     const room = await this.gameProvider.createRoom(gameTemplateId, participantsIds, currentUserId);
 
-    const pushTokens = room.participants.map((p) => p.deviceToken).filter((token) => token);
+    const pushTokens = room.participants
+      .filter((p) => p.id !== room.owner.id)
+      .map((p) => p.deviceToken)
+      .filter((token) => token);
 
-    const notification = {
-      notification: {
+    this.firebaseMessaging
+      .sendMulticastNotification({
         title: Strings.battleInvitationNotificationTitle(),
-        body: Strings.battleInvitationNotificationBody(),
-      },
-      data: {
-        roomId: room.id,
-        type: 'go_to_room',
-      },
-      tokens: pushTokens,
-    };
-
-    admin
-      .messaging()
-      .sendMulticast(notification)
-      .then((response) => {
-        if (response.failureCount > 0) {
-          const failedTokens: string[] = [];
-          response.responses.forEach((resp, i) => {
-            if (!resp.success) {
-              failedTokens.push(pushTokens[i] + ' - ' + room.participants[i].id);
-            }
-          });
-          console.log('List of tokens that caused failures:\n' + failedTokens);
-        } else {
-          console.log('All push notifications sent successfully');
-        }
+        body: room.owner.userName + ' ' + Strings.battleInvitationNotificationBody(),
+        data: {
+          roomId: room.id,
+          type: 'go_to_room',
+        },
+        pushTokens,
       })
-      .catch((error) => console.log('ERROR: on sending room invites: ' + JSON.stringify(error)));
+      .catch((e) => console.error('Failed sending room participant invites: ' + e));
 
     return room;
   }

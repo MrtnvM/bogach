@@ -6,12 +6,14 @@ import { GameService } from '../services/game_service';
 import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from '../providers/firestore_selector';
+import { FirebaseMessaging } from '../core/firebase/firebase_messaging';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
   const gameProvider = new GameProvider(firestore, selector);
-  const gameService = new GameService(gameProvider);
+  const firebaseMessaging = new FirebaseMessaging();
+  const gameService = new GameService(gameProvider, firebaseMessaging);
 
   const createGame = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request);
