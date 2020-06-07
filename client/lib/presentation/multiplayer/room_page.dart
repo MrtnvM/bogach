@@ -25,8 +25,10 @@ class RoomPage extends HookWidget {
       (s) => s.multiplayer.currentRoom?.participants?.map((p) => p.id),
     );
     final userProfiles = useGlobalState((s) => s.multiplayer.userProfiles);
-    final isRoomGameCreationInProgress = useGlobalState(
-      (s) => s.multiplayer.createRoomGameRequestState.isInProgress,
+    final isActionInProgress = useGlobalState(
+      (s) =>
+          s.multiplayer.createRoomGameRequestState.isInProgress ||
+          s.multiplayer.setPlayerReadyRequestState.isInProgress,
     );
 
     final multiplayerActions = useMultiplayerActions();
@@ -46,7 +48,8 @@ class RoomPage extends HookWidget {
     }, [roomGameId]);
 
     return Loadable(
-      isLoading: isRoomGameCreationInProgress,
+      backgroundColor: ColorRes.black80,
+      isLoading: isActionInProgress,
       child: CashFlowScaffold(
         title: Strings.waitingPlayers,
         showUser: true,

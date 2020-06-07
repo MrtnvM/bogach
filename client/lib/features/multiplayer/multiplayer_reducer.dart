@@ -45,4 +45,9 @@ final multiplayerReducer = Reducer<MultiplayerState>()
     (state, action) => state.rebuild((s) {
       s.currentRoom = action.room;
     }),
+  )
+  ..on<SetRoomParticipantReadyAsyncAction>(
+    (state, action) => state.rebuild((s) {
+      s.setPlayerReadyRequestState = action.requestState;
+    }),
   );

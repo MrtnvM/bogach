@@ -1,17 +1,12 @@
-import 'dart:io';
-
 import 'package:cash_flow/app/app_hooks.dart';
 import 'package:cash_flow/app/app_state.dart';
-import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/hooks/push_notification_hooks.dart';
-import 'package:cash_flow/features/multiplayer/multiplayer_hooks.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/presentation/main/main_page.dart';
-import 'package:cash_flow/presentation/multiplayer/room_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/utils/core/device_preview.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart' hide Store;
@@ -30,51 +25,27 @@ class CashFlowApp extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = useCurrentUser();
-    final isJoiningToRoom = useState(false);
+    final isJoiningToRoom = useGlobalState(
+      (s) => s.multiplayer.joinRoomRequestState.isInProgress,
+    );
 
     useSubscriptionToPurchases();
     usePushNotificationsPermissionRequest(useDelay: true);
+    useUserPushTokenUploader();
+    usePushNotificationsHandler();
 
-    usePushTokenSubscription(currentUser?.id, (token) {
-      if (currentUser == null) {
-        return;
-      }
+    final theme = Theme.of(context).copyWith(
+      scaffoldBackgroundColor: ColorRes.scaffoldBackground,
+      accentColor: Colors.white,
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        },
+      ),
+    );
 
-      Firestore.instance
-          .collection('devices')
-          .document(currentUser.id)
-          .setData({'token': token, 'device': Platform.operatingSystem});
-    });
-
-    final multiplayerActions = useMultiplayerActions();
-    usePushMessageSubscription((message) {
-      final Map<String, dynamic> data = message['data'] ?? message;
-      if (data == null) {
-        return;
-      }
-
-      final type = data['type'];
-
-      switch (type) {
-        case 'go_to_room':
-          final roomId = data['roomId'];
-
-          isJoiningToRoom.value = true;
-
-          multiplayerActions.joinRoom(roomId).then((value) async {
-            isJoiningToRoom.value = false;
-
-            await Future.delayed(const Duration(milliseconds: 300));
-            appRouter.goToRoot();
-            appRouter.goTo(RoomPage());
-          }).catchError((_) {
-            isJoiningToRoom.value = false;
-
-            // TODO(Maxim): Add retry alert
-          });
-      }
-    });
+    final homePage = isAuthorised ? const MainPage() : const LoginPage();
 
     return redux.StoreProvider(
       store: store,
@@ -84,36 +55,17 @@ class CashFlowApp extends HookWidget {
           enabled: snapShoot.hasData && snapShoot.data,
           builder: (context) => MaterialApp(
             debugShowCheckedModeBanner: false,
-            builder: DevicePreview.appBuilder,
+            builder: (context, widget) => Loadable(
+              backgroundColor: ColorRes.black80,
+              isLoading: isJoiningToRoom,
+              child: DevicePreview.appBuilder(context, widget),
+            ),
             navigatorKey: appRouter.navigatorKey,
-            home: Loadable(
-              isLoading: isJoiningToRoom.value,
-              child: _HomePage(isAuthorised: isAuthorised),
-            ),
-            theme: Theme.of(context).copyWith(
-              scaffoldBackgroundColor: ColorRes.scaffoldBackground,
-              accentColor: Colors.white,
-              pageTransitionsTheme: const PageTransitionsTheme(
-                builders: <TargetPlatform, PageTransitionsBuilder>{
-                  TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-                  TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-                },
-              ),
-            ),
+            home: homePage,
+            theme: theme,
           ),
         ),
       ),
     );
-  }
-}
-
-class _HomePage extends StatelessWidget {
-  const _HomePage({Key key, this.isAuthorised}) : super(key: key);
-
-  final bool isAuthorised;
-
-  @override
-  Widget build(BuildContext context) {
-    return isAuthorised ? const MainPage() : const LoginPage();
   }
 }
