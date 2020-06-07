@@ -50,7 +50,7 @@ class CreateRoomPage extends HookWidget {
     };
 
     final showRoomCreationFailedAlert = useWarningAlert(
-      errorMessage: (_) => Strings.roomCreationFailed,
+      message: (_) => Strings.roomCreationFailed,
     );
 
     VoidCallback createRoom;

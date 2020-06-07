@@ -39,11 +39,9 @@ Epic<AppState> multiplayerEpic({
 
       final onRoomUpdated = createRoom
           .flatMap((room) => gameService.subscribeOnRoomUpdates(room.id))
-          .takeUntil(
-            createRoom.flatMap((room) => action$
-                .whereType<StopListeningRoomUpdatesAction>()
-                .where((action) => action.roomId == room.id)),
-          )
+          .takeUntil(createRoom.flatMap((room) => action$
+              .whereType<StopListeningRoomUpdatesAction>()
+              .where((action) => action.roomId == room.id)))
           .map((room) => OnCurrentRoomUpdatedAction(room))
           .onErrorReturnWith((error) => OnCurrentRoomUpdatedAction(null));
 
@@ -72,9 +70,7 @@ Epic<AppState> multiplayerEpic({
         .whereType<CreateRoomGameAsyncAction>()
         .where((action) => action.isStarted)
         .flatMap((action) => gameService
-            .createRoomGame(
-              store.state.multiplayer.currentRoom.id,
-            )
+            .createRoomGame(store.state.multiplayer.currentRoom.id)
             .map(action.complete)
             .onErrorReturnWith(action.fail));
   });
@@ -88,20 +84,16 @@ Epic<AppState> multiplayerEpic({
 
       final onRoomUpdated = room
           .flatMap((room) => gameService.subscribeOnRoomUpdates(room.id))
-          .takeUntil(
-            room.flatMap((room) => action$
-                .whereType<StopListeningRoomUpdatesAction>()
-                .where((action) => action.roomId == room.id)),
-          )
+          .takeUntil(room.flatMap((room) => action$
+              .whereType<StopListeningRoomUpdatesAction>()
+              .where((action) => action.roomId == room.id)))
           .map((room) => OnCurrentRoomUpdatedAction(room))
           .onErrorReturnWith((error) => OnCurrentRoomUpdatedAction(null));
 
       final joinRoomResult = room
-          .asyncMap(
-            (room) => userService
-                .loadProfiles(room.participants.map((p) => p.id).toList())
-                .then((profiles) => Tuple(room, profiles)),
-          )
+          .asyncMap((room) => userService
+              .loadProfiles(room.participants.map((p) => p.id).toList())
+              .then((profiles) => Tuple(room, profiles)))
           .take(1);
 
       return Rx.concat([

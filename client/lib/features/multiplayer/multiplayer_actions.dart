@@ -13,7 +13,8 @@ class QueryUserProfilesAsyncAction
 }
 
 class SelectMultiplayerGameTemplateAction extends Action {
-  SelectMultiplayerGameTemplateAction(this.gameTemplate);
+  SelectMultiplayerGameTemplateAction(this.gameTemplate)
+      : assert(gameTemplate != null);
 
   final GameTemplate gameTemplate;
 }
@@ -34,13 +35,13 @@ class SetRoomParticipantReadyAsyncAction extends AsyncAction {
 class CreateRoomGameAsyncAction extends AsyncAction {}
 
 class StopListeningRoomUpdatesAction extends Action {
-  StopListeningRoomUpdatesAction(this.roomId);
+  StopListeningRoomUpdatesAction(this.roomId) : assert(roomId != null);
 
   final String roomId;
 }
 
 class JoinRoomAsyncAction extends AsyncAction<Tuple<Room, List<UserProfile>>> {
-  JoinRoomAsyncAction(this.roomId);
+  JoinRoomAsyncAction(this.roomId) : assert(roomId != null);
 
   final String roomId;
 }
