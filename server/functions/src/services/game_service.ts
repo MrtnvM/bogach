@@ -75,12 +75,12 @@ export class GameService {
     }
 
     const updatedGame = applyGameTransformers(game, [
+      new UserProgressTransformer(eventId, userId),
       new ParticipantAccountsTransformer(),
       new MonthTransformer(),
       new WinnersTransformer(),
-      new GameEventsTransformer(),
       new PossessionStateTransformer(),
-      new UserProgressTransformer(eventId, userId),
+      new GameEventsTransformer(),
     ]);
 
     await this.gameProvider.updateGame(updatedGame);

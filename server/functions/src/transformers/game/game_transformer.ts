@@ -6,9 +6,9 @@ export abstract class GameTransformer {
   isAllParticipantsCompletedMove(game: Game): boolean {
     return game.participants
       .map((participantId) => {
-        const currentEventNumber = game.state.participantProgress[participantId];
-        const isLastEvent = currentEventNumber === game.currentEvents.length - 1;
-        return isLastEvent;
+        const isParticipantCompletedMove =
+          game.state.participantsProgress[participantId].status === 'month_result';
+        return isParticipantCompletedMove;
       })
       .reduce((prev, curr) => prev && curr, true);
   }

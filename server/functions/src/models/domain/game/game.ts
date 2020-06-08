@@ -30,10 +30,16 @@ export namespace GameEntity {
   export type Status = 'players_move' | 'game_over';
   export type GameEventIndex = number;
 
+  export type ParticipantProgress = {
+    currentEventIndex: number;
+    status: 'player_move' | 'month_result';
+  };
+
   export type State = {
     readonly gameStatus: Status;
     readonly monthNumber: number;
     readonly participantProgress: { [userId: string]: GameEventIndex };
+    readonly participantsProgress: { [userId: string]: ParticipantProgress };
     readonly winners: { [place: number]: UserEntity.Id };
   };
 

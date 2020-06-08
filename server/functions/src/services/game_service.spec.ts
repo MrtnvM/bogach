@@ -30,6 +30,7 @@ describe('Game Service - Singleplayer game', () => {
     const expectedGameState = produce(game.state, (draft) => {
       const newCurrentEventIndex = 1;
       draft.participantProgress[userId] = newCurrentEventIndex;
+      draft.participantsProgress[userId].currentEventIndex = newCurrentEventIndex;
       draft.winners = { 0: userId };
     });
 
@@ -64,8 +65,10 @@ describe('Game Service - Singleplayer game', () => {
     });
 
     const expectedGameState = produce(game.state, (draft) => {
-      const newCurrentEventIndex = 0;
+      const newCurrentEventIndex = 1;
       draft.participantProgress[userId] = newCurrentEventIndex;
+      draft.participantsProgress[userId].currentEventIndex = newCurrentEventIndex;
+      draft.participantsProgress[userId].status = 'month_result';
       draft.monthNumber += 1;
       draft.winners = { 0: userId };
     });
@@ -103,8 +106,10 @@ describe('Game Service - Singleplayer game', () => {
     });
 
     const expectedGameState = produce(game.state, (draft) => {
-      const newCurrentEventIndex = 0;
+      const newCurrentEventIndex = 1;
       draft.participantProgress[userId] = newCurrentEventIndex;
+      draft.participantsProgress[userId].currentEventIndex = newCurrentEventIndex;
+      draft.participantsProgress[userId].status = 'month_result';
       draft.monthNumber += 1;
       draft.gameStatus = 'game_over';
       draft.winners = { 0: userId };
@@ -114,7 +119,7 @@ describe('Game Service - Singleplayer game', () => {
 
     expect(newGame.accounts).toStrictEqual(expectedAccounts);
     expect(newGame.state).toStrictEqual(expectedGameState);
-    expect(newGame.currentEvents).not.toStrictEqual(game.currentEvents);
+    expect(newGame.currentEvents).toStrictEqual(game.currentEvents);
     expect(newGame.possessions).not.toStrictEqual(game.possessions);
   });
 
