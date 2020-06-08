@@ -16,9 +16,9 @@ class UserGameList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final userId = useUserId();
-    final userGames = useGlobalState((s) => s.newGameState.userGames);
+    final userGames = useGlobalState((s) => s.newGame.userGames);
     final requestState = useGlobalState(
-      (s) => s.newGameState.getUserGamesRequestState,
+      (s) => s.newGame.getUserGamesRequestState,
     );
 
     final gameActions = useGameActions();

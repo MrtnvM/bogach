@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class BusinessesDescriptionToSellGameEvent extends HookWidget {
-  BusinessesDescriptionToSellGameEvent({
+  const BusinessesDescriptionToSellGameEvent({
     @required this.event,
     @required this.onItemCheck,
   })  : assert(event != null),

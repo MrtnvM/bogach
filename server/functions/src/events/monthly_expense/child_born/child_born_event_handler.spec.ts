@@ -1,9 +1,13 @@
+/// <reference types="@types/jest"/>
+
+import * as uuid from 'uuid';
+import produce from 'immer';
+
 import { GameEntity } from '../../../models/domain/game/game';
 import { MonthlyExpenseEventHandler } from '../monthly_expense_event_handler';
 import { stubs, utils } from './child_born_event_handler.spec.utils';
 import { MonthlyExpenseEvent } from '../monthly_expense_event';
-import uuid = require('uuid');
-import produce from 'immer';
+
 import { Expense } from '../../../models/domain/expense';
 
 describe('Expense event handler', () => {

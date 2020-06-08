@@ -12,3 +12,9 @@ EdgeInsets useNotchSize() {
   final notchSize = mediaQuery.padding;
   return notchSize;
 }
+
+Size useScreenSize() {
+  final mediaQuery = useMediaQuery();
+  final screenSize = mediaQuery.size;
+  return screenSize;
+}

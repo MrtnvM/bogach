@@ -1,6 +1,6 @@
 export interface User {
   readonly id: UserEntity.Id;
-  readonly nickname: string;
+  readonly userName: string;
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }

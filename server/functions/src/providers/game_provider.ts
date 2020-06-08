@@ -1,44 +1,54 @@
-import * as udid from 'uuid';
+import * as uuid from 'uuid';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from './firestore_selector';
 import { Game, GameEntity } from '../models/domain/game/game';
+import { RoomEntity, Room } from '../models/domain/room';
 import { GameTemplate, GameTemplateEntity } from '../models/domain/game/game_template';
-import { UserEntity } from '../models/domain/user';
+import { UserEntity, User } from '../models/domain/user';
 import { PossessionStateEntity } from '../models/domain/possession_state';
 import { assertExists } from '../utils/asserts';
+import { createParticipantsGameState } from '../models/domain/game/participant_game_state';
+import { produce } from 'immer';
+import { checkIds, checkId } from '../core/validation/type_checks';
 
 export class GameProvider {
   constructor(private firestore: Firestore, private selector: FirestoreSelector) {}
 
-  async createGame(templateId: GameTemplateEntity.Id, userId: UserEntity.Id): Promise<Game> {
+  async createGame(
+    templateId: GameTemplateEntity.Id,
+    participantsIds: UserEntity.Id[]
+  ): Promise<Game> {
+    if (!Array.isArray(participantsIds) || !participantsIds || participantsIds.length === 0) {
+      throw new Error('ERROR: No participants IDs on game creation');
+    }
+
     const template = await this.getGameTemplate(templateId);
 
-    if (!template) throw new Error('ERROR: No template on game creation');
-    if (!userId) throw new Error('ERROR: No user ID on game creation');
+    if (!template) {
+      throw new Error('ERROR: No template on game creation');
+    }
 
-    const gameId: GameEntity.Id = udid.v4();
+    const participantsGameState = <T>(value: T) => {
+      return createParticipantsGameState(participantsIds, value);
+    };
+
+    const gameId: GameEntity.Id = uuid.v4();
+    const gameType: GameEntity.Type = participantsIds.length > 0 ? 'multiplayer' : 'singleplayer';
+
     const game: Game = {
       id: gameId,
       name: template.name,
-      type: 'singleplayer',
+      type: gameType,
       state: {
         gameStatus: 'players_move',
         monthNumber: 1,
-        participantProgress: {
-          [userId]: 0,
-        },
+        participantProgress: participantsGameState(0),
         winners: {},
       },
-      participants: [userId],
-      possessions: {
-        [userId]: template.possessions,
-      },
-      possessionState: {
-        [userId]: PossessionStateEntity.createEmpty(),
-      },
-      accounts: {
-        [userId]: template.accountState,
-      },
+      participants: participantsIds,
+      possessions: participantsGameState(template.possessions),
+      possessionState: participantsGameState(PossessionStateEntity.createEmpty()),
+      accounts: participantsGameState(template.accountState),
       target: template.target,
       currentEvents: [],
     };
@@ -100,5 +110,116 @@ export class GameProvider {
 
     GameTemplateEntity.validate(template);
     return template as GameTemplate;
+  }
+
+  async createRoom(
+    gameTemplateId: GameTemplateEntity.Id,
+    participantIds: UserEntity.Id[],
+    currentUserId: UserEntity.Id
+  ): Promise<Room> {
+    checkIds([gameTemplateId, currentUserId, ...participantIds]);
+
+    if (participantIds.indexOf(currentUserId) < 0) {
+      participantIds.push(currentUserId);
+    }
+
+    if (participantIds.length < 2) {
+      throw new Error("Multiplayer game can't have lower than 2 participants");
+    }
+
+    const template = await this.getGameTemplate(gameTemplateId);
+
+    if (!template) {
+      throw new Error('ERROR: No template on room creation');
+    }
+
+    console.warn('!!! Room creation');
+
+    const participantDevices = await Promise.all(
+      participantIds.map((id) => {
+        const deviceSelector = this.selector.device(id);
+        return this.firestore.getItem(deviceSelector).then((s) => s.data());
+      })
+    );
+
+    console.warn('!!! Devices: ' + JSON.stringify(participantDevices, null, 2));
+
+    const participants = participantIds.map((participantsId, index) => {
+      const status: RoomEntity.ParticipantStatus =
+        participantsId === currentUserId ? 'ready' : 'waiting';
+
+      const participant: RoomEntity.Participant = {
+        id: participantsId,
+        status,
+        deviceToken: participantDevices[index]?.token || null,
+      };
+
+      console.log(JSON.stringify(participant));
+
+      return participant;
+    });
+
+    const ownerSelector = this.selector.user(currentUserId);
+    const owner = (await this.firestore.getItem(ownerSelector)).data() as User;
+
+    const roomId: RoomEntity.Id = uuid.v4();
+    const room: Room = {
+      id: roomId,
+      gameTemplateId,
+      owner,
+      participants,
+    };
+
+    const selector = this.selector.room(roomId);
+    const createdRoom = await this.firestore.createItem(selector, room);
+
+    RoomEntity.validate(createdRoom);
+    return createdRoom;
+  }
+
+  async setParticipantReady(roomId: RoomEntity.Id, participantId: UserEntity.Id): Promise<Room> {
+    const selector = this.selector.room(roomId);
+    let room = (await this.firestore.getItem(selector)).data() as Room;
+    RoomEntity.validate(room);
+
+    room = produce(room, (draft) => {
+      const participantIndex = draft.participants.findIndex((p) => p.id === participantId);
+
+      if (participantIndex >= 0) {
+        draft.participants[participantIndex].status = 'ready';
+      }
+    });
+
+    const updatedRoom = await this.firestore.updateItem(selector, room);
+    return updatedRoom;
+  }
+
+  async createRoomGame(roomId: RoomEntity.Id): Promise<[Room, Game]> {
+    checkId(roomId);
+
+    const selector = this.selector.room(roomId);
+    let room = (await this.firestore.getItem(selector)).data() as Room;
+    RoomEntity.validate(room);
+
+    if (room.gameId !== undefined) {
+      throw new Error('ERROR: Game already created');
+    }
+
+    const participantIds = room.participants.filter((p) => p.status === 'ready').map((p) => p.id);
+
+    if (participantIds.length < 2) {
+      throw new Error("ERROR: Multiplayer game can't have lower than 2 participants");
+    }
+
+    const game = await this.createGame(room.gameTemplateId, participantIds);
+
+    room = produce(room, (draft) => {
+      draft.gameId = game.id;
+    });
+
+    RoomEntity.validate(room);
+
+    const updatedRoom = await this.firestore.updateItem(selector, room);
+    return [updatedRoom, game];
   }
 }

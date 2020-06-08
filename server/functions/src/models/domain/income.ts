@@ -1,7 +1,7 @@
 import { Entity } from '../../core/domain/entity';
 
 export interface Income {
-  readonly id?: IncomeEntity.Id;
+  readonly id?: IncomeEntity.Id | null;
   readonly name: string;
   readonly value: number;
   readonly type: IncomeEntity.Type;

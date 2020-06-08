@@ -13,7 +13,7 @@ class GameBoard extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = useState(1);
-    final activeGameState = useGlobalState((s) => s.gameState.activeGameState);
+    final activeGameState = useGlobalState((s) => s.game.activeGameState);
 
     final tabItems = useMemoized(
       () => [

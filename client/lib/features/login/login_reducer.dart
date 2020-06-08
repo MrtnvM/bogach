@@ -9,27 +9,25 @@ final loginReducer = Reducer<LoginState>()
     (state, action) => state.rebuild((s) {
       s.loginRequestState = action.requestState;
 
-      action
-        ..onSuccess((currentUser) => s.currentUser = currentUser.toBuilder());
+      action.onSuccess((user) => s.currentUser = user);
     }),
   )
   ..on<LoginViaGoogleAsyncAction>(
     (state, action) => state.rebuild((s) {
       s.loginRequestState = action.requestState;
 
-      action
-        ..onSuccess((currentUser) => s.currentUser = currentUser.toBuilder());
+      action.onSuccess((user) => s.currentUser = user);
     }),
   )
   ..on<LoginViaAppleAsyncAction>(
     (state, action) => state.rebuild((s) {
       s.loginRequestState = action.requestState;
 
-      action
-        ..onSuccess((currentUser) => s.currentUser = currentUser.toBuilder());
+      action..onSuccess((user) => s.currentUser = user);
     }),
   )
   ..on<SetCurrentUserAction>(
     (state, action) => state.rebuild(
-        (s) => s..currentUser = mapToCurrentUser(action.user)?.toBuilder()),
+      (s) => s..currentUser = mapToUserProfile(action.user),
+    ),
   );

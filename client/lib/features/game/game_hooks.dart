@@ -9,7 +9,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 T useCurrentGame<T>(T Function(Game) convertor) {
-  return useGlobalState((s) => convertor(s.gameState.currentGame));
+  return useGlobalState((s) => convertor(s.game.currentGame));
 }
 
 _GameActions useGameActions() {

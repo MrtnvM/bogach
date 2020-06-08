@@ -6,37 +6,23 @@ import { GameService } from '../services/game_service';
 import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from '../providers/firestore_selector';
-import {
-  applyGameTransformers,
-  GameEventsTransformer,
-  PossessionStateTransformer,
-} from '../transformers/game_transformers';
+import { FirebaseMessaging } from '../core/firebase/firebase_messaging';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
   const gameProvider = new GameProvider(firestore, selector);
-  const gameService = new GameService(gameProvider);
+  const firebaseMessaging = new FirebaseMessaging();
+  const gameService = new GameService(gameProvider, firebaseMessaging);
 
   const createGame = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request);
 
     const templateId = apiRequest.jsonField('templateId');
-    const userId = apiRequest.jsonField('userId');
+    const participantsIds = apiRequest.optionalJsonField('participantsIds');
+    const userId = apiRequest.optionalJsonField('userId');
 
-    const createNewGame = async () => {
-      const createdGame = await gameProvider.createGame(templateId, userId);
-
-      const newGame = applyGameTransformers(createdGame, [
-        new GameEventsTransformer(true),
-        new PossessionStateTransformer(),
-      ]);
-
-      await gameProvider.updateGame(newGame);
-      return newGame;
-    };
-
-    const game = createNewGame();
+    const game = gameService.createNewGame(templateId, participantsIds || [userId]);
     return send(game, response);
   });
 
@@ -93,6 +79,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
       .then((result) => response.status(200).send(result))
       .catch((error) => {
         const errorMessage = error['message'] ? error.message : error;
+        console.error('ERROR: ' + JSON.stringify(error));
+        console.error('ERROR MESSAGE: ' + errorMessage);
         response.status(422).send(errorMessage);
       });
   };

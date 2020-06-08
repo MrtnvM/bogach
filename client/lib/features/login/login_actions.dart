@@ -1,23 +1,22 @@
-import 'package:cash_flow/models/domain/user/current_user.dart';
+import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart' as material;
+import 'package:flutter/foundation.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 class LogoutAsyncAction extends AsyncAction<void> {
   LogoutAsyncAction();
 }
 
-class LoginViaFacebookAsyncAction extends AsyncAction<CurrentUser> {
-  LoginViaFacebookAsyncAction({@material.required this.token})
-      : assert(token != null);
+class LoginViaFacebookAsyncAction extends AsyncAction<UserProfile> {
+  LoginViaFacebookAsyncAction({@required this.token}) : assert(token != null);
 
   final String token;
 }
 
-class LoginViaGoogleAsyncAction extends AsyncAction<CurrentUser> {
+class LoginViaGoogleAsyncAction extends AsyncAction<UserProfile> {
   LoginViaGoogleAsyncAction({
-    @material.required this.accessToken,
-    @material.required this.idToken,
+    @required this.accessToken,
+    @required this.idToken,
   })  : assert(accessToken != null),
         assert(idToken != null);
 
@@ -25,12 +24,12 @@ class LoginViaGoogleAsyncAction extends AsyncAction<CurrentUser> {
   final String idToken;
 }
 
-class LoginViaAppleAsyncAction extends AsyncAction<CurrentUser> {
+class LoginViaAppleAsyncAction extends AsyncAction<UserProfile> {
   LoginViaAppleAsyncAction({
-    @material.required this.accessToken,
-    @material.required this.idToken,
-    @material.required this.firstName,
-    @material.required this.lastName,
+    @required this.accessToken,
+    @required this.idToken,
+    @required this.firstName,
+    @required this.lastName,
   })  : assert(accessToken != null),
         assert(idToken != null);
 
@@ -41,7 +40,18 @@ class LoginViaAppleAsyncAction extends AsyncAction<CurrentUser> {
 }
 
 class SetCurrentUserAction extends Action {
-  SetCurrentUserAction({@material.required this.user});
+  SetCurrentUserAction({@required this.user});
 
   final FirebaseUser user;
+}
+
+class SendDevicePushTokenAsyncAction extends AsyncAction {
+  SendDevicePushTokenAsyncAction({
+    @required this.userId,
+    @required this.pushToken,
+  })  : assert(userId != null),
+        assert(pushToken != null);
+
+  final String userId;
+  final String pushToken;
 }

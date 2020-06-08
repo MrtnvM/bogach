@@ -1,7 +1,7 @@
 library login_state;
 
 import 'package:built_value/built_value.dart';
-import 'package:cash_flow/models/domain/user/current_user.dart';
+import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 part 'login_state.g.dart';
@@ -15,7 +15,7 @@ abstract class LoginState implements Built<LoginState, LoginStateBuilder> {
   RequestState get loginRequestState;
 
   @nullable
-  CurrentUser get currentUser;
+  UserProfile get currentUser;
 
   static LoginState initial() =>
       LoginState((b) => b..loginRequestState = RequestState.idle);

@@ -3,6 +3,7 @@ library app_state;
 import 'package:built_value/built_value.dart';
 import 'package:cash_flow/features/game/game_state.dart';
 import 'package:cash_flow/features/login/login_state.dart';
+import 'package:cash_flow/features/multiplayer/multiplayer_state.dart';
 import 'package:cash_flow/features/purchase/purchase_state.dart';
 import 'package:cash_flow/features/new_game/new_game_state.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
@@ -16,20 +17,20 @@ abstract class AppState
   AppState._();
 
   LoginState get login;
+  PurchaseState get purchase;
 
-  GameState get gameState;
-
-  NewGameState get newGameState;
-
-  PurchaseState get purchaseState;
+  GameState get game;
+  NewGameState get newGame;
+  MultiplayerState get multiplayer;
 
   static AppState initial() {
     return AppState(
       (b) => b
         ..login = LoginState.initial().toBuilder()
-        ..gameState = GameState.initial().toBuilder()
-        ..newGameState = NewGameState.initial().toBuilder()
-        ..purchaseState = PurchaseState.initial().toBuilder(),
+        ..purchase = PurchaseState.initial().toBuilder()
+        ..game = GameState.initial().toBuilder()
+        ..newGame = NewGameState.initial().toBuilder()
+        ..multiplayer = MultiplayerState.initial().toBuilder(),
     );
   }
 }
