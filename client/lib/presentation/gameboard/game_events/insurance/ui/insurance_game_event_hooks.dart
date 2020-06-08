@@ -14,7 +14,7 @@ Map<String, String> useInsuranceInfoTableData(GameEvent event) {
 
     final data = {
       Strings.cost: eventData.cost.toPrice(),
-      Strings.insuranceDuration: eventData.duration,
+      Strings.insuranceDuration: eventData.duration.toString(),
       Strings.insuranceValue: eventData.value.toPrice(),
     };
 

@@ -4,9 +4,10 @@ import 'package:cash_flow/presentation/gameboard/game_events/business/buy/model/
 import 'package:cash_flow/presentation/gameboard/game_events/business/buy/ui/business_buy_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/debenture_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/insurance/models/insurance_event_data.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/insurance/ui/insurance_game_event.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/containers/indicators_table.dart';
-import 'package:cash_flow/widgets/events/insurance_game_event.dart';
 import 'package:cash_flow/widgets/events/property_game_event.dart';
 import 'package:cash_flow/widgets/events/sale_business_game_event.dart';
 import 'package:cash_flow/widgets/events/windfall_income_game_event.dart';
@@ -176,10 +177,17 @@ class UiKit extends StatelessWidget {
             saleRate: 10,
           ),
         ),
-        const InsuranceGameEvent(
-          InsuranceViewModel(
-            price: 387,
-            coverage: 3367,
+        InsuranceGameEvent(
+          GameEvent(
+            id: 'event3',
+            name: 'Страховка',
+            description: 'Купи страховку и будь счастлив',
+            type: GameEventType.insurance(),
+            data: InsuranceEventData(
+              cost: 3700,
+              duration: 12,
+              value: 8000,
+            ),
           ),
         ),
       ],

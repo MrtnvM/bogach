@@ -10,8 +10,8 @@ abstract class InsuranceAsset with _$InsuranceAsset implements Asset {
   factory InsuranceAsset({
     @required String name,
     @required AssetType type,
-    @required double downPayment,
-    @required double value,
+    @required int cost,
+    @required int value,
   }) = _InsuranceAsset;
 
   factory InsuranceAsset.fromJson(Map<String, dynamic> json) =>
