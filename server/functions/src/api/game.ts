@@ -74,6 +74,20 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     return send(handleEvent, response);
   });
 
+  const startNewMonth = https.onRequest(async (request, response) => {
+    if (request.method !== 'POST') {
+      response.status(400).send('ERROR: Required should use POST method');
+      return;
+    }
+
+    const apiRequest = APIRequest.from(request);
+    const context = apiRequest.jsonField('context');
+
+    const startNewMonth = gameService.startNewMonth(context).then(() => 'New month started');
+
+    return send(startNewMonth, response);
+  });
+
   const send = <T>(data: Promise<T>, response: functions.Response) => {
     return data
       .then((result) => response.status(200).send(result))
@@ -92,5 +106,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     getAllGameTemplates,
     getGameTemplate,
     handleGameEvent,
+    startNewMonth,
   };
 };

@@ -25,6 +25,7 @@ import { Room, RoomEntity } from '../models/domain/room';
 import { checkIds } from '../core/validation/type_checks';
 import { Strings } from '../resources/strings';
 import { Game } from '../models/domain/game/game';
+import { produce } from 'immer';
 
 export class GameService {
   constructor(private gameProvider: GameProvider, private firebaseMessaging: FirebaseMessaging) {
@@ -84,6 +85,26 @@ export class GameService {
     ]);
 
     await this.gameProvider.updateGame(updatedGame);
+  }
+
+  async startNewMonth(context: GameContext) {
+    const { gameId, userId } = context;
+
+    let game = await this.gameProvider.getGame(gameId);
+    if (!game) throw new Error('No game with ID: ' + gameId);
+
+    const participantProgress = game.state.participantsProgress[userId];
+
+    if (participantProgress.status === 'month_result') {
+      const updatedGame = produce(game, (draft) => {
+        draft.state.participantsProgress[userId] = {
+          currentEventIndex: 0,
+          status: 'player_move',
+        };
+      });
+
+      await this.gameProvider.updateGame(updatedGame);
+    }
   }
 
   async createRoom(
