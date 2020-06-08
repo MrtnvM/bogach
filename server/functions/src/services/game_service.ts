@@ -13,6 +13,7 @@ import {
   GameEventsTransformer,
   PossessionStateTransformer,
   UserProgressTransformer,
+  MonthResultTransformer,
   applyGameTransformers,
 } from '../transformers/game_transformers';
 import { IncomeHandler } from '../events/income/income_handler';
@@ -82,6 +83,7 @@ export class GameService {
       new WinnersTransformer(),
       new PossessionStateTransformer(),
       new GameEventsTransformer(),
+      new MonthResultTransformer(userId),
     ]);
 
     await this.gameProvider.updateGame(updatedGame);
@@ -97,10 +99,10 @@ export class GameService {
 
     if (participantProgress.status === 'month_result') {
       const updatedGame = produce(game, (draft) => {
-        draft.state.participantsProgress[userId] = {
-          currentEventIndex: 0,
-          status: 'player_move',
-        };
+        const participantProgress = draft.state.participantsProgress[userId];
+
+        participantProgress.currentEventIndex = 0;
+        participantProgress.status = 'player_move';
       });
 
       await this.gameProvider.updateGame(updatedGame);

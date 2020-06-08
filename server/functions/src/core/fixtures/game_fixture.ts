@@ -6,6 +6,7 @@ import { PossessionStateEntity } from '../../models/domain/possession_state';
 export namespace GameFixture {
   export const createGame = (game: Partial<Game> | undefined = undefined): Game => {
     const participants = game?.participants || [];
+    const defaultInitialCash = 20_000;
 
     const newGame: Game = {
       id: game?.id || 'game1',
@@ -21,6 +22,7 @@ export namespace GameFixture {
           {
             currentEventIndex: 0,
             status: 'player_move',
+            monthResults: { [0]: { cash: defaultInitialCash } },
           }
         ),
         winners: {},
@@ -35,7 +37,7 @@ export namespace GameFixture {
         game?.accounts ||
         createParticipantsGameState(participants, {
           cashFlow: 10_000,
-          cash: 20_000,
+          cash: defaultInitialCash,
           credit: 0,
         }),
       target: game?.target || { type: 'cash', value: 1_000_000 },

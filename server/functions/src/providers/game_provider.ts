@@ -46,6 +46,7 @@ export class GameProvider {
         participantsProgress: participantsGameState({
           status: 'player_move',
           currentEventIndex: 0,
+          monthResults: { [0]: { cash: template.accountState.cash } },
         }),
         winners: {},
       },

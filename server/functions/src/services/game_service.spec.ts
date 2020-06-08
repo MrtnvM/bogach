@@ -67,8 +67,12 @@ describe('Game Service - Singleplayer game', () => {
     const expectedGameState = produce(game.state, (draft) => {
       const newCurrentEventIndex = 1;
       draft.participantProgress[userId] = newCurrentEventIndex;
-      draft.participantsProgress[userId].currentEventIndex = newCurrentEventIndex;
-      draft.participantsProgress[userId].status = 'month_result';
+
+      const participantProgress = draft.participantsProgress[userId];
+      participantProgress.currentEventIndex = newCurrentEventIndex;
+      participantProgress.status = 'month_result';
+      participantProgress.monthResults['1'] = { cash: 29_100 };
+
       draft.monthNumber += 1;
       draft.winners = { 0: userId };
     });
