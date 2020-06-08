@@ -27,11 +27,11 @@ class GameBoard extends HookWidget {
           image: Images.gameBoardBarIcon,
           onPressed: () => selectedIndex.value = 1,
         ),
-        BottomBarItem(
-          title: Strings.historyTabTitle,
-          image: Images.historyBarIcon,
-          onPressed: () => selectedIndex.value = 2,
-        ),
+        // BottomBarItem(
+        //   title: Strings.historyTabTitle,
+        //   image: Images.historyBarIcon,
+        //   onPressed: () => selectedIndex.value = 2,
+        // ),
       ],
     );
 
