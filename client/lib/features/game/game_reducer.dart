@@ -2,8 +2,10 @@ import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/features/game/game_state.dart';
 import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
+import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:cash_flow/utils/extensions/extensions.dart';
 
 final gameReducer = Reducer<GameState>()
   ..on<StartGameAction>(
@@ -21,20 +23,26 @@ final gameReducer = Reducer<GameState>()
 
         if (game.state.gameStatus == GameStatus.playersMove) {
           final userId = s.currentGameContext.userId;
-          final currentEventIndex = game.state.participantProgress[userId];
+          final progress = game.state.participantsProgress[userId];
 
-          newActiveGameState = s.activeGameState.maybeWhen(
-            gameEvent: (eventIndex, sendingEventIndex) {
-              return ActiveGameState.gameEvent(
-                eventIndex: currentEventIndex,
-                sendingEventIndex: sendingEventIndex,
-              );
-            },
-            orElse: () => ActiveGameState.gameEvent(
-              eventIndex: currentEventIndex,
-              sendingEventIndex: -1,
-            ),
-          );
+          if (progress.status == ParticipantProgressStatus.monthResult) {
+            newActiveGameState = ActiveGameState.monthResult();
+          }
+
+          if (progress.status == ParticipantProgressStatus.playerMove) {
+            newActiveGameState = s.activeGameState.maybeWhen(
+              gameEvent: (eventIndex, sendingEventIndex) {
+                return ActiveGameState.gameEvent(
+                  eventIndex: progress.currentEventIndex,
+                  sendingEventIndex: sendingEventIndex,
+                );
+              },
+              orElse: () => ActiveGameState.gameEvent(
+                eventIndex: progress.currentEventIndex,
+                sendingEventIndex: -1,
+              ),
+            );
+          }
         }
 
         if (game.state.gameStatus == GameStatus.gameOver) {
@@ -97,5 +105,10 @@ final gameReducer = Reducer<GameState>()
           orElse: () => s.activeGameState,
         );
       });
+    }),
+  )
+  ..on<StartNewMonthAsyncAction>(
+    (state, action) => state.rebuild((s) {
+      s.startNewMonthRequestState = action.requestState;
     }),
   );

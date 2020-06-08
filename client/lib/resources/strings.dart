@@ -159,6 +159,9 @@ class Strings {
   static const realty = 'Недвижимость';
   static const other = 'Прочие';
 
+  static String get monthResult => 'Итоги за месяц';
+  static String get financialResults => 'Финансовые показатели';
+
   static String get gameBoardTitle => 'GameBoard';
 
   static String get targetTypeCash => 'Капитал';

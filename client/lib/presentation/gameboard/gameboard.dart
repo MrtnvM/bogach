@@ -52,7 +52,7 @@ class GameBoard extends HookWidget {
     final content = activeGameState.maybeMap(
       gameEvent: (_) => activeTab,
       gameOver: (_) => WinnersPage(),
-      orElse: () => Container(),
+      orElse: () => activeTab,
     );
 
     return Scaffold(

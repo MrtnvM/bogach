@@ -43,6 +43,9 @@ _GameActions useGameActions() {
       skipPlayerAction: (eventId) {
         actionRunner.runAction(SendPlayerMoveAsyncAction(eventId: eventId));
       },
+      startNewMonth: () {
+        return actionRunner.runAsyncAction(StartNewMonthAsyncAction());
+      },
     );
   }, [userId]);
 
@@ -57,6 +60,7 @@ class _GameActions {
     this.stopGame,
     this.sendPlayerAction,
     this.skipPlayerAction,
+    this.startNewMonth,
   });
 
   final void Function() loadGameTemplates;
@@ -65,4 +69,5 @@ class _GameActions {
   final void Function() stopGame;
   final Future<void> Function(PlayerAction, String) sendPlayerAction;
   final void Function(String) skipPlayerAction;
+  final void Function() startNewMonth;
 }

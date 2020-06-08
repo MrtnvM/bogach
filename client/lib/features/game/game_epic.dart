@@ -40,8 +40,19 @@ Epic<AppState> gameEpic({@required GameService gameService}) {
     });
   });
 
+  final startNewMonthEpic = epic((action$, store) {
+    return action$
+        .whereType<StartNewMonthAsyncAction>()
+        .where((action) => action.isStarted)
+        .flatMap((action) => gameService
+            .startNewMonth(store.state.game.currentGameContext)
+            .map(action.complete)
+            .onErrorReturnWith(action.fail));
+  });
+
   return combineEpics([
     startGameEpic,
     sendGameEventPlayerActionEpic,
+    startNewMonthEpic,
   ]);
 }

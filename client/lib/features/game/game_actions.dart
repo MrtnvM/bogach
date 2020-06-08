@@ -52,4 +52,4 @@ class SendPlayerMoveAsyncAction extends AsyncAction<void> {
   final String eventId;
 }
 
-class GoToNewMonthAction extends Action {}
+class StartNewMonthAsyncAction extends AsyncAction {}
