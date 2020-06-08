@@ -89,6 +89,7 @@ class Strings {
   static const income = 'Непредвиденный доход';
   static const expense = 'Непредвиденный убыток';
   static const monthlyExpenseEvent = 'Новое событие';
+  static const insuranceEvent = 'Страховка';
   static const monthlyExpenseTitle = 'Ежемесячные расходы';
   static const property = 'Недвижимость';
   static const firstPayment = 'Первый взнос';
@@ -131,10 +132,8 @@ class Strings {
   static const stockMarketTitle = 'Фондовый рынок';
 
   static const insuranceTitle = 'Страхование';
-  static const insuranceDesc = 'Полис страхования имущества';
-  static const insurance = 'Страховая компания предлагает вам купить полис и '
-      'защитить свое имущество от неприятностей. Действие полиса 1 год.';
-  static const coverage = 'Защита:';
+  static const insuranceDuration = 'Срок действия (мес.)';
+  static const insuranceValue = 'Защита';
 
   static const smallBusinessTitle = 'Малый бизнесс';
   static const smallBusinessDesc = 'Продается терминал платежных систем';

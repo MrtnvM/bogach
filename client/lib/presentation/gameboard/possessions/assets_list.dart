@@ -26,9 +26,9 @@ class AssetsList extends HookWidget {
     final totalCash = _calculateSum<CashAsset>(cashAssets, (a) => a.value);
 
     final insuranses = _getAssets<InsuranceAsset>(assets, AssetType.insurance);
-    final totalInsurance = _calculateSum<InsuranceAsset>(
+    final totalInsurance = _calculateSumInt<InsuranceAsset>(
       insuranses,
-      (a) => a.value,
+      (a) => a.cost,
     );
 
     final debentures = _getAssets<DebentureAsset>(assets, AssetType.debenture);
@@ -70,9 +70,9 @@ class AssetsList extends HookWidget {
           title: Strings.insuranceTitle,
           value: totalInsurance.toPrice(),
           details: insuranses
-              .map((i) => '${i.name}; '
-                  '${Strings.defence} - ${i.value}; '
-                  '${Strings.firstPayment} - ${i.downPayment}')
+              .map((insurance) => '${insurance.name}; '
+                  '${Strings.defence} - ${insurance.value}; '
+                  '${Strings.cost} - ${insurance.cost}')
               .toList(),
         ),
         DetailRow(
@@ -139,5 +139,9 @@ class AssetsList extends HookWidget {
 
   double _calculateSum<T>(List<T> assets, double Function(T) converter) {
     return assets.fold(0.0, (s, a) => s + converter(a));
+  }
+
+  int _calculateSumInt<T>(List<T> assets, int Function(T) converter) {
+    return assets.fold(0, (s, a) => s + converter(a));
   }
 }

@@ -8,11 +8,13 @@ class InfoTable extends StatelessWidget {
     Key key,
     this.title,
     this.titleValue,
+    this.description,
     this.rows,
   }) : super(key: key);
 
   final String title;
   final String titleValue;
+  final String description;
   final List<Widget> rows;
 
   @override
@@ -32,16 +34,27 @@ class InfoTable extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
-    return Row(
-      children: [
-        Expanded(
-          child: Text(title, style: Styles.tableHeaderTitle),
+  List<Widget> _buildHeader() {
+    return <Widget>[
+      Row(
+        children: [
+          Expanded(
+            child: Text(title, style: Styles.tableHeaderTitle),
+          ),
+          if (titleValue != null)
+            Text(titleValue, style: Styles.tableHeaderValue),
+        ],
+      ),
+      if (description != null) ...<Widget>[
+        const SizedBox(height: 8),
+        Text(
+          description,
+          style: Styles.tableRowDetails,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 4,
         ),
-        if (titleValue != null)
-          Text(titleValue, style: Styles.tableHeaderValue),
       ],
-    );
+    ];
   }
 }
 

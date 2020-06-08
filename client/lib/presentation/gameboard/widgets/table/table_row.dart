@@ -9,11 +9,19 @@ class TableRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      Expanded(
-        child: Text(title, style: Styles.tableRowTitle),
-      ),
-      Text(value, style: Styles.tableRowValue),
-    ]);
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            title,
+            style: Styles.tableRowTitle,
+          ),
+        ),
+        Text(
+          value,
+          style: Styles.tableRowValue,
+        ),
+      ],
+    );
   }
 }
