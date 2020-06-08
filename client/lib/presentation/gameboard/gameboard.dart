@@ -1,4 +1,5 @@
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/tabs/actions_tab.dart';
 import 'package:cash_flow/presentation/gameboard/tabs/finances_tab.dart';
 import 'package:cash_flow/presentation/gameboard/winners_page.dart';
@@ -8,12 +9,14 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/bottom_bar.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
+import 'package:flutter_platform_loadable/flutter_platform_loadable.dart';
 
 class GameBoard extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = useState(1);
     final activeGameState = useGlobalState((s) => s.game.activeGameState);
+    final gameExists = useCurrentGame((g) => g != null);
 
     final tabItems = useMemoized(
       () => [
@@ -34,6 +37,14 @@ class GameBoard extends HookWidget {
         // ),
       ],
     );
+
+    if (!gameExists) {
+      return Loadable(
+        isLoading: !gameExists,
+        backgroundColor: ColorRes.black80,
+        child: Container(),
+      );
+    }
 
     Widget activeTab;
 

@@ -1,3 +1,4 @@
+import 'package:cash_flow/models/domain/game/current_game_state/month_result.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'participant_progress.freezed.dart';
@@ -8,6 +9,7 @@ abstract class ParticipantProgress with _$ParticipantProgress {
   factory ParticipantProgress({
     @required ParticipantProgressStatus status,
     @required int currentEventIndex,
+    @required Map<String, MonthResult> monthResults,
   }) = _ParticipantProgress;
 
   factory ParticipantProgress.fromJson(Map<String, dynamic> json) =>
