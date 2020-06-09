@@ -83,10 +83,10 @@ describe('Game Provider', () => {
 
     const expectedMonthResult: GameEntity.MonthResult = {
       cash: createdGame.accounts[userId].cash,
-      totalIncome: 0,
-      totalExpense: 0,
-      totalAssets: 0,
-      totalLiabilities: 0,
+      totalIncome: 109_320,
+      totalExpense: 45_500,
+      totalAssets: 2_295_000,
+      totalLiabilities: 2_045_000,
     };
 
     const expectedMonthResults: { [month: number]: GameEntity.MonthResult } = {

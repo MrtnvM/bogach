@@ -1,4 +1,5 @@
 import { Entity } from '../../core/domain/entity';
+import { Expense } from './expense';
 
 export interface Liability {
   readonly id?: LiabilityEntity.Id;
@@ -32,8 +33,12 @@ export namespace LiabilityEntity {
     entity.hasNumberValue('value');
   };
 
-  export const getExpense = (liability: Liability) => {
-    return undefined;
+  export const getExpense = (liability: Liability): Expense => {
+    return {
+      id: liability.id || null,
+      name: liability.name,
+      value: liability.monthlyPayment,
+    };
   };
 
   const filterAssets = <T extends Liability>(liabilities: Liability[], type: Type) => {

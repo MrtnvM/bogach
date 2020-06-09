@@ -1,11 +1,12 @@
 import { Entity } from '../../core/domain/entity';
 import { DebentureAssetEntity, DebentureAsset } from './assets/debenture_asset';
 import { InsuranceAsset } from './assets/insurance_asset';
-import { StockAsset } from './assets/stock_asset';
-import { RealtyAsset } from './assets/realty_asset';
-import { BusinessAsset } from './assets/business_asset';
+import { StockAsset, StockAssetEntity } from './assets/stock_asset';
+import { RealtyAsset, RealtyAssetEntity } from './assets/realty_asset';
+import { BusinessAsset, BusinessAssetEntity } from './assets/business_asset';
 import { CashAsset } from './assets/cash_asset';
 import { OtherAsset } from './assets/other_asset';
+import { Income } from './income';
 
 export interface Asset {
   readonly id?: AssetEntity.Id;
@@ -86,14 +87,68 @@ export namespace AssetEntity {
     return filterAssets<OtherAsset>(assets, 'other');
   };
 
-  export const getIncome = (asset: Asset) => {
-    if (asset.type === 'debenture') {
-      return DebentureAssetEntity.getIncome(asset as DebentureAsset);
+  export const getIncomeValue = (asset: Asset): number => {
+    switch (asset.type) {
+      case 'insurance':
+        return 0;
+
+      case 'debenture':
+        const debenture = asset as DebentureAsset;
+        return DebentureAssetEntity.getIncomeValue(debenture);
+
+      case 'stock':
+        const stock = asset as StockAsset;
+        return StockAssetEntity.getIncomeValue(stock);
+
+      case 'realty':
+        const realty = asset as RealtyAsset;
+        return RealtyAssetEntity.getIncomeValue(realty);
+
+      case 'business':
+        const business = asset as BusinessAsset;
+        return BusinessAssetEntity.getIncomeValue(business);
+
+      case 'cash':
+        return 0;
+
+      case 'other':
+        return 0;
+
+      default:
+        throw new Error("ERROR: Can't determine income for asset with type: " + asset.type);
     }
+  };
 
-    // TODO: Implement incomes from other asset types
+  export const getIncome = (asset: Asset): Income | undefined => {
+    switch (asset.type) {
+      case 'insurance':
+        return undefined;
 
-    return undefined;
+      case 'debenture':
+        const debenture = asset as DebentureAsset;
+        return DebentureAssetEntity.getIncome(debenture);
+
+      case 'stock':
+        const stock = asset as StockAsset;
+        return StockAssetEntity.getIncome(stock);
+
+      case 'realty':
+        const realty = asset as RealtyAsset;
+        return RealtyAssetEntity.getIncome(realty);
+
+      case 'business':
+        const business = asset as BusinessAsset;
+        return BusinessAssetEntity.getIncome(business);
+
+      case 'cash':
+        return undefined;
+
+      case 'other':
+        return undefined;
+
+      default:
+        throw new Error("ERROR: Can't determine income for asset with type: " + asset.type);
+    }
   };
 
   export const getExpense = (asset: Asset) => {

@@ -109,6 +109,7 @@ const initialPossesssions: Possessions = {
       type: 'realty',
       cost: 2000000,
       downPayment: 1000000,
+      passiveIncomePerMonth: 14_000,
     }),
     create<BusinessAsset>({
       id: 'business2',

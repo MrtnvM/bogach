@@ -33,15 +33,17 @@ export namespace DebentureAssetEntity {
     ]);
   };
 
+  export const getIncomeValue = (asset: DebentureAsset) => {
+    return (asset.nominal * asset.profitabilityPercent * asset.count) / 100;
+  };
+
   export const getIncome = (asset: DebentureAsset): Income => {
     validate(asset);
-
-    const incomeValue = (asset.nominal * asset.profitabilityPercent * asset.count) / 100;
 
     return {
       id: asset.id || null,
       name: Strings.debetures(),
-      value: incomeValue,
+      value: getIncomeValue(asset),
       type: 'investment',
     };
   };
