@@ -25,7 +25,6 @@ import { GameTemplateEntity } from '../models/domain/game/game_template';
 import { Room, RoomEntity } from '../models/domain/room';
 import { checkIds } from '../core/validation/type_checks';
 import { Strings } from '../resources/strings';
-import { Game } from '../models/domain/game/game';
 import { produce } from 'immer';
 
 export class GameService {
@@ -49,10 +48,7 @@ export class GameService {
 
   async createNewGame(templateId: GameTemplateEntity.Id, participantsIds: UserEntity.Id[]) {
     const createdGame = await this.gameProvider.createGame(templateId, participantsIds);
-    const newGame = this.intializeGame(createdGame);
-
-    await this.gameProvider.updateGame(newGame);
-    return newGame;
+    return createdGame;
   }
 
   async handlePlayerAction(eventId: GameEventEntity.Id, action: any, context: GameContext) {
@@ -83,7 +79,7 @@ export class GameService {
       new WinnersTransformer(),
       new PossessionStateTransformer(),
       new GameEventsTransformer(),
-      new MonthResultTransformer(userId),
+      new MonthResultTransformer(),
     ]);
 
     await this.gameProvider.updateGame(updatedGame);
@@ -153,21 +149,8 @@ export class GameService {
   }
 
   /// Creation of room game by force without waitng of all players
-  async createRoomGame(roomId: RoomEntity.Id) {
-    const [room, game] = await this.gameProvider.createRoomGame(roomId);
-
-    const newGame = this.intializeGame(game);
-    await this.gameProvider.updateGame(newGame);
-
+  async createRoomGame(roomId: RoomEntity.Id): Promise<Room> {
+    const [room] = await this.gameProvider.createRoomGame(roomId);
     return room;
-  }
-
-  private intializeGame(game: Game): Game {
-    const newGame = applyGameTransformers(game, [
-      new GameEventsTransformer(true),
-      new PossessionStateTransformer(),
-    ]);
-
-    return newGame;
   }
 }

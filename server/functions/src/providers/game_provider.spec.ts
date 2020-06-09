@@ -1,11 +1,13 @@
 /// <reference types="@types/jest"/>
 
-import { mock, when, instance } from 'ts-mockito';
+import * as admin from 'firebase-admin';
+import { mock, when, instance, anything } from 'ts-mockito';
+
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from './firestore_selector';
 import { GameProvider } from './game_provider';
-import { MockDocumentSnapshot } from '../core/mock/mock_document_snapshot';
-import * as admin from 'firebase-admin';
+import { GameEntity } from '../models/domain/game/game';
+import { GameTemplateFixture } from '../core/fixtures/game_template_fixture';
 
 describe('Game Provider', () => {
   test('Could not create game without participants IDs array', async () => {
@@ -32,9 +34,8 @@ describe('Game Provider', () => {
     );
   });
 
-  // TODO(Maxim): Find out why firestore is undefined when method was mocked
-  test.skip('Could not create game without template', async () => {
-    const mockFirestore: Firestore = mock(Firestore);
+  test('Could not create game without template', async () => {
+    const mockFirestore = mock(Firestore);
     const mockSelector = mock(FirestoreSelector);
     const mockTemplateRef = mock(admin.firestore.DocumentReference);
 
@@ -42,14 +43,7 @@ describe('Game Provider', () => {
     const participantsIds = ['user1'];
 
     when(mockSelector.gameTemplate(templateId)).thenReturn(mockTemplateRef);
-
-    const getGameTemplate = async () => {
-      return new MockDocumentSnapshot<FirebaseFirestore.DocumentData>({
-        data: undefined,
-      });
-    };
-
-    when(mockFirestore.getItem(mockTemplateRef)).thenReturn(getGameTemplate());
+    when(mockFirestore.getItemData(mockTemplateRef)).thenReturn(Promise.resolve(undefined));
 
     const firestore = instance(mockFirestore);
     const selector = instance(mockSelector);
@@ -59,6 +53,42 @@ describe('Game Provider', () => {
       await gameProvider.createGame(templateId, participantsIds);
     };
 
-    await expect(createGame()).rejects.toThrow(new Error('ERROR: No template on game creation'));
+    await expect(createGame()).rejects.toThrow(
+      new Error('ERROR: No template with id: ' + templateId)
+    );
+  });
+
+  test('Created game contains initial month result', async () => {
+    const mockFirestore = mock(Firestore);
+    const mockSelector = mock(FirestoreSelector);
+    const mockTemplateRef = mock(admin.firestore.DocumentReference);
+
+    const templateId = 'template1';
+    const userId = 'user1';
+
+    const gameTemplate = GameTemplateFixture.createGameTemplate({ id: templateId });
+
+    when(mockSelector.gameTemplate(templateId)).thenReturn(mockTemplateRef);
+    when(mockFirestore.getItemData(mockTemplateRef)).thenReturn(Promise.resolve(gameTemplate));
+    when(mockFirestore.createItem(anything(), anything())).thenCall((selector, game) => {
+      return game;
+    });
+
+    const firestore = instance(mockFirestore);
+    const selector = instance(mockSelector);
+    const gameProvider = new GameProvider(firestore, selector);
+
+    const createdGame = await gameProvider.createGame(templateId, [userId]);
+    const monthResults = createdGame.state.participantsProgress[userId].monthResults;
+
+    const expectedMonthResult: GameEntity.MonthResult = {
+      cash: createdGame.accounts[userId].cash,
+    };
+
+    const expectedMonthResults: { [month: number]: GameEntity.MonthResult } = {
+      [0]: expectedMonthResult,
+    };
+
+    expect(monthResults).toStrictEqual(expectedMonthResults);
   });
 });

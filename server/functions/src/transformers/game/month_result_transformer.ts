@@ -1,10 +1,9 @@
 import produce from 'immer';
 import { Game } from '../../models/domain/game/game';
 import { GameTransformer } from './game_transformer';
-import { UserEntity } from '../../models/domain/user';
 
 export class MonthResultTransformer extends GameTransformer {
-  constructor(private userId: UserEntity.Id) {
+  constructor(private force: boolean = false) {
     super();
   }
 
@@ -13,22 +12,27 @@ export class MonthResultTransformer extends GameTransformer {
       return game;
     }
 
-    const participantProgress = game.state.participantsProgress[this.userId];
-    const isMonthResult = participantProgress.status === 'month_result';
-
-    if (!isMonthResult) {
-      return game;
-    }
-
     return produce(game, (draft) => {
-      const monthResults = draft.state.participantsProgress[this.userId].monthResults;
+      draft.participants.forEach((participantId) => {
+        const participantProgress = game.state.participantsProgress[participantId];
+        const isMonthResult = participantProgress.status === 'month_result';
 
-      draft.state.participantsProgress[this.userId].monthResults = {
-        ...monthResults,
-        [game.state.monthNumber - 1]: {
-          cash: game.accounts[this.userId].cash,
-        },
-      };
+        if (!isMonthResult && !this.force) {
+          return;
+        }
+
+        const monthResults = draft.state.participantsProgress[participantId].monthResults;
+        const resultMonth = game.state.monthNumber - 1;
+        const resultAlreadyExists = monthResults[resultMonth] !== undefined;
+
+        if (resultAlreadyExists) {
+          return;
+        }
+
+        draft.state.participantsProgress[participantId].monthResults[resultMonth] = {
+          cash: game.accounts[participantId].cash,
+        };
+      });
     });
   }
 }
