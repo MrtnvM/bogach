@@ -16,14 +16,7 @@ export interface Asset {
 export namespace AssetEntity {
   export type Id = string;
 
-  export type Type =
-    | 'insurance'
-    | 'debenture'
-    | 'stock'
-    | 'realty'
-    | 'business'
-    | 'cash'
-    | 'other';
+  export type Type = 'insurance' | 'debenture' | 'stock' | 'realty' | 'business' | 'cash' | 'other';
 
   export const TypeValues: Type[] = [
     'insurance',
@@ -32,7 +25,7 @@ export namespace AssetEntity {
     'realty',
     'business',
     'cash',
-    'other'
+    'other',
   ];
 
   export const parse = (data: any): Asset => {
@@ -62,7 +55,7 @@ export namespace AssetEntity {
   };
 
   const filterAssets = <T extends Asset>(assets: Asset[], type: Type) => {
-    return (assets?.filter(a => a.type === type) as T[]) ?? [];
+    return (assets?.filter((a) => a.type === type) as T[]) ?? [];
   };
 
   export const getInsurances = (assets: Asset[]) => {
@@ -105,5 +98,40 @@ export namespace AssetEntity {
 
   export const getExpense = (asset: Asset) => {
     return undefined;
+  };
+
+  export const getAssetValue = (asset: Asset): number => {
+    switch (asset.type) {
+      case 'insurance':
+        const insurance = asset as InsuranceAsset;
+        return insurance.value;
+
+      case 'debenture':
+        const debenture = asset as DebentureAsset;
+        return debenture.averagePrice * debenture.count;
+
+      case 'stock':
+        const stock = asset as StockAsset;
+        return stock.averagePrice * stock.countInPortfolio;
+
+      case 'realty':
+        const realty = asset as RealtyAsset;
+        return realty.cost;
+
+      case 'business':
+        const business = asset as BusinessAsset;
+        return business.buyPrice;
+
+      case 'cash':
+        const cash = asset as CashAsset;
+        return cash.value;
+
+      case 'other':
+        const otherAsset = asset as OtherAsset;
+        return otherAsset.value;
+
+      default:
+        throw new Error("ERROR: Can't determine value for asset with type: " + asset.type);
+    }
   };
 }

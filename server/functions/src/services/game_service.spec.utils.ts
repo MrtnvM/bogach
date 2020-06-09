@@ -27,6 +27,21 @@ const create = <T>(obj: T) => obj;
 export const game: Game = GameFixture.createGame({
   id: gameId,
   participants: [userId],
+  possessions: {
+    [userId]: {
+      incomes: [
+        {
+          id: 'income1',
+          value: 10_000,
+          name: 'Зарплата',
+          type: 'salary',
+        },
+      ],
+      expenses: [],
+      assets: [],
+      liabilities: [],
+    },
+  },
   possessionState: {
     [userId]: {
       incomes: [

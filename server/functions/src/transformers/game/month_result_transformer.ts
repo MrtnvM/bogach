@@ -1,6 +1,7 @@
 import produce from 'immer';
 import { Game } from '../../models/domain/game/game';
 import { GameTransformer } from './game_transformer';
+import { AssetEntity } from '../../models/domain/asset';
 
 export class MonthResultTransformer extends GameTransformer {
   constructor(private force: boolean = false) {
@@ -29,8 +30,27 @@ export class MonthResultTransformer extends GameTransformer {
           return;
         }
 
+        const possessionState = game.possessionState[participantId];
+        const { incomes, expenses, assets, liabilities } = possessionState;
+
+        const totalIncome = incomes.reduce((total, income) => total + income.value, 0);
+        const totalExpense = expenses.reduce((total, expense) => total + expense.value, 0);
+
+        const totalAssets = assets
+          .map(AssetEntity.getAssetValue)
+          .reduce((total, assetValue) => total + assetValue, 0);
+
+        const totalLiabilities = liabilities.reduce(
+          (total, liability) => total + liability.value,
+          0
+        );
+
         draft.state.participantsProgress[participantId].monthResults[resultMonth] = {
           cash: game.accounts[participantId].cash,
+          totalIncome,
+          totalExpense,
+          totalAssets,
+          totalLiabilities,
         };
       });
     });

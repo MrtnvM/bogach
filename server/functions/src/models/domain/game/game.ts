@@ -32,6 +32,10 @@ export namespace GameEntity {
 
   export type MonthResult = {
     cash: number;
+    totalIncome: number;
+    totalExpense: number;
+    totalAssets: number;
+    totalLiabilities: number;
   };
 
   export type ParticipantProgress = {

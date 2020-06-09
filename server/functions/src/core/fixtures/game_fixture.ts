@@ -2,13 +2,17 @@ import { Game, GameEntity } from '../../models/domain/game/game';
 import { createParticipantsGameState } from '../../models/domain/game/participant_game_state';
 import { PossessionsEntity } from '../../models/domain/possessions';
 import { PossessionStateEntity } from '../../models/domain/possession_state';
+import {
+  applyGameTransformers,
+  MonthResultTransformer,
+} from '../../transformers/game_transformers';
 
 export namespace GameFixture {
   export const createGame = (game: Partial<Game> | undefined = undefined): Game => {
     const participants = game?.participants || [];
     const defaultInitialCash = 20_000;
 
-    const newGame: Game = {
+    let newGame: Game = {
       id: game?.id || 'game1',
       name: game?.name || 'Game 1',
       type: game?.type || 'singleplayer',
@@ -22,7 +26,7 @@ export namespace GameFixture {
           {
             currentEventIndex: 0,
             status: 'player_move',
-            monthResults: { [0]: { cash: defaultInitialCash } },
+            monthResults: {},
           }
         ),
         winners: {},
@@ -43,6 +47,8 @@ export namespace GameFixture {
       target: game?.target || { type: 'cash', value: 1_000_000 },
       currentEvents: game?.currentEvents || [],
     };
+
+    newGame = applyGameTransformers(newGame, [new MonthResultTransformer(true)]);
 
     GameEntity.validate(newGame);
     return newGame;
