@@ -7,6 +7,10 @@ part 'month_result.g.dart';
 abstract class MonthResult with _$MonthResult {
   factory MonthResult({
     @required double cash,
+    @required double totalIncome,
+    @required double totalExpense,
+    @required double totalAssets,
+    @required double totalLiabilities,
   }) = _MonthResult;
 
   factory MonthResult.fromJson(Map<String, dynamic> json) =>

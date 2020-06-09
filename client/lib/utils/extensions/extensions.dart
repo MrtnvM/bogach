@@ -9,9 +9,14 @@ extension PriceFormatting on num {
   }
 
   String toPercent() {
+    if (isInfinite) {
+      return '-';
+    }
+
     final formatter = NumberFormat();
     formatter.minimumFractionDigits = 0;
     formatter.maximumFractionDigits = 1;
+
     return '${formatter.format(this)}%';
   }
 }

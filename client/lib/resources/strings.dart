@@ -161,6 +161,8 @@ class Strings {
 
   static String get monthResult => 'Итоги за месяц';
   static String get financialResults => 'Финансовые показатели';
+  static String get financialResultsChange => 'Изменения показателей';
+  static String get total => 'Итого';
 
   static String get gameBoardTitle => 'GameBoard';
 
