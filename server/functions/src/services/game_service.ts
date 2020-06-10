@@ -20,6 +20,7 @@ import { IncomeHandler } from '../events/income/income_handler';
 import { ExpenseHandler } from '../events/expense/expense_handler';
 import { BusinessSellEventHandler } from '../events/business/sell/business_sell_event_handler';
 import { MonthlyExpenseEventHandler } from '../events/monthly_expense/monthly_expense_event_handler';
+import { InsuranceHandler } from '../events/insurance/insurance_handler';
 import { UserEntity } from '../models/domain/user';
 import { GameTemplateEntity } from '../models/domain/game/game_template';
 import { Room, RoomEntity } from '../models/domain/room';
@@ -42,6 +43,7 @@ export class GameService {
     new IncomeHandler(),
     new ExpenseHandler(),
     new MonthlyExpenseEventHandler(),
+    new InsuranceHandler(),
   ];
 
   private handlerMap: { [type: string]: PlayerActionHandler } = {};

@@ -3,6 +3,7 @@ import 'package:cash_flow/presentation/gameboard/game_events/business/sell/model
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/debenture_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/expense/models/expense_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/income/models/income_event_data.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/insurance/models/insurance_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/monthly_payment/monthly_expense_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/model/stock_event_data.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -18,6 +19,7 @@ const _businessSellEventType = 'business-sell-event';
 const _incomeEventType = 'income-event';
 const _expenseEventType = 'expense-event';
 const _monthlyExpenseEventType = 'monthly-expense-event';
+const _insurance = 'insurance-event';
 
 @freezed
 abstract class GameEventType implements _$GameEventType {
@@ -30,6 +32,7 @@ abstract class GameEventType implements _$GameEventType {
   factory GameEventType.income() = IncomeGameEventType;
   factory GameEventType.expense() = ExpenseGameEventType;
   factory GameEventType.monthlyExpense() = MonthlyExpenseGameEventType;
+  factory GameEventType.insurance() = InsuranceGameEventType;
 
   String typeTitle() => map(
         debenture: (_) => Strings.investments,
@@ -39,6 +42,7 @@ abstract class GameEventType implements _$GameEventType {
         income: (_) => Strings.income,
         expense: (_) => Strings.expense,
         monthlyExpense: (_) => Strings.monthlyExpenseEvent,
+        insurance: (_) => Strings.insuranceEvent,
       );
 
   dynamic parseGameEventData(Map<String, dynamic> json) {
@@ -50,6 +54,7 @@ abstract class GameEventType implements _$GameEventType {
       income: (_) => IncomeEventData.fromJson(json),
       expense: (_) => ExpenseEventData.fromJson(json),
       monthlyExpense: (_) => MonthlyExpenseEventData.fromJson(json),
+      insurance: (_) => InsuranceEventData.fromJson(json),
     );
   }
 
@@ -61,6 +66,7 @@ abstract class GameEventType implements _$GameEventType {
         income: (_) => _incomeEventType,
         expense: (_) => _expenseEventType,
         monthlyExpense: (_) => _monthlyExpenseEventType,
+        insurance: (_) => _insurance,
       );
 
   static GameEventType fromJson(String json) {
@@ -85,6 +91,9 @@ abstract class GameEventType implements _$GameEventType {
 
       case _monthlyExpenseEventType:
         return GameEventType.monthlyExpense();
+
+      case _insurance:
+        return GameEventType.insurance();
 
       default:
         // TODO(Maxim): Add non fatal error; Remove throwing exception
