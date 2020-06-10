@@ -1,6 +1,7 @@
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/table/table_divider.dart';
 import 'package:cash_flow/presentation/multiplayer/widgets/user_profile_item.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -29,12 +30,14 @@ class WaitingPlayersCard extends HookWidget {
       child: Column(
         children: <Widget>[
           _buildHeader(),
+          const TableDivider(),
+          const SizedBox(height: 4),
           Wrap(
             alignment: WrapAlignment.center,
             children: <Widget>[
               for (final profile in waitingPlayerList)
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: UserProfileItem(
                     profile,
                     titleColor: ColorRes.mainBlack,
