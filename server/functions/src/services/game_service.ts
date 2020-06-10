@@ -90,17 +90,17 @@ export class GameService {
   async startNewMonth(context: GameContext) {
     const { gameId, userId } = context;
 
-    let game = await this.gameProvider.getGame(gameId);
+    const game = await this.gameProvider.getGame(gameId);
     if (!game) throw new Error('No game with ID: ' + gameId);
 
     const participantProgress = game.state.participantsProgress[userId];
 
     if (participantProgress.status === 'month_result') {
       const updatedGame = produce(game, (draft) => {
-        const participantProgress = draft.state.participantsProgress[userId];
+        const progress = draft.state.participantsProgress[userId];
 
-        participantProgress.currentEventIndex = 0;
-        participantProgress.status = 'player_move';
+        progress.currentEventIndex = 0;
+        progress.status = 'player_move';
       });
 
       await this.gameProvider.updateGame(updatedGame);

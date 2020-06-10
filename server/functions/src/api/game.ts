@@ -83,9 +83,9 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const apiRequest = APIRequest.from(request);
     const context = apiRequest.jsonField('context');
 
-    const startNewMonth = gameService.startNewMonth(context).then(() => 'New month started');
+    const startNewMonthRequest = gameService.startNewMonth(context).then(() => 'New month started');
 
-    return send(startNewMonth, response);
+    return send(startNewMonthRequest, response);
   });
 
   const send = <T>(data: Promise<T>, response: functions.Response) => {

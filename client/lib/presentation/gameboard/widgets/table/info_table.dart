@@ -23,11 +23,11 @@ class InfoTable extends StatelessWidget {
       padding: const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 20),
       child: Column(
         children: <Widget>[
-          _buildHeader(),
-          TableDivider(),
+          ..._buildHeader(),
+          const TableDivider(),
           for (var i = 0; i < rows.length; i++) ...[
             rows[i],
-            if (i != rows.length - 1) TableDivider(),
+            if (i != rows.length - 1) const TableDivider(),
           ]
         ],
       ),

@@ -70,7 +70,7 @@ describe('Game Provider', () => {
 
     when(mockSelector.gameTemplate(templateId)).thenReturn(mockTemplateRef);
     when(mockFirestore.getItemData(mockTemplateRef)).thenReturn(Promise.resolve(gameTemplate));
-    when(mockFirestore.createItem(anything(), anything())).thenCall((selector, game) => {
+    when(mockFirestore.createItem(anything(), anything())).thenCall((_, game) => {
       return game;
     });
 
