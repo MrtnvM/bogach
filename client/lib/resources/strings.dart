@@ -163,6 +163,8 @@ class Strings {
   static String get financialResultsChange => 'Изменения показателей';
   static String get total => 'Итого';
 
+  static String get waitingPlayersList => 'Ждем хода игроков';
+
   static String get gameBoardTitle => 'GameBoard';
 
   static String get targetTypeCash => 'Капитал';

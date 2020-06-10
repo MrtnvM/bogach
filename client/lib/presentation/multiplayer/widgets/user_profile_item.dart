@@ -4,8 +4,14 @@ import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
 import 'package:flutter/material.dart';
 
 class UserProfileItem extends StatelessWidget {
-  const UserProfileItem(this.profile, {Key key}) : super(key: key);
+  const UserProfileItem(
+    this.profile, {
+    Key key,
+    this.titleColor,
+  }) : super(key: key);
+
   final UserProfile profile;
+  final Color titleColor;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +26,7 @@ class UserProfileItem extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             profile.fullName,
-            style: Styles.body1.copyWith(fontSize: 13),
+            style: Styles.body1.copyWith(fontSize: 13, color: titleColor),
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,

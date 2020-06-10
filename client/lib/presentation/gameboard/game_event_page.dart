@@ -1,5 +1,6 @@
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
+import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/expense/ui/expense_game_event.dart';
@@ -8,6 +9,7 @@ import 'package:cash_flow/presentation/gameboard/game_events/insurance/ui/insura
 import 'package:cash_flow/presentation/gameboard/game_events/monthly_payment/ui/monthly_expense_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/ui/stock_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/month_result_card.dart';
+import 'package:cash_flow/presentation/gameboard/waiting_players_card.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar_button.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +26,9 @@ class GameEventPage extends HookWidget {
     final activeGameState = useGlobalState((s) => s.game.activeGameState);
     final gameEvents = useCurrentGame((g) => g.currentEvents);
     final gameActions = useGameActions();
+    final participantProgress = useCurrentGame(
+      (g) => g.state.participantsProgress,
+    );
 
     final currentEvent = activeGameState.maybeMap(
       gameEvent: (eventState) => gameEvents[eventState.eventIndex],
@@ -35,11 +40,18 @@ class GameEventPage extends HookWidget {
       orElse: () => false,
     );
 
+    final isWaitingPlayers = isMonthResult &&
+        participantProgress.values.any(
+          (e) => e.status != ParticipantProgressStatus.monthResult,
+        );
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (isMonthResult) _buildMonthResult(gameActions.startNewMonth),
+        if (isWaitingPlayers) WaitingPlayersCard(),
+        if (!isWaitingPlayers && isMonthResult)
+          _buildMonthResult(gameActions.startNewMonth),
         if (currentEvent != null) _buildEventBody(currentEvent),
       ],
     );
