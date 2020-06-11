@@ -149,7 +149,7 @@ describe('Possession Service Tests', () => {
           id: 'debenture1',
           name: 'Облигации',
           type: 'investment',
-          value: 320,
+          value: 26.666666666666668,
         },
         {
           id: 'realty1',

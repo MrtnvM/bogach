@@ -73,7 +73,7 @@ describe('Game Service - Singleplayer game', () => {
       participantProgress.status = 'month_result';
       participantProgress.monthResults['1'] = {
         cash: 29_100,
-        totalIncome: 10_060,
+        totalIncome: 10_005,
         totalExpense: 0,
         totalAssets: 900,
         totalLiabilities: 0,

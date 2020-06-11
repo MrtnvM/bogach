@@ -34,7 +34,7 @@ export namespace DebentureAssetEntity {
   };
 
   export const getIncomeValue = (asset: DebentureAsset) => {
-    return (asset.nominal * asset.profitabilityPercent * asset.count) / 100;
+    return (asset.nominal * asset.count * (asset.profitabilityPercent / 100)) / 12;
   };
 
   export const getIncome = (asset: DebentureAsset): Income => {
