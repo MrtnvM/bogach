@@ -52,7 +52,7 @@ export class GameProvider {
         participantsProgress: participantsGameState({
           status: 'player_move',
           currentEventIndex: 0,
-          currentMonthForParticipant: 0,
+          currentMonthForParticipant: 1,
           monthResults: {},
         }),
         winners: {},
@@ -68,7 +68,7 @@ export class GameProvider {
     game = applyGameTransformers(game, [
       new GameEventsTransformer(true),
       new PossessionStateTransformer(),
-      new MonthResultTransformer(true),
+      new MonthResultTransformer(0),
     ]);
 
     const selector = this.selector.game(gameId);

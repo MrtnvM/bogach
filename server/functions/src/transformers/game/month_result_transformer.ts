@@ -4,7 +4,7 @@ import { GameTransformer } from './game_transformer';
 import { AssetEntity } from '../../models/domain/asset';
 
 export class MonthResultTransformer extends GameTransformer {
-  constructor(private force: boolean = false) {
+  constructor(private month: number | undefined = undefined) {
     super();
   }
 
@@ -18,12 +18,12 @@ export class MonthResultTransformer extends GameTransformer {
         const participantProgress = game.state.participantsProgress[participantId];
         const isMonthResult = participantProgress.status === 'month_result';
 
-        if (!isMonthResult && !this.force) {
+        if (!isMonthResult && this.month === undefined) {
           return;
         }
 
         const { monthResults, currentMonthForParticipant } = participantProgress;
-        const resultMonth = currentMonthForParticipant;
+        const resultMonth = this.month !== undefined ? this.month : currentMonthForParticipant;
         const resultAlreadyExists = monthResults[resultMonth] !== undefined;
 
         if (resultAlreadyExists) {
