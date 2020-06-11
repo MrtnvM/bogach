@@ -19,6 +19,7 @@ abstract class GameState implements Built<GameState, GameStateBuilder> {
   RequestState get startNewMonthRequestState;
 
   ActiveGameState get activeGameState;
+  int get currentMonth;
 
   @nullable
   Game get currentGame;
@@ -33,6 +34,7 @@ abstract class GameState implements Built<GameState, GameStateBuilder> {
           ..getRequestState = RequestState.idle
           ..startNewMonthRequestState = RequestState.idle
           ..activeGameState = ActiveGameState.waitingForStart()
+          ..currentMonth = 0
           ..participantProfiles = StoreList<UserProfile>(),
       );
 }

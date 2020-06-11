@@ -1,6 +1,4 @@
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
-import 'package:cash_flow/features/game/game_hooks.dart';
-import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/table_divider.dart';
 import 'package:cash_flow/presentation/multiplayer/widgets/user_profile_item.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -14,16 +12,12 @@ class WaitingPlayersCard extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final userProfiles = useGlobalState((s) => s.game.participantProfiles);
-    final participantIds = useCurrentGame((g) => g.participants);
-    final participantsStatus = useCurrentGame(
-      (g) => g.state.participantsProgress,
-    );
+    final activeGameState = useGlobalState((s) => s.game.activeGameState);
 
-    final waitingPlayerList = participantIds
-        .where((id) =>
-            participantsStatus[id].status !=
-            ParticipantProgressStatus.monthResult)
-        .map((id) => userProfiles.itemsMap[id]);
+    final waitingPlayerList = activeGameState.maybeWhen(
+      waitingPlayers: (ids) => ids.map((id) => userProfiles.itemsMap[id]),
+      orElse: () => [],
+    );
 
     return CardContainer(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 20),

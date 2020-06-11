@@ -22,8 +22,8 @@ export class MonthResultTransformer extends GameTransformer {
           return;
         }
 
-        const monthResults = draft.state.participantsProgress[participantId].monthResults;
-        const resultMonth = game.state.monthNumber - 1;
+        const { monthResults, currentMonthForParticipant } = participantProgress;
+        const resultMonth = currentMonthForParticipant;
         const resultAlreadyExists = monthResults[resultMonth] !== undefined;
 
         if (resultAlreadyExists) {

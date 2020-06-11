@@ -16,8 +16,7 @@ Epic<AppState> gameEpic({
   final startGameEpic = epic((action$, store) {
     return action$.whereType<StartGameAction>() //
         .flatMap((action) {
-      final game =
-          gameService.getGame(action.gameContext).shareReplay(maxSize: 1);
+      final game = gameService.getGame(action.gameContext);
 
       final userProfiles = game
           .take(1)

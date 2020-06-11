@@ -27,7 +27,14 @@ final gameReducer = Reducer<GameState>()
           final progress = game.state.participantsProgress[userId];
 
           if (progress.status == ParticipantProgressStatus.monthResult) {
-            newActiveGameState = ActiveGameState.monthResult();
+            final waitingPlayerList = getParticipantIdsForWaiting(
+              userId,
+              game.state.participantsProgress,
+            );
+
+            newActiveGameState = waitingPlayerList.isEmpty
+                ? ActiveGameState.monthResult()
+                : ActiveGameState.waitingPlayers(waitingPlayerList);
           }
 
           if (progress.status == ParticipantProgressStatus.playerMove) {
@@ -118,3 +125,30 @@ final gameReducer = Reducer<GameState>()
       s.participantProfiles = StoreList<UserProfile>(action.userProfiles);
     }),
   );
+
+List<String> getParticipantIdsForWaiting(
+  String myUserId,
+  Map<String, ParticipantProgress> participantsProgress,
+) {
+  final progress = participantsProgress[myUserId];
+  final myCurrentMonth = progress.currentMonthForParticipant;
+
+  final waitingPlayerList = participantsProgress.entries
+      .where((entry) => entry.key != myUserId)
+      .where((entry) {
+        final progress = entry.value;
+        final participantMonth = progress.currentMonthForParticipant;
+
+        final isMoving = participantMonth == myCurrentMonth &&
+            progress.status != ParticipantProgressStatus.monthResult;
+
+        final didNotStartNewMonth =
+            progress.currentMonthForParticipant < myCurrentMonth;
+
+        return isMoving || didNotStartNewMonth;
+      })
+      .map((entry) => entry.key)
+      .toList();
+
+  return waitingPlayerList;
+}

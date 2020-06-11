@@ -77,11 +77,11 @@ export class GameService {
     const updatedGame = applyGameTransformers(game, [
       new UserProgressTransformer(eventId, userId),
       new ParticipantAccountsTransformer(),
-      new MonthTransformer(),
       new WinnersTransformer(),
       new PossessionStateTransformer(),
       new GameEventsTransformer(),
       new MonthResultTransformer(),
+      new MonthTransformer(),
     ]);
 
     await this.gameProvider.updateGame(updatedGame);
@@ -100,6 +100,7 @@ export class GameService {
         const progress = draft.state.participantsProgress[userId];
 
         progress.currentEventIndex = 0;
+        progress.currentMonthForParticipant = draft.state.monthNumber;
         progress.status = 'player_move';
       });
 

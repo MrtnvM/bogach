@@ -1,6 +1,5 @@
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
-import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/expense/ui/expense_game_event.dart';
@@ -26,34 +25,12 @@ class GameEventPage extends HookWidget {
     final activeGameState = useGlobalState((s) => s.game.activeGameState);
     final gameEvents = useCurrentGame((g) => g.currentEvents);
     final gameActions = useGameActions();
-    final participantProgress = useCurrentGame(
-      (g) => g.state.participantsProgress,
-    );
 
-    final currentEvent = activeGameState.maybeMap(
-      gameEvent: (eventState) => gameEvents[eventState.eventIndex],
-      orElse: () => null,
-    );
-
-    final isMonthResult = activeGameState.maybeWhen(
-      monthResult: () => true,
-      orElse: () => false,
-    );
-
-    final isWaitingPlayers = isMonthResult &&
-        participantProgress.values.any(
-          (e) => e.status != ParticipantProgressStatus.monthResult,
-        );
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (isWaitingPlayers) WaitingPlayersCard(),
-        if (!isWaitingPlayers && isMonthResult)
-          _buildMonthResult(gameActions.startNewMonth),
-        if (currentEvent != null) _buildEventBody(currentEvent),
-      ],
+    return activeGameState.maybeWhen(
+      gameEvent: (eventIndex, _) => _buildEventBody(gameEvents[eventIndex]),
+      waitingPlayers: (_) => WaitingPlayersCard(),
+      monthResult: () => _buildMonthResult(gameActions.startNewMonth),
+      orElse: () => Container(),
     );
   }
 

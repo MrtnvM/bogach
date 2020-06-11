@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 class StartGameAction extends Action {
-  StartGameAction(this.gameContext);
+  StartGameAction(this.gameContext) : assert(gameContext != null);
 
   final GameContext gameContext;
 
@@ -56,7 +56,7 @@ class SendPlayerMoveAsyncAction extends AsyncAction<void> {
 class StartNewMonthAsyncAction extends AsyncAction {}
 
 class SetGameParticipnatsProfiles extends Action {
-  SetGameParticipnatsProfiles(this.userProfiles);
+  SetGameParticipnatsProfiles(this.userProfiles) : assert(userProfiles != null);
 
   final List<UserProfile> userProfiles;
 }

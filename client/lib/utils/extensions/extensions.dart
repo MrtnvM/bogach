@@ -9,7 +9,7 @@ extension PriceFormatting on num {
   }
 
   String toPercent() {
-    if (isInfinite) {
+    if (isInfinite || isNaN) {
       return '-';
     }
 

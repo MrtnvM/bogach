@@ -40,6 +40,7 @@ export namespace GameEntity {
 
   export type ParticipantProgress = {
     currentEventIndex: number;
+    currentMonthForParticipant: number;
     status: 'player_move' | 'month_result';
     monthResults: { [month: number]: MonthResult };
   };

@@ -52,6 +52,7 @@ export class GameProvider {
         participantsProgress: participantsGameState({
           status: 'player_move',
           currentEventIndex: 0,
+          currentMonthForParticipant: 0,
           monthResults: {},
         }),
         winners: {},

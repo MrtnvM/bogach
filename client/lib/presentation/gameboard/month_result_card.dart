@@ -18,17 +18,9 @@ class MonthResultCard extends HookWidget {
     final monthResults = useCurrentGame(
       (g) => g.state.participantsProgress[userId].monthResults,
     );
+    final calculateChange = useMonthChangeCalculator();
 
-    final previousResults = monthResults['${month - 2}'];
     final currentResults = monthResults['${month - 1}'];
-
-    final calculateChange = (double Function(MonthResult result) selector) {
-      final currentValue = selector(currentResults);
-      final previousValue = selector(previousResults);
-      final change = (currentValue - previousValue) / previousValue;
-      return change * 100;
-    };
-
     final cashFlow = currentResults.totalIncome - currentResults.totalExpense;
     final cashChange = calculateChange((r) => r.cash);
     final incomeChange = calculateChange((r) => r.totalIncome);
@@ -159,4 +151,24 @@ class MonthResultCard extends HookWidget {
       color: ColorRes.newGameBoardInvestmentsDividerColor.withAlpha(150),
     );
   }
+}
+
+double Function(double Function(MonthResult)) useMonthChangeCalculator() {
+  final userId = useUserId();
+  final month = useCurrentGame((g) => g.state.monthNumber);
+  final monthResults = useCurrentGame(
+    (g) => g.state.participantsProgress[userId].monthResults,
+  );
+
+  final previousResults = monthResults['${month - 2}'];
+  final currentResults = monthResults['${month - 1}'];
+
+  final calculateChange = (double Function(MonthResult result) selector) {
+    final currentValue = selector(currentResults);
+    final previousValue = selector(previousResults);
+    final change = (currentValue - previousValue) / previousValue;
+    return change * 100;
+  };
+
+  return calculateChange;
 }

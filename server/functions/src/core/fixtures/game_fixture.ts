@@ -2,15 +2,53 @@ import { Game, GameEntity } from '../../models/domain/game/game';
 import { createParticipantsGameState } from '../../models/domain/game/participant_game_state';
 import { PossessionsEntity } from '../../models/domain/possessions';
 import { PossessionStateEntity } from '../../models/domain/possession_state';
-import {
-  applyGameTransformers,
-  MonthResultTransformer,
-} from '../../transformers/game_transformers';
+import { AssetEntity } from '../../models/domain/asset';
 
 export namespace GameFixture {
   export const createGame = (game: Partial<Game> | undefined = undefined): Game => {
     const participants = game?.participants || [];
     const defaultInitialCash = 20_000;
+
+    const accounts =
+      game?.accounts ||
+      createParticipantsGameState(participants, {
+        cashFlow: 10_000,
+        cash: defaultInitialCash,
+        credit: 0,
+      });
+
+    const possessionState =
+      game?.possessionState ||
+      createParticipantsGameState(participants, PossessionStateEntity.createEmpty());
+
+    const participantsProgress: { [userId: string]: GameEntity.ParticipantProgress } = {};
+    participants.forEach((id) => {
+      const { incomes, expenses, assets, liabilities } = possessionState[id];
+
+      const totalIncome = incomes.reduce((total, income) => total + income.value, 0);
+      const totalExpense = expenses.reduce((total, expense) => total + expense.value, 0);
+
+      const totalAssets = assets
+        .map(AssetEntity.getAssetValue)
+        .reduce((total, assetValue) => total + assetValue, 0);
+
+      const totalLiabilities = liabilities.reduce((total, liability) => total + liability.value, 0);
+
+      const monthResult: GameEntity.MonthResult = {
+        cash: accounts[id].cash,
+        totalIncome,
+        totalExpense,
+        totalAssets,
+        totalLiabilities,
+      };
+
+      participantsProgress[id] = {
+        currentEventIndex: 0,
+        currentMonthForParticipant: 1,
+        status: 'player_move',
+        monthResults: { 0: monthResult },
+      };
+    });
 
     let newGame: Game = {
       id: game?.id || 'game1',
@@ -21,34 +59,17 @@ export namespace GameFixture {
         gameStatus: 'players_move',
         monthNumber: 1,
         participantProgress: createParticipantsGameState(participants, 0),
-        participantsProgress: createParticipantsGameState<GameEntity.ParticipantProgress>(
-          participants,
-          {
-            currentEventIndex: 0,
-            status: 'player_move',
-            monthResults: {},
-          }
-        ),
+        participantsProgress,
         winners: {},
       },
       possessions:
         game?.possessions ||
         createParticipantsGameState(participants, PossessionsEntity.createEmpty()),
-      possessionState:
-        game?.possessionState ||
-        createParticipantsGameState(participants, PossessionStateEntity.createEmpty()),
-      accounts:
-        game?.accounts ||
-        createParticipantsGameState(participants, {
-          cashFlow: 10_000,
-          cash: defaultInitialCash,
-          credit: 0,
-        }),
+      possessionState,
+      accounts,
       target: game?.target || { type: 'cash', value: 1_000_000 },
       currentEvents: game?.currentEvents || [],
     };
-
-    newGame = applyGameTransformers(newGame, [new MonthResultTransformer(true)]);
 
     GameEntity.validate(newGame);
     return newGame;

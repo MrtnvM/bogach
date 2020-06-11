@@ -9,6 +9,7 @@ abstract class ParticipantProgress with _$ParticipantProgress {
   factory ParticipantProgress({
     @required ParticipantProgressStatus status,
     @required int currentEventIndex,
+    @required int currentMonthForParticipant,
     @required Map<String, MonthResult> monthResults,
   }) = _ParticipantProgress;
 

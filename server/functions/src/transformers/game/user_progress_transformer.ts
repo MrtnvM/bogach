@@ -13,7 +13,8 @@ export class UserProgressTransformer extends GameTransformer {
   apply(game: Game): Game {
     const currentParticipantEventIndex = game.currentEvents.findIndex((e) => e.id === this.eventId);
     const isNotLastEvent = currentParticipantEventIndex < game.currentEvents.length - 1;
-    const monthResults = game.state.participantsProgress[this.userId].monthResults;
+    const currentParticipantProgress = game.state.participantsProgress[this.userId];
+    const { monthResults, currentMonthForParticipant } = currentParticipantProgress;
 
     let newParticipantEventIndex: number;
     let newParticipantProgress: GameEntity.ParticipantProgress;
@@ -23,6 +24,7 @@ export class UserProgressTransformer extends GameTransformer {
 
       newParticipantProgress = {
         currentEventIndex: newParticipantEventIndex,
+        currentMonthForParticipant,
         status: 'player_move',
         monthResults,
       };
@@ -31,6 +33,7 @@ export class UserProgressTransformer extends GameTransformer {
 
       newParticipantProgress = {
         currentEventIndex: newParticipantEventIndex,
+        currentMonthForParticipant,
         status: 'month_result',
         monthResults,
       };
