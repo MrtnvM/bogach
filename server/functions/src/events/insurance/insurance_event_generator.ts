@@ -29,7 +29,7 @@ export namespace InsuranceEventGenerator {
 
   const generateInsuranceType = (): InsuranceAssetEntity.InsuranceType => {
     const randomInt = random.int(0, 100);
-    if (randomInt >= 50) {
+    if (randomInt <= 50) {
       return 'health';
     } else {
       return 'property';

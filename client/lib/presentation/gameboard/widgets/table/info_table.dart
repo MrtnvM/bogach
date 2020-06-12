@@ -47,12 +47,15 @@ class InfoTable extends StatelessWidget {
       ),
       if (description != null) ...<Widget>[
         const SizedBox(height: 8),
-        Text(
-          description,
-          style: Styles.tableRowDetails,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 4,
-        ),
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            description,
+            style: Styles.tableRowDetails,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 4,
+          ),
+        )
       ],
     ];
   }

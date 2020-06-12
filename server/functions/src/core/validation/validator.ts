@@ -98,6 +98,25 @@ export class Validator<T extends object> {
     }
   }
 
+  checkNullableUnion(field: keyof T, unionValues: any[]) {
+    const value = this.entity[field];
+
+    if (value === undefined) {
+      this.throwError(`The entity does not have nullable value for '${field}' field`);
+    }
+
+    if (value === null) {
+      return;
+    }
+
+    if (unionValues.indexOf(value) < 0) {
+      const valuesList = unionValues.join(', ');
+      const errorMessage = `The ${field} field can have only these values: ${valuesList}`;
+
+      this.throwError(errorMessage);
+    }
+  }
+
   private throwError(reason: string) {
     const error = `[VALIDATION ERROR]: ${reason}`;
     const context = this.context ? `\n[CONTEXT]: ${this.context}` : '';

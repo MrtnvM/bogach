@@ -39,6 +39,7 @@ export class GameEventsTransformer extends GameTransformer {
     const gameEvents = [
       InsuranceEventGenerator.generate(),
       ChildBornGenerator.generate(),
+      ExpenseEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),
       DebenturePriceChangedEventGenerator.generate(),

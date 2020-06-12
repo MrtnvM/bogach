@@ -1,5 +1,6 @@
 import { GameEvent, GameEventEntity } from '../../models/domain/game/game_event';
 import { Entity } from '../../core/domain/entity';
+import { InsuranceAssetEntity } from '../../models/domain/assets/insurance_asset';
 
 export namespace ExpenseEvent {
   export const Type: GameEventEntity.Type = 'expense-event';
@@ -8,17 +9,19 @@ export namespace ExpenseEvent {
 
   export interface Data {
     readonly expense: number;
+    readonly insuranceType: InsuranceAssetEntity.InsuranceType | null;
   }
 
   export type PlayerAction = {};
 
   export const parse = (gameEvent: GameEvent, eventData: any): Event => {
-    const { expense } = eventData.data;
+    const { expense, insuranceType } = eventData.data;
 
     return {
       ...gameEvent,
       data: {
         expense,
+        insuranceType,
       },
     };
   };
@@ -31,6 +34,7 @@ export namespace ExpenseEvent {
     const entity = Entity.createEntityValidator<Data>(event.data, 'ExpenseEvent.Data');
 
     entity.hasNumberValue('expense');
+    entity.checkNullableUnion('insuranceType', InsuranceAssetEntity.TypeValues);
 
     entity.checkWithRules([[(a) => a.expense <= 0, "Expense can't be <= 0"]]);
   };
