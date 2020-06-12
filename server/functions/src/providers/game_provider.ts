@@ -10,6 +10,12 @@ import { assertExists } from '../utils/asserts';
 import { createParticipantsGameState } from '../models/domain/game/participant_game_state';
 import { produce } from 'immer';
 import { checkIds, checkId } from '../core/validation/type_checks';
+import {
+  applyGameTransformers,
+  GameEventsTransformer,
+  PossessionStateTransformer,
+  MonthResultTransformer,
+} from '../transformers/game_transformers';
 
 export class GameProvider {
   constructor(private firestore: Firestore, private selector: FirestoreSelector) {}
@@ -35,7 +41,7 @@ export class GameProvider {
     const gameId: GameEntity.Id = uuid.v4();
     const gameType: GameEntity.Type = participantsIds.length > 0 ? 'multiplayer' : 'singleplayer';
 
-    const game: Game = {
+    let game: Game = {
       id: gameId,
       name: template.name,
       type: gameType,
@@ -43,6 +49,12 @@ export class GameProvider {
         gameStatus: 'players_move',
         monthNumber: 1,
         participantProgress: participantsGameState(0),
+        participantsProgress: participantsGameState({
+          status: 'player_move',
+          currentEventIndex: 0,
+          currentMonthForParticipant: 1,
+          monthResults: {},
+        }),
         winners: {},
       },
       participants: participantsIds,
@@ -52,6 +64,12 @@ export class GameProvider {
       target: template.target,
       currentEvents: [],
     };
+
+    game = applyGameTransformers(game, [
+      new GameEventsTransformer(true),
+      new PossessionStateTransformer(),
+      new MonthResultTransformer(0),
+    ]);
 
     const selector = this.selector.game(gameId);
     const createdGame = await this.firestore.createItem(selector, game);
@@ -72,7 +90,7 @@ export class GameProvider {
     assertExists('Game ID', gameId);
 
     const selector = this.selector.game(gameId);
-    const game = (await this.firestore.getItem(selector)).data();
+    const game = await this.firestore.getItemData(selector);
 
     GameEntity.validate(game);
     return game as Game;
@@ -106,7 +124,11 @@ export class GameProvider {
 
   async getGameTemplate(templateId: GameTemplateEntity.Id): Promise<GameTemplate> {
     const selector = this.selector.gameTemplate(templateId);
-    const template = (await this.firestore.getItem(selector)).data();
+    const template = await this.firestore.getItemData(selector);
+
+    if (!template) {
+      throw new Error('ERROR: No template with id: ' + templateId);
+    }
 
     GameTemplateEntity.validate(template);
     return template as GameTemplate;
@@ -138,7 +160,7 @@ export class GameProvider {
     const participantDevices = await Promise.all(
       participantIds.map((id) => {
         const deviceSelector = this.selector.device(id);
-        return this.firestore.getItem(deviceSelector).then((s) => s.data());
+        return this.firestore.getItemData(deviceSelector);
       })
     );
 
@@ -160,7 +182,7 @@ export class GameProvider {
     });
 
     const ownerSelector = this.selector.user(currentUserId);
-    const owner = (await this.firestore.getItem(ownerSelector)).data() as User;
+    const owner = (await this.firestore.getItemData(ownerSelector)) as User;
 
     const roomId: RoomEntity.Id = uuid.v4();
     const room: Room = {
@@ -198,7 +220,7 @@ export class GameProvider {
     checkId(roomId);
 
     const selector = this.selector.room(roomId);
-    let room = (await this.firestore.getItem(selector)).data() as Room;
+    let room = (await this.firestore.getItemData(selector)) as Room;
     RoomEntity.validate(room);
 
     if (room.gameId !== undefined) {

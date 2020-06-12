@@ -4,12 +4,25 @@ export abstract class GameTransformer {
   abstract apply(game: Game): Game;
 
   isAllParticipantsCompletedMove(game: Game): boolean {
-    return game.participants
+    const isAllParticipantsOnMonthResult = game.participants
       .map((participantId) => {
-        const currentEventNumber = game.state.participantProgress[participantId];
-        const isLastEvent = currentEventNumber === game.currentEvents.length - 1;
-        return isLastEvent;
+        const isParticipantCompletedMove =
+          game.state.participantsProgress[participantId].status === 'month_result';
+
+        return isParticipantCompletedMove;
       })
       .reduce((prev, curr) => prev && curr, true);
+
+    const isAllParticipantsOnCurrentMonth = game.participants
+      .map((participantId) => {
+        const currentMonth = game.state.monthNumber;
+        const participantMonth =
+          game.state.participantsProgress[participantId].currentMonthForParticipant;
+
+        return currentMonth === participantMonth;
+      })
+      .reduce((prev, curr) => prev && curr, true);
+
+    return isAllParticipantsOnMonthResult && isAllParticipantsOnCurrentMonth;
   }
 }

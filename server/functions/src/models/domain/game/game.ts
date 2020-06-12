@@ -30,10 +30,26 @@ export namespace GameEntity {
   export type Status = 'players_move' | 'game_over';
   export type GameEventIndex = number;
 
+  export type MonthResult = {
+    cash: number;
+    totalIncome: number;
+    totalExpense: number;
+    totalAssets: number;
+    totalLiabilities: number;
+  };
+
+  export type ParticipantProgress = {
+    currentEventIndex: number;
+    currentMonthForParticipant: number;
+    status: 'player_move' | 'month_result';
+    monthResults: { [month: number]: MonthResult };
+  };
+
   export type State = {
     readonly gameStatus: Status;
     readonly monthNumber: number;
     readonly participantProgress: { [userId: string]: GameEventIndex };
+    readonly participantsProgress: { [userId: string]: ParticipantProgress };
     readonly winners: { [place: number]: UserEntity.Id };
   };
 

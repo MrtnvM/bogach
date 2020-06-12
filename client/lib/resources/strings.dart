@@ -158,6 +158,13 @@ class Strings {
   static const realty = 'Недвижимость';
   static const other = 'Прочие';
 
+  static String get monthResult => 'Итоги за месяц';
+  static String get financialResults => 'Финансовые показатели';
+  static String get financialResultsChange => 'Изменения показателей';
+  static String get total => 'Итого';
+
+  static String get waitingPlayersList => 'Ждем хода игроков';
+
   static String get gameBoardTitle => 'GameBoard';
 
   static String get targetTypeCash => 'Капитал';

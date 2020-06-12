@@ -1,7 +1,7 @@
 import { Entity } from '../../core/domain/entity';
 
 export interface Expense {
-  readonly id?: ExpenseEntity.Id;
+  readonly id?: ExpenseEntity.Id | null;
   readonly name: string;
   readonly value: number;
 }

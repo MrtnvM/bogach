@@ -5,6 +5,7 @@ import { Possessions } from '../../models/domain/possessions';
 import { ParticipantAccountsTransformer } from './participant_accounts_transformer';
 import { Game } from '../../models/domain/game/game';
 import { UserEntity } from '../../models/domain/user';
+import { GameFixture } from '../../core/fixtures/game_fixture';
 
 const userId: UserEntity.Id = 'user1';
 
@@ -172,19 +173,9 @@ function buildGameEntity(possessionState: PossessionState) {
     liabilities: [],
   };
 
-  const game: Game = {
+  const game: Game = GameFixture.createGame({
     id: 'game1',
-    name: 'Game 1',
-    type: 'singleplayer',
     participants: [userId],
-    state: {
-      gameStatus: 'players_move',
-      monthNumber: 1,
-      participantProgress: {
-        [userId]: 0,
-      },
-      winners: {},
-    },
     possessions: {
       [userId]: initialPossesssions,
     },
@@ -194,9 +185,7 @@ function buildGameEntity(possessionState: PossessionState) {
     accounts: {
       [userId]: { cashFlow: 10000, cash: 10000, credit: 0 },
     },
-    target: { type: 'cash', value: 1000000 },
-    currentEvents: [],
-  };
+  });
 
   return game;
 }

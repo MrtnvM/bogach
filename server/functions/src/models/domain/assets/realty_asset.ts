@@ -6,13 +6,14 @@ import { Entity } from '../../../core/domain/entity';
 export interface RealtyAsset extends Asset {
   readonly downPayment: number;
   readonly cost: number;
+  readonly passiveIncomePerMonth: number;
 }
 
 export namespace RealtyAssetEntity {
   export const parse = (asset: Asset, data: any): RealtyAsset => {
-    const { downPayment, cost } = data;
+    const { downPayment, cost, passiveIncomePerMonth } = data;
 
-    return { ...asset, downPayment, cost };
+    return { ...asset, downPayment, cost, passiveIncomePerMonth };
   };
 
   export const validate = (asset: any) => {
@@ -20,22 +21,26 @@ export namespace RealtyAssetEntity {
 
     entity.hasNumberValue('downPayment');
     entity.hasNumberValue('cost');
+    entity.hasNumberValue('passiveIncomePerMonth');
 
     entity.checkWithRules([
-      [a => a.downPayment <= 0, "Down payment can't be <= 0"],
-      [a => a.cost <= 0, "Cost can't be <= 0"]
+      [(a) => a.downPayment <= 0, "Down payment can't be <= 0"],
+      [(a) => a.cost <= 0, "Cost can't be <= 0"],
     ]);
+  };
+
+  export const getIncomeValue = (asset: RealtyAsset) => {
+    return asset.passiveIncomePerMonth;
   };
 
   export const getIncome = (asset: RealtyAsset): Income => {
     validate(asset);
 
-    const incomeValue = (asset.cost * 1) / 100;
-
     return {
+      id: asset.id ?? null,
       name: Strings.realty(),
-      value: incomeValue,
-      type: 'realty'
+      value: getIncomeValue(asset),
+      type: 'realty',
     };
   };
 }

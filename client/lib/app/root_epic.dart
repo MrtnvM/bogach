@@ -19,7 +19,7 @@ Epic<AppState> rootEpic({
   return combineEpics([
     loginEpic(userService: userService),
     newGameEpic(gameService: gameService),
-    gameEpic(gameService: gameService),
+    gameEpic(gameService: gameService, userService: userService),
     purchaseEpic(purchaseService: purchaseService),
     multiplayerEpic(userService: userService, gameService: gameService),
   ]);

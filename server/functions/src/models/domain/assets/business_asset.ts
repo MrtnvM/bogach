@@ -1,5 +1,7 @@
 import { Asset } from '../asset';
 import { Entity } from '../../../core/domain/entity';
+import { Strings } from '../../../resources/strings';
+import { Income } from '../income';
 
 export interface BusinessAsset extends Asset {
   readonly buyPrice: number;
@@ -48,5 +50,18 @@ export namespace BusinessAssetEntity {
       [(a) => a.fairPrice <= 0, "FairPrice can't be <= 0"],
       [(a) => a.sellProbability <= 0, "SellProbability can't be <= 0"],
     ]);
+  };
+
+  export const getIncomeValue = (asset: BusinessAsset) => {
+    return asset.passiveIncomePerMonth;
+  };
+
+  export const getIncome = (asset: BusinessAsset): Income => {
+    return {
+      id: asset.id || null,
+      name: Strings.business(),
+      value: getIncomeValue(asset),
+      type: 'business',
+    };
   };
 }

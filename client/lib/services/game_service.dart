@@ -59,6 +59,10 @@ class GameService {
     return apiClient.sendPlayerAction(playerAction);
   }
 
+  Stream<void> startNewMonth(GameContext gameContext) {
+    return apiClient.startNewMonth(gameContext);
+  }
+
   Stream<Room> createRoom(CreateRoomRequestModel requestModel) {
     return apiClient.createRoom(requestModel);
   }

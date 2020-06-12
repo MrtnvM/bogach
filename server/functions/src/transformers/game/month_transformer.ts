@@ -5,7 +5,15 @@ import { GameTransformer } from './game_transformer';
 export class MonthTransformer extends GameTransformer {
   apply(game: Game): Game {
     const isMoveCompleted = this.isAllParticipantsCompletedMove(game);
-    const monthNumber = game.state.monthNumber + (isMoveCompleted ? 1 : 0);
+
+    if (!isMoveCompleted) {
+      return game;
+    }
+
+    const firstParticipant = game.participants[0];
+    const currentMonth =
+      game.state.participantsProgress[firstParticipant].currentMonthForParticipant;
+    const monthNumber = currentMonth + 1;
 
     return produce(game, (draft) => {
       draft.state.monthNumber = monthNumber;

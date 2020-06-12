@@ -6,6 +6,10 @@ import { GameTargetEntity } from '../../models/domain/game/game_target';
 
 export class WinnersTransformer extends GameTransformer {
   apply(game: Game): Game {
+    if (game.state.gameStatus === 'game_over') {
+      return game;
+    }
+
     const isMoveCompleted = this.isAllParticipantsCompletedMove(game);
 
     const usersProgress = game.participants

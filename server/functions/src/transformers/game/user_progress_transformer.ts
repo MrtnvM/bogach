@@ -1,7 +1,7 @@
 import produce from 'immer';
 
 import { GameTransformer } from './game_transformer';
-import { Game } from '../../models/domain/game/game';
+import { Game, GameEntity } from '../../models/domain/game/game';
 import { GameEventEntity } from '../../models/domain/game/game_event';
 import { UserEntity } from '../../models/domain/user';
 
@@ -11,20 +11,37 @@ export class UserProgressTransformer extends GameTransformer {
   }
 
   apply(game: Game): Game {
-    const isMoveCompleted = this.isAllParticipantsCompletedMove(game);
+    const currentParticipantEventIndex = game.currentEvents.findIndex((e) => e.id === this.eventId);
+    const isNotLastEvent = currentParticipantEventIndex < game.currentEvents.length - 1;
+    const currentParticipantProgress = game.state.participantsProgress[this.userId];
+    const { monthResults, currentMonthForParticipant } = currentParticipantProgress;
 
-    const currentUserProgress = game.currentEvents.findIndex((e) => e.id === this.eventId);
-    const isNotLastEvent = currentUserProgress < game.currentEvents.length - 1;
-    let newUserProgress: number;
+    let newParticipantEventIndex: number;
+    let newParticipantProgress: GameEntity.ParticipantProgress;
 
     if (isNotLastEvent) {
-      newUserProgress = currentUserProgress + 1;
+      newParticipantEventIndex = currentParticipantEventIndex + 1;
+
+      newParticipantProgress = {
+        currentEventIndex: newParticipantEventIndex,
+        currentMonthForParticipant,
+        status: 'player_move',
+        monthResults,
+      };
     } else {
-      newUserProgress = isMoveCompleted ? 0 : currentUserProgress;
+      newParticipantEventIndex = currentParticipantEventIndex;
+
+      newParticipantProgress = {
+        currentEventIndex: newParticipantEventIndex,
+        currentMonthForParticipant,
+        status: 'month_result',
+        monthResults,
+      };
     }
 
     return produce(game, (draft) => {
-      draft.state.participantProgress[this.userId] = newUserProgress;
+      draft.state.participantProgress[this.userId] = newParticipantEventIndex;
+      draft.state.participantsProgress[this.userId] = newParticipantProgress;
     });
   }
 }

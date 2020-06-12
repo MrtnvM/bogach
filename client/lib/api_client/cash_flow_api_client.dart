@@ -1,6 +1,7 @@
 library cash_flow_api;
 
 import 'package:cash_flow/api_client/headers.dart';
+import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/models/domain/room/room.dart';
 import 'package:cash_flow/models/network/request/game/create_room_request_model.dart';
 import 'package:cash_flow/models/network/responses/game_template_response_model.dart';
@@ -42,6 +43,12 @@ class CashFlowApiClient extends ApiClient {
   Stream<void> sendPlayerAction(PlayerActionRequestModel playerAction) => post(
         path: 'handleGameEvent',
         body: playerAction.toJson(),
+        responseMapper: rm.voidResponse,
+      );
+
+  Stream<void> startNewMonth(GameContext gameContext) => post(
+        path: 'startNewMonth',
+        body: {'context': gameContext.toJson()},
         responseMapper: rm.voidResponse,
       );
 

@@ -1,7 +1,10 @@
 export namespace Strings {
   export const debetures = () => get('debetures');
   export const realty = () => get('realty');
+  export const business = () => get('business');
   export const currentPrice = () => get('currentPrice');
+  export const mortgage = () => get('mortgage');
+  export const businessCredit = () => get('businessCredit');
   export const battleInvitationNotificationTitle = () => get('battleInvitationNotificationTitle');
   export const battleInvitationNotificationBody = () => get('battleInvitationNotificationBody');
 }
@@ -10,6 +13,9 @@ const strings: { [key: string]: string } = {
   debetures: 'Облигации',
   stocks: 'Акции',
   realty: 'Недвижимость',
+  business: 'Бизнес',
+  mortgage: 'Ипотека',
+  businessCredit: 'Бизнес-кредит',
   battleInvitationNotificationTitle: 'Вызываю тебя на дуэль!',
   battleInvitationNotificationBody: 'приглашает Вас сразиться в поединке капиталистов!',
 };

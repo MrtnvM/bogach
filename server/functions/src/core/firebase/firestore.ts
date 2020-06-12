@@ -28,6 +28,10 @@ export class Firestore {
     return selector.get();
   }
 
+  getItemData(selector: DocumentReference) {
+    return selector.get().then((snapshot) => snapshot.data());
+  }
+
   async createItem(selector: DocumentReference, item: any, options?: FirestoreWriteOptions) {
     const newItem = item && {
       ...item,

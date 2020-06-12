@@ -357,8 +357,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.0.21"
-      resolved-ref: "60eb9ddc6d90d212923fda8377e088e6f031821f"
+      ref: "v0.0.22"
+      resolved-ref: "42c8b33e4c7dbd2f1f32f04899ccb885d9f1cd06"
       url: "git://github.com/Cash-Flow-Team/flutter-platform-core"
     source: git
     version: "0.0.1"
@@ -366,8 +366,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.0.15"
-      resolved-ref: "78fec93f0406dee3225b18d7799b25fa508f3e50"
+      ref: "v0.0.16"
+      resolved-ref: da4d777d14631ab9cadb4c7223ee3fb02856e383
       url: "git://github.com/Cash-Flow-Team/flutter-platform-loadable"
     source: git
     version: "0.0.15"

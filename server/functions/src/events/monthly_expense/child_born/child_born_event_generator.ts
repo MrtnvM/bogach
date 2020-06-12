@@ -5,7 +5,7 @@ export namespace ChildBornGenerator {
   export const generate = (): MonthlyExpenseEvent.Event => {
     const eventId = uuid.v4();
 
-    const name = 'Поздравляем с рождением ребёенка!';
+    const name = 'Поздравляем с рождением ребёнка!';
     const description = 'В вашей семье пополнение';
     const monthlyPayment = 250;
 

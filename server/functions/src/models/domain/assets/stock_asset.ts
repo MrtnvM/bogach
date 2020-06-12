@@ -1,6 +1,8 @@
 import { Asset } from '../asset';
 import { Entity } from '../../../core/domain/entity';
+import { Income } from '../income';
 
+// TODO(Maxim): Implement dividend income
 export interface StockAsset extends Asset {
   readonly fairPrice: number;
   readonly averagePrice: number;
@@ -26,5 +28,14 @@ export namespace StockAssetEntity {
       [(a) => a.averagePrice <= 0, "AveragePrice can't be <= 0"],
       [(a) => a.countInPortfolio < 0, "CountInPortfolio can't be < 0"],
     ]);
+  };
+
+  export const getIncomeValue = (asset: StockAsset) => {
+    // TODO(Maxim): Implement dividend income
+    return 0;
+  };
+
+  export const getIncome = (asset: StockAsset): Income | undefined => {
+    return undefined;
   };
 }
