@@ -23,7 +23,7 @@ class InfoTable extends StatelessWidget {
       padding: const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 20),
       child: Column(
         children: <Widget>[
-          _buildHeader(),
+          ..._buildHeader(),
           _TableDivider(),
           for (var i = 0; i < rows.length; i++) ...[
             rows[i],
@@ -47,12 +47,15 @@ class InfoTable extends StatelessWidget {
       ),
       if (description != null) ...<Widget>[
         const SizedBox(height: 8),
-        Text(
-          description,
-          style: Styles.tableRowDetails,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 4,
-        ),
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            description,
+            style: Styles.tableRowDetails,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 4,
+          ),
+        )
       ],
     ];
   }

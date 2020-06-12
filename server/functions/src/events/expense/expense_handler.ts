@@ -4,6 +4,7 @@ import { Account } from '../../models/domain/account';
 import produce from 'immer';
 import { UserEntity } from '../../models/domain/user';
 import { ExpenseEvent } from './expense_event';
+import { InsuranceAsset } from '../../models/domain/assets/insurance_asset';
 
 type Event = ExpenseEvent.Event;
 type Action = ExpenseEvent.PlayerAction;
@@ -14,7 +15,7 @@ interface ActionResult {
 
 interface ActionParameters {
   readonly userAccount: Account;
-  readonly expense: number;
+  readonly expenseToPay: number;
 }
 
 export class ExpenseHandler extends PlayerActionHandler {
@@ -35,13 +36,29 @@ export class ExpenseHandler extends PlayerActionHandler {
   }
 
   async handle(game: Game, event: Event, action: Action, userId: UserEntity.Id): Promise<Game> {
-    const { expense } = event.data;
+    const { expense, insuranceType } = event.data;
 
     const userAccount = game.accounts[userId];
 
+    const assets = game.possessions[userId].assets;
+
+    var insurancesValue = 0;
+    if (insuranceType !== null) {
+      insurancesValue = assets
+        .filter((asset) => asset.type === 'insurance')
+        .map((asset) => asset as InsuranceAsset)
+        .filter((insurance) => insurance.insuranceType === insuranceType)
+        .reduce((prev, curr) => prev + curr.value, 0);
+    }
+
+    var expenseToPay = expense - insurancesValue;
+    if (expenseToPay < 0) {
+      expenseToPay = 0;
+    }
+
     const actionParameters: ActionParameters = {
       userAccount,
-      expense,
+      expenseToPay,
     };
 
     const actionResult = this.applyAction(actionParameters);
@@ -54,9 +71,9 @@ export class ExpenseHandler extends PlayerActionHandler {
   }
 
   applyAction(actionParameters: ActionParameters): ActionResult {
-    const { userAccount, expense } = actionParameters;
+    const { userAccount, expenseToPay } = actionParameters;
 
-    const newAccountBalance = userAccount.cash - expense;
+    const newAccountBalance = userAccount.cash - expenseToPay;
 
     const actionResult: ActionResult = {
       newAccountBalance,
