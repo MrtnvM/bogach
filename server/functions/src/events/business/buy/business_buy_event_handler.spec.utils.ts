@@ -10,10 +10,10 @@ import { BusinessCreditLiability } from '../../../models/domain/liabilities/busi
 import { OtherLiability } from '../../../models/domain/liabilities/other_liability';
 import { UserEntity } from '../../../models/domain/user';
 import { Possessions } from '../../../models/domain/possessions';
-import { PossessionStateEntity } from '../../../models/domain/possession_state';
 import { GameContext } from '../../../models/domain/game/game_context';
 import { GameEventEntity } from '../../../models/domain/game/game_event';
 import { BusinessBuyEvent } from './business_buy_event';
+import { GameFixture } from '../../../core/fixtures/game_fixture';
 
 const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
@@ -83,6 +83,7 @@ const initialPossesssions: Possessions = {
       type: 'realty',
       cost: 2000000,
       downPayment: 1000000,
+      passiveIncomePerMonth: 14_000,
     }),
     create<BusinessAsset>({
       id: 'business2',
@@ -141,31 +142,16 @@ const initialPossesssions: Possessions = {
   ],
 };
 
-const game: Game = {
+const game: Game = GameFixture.createGame({
   id: gameId,
-  name: 'Game 1',
-  type: 'singleplayer',
   participants: [userId],
-  state: {
-    gameStatus: 'players_move',
-    monthNumber: 1,
-    participantProgress: {
-      [userId]: 0,
-    },
-    winners: {},
-  },
   possessions: {
     [userId]: initialPossesssions,
-  },
-  possessionState: {
-    [userId]: PossessionStateEntity.createEmpty(),
   },
   accounts: {
     [userId]: { cashFlow: 10_000, cash: initialCash, credit: 0 },
   },
-  target: { type: 'cash', value: 1_000_000 },
-  currentEvents: [],
-};
+});
 
 const businessOfferEvent = (data: BusinessBuyEvent.Data) => {
   const event: BusinessBuyEvent.Event = {

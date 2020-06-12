@@ -10,6 +10,10 @@ import { Possessions } from '../../models/domain/possessions';
 
 export class PossessionStateTransformer extends GameTransformer {
   apply(game: Game): Game {
+    if (game.state.gameStatus === 'game_over') {
+      return game;
+    }
+
     const possessionState = this.generateParticipantsPossessionState(game);
 
     return produce(game, (draft) => {

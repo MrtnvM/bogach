@@ -4,6 +4,10 @@ import { Game } from '../../models/domain/game/game';
 
 export class ParticipantAccountsTransformer extends GameTransformer {
   apply(game: Game): Game {
+    if (game.state.gameStatus === 'game_over') {
+      return game;
+    }
+
     const isMoveCompleted = this.isAllParticipantsCompletedMove(game);
 
     const updatedCashFlowAccounts = produce(game.accounts, (draft) => {

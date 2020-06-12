@@ -18,6 +18,9 @@ class ContainerWithHeaderImage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final scrollController = useMemoized(() => ScrollController());
+    final isStartingNewMonth = useGlobalState(
+      (s) => s.game.startNewMonthRequestState.isInProgress,
+    );
 
     final isSendingTurnEvent = useGlobalState((state) {
       final activeGameState = state.game.activeGameState;
@@ -37,6 +40,8 @@ class ContainerWithHeaderImage extends HookWidget {
     final imageHeight = screenWidth / imageAspectRatio;
     final contentOffset = imageHeight * 0.76;
 
+    final shouldDisplayLoader = isSendingTurnEvent || isStartingNewMonth;
+
     return Stack(
       children: <Widget>[
         _buildHeaderImage(imageHeight),
@@ -45,7 +50,7 @@ class ContainerWithHeaderImage extends HookWidget {
           padding: EdgeInsets.only(top: contentOffset, bottom: 16),
           children: children,
         ),
-        if (isSendingTurnEvent) _buildLoader(),
+        if (shouldDisplayLoader) _buildLoader(),
         NavigationBar(
           title: navBarTitle,
           scrollController: scrollController,

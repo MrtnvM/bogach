@@ -1,3 +1,4 @@
+import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'current_game_state.freezed.dart';
@@ -8,7 +9,7 @@ abstract class CurrentGameState with _$CurrentGameState {
   factory CurrentGameState({
     GameStatus gameStatus,
     int monthNumber,
-    Map<String, int> participantProgress,
+    Map<String, ParticipantProgress> participantsProgress,
     Map<int, String> winners,
   }) = _CurrentGameState;
 

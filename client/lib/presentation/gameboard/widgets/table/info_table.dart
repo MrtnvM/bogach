@@ -1,4 +1,4 @@
-import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/table/table_divider.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/containers/card_container.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +24,10 @@ class InfoTable extends StatelessWidget {
       child: Column(
         children: <Widget>[
           ..._buildHeader(),
-          _TableDivider(),
+          const TableDivider(),
           for (var i = 0; i < rows.length; i++) ...[
             rows[i],
-            if (i != rows.length - 1) _TableDivider(),
+            if (i != rows.length - 1) const TableDivider(),
           ]
         ],
       ),
@@ -58,16 +58,5 @@ class InfoTable extends StatelessWidget {
         )
       ],
     ];
-  }
-}
-
-class _TableDivider extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const Divider(
-      height: 24,
-      thickness: 1,
-      color: ColorRes.newGameBoardInvestmentsDividerColor,
-    );
   }
 }

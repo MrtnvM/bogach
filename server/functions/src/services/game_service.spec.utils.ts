@@ -1,8 +1,8 @@
 import { GameEntity, Game } from '../models/domain/game/game';
 import { UserEntity } from '../models/domain/user';
-import { PossessionsEntity } from '../models/domain/possessions';
 import { DebenturePriceChangedEvent } from '../events/debenture/debenture_price_changed_event';
 import { GameEventEntity } from '../models/domain/game/game_event';
+import { GameFixture } from '../core/fixtures/game_fixture';
 
 export const gameId: GameEntity.Id = 'game1';
 export const userId: UserEntity.Id = 'user1';
@@ -24,18 +24,24 @@ export const lastEventPlayerAction: DebenturePriceChangedEvent.PlayerAction = {
 
 const create = <T>(obj: T) => obj;
 
-export const game: Game = {
+export const game: Game = GameFixture.createGame({
   id: gameId,
-  name: 'Game 1',
-  type: 'singleplayer',
   participants: [userId],
-  state: {
-    gameStatus: 'players_move',
-    monthNumber: 1,
-    participantProgress: { [userId]: 0 },
-    winners: {},
+  possessions: {
+    [userId]: {
+      incomes: [
+        {
+          id: 'income1',
+          value: 10_000,
+          name: 'Зарплата',
+          type: 'salary',
+        },
+      ],
+      expenses: [],
+      assets: [],
+      liabilities: [],
+    },
   },
-  possessions: { [userId]: PossessionsEntity.createEmpty() },
   possessionState: {
     [userId]: {
       incomes: [
@@ -58,7 +64,6 @@ export const game: Game = {
       credit: 0,
     },
   },
-  target: { type: 'cash', value: 1000000 },
   currentEvents: [
     create<DebenturePriceChangedEvent.Event>({
       id: firstEventId,
@@ -85,7 +90,7 @@ export const game: Game = {
       },
     }),
   ],
-};
+});
 
 export const TestData = {
   gameId,

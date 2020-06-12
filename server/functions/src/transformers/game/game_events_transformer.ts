@@ -19,6 +19,10 @@ export class GameEventsTransformer extends GameTransformer {
   }
 
   apply(game: Game): Game {
+    if (game.state.gameStatus === 'game_over') {
+      return game;
+    }
+
     const isMoveCompleted = this.isAllParticipantsCompletedMove(game);
     const shouldGenerateEvents = isMoveCompleted || this.force;
     const gameEvents = shouldGenerateEvents ? this.generateGameEvents(game) : game.currentEvents;

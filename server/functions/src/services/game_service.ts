@@ -13,6 +13,7 @@ import {
   GameEventsTransformer,
   PossessionStateTransformer,
   UserProgressTransformer,
+  MonthResultTransformer,
   applyGameTransformers,
 } from '../transformers/game_transformers';
 import { IncomeHandler } from '../events/income/income_handler';
@@ -25,7 +26,7 @@ import { GameTemplateEntity } from '../models/domain/game/game_template';
 import { Room, RoomEntity } from '../models/domain/room';
 import { checkIds } from '../core/validation/type_checks';
 import { Strings } from '../resources/strings';
-import { Game } from '../models/domain/game/game';
+import { produce } from 'immer';
 
 export class GameService {
   constructor(private gameProvider: GameProvider, private firebaseMessaging: FirebaseMessaging) {
@@ -49,10 +50,7 @@ export class GameService {
 
   async createNewGame(templateId: GameTemplateEntity.Id, participantsIds: UserEntity.Id[]) {
     const createdGame = await this.gameProvider.createGame(templateId, participantsIds);
-    const newGame = this.intializeGame(createdGame);
-
-    await this.gameProvider.updateGame(newGame);
-    return newGame;
+    return createdGame;
   }
 
   async handlePlayerAction(eventId: GameEventEntity.Id, action: any, context: GameContext) {
@@ -77,15 +75,37 @@ export class GameService {
     }
 
     const updatedGame = applyGameTransformers(game, [
-      new ParticipantAccountsTransformer(),
-      new MonthTransformer(),
-      new WinnersTransformer(),
-      new GameEventsTransformer(),
-      new PossessionStateTransformer(),
       new UserProgressTransformer(eventId, userId),
+      new ParticipantAccountsTransformer(),
+      new WinnersTransformer(),
+      new PossessionStateTransformer(),
+      new GameEventsTransformer(),
+      new MonthResultTransformer(),
+      new MonthTransformer(),
     ]);
 
     await this.gameProvider.updateGame(updatedGame);
+  }
+
+  async startNewMonth(context: GameContext) {
+    const { gameId, userId } = context;
+
+    const game = await this.gameProvider.getGame(gameId);
+    if (!game) throw new Error('No game with ID: ' + gameId);
+
+    const participantProgress = game.state.participantsProgress[userId];
+
+    if (participantProgress.status === 'month_result') {
+      const updatedGame = produce(game, (draft) => {
+        const progress = draft.state.participantsProgress[userId];
+
+        progress.currentEventIndex = 0;
+        progress.currentMonthForParticipant = draft.state.monthNumber;
+        progress.status = 'player_move';
+      });
+
+      await this.gameProvider.updateGame(updatedGame);
+    }
   }
 
   async createRoom(
@@ -132,21 +152,8 @@ export class GameService {
   }
 
   /// Creation of room game by force without waitng of all players
-  async createRoomGame(roomId: RoomEntity.Id) {
-    const [room, game] = await this.gameProvider.createRoomGame(roomId);
-
-    const newGame = this.intializeGame(game);
-    await this.gameProvider.updateGame(newGame);
-
+  async createRoomGame(roomId: RoomEntity.Id): Promise<Room> {
+    const [room] = await this.gameProvider.createRoomGame(roomId);
     return room;
-  }
-
-  private intializeGame(game: Game): Game {
-    const newGame = applyGameTransformers(game, [
-      new GameEventsTransformer(true),
-      new PossessionStateTransformer(),
-    ]);
-
-    return newGame;
   }
 }

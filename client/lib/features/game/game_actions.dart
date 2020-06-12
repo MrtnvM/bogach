@@ -1,11 +1,12 @@
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/models/domain/player_action/player_action.dart';
+import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 
 class StartGameAction extends Action {
-  StartGameAction(this.gameContext);
+  StartGameAction(this.gameContext) : assert(gameContext != null);
 
   final GameContext gameContext;
 
@@ -52,4 +53,10 @@ class SendPlayerMoveAsyncAction extends AsyncAction<void> {
   final String eventId;
 }
 
-class GoToNewMonthAction extends Action {}
+class StartNewMonthAsyncAction extends AsyncAction {}
+
+class SetGameParticipnatsProfiles extends Action {
+  SetGameParticipnatsProfiles(this.userProfiles) : assert(userProfiles != null);
+
+  final List<UserProfile> userProfiles;
+}
