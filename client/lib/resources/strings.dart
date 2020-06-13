@@ -68,6 +68,9 @@ class Strings {
 
   static String get monthlyPayment => 'Ежемесячный платеж:';
 
+  static String get waiting => 'Ожидание';
+  static String get readyForGame => 'В игре';
+
   static const rubleSymbol = '₽';
   static const title = '';
   static const wordIn = 'в';
