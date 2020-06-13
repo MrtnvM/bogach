@@ -19,6 +19,24 @@ extension PriceFormatting on num {
 
     return '${formatter.format(this)}%';
   }
+
+  String toPercentWithSign() {
+    if (isInfinite || isNaN) {
+      return '-';
+    }
+
+    final value = toPercent();
+
+    if (this > 0) {
+      return '+$value';
+    }
+
+    if (this < 0) {
+      return '-$value';
+    }
+
+    return value;
+  }
 }
 
 extension RequestStateHelper on AsyncAction {
