@@ -1,11 +1,9 @@
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/monthly_payment/monthly_expense_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
-import 'package:cash_flow/presentation/gameboard/widgets/table/table_divider.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
 import 'package:cash_flow/resources/strings.dart';
-import 'package:cash_flow/resources/styles.dart';
-import 'package:cash_flow/widgets/containers/card_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
@@ -24,23 +22,21 @@ class MonthlyExpenseEvent extends HookWidget {
   Widget build(BuildContext context) {
     final sendPlayerAction = useMonthlyExpensePlayerActionHandler(event: event);
 
-    return CardContainer(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 20),
-      child: Column(
-        children: <Widget>[
-          Text(event.name, style: Styles.tableHeaderTitle),
-          const SizedBox(height: 4),
-          const TableDivider(),
-          Text(event.description, style: Styles.tableHeaderValue),
-          const SizedBox(height: 24),
-          TitleRow(
-            title: Strings.monthlyExpenseTitle,
-            value: eventData.monthlyPayment.toPrice(),
-          ),
-          const SizedBox(height: 28),
-          PlayerActionBar(confirm: sendPlayerAction),
-        ],
-      ),
+    return Column(
+      children: <Widget>[
+        InfoTable(
+          title: event.name,
+          description: event.description,
+          rows: <Widget>[
+            TitleRow(
+              title: Strings.monthlyExpenseTitle,
+              value: eventData.monthlyPayment.toPrice(),
+            ),
+          ],
+        ),
+        const SizedBox(height: 28),
+        PlayerActionBar(confirm: sendPlayerAction),
+      ],
     );
   }
 }

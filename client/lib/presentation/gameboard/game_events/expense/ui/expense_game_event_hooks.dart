@@ -15,7 +15,7 @@ import 'package:cash_flow/utils/extensions/extensions.dart';
 ExpenseWidgetData useExpenseEventData({
   @required GameEvent event,
 }) {
-  final eventData = event.data as ExpenseEventData;
+  final ExpenseEventData eventData = event.data;
   final userInsurances = useUserAssetsWithType<InsuranceAsset>(
     AssetType.insurance,
   );
@@ -23,7 +23,7 @@ ExpenseWidgetData useExpenseEventData({
       .where((i) => i.insuranceType == eventData.insuranceType)
       .toList();
 
-  final insuranceCommonValue = insurancesForEvent.fold(
+  final insuranceCommonValue = insurancesForEvent.fold<int>(
     0,
     (previousValue, insurance) => previousValue + insurance.value,
   );

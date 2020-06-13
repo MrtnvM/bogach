@@ -32,7 +32,9 @@ class MonthResultCard extends HookWidget {
     const red = ColorRes.errorRed;
 
     final color = (value, shouldReverse) {
-      if (double.parse(value.toStringAsFixed(1)) == 0.0) {
+      final isValueTooLow = double.parse(value.toStringAsFixed(1)) == 0.0;
+
+      if (isValueTooLow || value.isNaN || value.isInfinite) {
         return ColorRes.mainBlack;
       }
 
@@ -74,31 +76,31 @@ class MonthResultCard extends HookWidget {
           const TableDivider(),
           _buildItem(
             title: '${Strings.cash}:',
-            value: cashChange.toPercent(),
+            value: cashChange.toPercentWithSign(),
             color: color(cashChange, false),
           ),
           _buildItemDivider(),
           _buildItem(
             title: '${Strings.incomes}:',
-            value: incomeChange.toPercent(),
+            value: incomeChange.toPercentWithSign(),
             color: color(incomeChange, false),
           ),
           _buildItemDivider(),
           _buildItem(
             title: '${Strings.expenses}:',
-            value: expenseChange.toPercent(),
+            value: expenseChange.toPercentWithSign(),
             color: color(expenseChange, true),
           ),
           _buildItemDivider(),
           _buildItem(
             title: '${Strings.assets}:',
-            value: assetsChange.toPercent(),
+            value: assetsChange.toPercentWithSign(),
             color: color(assetsChange, false),
           ),
           _buildItemDivider(),
           _buildItem(
             title: '${Strings.liabilities}:',
-            value: liabilityChange.toPercent(),
+            value: liabilityChange.toPercentWithSign(),
             color: color(liabilityChange, true),
           ),
         ],
