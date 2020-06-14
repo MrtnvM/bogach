@@ -33,6 +33,7 @@ class CashFlowApp extends HookWidget {
     usePushNotificationsPermissionRequest(useDelay: true);
     useUserPushTokenUploader();
     usePushNotificationsHandler();
+    useDynamicLinkHandler();
 
     final theme = Theme.of(context).copyWith(
       scaffoldBackgroundColor: ColorRes.scaffoldBackground,
