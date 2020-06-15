@@ -9,7 +9,7 @@ export namespace InsuranceEventGenerator {
 
     const insuranceType = generateInsuranceType();
     const insuranceDescription = getInsuranceDescription(insuranceType);
-    const duration = 2;
+    const duration = 12;
     const value = random.int(800, 6000);
     const cost = random.int(300, 3000);
 
