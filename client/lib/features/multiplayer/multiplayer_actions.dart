@@ -19,11 +19,7 @@ class SelectMultiplayerGameTemplateAction extends Action {
   final GameTemplate gameTemplate;
 }
 
-class CreateRoomAsyncAction extends AsyncAction<Room> {
-  CreateRoomAsyncAction(this.participantIds);
-
-  final List<String> participantIds;
-}
+class CreateRoomAsyncAction extends AsyncAction<Room> {}
 
 class SetRoomParticipantReadyAsyncAction extends AsyncAction {
   SetRoomParticipantReadyAsyncAction(this.participantId)
@@ -50,4 +46,10 @@ class OnCurrentRoomUpdatedAction extends Action {
   OnCurrentRoomUpdatedAction(this.room);
 
   final Room room;
+}
+
+class ShareRoomInviteLinkAsyncAction extends AsyncAction {
+  ShareRoomInviteLinkAsyncAction(this.roomId);
+
+  final String roomId;
 }

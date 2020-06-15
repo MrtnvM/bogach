@@ -33,7 +33,6 @@ Epic<AppState> multiplayerEpic({
           .createRoom(CreateRoomRequestModel(
             currentUserId: store.state.login.currentUser.id,
             gameTemplateId: store.state.multiplayer.selectedGameTemplate.id,
-            participantsIds: action.participantIds,
           ))
           .shareReplay();
 
@@ -103,11 +102,26 @@ Epic<AppState> multiplayerEpic({
     });
   });
 
+  final shareRoomInviteLinkEpic = epic((action$, store) {
+    return action$
+        .whereType<ShareRoomInviteLinkAsyncAction>()
+        .where((action) => action.isStarted)
+        .flatMap((action) => gameService
+            .shareRoomInviteLink(
+              roomId: action.roomId,
+              currentUser: store.state.login.currentUser,
+            )
+            .asStream()
+            .map(action.complete)
+            .onErrorReturnWith(action.fail));
+  });
+
   return combineEpics([
     queryUsersEpic,
     createRoomEpic,
     setPlayerReadyStatusEpic,
     createRoomGameEpic,
     joinRoomEpic,
+    shareRoomInviteLinkEpic,
   ]);
 }

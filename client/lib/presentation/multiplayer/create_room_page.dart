@@ -20,6 +20,7 @@ class CreateRoomPage extends HookWidget {
   Widget build(BuildContext context) {
     final userId = useUserId();
     final selectedPlayers = useState(<UserProfile>{});
+    final currentRoom = useGlobalState((s) => s.multiplayer.currentRoom);
     final possiblePlayers = useGlobalState(
       (s) => s.multiplayer.userProfiles.items
           .where((u) => !u.isAnonymous)
@@ -59,13 +60,27 @@ class CreateRoomPage extends HookWidget {
         return;
       }
 
-      final participantIds =
-          selectedPlayers.value.map((p) => p.userId).toList();
-
       multiplayerActions
-          .createRoom(participantIds)
+          .createRoom()
           .then((_) => appRouter.goTo(RoomPage()))
           .catchError((e) => showRoomCreationFailedAlert(e, createRoom));
+    };
+
+    final inviteByLink = () async {
+      var room = currentRoom;
+
+      try {
+        if (currentRoom == null) {
+          room = await multiplayerActions.createRoom();
+        }
+
+        await multiplayerActions
+            .shareRoomInviteLink(room.id)
+            .then((_) => appRouter.goTo(RoomPage()))
+            .catchError((e) => showRoomCreationFailedAlert(e, createRoom));
+      } on dynamic catch (error) {
+        showRoomCreationFailedAlert(error, createRoom);
+      }
     };
 
     return Loadable(
@@ -100,7 +115,8 @@ class CreateRoomPage extends HookWidget {
                     .toList(),
                 onProfileSelected: selectPlayer,
               ),
-              // // const SizedBox(height: 36),
+              _buildInviteByLinkButton(inviteByLink),
+              const SizedBox(height: 8),
               _buildCreateRoomButton(createRoom),
               const SizedBox(height: 8),
               _buildBackButton(),
@@ -108,6 +124,18 @@ class CreateRoomPage extends HookWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildInviteByLinkButton(VoidCallback inviteByLink) {
+    return Container(
+      height: 50,
+      width: 200,
+      child: ColorButton(
+        text: Strings.inviteByLink,
+        onPressed: inviteByLink,
+        color: ColorRes.white,
       ),
     );
   }

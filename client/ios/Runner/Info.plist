@@ -34,6 +34,10 @@
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
 			<string>Firebase Dynamic Links</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>io.mobile.cashflow</string>
+			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>

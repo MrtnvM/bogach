@@ -17,6 +17,7 @@ final multiplayerReducer = Reducer<MultiplayerState>()
   ..on<SelectMultiplayerGameTemplateAction>(
     (state, action) => state.rebuild((s) {
       s.selectedGameTemplate = action.gameTemplate;
+      s.currentRoom = null;
     }),
   )
   ..on<CreateRoomAsyncAction>(
@@ -49,5 +50,10 @@ final multiplayerReducer = Reducer<MultiplayerState>()
   ..on<SetRoomParticipantReadyAsyncAction>(
     (state, action) => state.rebuild((s) {
       s.setPlayerReadyRequestState = action.requestState;
+    }),
+  )
+  ..on<ShareRoomInviteLinkAsyncAction>(
+    (state, action) => state.rebuild((s) {
+      s.createRoomInviteLinkRequestState = action.requestState;
     }),
   );
