@@ -5,6 +5,11 @@ export interface User {
   readonly updatedAt?: Date;
 }
 
+export interface UserDevice {
+  platform: 'ios' | 'android';
+  token: string;
+}
+
 export namespace UserEntity {
   export type Id = string;
 }

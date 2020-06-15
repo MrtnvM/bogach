@@ -1,4 +1,3 @@
-import { FirebaseMessaging } from '../core/firebase/firebase_messaging';
 import { GameProvider } from '../providers/game_provider';
 import { GameEventEntity } from '../models/domain/game/game_event';
 import { GameContext } from '../models/domain/game/game_context';
@@ -23,13 +22,10 @@ import { MonthlyExpenseEventHandler } from '../events/monthly_expense/monthly_ex
 import { InsuranceHandler } from '../events/insurance/insurance_handler';
 import { UserEntity } from '../models/domain/user';
 import { GameTemplateEntity } from '../models/domain/game/game_template';
-import { Room, RoomEntity } from '../models/domain/room';
-import { checkIds } from '../core/validation/type_checks';
-import { Strings } from '../resources/strings';
 import { produce } from 'immer';
 
 export class GameService {
-  constructor(private gameProvider: GameProvider, private firebaseMessaging: FirebaseMessaging) {
+  constructor(private gameProvider: GameProvider) {
     this.handlers.forEach((handler) => {
       this.handlerMap[handler.gameEventType] = handler;
     });
@@ -106,54 +102,5 @@ export class GameService {
 
       await this.gameProvider.updateGame(updatedGame);
     }
-  }
-
-  async createRoom(
-    gameTemplateId: GameTemplateEntity.Id,
-    participantsIds: UserEntity.Id[],
-    currentUserId: UserEntity.Id
-  ): Promise<Room> {
-    const room = await this.gameProvider.createRoom(gameTemplateId, participantsIds, currentUserId);
-
-    const pushTokens = room.participants
-      .filter((p) => p.id !== room.owner.id)
-      .map((p) => p.deviceToken)
-      .filter((token) => token);
-
-    this.firebaseMessaging
-      .sendMulticastNotification({
-        title: Strings.battleInvitationNotificationTitle(),
-        body: room.owner.userName + ' ' + Strings.battleInvitationNotificationBody(),
-        data: {
-          roomId: room.id,
-          type: 'go_to_room',
-        },
-        pushTokens,
-      })
-      .catch((e) => {
-        // TODO(Maxim): Process failed invites
-        console.error('Failed sending room participant invites: ' + e);
-      });
-
-    return room;
-  }
-
-  async onParticipantReady(roomId: RoomEntity.Id, participantId: UserEntity.Id) {
-    checkIds([roomId, participantId]);
-
-    const room = await this.gameProvider.setParticipantReady(roomId, participantId);
-
-    const gameIsNotCreatedYet = !room.gameId;
-    const isAllParticipantsReady = room.participants.every((p) => p.status === 'ready');
-
-    if (gameIsNotCreatedYet && isAllParticipantsReady) {
-      await this.createRoomGame(room.id);
-    }
-  }
-
-  /// Creation of room game by force without waitng of all players
-  async createRoomGame(roomId: RoomEntity.Id): Promise<Room> {
-    const [room] = await this.gameProvider.createRoomGame(roomId);
-    return room;
   }
 }
