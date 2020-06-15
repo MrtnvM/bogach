@@ -26,7 +26,8 @@ import { GameTemplateEntity } from '../models/domain/game/game_template';
 import { Room, RoomEntity } from '../models/domain/room';
 import { checkIds } from '../core/validation/type_checks';
 import { Strings } from '../resources/strings';
-import { produce } from 'immer';
+import { InsuranceTransformer } from '../transformers/game/insurance_transformer';
+import { ResetEventIndexTransformer } from '../transformers/game/reset_event_index_transformer';
 
 export class GameService {
   constructor(private gameProvider: GameProvider, private firebaseMessaging: FirebaseMessaging) {
@@ -96,13 +97,11 @@ export class GameService {
     const participantProgress = game.state.participantsProgress[userId];
 
     if (participantProgress.status === 'month_result') {
-      const updatedGame = produce(game, (draft) => {
-        const progress = draft.state.participantsProgress[userId];
-
-        progress.currentEventIndex = 0;
-        progress.currentMonthForParticipant = draft.state.monthNumber;
-        progress.status = 'player_move';
-      });
+      const updatedGame = applyGameTransformers(game, [
+        new ResetEventIndexTransformer(userId),
+        new InsuranceTransformer(userId),
+        new PossessionStateTransformer(),
+      ]);
 
       await this.gameProvider.updateGame(updatedGame);
     }
