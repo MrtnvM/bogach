@@ -6,6 +6,7 @@ import 'package:cash_flow/cash_flow_app.dart';
 import 'package:cash_flow/configuration/api_client.dart';
 import 'package:cash_flow/configuration/control_panel.dart';
 import 'package:cash_flow/configuration/error_reporting.dart';
+import 'package:cash_flow/configuration/firestore.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/configuration/ui_kit.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -27,8 +28,12 @@ Future<void> main() async {
   final tokenStorage = TokenStorage();
   final alice = Alice(navigatorKey: appRouter.navigatorKey);
   final sharedPreferences = await SharedPreferences.getInstance();
-  const environment = stagingEnvironment;
+  const environment = developmentEnvironment;
   final apiClient = configureApiClient(alice, environment);
+
+  if (environment == developmentEnvironment) {
+    await configureFirestoreLocalEnvironment();
+  }
 
   configurePurchases();
   configureControlPanel(alice, apiClient);
