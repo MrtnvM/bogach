@@ -13,7 +13,7 @@ export namespace ExpenseEventGenerator {
   export const generate = (): ExpenseEvent.Event => {
     const expense = 1000;
     const eventCanBeCoveredByInsurance = canBeCoveredByInsurance();
-    var expenseEventInfo;
+    let expenseEventInfo;
     if (eventCanBeCoveredByInsurance) {
       expenseEventInfo = generateExpenseInfoWithInsurance();
     } else {
