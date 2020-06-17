@@ -57,8 +57,7 @@ void useDynamicLinkHandler() {
   useDynamicLinkSubscription((dynamicLink) {
     final link = dynamicLink.link;
 
-    logger.d('APP CAPTURE DYNAMIC LINK:');
-    logger.d(link);
+    logger.i('APP CAPTURE DYNAMIC LINK:\n$link');
 
     if (link == null) {
       return;
@@ -81,7 +80,7 @@ void useDeepLinkHandler() {
   useEffect(() {
     // ignore: avoid_types_on_closure_parameters
     final onDeepLink = (String deepLink) {
-      logger.d('APP CAPTURE DEEP LINK:\n$deepLink');
+      logger.i('APP CAPTURE DEEP LINK:\n$deepLink');
 
       if (deepLink == null) {
         return;

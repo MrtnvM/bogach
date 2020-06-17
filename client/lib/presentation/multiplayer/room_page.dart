@@ -47,7 +47,7 @@ class RoomPage extends HookWidget {
 
     final isParticipantAlreadyJoined = !isCurrentUserRoomOwner &&
         room.participants
-            .where((p) => p.id != userId)
+            .where((p) => p.id == userId)
             .any((p) => p.status == RoomParticipantStatus.ready);
 
     useAutoTransitionToCreatedGame();
