@@ -22,7 +22,8 @@ import { MonthlyExpenseEventHandler } from '../events/monthly_expense/monthly_ex
 import { InsuranceHandler } from '../events/insurance/insurance_handler';
 import { UserEntity } from '../models/domain/user';
 import { GameTemplateEntity } from '../models/domain/game/game_template';
-import { produce } from 'immer';
+import { InsuranceTransformer } from '../transformers/game/insurance_transformer';
+import { ResetEventIndexTransformer } from '../transformers/game/reset_event_index_transformer';
 
 export class GameService {
   constructor(private gameProvider: GameProvider) {
@@ -92,13 +93,11 @@ export class GameService {
     const participantProgress = game.state.participantsProgress[userId];
 
     if (participantProgress.status === 'month_result') {
-      const updatedGame = produce(game, (draft) => {
-        const progress = draft.state.participantsProgress[userId];
-
-        progress.currentEventIndex = 0;
-        progress.currentMonthForParticipant = draft.state.monthNumber;
-        progress.status = 'player_move';
-      });
+      const updatedGame = applyGameTransformers(game, [
+        new ResetEventIndexTransformer(userId),
+        new InsuranceTransformer(userId),
+        new PossessionStateTransformer(),
+      ]);
 
       await this.gameProvider.updateGame(updatedGame);
     }
