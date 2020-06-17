@@ -13,6 +13,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_platform_control_panel/control_panel.dart';
 import 'package:package_info/package_info.dart';
 import 'package:share/share.dart';
 
@@ -104,11 +105,12 @@ class GameService {
     final packageInfo = await PackageInfo.fromPlatform();
     final packageName = packageInfo.packageName;
 
+    final deepLink = 'https://cash-flow-staging.firebaseapp.com/'
+        '${DynamicLinks.roomInvite}?room_id=$roomId';
+
     final parameters = DynamicLinkParameters(
-      uriPrefix: 'https://capitalist-game.ru/join',
-      link: Uri.parse(
-        'https://capitalist-game.ru/${DynamicLinks.roomInvite}?room_id=$roomId',
-      ),
+      uriPrefix: 'https://cash-flow-staging.firebaseapp.com/join',
+      link: Uri.parse(deepLink),
       androidParameters: AndroidParameters(
         packageName: packageName,
         minimumVersion: 1,
@@ -127,7 +129,14 @@ class GameService {
       ),
     );
 
-    final shortLink = await parameters.buildShortLink();
-    Share.share(shortLink.shortUrl.toString());
+    logger.d(parameters);
+
+    // final shortLink = await parameters.buildShortLink();
+    // final dynamicLink = shortLink.shortUrl.toString();
+    // logger.d('ROOM INVITE DYNAMIC LINK: $dynamicLink');
+    // logger.d('ROOM INVITE DYNAMIC LINK WARNINGS:');
+    // logger.d(shortLink.warnings.toList());
+
+    Share.share(deepLink);
   }
 }

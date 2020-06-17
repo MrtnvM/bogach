@@ -16,6 +16,7 @@ import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:flutter_platform_loadable/flutter_platform_loadable.dart';
 
 class RoomPage extends HookWidget {
@@ -23,7 +24,14 @@ class RoomPage extends HookWidget {
   Widget build(BuildContext context) {
     final userId = useUserId();
     final room = useGlobalState((s) => s.multiplayer.currentRoom);
-    final userProfiles = useGlobalState((s) => s.multiplayer.userProfiles);
+
+    final userProfiles = useGlobalState((s) {
+      return StoreList<UserProfile>([
+        ...s.multiplayer.userProfiles.items,
+        s.login.currentUser,
+      ]);
+    });
+
     final isActionInProgress = useGlobalState(
       (s) =>
           s.multiplayer.createRoomGameRequestState.isInProgress ||
@@ -33,11 +41,14 @@ class RoomPage extends HookWidget {
     final multiplayerActions = useMultiplayerActions();
 
     final isCurrentUserRoomOwner = room.owner.id == userId;
-    final participantsList = room?.participants
-            ?.where((p) => p.id != userId)
-            ?.map((p) => Tuple(p, userProfiles.itemsMap[p.id]))
-            ?.toList() ??
-        [];
+    final participantsList = room.participants
+        .map((p) => Tuple(p, userProfiles.itemsMap[p.id]))
+        .toList();
+
+    final isParticipantAlreadyJoined = !isCurrentUserRoomOwner &&
+        room.participants
+            .where((p) => p.id != userId)
+            .any((p) => p.status == RoomParticipantStatus.ready);
 
     useAutoTransitionToCreatedGame();
 
@@ -67,7 +78,10 @@ class RoomPage extends HookWidget {
                       for (final participant in participantsList)
                         _buildParticipantWidget(
                           participant: participant.item1,
-                          profile: participant.item2,
+                          profile: participant.item2 ??
+                              UserProfile.unknownUser(
+                                participant.item1.id,
+                              ),
                         )
                     ],
                   ),
@@ -78,7 +92,8 @@ class RoomPage extends HookWidget {
                 _buildInviteByLinkButton(inviteByLink),
                 const SizedBox(height: 16),
                 _buildStartGameButton(multiplayerActions.createRoomGame),
-              ] else
+              ],
+              if (!isCurrentUserRoomOwner && isParticipantAlreadyJoined)
                 _buildReadyButton(
                   join: () => multiplayerActions.setPlayerReady(userId),
                 ),

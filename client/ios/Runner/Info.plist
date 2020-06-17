@@ -77,5 +77,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>FirebaseDynamicLinksCustomDomains</key>
+	<array>
+		<string>https://capitalist-game.ru/join</string>
+		<string>https://www.capitalist-game.ru/join</string>
+	</array>
 </dict>
 </plist>

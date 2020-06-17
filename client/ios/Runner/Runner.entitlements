@@ -6,8 +6,8 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:cash-flow-staging.firebaseapp.com</string>
 		<string>applinks:capitalist-game.ru</string>
+		<string>applinks:cash-flow-staging.firebaseapp.com</string>
 	</array>
 </dict>
 </plist>

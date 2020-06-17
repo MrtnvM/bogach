@@ -30,6 +30,12 @@ class SetRoomParticipantReadyAsyncAction extends AsyncAction {
 
 class CreateRoomGameAsyncAction extends AsyncAction {}
 
+class StartListeningRoomUpdatesAction extends Action {
+  StartListeningRoomUpdatesAction(this.roomId) : assert(roomId != null);
+
+  final String roomId;
+}
+
 class StopListeningRoomUpdatesAction extends Action {
   StopListeningRoomUpdatesAction(this.roomId) : assert(roomId != null);
 
@@ -52,4 +58,10 @@ class ShareRoomInviteLinkAsyncAction extends AsyncAction {
   ShareRoomInviteLinkAsyncAction(this.roomId);
 
   final String roomId;
+}
+
+class OnLoadedParticipantProfilesAction extends Action {
+  OnLoadedParticipantProfilesAction(this.profiles);
+
+  final List<UserProfile> profiles;
 }

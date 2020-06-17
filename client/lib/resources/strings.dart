@@ -71,6 +71,8 @@ class Strings {
   static String get waiting => 'Ожидание';
   static String get readyForGame => 'В игре';
 
+  static String get unknownUser => 'Неопознаный игрок';
+
   static const rubleSymbol = '₽';
   static const title = '';
   static const wordIn = 'в';

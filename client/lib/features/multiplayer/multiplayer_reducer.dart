@@ -56,4 +56,9 @@ final multiplayerReducer = Reducer<MultiplayerState>()
     (state, action) => state.rebuild((s) {
       s.createRoomInviteLinkRequestState = action.requestState;
     }),
+  )
+  ..on<OnLoadedParticipantProfilesAction>(
+    (state, action) => state.rebuild((s) {
+      s.userProfiles.addAll(action.profiles);
+    }),
   );

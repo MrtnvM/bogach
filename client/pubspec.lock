@@ -873,6 +873,13 @@ packages:
       url: "git://github.com/Cash-Flow-Team/flutter-ui-kit"
     source: git
     version: "0.0.2"
+  uni_links:
+    dependency: "direct main"
+    description:
+      name: uni_links
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0"
   url_launcher:
     dependency: "direct main"
     description:

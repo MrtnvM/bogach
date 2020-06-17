@@ -6,6 +6,8 @@ import 'package:cash_flow/services/user_service.dart';
 import 'package:cash_flow/utils/core/epic.dart';
 import 'package:cash_flow/utils/core/tuple.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_platform_control_panel/control_panel.dart';
+import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -36,17 +38,18 @@ Epic<AppState> multiplayerEpic({
           ))
           .shareReplay();
 
-      final onRoomUpdated = createRoom
-          .flatMap((room) => gameService.subscribeOnRoomUpdates(room.id))
-          .takeUntil(createRoom.flatMap((room) => action$
-              .whereType<StopListeningRoomUpdatesAction>()
-              .where((action) => action.roomId == room.id)))
-          .map((room) => OnCurrentRoomUpdatedAction(room))
-          .onErrorReturnWith((error) => OnCurrentRoomUpdatedAction(null));
+      final startListenRoom = createRoom
+          .map<Action>((room) => StartListeningRoomUpdatesAction(room.id))
+          .take(1);
 
-      return Rx.concat([
-        createRoom.take(1).map(action.complete).onErrorReturnWith(action.fail),
-        onRoomUpdated
+      final createRoomAction = createRoom
+          .take(1)
+          .map<Action>(action.complete)
+          .onErrorReturnWith(action.fail);
+
+      return Rx.concat<Action>([
+        createRoomAction,
+        startListenRoom,
       ]);
     });
   });
@@ -81,24 +84,58 @@ Epic<AppState> multiplayerEpic({
         .switchMap((action) {
       final room = gameService.getRoom(action.roomId).asStream().shareReplay();
 
-      final onRoomUpdated = room
-          .flatMap((room) => gameService.subscribeOnRoomUpdates(room.id))
-          .takeUntil(room.flatMap((room) => action$
-              .whereType<StopListeningRoomUpdatesAction>()
-              .where((action) => action.roomId == room.id)))
-          .map((room) => OnCurrentRoomUpdatedAction(room))
-          .onErrorReturnWith((error) => OnCurrentRoomUpdatedAction(null));
-
       final joinRoomResult = room
           .asyncMap((room) => userService
               .loadProfiles(room.participants.map((p) => p.id).toList())
               .then((profiles) => Tuple(room, profiles)))
           .take(1);
 
+      final startListenRoom = room
+          .map<Action>((room) => StartListeningRoomUpdatesAction(room.id))
+          .take(1);
+
       return Rx.concat([
         joinRoomResult.map(action.complete).onErrorReturnWith(action.fail),
-        onRoomUpdated
+        startListenRoom,
       ]);
+    });
+  });
+
+  final listenRoomUpdatesEpic = epic((action$, store) {
+    return action$ //
+        .whereType<StartListeningRoomUpdatesAction>()
+        .flatMap((action) => gameService
+            .subscribeOnRoomUpdates(action.roomId)
+            .takeUntil(action$
+                .whereType<StopListeningRoomUpdatesAction>()
+                .where((a) => a.roomId == action.roomId))
+            .map<Action>((room) => OnCurrentRoomUpdatedAction(room))
+            .onErrorReturnWith((error) => OnCurrentRoomUpdatedAction(null)));
+  });
+
+  final loadParticipantProfilesEpic = epic((action$, store) {
+    return action$
+        .whereType<OnCurrentRoomUpdatedAction>()
+        .where((action) => action.room != null)
+        .flatMap((action) {
+      final isParticipantProfileLoaded = (id) {
+        return store.state.multiplayer.userProfiles.itemsMap[id] != null;
+      };
+
+      final participantWithoutProfile = action.room.participants
+          .where((p) => !isParticipantProfileLoaded(p.id))
+          .map((p) => p.id)
+          .toList();
+
+      return userService
+          .loadProfiles(participantWithoutProfile)
+          .asStream()
+          .map<Action>(
+              (profiles) => OnLoadedParticipantProfilesAction(profiles))
+          .onErrorReturnWith((error) {
+        logger.e('PARTICIPANT PROFILES LOADING FAILED\n$error');
+        return OnLoadedParticipantProfilesAction([]);
+      });
     });
   });
 
@@ -123,5 +160,7 @@ Epic<AppState> multiplayerEpic({
     createRoomGameEpic,
     joinRoomEpic,
     shareRoomInviteLinkEpic,
+    listenRoomUpdatesEpic,
+    loadParticipantProfilesEpic,
   ]);
 }

@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_platform_control_panel/control_panel.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:uni_links/uni_links.dart';
 
 void useSubscriptionToPurchases() {
   final actionRunner = useActionRunner();
@@ -74,6 +75,45 @@ void useDynamicLinkHandler() {
   });
 }
 
+void useDeepLinkHandler() {
+  final appActions = useAppActions();
+
+  useEffect(() {
+    // ignore: avoid_types_on_closure_parameters
+    final onDeepLink = (String deepLink) {
+      logger.d('APP CAPTURE DEEP LINK:\n$deepLink');
+
+      if (deepLink == null) {
+        return;
+      }
+
+      final uri = Uri.parse(deepLink);
+
+      final isLinkTo = (path) {
+        return uri.path.contains(path) ?? false;
+      };
+
+      if (isLinkTo(DynamicLinks.roomInvite)) {
+        final roomId = uri.queryParameters['room_id'];
+        appActions.joinRoom(roomId);
+      }
+    };
+
+    final onDeepLinkError = (error) {
+      logger.e('ERROR ON HANDLING DEEP LINK:\n$error');
+    };
+
+    getInitialLink().then(onDeepLink).catchError(onDeepLinkError);
+
+    final subscription = getLinksStream().listen(
+      onDeepLink,
+      onError: onDeepLinkError,
+    );
+
+    return subscription.cancel;
+  }, []);
+}
+
 _AppActions useAppActions() {
   final multiplayerActions = useMultiplayerActions();
 
@@ -87,8 +127,7 @@ _AppActions useAppActions() {
           appRouter.goTo(RoomPage());
         }).catchError((error) {
           // TODO(Maxim): Add retry alert
-          logger.e('ERROR ON JOINING TO ROOM ($roomId):');
-          logger.e(error);
+          logger.e('ERROR ON JOINING TO ROOM ($roomId):\n$error');
         });
       },
     ),
