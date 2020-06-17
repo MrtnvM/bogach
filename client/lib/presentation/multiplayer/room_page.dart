@@ -50,6 +50,8 @@ class RoomPage extends HookWidget {
             .where((p) => p.id == userId)
             .any((p) => p.status == RoomParticipantStatus.ready);
 
+    final canStartGame = room.participants.length >= 2;
+
     useAutoTransitionToCreatedGame();
 
     final inviteByLink = () {
@@ -91,7 +93,10 @@ class RoomPage extends HookWidget {
               if (isCurrentUserRoomOwner) ...[
                 _buildInviteByLinkButton(inviteByLink),
                 const SizedBox(height: 16),
-                _buildStartGameButton(multiplayerActions.createRoomGame),
+                _buildStartGameButton(
+                  startGame: multiplayerActions.createRoomGame,
+                  canStartGame: canStartGame,
+                ),
               ],
               if (!isCurrentUserRoomOwner && isParticipantAlreadyJoined)
                 _buildReadyButton(
@@ -107,13 +112,16 @@ class RoomPage extends HookWidget {
     );
   }
 
-  Widget _buildStartGameButton(VoidCallback startGame) {
+  Widget _buildStartGameButton({
+    @required VoidCallback startGame,
+    @required bool canStartGame,
+  }) {
     return Container(
       height: 50,
       width: 200,
       child: ColorButton(
         text: Strings.startGame,
-        onPressed: startGame,
+        onPressed: canStartGame ? startGame : null,
         color: ColorRes.white,
       ),
     );

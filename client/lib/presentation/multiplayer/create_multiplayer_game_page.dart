@@ -19,9 +19,10 @@ import 'package:flutter_platform_loadable/flutter_platform_loadable.dart';
 class CreateMultiplayerGamePage extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final requestState = useGlobalState(
-      (s) => s.newGame.getGameTemplatesRequestState,
-    );
+    final createRoomRequestState =
+        useGlobalState((s) => s.multiplayer.createRoomRequestState);
+    final getGameTemplatesRequestState =
+        useGlobalState((s) => s.newGame.getGameTemplatesRequestState);
 
     final gameTemplates = useGlobalState((s) => s.newGame.gameTemplates);
     final gameAcitons = useGameActions();
@@ -44,8 +45,8 @@ class CreateMultiplayerGamePage extends HookWidget {
     };
 
     return Loadable(
-      isLoading: requestState.isInProgress,
-      backgroundColor: ColorRes.mainGreen,
+      isLoading: createRoomRequestState.isInProgress,
+      backgroundColor: ColorRes.black80,
       child: CashFlowScaffold(
         title: Strings.chooseLevel,
         showUser: true,
@@ -58,7 +59,7 @@ class CreateMultiplayerGamePage extends HookWidget {
               child: _buildGameTemplateList(
                 gameTemplates: gameTemplates,
                 onGameTempalateSelected: onGameTempalateSelected,
-                loadGameTempalatesRequestState: requestState,
+                loadGameTempalatesRequestState: getGameTemplatesRequestState,
                 loadGameTemplates: gameAcitons.loadGameTemplates,
               ),
             ),
