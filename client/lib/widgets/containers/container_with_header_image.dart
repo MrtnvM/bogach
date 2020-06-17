@@ -1,19 +1,31 @@
+import 'dart:math';
+
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/navigation_bar.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
+import 'package:cash_flow/resources/styles.dart';
+import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ContainerWithHeaderImage extends HookWidget {
   const ContainerWithHeaderImage({
     Key key,
     @required this.children,
     @required this.navBarTitle,
+    this.subTitle,
+    this.imageUrl,
+    this.imageSvg,
   }) : super(key: key);
 
   final List<Widget> children;
   final String navBarTitle;
+  final String subTitle;
+  final String imageUrl;
+  final String imageSvg;
 
   @override
   Widget build(BuildContext context) {
@@ -34,17 +46,19 @@ class ContainerWithHeaderImage extends HookWidget {
       return isSent;
     });
 
-    final mediaQuery = MediaQuery.of(context);
-    final screenWidth = mediaQuery.size.width;
-    const imageAspectRatio = 2;
-    final imageHeight = screenWidth / imageAspectRatio;
-    final contentOffset = imageHeight * 0.76;
+    final notchSize = useNotchSize();
+    final imageHeight = _getBackgroundImageSize(notchSize.top);
+    final contentOffset = imageHeight - 24;
 
     final shouldDisplayLoader = isSendingTurnEvent || isStartingNewMonth;
 
     return Stack(
       children: <Widget>[
-        _buildHeaderImage(imageHeight),
+        _buildHeader(
+          imageHeight: imageHeight,
+          scrollController: scrollController,
+          topPadding: notchSize.top,
+        ),
         ListView(
           controller: scrollController,
           padding: EdgeInsets.only(top: contentOffset, bottom: 16),
@@ -52,20 +66,95 @@ class ContainerWithHeaderImage extends HookWidget {
         ),
         if (shouldDisplayLoader) _buildLoader(),
         NavigationBar(
-          title: navBarTitle,
           scrollController: scrollController,
         ),
       ],
     );
   }
 
-  Widget _buildHeaderImage(double imageHeight) {
-    return Container(
-      color: ColorRes.primaryBackgroundColor,
-      height: imageHeight,
-      alignment: Alignment.bottomCenter,
-      child: const Image(image: AssetImage(Images.money)),
+  Widget _buildHeader({
+    double imageHeight,
+    ScrollController scrollController,
+    double topPadding,
+  }) {
+    final opacity = useState(1.0);
+
+    useEffect(() {
+      final listener = () {
+        return opacity.value = 1 - scrollController.offset / 50;
+      };
+
+      scrollController?.addListener(listener);
+      return () => scrollController?.removeListener(listener);
+    }, []);
+
+    return Opacity(
+      opacity: max(min(opacity.value, 1), 0),
+      child: Stack(
+        children: <Widget>[
+          Container(
+            height: imageHeight,
+            width: double.infinity,
+            child: const Image(
+              image: AssetImage(Images.headerGreenBackground),
+              fit: BoxFit.fill,
+            ),
+          ),
+          Container(
+            height: imageHeight,
+            padding: EdgeInsets.only(top: topPadding),
+            child: Center(
+              child: _buildHeaderContent(),
+            ),
+          )
+        ],
+      ),
     );
+  }
+
+  Widget _buildHeaderContent() {
+    return Column(
+      children: <Widget>[
+        const SizedBox(height: 16),
+        _buildHeaderContentImage(),
+        const SizedBox(height: 8),
+        Text(
+          navBarTitle,
+          style: Styles.bodyBlackBold.copyWith(color: ColorRes.white),
+        ),
+        const SizedBox(height: 8),
+        if (subTitle != null)
+          Text(
+            subTitle,
+            style: Styles.bodyBlack.copyWith(color: ColorRes.white),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildHeaderContentImage() {
+    if (imageUrl != null) {
+      return UserAvatar(
+        url: imageUrl,
+        size: 54,
+      );
+    }
+    if (imageSvg != null) {
+      return Container(
+        width: 54,
+        height: 54,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(27)),
+          color: ColorRes.white,
+        ),
+        child: SvgPicture.asset(
+          imageSvg,
+          color: ColorRes.mainGreen,
+        ),
+      );
+    }
+    return const SizedBox();
   }
 
   Widget _buildLoader() {
@@ -77,5 +166,12 @@ class ContainerWithHeaderImage extends HookWidget {
         ),
       ),
     );
+  }
+
+  double _getBackgroundImageSize(double topPadding) {
+    if (subTitle != null) {
+      return topPadding + 160;
+    }
+    return topPadding + 140;
   }
 }

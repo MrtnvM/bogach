@@ -25,7 +25,7 @@ class ColorRes {
   static const gallery = Color(0xFFEEEEEE);
   static const blue = Color(0xFF598398);
   static const darkBlue = Color(0xFF0B4F6C);
-  static const green = Color(0xFFFF4CAF50);
+  static const green = Color(0xFF4CAF50);
   static const orange = Color(0xFFFFA726);
 
   static const newGameBoardHeaderBackground = Color(0xFFFFE21C);
@@ -52,4 +52,5 @@ class ColorRes {
   static const yellow = Color(0xFFFFE21C);
   static const mainGreen = Color(0xFF08B675);
   static const lightGreen = Color(0xFF80D7B5);
+  static const bottomBarGray = Color(0xFFF9F9F9);
 }
