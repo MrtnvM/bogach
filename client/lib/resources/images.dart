@@ -12,9 +12,10 @@ class Images {
   static const homeImage = 'assets/images/png/home_image.png';
   static const authImage = 'assets/images/png/auth_image.png';
   static const icBackWhite = 'assets/images/png/ic_back_white.svg';
+  static const headerGreenBackground = 'assets/images/png/green_bg.png';
 
   // Bottom bar icons
-  static const financesBarIcon = 'assets/images/png/footer_financal.png';
-  static const gameBoardBarIcon = 'assets/images/png/footer_action.png';
-  static const historyBarIcon = 'assets/images/png/footer_history.png';
+  static const financesBarIcon = 'assets/images/svg/footer_financal.svg';
+  static const gameBoardBarIcon = 'assets/images/svg/footer_action.svg';
+  static const historyBarIcon = 'assets/images/svg/footer_history.svg';
 }

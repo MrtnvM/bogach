@@ -2,15 +2,16 @@ import 'dart:math';
 
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/navigation/app_router.dart';
-import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class NavigationBar extends HookWidget {
   const NavigationBar({
     Key key,
-    @required this.title,
+    this.title,
     this.subtitle,
     this.goBack,
     this.scrollController,
@@ -39,7 +40,7 @@ class NavigationBar extends HookWidget {
       opacity: max(min(opacity.value, 1), 0),
       child: Container(
         margin: EdgeInsets.only(top: notchSize.top),
-        constraints: const BoxConstraints.expand(height: 60),
+        constraints: const BoxConstraints.expand(height: 50),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
@@ -57,10 +58,7 @@ class NavigationBar extends HookWidget {
       behavior: HitTestBehavior.translucent,
       child: Container(
         padding: const EdgeInsets.all(16),
-        child: Icon(
-          Icons.arrow_back_ios,
-          color: ColorRes.primaryWhiteColor,
-        ),
+        child: SvgPicture.asset(Images.icBack),
       ),
     );
   }
@@ -73,7 +71,8 @@ class NavigationBar extends HookWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(title, style: Styles.navBarTitle),
+            if (title?.isNotEmpty ?? false)
+              Text(title, style: Styles.navBarTitle),
             if (subtitle?.isNotEmpty ?? false) ...[
               const SizedBox(height: 10),
               Text(subtitle, style: Styles.navBarSubtitle),

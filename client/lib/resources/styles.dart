@@ -136,10 +136,8 @@ class Styles {
 
   static TextStyle bottomNavBarButtonTitle({bool isSelected = false}) {
     return TextStyle(
-      color: isSelected
-          ? ColorRes.primaryWhiteColor
-          : ColorRes.primaryWhiteColor.withAlpha(120),
-      fontSize: 8,
+      color: isSelected ? ColorRes.mainGreen : ColorRes.primaryGreyColor,
+      fontSize: 10,
       fontFamily: _defaultFontFamily,
       fontWeight: FontWeight.normal,
       fontStyle: FontStyle.normal,

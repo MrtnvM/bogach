@@ -1,6 +1,7 @@
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class BottomBarItem {
   const BottomBarItem({
@@ -29,12 +30,12 @@ class BottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: ColorRes.primaryBackgroundColor,
+        color: ColorRes.bottomBarGray,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(50),
-            blurRadius: 2.0,
-            spreadRadius: 3.0,
+            color: Colors.black.withAlpha(25),
+            blurRadius: 1.0,
+            spreadRadius: 1.5,
           ),
         ],
       ),
@@ -59,15 +60,17 @@ class BottomBar extends StatelessWidget {
         behavior: HitTestBehavior.translucent,
         child: SafeArea(
           child: Container(
-            height: 55,
+            height: 56,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Image(
-                  image: AssetImage(item.image),
+                SvgPicture.asset(
+                  item.image,
+                  width: 24,
+                  height: 24,
                   color: isSelected
-                      ? ColorRes.primaryWhiteColor
-                      : ColorRes.primaryWhiteColor.withAlpha(180),
+                      ? ColorRes.mainGreen
+                      : ColorRes.primaryGreyColor,
                 ),
                 Text(
                   item.title,
