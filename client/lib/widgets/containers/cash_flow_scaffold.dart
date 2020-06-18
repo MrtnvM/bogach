@@ -65,13 +65,19 @@ class CashFlowScaffold extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              SvgPicture.asset(
-                Images.icBackWhite,
-                width: 24,
-                height: 24,
+              Container(
+                padding: const EdgeInsets.only(left: 8),
+                child: IconButton(
+                  onPressed: () => {},
+                  icon: SvgPicture.asset(
+                    Images.icBackWhite,
+                    width: 24,
+                    height: 12,
+                  ),
+                ),
               ),
               showUser ? UserWidget() : Container(),
-              const SizedBox(width: 24),
+              const SizedBox(width: 56),
             ],
           ),
           TitleText(title),
