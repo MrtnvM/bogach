@@ -14,14 +14,6 @@ class GameTemplateItem extends StatelessWidget {
   final GameTemplate gameTemplate;
   final void Function(GameTemplate) onTemplateSelected;
 
-  Widget getTemplateIcon() {
-      return Image.network(
-        gameTemplate.icon,
-        height: 38,
-        width: 38,
-      );
-  }
-
   @override
   Widget build(BuildContext context) {
     final gameTarget = gameTemplate.target;
@@ -69,6 +61,14 @@ class GameTemplateItem extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget getTemplateIcon() {
+    return Image.network(
+      gameTemplate.icon,
+      height: 38,
+      width: 38,
     );
   }
 }
