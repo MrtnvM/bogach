@@ -9,6 +9,7 @@ List<GameTemplate> mapToGameTemplates(List<GameTemplateResponseModel> games) {
         (game) => GameTemplate(
           id: game.id,
           name: game.name,
+          icon: 'https://image.flaticon.com/icons/png/128/1907/1907938.png',
           accountState: Account(
             cash: game.accountState.cash,
             cashFlow: game.accountState.cashFlow,

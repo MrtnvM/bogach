@@ -1,11 +1,9 @@
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
-import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class GameTemplateItem extends StatelessWidget {
   const GameTemplateItem({
@@ -15,6 +13,14 @@ class GameTemplateItem extends StatelessWidget {
 
   final GameTemplate gameTemplate;
   final void Function(GameTemplate) onTemplateSelected;
+
+  Widget getTemplateIcon() {
+      return Image.network(
+        gameTemplate.icon,
+        height: 38,
+        width: 38,
+      );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +57,7 @@ class GameTemplateItem extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 16),
-                SvgPicture.asset(
-                  Images.icCourier,
-                  height: 38,
-                  width: 38,
-                ),
+                getTemplateIcon(),
               ],
             ),
             const SizedBox(height: 8),

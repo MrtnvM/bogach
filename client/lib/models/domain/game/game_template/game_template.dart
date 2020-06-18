@@ -8,16 +8,19 @@ class GameTemplate implements StoreListItem {
   const GameTemplate({
     @required this.id,
     @required this.name,
+    @required this.icon,
     @required this.accountState,
     @required this.target,
   })  : assert(id != null),
         assert(name != null),
+        // TODO(robert): add assert
         assert(accountState != null),
         assert(target != null);
 
   @override
   final String id;
   final String name;
+  final String icon;
   final Account accountState;
   final Target target;
 }

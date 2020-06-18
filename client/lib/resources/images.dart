@@ -11,6 +11,7 @@ class Images {
   static const money = 'assets/images/png/many_money.png';
   static const homeImage = 'assets/images/png/home_image.png';
   static const authImage = 'assets/images/png/auth_image.png';
+  static const icBackWhite = 'assets/images/png/ic_back_white.svg';
 
   // Bottom bar icons
   static const financesBarIcon = 'assets/images/png/footer_financal.png';
