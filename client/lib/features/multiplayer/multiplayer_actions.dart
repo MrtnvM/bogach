@@ -55,13 +55,13 @@ class OnCurrentRoomUpdatedAction extends Action {
 }
 
 class ShareRoomInviteLinkAsyncAction extends AsyncAction {
-  ShareRoomInviteLinkAsyncAction(this.roomId);
+  ShareRoomInviteLinkAsyncAction(this.roomId) : assert(roomId != null);
 
   final String roomId;
 }
 
 class OnLoadedParticipantProfilesAction extends Action {
-  OnLoadedParticipantProfilesAction(this.profiles);
+  OnLoadedParticipantProfilesAction(this.profiles) : assert(profiles != null);
 
   final List<UserProfile> profiles;
 }

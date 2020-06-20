@@ -105,11 +105,12 @@ class GameService {
     final packageInfo = await PackageInfo.fromPlatform();
     final packageName = packageInfo.packageName;
 
-    final deepLink = 'https://cash-flow-staging.firebaseapp.com/'
-        '${DynamicLinks.roomInvite}?room_id=$roomId';
+    final deepLink = '${DynamicLinks.baseUrl}'
+        '${DynamicLinks.roomInvite}?'
+        'room_id=$roomId';
 
     final parameters = DynamicLinkParameters(
-      uriPrefix: 'https://cash-flow-staging.firebaseapp.com/join',
+      uriPrefix: '${DynamicLinks.baseUrl}join',
       link: Uri.parse(deepLink),
       androidParameters: AndroidParameters(
         packageName: packageName,
