@@ -20,7 +20,7 @@ export class InsuranceTransformer extends GameTransformer {
       return currentMonth - insurance.fromMonth > insurance.duration;
     });
 
-    if (expiredInsurances.length == 0) {
+    if (expiredInsurances.length === 0) {
       return game;
     }
 
@@ -28,9 +28,9 @@ export class InsuranceTransformer extends GameTransformer {
       expiredInsurances.map((expiredInsurance) => {
         console.log('expiredInsurance: ' + expiredInsurance);
         const assets = draft.possessions[this.userId].assets;
-        const index = assets.findIndex((asset) => asset.id == expiredInsurance.id);
+        const index = assets.findIndex((asset) => asset.id === expiredInsurance.id);
 
-        if (index != -1) {
+        if (index !== -1) {
           assets.splice(index, 1);
         }
       });

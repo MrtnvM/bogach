@@ -50,7 +50,7 @@ export namespace GameFixture {
       };
     });
 
-    let newGame: Game = {
+    const newGame: Game = {
       id: game?.id || 'game1',
       name: game?.name || 'Game 1',
       type: game?.type || 'singleplayer',

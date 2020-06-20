@@ -1,3 +1,4 @@
+import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -15,6 +16,11 @@ abstract class UserProfile with _$UserProfile implements StoreListItem {
 
   factory UserProfile.fromJson(Map<String, dynamic> json) =>
       _$UserProfileFromJson(json);
+
+  factory UserProfile.unknownUser(String userId) => UserProfile(
+        userId: userId,
+        fullName: Strings.unknownUser,
+      );
 
   @override
   @late

@@ -22,9 +22,9 @@ _MultiplayerActions useMultiplayerActions() {
           SelectMultiplayerGameTemplateAction(gameTemplate),
         );
       },
-      createRoom: (participantsIds) {
+      createRoom: () {
         return actionRunner.runAsyncAction(
-          CreateRoomAsyncAction(participantsIds),
+          CreateRoomAsyncAction(),
         );
       },
       setPlayerReady: (participantId) {
@@ -41,6 +41,11 @@ _MultiplayerActions useMultiplayerActions() {
       joinRoom: (roomId) {
         return actionRunner.runAsyncAction(JoinRoomAsyncAction(roomId));
       },
+      shareRoomInviteLink: (roomId) {
+        return actionRunner.runAsyncAction(
+          ShareRoomInviteLinkAsyncAction(roomId),
+        );
+      },
     );
   });
 }
@@ -54,14 +59,16 @@ class _MultiplayerActions {
     @required this.createRoomGame,
     @required this.stopListeningRoomUpdates,
     @required this.joinRoom,
+    @required this.shareRoomInviteLink,
   });
 
   final void Function(String searchString) searchUsers;
   final void Function(GameTemplate gameTemplate) selectGameTemplate;
 
-  final Future<Room> Function(List<String> participantIds) createRoom;
+  final Future<Room> Function() createRoom;
   final Future Function(String participantId) setPlayerReady;
   final Future Function() createRoomGame;
   final void Function(String) stopListeningRoomUpdates;
   final Future<Tuple<Room, List<UserProfile>>> Function(String) joinRoom;
+  final Future<void> Function(String) shareRoomInviteLink;
 }

@@ -5,6 +5,7 @@ import 'package:cash_flow/features/multiplayer/multiplayer_hooks.dart';
 import 'package:cash_flow/models/domain/room/room_participant.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/navigation/app_router.dart';
+import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard.dart';
 import 'package:cash_flow/presentation/multiplayer/widgets/user_profile_item.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -15,6 +16,7 @@ import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:flutter_platform_loadable/flutter_platform_loadable.dart';
 
 class RoomPage extends HookWidget {
@@ -22,7 +24,14 @@ class RoomPage extends HookWidget {
   Widget build(BuildContext context) {
     final userId = useUserId();
     final room = useGlobalState((s) => s.multiplayer.currentRoom);
-    final userProfiles = useGlobalState((s) => s.multiplayer.userProfiles);
+
+    final userProfiles = useGlobalState((s) {
+      return StoreList<UserProfile>([
+        ...s.multiplayer.userProfiles.items,
+        s.login.currentUser,
+      ]);
+    });
+
     final isActionInProgress = useGlobalState(
       (s) =>
           s.multiplayer.createRoomGameRequestState.isInProgress ||
@@ -30,28 +39,26 @@ class RoomPage extends HookWidget {
     );
 
     final multiplayerActions = useMultiplayerActions();
-    final gameActions = useGameActions();
 
-    final participantsWaitingList = room?.participants
-            ?.where((p) => p.id != userId)
-            ?.map((p) => Tuple(p, userProfiles.itemsMap[p.id]))
-            ?.toList() ??
-        [];
+    final isCurrentUserRoomOwner = room.owner.id == userId;
+    final participantsList = room.participants
+        .map((p) => Tuple(p, userProfiles.itemsMap[p.id]))
+        .toList();
 
-    useEffect(() {
-      if (room?.gameId != null) {
-        gameActions.startGame(room.gameId);
+    final isParticipantAlreadyJoined = !isCurrentUserRoomOwner &&
+        room.participants
+            .where((p) => p.id == userId)
+            .any((p) => p.status == RoomParticipantStatus.ready);
 
-        Future.delayed(const Duration(milliseconds: 100)).then((_) async {
-          appRouter.goToRoot();
-          appRouter.goTo(GameBoard());
+    final canStartGame = room.participants.length >= 2;
 
-          multiplayerActions.stopListeningRoomUpdates(room.id);
-        });
-      }
+    useAutoTransitionToCreatedGame();
 
-      return null;
-    }, [room?.gameId]);
+    final inviteByLink = () {
+      multiplayerActions
+          .shareRoomInviteLink(room.id)
+          .catchError((e) => handleError(context: context, exception: e));
+    };
 
     return Loadable(
       backgroundColor: ColorRes.black80,
@@ -70,21 +77,28 @@ class RoomPage extends HookWidget {
                     direction: Axis.horizontal,
                     alignment: WrapAlignment.center,
                     children: <Widget>[
-                      for (final participant in participantsWaitingList)
+                      for (final participant in participantsList)
                         _buildParticipantWidget(
                           participant: participant.item1,
-                          profile: participant.item2,
+                          profile: participant.item2 ??
+                              UserProfile.unknownUser(
+                                participant.item1.id,
+                              ),
                         )
                     ],
                   ),
                 ),
               ),
               const SizedBox(height: 36),
-              if (room?.owner?.id == userId)
+              if (isCurrentUserRoomOwner) ...[
+                _buildInviteByLinkButton(inviteByLink),
+                const SizedBox(height: 16),
                 _buildStartGameButton(
                   startGame: multiplayerActions.createRoomGame,
-                )
-              else
+                  canStartGame: canStartGame,
+                ),
+              ],
+              if (!isCurrentUserRoomOwner && isParticipantAlreadyJoined)
                 _buildReadyButton(
                   join: () => multiplayerActions.setPlayerReady(userId),
                 ),
@@ -99,14 +113,15 @@ class RoomPage extends HookWidget {
   }
 
   Widget _buildStartGameButton({
-    VoidCallback startGame,
+    @required VoidCallback startGame,
+    @required bool canStartGame,
   }) {
     return Container(
       height: 50,
       width: 200,
       child: ColorButton(
         text: Strings.startGame,
-        onPressed: startGame,
+        onPressed: canStartGame ? startGame : null,
         color: ColorRes.white,
       ),
     );
@@ -121,6 +136,18 @@ class RoomPage extends HookWidget {
       child: ColorButton(
         text: Strings.join,
         onPressed: join,
+        color: ColorRes.white,
+      ),
+    );
+  }
+
+  Widget _buildInviteByLinkButton(VoidCallback inviteByLink) {
+    return Container(
+      height: 50,
+      width: 280,
+      child: ColorButton(
+        text: Strings.inviteByLink,
+        onPressed: inviteByLink,
         color: ColorRes.white,
       ),
     );
@@ -188,4 +215,25 @@ class RoomPage extends HookWidget {
       ),
     );
   }
+}
+
+void useAutoTransitionToCreatedGame() {
+  final room = useGlobalState((s) => s.multiplayer.currentRoom);
+  final multiplayerActions = useMultiplayerActions();
+  final gameActions = useGameActions();
+
+  useEffect(() {
+    if (room?.gameId != null) {
+      gameActions.startGame(room.gameId);
+
+      Future.delayed(const Duration(milliseconds: 100)).then((_) async {
+        appRouter.goToRoot();
+        appRouter.goTo(GameBoard());
+
+        multiplayerActions.stopListeningRoomUpdates(room.id);
+      });
+    }
+
+    return null;
+  }, [room?.gameId]);
 }

@@ -32,7 +32,7 @@ extension PriceFormatting on num {
     }
 
     if (this < 0) {
-      return '-$value';
+      return '$value';
     }
 
     return value;
