@@ -39,7 +39,7 @@ export class GameProvider {
     };
 
     const gameId: GameEntity.Id = uuid.v4();
-    const gameType: GameEntity.Type = participantsIds.length > 0 ? 'multiplayer' : 'singleplayer';
+    const gameType: GameEntity.Type = participantsIds.length > 1 ? 'multiplayer' : 'singleplayer';
 
     let game: Game = {
       id: gameId,
