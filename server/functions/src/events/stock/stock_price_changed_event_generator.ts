@@ -1,27 +1,74 @@
+/// <reference types="@types/node"/>
+
 import * as uuid from 'uuid';
 import * as random from 'random';
-import { Strings } from '../../resources/strings';
-import { formatPrice } from '../../utils/currency';
 import { StockPriceChangedEvent } from './stock_price_changed_event';
+import { Game } from '../../models/domain/game/game';
+import * as fs from 'fs';
+import * as path from 'path';
+
+type Candle = {
+  High: number;
+  Low: number;
+  Open: number;
+  Close: number;
+};
+
+const stockCandlesCache: { [stock: string]: Candle[] } = {};
+
+const getStockCandles = (stockName: string): Candle[] => {
+  const cachedStockCandles = stockCandlesCache[stockName];
+  if (cachedStockCandles !== undefined) {
+    return cachedStockCandles;
+  }
+
+  const stockDataFile = stockName + '.json';
+  const stockDataPath = path.join(
+    __dirname,
+    '..',
+    '..',
+    '..',
+    'data',
+    'stocks_history',
+    stockDataFile
+  );
+
+  const rawData = fs.readFileSync(stockDataPath, 'utf8');
+  const stockCandles = JSON.parse(rawData) as Candle[];
+  stockCandlesCache[stockName] = stockCandles;
+
+  return stockCandles;
+};
 
 export namespace StockPriceChangedEventGenerator {
-  export const generate = (): StockPriceChangedEvent.Event => {
-    const fairPrice = random.int(20, 100);
-    const minPercentRange = -0.3;
-    const maxPercentRange = 0.3;
-    const priceDiffernceFloat = random.float(minPercentRange, maxPercentRange) * fairPrice;
-    const priceDifference = Math.round(priceDiffernceFloat);
-    const currentPrice = fairPrice + priceDifference;
+  export const generate = (game: Game): StockPriceChangedEvent.Event => {
+    const stockIndex = random.int(0, game.config.stocks.length - 1);
+    const stockName = game.config.stocks[stockIndex];
+    const stockCandles = getStockCandles(stockName);
+
+    const month = game.state.monthNumber;
+    const monthCountInYear = 12;
+    const startIndex = month % stockCandles.length;
+
+    const yearAverageStockPrice =
+      stockCandles
+        .slice(startIndex, startIndex + monthCountInYear)
+        .reduce((acc, candle) => candle.Close + acc, 0) / monthCountInYear;
+
+    const currentCandleIndex = startIndex + monthCountInYear;
+    const candle = stockCandles[currentCandleIndex];
+    const currentPrice = random.float(candle.Low, candle.High);
+
     const maxCount = random.int(9, 14) * 10;
 
     return {
       id: uuid.v4(),
-      name: 'Название акции',
-      description: Strings.currentPrice() + formatPrice(currentPrice),
+      name: stockName,
+      description: '',
       type: StockPriceChangedEvent.Type,
       data: {
         currentPrice,
-        fairPrice,
+        fairPrice: yearAverageStockPrice,
         availableCount: maxCount,
       },
     };

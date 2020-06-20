@@ -19,6 +19,7 @@ export interface Game {
   readonly target: GameTarget;
   readonly currentEvents: GameEvent[];
 
+  readonly config: GameEntity.Config;
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }
@@ -31,18 +32,18 @@ export namespace GameEntity {
   export type GameEventIndex = number;
 
   export type MonthResult = {
-    cash: number;
-    totalIncome: number;
-    totalExpense: number;
-    totalAssets: number;
-    totalLiabilities: number;
+    readonly cash: number;
+    readonly totalIncome: number;
+    readonly totalExpense: number;
+    readonly totalAssets: number;
+    readonly totalLiabilities: number;
   };
 
   export type ParticipantProgress = {
-    currentEventIndex: number;
-    currentMonthForParticipant: number;
-    status: 'player_move' | 'month_result';
-    monthResults: { [month: number]: MonthResult };
+    readonly currentEventIndex: number;
+    readonly currentMonthForParticipant: number;
+    readonly status: 'player_move' | 'month_result';
+    readonly monthResults: { [month: number]: MonthResult };
   };
 
   export type State = {
@@ -54,6 +55,10 @@ export namespace GameEntity {
   };
 
   const GameStateValues = ['players_move', 'game_over'];
+
+  export type Config = {
+    readonly stocks: string[];
+  };
 
   export const parse = (data: any): Game => {
     const {
@@ -67,6 +72,7 @@ export namespace GameEntity {
       accounts,
       target,
       currentEvents,
+      config,
       createdAt,
       updatedAt,
     } = data;
@@ -82,6 +88,7 @@ export namespace GameEntity {
       accounts,
       target,
       currentEvents,
+      config,
       createdAt,
       updatedAt,
     };
