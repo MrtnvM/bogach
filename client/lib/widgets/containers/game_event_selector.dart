@@ -109,7 +109,7 @@ class SelectorViewModel {
     this.changeableType = true,
   });
 
-  final int currentPrice;
+  final double currentPrice;
   final int passiveIncomePerMonth;
   final int alreadyHave;
   final int maxCount;

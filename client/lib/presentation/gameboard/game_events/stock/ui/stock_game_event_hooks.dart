@@ -16,8 +16,9 @@ Map<String, String> useStockInfoTableData(GameEvent event) {
     final StockEventData eventData = event.data;
 
     final data = {
-      Strings.investmentType: event.type.typeTitle(),
-      Strings.fairPrice: eventData.fairPrice.toPrice(),
+      Strings.investmentType: event.name,
+      Strings.yearAvaragePrive: eventData.fairPrice.toPrice(),
+      Strings.currentPrice: eventData.currentPrice.toPrice(),
       Strings.alreadyHave: alreadyHave == 0
           ? alreadyHave.toString()
           : Strings.getUserAvailableCount(

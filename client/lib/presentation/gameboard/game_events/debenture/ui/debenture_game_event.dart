@@ -32,7 +32,7 @@ class DebentureGameEvent extends HookWidget {
     const alreadyHave = 0; // TODO(Maxim): replace with real value
 
     final selectorViewModel = SelectorViewModel(
-      currentPrice: eventData.currentPrice,
+      currentPrice: eventData.currentPrice.toDouble(),
       passiveIncomePerMonth: eventData.profitabilityPercent,
       alreadyHave: alreadyHave,
       maxCount: eventData.availableCount,
