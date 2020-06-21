@@ -26,7 +26,7 @@ export class StocksInitializerGameTransformer extends GameTransformer {
       'data',
       'stocks_history'
     );
-    const files = fs.readdirSync(stocksDataPath);
+    const files = fs.readdirSync(stocksDataPath).filter((f) => f.endsWith('.json'));
 
     const stocksCountInGame = random.int(4, 7);
     const selectedIndexes = {};
