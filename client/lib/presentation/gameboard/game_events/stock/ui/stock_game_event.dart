@@ -51,6 +51,7 @@ class StockGameEvent extends HookWidget {
         ),
         const SizedBox(height: 24),
         GameEventSelector(
+          key: ValueKey(event.id),
           viewModel: selectorViewModel,
           onPlayerActionParamsChanged: (action, count) {
             selectedCount.value = count;

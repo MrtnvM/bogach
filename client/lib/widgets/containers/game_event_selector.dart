@@ -13,10 +13,12 @@ typedef OnPlayerActionParamsChanged = void Function(
 
 class GameEventSelector extends StatefulWidget {
   const GameEventSelector({
+    Key key,
     @required this.viewModel,
     @required this.onPlayerActionParamsChanged,
   })  : assert(viewModel != null),
-        assert(onPlayerActionParamsChanged != null);
+        assert(onPlayerActionParamsChanged != null),
+        super(key: key);
 
   final SelectorViewModel viewModel;
   final OnPlayerActionParamsChanged onPlayerActionParamsChanged;
