@@ -1,9 +1,22 @@
 import { GameEvent } from '../models/domain/game/game_event';
 import { Rule } from './generator_rule';
-import { DebentureRule } from './rules/debenture_generate_rule';
+import * as random from 'random';
+import { DebentureGenerateRule } from './rules/debenture_generate_rule';
+import { IncomeGenerateRule } from './rules/income_generate_rule';
+import { ExpenseGenerateRule } from './rules/expense_generate_rule';
+import { InsuranceGenerateRule } from './rules/insurance_generate_rule';
+import { MonthlyExpenseGenerateRule } from './rules/monthly_expense_generate_rule';
+import { StockGenerateRule } from './rules/stock_generate_rule';
 
-export namespace GameEvenGenerator {
-  const rules: Rule<any>[] = [new DebentureRule()];
+export namespace GameEventGenerator {
+  const rules: Rule<any>[] = [
+    new DebentureGenerateRule(),
+    new IncomeGenerateRule(),
+    new ExpenseGenerateRule(),
+    new InsuranceGenerateRule(),
+    new MonthlyExpenseGenerateRule(),
+    new StockGenerateRule(),
+  ];
   const allProbability: number = rules.reduce((prev, cur) => prev + cur.getPercentage(), 0);
 
   export const generateNextEvent = (events: GameEvent[]): GameEvent => {
@@ -28,7 +41,7 @@ export namespace GameEvenGenerator {
   };
 
   const findRule = (events: GameEvent[]): Rule<any> => {
-    let randomNumber: number = Math.random() * allProbability;
+    let randomNumber: number = random.int(0, allProbability);
 
     for (let rule of rules) {
       randomNumber -= rule.getPercentage();
