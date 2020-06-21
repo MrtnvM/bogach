@@ -1,13 +1,14 @@
 import { Rule } from '../generator_rule';
 import { StockPriceChangedEvent } from '../../events/stock/stock_price_changed_event';
 import { StockPriceChangedEventGenerator } from '../../events/stock/stock_price_changed_event_generator';
+import { GameEvent } from '../../models/domain/game/game_event';
 
 export class StockGenerateRule extends Rule<StockPriceChangedEvent.Event> {
   getPercentage(): number {
     return 10;
   }
 
-  generate() {
+  generate(events: GameEvent[]) {
     return StockPriceChangedEventGenerator.generate();
   }
 

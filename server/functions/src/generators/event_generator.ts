@@ -34,7 +34,7 @@ export namespace GameEventGenerator {
     const distanceDoable = isDistanceDoable(events, rule);
 
     if (distanceDoable && rule.canGenerate(events)) {
-      return rule.generate();
+      return rule.generate(events);
     }
 
     return null;
@@ -59,6 +59,6 @@ export namespace GameEventGenerator {
     const minDuration: number = rule.getMinDuration();
     const start: number = events.length - minDuration < 0 ? 0 : events.length - minDuration;
     const end: number = events.length;
-    return events.slice(start, end).find((item) => item.type === rule.getType()) !== undefined;
+    return events.slice(start, end).find((item) => item.type === rule.getType()) === undefined;
   };
 }

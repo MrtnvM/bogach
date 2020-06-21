@@ -5,7 +5,7 @@ export abstract class Rule<T> {
     return true;
   }
   abstract getPercentage(): number;
-  abstract generate(): T;
+  abstract generate(events: GameEvent[]): T;
   abstract getMinDuration(): number;
   abstract getType(): string;
 }
