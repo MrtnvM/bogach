@@ -11,6 +11,7 @@ import 'package:cash_flow/utils/error_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_platform_control_panel/control_panel.dart';
 import 'package:meta/meta.dart';
 
 class UserService {
@@ -172,7 +173,14 @@ class UserService {
       profileIds.map((id) => firestore.collection('users').document(id).get()),
     );
 
+    final emptyProfiles = profiles //
+        .where((p) => p.data == null)
+        .map((p) => p.documentID);
+
+    logger.d('WARNING: not found profiles with IDs: $emptyProfiles');
+
     return profiles
+        .where((p) => p.data != null)
         .map((snapshot) => UserProfile.fromJson(snapshot.data))
         .toList();
   }
