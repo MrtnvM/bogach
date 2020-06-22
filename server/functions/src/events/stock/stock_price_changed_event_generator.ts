@@ -61,7 +61,7 @@ export namespace StockPriceChangedEventGenerator {
     const yearAverageStockPrice =
       stockCandles
         .slice(startIndex, startIndex + monthCountInYear)
-        .reduce((acc, candle) => candle.Close + acc, 0) / monthCountInYear;
+        .reduce((acc, c) => c.Close + acc, 0) / monthCountInYear;
 
     const currentCandleIndex = startIndex + monthCountInYear;
     const candle = stockCandles[currentCandleIndex];
