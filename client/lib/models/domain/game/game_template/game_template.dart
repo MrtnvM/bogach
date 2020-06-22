@@ -13,7 +13,7 @@ class GameTemplate implements StoreListItem {
     @required this.target,
   })  : assert(id != null),
         assert(name != null),
-        // TODO(robert): add assert
+        assert(icon != null),
         assert(accountState != null),
         assert(target != null);
 

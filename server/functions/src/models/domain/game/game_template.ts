@@ -36,8 +36,7 @@ export namespace GameTemplateEntity {
 
     entity.hasValue('id');
     entity.hasValue('name');
-    // TODO add validator
-    //entity.hasValue('icon');
+    entity.hasValue('icon');
     entity.hasValue('possessions');
     entity.hasValue('accountState');
     entity.hasValue('target');

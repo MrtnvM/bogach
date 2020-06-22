@@ -15,6 +15,7 @@ class CashFlowScaffold extends StatelessWidget {
     this.showUser = false,
     this.footerImage,
     this.horizontalPadding = 32,
+    this.showBackArrow = false,
   }) : super(key: key);
 
   final Widget child;
@@ -22,6 +23,7 @@ class CashFlowScaffold extends StatelessWidget {
   final String title;
   final String footerImage;
   final double horizontalPadding;
+  final bool showBackArrow;
 
   @override
   Widget build(BuildContext context) {
@@ -65,19 +67,22 @@ class CashFlowScaffold extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Container(
-                padding: const EdgeInsets.only(left: 8),
-                child: IconButton(
-                  onPressed: () => {},
-                  icon: SvgPicture.asset(
-                    Images.icBackWhite,
-                    width: 24,
-                    height: 12,
+              if (showBackArrow)
+                Container(
+                  padding: const EdgeInsets.only(left: 4),
+                  child: IconButton(
+                    onPressed: () => {},
+                    icon: SvgPicture.asset(
+                      Images.icBackWhite,
+                      width: 24,
+                      height: 12,
+                    ),
                   ),
-                ),
-              ),
+                )
+              else
+                Container(),
               showUser ? UserWidget() : Container(),
-              const SizedBox(width: 56),
+              if (showBackArrow) const SizedBox(width: 56) else Container(),
             ],
           ),
           TitleText(title),

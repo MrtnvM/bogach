@@ -9,6 +9,7 @@ class GameTemplateResponseModel {
   const GameTemplateResponseModel({
     this.id,
     this.name,
+    this.icon,
     this.target,
     this.accountState,
   });
@@ -20,6 +21,8 @@ class GameTemplateResponseModel {
   final String id;
   @JsonKey(name: 'name')
   final String name;
+  @JsonKey(name: 'icon')
+  final String icon;
   @JsonKey(name: 'target')
   final Target target;
   @JsonKey(name: 'accountState')
