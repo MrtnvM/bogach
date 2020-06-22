@@ -120,19 +120,34 @@ class Styles {
     fontFamily: _defaultFontFamily,
   );
 
-  static const tableHeaderTitle = TextStyle(
+  static const tableHeaderTitleBlue = TextStyle(
     fontFamily: _defaultFontFamily,
     color: ColorRes.darkBlue,
     fontSize: 16,
     fontWeight: FontWeight.bold,
   );
 
-  static const tableHeaderValue = TextStyle(
+  static const tableHeaderTitleBlack = TextStyle(
+    fontFamily: _defaultFontFamily,
+    color: ColorRes.mainBlack,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  );
+
+  static const tableHeaderValueBlue = TextStyle(
     fontFamily: _defaultFontFamily,
     color: ColorRes.newGameBoardPrimaryTextColor,
     fontSize: 15,
     fontWeight: FontWeight.w700,
   );
+  
+   static const tableHeaderValueBlack = TextStyle(
+    fontFamily: _defaultFontFamily,
+    color: ColorRes.mainBlack,
+    fontSize: 15,
+    fontWeight: FontWeight.w700,
+  );
+  
 
   static TextStyle bottomNavBarButtonTitle({bool isSelected = false}) {
     return TextStyle(

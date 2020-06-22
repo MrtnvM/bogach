@@ -50,7 +50,7 @@ class WaitingPlayersCard extends HookWidget {
         Expanded(
           child: Text(
             Strings.waitingPlayersList,
-            style: Styles.tableHeaderTitle,
+            style: Styles.tableHeaderTitleBlue,
             textAlign: TextAlign.center,
           ),
         ),

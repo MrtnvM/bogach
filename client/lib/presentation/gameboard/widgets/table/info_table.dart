@@ -10,12 +10,16 @@ class InfoTable extends StatelessWidget {
     this.titleValue,
     this.description,
     this.rows,
+    this.titleTextStyle = Styles.tableHeaderTitleBlue,
+    this.titleValueStyle = Styles.tableHeaderValueBlue,
   }) : super(key: key);
 
   final String title;
   final String titleValue;
   final String description;
   final List<Widget> rows;
+  final TextStyle titleTextStyle;
+  final TextStyle titleValueStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +43,9 @@ class InfoTable extends StatelessWidget {
       Row(
         children: [
           Expanded(
-            child: Text(title, style: Styles.tableHeaderTitle),
+            child: Text(title, style: titleTextStyle),
           ),
-          if (titleValue != null)
-            Text(titleValue, style: Styles.tableHeaderValue),
+          if (titleValue != null) Text(titleValue, style: titleValueStyle),
         ],
       ),
       if (description != null) ...<Widget>[
