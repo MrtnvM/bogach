@@ -1,4 +1,5 @@
 import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/core/hooks/alert_hooks.dart';
 import 'package:cash_flow/core/hooks/dynamic_link_hooks.dart';
 import 'package:cash_flow/core/hooks/push_notification_hooks.dart';
 import 'package:cash_flow/features/login/login_actions.dart';
@@ -7,6 +8,7 @@ import 'package:cash_flow/features/purchase/purchase_actions.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/multiplayer/room_page.dart';
 import 'package:cash_flow/resources/dynamic_links.dart';
+import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_platform_control_panel/control_panel.dart';
@@ -115,21 +117,31 @@ void useDeepLinkHandler() {
 
 _AppActions useAppActions() {
   final multiplayerActions = useMultiplayerActions();
+  final failedJoiningToRoomAlert = useWarningAlert(
+    message: (_) => Strings.joinRoomError,
+    needCancelButton: true,
+  );
 
   return useMemoized(
     () => _AppActions(
       joinRoom: (roomId) {
-        multiplayerActions.joinRoom(roomId).then((value) async {
-          await Future.delayed(const Duration(milliseconds: 50));
+        VoidCallback joinRoom;
+        joinRoom = () {
+          multiplayerActions.joinRoom(roomId).then((value) async {
+            await Future.delayed(const Duration(milliseconds: 50));
 
-          appRouter.goToRoot();
-          appRouter.goTo(RoomPage());
-        }).catchError((error) {
-          // TODO(Maxim): Add retry alert
-          logger.e('ERROR ON JOINING TO ROOM ($roomId):\n$error');
-        });
+            appRouter.goToRoot();
+            appRouter.goTo(RoomPage());
+          }).catchError((error) {
+            failedJoiningToRoomAlert(error, joinRoom);
+            logger.e('ERROR ON JOINING TO ROOM ($roomId):\n$error');
+          });
+        };
+
+        joinRoom();
       },
     ),
+    [],
   );
 }
 

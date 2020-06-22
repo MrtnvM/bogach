@@ -252,4 +252,6 @@ class Strings {
   static String get battleInvitationTitle => 'Вызываю тебя на дуэль!';
   static String get battleInvitationDescription =>
       'приглашает Вас сразиться в поединке капиталистов!';
+  static String get joinRoomError =>
+      'Не удалось подключиться к комнате игроков';
 }
