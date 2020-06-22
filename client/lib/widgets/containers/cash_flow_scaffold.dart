@@ -1,3 +1,4 @@
+import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/widgets/avatar/user_widget.dart';
@@ -71,7 +72,7 @@ class CashFlowScaffold extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.only(left: 4),
                   child: IconButton(
-                    onPressed: () => {},
+                    onPressed: appRouter.goBack,
                     icon: SvgPicture.asset(
                       Images.icBackWhite,
                       width: 24,

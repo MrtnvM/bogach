@@ -51,6 +51,7 @@ class CreateMultiplayerGamePage extends HookWidget {
         title: Strings.chooseLevel,
         showUser: true,
         horizontalPadding: 10,
+        showBackArrow: true,
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
@@ -63,7 +64,6 @@ class CreateMultiplayerGamePage extends HookWidget {
                 loadGameTemplates: gameAcitons.loadGameTemplates,
               ),
             ),
-            _buildGoBackButton(),
           ],
         ),
       ),
@@ -86,21 +86,6 @@ class CreateMultiplayerGamePage extends HookWidget {
         loadListRequestState: loadGameTempalatesRequestState,
         loadList: loadGameTemplates,
         padding: const EdgeInsets.all(16),
-      ),
-    );
-  }
-
-  Widget _buildGoBackButton() {
-    return Positioned(
-      bottom: 16,
-      child: Container(
-        height: 50,
-        width: 200,
-        child: ColorButton(
-          text: Strings.goBack,
-          onPressed: appRouter.goBack,
-          color: ColorRes.yellow,
-        ),
       ),
     );
   }
