@@ -1,0 +1,11 @@
+{
+    "applinks": {
+        "apps" :[],
+        "details": [
+           {
+             "appID": "Q55XU7GJUK.io.mobile.cashflow",
+             "paths": [ "*" ]
+           }
+       ]
+    }
+}

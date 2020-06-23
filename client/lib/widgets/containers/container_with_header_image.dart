@@ -46,6 +46,17 @@ class ContainerWithHeaderImage extends HookWidget {
       return isSent;
     });
 
+    final opacity = useState(1.0);
+
+    useEffect(() {
+      final listener = () {
+        return opacity.value = 1 - scrollController.offset / 50;
+      };
+
+      scrollController?.addListener(listener);
+      return () => scrollController?.removeListener(listener);
+    }, []);
+
     final notchSize = useNotchSize();
     final imageHeight = _getBackgroundImageSize(notchSize.top);
     final contentOffset = imageHeight - 24;
@@ -56,7 +67,7 @@ class ContainerWithHeaderImage extends HookWidget {
       children: <Widget>[
         _buildHeader(
           imageHeight: imageHeight,
-          scrollController: scrollController,
+          opacity: opacity.value,
           topPadding: notchSize.top,
         ),
         ListView(
@@ -74,22 +85,11 @@ class ContainerWithHeaderImage extends HookWidget {
 
   Widget _buildHeader({
     double imageHeight,
-    ScrollController scrollController,
     double topPadding,
+    double opacity,
   }) {
-    final opacity = useState(1.0);
-
-    useEffect(() {
-      final listener = () {
-        return opacity.value = 1 - scrollController.offset / 50;
-      };
-
-      scrollController?.addListener(listener);
-      return () => scrollController?.removeListener(listener);
-    }, []);
-
     return Opacity(
-      opacity: max(min(opacity.value, 1), 0),
+      opacity: max(min(opacity, 1), 0),
       child: Stack(
         children: <Widget>[
           Container(
@@ -169,8 +169,8 @@ class ContainerWithHeaderImage extends HookWidget {
         width: 54,
         height: 54,
         padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(27)),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(27)),
           color: ColorRes.white,
         ),
         child: SvgPicture.asset(

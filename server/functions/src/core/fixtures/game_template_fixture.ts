@@ -128,6 +128,7 @@ export namespace GameTemplateFixture {
     const gameTemplate: GameTemplate = {
       id: template?.id || 'template1',
       name: template?.name || 'Game 1',
+      icon: 'https://image.flaticon.com/icons/png/128/1907/1907938.png',
       possessions: template?.possessions || initialPossesssions,
       accountState: template?.accountState || {
         cashFlow: 10_000,

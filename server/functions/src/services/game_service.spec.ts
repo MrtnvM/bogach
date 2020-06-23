@@ -6,7 +6,6 @@ import { GameProvider } from '../providers/game_provider';
 import { GameService } from './game_service';
 import { GameContext } from '../models/domain/game/game_context';
 import { TestData } from './game_service.spec.utils';
-import { FirebaseMessaging } from '../core/firebase/firebase_messaging';
 
 describe('Game Service - Singleplayer game', () => {
   test('Successfully handle not last game event', async () => {
@@ -16,8 +15,7 @@ describe('Game Service - Singleplayer game', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
 
     const gameProvider = instance(mockGameProvider);
-    const firebaseMessaging = instance(mock(FirebaseMessaging));
-    const gameService = new GameService(gameProvider, firebaseMessaging);
+    const gameService = new GameService(gameProvider);
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(firstEventId, firstEventPlayerAction, gameContext);
@@ -51,8 +49,7 @@ describe('Game Service - Singleplayer game', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
 
     const gameProvider = instance(mockGameProvider);
-    const firebaseMessaging = instance(mock(FirebaseMessaging));
-    const gameService = new GameService(gameProvider, firebaseMessaging);
+    const gameService = new GameService(gameProvider);
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
@@ -102,8 +99,7 @@ describe('Game Service - Singleplayer game', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
 
     const gameProvider = instance(mockGameProvider);
-    const firebaseMessaging = instance(mock(FirebaseMessaging));
-    const gameService = new GameService(gameProvider, firebaseMessaging);
+    const gameService = new GameService(gameProvider);
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
@@ -145,8 +141,7 @@ describe('Game Service - Singleplayer game', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
 
     const gameProvider = instance(mockGameProvider);
-    const firebaseMessaging = instance(mock(FirebaseMessaging));
-    const gameService = new GameService(gameProvider, firebaseMessaging);
+    const gameService = new GameService(gameProvider);
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);

@@ -20,7 +20,7 @@ export namespace RoomEntity {
   export type Participant = {
     id: UserEntity.Id;
     status: ParticipantStatus;
-    deviceToken: string;
+    deviceToken: string | null;
   };
 
   export const parse = (data: any): Room => {

@@ -2,18 +2,20 @@ import * as functions from 'firebase-functions';
 import * as config from '../config';
 
 import { GameProvider } from '../providers/game_provider';
-import { GameService } from '../services/game_service';
+import { RoomService } from '../services/room_service';
 import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from '../providers/firestore_selector';
 import { FirebaseMessaging } from '../core/firebase/firebase_messaging';
+import { UserProvider } from '../providers/user_provider';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
   const gameProvider = new GameProvider(firestore, selector);
+  const userProvider = new UserProvider(firestore, selector);
   const firebaseMessaging = new FirebaseMessaging();
-  const gameService = new GameService(gameProvider, firebaseMessaging);
+  const roomService = new RoomService(gameProvider, userProvider, firebaseMessaging);
 
   const createRoom = https.onRequest(async (request, response) => {
     if (request.method !== 'POST') {
@@ -24,14 +26,9 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const apiRequest = APIRequest.from(request);
 
     const gameTemplateId = apiRequest.jsonField('gameTemplateId');
-    const participantsIds = apiRequest.jsonField('participantsIds');
     const currentUserId = apiRequest.jsonField('currentUserId');
 
-    const createRoomRequest = gameService.createRoom(
-      gameTemplateId,
-      participantsIds,
-      currentUserId
-    );
+    const createRoomRequest = roomService.createRoom(gameTemplateId, currentUserId);
 
     return send(createRoomRequest, response);
   });
@@ -47,7 +44,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const roomId = apiRequest.jsonField('roomId');
     const participantId = apiRequest.jsonField('participantId');
 
-    const setReadyStatusRequest = gameService.onParticipantReady(roomId, participantId);
+    const setReadyStatusRequest = roomService.onParticipantReady(roomId, participantId);
     return send(setReadyStatusRequest, response);
   });
 
@@ -61,7 +58,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const roomId = apiRequest.jsonField('roomId');
 
-    const createRoomRequest = gameService.createRoomGame(roomId);
+    const createRoomRequest = roomService.createRoomGame(roomId);
     return send(createRoomRequest, response);
   });
 
