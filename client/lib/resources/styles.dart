@@ -11,8 +11,8 @@ class Styles {
   static const linearGradient = LinearGradient(
     colors: _gradientColors,
     stops: _gradientStops,
-    begin: Alignment(0.4, 0.7),
-    end: Alignment(2.2, 0.4),
+    begin: Alignment(0.4, 0.6),
+    end: Alignment(2.2, 0.2),
   );
 
   static const subhead = TextStyle(

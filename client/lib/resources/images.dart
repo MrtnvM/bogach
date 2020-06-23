@@ -12,6 +12,8 @@ class Images {
   static const homeImage = 'assets/images/png/home_image.png';
   static const authImage = 'assets/images/png/auth_image.png';
   static const headerGreenBackground = 'assets/images/png/green_bg.png';
+  static const bgCircleRight = 'assets/images/png/bg_circle_right.png';
+  static const bgCircleLeft = 'assets/images/png/bg_circle_left.png';
 
   // Bottom bar icons
   static const financesBarIcon = 'assets/images/svg/footer_financal.svg';
