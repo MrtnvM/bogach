@@ -114,7 +114,7 @@ class MonthResultCard extends HookWidget {
         Expanded(
           child: Text(
             Strings.monthResult,
-            style: Styles.tableHeaderTitle,
+            style: Styles.tableHeaderTitleBlue,
             textAlign: TextAlign.center,
           ),
         ),

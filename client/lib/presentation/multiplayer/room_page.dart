@@ -66,6 +66,7 @@ class RoomPage extends HookWidget {
       child: CashFlowScaffold(
         title: Strings.waitingPlayers,
         showUser: true,
+        showBackArrow: true,
         child: Container(
           height: 300,
           child: Column(
@@ -102,8 +103,6 @@ class RoomPage extends HookWidget {
                 _buildReadyButton(
                   join: () => multiplayerActions.setPlayerReady(userId),
                 ),
-              const SizedBox(height: 16),
-              _buildBackButton(),
               const SizedBox(height: 16),
             ],
           ),
@@ -149,18 +148,6 @@ class RoomPage extends HookWidget {
         text: Strings.inviteByLink,
         onPressed: inviteByLink,
         color: ColorRes.white,
-      ),
-    );
-  }
-
-  Widget _buildBackButton() {
-    return Container(
-      height: 50,
-      width: 200,
-      child: ColorButton(
-        text: Strings.goBack,
-        onPressed: appRouter.goBack,
-        color: ColorRes.yellow,
       ),
     );
   }
