@@ -9,7 +9,7 @@ export class StockGenerateRule extends Rule<StockPriceChangedEvent.Event> {
   }
 
   generate(game: Game) {
-    return StockPriceChangedEventGenerator.generate();
+    return StockPriceChangedEventGenerator.generate(game);
   }
 
   getMinDistanceBetweenEvents(): number {

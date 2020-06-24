@@ -3,6 +3,10 @@ import { createParticipantsGameState } from '../../models/domain/game/participan
 import { PossessionsEntity } from '../../models/domain/possessions';
 import { PossessionStateEntity } from '../../models/domain/possession_state';
 import { AssetEntity } from '../../models/domain/asset';
+import {
+  applyGameTransformers,
+  StocksInitializerGameTransformer,
+} from '../../transformers/game_transformers';
 
 export namespace GameFixture {
   export const createGame = (game: Partial<Game> | undefined = undefined): Game => {
@@ -50,7 +54,7 @@ export namespace GameFixture {
       };
     });
 
-    const newGame: Game = {
+    let newGame: Game = {
       id: game?.id || 'game1',
       name: game?.name || 'Game 1',
       type: game?.type || 'singleplayer',
@@ -70,7 +74,10 @@ export namespace GameFixture {
       target: game?.target || { type: 'cash', value: 1_000_000 },
       currentEvents: game?.currentEvents || [],
       history: { monthEvents: [] },
+      config: { stocks: [] },
     };
+
+    newGame = applyGameTransformers(newGame, [new StocksInitializerGameTransformer()]);
 
     GameEntity.validate(newGame);
     return newGame;

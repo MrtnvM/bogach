@@ -7,9 +7,9 @@ part 'stock_event_data.g.dart';
 @freezed
 abstract class StockEventData with _$StockEventData implements GameEventData {
   factory StockEventData({
-    int currentPrice,
+    double currentPrice,
     int availableCount,
-    int fairPrice,
+    double fairPrice,
   }) = _StockEventData;
 
   factory StockEventData.fromJson(Map<String, dynamic> json) =>

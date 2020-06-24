@@ -1,3 +1,4 @@
+import { produce } from 'immer';
 import * as random from 'random';
 
 import { Rule } from './generator_rule';
@@ -55,6 +56,13 @@ export class GameEventGenerator {
     let skippedEventCount = 0;
     const maxEmptyIterationCount = 10_000;
 
+    // For event generation used game updated with generated game events.
+    // It's required for concrete game event generator have an ability
+    // to modify event content according to already exisiting events in the current month
+    let updatedGame = produce(game, (draft) => {
+      draft.currentEvents = [];
+    });
+
     while (gameEvents.length < neededGameEventsCount) {
       if (skippedEventCount >= maxEmptyIterationCount) {
         break;
@@ -98,10 +106,15 @@ export class GameEventGenerator {
         continue;
       }
 
-      const gameEvent = rule.generate(game);
+      const gameEvent = rule.generate(updatedGame);
 
       if (gameEvent) {
         gameEvents.push(gameEvent);
+
+        updatedGame = produce(game, (draft) => {
+          draft.currentEvents = gameEvents;
+        });
+
         skippedEventCount = 0;
       } else {
         skippedEventCount++;

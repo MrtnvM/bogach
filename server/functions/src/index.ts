@@ -7,7 +7,13 @@ import * as debugAPI from './api/debug';
 import { FirestoreSelector } from './providers/firestore_selector';
 import { Firestore } from './core/firebase/firestore';
 
-admin.initializeApp();
+const serviceAccount = require('../../cash-flow-staging-firebase-adminsdk-9r4ck-d568e56f39');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: 'https://cash-flow-staging.firebaseio.com',
+  storageBucket: 'cash-flow-staging.appspot.com',
+});
 
 const selector = new FirestoreSelector(admin.firestore());
 const firestore = new Firestore();
