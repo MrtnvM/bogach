@@ -3,7 +3,7 @@ import produce from 'immer';
 import { GameTransformer } from './game_transformer';
 import { Game } from '../../models/domain/game/game';
 import { GameEvent } from '../../models/domain/game/game_event';
-import { GameEventGenerator } from '../../generators/event_generator';
+import { GameEventGenerator } from '../../generators/game_event_generator';
 import { DebentureGenerateRule } from '../../generators/rules/debenture_generate_rule';
 import { IncomeGenerateRule } from '../../generators/rules/income_generate_rule';
 import { ExpenseGenerateRule } from '../../generators/rules/expense_generate_rule';

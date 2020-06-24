@@ -2,8 +2,12 @@
 
 import produce from 'immer';
 
-import { stubs, createMockedDebentureRule, debentureEvent } from './event_generator.spec.utils';
-import { GameEventGenerator } from './event_generator';
+import {
+  stubs,
+  createMockedDebentureRule,
+  debentureEvent,
+} from './game_event_generator.spec.utils';
+import { GameEventGenerator } from './game_event_generator';
 import { DebentureGenerateRule } from './rules/debenture_generate_rule';
 import { StockGenerateRule } from './rules/stock_generate_rule';
 import { ExpenseGenerateRule } from './rules/expense_generate_rule';
@@ -41,10 +45,10 @@ describe('Game Event Generator', () => {
       ],
     });
 
-    const countOfeventsForGeneration = generator.getEventCountForGeneration(game);
+    const countOfEventsForGeneration = generator.getEventCountForGeneration(game);
     const gameEvents = generator.generateEvents(game);
 
-    expect(gameEvents.length).toEqual(countOfeventsForGeneration);
+    expect(gameEvents.length).toEqual(countOfEventsForGeneration);
   });
 
   test('Checks level bounds', () => {
