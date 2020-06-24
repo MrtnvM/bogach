@@ -88,27 +88,27 @@ class ContainerWithHeaderImage extends HookWidget {
     double topPadding,
     double opacity,
   }) {
-    return Opacity(
-      opacity: max(min(opacity, 1), 0),
-      child: Stack(
-        children: <Widget>[
-          Container(
-            height: imageHeight,
-            width: double.infinity,
-            child: const Image(
-              image: AssetImage(Images.headerGreenBackground),
-              fit: BoxFit.fill,
-            ),
+    return Stack(
+      children: <Widget>[
+        Container(
+          height: imageHeight,
+          width: double.infinity,
+          child: const Image(
+            image: AssetImage(Images.headerGreenBackground),
+            fit: BoxFit.fill,
           ),
-          Container(
+        ),
+        Opacity(
+          opacity: max(min(opacity, 1), 0),
+          child: Container(
             height: imageHeight,
             padding: EdgeInsets.only(top: topPadding),
             child: Center(
               child: _buildHeaderContent(),
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 
