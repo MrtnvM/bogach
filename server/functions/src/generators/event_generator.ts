@@ -49,7 +49,7 @@ export class GameEventGenerator {
       maxProbabilityLevel += probabilityLevel;
     }
 
-    const gameEvents: GameEvent[] = [];
+    let gameEvents: GameEvent[] = [];
     const neededGameEventsCount = this.getEventCountForGeneration(game);
 
     // For preventing infinite loop used counter of iterations of trying generate single game event
@@ -109,7 +109,7 @@ export class GameEventGenerator {
       const gameEvent = rule.generate(updatedGame);
 
       if (gameEvent) {
-        gameEvents.push(gameEvent);
+        gameEvents = [...gameEvents, gameEvent];
 
         updatedGame = produce(game, (draft) => {
           draft.currentEvents = gameEvents;
