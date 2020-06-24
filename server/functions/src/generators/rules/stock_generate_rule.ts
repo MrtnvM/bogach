@@ -1,18 +1,18 @@
 import { Rule } from '../generator_rule';
 import { StockPriceChangedEvent } from '../../events/stock/stock_price_changed_event';
 import { StockPriceChangedEventGenerator } from '../../events/stock/stock_price_changed_event_generator';
-import { GameEvent } from '../../models/domain/game/game_event';
+import { Game } from '../../models/domain/game/game';
 
 export class StockGenerateRule extends Rule<StockPriceChangedEvent.Event> {
-  getPercentage(): number {
+  getProbabilityLevel(): number {
     return 10;
   }
 
-  generate(events: GameEvent[]) {
+  generate(game: Game) {
     return StockPriceChangedEventGenerator.generate();
   }
 
-  getMinDuration(): number {
+  getMinDistanceBetweenEvents(): number {
     return 1;
   }
 

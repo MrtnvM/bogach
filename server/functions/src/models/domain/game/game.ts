@@ -18,6 +18,7 @@ export interface Game {
   readonly accounts: ParticipantGameState<Account>;
   readonly target: GameTarget;
   readonly currentEvents: GameEvent[];
+  readonly history: GameEntity.History;
 
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
@@ -25,10 +26,11 @@ export interface Game {
 
 export namespace GameEntity {
   export type Id = string;
-
   export type Type = 'singleplayer' | 'multiplayer';
-  export type Status = 'players_move' | 'game_over';
   export type GameEventIndex = number;
+
+  export type Status = 'players_move' | 'game_over';
+  const GameStatusValues = ['players_move', 'game_over'];
 
   export type MonthResult = {
     cash: number;
@@ -53,41 +55,8 @@ export namespace GameEntity {
     readonly winners: { [place: number]: UserEntity.Id };
   };
 
-  const GameStateValues = ['players_move', 'game_over'];
-
-  export const parse = (data: any): Game => {
-    const {
-      id,
-      name,
-      type,
-      state,
-      participants,
-      possessions,
-      possessionState,
-      accounts,
-      target,
-      currentEvents,
-      createdAt,
-      updatedAt,
-    } = data;
-
-    const game: Game = {
-      id,
-      name,
-      type,
-      state,
-      participants,
-      possessions,
-      possessionState,
-      accounts,
-      target,
-      currentEvents,
-      createdAt,
-      updatedAt,
-    };
-
-    validate(game);
-    return game;
+  export type History = {
+    monthEvents: GameEvent[][];
   };
 
   export const validate = (game: any) => {
@@ -112,7 +81,7 @@ export namespace GameEntity {
 
     const stateEntity = Entity.createEntityValidator<State>(gameEntity.state, 'Game State');
 
-    stateEntity.checkUnion('gameStatus', GameStateValues);
+    stateEntity.checkUnion('gameStatus', GameStatusValues);
     stateEntity.hasNumberValue('monthNumber');
     stateEntity.hasValuesForKeys('participantProgress', gameEntity.participants);
   };

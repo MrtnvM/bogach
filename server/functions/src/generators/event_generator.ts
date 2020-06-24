@@ -1,64 +1,113 @@
-import { GameEvent } from '../models/domain/game/game_event';
-import { Rule } from './generator_rule';
 import * as random from 'random';
-import { DebentureGenerateRule } from './rules/debenture_generate_rule';
-import { IncomeGenerateRule } from './rules/income_generate_rule';
-import { ExpenseGenerateRule } from './rules/expense_generate_rule';
-import { InsuranceGenerateRule } from './rules/insurance_generate_rule';
-import { MonthlyExpenseGenerateRule } from './rules/monthly_expense_generate_rule';
-import { StockGenerateRule } from './rules/stock_generate_rule';
 
-export namespace GameEventGenerator {
-  const rules: Rule<any>[] = [
-    new DebentureGenerateRule(),
-    new IncomeGenerateRule(),
-    new ExpenseGenerateRule(),
-    new InsuranceGenerateRule(),
-    new MonthlyExpenseGenerateRule(),
-    new StockGenerateRule(),
-  ];
-  const allProbability: number = rules.reduce((prev, cur) => prev + cur.getPercentage(), 0);
+import { Rule } from './generator_rule';
+import { Game } from '../models/domain/game/game';
+import { GameEvent } from '../models/domain/game/game_event';
 
-  export const generateNextEvent = (events: GameEvent[]): GameEvent => {
-    let event: GameEvent | null = null!;
+type Range = { min: number; max: number };
 
-    while (event === null) {
-      event = generateEvent(events);
+export type GameEventGeneratorConfig = {
+  readonly eventCountForGeneration?: number;
+  readonly rules: Rule<GameEvent>[];
+};
+
+export class GameEventGenerator {
+  constructor(private config: GameEventGeneratorConfig) {
+    if (!config.rules || config.rules.length === 0) {
+      throw new Error('ERROR: Cannot create generator with empty rules set');
+    }
+  }
+
+  getEventCountForGeneration(game: Game) {
+    return this.config.eventCountForGeneration || 7;
+  }
+
+  generateEvents(game: Game): GameEvent[] {
+    const { rules } = this.config;
+
+    const ruleRanges: Range[] = [];
+    let maxProbabilityLevel = 0;
+
+    for (const rule of rules) {
+      const level = rule.getProbabilityLevel();
+
+      if (level < 0 || level > 10) {
+        throw new Error(
+          'ERROR: Incorrect value for probalility level. It should be in interval 0...10 ' +
+            'and it should be integer number'
+        );
+      }
+
+      const probabilityLevel = parseInt(level.toString(), 10);
+      const range: Range = {
+        min: maxProbabilityLevel,
+        max: maxProbabilityLevel + probabilityLevel,
+      };
+
+      ruleRanges.push(range);
+      maxProbabilityLevel += probabilityLevel;
     }
 
-    return event;
-  };
+    const gameEvents: GameEvent[] = [];
+    const neededGameEventsCount = this.getEventCountForGeneration(game);
 
-  const generateEvent = (events: GameEvent[]): GameEvent | null => {
-    const rule: Rule<any> = findRule(events);
-    const distanceDoable = isDistanceDoable(events, rule);
+    // For preventing infinite loop used counter of iterations of trying generate single game event
+    let skippedEventCount = 0;
+    const maxEmptyIterationCount = 10_000;
 
-    if (distanceDoable && rule.canGenerate(events)) {
-      return rule.generate(events);
-    }
+    while (gameEvents.length < neededGameEventsCount) {
+      if (skippedEventCount >= maxEmptyIterationCount) {
+        break;
+      }
 
-    return null;
-  };
+      const randomRuleLevel = random.int(0, maxProbabilityLevel);
 
-  const findRule = (events: GameEvent[]): Rule<any> => {
-    let randomNumber: number = random.int(0, allProbability);
+      const ruleIndex = ruleRanges.findIndex((range) => {
+        return range.min <= randomRuleLevel && randomRuleLevel <= range.max;
+      });
 
-    for (let rule of rules) {
-      randomNumber -= rule.getPercentage();
+      if (ruleIndex < 0 || ruleIndex >= rules.length) {
+        skippedEventCount++;
+        continue;
+      }
 
-      if (randomNumber <= 0) {
-        return rule;
+      const rule = rules[ruleIndex];
+      const minDistance = rule.getMinDistanceBetweenEvents();
+      let shouldSkipEvent = false;
+
+      if (minDistance <= 0) {
+        shouldSkipEvent = false;
+      } else if (minDistance === 1) {
+        const alreadyHaveThisEvent = gameEvents.findIndex((e) => e.type === rule.getType()) >= 0;
+        shouldSkipEvent = alreadyHaveThisEvent;
+      } else {
+        const monthsCount = Math.min(game.history.monthEvents.length, minDistance);
+        const monthsEventHistory = game.history.monthEvents.slice(-monthsCount);
+
+        const isEventAlreadyHappened = monthsEventHistory.some((monthEvents) => {
+          return monthEvents.findIndex((e) => e.type === rule.getType()) >= 0;
+        });
+
+        const alreadyHaveThisEvent = gameEvents.findIndex((e) => e.type === rule.getType()) >= 0;
+
+        shouldSkipEvent = isEventAlreadyHappened || alreadyHaveThisEvent;
+      }
+
+      if (shouldSkipEvent) {
+        skippedEventCount++;
+        continue;
+      }
+
+      const gameEvent = rule.generate(game);
+
+      if (gameEvent) {
+        gameEvents.push(gameEvent);
+        skippedEventCount = 0;
+      } else {
+        skippedEventCount++;
       }
     }
 
-    // Won't be called in the correct implementation
-    return rules[0];
-  };
-
-  const isDistanceDoable = (events: GameEvent[], rule: Rule<any>): boolean => {
-    const minDuration: number = rule.getMinDuration();
-    const start: number = events.length - minDuration < 0 ? 0 : events.length - minDuration;
-    const end: number = events.length;
-    return events.slice(start, end).find((item) => item.type === rule.getType()) === undefined;
-  };
+    return gameEvents;
+  }
 }

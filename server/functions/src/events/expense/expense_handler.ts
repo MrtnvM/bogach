@@ -42,7 +42,7 @@ export class ExpenseHandler extends PlayerActionHandler {
 
     const assets = game.possessions[userId].assets;
 
-    var insurancesValue = 0;
+    let insurancesValue = 0;
     if (insuranceType !== null) {
       insurancesValue = assets
         .filter((asset) => asset.type === 'insurance')
@@ -51,7 +51,7 @@ export class ExpenseHandler extends PlayerActionHandler {
         .reduce((prev, curr) => prev + curr.value, 0);
     }
 
-    var expenseToPay = expense - insurancesValue;
+    let expenseToPay = expense - insurancesValue;
     if (expenseToPay < 0) {
       expenseToPay = 0;
     }

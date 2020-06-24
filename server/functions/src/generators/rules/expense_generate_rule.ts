@@ -1,19 +1,19 @@
 import { Rule } from '../generator_rule';
 import { ExpenseEvent } from '../../events/expense/expense_event';
 import { ExpenseEventGenerator } from '../../events/expense/expense_event_generator';
-import { GameEvent } from '../../models/domain/game/game_event';
+import { Game } from '../../models/domain/game/game';
 
 export class ExpenseGenerateRule extends Rule<ExpenseEvent.Event> {
-  getPercentage(): number {
-    return 10;
+  getProbabilityLevel(): number {
+    return 4;
   }
 
-  generate(events: GameEvent[]) {
+  generate(game: Game) {
     return ExpenseEventGenerator.generate();
   }
 
-  getMinDuration(): number {
-    return 10;
+  getMinDistanceBetweenEvents(): number {
+    return 2;
   }
 
   getType(): string {

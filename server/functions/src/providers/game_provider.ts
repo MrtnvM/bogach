@@ -63,6 +63,7 @@ export class GameProvider {
       accounts: participantsGameState(template.accountState),
       target: template.target,
       currentEvents: [],
+      history: { monthEvents: [] },
     };
 
     game = applyGameTransformers(game, [

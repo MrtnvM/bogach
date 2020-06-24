@@ -1,18 +1,18 @@
 import { Rule } from '../generator_rule';
 import { InsuranceEvent } from '../../events/insurance/insurance_event';
 import { InsuranceEventGenerator } from '../../events/insurance/insurance_event_generator';
-import { GameEvent } from '../../models/domain/game/game_event';
+import { Game } from '../../models/domain/game/game';
 
 export class InsuranceGenerateRule extends Rule<InsuranceEvent.Event> {
-  getPercentage(): number {
+  getProbabilityLevel(): number {
     return 10;
   }
 
-  generate(events: GameEvent[]) {
+  generate(game: Game) {
     return InsuranceEventGenerator.generate();
   }
 
-  getMinDuration(): number {
+  getMinDistanceBetweenEvents(): number {
     return 15;
   }
 

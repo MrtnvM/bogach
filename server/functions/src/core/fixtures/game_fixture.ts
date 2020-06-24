@@ -50,7 +50,7 @@ export namespace GameFixture {
       };
     });
 
-    let newGame: Game = {
+    const newGame: Game = {
       id: game?.id || 'game1',
       name: game?.name || 'Game 1',
       type: game?.type || 'singleplayer',
@@ -69,6 +69,7 @@ export namespace GameFixture {
       accounts,
       target: game?.target || { type: 'cash', value: 1_000_000 },
       currentEvents: game?.currentEvents || [],
+      history: { monthEvents: [] },
     };
 
     GameEntity.validate(newGame);

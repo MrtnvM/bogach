@@ -4,23 +4,24 @@ import { BusinessSellEvent } from '../../events/business/sell/business_sell_even
 import { BusinessSellEventGenerator } from '../../events/business/sell/business_sell_event_generator';
 import { BusinessBuyEvent } from '../../events/business/buy/business_buy_event';
 import { BusinessAsset } from '../../models/domain/assets/business_asset';
+import { Game } from '../../models/domain/game/game';
 
 export class BusinessSellGenerateRule extends Rule<BusinessSellEvent.Event> {
   canGenerate(events: GameEvent[]): boolean {
     return this.findBuyEvent(events) !== undefined;
   }
 
-  getPercentage(): number {
+  getProbabilityLevel(): number {
     return 10;
   }
 
-  generate(events: GameEvent[]) {
-    const buyEvent = this.findBuyEvent(events)!;
+  generate(game: Game) {
+    const buyEvent = this.findBuyEvent(game.currentEvents)!;
 
-    return (new BusinessSellEventGenerator).generate(buyEvent);
+    return new BusinessSellEventGenerator().generate(buyEvent);
   }
 
-  getMinDuration(): number {
+  getMinDistanceBetweenEvents(): number {
     return 10;
   }
 
@@ -30,7 +31,7 @@ export class BusinessSellGenerateRule extends Rule<BusinessSellEvent.Event> {
 
   //TODO: fix issue with 2 buy events without sell events
   findBuyEvent(events: GameEvent[]): BusinessAsset | undefined {
-    const buyEvent = events.reverse().find((item) => item.type === BusinessBuyEvent.Type)?.data; 
-    return (buyEvent !== undefined ? undefined : buyEvent as BusinessAsset)
+    const buyEvent = events.reverse().find((item) => item.type === BusinessBuyEvent.Type)?.data;
+    return buyEvent !== undefined ? undefined : (buyEvent as BusinessAsset);
   }
 }
