@@ -68,6 +68,11 @@ class Strings {
 
   static String get monthlyPayment => 'Ежемесячный платеж:';
 
+  static String get waiting => 'Ожидание';
+  static String get readyForGame => 'В игре';
+
+  static String get unknownUser => 'Аноним';
+
   static const rubleSymbol = '₽';
   static const title = '';
   static const wordIn = 'в';
@@ -238,8 +243,14 @@ class Strings {
   static String get selectedPlayers => 'Выбранные игроки';
   static String get allPlayers => 'Все игроки';
   static String get createRoom => 'Создать комнату';
+  static String get inviteByLink => 'Пригласить по ссылке';
   static String get startGame => 'Начать игру';
   static String get roomCreationFailed =>
       'При создании комнаты возникла ошибка';
   static String get join => 'Присоединиться';
+  static String get battleInvitationTitle => 'Вызываю тебя на дуэль!';
+  static String get battleInvitationDescription =>
+      'приглашает Вас сразиться в поединке капиталистов!';
+  static String get joinRoomError =>
+      'Не удалось подключиться к комнате игроков';
 }

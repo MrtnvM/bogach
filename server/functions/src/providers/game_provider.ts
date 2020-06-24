@@ -117,10 +117,18 @@ export class GameProvider {
 
   async getAllGameTemplates(): Promise<GameTemplate[]> {
     const selector = this.selector.gameTemplates();
-    const templates = await this.firestore.getItems(selector);
+    const templates = (await this.firestore.getItems(selector)) || [];
 
     templates.forEach(GameTemplateEntity.validate);
     return templates as GameTemplate[];
+  }
+
+  async createGameTemplate(template: GameTemplate): Promise<GameTemplate> {
+    const selector = this.selector.gameTemplate(template.id);
+    const createdTemplate = await this.firestore.createItem(selector, template);
+
+    GameTemplateEntity.validate(createdTemplate);
+    return createdTemplate as GameTemplate;
   }
 
   async getGameTemplate(templateId: GameTemplateEntity.Id): Promise<GameTemplate> {
@@ -135,55 +143,45 @@ export class GameProvider {
     return template as GameTemplate;
   }
 
+  async getRoom(roomId: RoomEntity.Id): Promise<Room> {
+    const selector = this.selector.room(roomId);
+    const room = await this.firestore.getItemData(selector);
+
+    if (!room) {
+      throw new Error('ERROR: No room with id: ' + roomId);
+    }
+
+    RoomEntity.validate(room);
+    return room as Room;
+  }
+
+  async updateRoom(room: Room): Promise<Room> {
+    assertExists('Room and Room ID', room?.id);
+    RoomEntity.validate(room);
+
+    const selector = this.selector.room(room.id);
+    const updatedRoom = await this.firestore.updateItem(selector, room);
+
+    RoomEntity.validate(updatedRoom);
+    return updatedRoom as Room;
+  }
+
   async createRoom(
     gameTemplateId: GameTemplateEntity.Id,
-    participantIds: UserEntity.Id[],
     currentUserId: UserEntity.Id
   ): Promise<Room> {
-    checkIds([gameTemplateId, currentUserId, ...participantIds]);
-
-    if (participantIds.indexOf(currentUserId) < 0) {
-      participantIds.push(currentUserId);
-    }
-
-    if (participantIds.length < 2) {
-      throw new Error("Multiplayer game can't have lower than 2 participants");
-    }
-
-    const template = await this.getGameTemplate(gameTemplateId);
-
-    if (!template) {
-      throw new Error('ERROR: No template on room creation');
-    }
-
-    console.warn('!!! Room creation');
-
-    const participantDevices = await Promise.all(
-      participantIds.map((id) => {
-        const deviceSelector = this.selector.device(id);
-        return this.firestore.getItemData(deviceSelector);
-      })
-    );
-
-    console.warn('!!! Devices: ' + JSON.stringify(participantDevices, null, 2));
-
-    const participants = participantIds.map((participantsId, index) => {
-      const status: RoomEntity.ParticipantStatus =
-        participantsId === currentUserId ? 'ready' : 'waiting';
-
-      const participant: RoomEntity.Participant = {
-        id: participantsId,
-        status,
-        deviceToken: participantDevices[index]?.token || null,
-      };
-
-      console.log(JSON.stringify(participant));
-
-      return participant;
-    });
+    checkIds([gameTemplateId, currentUserId]);
 
     const ownerSelector = this.selector.user(currentUserId);
     const owner = (await this.firestore.getItemData(ownerSelector)) as User;
+
+    const ownerParticipant: RoomEntity.Participant = {
+      id: currentUserId,
+      status: 'ready',
+      deviceToken: null,
+    };
+
+    const participants: RoomEntity.Participant[] = [ownerParticipant];
 
     const roomId: RoomEntity.Id = uuid.v4();
     const room: Room = {
@@ -202,7 +200,7 @@ export class GameProvider {
 
   async setParticipantReady(roomId: RoomEntity.Id, participantId: UserEntity.Id): Promise<Room> {
     const selector = this.selector.room(roomId);
-    let room = (await this.firestore.getItem(selector)).data() as Room;
+    let room = (await this.firestore.getItemData(selector)) as Room;
     RoomEntity.validate(room);
 
     room = produce(room, (draft) => {

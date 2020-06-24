@@ -19,11 +19,7 @@ class SelectMultiplayerGameTemplateAction extends Action {
   final GameTemplate gameTemplate;
 }
 
-class CreateRoomAsyncAction extends AsyncAction<Room> {
-  CreateRoomAsyncAction(this.participantIds);
-
-  final List<String> participantIds;
-}
+class CreateRoomAsyncAction extends AsyncAction<Room> {}
 
 class SetRoomParticipantReadyAsyncAction extends AsyncAction {
   SetRoomParticipantReadyAsyncAction(this.participantId)
@@ -33,6 +29,12 @@ class SetRoomParticipantReadyAsyncAction extends AsyncAction {
 }
 
 class CreateRoomGameAsyncAction extends AsyncAction {}
+
+class StartListeningRoomUpdatesAction extends Action {
+  StartListeningRoomUpdatesAction(this.roomId) : assert(roomId != null);
+
+  final String roomId;
+}
 
 class StopListeningRoomUpdatesAction extends Action {
   StopListeningRoomUpdatesAction(this.roomId) : assert(roomId != null);
@@ -50,4 +52,16 @@ class OnCurrentRoomUpdatedAction extends Action {
   OnCurrentRoomUpdatedAction(this.room);
 
   final Room room;
+}
+
+class ShareRoomInviteLinkAsyncAction extends AsyncAction {
+  ShareRoomInviteLinkAsyncAction(this.roomId) : assert(roomId != null);
+
+  final String roomId;
+}
+
+class OnLoadedParticipantProfilesAction extends Action {
+  OnLoadedParticipantProfilesAction(this.profiles) : assert(profiles != null);
+
+  final List<UserProfile> profiles;
 }

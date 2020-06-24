@@ -3,6 +3,7 @@ import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
@@ -20,6 +21,8 @@ class ExpensesList extends HookWidget {
     return InfoTable(
       title: Strings.expenses,
       titleValue: totalExpense.toPrice(),
+      titleTextStyle: Styles.tableHeaderTitleBlack,
+      titleValueStyle: Styles.tableHeaderValueBlack,
       rows: [
         for (final expense in expenses)
           TitleRow(title: expense.name, value: expense.value.toPrice())

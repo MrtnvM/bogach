@@ -6,16 +6,19 @@ class ColorButton extends StatelessWidget {
     @required this.onPressed,
     @required this.text,
     this.color = Colors.white,
+    this.disabledColor,
   });
 
   final Function() onPressed;
   final String text;
   final Color color;
+  final Color disabledColor;
 
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
       onPressed: onPressed,
+      disabledColor: disabledColor ?? color.withAlpha(180),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4),
       ),

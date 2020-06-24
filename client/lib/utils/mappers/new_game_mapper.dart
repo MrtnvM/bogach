@@ -9,6 +9,7 @@ List<GameTemplate> mapToGameTemplates(List<GameTemplateResponseModel> games) {
         (game) => GameTemplate(
           id: game.id,
           name: game.name,
+          icon: game.icon,
           accountState: Account(
             cash: game.accountState.cash,
             cashFlow: game.accountState.cashFlow,

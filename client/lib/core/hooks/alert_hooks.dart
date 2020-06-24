@@ -20,7 +20,7 @@ RetriableShowAlertFunction useWarningAlert({
     showWarningAlertDialog(
       context: context,
       errorMessage: errorMessage,
-      needCancelButton: false,
+      needCancelButton: needCancelButton,
       onSubmit: retry,
     );
   };

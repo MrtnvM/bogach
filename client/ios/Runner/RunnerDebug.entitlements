@@ -8,5 +8,10 @@
 	<array>
 		<string>Default</string>
 	</array>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:capitalist-game.ru</string>
+		<string>applinks:cash-flow-staging.firebaseapp.com</string>
+	</array>
 </dict>
 </plist>

@@ -29,6 +29,16 @@
 				<string>fb210237670277363</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>Firebase Dynamic Links</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>io.mobile.cashflow</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
@@ -67,5 +77,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>FirebaseDynamicLinksCustomDomains</key>
+	<array>
+		<string>https://capitalist-game.ru/join</string>
+		<string>https://www.capitalist-game.ru/join</string>
+	</array>
 </dict>
 </plist>
