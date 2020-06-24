@@ -4,8 +4,6 @@ import { GameTransformer } from './game_transformer';
 import { Game } from '../../models/domain/game/game';
 import { GameEvent } from '../../models/domain/game/game_event';
 import { BusinessBuyEventGenerator } from '../../events/business/buy/business_buy_event_generator';
-import { BusinessSellEventGenerator } from '../../events/business/sell/business_sell_event_generator';
-import { BusinessSellEventProvider } from '../../services/generation/business_sell_event_provider';
 import { IncomeEventGenerator } from '../../events/income/income_event_generator';
 import { ExpenseEventGenerator } from '../../events/expense/expense_event_generator';
 import { StockPriceChangedEventGenerator } from '../../events/stock/stock_price_changed_event_generator';
@@ -33,25 +31,37 @@ export class GameEventsTransformer extends GameTransformer {
   }
 
   private generateGameEvents(game: Game): GameEvent[] {
-    const businessSellEventGenerator = new BusinessSellEventGenerator();
-    const businessSellEventProvider = new BusinessSellEventProvider(businessSellEventGenerator);
+    // const businessSellEventGenerator = new BusinessSellEventGenerator();
+    // const businessSellEventProvider = new BusinessSellEventProvider(businessSellEventGenerator);
 
-    const gameEvents = [
-      InsuranceEventGenerator.generate(),
-      ChildBornGenerator.generate(),
-      ExpenseEventGenerator.generate(),
-      DebenturePriceChangedEventGenerator.generate(),
-      DebenturePriceChangedEventGenerator.generate(),
-      DebenturePriceChangedEventGenerator.generate(),
-      StockPriceChangedEventGenerator.generate(),
-      StockPriceChangedEventGenerator.generate(),
-      StockPriceChangedEventGenerator.generate(),
-      BusinessBuyEventGenerator.generate(),
-      BusinessBuyEventGenerator.generate(),
-      ...businessSellEventProvider.generateBusinessSellEvent(game),
-      IncomeEventGenerator.generate(),
-      ExpenseEventGenerator.generate(),
+    const gameEventGenerators: ((game: Game) => GameEvent)[] = [
+      (g) => InsuranceEventGenerator.generate(),
+      (g) => ChildBornGenerator.generate(),
+      (g) => ExpenseEventGenerator.generate(),
+      (g) => DebenturePriceChangedEventGenerator.generate(),
+      (g) => DebenturePriceChangedEventGenerator.generate(),
+      (g) => DebenturePriceChangedEventGenerator.generate(),
+      (g) => StockPriceChangedEventGenerator.generate(g),
+      (g) => StockPriceChangedEventGenerator.generate(g),
+      (g) => StockPriceChangedEventGenerator.generate(g),
+      (g) => BusinessBuyEventGenerator.generate(),
+      (g) => BusinessBuyEventGenerator.generate(),
+      // (g) => businessSellEventProvider.generateBusinessSellEvent(game),
+      (g) => IncomeEventGenerator.generate(),
+      (g) => ExpenseEventGenerator.generate(),
     ];
+
+    let updatedGame = game;
+    let gameEvents: GameEvent[] = [];
+
+    for (const generator of gameEventGenerators) {
+      const gameEvent = generator(updatedGame);
+      gameEvents = [...gameEvents, gameEvent];
+
+      updatedGame = produce(updatedGame, (draft) => {
+        draft.currentEvents = gameEvents;
+      });
+    }
 
     return gameEvents;
   }

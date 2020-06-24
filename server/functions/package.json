@@ -16,8 +16,6 @@
   "main": "lib/index.js",
   "dependencies": {
     "@firebase/app-types": "0.x",
-    "@types/random": "^2.1.1",
-    "@types/uuid": "^3.4.7",
     "firebase-admin": "^8.6.0",
     "firebase-functions": "^3.3.0",
     "immer": "^6.0.3",
@@ -26,6 +24,9 @@
     "uuid": "^3.4.0"
   },
   "devDependencies": {
+    "@types/node": "^14.0.13",
+    "@types/random": "^2.1.1",
+    "@types/uuid": "^3.4.7",
     "@types/jest": "^25.1.4",
     "firebase-functions-test": "^0.1.6",
     "jest": "^24.9.0",

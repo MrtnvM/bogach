@@ -15,6 +15,7 @@ import {
   GameEventsTransformer,
   PossessionStateTransformer,
   MonthResultTransformer,
+  StocksInitializerGameTransformer,
 } from '../transformers/game_transformers';
 
 export class GameProvider {
@@ -39,7 +40,7 @@ export class GameProvider {
     };
 
     const gameId: GameEntity.Id = uuid.v4();
-    const gameType: GameEntity.Type = participantsIds.length > 0 ? 'multiplayer' : 'singleplayer';
+    const gameType: GameEntity.Type = participantsIds.length > 1 ? 'multiplayer' : 'singleplayer';
 
     let game: Game = {
       id: gameId,
@@ -63,9 +64,13 @@ export class GameProvider {
       accounts: participantsGameState(template.accountState),
       target: template.target,
       currentEvents: [],
+      config: {
+        stocks: [],
+      },
     };
 
     game = applyGameTransformers(game, [
+      new StocksInitializerGameTransformer(),
       new GameEventsTransformer(true),
       new PossessionStateTransformer(),
       new MonthResultTransformer(0),

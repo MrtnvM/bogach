@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/widgets/containers/card_container.dart';
 import 'package:cash_flow/widgets/game_event/buy_sell_bar.dart';
@@ -13,10 +15,12 @@ typedef OnPlayerActionParamsChanged = void Function(
 
 class GameEventSelector extends StatefulWidget {
   const GameEventSelector({
+    Key key,
     @required this.viewModel,
     @required this.onPlayerActionParamsChanged,
   })  : assert(viewModel != null),
-        assert(onPlayerActionParamsChanged != null);
+        assert(onPlayerActionParamsChanged != null),
+        super(key: key);
 
   final SelectorViewModel viewModel;
   final OnPlayerActionParamsChanged onPlayerActionParamsChanged;
@@ -35,6 +39,15 @@ class GameEventSelectorState extends State<GameEventSelector> {
 
   @override
   Widget build(BuildContext context) {
+    final availableCount = _buySellAction.when(
+      buy: () {
+        final total =
+            vm.availableCash != null ? vm.availableCash ~/ vm.currentPrice : 0;
+        return min(vm.maxCount, total);
+      },
+      sell: () => vm.alreadyHave,
+    );
+
     return CardContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +69,7 @@ class GameEventSelectorState extends State<GameEventSelector> {
                 GameEventValueSelector(
                   action: _buySellAction,
                   selectedCount: _selectedCount,
-                  availableCount: 0, // vm.maxCount,
+                  availableCount: availableCount,
                   maxCount: vm.maxCount,
                   onCountChanged: _onSelectedCountChanged,
                   isChangeableType: vm.changeableType,
@@ -107,11 +120,13 @@ class SelectorViewModel {
     this.alreadyHave,
     this.maxCount,
     this.changeableType = true,
+    this.availableCash,
   });
 
-  final int currentPrice;
+  final double currentPrice;
   final int passiveIncomePerMonth;
   final int alreadyHave;
   final int maxCount;
   final bool changeableType;
+  final double availableCash;
 }
