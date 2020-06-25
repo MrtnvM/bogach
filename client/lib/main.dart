@@ -28,12 +28,12 @@ Future<void> main() async {
   final tokenStorage = TokenStorage();
   final alice = Alice(navigatorKey: appRouter.navigatorKey);
   final sharedPreferences = await SharedPreferences.getInstance();
-  const environment = stagingEnvironment;
+  const environment = developmentEnvironment;
   final apiClient = configureApiClient(alice, environment);
 
-  if (environment == developmentEnvironment) {
-    await configureFirestoreLocalEnvironment();
-  }
+  // if (environment == developmentEnvironment) {
+  //   await configureFirestoreLocalEnvironment();
+  // }
 
   configurePurchases();
   configureControlPanel(alice, apiClient);

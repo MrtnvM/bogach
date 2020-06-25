@@ -5,7 +5,7 @@ import { Game } from '../../models/domain/game/game';
 
 export class InsuranceGenerateRule extends Rule<InsuranceEvent.Event> {
   getProbabilityLevel(): number {
-    return 10;
+    return 5;
   }
 
   generate(game: Game) {
@@ -13,7 +13,7 @@ export class InsuranceGenerateRule extends Rule<InsuranceEvent.Event> {
   }
 
   getMinDistanceBetweenEvents(): number {
-    return 15;
+    return 6;
   }
 
   getType(): string {

@@ -13,10 +13,14 @@ export class StockGenerateRule extends Rule<StockPriceChangedEvent.Event> {
   }
 
   getMinDistanceBetweenEvents(): number {
-    return 1;
+    return 0;
   }
 
   getType(): string {
     return StockPriceChangedEvent.Type;
+  }
+
+  getMaxCountOfEventInMonth() {
+    return 3;
   }
 }

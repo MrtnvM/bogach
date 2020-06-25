@@ -13,10 +13,14 @@ export class DebentureGenerateRule extends Rule<DebenturePriceChangedEvent.Event
   }
 
   getMinDistanceBetweenEvents(): number {
-    return 1;
+    return 0;
   }
 
   getType(): string {
     return DebenturePriceChangedEvent.Type;
+  }
+
+  getMaxCountOfEventInMonth() {
+    return 1;
   }
 }

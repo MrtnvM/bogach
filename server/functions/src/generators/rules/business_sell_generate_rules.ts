@@ -12,7 +12,7 @@ export class BusinessSellGenerateRule extends Rule<BusinessSellEvent.Event> {
   }
 
   getProbabilityLevel(): number {
-    return 10;
+    return 4;
   }
 
   generate(game: Game) {

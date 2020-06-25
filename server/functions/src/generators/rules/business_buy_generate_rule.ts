@@ -5,7 +5,7 @@ import { Game } from '../../models/domain/game/game';
 
 export class BusinessBuyGenerateRule extends Rule<BusinessBuyEvent.Event> {
   getProbabilityLevel(): number {
-    return 10;
+    return 6;
   }
 
   generate(game: Game) {
@@ -13,7 +13,7 @@ export class BusinessBuyGenerateRule extends Rule<BusinessBuyEvent.Event> {
   }
 
   getMinDistanceBetweenEvents(): number {
-    return 10;
+    return 2;
   }
 
   getType(): string {
