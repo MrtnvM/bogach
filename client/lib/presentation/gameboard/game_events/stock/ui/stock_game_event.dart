@@ -1,5 +1,8 @@
+import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
+import 'package:cash_flow/models/domain/game/possession_state/assets/asset.dart';
+import 'package:cash_flow/models/domain/game/possession_state/assets/stock/stock_asset.dart';
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/model/stock_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/ui/stock_game_event_hooks.dart';
@@ -31,13 +34,16 @@ class StockGameEvent extends HookWidget {
       action: buySellAction.value,
     );
 
-    const alreadyHave = 0; // TODO(Maxim): replace with real value
+    final userId = useUserId();
+    final cash = useCurrentGame((g) => g.accounts[userId].cash);
+    final alreadyHave = useAvaliableStockCount(event);
 
     final selectorViewModel = SelectorViewModel(
       currentPrice: eventData.currentPrice,
       alreadyHave: alreadyHave,
       maxCount: eventData.availableCount,
       changeableType: true,
+      availableCash: cash,
     );
 
     return Column(
@@ -52,6 +58,7 @@ class StockGameEvent extends HookWidget {
         ),
         const SizedBox(height: 24),
         GameEventSelector(
+          key: ValueKey(event.id),
           viewModel: selectorViewModel,
           onPlayerActionParamsChanged: (action, count) {
             selectedCount.value = count;

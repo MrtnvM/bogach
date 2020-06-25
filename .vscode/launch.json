@@ -16,6 +16,12 @@
       "program": "client/lib/main.dart"
     },
     {
+      "name": "Flutter Attach",
+      "type": "dart",
+      "request": "attach",
+      "program": "client/lib/main.dart"
+    },
+    {
       "type": "node",
       "request": "launch",
       "name": "Jest All",

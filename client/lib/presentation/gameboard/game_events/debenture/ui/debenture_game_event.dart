@@ -1,3 +1,4 @@
+import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
@@ -29,14 +30,18 @@ class DebentureGameEvent extends HookWidget {
       action: buySellAction.value,
     );
 
+    final userId = useUserId();
+    final cash = useCurrentGame((g) => g.accounts[userId].cash);
+
     const alreadyHave = 0; // TODO(Maxim): replace with real value
 
     final selectorViewModel = SelectorViewModel(
-      currentPrice: eventData.currentPrice,
+      currentPrice: eventData.currentPrice.toDouble(),
       passiveIncomePerMonth: eventData.profitabilityPercent,
       alreadyHave: alreadyHave,
       maxCount: eventData.availableCount,
       changeableType: true,
+      availableCash: cash,
     );
 
     return Column(
@@ -51,6 +56,7 @@ class DebentureGameEvent extends HookWidget {
         ),
         const SizedBox(height: 24),
         GameEventSelector(
+          key: ValueKey(event.id),
           viewModel: selectorViewModel,
           onPlayerActionParamsChanged: (action, count) {
             selectedCount.value = count;

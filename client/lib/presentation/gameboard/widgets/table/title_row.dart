@@ -13,8 +13,15 @@ class TitleRow extends StatelessWidget {
       children: <Widget>[
         Row(
           children: [
-            Expanded(child: Text(title, style: Styles.bodyBlack)),
-            if (value != null) Text(value, style: Styles.bodyBlack),
+            Text(title, style: Styles.bodyBlack),
+            const SizedBox(width: 20),
+            if (value != null)
+              Expanded(
+                  child: Text(
+                value,
+                style: Styles.bodyBlack,
+                textAlign: TextAlign.end,
+              )),
           ],
         ),
       ],

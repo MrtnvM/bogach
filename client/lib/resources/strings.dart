@@ -128,6 +128,7 @@ class Strings {
   static const selling = 'Продать';
   static const inputCount = 'Количество:';
   static const fairPrice = 'Справедливая цена:';
+  static String get yearAvaragePrive => 'Среднегодовая цена:';
 
   static const newBusinessTitle = 'Новый бизнесс';
 
