@@ -6,12 +6,12 @@ import {
   stubs,
   createMockedDebentureRule,
   debentureEvent,
+  createMockedStockRule,
 } from './game_event_generator.spec.utils';
 import { GameEventGenerator } from './game_event_generator';
 import { DebentureGenerateRule } from './rules/debenture_generate_rule';
-import { StockGenerateRule } from './rules/stock_generate_rule';
-import { ExpenseGenerateRule } from './rules/expense_generate_rule';
-import { MonthlyExpenseGenerateRule } from './rules/monthly_expense_generate_rule';
+import { DebenturePriceChangedEvent } from '../events/debenture/debenture_price_changed_event';
+import { StockPriceChangedEvent } from '../events/stock/stock_price_changed_event';
 
 describe('Game Event Generator', () => {
   const { game } = stubs;
@@ -36,19 +36,34 @@ describe('Game Event Generator', () => {
   });
 
   test('Successfully generates events needed count of events', () => {
+    const countOfEventsForGenerationConfigValue = 7;
+
+    const debentureRule = createMockedDebentureRule({
+      minDistance: 0,
+      maxEventsInMonth: 1,
+      probabilityLevel: [10],
+    });
+    const stocksRule = createMockedStockRule({
+      minDistance: 0,
+      maxEventsInMonth: countOfEventsForGenerationConfigValue - 1,
+      probabilityLevel: [10],
+    });
+
     const generator = new GameEventGenerator({
-      rules: [
-        new DebentureGenerateRule(),
-        new StockGenerateRule(),
-        new MonthlyExpenseGenerateRule(),
-        new ExpenseGenerateRule(),
-      ],
+      rules: [debentureRule, stocksRule],
+      eventCountForGeneration: countOfEventsForGenerationConfigValue,
     });
 
     const countOfEventsForGeneration = generator.getEventCountForGeneration(game);
     const gameEvents = generator.generateEvents(game);
 
     expect(gameEvents.length).toEqual(countOfEventsForGeneration);
+
+    const debentureEvents = gameEvents.filter((e) => e.type === DebenturePriceChangedEvent.Type);
+    expect(debentureEvents.length).toEqual(1);
+
+    const stockEvents = gameEvents.filter((e) => e.type === StockPriceChangedEvent.Type);
+    expect(stockEvents.length).toEqual(6);
   });
 
   test('Checks level bounds', () => {
@@ -87,7 +102,7 @@ describe('Game Event Generator', () => {
     expect(gameEvents.length).toEqual(1);
   });
 
-  test.only('Check min duration more than 1 month', () => {
+  test('Check min duration more than 1 month', () => {
     const debentureRule = createMockedDebentureRule({
       minDistance: 2,
       probabilityLevel: [10],
@@ -99,7 +114,7 @@ describe('Game Event Generator', () => {
 
     const event1 = debentureEvent();
     const game1 = produce(game, (draft) => {
-      draft.history = { monthEvents: [[event1], []] };
+      draft.history = { months: [{ events: [event1] }, { events: [] }] };
     });
 
     const gameEvents1 = generator.generateEvents(game1);
@@ -107,7 +122,7 @@ describe('Game Event Generator', () => {
 
     const event2 = debentureEvent();
     const game2 = produce(game, (draft) => {
-      draft.history = { monthEvents: [[event2], [], []] };
+      draft.history = { months: [{ events: [event2] }, { events: [] }, { events: [] }] };
     });
 
     const gameEvents2 = generator.generateEvents(game2);

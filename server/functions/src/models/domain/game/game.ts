@@ -57,7 +57,7 @@ export namespace GameEntity {
   };
 
   export type History = {
-    monthEvents: GameEvent[][];
+    months: { events: GameEvent[] }[];
   };
 
   export type Config = {

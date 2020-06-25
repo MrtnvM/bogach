@@ -64,7 +64,7 @@ export class GameProvider {
       accounts: participantsGameState(template.accountState),
       target: template.target,
       currentEvents: [],
-      history: { monthEvents: [] },
+      history: { months: [] },
       config: { stocks: [] },
     };
 

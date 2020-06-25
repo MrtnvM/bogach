@@ -14,6 +14,7 @@ import {
   UserProgressTransformer,
   MonthResultTransformer,
   applyGameTransformers,
+  HistoryGameTransformer,
 } from '../transformers/game_transformers';
 import { IncomeHandler } from '../events/income/income_handler';
 import { ExpenseHandler } from '../events/expense/expense_handler';
@@ -76,6 +77,7 @@ export class GameService {
       new ParticipantAccountsTransformer(),
       new WinnersTransformer(),
       new PossessionStateTransformer(),
+      new HistoryGameTransformer(),
       new GameEventsTransformer(),
       new MonthResultTransformer(),
       new MonthTransformer(),

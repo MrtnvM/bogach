@@ -80,26 +80,7 @@ export class GameEventGenerator {
       }
 
       const rule = rules[ruleIndex];
-      const minDistance = rule.getMinDistanceBetweenEvents();
-      let shouldSkipEvent = false;
-
-      if (minDistance <= 0) {
-        shouldSkipEvent = false;
-      } else if (minDistance === 1) {
-        const alreadyHaveThisEvent = gameEvents.findIndex((e) => e.type === rule.getType()) >= 0;
-        shouldSkipEvent = alreadyHaveThisEvent;
-      } else {
-        const monthsCount = Math.min(game.history.monthEvents.length, minDistance);
-        const monthsEventHistory = game.history.monthEvents.slice(-monthsCount);
-
-        const isEventAlreadyHappened = monthsEventHistory.some((monthEvents) => {
-          return monthEvents.findIndex((e) => e.type === rule.getType()) >= 0;
-        });
-
-        const alreadyHaveThisEvent = gameEvents.findIndex((e) => e.type === rule.getType()) >= 0;
-
-        shouldSkipEvent = isEventAlreadyHappened || alreadyHaveThisEvent;
-      }
+      const shouldSkipEvent = this.checkIfShouldSkipEvent(rule, updatedGame);
 
       if (shouldSkipEvent) {
         skippedEventCount++;
@@ -122,5 +103,57 @@ export class GameEventGenerator {
     }
 
     return gameEvents;
+  }
+
+  private checkIfShouldSkipEvent(rule: Rule, game: Game) {
+    const isMinDistanceValid = this.checkIsMinDistanceBetweenEventsValid(rule, game);
+    if (!isMinDistanceValid) {
+      return true;
+    }
+
+    const isCountOfEventInMonthValid = this.checkIsEventCountInMonthValid(rule, game);
+    if (!isCountOfEventInMonthValid) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private checkIsMinDistanceBetweenEventsValid(rule: Rule, game: Game) {
+    const minDistance = rule.getMinDistanceBetweenEvents();
+    const gameEvents = game.currentEvents;
+
+    if (minDistance <= 0) {
+      return true;
+    }
+
+    if (minDistance === 1) {
+      const alreadyHaveThisEvent = gameEvents.findIndex((e) => e.type === rule.getType()) >= 0;
+      return !alreadyHaveThisEvent;
+    }
+
+    const monthsCount = Math.min(game.history.months.length, minDistance);
+    const monthsEventHistory = game.history.months.slice(-monthsCount);
+
+    const isEventAlreadyHappened = monthsEventHistory.some((month) => {
+      return month.events.findIndex((e) => e.type === rule.getType()) >= 0;
+    });
+
+    const alreadyHaveThisEventInMonth = gameEvents.findIndex((e) => e.type === rule.getType()) >= 0;
+
+    return !isEventAlreadyHappened && !alreadyHaveThisEventInMonth;
+  }
+
+  private checkIsEventCountInMonthValid(rule: Rule, game: Game) {
+    const maxCountOfEventInMonth = rule.getMaxCountOfEventInMonth();
+
+    if (maxCountOfEventInMonth <= 0) {
+      return true;
+    }
+
+    const ruleEvents = game.currentEvents.filter((e) => e.type === rule.getType());
+    const isLowerOrEqualToLimit = ruleEvents.length < maxCountOfEventInMonth;
+
+    return isLowerOrEqualToLimit;
   }
 }
