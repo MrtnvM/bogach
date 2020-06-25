@@ -7,10 +7,6 @@ import { BusinessAsset } from '../../models/domain/assets/business_asset';
 import { Game } from '../../models/domain/game/game';
 
 export class BusinessSellGenerateRule extends Rule<BusinessSellEvent.Event> {
-  canGenerate(events: GameEvent[]): boolean {
-    return this.findBuyEvent(events) !== undefined;
-  }
-
   getProbabilityLevel(): number {
     return 4;
   }
