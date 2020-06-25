@@ -24,6 +24,7 @@ class InsuranceGameEvent extends HookWidget {
         InfoTable(
           title: event.name,
           description: event.description,
+          withShadow: false,
           rows: <Widget>[
             for (final item in infoTableData.entries)
               TitleRow(title: item.key, value: item.value)

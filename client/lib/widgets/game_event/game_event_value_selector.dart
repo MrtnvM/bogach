@@ -86,7 +86,7 @@ class GameEventValueSelector extends StatelessWidget {
                 text: title,
                 style: Styles.body1.copyWith(
                   decoration: TextDecoration.underline,
-                  color: ColorRes.blue,
+                  color: ColorRes.mainGreen,
                 ),
               ),
             ],

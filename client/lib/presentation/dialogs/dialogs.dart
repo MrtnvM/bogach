@@ -52,7 +52,7 @@ Future<DialogResponse> showCashDialog({
                       Expanded(
                         child: Container(
                           child: FlatButton(
-                            child: Text(positiveButton ?? Strings.confirm),
+                            child: Text(positiveButton ?? Strings.ok),
                             onPressed: () {
                               Navigator.pop(context, DialogResponse.confirm);
                             },

@@ -20,8 +20,8 @@ class MonthlyIncomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = action.map(
-      buy: (_) => ColorRes.green,
-      sell: (_) => ColorRes.orange,
+      buy: (_) => ColorRes.mainGreen,
+      sell: (_) => ColorRes.red,
     );
 
     final multiplier = action.map(

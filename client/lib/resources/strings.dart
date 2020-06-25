@@ -76,7 +76,8 @@ class Strings {
   static const rubleSymbol = '₽';
   static const title = '';
   static const wordIn = 'в';
-  static const confirm = 'ОК';
+  static const ok = 'ОК';
+  static const confirm = 'Подтвердить';
   static const cancel = 'Отмена';
   static const warning = 'Внимание';
   static const retry = 'Повторить';

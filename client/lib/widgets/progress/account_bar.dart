@@ -54,18 +54,15 @@ class AccountBar extends HookWidget {
       children: <Widget>[
         Text(
           value.toPrice(),
-          style: Styles.body1.copyWith(
-            color: ColorRes.newGameBoardPrimaryTextColor,
+          style: Styles.tableHeaderTitleBlack.copyWith(
             fontSize: 12,
-            fontWeight: FontWeight.w700,
           ),
         ),
         const Spacer(),
         Text(
           title,
-          style: Styles.body1.copyWith(
+          style: Styles.bodyBlack.copyWith(
             fontSize: 12,
-            color: Colors.black,
           ),
         ),
       ],
