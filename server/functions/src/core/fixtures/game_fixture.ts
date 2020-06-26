@@ -6,6 +6,7 @@ import { AssetEntity } from '../../models/domain/asset';
 import {
   applyGameTransformers,
   StocksInitializerGameTransformer,
+  DebentureInitializerGameTransformer,
 } from '../../transformers/game_transformers';
 
 export namespace GameFixture {
@@ -74,10 +75,13 @@ export namespace GameFixture {
       target: game?.target || { type: 'cash', value: 1_000_000 },
       currentEvents: game?.currentEvents || [],
       history: { months: [] },
-      config: { stocks: [] },
+      config: { stocks: [], debentures: [] },
     };
 
-    newGame = applyGameTransformers(newGame, [new StocksInitializerGameTransformer()]);
+    newGame = applyGameTransformers(newGame, [
+      new StocksInitializerGameTransformer(),
+      new DebentureInitializerGameTransformer(),
+    ]);
 
     GameEntity.validate(newGame);
     return newGame;

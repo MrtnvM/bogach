@@ -62,6 +62,7 @@ export namespace GameEntity {
 
   export type Config = {
     readonly stocks: string[];
+    readonly debentures: string[];
   };
 
   export const validate = (game: any) => {

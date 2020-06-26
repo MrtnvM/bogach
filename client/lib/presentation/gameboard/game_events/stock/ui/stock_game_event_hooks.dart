@@ -13,25 +13,24 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 
 Map<String, String> useStockInfoTableData(GameEvent event) {
-  final alreadyHave = useAvaliableStockCount(event);
+  final currentStock = useCurrentStock(event);
+  final alreadyHave = currentStock?.countInPortfolio ?? 0;
 
-  return useMemoized(() {
-    final StockEventData eventData = event.data;
+  final StockEventData eventData = event.data;
 
-    final data = {
-      Strings.investmentType: event.name,
-      Strings.yearAvaragePrive: eventData.fairPrice.toPrice(),
-      Strings.currentPrice: eventData.currentPrice.toPrice(),
-      Strings.alreadyHave: alreadyHave == 0
-          ? alreadyHave.toString()
-          : Strings.getUserAvailableCount(
-              alreadyHave.toString(),
-              eventData.currentPrice.toPrice(),
-            ),
-    };
+  final data = {
+    Strings.investmentType: event.name,
+    Strings.yearAvaragePrive: eventData.fairPrice.toPrice(),
+    Strings.currentPrice: eventData.currentPrice.toPrice(),
+    Strings.alreadyHave: alreadyHave == 0
+        ? alreadyHave.toString()
+        : Strings.getUserAvailableCount(
+            currentStock.countInPortfolio.toString(),
+            currentStock.averagePrice.toPrice(),
+          ),
+  };
 
-    return data;
-  }, [alreadyHave, event]);
+  return data;
 }
 
 VoidCallback useStockPlayerActionHandler({
@@ -55,16 +54,16 @@ VoidCallback useStockPlayerActionHandler({
   };
 }
 
-int useAvaliableStockCount(GameEvent event) {
+StockAsset useCurrentStock(GameEvent event) {
   final userId = useUserId();
-  final alreadyHave = useCurrentGame((g) {
-    final theSameStocks = g.possessionState[userId].assets
+  final currentStock = useCurrentGame((g) {
+    final theSameStock = g.possessionState[userId].assets
         .where((a) => a.type == AssetType.stock)
         .cast<StockAsset>()
         .firstWhere((s) => s.name == event.name, orElse: () => null);
 
-    return theSameStocks?.countInPortfolio ?? 0;
+    return theSameStock;
   });
 
-  return alreadyHave;
+  return currentStock;
 }

@@ -1,38 +1,39 @@
+import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
+import 'package:cash_flow/models/domain/game/possession_state/assets/asset.dart';
+import 'package:cash_flow/models/domain/game/possession_state/assets/debenture/debenture_asset.dart';
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/debenture_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/debenture_player_action.dart';
 import 'package:cash_flow/resources/strings.dart';
-import 'package:cash_flow/utils/metrics/roi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 
 Map<String, String> useDebentureInfoTableData(GameEvent event) {
-  const alreadyHave = 0; // TODO(Maxim): replace with real value
+  final currentDebenture = useCurrentDebenture(event);
+  final alreadyHave = currentDebenture?.count ?? 0;
 
-  return useMemoized(() {
-    final DebentureEventData eventData = event.data;
+  final DebentureEventData eventData = event.data;
 
-    final alreadyHaveString = alreadyHave == 0
-        ? alreadyHave.toString()
-        : Strings.getUserAvailableCount(
-            alreadyHave.toString(),
-            eventData.currentPrice.toPrice(),
-          );
+  final alreadyHaveString = alreadyHave == 0
+      ? alreadyHave.toString()
+      : Strings.getUserAvailableCount(
+          alreadyHave.toString(),
+          currentDebenture.averagePrice.toPrice(),
+        );
 
-    final data = {
-      Strings.investmentType: event.type.typeTitle(),
-      Strings.nominalCost: eventData.nominal.toPrice(),
-      Strings.passiveIncomePerMonth: eventData.profitabilityPercent.toPrice(),
-      Strings.roi: ROI.fromInvestment(eventData).toPercent(),
-      Strings.alreadyHave: alreadyHaveString,
-    };
+  final data = {
+    Strings.investmentType: event.name,
+    Strings.nominalCost: eventData.nominal.toPrice(),
+    Strings.passiveIncomePerMonth: eventData.profitabilityPercent.toPrice(),
+    // Strings.roi: ROI.fromInvestment(eventData).toPercent(),
+    Strings.alreadyHave: alreadyHaveString,
+  };
 
-    return data;
-  }, [alreadyHave, event]);
+  return data;
 }
 
 VoidCallback useDebenturePlayerActionHandler({
@@ -54,4 +55,18 @@ VoidCallback useDebenturePlayerActionHandler({
         .sendPlayerAction(playerAction, event.id)
         .catchError((e) => handleError(context: context, exception: e));
   };
+}
+
+DebentureAsset useCurrentDebenture(GameEvent event) {
+  final userId = useUserId();
+  final currentDebenture = useCurrentGame((g) {
+    final theSameDebenture = g.possessionState[userId].assets
+        .where((a) => a.type == AssetType.debenture)
+        .cast<DebentureAsset>()
+        .firstWhere((s) => s.name == event.name, orElse: () => null);
+
+    return theSameDebenture;
+  });
+
+  return currentDebenture;
 }

@@ -45,7 +45,7 @@ class GameEventValueSelector extends StatelessWidget {
           minCount: 1,
           onCountChanged: onCountChanged,
         ),
-        if (isChangeableType)
+        if (isChangeableType && passiveIncomePerMonth != 0)
           MonthlyIncomeWidget(
             action: action,
             assetCount: selectedCount,

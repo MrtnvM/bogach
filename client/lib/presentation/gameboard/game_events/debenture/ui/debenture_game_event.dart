@@ -33,11 +33,13 @@ class DebentureGameEvent extends HookWidget {
     final userId = useUserId();
     final cash = useCurrentGame((g) => g.accounts[userId].cash);
 
-    const alreadyHave = 0; // TODO(Maxim): replace with real value
+    final alreadyHave = useCurrentDebenture(event)?.count ?? 0;
+    final passiveIncomePerMonth =
+        eventData.nominal * eventData.profitabilityPercent / 100 / 12;
 
     final selectorViewModel = SelectorViewModel(
-      currentPrice: eventData.currentPrice.toDouble(),
-      passiveIncomePerMonth: eventData.profitabilityPercent.toInt(),
+      currentPrice: eventData.currentPrice,
+      passiveIncomePerMonth: passiveIncomePerMonth,
       alreadyHave: alreadyHave,
       maxCount: eventData.availableCount,
       changeableType: true,
@@ -47,7 +49,7 @@ class DebentureGameEvent extends HookWidget {
     return Column(
       children: <Widget>[
         InfoTable(
-          title: Strings.investments,
+          title: Strings.debentures,
           withShadow: false,
           rows: <Widget>[
             for (final item in infoTableData.entries)

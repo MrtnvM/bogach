@@ -91,7 +91,7 @@ class Strings {
   static const cash = 'Наличные';
   static const count = 'Количество';
   static const sum = 'Сумма';
-  static const stock = 'Акции/Фонды';
+  static const stock = 'Акции';
   static const income = 'Непредвиденный доход';
   static const expense = 'Непредвиденный убыток';
   static const monthlyExpenseEvent = 'Новое событие';
@@ -116,6 +116,7 @@ class Strings {
   static const takeLoan = 'Взять\nкредит';
 
   static const investments = 'Вложения';
+  static String get debentures => 'Облигации';
   static const currentPrice = 'Текущая цена:';
   static const investmentType = 'Наименование:';
   static const nominalCost = 'Номинальная стоимость:';

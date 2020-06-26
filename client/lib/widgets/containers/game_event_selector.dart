@@ -124,7 +124,7 @@ class SelectorViewModel {
   });
 
   final double currentPrice;
-  final int passiveIncomePerMonth;
+  final double passiveIncomePerMonth;
   final int alreadyHave;
   final int maxCount;
   final bool changeableType;
