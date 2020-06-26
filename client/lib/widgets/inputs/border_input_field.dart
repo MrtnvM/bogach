@@ -53,14 +53,14 @@ class _BorderInputFieldState extends State<BorderInputField> {
               Text(
                 widget.props.label.toUpperCase(),
                 style: _validationResult?.isNotEmpty == true
-                    ? Styles.caption.copyWith(color: ColorRes.errorRed)
+                    ? Styles.caption.copyWith(color: ColorRes.red)
                     : Styles.caption.copyWith(color: ColorRes.grey),
               ),
               const Spacer(),
               if (_validationResult?.isNotEmpty == true)
                 Text(
                   _validationResult,
-                  style: Styles.overline.copyWith(color: ColorRes.errorRed),
+                  style: Styles.overline.copyWith(color: ColorRes.red),
                 ),
             ],
           ),
@@ -74,7 +74,7 @@ class _BorderInputFieldState extends State<BorderInputField> {
           decoration: InputDecoration(
             isDense: true,
             suffix: _validationResult?.isNotEmpty == true
-                ? Icon(Icons.error, color: ColorRes.errorRed, size: 14)
+                ? Icon(Icons.error, color: ColorRes.red, size: 14)
                 : null,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
@@ -85,7 +85,7 @@ class _BorderInputFieldState extends State<BorderInputField> {
                 .copyWith(fontStyle: FontStyle.italic, color: ColorRes.grey),
             enabledBorder: OutlineInputBorder(
               borderSide: _validationResult?.isNotEmpty == true
-                  ? const BorderSide(color: ColorRes.errorRed)
+                  ? const BorderSide(color: ColorRes.red)
                   : const BorderSide(color: ColorRes.grey),
               borderRadius: BorderRadius.circular(4),
             ),

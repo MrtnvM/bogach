@@ -65,7 +65,7 @@ dependencies:
   flutter_platform_loadable:
     git:
       url: git://github.com/Cash-Flow-Team/flutter-platform-loadable
-      ref: v0.0.16
+      ref: v0.0.17
 
   uikit:
     git:

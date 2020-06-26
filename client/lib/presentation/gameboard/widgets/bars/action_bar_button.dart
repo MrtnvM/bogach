@@ -18,7 +18,7 @@ class ActionBarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 46,
+      height: 48,
       child: RaisedButton(
         onPressed: onPressed,
         shape: const RoundedRectangleBorder(

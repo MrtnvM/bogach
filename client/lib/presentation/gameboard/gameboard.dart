@@ -41,7 +41,8 @@ class GameBoard extends HookWidget {
     if (!gameExists) {
       return Loadable(
         isLoading: !gameExists,
-        backgroundColor: ColorRes.black80,
+        backgroundColor: ColorRes.white,
+        indicatorColor: const AlwaysStoppedAnimation<Color>(ColorRes.mainGreen),
         child: Container(),
       );
     }

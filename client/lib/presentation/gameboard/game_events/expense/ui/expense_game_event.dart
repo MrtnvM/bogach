@@ -22,6 +22,7 @@ class ExpenseGameEvent extends HookWidget {
       children: <Widget>[
         InfoTable(
           title: expenseWidgetData.eventName,
+          withShadow: false,
           description: expenseWidgetData.eventDescription,
           rows: <Widget>[
             for (final item in expenseWidgetData.data.entries)

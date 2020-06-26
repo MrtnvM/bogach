@@ -10,8 +10,9 @@ class InfoTable extends StatelessWidget {
     this.titleValue,
     this.description,
     this.rows,
-    this.titleTextStyle = Styles.tableHeaderTitleBlue,
-    this.titleValueStyle = Styles.tableHeaderValueBlue,
+    this.titleTextStyle = Styles.tableHeaderTitleBlack,
+    this.titleValueStyle = Styles.tableHeaderValueBlack,
+    this.withShadow = true,
   }) : super(key: key);
 
   final String title;
@@ -20,21 +21,33 @@ class InfoTable extends StatelessWidget {
   final List<Widget> rows;
   final TextStyle titleTextStyle;
   final TextStyle titleValueStyle;
+  final bool withShadow;
 
   @override
   Widget build(BuildContext context) {
-    return CardContainer(
+    if (withShadow) {
+      return CardContainer(
+        padding:
+            const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 20),
+        child: _buildBody(),
+      );
+    }
+    return Container(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 20),
-      child: Column(
-        children: <Widget>[
-          ..._buildHeader(),
-          const TableDivider(),
-          for (var i = 0; i < rows.length; i++) ...[
-            rows[i],
-            if (i != rows.length - 1) const TableDivider(),
-          ]
-        ],
-      ),
+      child: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    return Column(
+      children: <Widget>[
+        ..._buildHeader(),
+        const TableDivider(),
+        for (var i = 0; i < rows.length; i++) ...[
+          rows[i],
+          if (i != rows.length - 1) const TableDivider(),
+        ]
+      ],
     );
   }
 
@@ -49,7 +62,7 @@ class InfoTable extends StatelessWidget {
         ],
       ),
       if (description != null) ...<Widget>[
-        const SizedBox(height: 8),
+        const SizedBox(height: 16),
         Container(
           alignment: Alignment.centerLeft,
           child: Text(

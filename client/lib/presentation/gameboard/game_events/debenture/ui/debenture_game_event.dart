@@ -50,6 +50,7 @@ class DebentureGameEvent extends HookWidget {
       children: <Widget>[
         InfoTable(
           title: Strings.debentures,
+          withShadow: false,
           rows: <Widget>[
             for (final item in infoTableData.entries)
               TitleRow(title: item.key, value: item.value)

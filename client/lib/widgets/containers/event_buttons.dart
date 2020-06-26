@@ -37,7 +37,7 @@ class EventButtons extends StatelessWidget {
         ActionButton(
           onPressed: isNormal ? properties.onConfirm : properties.onBuy,
           color: ColorRes.green,
-          text: isNormal ? Strings.confirm : Strings.buy,
+          text: isNormal ? Strings.ok : Strings.buy,
         ),
         const SizedBox(width: 6),
         ActionButton(

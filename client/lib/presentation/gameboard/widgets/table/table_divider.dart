@@ -12,7 +12,7 @@ class TableDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Divider(
-      height: 24,
+      height: 32,
       thickness: 1,
       color: color,
     );

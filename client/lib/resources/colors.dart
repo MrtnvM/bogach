@@ -8,7 +8,7 @@ class ColorRes {
   static const primary64 = Color(0xA3006CBB);
   static const accentColor = Color(0xFF2196F3);
   static const scaffoldBackground = Color(0xFFFAFAFA);
-  static const errorRed = Color(0xFFC73734);
+  static const red = Color(0xFFFA521D);
 
   static const black = Color(0xff000000);
   static const black80 = Color(0xCC000000);
