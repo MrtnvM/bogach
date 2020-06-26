@@ -115,6 +115,7 @@ class Strings {
   static const takeLoan = 'Взять\nкредит';
 
   static const investments = 'Вложения';
+  static String get debentures => 'Облигации';
   static const currentPrice = 'Текущая цена:';
   static const investmentType = 'Наименование:';
   static const nominalCost = 'Номинальная стоимость:';

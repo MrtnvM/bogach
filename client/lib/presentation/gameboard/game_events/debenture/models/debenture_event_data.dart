@@ -10,10 +10,10 @@ abstract class DebentureEventData
     with _$DebentureEventData
     implements GameEventData {
   factory DebentureEventData({
-    int currentPrice,
+    double currentPrice,
+    double nominal,
+    double profitabilityPercent,
     int availableCount,
-    int nominal,
-    int profitabilityPercent,
   }) = _DebentureEventData;
 
   factory DebentureEventData.fromJson(Map<String, dynamic> json) =>
