@@ -1,3 +1,4 @@
+import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 
@@ -29,6 +30,8 @@ class ValueSlider extends StatelessWidget {
           child: Slider(
             min: 0,
             max: maxCount.toDouble(),
+            activeColor: ColorRes.mainGreen,
+            inactiveColor: ColorRes.lightGreen.withOpacity(0.6),
             value: selectedCount.toDouble(),
             onChanged: (count) => onCountChanged(count.toInt()),
             divisions: maxCount.toInt(),

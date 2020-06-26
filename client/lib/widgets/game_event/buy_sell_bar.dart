@@ -59,8 +59,8 @@ class BuySellBar extends StatelessWidget {
           height: 50,
           decoration: BoxDecoration(
             color: action == selectedAction
-                ? ColorRes.gameEventSelectedTab
-                : ColorRes.gameEventUnselectedTab,
+                ? ColorRes.mainGreen
+                : ColorRes.lightGreen,
           ),
           alignment: Alignment.center,
           child: Row(

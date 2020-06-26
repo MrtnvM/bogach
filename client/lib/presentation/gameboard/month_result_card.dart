@@ -29,7 +29,7 @@ class MonthResultCard extends HookWidget {
     final liabilityChange = calculateChange((r) => r.totalLiabilities);
 
     const green = ColorRes.green;
-    const red = ColorRes.errorRed;
+    const red = ColorRes.red;
 
     final color = (value, shouldReverse) {
       final isValueTooLow = double.parse(value.toStringAsFixed(1)) == 0.0;

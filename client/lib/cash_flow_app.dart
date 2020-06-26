@@ -39,6 +39,7 @@ class CashFlowApp extends HookWidget {
     final theme = Theme.of(context).copyWith(
       scaffoldBackgroundColor: ColorRes.scaffoldBackground,
       accentColor: Colors.white,
+      primaryColor: ColorRes.mainGreen,
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),

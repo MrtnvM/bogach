@@ -28,19 +28,23 @@ class ProgressBar extends HookWidget {
       child: Column(
         children: [
           _ProgressTitle(target: target, currentValue: currentTargetValue),
-          Container(
-            height: 20,
-            child: Stack(
-              children: [
-                _ProgressLine(progress),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    border: Border.all(color: ColorRes.progressBarBorderColor),
+          ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
+            child: Container(
+              height: 20,
+              child: Stack(
+                children: [
+                  _ProgressLine(progress),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      border:
+                          Border.all(color: ColorRes.progressBarBorderColor),
+                    ),
                   ),
-                ),
-                _MaxProgressValue(target.value),
-              ],
+                  _MaxProgressValue(target.value),
+                ],
+              ),
             ),
           ),
         ],
@@ -67,20 +71,14 @@ class _ProgressTitle extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Text(
-            '${mapTargetTypeToString(target.type)}: ',
+            '${mapTargetTypeToString(target.type)}:  ',
             textAlign: TextAlign.left,
-            style: Styles.bodyBlack.copyWith(
-              color: ColorRes.primaryBackgroundColor,
-              fontWeight: FontWeight.bold,
-            ),
+            style: Styles.tableHeaderTitleBlack,
           ),
           Text(
             currentValue.toPrice(),
             textAlign: TextAlign.left,
-            style: Styles.bodyBlack.copyWith(
-              color: ColorRes.newGameBoardPrimaryTextColor,
-              fontWeight: FontWeight.bold,
-            ),
+            style: Styles.tableHeaderTitleBlack,
           ),
         ],
       ),
@@ -99,7 +97,7 @@ class _ProgressLine extends StatelessWidget {
         return Container(
           width: constraints.maxWidth * progress,
           decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
+//            borderRadius: BorderRadius.all(Radius.circular(5)),
             color: ColorRes.primaryYellowColor,
           ),
         );
@@ -119,11 +117,7 @@ class _MaxProgressValue extends StatelessWidget {
       padding: const EdgeInsets.only(right: 16),
       child: Text(
         value.toPrice(),
-        style: const TextStyle(
-          fontSize: 12,
-          fontFamily: 'Montserrat',
-          fontWeight: FontWeight.w700,
-        ),
+        style: Styles.tableHeaderTitleBlack.copyWith(fontSize: 10),
       ),
     );
   }

@@ -22,9 +22,9 @@ class CardContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(40),
-            blurRadius: 2.0,
-            spreadRadius: 2.0,
+            color: Colors.black.withAlpha(15),
+            blurRadius: 3,
+            spreadRadius: 3,
           ),
         ],
       ),

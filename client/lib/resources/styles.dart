@@ -11,8 +11,8 @@ class Styles {
   static const linearGradient = LinearGradient(
     colors: _gradientColors,
     stops: _gradientStops,
-    begin: Alignment(0.4, 0.7),
-    end: Alignment(2.2, 0.4),
+    begin: Alignment(0.4, 0.6),
+    end: Alignment(2.2, 0.2),
   );
 
   static const subhead = TextStyle(
@@ -86,7 +86,7 @@ class Styles {
     fontWeight: FontWeight.w500,
     fontSize: 10,
     height: 1.6,
-    color: ColorRes.errorRed,
+    color: ColorRes.red,
   );
 
   static const navBarTitle = TextStyle(
@@ -140,14 +140,13 @@ class Styles {
     fontSize: 15,
     fontWeight: FontWeight.w700,
   );
-  
-   static const tableHeaderValueBlack = TextStyle(
+
+  static const tableHeaderValueBlack = TextStyle(
     fontFamily: _defaultFontFamily,
     color: ColorRes.mainBlack,
     fontSize: 15,
     fontWeight: FontWeight.w700,
   );
-  
 
   static TextStyle bottomNavBarButtonTitle({bool isSelected = false}) {
     return TextStyle(

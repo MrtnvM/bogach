@@ -1,3 +1,4 @@
+import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.uikit.dart';
 import 'package:cash_flow/widgets/game_event/buy_sell_bar.uikit.dart';
 import 'package:cash_flow/widgets/game_event/monthly_income.uikit.dart';
 import 'package:cash_flow/widgets/game_event/price_calculator.uikit.dart';
@@ -13,6 +14,7 @@ void configureUiKit() {
         PriceCalculatorBuilder(),
         ValueSliderBuilder(),
         MonthlyIncomeWidgetBuilder(),
+        ActionBarBuilder(),
       ]),
     ],
   );

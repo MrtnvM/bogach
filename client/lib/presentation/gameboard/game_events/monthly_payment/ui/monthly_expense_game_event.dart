@@ -26,6 +26,7 @@ class MonthlyExpenseEvent extends HookWidget {
       children: <Widget>[
         InfoTable(
           title: event.name,
+          withShadow: false,
           description: event.description,
           rows: <Widget>[
             TitleRow(

@@ -35,7 +35,7 @@ class PriceCalculator extends StatelessWidget {
                 TextSpan(
                   text: (currentPrice * count.toDouble()).toPrice(),
                   style: Styles.body2.copyWith(
-                    color: ColorRes.orange,
+                    color: ColorRes.mainGreen,
                     fontSize: 15,
                   ),
                 ),

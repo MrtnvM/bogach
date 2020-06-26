@@ -48,7 +48,7 @@ class _InputFieldState extends State<InputField> {
       decoration: InputDecoration(
         isDense: true,
         suffix: validationResult?.isNotEmpty == true
-            ? Icon(Icons.error, color: ColorRes.errorRed, size: 14)
+            ? Icon(Icons.error, color: ColorRes.red, size: 14)
             : null,
         contentPadding: const EdgeInsets.symmetric(vertical: 9),
         labelText: _hasValue() || _hasFocus()
@@ -62,7 +62,7 @@ class _InputFieldState extends State<InputField> {
         enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: ColorRes.gallery.withAlpha(128))),
         errorBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: ColorRes.errorRed)),
+            borderSide: BorderSide(color: ColorRes.red)),
       ),
       textInputAction: widget.props.textInputAction,
       validator: (value) {
@@ -100,7 +100,7 @@ class _InputFieldState extends State<InputField> {
     final hasFocus = widget.props.focusNode?.hasFocus == true;
 
     if (hasError && hasValue && !hasFocus) {
-      return Styles.caption.copyWith(color: ColorRes.errorRed);
+      return Styles.caption.copyWith(color: ColorRes.red);
     } else {
       return Styles.caption.copyWith(color: ColorRes.gallery);
     }

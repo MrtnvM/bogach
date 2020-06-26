@@ -67,7 +67,7 @@ class PropertyGameEventState extends State<PropertyGameEvent> {
           )),
           TextSpan(
               text: widget.viewModel.marketPrice.toPrice(),
-              style: Styles.body2.copyWith(color: ColorRes.blue)),
+              style: Styles.body2.copyWith(color: ColorRes.mainGreen)),
         ],
       ),
     );
