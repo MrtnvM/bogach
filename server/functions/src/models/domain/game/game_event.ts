@@ -32,18 +32,6 @@ export namespace GameEventEntity {
     return newGameEvent;
   };
 
-  export const parse = (eventData: any): GameEvent => {
-    const { id, name, description, type } = eventData;
-    let gameEvent: GameEvent = { id, name, description, type, data: {} };
-
-    gameEvent = Entity.parse(gameEvent, eventData, gameEvent.type, [
-      [DebenturePriceChangedEvent.Type, DebenturePriceChangedEvent.parse],
-    ]);
-
-    validate(gameEvent);
-    return gameEvent;
-  };
-
   export const validate = (gameEvent: any) => {
     const entity = Entity.createEntityValidator<GameEvent>(gameEvent, 'Game Event');
 

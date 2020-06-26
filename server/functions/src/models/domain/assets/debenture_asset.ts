@@ -11,12 +11,6 @@ export interface DebentureAsset extends Asset {
 }
 
 export namespace DebentureAssetEntity {
-  export const parse = (asset: Asset, data: any): DebentureAsset => {
-    const { averagePrice, nominal, profitabilityPercent, count } = data;
-
-    return { ...asset, averagePrice, nominal, profitabilityPercent, count };
-  };
-
   export const validate = (asset: any) => {
     const entity = Entity.createEntityValidator<DebentureAsset>(asset, 'Debenture Asset');
 

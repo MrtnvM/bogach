@@ -10,12 +10,6 @@ export interface StockAsset extends Asset {
 }
 
 export namespace StockAssetEntity {
-  export const parse = (asset: Asset, data: any): StockAsset => {
-    const { currentPrice, fairPrice, averagePrice, countInPortfolio, maxCount } = data;
-
-    return { ...currentPrice, fairPrice, averagePrice, countInPortfolio, maxCount };
-  };
-
   export const validate = (asset: any) => {
     const entity = Entity.createEntityValidator<StockAsset>(asset, 'Stock Asset');
 

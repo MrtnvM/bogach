@@ -20,20 +20,6 @@ export namespace DebenturePriceChangedEvent {
     readonly count: number;
   }
 
-  export const parse = (gameEvent: GameEvent, eventData: any): Event => {
-    const { currentPrice, nominal, profitabilityPercent, availableCount } = eventData.data;
-
-    return {
-      ...gameEvent,
-      data: {
-        currentPrice,
-        nominal,
-        profitabilityPercent,
-        availableCount,
-      },
-    };
-  };
-
   export const validate = (event: any) => {
     if (event?.type !== Type) {
       throw new Error('ERROR: Event type is not equal to ' + Type);

@@ -13,12 +13,6 @@ export namespace InsuranceAssetEntity {
   export type InsuranceType = 'health' | 'property';
   export const TypeValues = ['health', 'property'];
 
-  export const parse = (asset: Asset, data: any): InsuranceAsset => {
-    const { cost, value, duration, fromMonth, insuranceType } = data;
-
-    return { ...asset, cost, value, duration, fromMonth, insuranceType };
-  };
-
   export const validate = (asset: any) => {
     const entity = Entity.createEntityValidator<InsuranceAsset>(asset, 'Insurance Asset');
 

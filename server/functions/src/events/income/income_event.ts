@@ -12,17 +12,6 @@ export namespace IncomeEvent {
 
   export type PlayerAction = {};
 
-  export const parse = (gameEvent: GameEvent, eventData: any): Event => {
-    const { income } = eventData.data;
-
-    return {
-      ...gameEvent,
-      data: {
-        income,
-      },
-    };
-  };
-
   export const validate = (event: any) => {
     if (event?.type !== Type) {
       throw new Error('ERROR: Event type is not equal to ' + Type);

@@ -19,19 +19,6 @@ export namespace StockPriceChangedEvent {
     readonly count: number;
   }
 
-  export const parse = (gameEvent: GameEvent, eventData: any): Event => {
-    const { currentPrice, fairPrice, availableCount } = eventData.data;
-
-    return {
-      ...gameEvent,
-      data: {
-        currentPrice,
-        fairPrice,
-        availableCount,
-      },
-    };
-  };
-
   export const validate = (event: any) => {
     if (event?.type !== Type) {
       throw new Error('ERROR: Event type is not equal to ' + Type);

@@ -10,15 +10,6 @@ export interface Account {
 export namespace AccountEntity {
   export type Id = string;
 
-  export const parse = (data: any): Account => {
-    const { id, balance, credit, cashFlow } = data;
-    const account: Account = { id, cash: balance, credit, cashFlow };
-
-    validate(account);
-
-    return account;
-  };
-
   export const validate = (asset: any) => {
     const entity = Entity.createEntityValidator<Account>(asset, 'Account');
 

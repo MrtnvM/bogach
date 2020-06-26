@@ -15,14 +15,6 @@ export namespace LiabilityEntity {
   export type Type = 'mortgage' | 'business_credit' | 'other';
   export const TypeValues: Type[] = ['mortgage', 'business_credit', 'other'];
 
-  export const parse = (data: any): Liability => {
-    const { id, name, type, monthlyPayment, value } = data;
-    const liability: Liability = { id, name, type, monthlyPayment, value };
-
-    validate(liability);
-    return liability;
-  };
-
   export const validate = (liability: any) => {
     const entity = Entity.createEntityValidator<Liability>(liability, 'Liability');
 

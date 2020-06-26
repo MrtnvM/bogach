@@ -13,27 +13,6 @@ export interface BusinessAsset extends Asset {
 }
 
 export namespace BusinessAssetEntity {
-  export const parse = (asset: Asset, data: any): BusinessAsset => {
-    const {
-      buyPrice,
-      downPayment,
-      fairPrice,
-      passiveIncomePerMonth,
-      payback,
-      sellProbability,
-    } = data;
-
-    return {
-      ...asset,
-      buyPrice,
-      downPayment,
-      fairPrice,
-      passiveIncomePerMonth,
-      payback,
-      sellProbability,
-    };
-  };
-
   export const validate = (asset: any) => {
     const entity = Entity.createEntityValidator<BusinessAsset>(asset, 'Business Asset');
 

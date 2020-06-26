@@ -29,20 +29,6 @@ export namespace AssetEntity {
     'other',
   ];
 
-  export const parse = (data: any): Asset => {
-    const { id, name, type } = data;
-    let asset: Asset = { id, name, type };
-
-    const assetType: Type = asset.type;
-    asset = Entity.parse<Type>(asset, data, assetType, [['debenture', DebentureAssetEntity.parse]]);
-
-    // TODO add support for other types in another task
-
-    validate(asset);
-
-    return asset;
-  };
-
   export const validate = (asset: any) => {
     const entity = Entity.createEntityValidator<Asset>(asset, 'Asset');
 
