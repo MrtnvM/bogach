@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/navigation_bar.dart';
@@ -46,20 +44,21 @@ class ContainerWithHeaderImage extends HookWidget {
       return isSent;
     });
 
-    final opacity = useState(1.0);
+    final topAlign = useState(-1.0);
+
+    final notchSize = useNotchSize();
+    final imageHeight = _getBackgroundImageSize(notchSize.top);
+    final contentOffset = imageHeight - 24;
+    final scrollOffset = imageHeight * 1.55;
 
     useEffect(() {
       final listener = () {
-        return opacity.value = 1 - scrollController.offset / 50;
+        return topAlign.value = -1 - scrollController.offset / scrollOffset;
       };
 
       scrollController?.addListener(listener);
       return () => scrollController?.removeListener(listener);
     }, []);
-
-    final notchSize = useNotchSize();
-    final imageHeight = _getBackgroundImageSize(notchSize.top);
-    final contentOffset = imageHeight - 24;
 
     final shouldDisplayLoader = isSendingTurnEvent || isStartingNewMonth;
 
@@ -67,10 +66,11 @@ class ContainerWithHeaderImage extends HookWidget {
       children: <Widget>[
         _buildHeader(
           imageHeight: imageHeight,
-          opacity: opacity.value,
+          topAlign: topAlign.value,
           topPadding: notchSize.top,
         ),
         ListView(
+          physics: const ClampingScrollPhysics(),
           controller: scrollController,
           padding: EdgeInsets.only(top: contentOffset, bottom: 16),
           children: children,
@@ -86,28 +86,53 @@ class ContainerWithHeaderImage extends HookWidget {
   Widget _buildHeader({
     double imageHeight,
     double topPadding,
-    double opacity,
+    double topAlign,
   }) {
-    return Stack(
-      children: <Widget>[
-        Container(
-          height: imageHeight,
-          width: double.infinity,
-          child: const Image(
-            image: AssetImage(Images.headerGreenBackground),
-            fit: BoxFit.fill,
+    return Align(
+      alignment: Alignment(0, topAlign),
+      child: Stack(
+        children: <Widget>[
+          Container(
+            height: imageHeight,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: Styles.linearGradient,
+            ),
+            child: _buildHeaderBackground(),
           ),
-        ),
-        Opacity(
-          opacity: max(min(opacity, 1), 0),
-          child: Container(
+          Container(
             height: imageHeight,
             padding: EdgeInsets.only(top: topPadding),
             child: Center(
               child: _buildHeaderContent(),
             ),
           ),
-        )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeaderBackground() {
+    return Stack(
+      children: <Widget>[
+        Align(
+          alignment: Alignment.topRight,
+          child: Image(
+            image: AssetImage(Images.bgCircleRight),
+            fit: BoxFit.contain,
+            width: 93,
+            height: 87,
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: Image(
+            image: AssetImage(Images.bgCircleLeft),
+            fit: BoxFit.contain,
+            width: 119,
+            height: 81,
+          ),
+        ),
       ],
     );
   }

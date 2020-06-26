@@ -37,7 +37,7 @@ class DebentureGameEvent extends HookWidget {
 
     final selectorViewModel = SelectorViewModel(
       currentPrice: eventData.currentPrice.toDouble(),
-      passiveIncomePerMonth: eventData.profitabilityPercent,
+      passiveIncomePerMonth: eventData.profitabilityPercent.toInt(),
       alreadyHave: alreadyHave,
       maxCount: eventData.availableCount,
       changeableType: true,
@@ -48,6 +48,7 @@ class DebentureGameEvent extends HookWidget {
       children: <Widget>[
         InfoTable(
           title: Strings.investments,
+          withShadow: false,
           rows: <Widget>[
             for (final item in infoTableData.entries)
               TitleRow(title: item.key, value: item.value)

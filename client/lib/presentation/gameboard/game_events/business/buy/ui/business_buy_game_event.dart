@@ -31,6 +31,7 @@ class BusinessBuyGameEvent extends HookWidget {
       children: <Widget>[
         InfoTable(
           title: Strings.business,
+          withShadow: false,
           rows: <Widget>[
             for (final item in infoTableData.entries)
               TitleRow(title: item.key, value: item.value)

@@ -86,7 +86,7 @@ class GameEventValueSelector extends StatelessWidget {
                 text: title,
                 style: Styles.body1.copyWith(
                   decoration: TextDecoration.underline,
-                  color: ColorRes.blue,
+                  color: ColorRes.mainGreen,
                 ),
               ),
             ],
@@ -114,10 +114,10 @@ class GameEventValueSelector extends StatelessWidget {
                 text: Strings.available,
                 style: Styles.body1.copyWith(
                   decoration: TextDecoration.underline,
-                  color: ColorRes.blue,
+                  color: ColorRes.black64,
                 ),
               ),
-              const WidgetSpan(child: SizedBox(width: 4)),
+              const WidgetSpan(child: SizedBox(width: 8)),
               TextSpan(
                 text: availableCount.toStringAsFixed(0),
                 style: Styles.bodyBlack,
