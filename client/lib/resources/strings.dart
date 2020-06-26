@@ -90,7 +90,7 @@ class Strings {
   static const cash = 'Наличные';
   static const count = 'Количество';
   static const sum = 'Сумма';
-  static const stock = 'Акции/Фонды';
+  static const stock = 'Акции';
   static const income = 'Непредвиденный доход';
   static const expense = 'Непредвиденный убыток';
   static const monthlyExpenseEvent = 'Новое событие';
