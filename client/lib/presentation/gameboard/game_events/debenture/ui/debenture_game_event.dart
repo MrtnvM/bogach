@@ -37,7 +37,7 @@ class DebentureGameEvent extends HookWidget {
 
     final selectorViewModel = SelectorViewModel(
       currentPrice: eventData.currentPrice.toDouble(),
-      passiveIncomePerMonth: eventData.profitabilityPercent,
+      passiveIncomePerMonth: eventData.profitabilityPercent.toInt(),
       alreadyHave: alreadyHave,
       maxCount: eventData.availableCount,
       changeableType: true,

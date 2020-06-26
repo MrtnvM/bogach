@@ -373,8 +373,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.0.16"
-      resolved-ref: da4d777d14631ab9cadb4c7223ee3fb02856e383
+      ref: "v0.0.17"
+      resolved-ref: f9a5820a3fb7d269f2e6d6b7b7e75d83e2593e79
       url: "git://github.com/Cash-Flow-Team/flutter-platform-loadable"
     source: git
     version: "0.0.15"

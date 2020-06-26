@@ -18,6 +18,7 @@ export interface Game {
   readonly accounts: ParticipantGameState<Account>;
   readonly target: GameTarget;
   readonly currentEvents: GameEvent[];
+  readonly history: GameEntity.History;
 
   readonly config: GameEntity.Config;
   readonly createdAt?: Date;
@@ -26,10 +27,11 @@ export interface Game {
 
 export namespace GameEntity {
   export type Id = string;
-
   export type Type = 'singleplayer' | 'multiplayer';
-  export type Status = 'players_move' | 'game_over';
   export type GameEventIndex = number;
+
+  export type Status = 'players_move' | 'game_over';
+  const GameStatusValues = ['players_move', 'game_over'];
 
   export type MonthResult = {
     readonly cash: number;
@@ -54,47 +56,12 @@ export namespace GameEntity {
     readonly winners: { [place: number]: UserEntity.Id };
   };
 
-  const GameStateValues = ['players_move', 'game_over'];
+  export type History = {
+    months: { events: GameEvent[] }[];
+  };
 
   export type Config = {
     readonly stocks: string[];
-  };
-
-  export const parse = (data: any): Game => {
-    const {
-      id,
-      name,
-      type,
-      state,
-      participants,
-      possessions,
-      possessionState,
-      accounts,
-      target,
-      currentEvents,
-      config,
-      createdAt,
-      updatedAt,
-    } = data;
-
-    const game: Game = {
-      id,
-      name,
-      type,
-      state,
-      participants,
-      possessions,
-      possessionState,
-      accounts,
-      target,
-      currentEvents,
-      config,
-      createdAt,
-      updatedAt,
-    };
-
-    validate(game);
-    return game;
   };
 
   export const validate = (game: any) => {
@@ -119,7 +86,7 @@ export namespace GameEntity {
 
     const stateEntity = Entity.createEntityValidator<State>(gameEntity.state, 'Game State');
 
-    stateEntity.checkUnion('gameStatus', GameStateValues);
+    stateEntity.checkUnion('gameStatus', GameStatusValues);
     stateEntity.hasNumberValue('monthNumber');
     stateEntity.hasValuesForKeys('participantProgress', gameEntity.participants);
   };

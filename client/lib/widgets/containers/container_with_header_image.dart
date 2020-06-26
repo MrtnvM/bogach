@@ -70,6 +70,7 @@ class ContainerWithHeaderImage extends HookWidget {
           topPadding: notchSize.top,
         ),
         ListView(
+          physics: const ClampingScrollPhysics(),
           controller: scrollController,
           padding: EdgeInsets.only(top: contentOffset, bottom: 16),
           children: children,
@@ -105,7 +106,7 @@ class ContainerWithHeaderImage extends HookWidget {
             child: Center(
               child: _buildHeaderContent(),
             ),
-          )
+          ),
         ],
       ),
     );

@@ -64,9 +64,8 @@ export class GameProvider {
       accounts: participantsGameState(template.accountState),
       target: template.target,
       currentEvents: [],
-      config: {
-        stocks: [],
-      },
+      history: { months: [] },
+      config: { stocks: [] },
     };
 
     game = applyGameTransformers(game, [
