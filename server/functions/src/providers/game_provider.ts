@@ -16,6 +16,7 @@ import {
   PossessionStateTransformer,
   MonthResultTransformer,
   StocksInitializerGameTransformer,
+  DebentureInitializerGameTransformer,
 } from '../transformers/game_transformers';
 
 export class GameProvider {
@@ -65,11 +66,12 @@ export class GameProvider {
       target: template.target,
       currentEvents: [],
       history: { months: [] },
-      config: { stocks: [] },
+      config: { stocks: [], debentures: [] },
     };
 
     game = applyGameTransformers(game, [
       new StocksInitializerGameTransformer(),
+      new DebentureInitializerGameTransformer(),
       new GameEventsTransformer(true),
       new PossessionStateTransformer(),
       new MonthResultTransformer(0),

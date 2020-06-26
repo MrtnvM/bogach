@@ -9,7 +9,7 @@ export class DebentureGenerateRule extends Rule<DebenturePriceChangedEvent.Event
   }
 
   generate(game: Game) {
-    return DebenturePriceChangedEventGenerator.generate();
+    return DebenturePriceChangedEventGenerator.generate(game);
   }
 
   getMinDistanceBetweenEvents(): number {
