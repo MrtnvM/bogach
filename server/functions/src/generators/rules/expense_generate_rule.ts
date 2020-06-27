@@ -9,7 +9,7 @@ export class ExpenseGenerateRule extends Rule<ExpenseEvent.Event> {
   }
 
   generate(game: Game) {
-    return ExpenseEventGenerator.generate();
+    return ExpenseEventGenerator.generate(game);
   }
 
   getMinDistanceBetweenEvents(): number {
