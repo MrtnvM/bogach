@@ -7,12 +7,6 @@ export interface OtherAsset extends Asset {
 }
 
 export namespace OtherAssetEntity {
-  export const parse = (asset: Asset, data: any): OtherAsset => {
-    const { downPayment, value } = data;
-
-    return { ...asset, downPayment, value };
-  };
-
   export const validate = (asset: any) => {
     const entity = Entity.createEntityValidator<OtherAsset>(asset, 'Other Asset');
 
@@ -20,8 +14,8 @@ export namespace OtherAssetEntity {
     entity.hasNumberValue('value');
 
     entity.checkWithRules([
-      [a => a.downPayment <= 0, "Down payment can't be <= 0"],
-      [a => a.value <= 0, "Value can't be <= 0"]
+      [(a) => a.downPayment <= 0, "Down payment can't be <= 0"],
+      [(a) => a.value <= 0, "Value can't be <= 0"],
     ]);
   };
 }

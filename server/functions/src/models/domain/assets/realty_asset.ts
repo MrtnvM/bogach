@@ -10,12 +10,6 @@ export interface RealtyAsset extends Asset {
 }
 
 export namespace RealtyAssetEntity {
-  export const parse = (asset: Asset, data: any): RealtyAsset => {
-    const { downPayment, cost, passiveIncomePerMonth } = data;
-
-    return { ...asset, downPayment, cost, passiveIncomePerMonth };
-  };
-
   export const validate = (asset: any) => {
     const entity = Entity.createEntityValidator<RealtyAsset>(asset, 'Debenture Asset');
 

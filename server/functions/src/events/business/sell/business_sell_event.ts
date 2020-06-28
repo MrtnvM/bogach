@@ -17,18 +17,6 @@ export namespace BusinessSellEvent {
     readonly action: BuySellAction;
   }
 
-  export const parse = (gameEvent: GameEvent, eventData: any): Event => {
-    const { businessId, currentPrice } = eventData.data;
-
-    return {
-      ...gameEvent,
-      data: {
-        businessId,
-        currentPrice,
-      },
-    };
-  };
-
   export const validate = (event: any) => {
     if (event?.type !== Type) {
       throw new Error('ERROR: Event type is not equal to ' + Type);

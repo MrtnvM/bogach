@@ -1,76 +1,50 @@
 import * as uuid from 'uuid';
-import { ExpenseEvent } from './expense_event';
 import * as random from 'random';
-import { InsuranceAssetEntity } from '../../models/domain/assets/insurance_asset';
+
+import { ExpenseEvent } from './expense_event';
+import { Game, GameEntity } from '../../models/domain/game/game';
+import { ExpenseGeneratorConfig } from './expense_generator_config';
+import { randomValueFromRange } from '../../core/data/value_range';
 
 export namespace ExpenseEventGenerator {
-  interface ExpenseEventInfo {
-    readonly name;
-    readonly description;
-    readonly insuranceType: InsuranceAssetEntity.InsuranceType | null;
-  }
+  export const generate = (game: Game): ExpenseEvent.Event | undefined => {
+    const pastExpenseEvents = GameEntity.getPastEventsOfType<ExpenseEvent.Event>({
+      game,
+      type: ExpenseEvent.Type,
+      maxHistoryLength: 12,
+    });
 
-  export const generate = (): ExpenseEvent.Event => {
-    const expense = 1000;
-    const eventCanBeCoveredByInsurance = canBeCoveredByInsurance();
-    let expenseEventInfo;
-    if (eventCanBeCoveredByInsurance) {
-      expenseEventInfo = generateExpenseInfoWithInsurance();
-    } else {
-      expenseEventInfo = generateExpenseInfoWithoutInsurance();
+    const alreadyHappendEvents = {};
+    pastExpenseEvents.forEach((e) => (alreadyHappendEvents[e.name + e.description] = true));
+
+    let filtredExpenseEvents = ExpenseGeneratorConfig.allExpenses.filter(
+      (e) => !alreadyHappendEvents[e.name + e.description]
+    );
+
+    const lastEvent = pastExpenseEvents[0];
+    if (lastEvent) {
+      filtredExpenseEvents = filtredExpenseEvents.filter(
+        (e) => e.insuranceType === lastEvent.data.insuranceType
+      );
     }
+
+    if (filtredExpenseEvents.length === 0) {
+      return undefined;
+    }
+
+    const eventIndex = random.int(0, filtredExpenseEvents.length - 1);
+    const eventInfo = filtredExpenseEvents[eventIndex];
+    const expense = randomValueFromRange(eventInfo.range);
 
     return {
       id: uuid.v4(),
-      name: expenseEventInfo.name,
-      description: expenseEventInfo.description,
+      name: eventInfo.name,
+      description: eventInfo.description,
       type: ExpenseEvent.Type,
       data: {
         expense,
-        insuranceType: expenseEventInfo.insuranceType,
+        insuranceType: eventInfo.insuranceType,
       },
     };
-  };
-
-  const canBeCoveredByInsurance = (): boolean => {
-    const randomInt = random.int(0, 100);
-    return randomInt >= 50;
-  };
-
-  const generateExpenseInfoWithoutInsurance = (): ExpenseEventInfo => {
-    const expenseTypeInfo: ExpenseEventInfo = {
-      name: 'Неожиданно потеряли деньги',
-      description: 'Что-то произошло',
-      insuranceType: null,
-    };
-    return expenseTypeInfo;
-  };
-
-  const generateExpenseInfoWithInsurance = (): ExpenseEventInfo => {
-    const randomInt = random.int(0, 100);
-
-    if (randomInt > 50) {
-      return generateHealthExpenseInfo();
-    } else {
-      return generatePropertyExpenseInfo();
-    }
-  };
-
-  const generateHealthExpenseInfo = (): ExpenseEventInfo => {
-    const expenseTypeInfo: ExpenseEventInfo = {
-      name: 'Проблемы со здоровьем',
-      description: 'Вы посетили больницу',
-      insuranceType: 'health',
-    };
-    return expenseTypeInfo;
-  };
-
-  const generatePropertyExpenseInfo = (): ExpenseEventInfo => {
-    const expenseTypeInfo: ExpenseEventInfo = {
-      name: 'Проблемы с имуществом',
-      description: 'Срочно нужны деньги на новый холодильник',
-      insuranceType: 'property',
-    };
-    return expenseTypeInfo;
   };
 }

@@ -9,15 +9,6 @@ export interface Expense {
 export namespace ExpenseEntity {
   export type Id = string;
 
-  export const parse = (data: any): Expense => {
-    const { id, name, value, type } = data;
-    const expense = { id, name, value, type };
-
-    validate(expense);
-
-    return expense;
-  };
-
   export const validate = (expense: any) => {
     const entity = Entity.createEntityValidator<Expense>(expense, 'Expense');
 

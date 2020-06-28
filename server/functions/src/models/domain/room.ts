@@ -23,14 +23,6 @@ export namespace RoomEntity {
     deviceToken: string | null;
   };
 
-  export const parse = (data: any): Room => {
-    const { id, gameTemplateId, owner, participants, gameId } = data;
-    const room: Room = { id, gameTemplateId, owner, participants, gameId };
-
-    validate(room);
-    return room;
-  };
-
   export const validate = (room: any) => {
     const entity = Entity.createEntityValidator<Room>(room, 'Room');
 

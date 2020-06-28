@@ -3,7 +3,7 @@ import { Game } from '../models/domain/game/game';
 
 export abstract class Rule<T extends GameEvent = GameEvent> {
   abstract getProbabilityLevel(): number;
-  abstract generate(game: Game): T;
+  abstract generate(game: Game): T | undefined;
   abstract getMinDistanceBetweenEvents(): number;
   abstract getType(): string;
 

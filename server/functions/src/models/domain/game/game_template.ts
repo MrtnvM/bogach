@@ -15,22 +15,6 @@ export interface GameTemplate {
 export namespace GameTemplateEntity {
   export type Id = string;
 
-  export const parse = (data: any): GameTemplate => {
-    const { id, name, icon, possessions, accountState, target } = data;
-
-    const gameTemplate: GameTemplate = {
-      id,
-      name,
-      icon,
-      possessions,
-      accountState,
-      target,
-    };
-
-    validate(gameTemplate);
-    return gameTemplate;
-  };
-
   export const validate = (gameTemplate: any) => {
     const entity = Entity.createEntityValidator<GameTemplate>(gameTemplate, 'Game Template');
 
