@@ -91,4 +91,21 @@ export namespace GameEntity {
     stateEntity.hasNumberValue('monthNumber');
     stateEntity.hasValuesForKeys('participantProgress', gameEntity.participants);
   };
+
+  export const getPastEventsOfType = <T extends GameEvent>(props: {
+    game: Game;
+    type: string;
+    maxHistoryLength: number;
+  }): T[] => {
+    const { game, type, maxHistoryLength } = props;
+    const historyLength = Math.min(game.history.months.length, maxHistoryLength);
+    const history = game.history.months.slice(-historyLength);
+
+    const pastEvents = history
+      .map((month) => month.events.filter((e) => e.type === type))
+      .reduce((allEvents, monthEvents) => [...monthEvents.reverse(), ...allEvents], [])
+      .map((e) => e as T);
+
+    return pastEvents;
+  };
 }

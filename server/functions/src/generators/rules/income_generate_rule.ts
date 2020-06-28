@@ -9,7 +9,7 @@ export class IncomeGenerateRule extends Rule<IncomeEvent.Event> {
   }
 
   generate(game: Game) {
-    return IncomeEventGenerator.generate();
+    return IncomeEventGenerator.generate(game);
   }
 
   getMinDistanceBetweenEvents(): number {

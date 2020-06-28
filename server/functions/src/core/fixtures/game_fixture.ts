@@ -74,8 +74,8 @@ export namespace GameFixture {
       accounts,
       target: game?.target || { type: 'cash', value: 1_000_000 },
       currentEvents: game?.currentEvents || [],
-      history: { months: [] },
-      config: { stocks: [], debentures: [] },
+      history: game?.history || { months: [] },
+      config: game?.config || { stocks: [], debentures: [] },
     };
 
     newGame = applyGameTransformers(newGame, [
