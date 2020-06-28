@@ -2,6 +2,7 @@ import { InsuranceEvent } from './insurance_event';
 import uuid = require('uuid');
 import * as random from 'random';
 import { InsuranceAssetEntity } from '../../models/domain/assets/insurance_asset';
+import { randomValueFromRange } from '../../core/data/value_range';
 
 export namespace InsuranceEventGenerator {
   export const generate = (): InsuranceEvent.Event => {
@@ -10,8 +11,18 @@ export namespace InsuranceEventGenerator {
     const insuranceType = generateInsuranceType();
     const insuranceDescription = getInsuranceDescription(insuranceType);
     const duration = 12;
-    const value = random.int(800, 6000);
-    const cost = random.int(300, 3000);
+
+    const cost = randomValueFromRange({
+      min: 2000,
+      max: 5000,
+      stepValue: 1000,
+    });
+
+    const value = randomValueFromRange({
+      min: cost + 2000,
+      max: cost + 10000,
+      stepValue: 1000,
+    });
 
     return {
       id,
