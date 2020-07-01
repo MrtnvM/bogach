@@ -157,10 +157,12 @@ export namespace AssetEntity {
 
       case 'realty':
         const realty = asset as RealtyAsset;
-        return realty.cost;
+        // TODO может здесь нужна справедливая цена? как правильно посчитать актив?
+        return realty.buyPrice;
 
       case 'business':
         const business = asset as BusinessAsset;
+        // TODO может здесь нужна справедливая цена? как правильно посчитать актив?
         return business.buyPrice;
 
       case 'cash':
