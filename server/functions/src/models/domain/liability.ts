@@ -12,8 +12,8 @@ export interface Liability {
 export namespace LiabilityEntity {
   export type Id = string;
 
-  export type Type = 'mortgage' | 'business_credit' | 'other';
-  export const TypeValues: Type[] = ['mortgage', 'business_credit', 'other'];
+  export type Type = 'mortgage' | 'business_credit' | 'other' | 'real_estate_credit';
+  export const TypeValues: Type[] = ['mortgage', 'business_credit', 'other', 'real_estate_credit'];
 
   export const validate = (liability: any) => {
     const entity = Entity.createEntityValidator<Liability>(liability, 'Liability');
@@ -39,5 +39,9 @@ export namespace LiabilityEntity {
 
   export const getBusinessCredits = (liabilities: Liability[]) => {
     return filterAssets<Liability>(liabilities, 'business_credit');
+  };
+
+  export const getRealEstatesCredits = (liabilities: Liability[]) => {
+    return filterAssets<Liability>(liabilities, 'real_estate_credit');
   };
 }
