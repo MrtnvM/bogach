@@ -69,11 +69,12 @@ const createBuyRealEstateEvent = (data: BuyRealEstateEvent.Data) => {
     data: data,
   };
 
+  BuyRealEstateEvent.validate(event);
+
   return event;
 };
 
 const createBuyRealEstateAction = (eventId: GameEventEntity.Id) => {
-  BuyRealEstateEvent.validate(event);
   const action: BuyRealEstateEvent.PlayerAction = {
     eventId,
   };

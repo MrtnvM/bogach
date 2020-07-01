@@ -48,7 +48,7 @@ describe('Realty buy event event handler', () => {
 
     const newLiability: Liability = {
       id: 'randomId',
-      name: 'Торговая точка',
+      name: 'Гараж',
       type: LiabilityEntity.TypeValues[3],
       monthlyPayment: 0,
       value: 85_000,
@@ -112,7 +112,7 @@ describe('Realty buy event event handler', () => {
     const handler = new RealEstateBuyEventHandler();
 
     const newRealEstateAssetData: BuyRealEstateEvent.Data = {
-      realEstateId: 'existingRealtyLiabilityId',
+      realEstateId: 'randomId',
       currentPrice: 120_000,
       fairPrice: 30_000,
       downPayment: 20_000,

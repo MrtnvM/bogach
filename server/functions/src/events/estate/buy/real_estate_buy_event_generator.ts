@@ -1,9 +1,9 @@
-import { BuyRealEstateEvent } from './real_estate_event';
-import { Game, GameEntity } from '../../models/domain/game/game';
-import { BuyRealEstateGeneratorConfig } from './real_estate_generator_config';
+import { BuyRealEstateEvent } from './real_estate_buy_event';
+import { Game, GameEntity } from '../../../models/domain/game/game';
+import { BuyRealEstateGeneratorConfig } from './real_estate_buy_generator_config';
 import uuid = require('uuid');
 import * as random from 'random';
-import { randomValueFromRange } from '../../core/data/value_range';
+import { randomValueFromRange } from '../../../core/data/value_range';
 
 export namespace BuyRealEstateEventGenerator {
   export const generate = (game: Game): BuyRealEstateEvent.Event | undefined => {
@@ -17,13 +17,13 @@ export namespace BuyRealEstateEventGenerator {
     pastBuyRealEstateEvents.forEach((e) => (alreadyHappenedEvents[e.name] = true));
 
     let filtredBuyRealEstateEvents = BuyRealEstateGeneratorConfig.allRealEstates.filter(
-      (e) => !alreadyHappenedEvents[e.name]
+      (e) => !alreadyHappenedEvents[e.eventName]
     );
 
     const lastEvent = pastBuyRealEstateEvents[0];
     if (lastEvent) {
       filtredBuyRealEstateEvents = filtredBuyRealEstateEvents.filter(
-        (e) => e.name === lastEvent.name
+        (e) => e.eventName === lastEvent.name
       );
     }
 
@@ -33,7 +33,7 @@ export namespace BuyRealEstateEventGenerator {
 
     const eventIndex = random.int(0, filtredBuyRealEstateEvents.length - 1);
     const eventInfo = filtredBuyRealEstateEvents[eventIndex];
-    
+
     const currentPrice = randomValueFromRange(eventInfo.price);
     const fairPrice = randomValueFromRange(eventInfo.fairPrice);
 
@@ -50,18 +50,19 @@ export namespace BuyRealEstateEventGenerator {
 
     return {
       id: uuid.v4(),
-      name: eventInfo.name,
+      name: eventInfo.eventName,
       type: BuyRealEstateEvent.Type,
-      description: "",
+      description: '',
       data: {
         realEstateId: uuid.v4(),
-        price: currentPrice,
+        currentPrice: currentPrice,
         fairPrice: fairPrice,
         downPayment: downPayment,
         debt: debt,
         passiveIncomePerMonth: passiveIncomePerMonth,
         payback: payback,
         sellProbability: sellProbability,
+        assetName: eventInfo.assetName,
       },
     };
   };
