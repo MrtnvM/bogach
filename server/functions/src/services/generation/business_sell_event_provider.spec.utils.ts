@@ -1,11 +1,7 @@
 import { BusinessAsset } from '../../models/domain/assets/business_asset';
 import { GameEntity, Game } from '../../models/domain/game/game';
 import { UserEntity } from '../../models/domain/user';
-import { RealtyAsset } from '../../models/domain/assets/realty_asset';
-import { StockAsset } from '../../models/domain/assets/stock_asset';
 import { InsuranceAsset } from '../../models/domain/assets/insurance_asset';
-import { CashAsset } from '../../models/domain/assets/cash_asset';
-import { OtherAsset } from '../../models/domain/assets/other_asset';
 import { Possessions } from '../../models/domain/possessions';
 import { BusinessSellEvent } from '../../events/business/sell/business_sell_event';
 import { GameFixture } from '../../core/fixtures/game_fixture';
@@ -80,46 +76,6 @@ const initialPossesssions: Possessions = {
     business1,
     business2,
     business3,
-    create<StockAsset>({
-      id: 'stocks1',
-      name: 'Яндекс',
-      type: 'stock',
-      averagePrice: 1000,
-      countInPortfolio: 10,
-      fairPrice: 900,
-    }),
-    create<RealtyAsset>({
-      id: 'realty1',
-      name: 'Квартира',
-      type: 'realty',
-      cost: 2000000,
-      downPayment: 1000000,
-      passiveIncomePerMonth: 14_000,
-    }),
-    create<BusinessAsset>({
-      id: 'business2',
-      name: 'Птицеферма',
-      type: 'business',
-      buyPrice: 130_000,
-      downPayment: 15_000,
-      fairPrice: 135_000,
-      passiveIncomePerMonth: 2500,
-      payback: 22,
-      sellProbability: 0,
-    }),
-    create<OtherAsset>({
-      id: 'other_asset1',
-      name: 'Биткойны',
-      type: 'other',
-      value: 30000,
-      downPayment: 30000,
-    }),
-    create<CashAsset>({
-      id: 'cash1',
-      type: 'cash',
-      value: 500,
-      name: 'Наличные',
-    }),
   ],
   liabilities: [],
 };
