@@ -48,6 +48,7 @@ BusinessesToSellData useBusinessToSellData(GameEvent event) {
         Strings.passiveIncomePerMonth:
             businessToSell.passiveIncomePerMonth.toPrice(),
         Strings.roi: businessToSell.payback.toPercent(),
+        Strings.sellProbability: eventData.sellProbability.toPercent(),
       };
 
       return BusinessToSellTableData(

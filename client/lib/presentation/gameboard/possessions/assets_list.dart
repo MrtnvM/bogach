@@ -112,7 +112,7 @@ class AssetsList extends HookWidget {
           title: Strings.property,
           value: totalRealties.toPrice(),
           details: realties
-              .map((i) => '${i.name}; ${Strings.cost} - ${i.cost}')
+              .map((i) => '${i.name}; ${Strings.cost} - ${i.downPayment}')
               .toList(),
         ),
         DetailRow(
