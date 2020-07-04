@@ -351,12 +351,21 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.0"
+  flutter_launcher_icons:
+    dependency: "direct dev"
+    description:
+      path: "."
+      ref: flavors
+      resolved-ref: "7a8ea42e129733a3d3e23a4e8f3304fdfe807d51"
+      url: "git://github.com/fluttercommunity/flutter_launcher_icons"
+    source: git
+    version: "0.7.2+1"
   flutter_platform_control_panel:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.0.10"
-      resolved-ref: "0e002247ae63739b24fa85f4f537ff226ffc5b0b"
+      ref: "v0.0.15"
+      resolved-ref: d7c12a3296124cfbe44264fc5e3e9813aa50fe69
       url: "git://github.com/Cash-Flow-Team/flutter-platform-control-panel"
     source: git
     version: "0.0.2"
@@ -557,7 +566,7 @@ packages:
       name: logger
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.3"
+    version: "0.9.1"
   logging:
     dependency: transitive
     description:

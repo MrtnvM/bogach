@@ -60,7 +60,7 @@ dependencies:
   flutter_platform_control_panel:
     git:
       url: git://github.com/Cash-Flow-Team/flutter-platform-control-panel
-      ref: v0.0.10
+      ref: v0.0.15
 
   flutter_platform_loadable:
     git:
@@ -76,6 +76,10 @@ dependencies:
 
 dev_dependencies:
   effective_dart: ^1.2.1
+  flutter_launcher_icons:
+    git:
+      url: git://github.com/fluttercommunity/flutter_launcher_icons
+      ref: flavors
 
   flutter_test:
     sdk: flutter

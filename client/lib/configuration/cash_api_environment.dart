@@ -1,0 +1,38 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter_platform_network/flutter_platform_network.dart';
+
+class CashApiEnvironment extends ApiEnvironment {
+  const CashApiEnvironment({
+    @required String baseUrl,
+    bool validateRequestsByDefault = true,
+    bool isRequestsAuthorisedByDefault = false,
+  }) : super(
+          baseUrl: baseUrl,
+          validateRequestsByDefaut: validateRequestsByDefault,
+          isRequestsAuthorisedByDefault: isRequestsAuthorisedByDefault,
+        );
+
+  static const development = CashApiEnvironment(
+    baseUrl: 'http://localhost:5001/cash-flow-staging/europe-west2/',
+    validateRequestsByDefault: false,
+    isRequestsAuthorisedByDefault: false,
+  );
+
+  static const staging = CashApiEnvironment(
+    baseUrl: 'https://europe-west2-cash-flow-staging.cloudfunctions.net/',
+    validateRequestsByDefault: false,
+    isRequestsAuthorisedByDefault: false,
+  );
+
+  static const uat = CashApiEnvironment(
+    baseUrl: 'https://europe-west2-cash-flow-uat.cloudfunctions.net/',
+    validateRequestsByDefault: false,
+    isRequestsAuthorisedByDefault: false,
+  );
+
+  static const production = CashApiEnvironment(
+    baseUrl: '',
+    validateRequestsByDefault: false,
+    isRequestsAuthorisedByDefault: false,
+  );
+}

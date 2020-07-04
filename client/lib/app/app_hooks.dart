@@ -59,7 +59,7 @@ void useDynamicLinkHandler() {
   useDynamicLinkSubscription((dynamicLink) {
     final link = dynamicLink.link;
 
-    logger.i('APP CAPTURE DYNAMIC LINK:\n$link');
+    Logger.i('APP CAPTURE DYNAMIC LINK:\n$link');
 
     if (link == null) {
       return;
@@ -82,7 +82,7 @@ void useDeepLinkHandler() {
   useEffect(() {
     // ignore: avoid_types_on_closure_parameters
     final onDeepLink = (String deepLink) {
-      logger.i('APP CAPTURE DEEP LINK:\n$deepLink');
+      Logger.i('APP CAPTURE DEEP LINK:\n$deepLink');
 
       if (deepLink == null) {
         return;
@@ -101,7 +101,7 @@ void useDeepLinkHandler() {
     };
 
     final onDeepLinkError = (error) {
-      logger.e('ERROR ON HANDLING DEEP LINK:\n$error');
+      Logger.e('ERROR ON HANDLING DEEP LINK:\n$error');
     };
 
     getInitialLink().then(onDeepLink).catchError(onDeepLinkError);
@@ -134,7 +134,7 @@ _AppActions useAppActions() {
             appRouter.goTo(RoomPage());
           }).catchError((error) {
             failedJoiningToRoomAlert(error, joinRoom);
-            logger.e('ERROR ON JOINING TO ROOM ($roomId):\n$error');
+            Logger.e('ERROR ON JOINING TO ROOM ($roomId):\n$error');
           });
         };
 

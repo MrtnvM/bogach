@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:alice/alice.dart';
 import 'package:cash_flow/app/store/store.dart';
+import 'package:cash_flow/app_configuration.dart';
 import 'package:cash_flow/cash_flow_app.dart';
 import 'package:cash_flow/configuration/api_client.dart';
+import 'package:cash_flow/configuration/cash_api_environment.dart';
 import 'package:cash_flow/configuration/control_panel.dart';
 import 'package:cash_flow/configuration/error_reporting.dart';
 import 'package:cash_flow/configuration/firestore.dart';
@@ -22,16 +24,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'features/login/login_actions.dart';
 
-Future<void> main() async {
+Future<void> main({
+  @required CashApiEnvironment environment,
+}) async {
+  AppConfiguration.init(environment: environment);
   WidgetsFlutterBinding.ensureInitialized();
 
   final tokenStorage = TokenStorage();
   final alice = Alice(navigatorKey: appRouter.navigatorKey);
   final sharedPreferences = await SharedPreferences.getInstance();
-  const environment = stagingEnvironment;
   final apiClient = configureApiClient(alice, environment);
 
-  if (environment == developmentEnvironment) {
+  if (environment == CashApiEnvironment.development) {
     await configureFirestoreLocalEnvironment();
   }
 

@@ -133,7 +133,7 @@ Epic<AppState> multiplayerEpic({
           .map<Action>(
               (profiles) => OnLoadedParticipantProfilesAction(profiles))
           .onErrorReturnWith((error) {
-        logger.e('PARTICIPANT PROFILES LOADING FAILED\n$error');
+        Logger.e('PARTICIPANT PROFILES LOADING FAILED\n$error');
         return OnLoadedParticipantProfilesAction([]);
       });
     });

@@ -52,6 +52,32 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    flavorDimensions "app"
+
+    productFlavors {
+        staging {
+            dimension "app"
+            applicationIdSuffix ".staging"
+            versionNameSuffix "-staging"
+        }
+
+        development {
+            dimension "app"
+            applicationIdSuffix ".development"
+            versionNameSuffix "-development"
+        }
+
+        uat {
+            dimension "app"
+            applicationIdSuffix ".uat"
+            versionNameSuffix "-uat"
+        }
+
+        production {
+            dimension "app"
+        }
+    }
 }
 
 flutter {
