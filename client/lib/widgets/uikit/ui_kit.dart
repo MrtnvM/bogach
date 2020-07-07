@@ -8,7 +8,6 @@ import 'package:cash_flow/presentation/gameboard/game_events/insurance/models/in
 import 'package:cash_flow/presentation/gameboard/game_events/insurance/ui/insurance_game_event.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/containers/indicators_table.dart';
-import 'package:cash_flow/widgets/events/property_game_event.dart';
 import 'package:cash_flow/widgets/events/sale_business_game_event.dart';
 import 'package:cash_flow/widgets/events/windfall_income_game_event.dart';
 import 'package:cash_flow/widgets/inputs/drop_focus.dart';
@@ -118,18 +117,6 @@ class UiKit extends StatelessWidget {
   Widget _getGameEvents(BuildContext context) {
     return Column(
       children: <Widget>[
-        const PropertyGameEvent(
-          PropertyViewModel(
-            name: 'киоск',
-            price: 83000,
-            marketPrice: 100000,
-            downPayment: 16500,
-            debt: 66500,
-            passiveIncomePerMonth: -100,
-            roi: -7.3,
-            saleRate: 14,
-          ),
-        ),
         DebentureGameEvent(
           event: GameEvent(
             id: 'event1',

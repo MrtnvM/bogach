@@ -4,7 +4,7 @@ import { UserEntity } from '../../../models/domain/user';
 import { Possessions } from '../../../models/domain/possessions';
 import { GameEventEntity } from '../../../models/domain/game/game_event';
 import { GameFixture } from '../../../core/fixtures/game_fixture';
-import { BuyRealEstateEvent } from './real_estate_buy_event';
+import { RealEstateBuyEvent } from './real_estate_buy_event';
 import { Liability } from '../../../models/domain/liability';
 
 const create = <T>(obj: T) => obj;
@@ -60,22 +60,22 @@ export const stubs = {
   game,
 };
 
-const createBuyRealEstateEvent = (data: BuyRealEstateEvent.Data) => {
-  const event: BuyRealEstateEvent.Event = {
+const createBuyRealEstateEvent = (data: RealEstateBuyEvent.Data) => {
+  const event: RealEstateBuyEvent.Event = {
     id: eventId,
     name: 'Купить недвижимость',
     description: '',
-    type: BuyRealEstateEvent.Type,
+    type: RealEstateBuyEvent.Type,
     data: data,
   };
 
-  BuyRealEstateEvent.validate(event);
+  RealEstateBuyEvent.validate(event);
 
   return event;
 };
 
 const createBuyRealEstateAction = (eventId: GameEventEntity.Id) => {
-  const action: BuyRealEstateEvent.PlayerAction = {
+  const action: RealEstateBuyEvent.PlayerAction = {
     eventId,
   };
 

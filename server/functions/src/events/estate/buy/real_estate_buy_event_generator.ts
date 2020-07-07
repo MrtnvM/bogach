@@ -1,4 +1,4 @@
-import { BuyRealEstateEvent } from './real_estate_buy_event';
+import { RealEstateBuyEvent } from './real_estate_buy_event';
 import { Game, GameEntity } from '../../../models/domain/game/game';
 import { BuyRealEstateGeneratorConfig } from './real_estate_buy_generator_config';
 import uuid = require('uuid');
@@ -6,10 +6,10 @@ import * as random from 'random';
 import { randomValueFromRange } from '../../../core/data/value_range';
 
 export namespace BuyRealEstateEventGenerator {
-  export const generate = (game: Game): BuyRealEstateEvent.Event | undefined => {
-    const pastBuyRealEstateEvents = GameEntity.getPastEventsOfType<BuyRealEstateEvent.Event>({
+  export const generate = (game: Game): RealEstateBuyEvent.Event | undefined => {
+    const pastBuyRealEstateEvents = GameEntity.getPastEventsOfType<RealEstateBuyEvent.Event>({
       game,
-      type: BuyRealEstateEvent.Type,
+      type: RealEstateBuyEvent.Type,
       maxHistoryLength: 6,
     });
 
@@ -51,7 +51,7 @@ export namespace BuyRealEstateEventGenerator {
     return {
       id: uuid.v4(),
       name: eventInfo.eventName,
-      type: BuyRealEstateEvent.Type,
+      type: RealEstateBuyEvent.Type,
       description: '',
       data: {
         realEstateId: uuid.v4(),

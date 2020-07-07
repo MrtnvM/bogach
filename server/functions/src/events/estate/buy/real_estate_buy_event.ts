@@ -1,8 +1,8 @@
 import { GameEvent, GameEventEntity } from '../../../models/domain/game/game_event';
 import { Entity } from '../../../core/domain/entity';
 
-export namespace BuyRealEstateEvent {
-  export const Type: GameEventEntity.Type = 'buy-real-estate-event';
+export namespace RealEstateBuyEvent {
+  export const Type: GameEventEntity.Type = 'real-estate-buy-event';
 
   export type Event = GameEvent<Data>;
 

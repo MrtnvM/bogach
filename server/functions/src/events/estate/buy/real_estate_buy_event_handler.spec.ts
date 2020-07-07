@@ -6,7 +6,7 @@ import { Liability, LiabilityEntity } from '../../../models/domain/liability';
 import { utils, stubs } from './real_estate_buy_event_handler.spec.utils';
 import { RealEstateBuyEventHandler } from './real_estate_buy_event_handler';
 import { RealtyAsset } from '../../../models/domain/assets/realty_asset';
-import { BuyRealEstateEvent } from './real_estate_buy_event';
+import { RealEstateBuyEvent } from './real_estate_buy_event';
 
 describe('Realty buy event event handler', () => {
   const { eventId, userId, initialCash, game } = stubs;
@@ -88,7 +88,7 @@ describe('Realty buy event event handler', () => {
   test('Cant buy two the same realties if liability present', async () => {
     const handler = new RealEstateBuyEventHandler();
 
-    const newRealEstateAssetData: BuyRealEstateEvent.Data = {
+    const newRealEstateAssetData: RealEstateBuyEvent.Data = {
       realEstateId: 'existingRealtyLiabilityId',
       currentPrice: 120_000,
       fairPrice: 30_000,
@@ -111,7 +111,7 @@ describe('Realty buy event event handler', () => {
   test('Can not buy new real estate if not enough money', async () => {
     const handler = new RealEstateBuyEventHandler();
 
-    const newRealEstateAssetData: BuyRealEstateEvent.Data = {
+    const newRealEstateAssetData: RealEstateBuyEvent.Data = {
       realEstateId: 'randomId',
       currentPrice: 120_000,
       fairPrice: 30_000,

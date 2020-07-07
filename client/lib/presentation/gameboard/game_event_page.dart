@@ -6,6 +6,7 @@ import 'package:cash_flow/presentation/gameboard/game_events/expense/ui/expense_
 import 'package:cash_flow/presentation/gameboard/game_events/income/ui/income_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/insurance/ui/insurance_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/monthly_payment/ui/monthly_expense_game_event.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/real_estate/ui/real_estate_buy_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/ui/stock_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/month_result_card.dart';
 import 'package:cash_flow/presentation/gameboard/waiting_players_card.dart';
@@ -44,6 +45,7 @@ class GameEventPage extends HookWidget {
       expense: (_) => ExpenseGameEvent(event),
       monthlyExpense: (_) => MonthlyExpenseEvent(event),
       insurance: (_) => InsuranceGameEvent(event),
+      realEstateBuy: (_) => RealEstateBuyGameEvent(event),
     );
   }
 
