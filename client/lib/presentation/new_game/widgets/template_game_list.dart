@@ -44,7 +44,7 @@ class TemplateGameList extends HookWidget {
           createGameRequestState.isInProgress;
     return Loadable(
       isLoading: isLoading,
-      backgroundColor: ColorRes.mainGreen,
+      backgroundColor: ColorRes.mainGreen.withOpacity(0.8),
       child: LoadableList<GameTemplate>(
         viewModel: LoadableListViewModel(
           items: gameTemplates,
