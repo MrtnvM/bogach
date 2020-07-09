@@ -35,8 +35,8 @@ class CreateMultiplayerGamePage extends HookWidget {
           .createRoom()
           .then((_) => appRouter.goTo(RoomPage()))
           .catchError((error) {
-        logger.e('ERROR: On room creation with template ID: ${template.id}');
-        logger.e(error);
+        Logger.e('ERROR: On room creation with template ID: ${template.id}');
+        Logger.e(error);
 
         // TODO(Maxim): Show detailed error
         handleError(context: context, exception: error);

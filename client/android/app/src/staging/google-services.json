@@ -1,0 +1,115 @@
+{
+  "project_info": {
+    "project_number": "911577434143",
+    "firebase_url": "https://cash-flow-staging.firebaseio.com",
+    "project_id": "cash-flow-staging",
+    "storage_bucket": "cash-flow-staging.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911577434143:android:26621e58220481b40dad2a",
+        "android_client_info": {
+          "package_name": "io.mobile.cashflow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911577434143-87ofepur7sl5tf8lktluo8uuk0lrrgp2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.cashflow",
+            "certificate_hash": "4f299763be9fcacd21ebb298d484bb4c2b93dbcc"
+          }
+        },
+        {
+          "client_id": "911577434143-pdf2kct00hdvd3t371gvoq31r8kuq9gu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.cashflow",
+            "certificate_hash": "63ae35bd8770114f8205500832afa829ac7b9274"
+          }
+        },
+        {
+          "client_id": "911577434143-hn87nrf7ppk7rsrp1d51qri56uudjlj2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.cashflow",
+            "certificate_hash": "d098e6d7c627dcb522eb44c1af9370838787f580"
+          }
+        },
+        {
+          "client_id": "911577434143-o4397bbkqa56q9onrvou5ivhfnlk91jc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.cashflow",
+            "certificate_hash": "4a5fe41854dadf8fbeee517b21bdcb5eca6be32d"
+          }
+        },
+        {
+          "client_id": "911577434143-brb7qtirn8f8up0e7med6998925aiach.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp0pF4Qn4p3C9HX2V8SJNiD7Nc2ckX5CY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911577434143-brb7qtirn8f8up0e7med6998925aiach.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911577434143-oaotur9dmsek2ckagj3n6iiskm6ldo42.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.mobile.cashflow"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911577434143:android:9157c8ba1d17e64a0dad2a",
+        "android_client_info": {
+          "package_name": "io.mobile.cashflow.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911577434143-brb7qtirn8f8up0e7med6998925aiach.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp0pF4Qn4p3C9HX2V8SJNiD7Nc2ckX5CY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911577434143-brb7qtirn8f8up0e7med6998925aiach.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911577434143-oaotur9dmsek2ckagj3n6iiskm6ldo42.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.mobile.cashflow"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -130,7 +130,7 @@ class GameService {
       ),
     );
 
-    logger.d(parameters);
+    Logger.d(parameters);
 
     // final shortLink = await parameters.buildShortLink();
     // final dynamicLink = shortLink.shortUrl.toString();

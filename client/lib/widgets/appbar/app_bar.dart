@@ -1,3 +1,4 @@
+import 'package:cash_flow/app_configuration.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
@@ -58,6 +59,7 @@ class CashAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return ControlPanelGate(
+      isEnabled: AppConfiguration.controlPanelEnabled,
       child: AppBar(
         backgroundColor: backgroundColor,
         title: title,

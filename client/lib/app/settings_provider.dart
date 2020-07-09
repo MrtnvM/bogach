@@ -1,7 +1,6 @@
 import 'package:alice/alice.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:cash_flow/widgets/settings/device_preview_setting_provider.dart';
 import 'package:cash_flow/widgets/settings/logout_setting.dart';
 import 'package:cash_flow/widgets/uikit/ui_kit_setting.dart';
 import 'package:flutter/foundation.dart';
