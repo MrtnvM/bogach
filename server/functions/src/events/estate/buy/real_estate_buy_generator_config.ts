@@ -23,7 +23,26 @@ export namespace BuyRealEstateGeneratorConfig {
     },
   ];
 
-  export const allRealEstates: BuyRealEstateInfo[] = [
-    ...garageEstate,
+  export const flatEstate: BuyRealEstateInfo[] = [
+    {
+      eventName: 'Продаётся квартира',
+      assetName: '1-комн. Квартира',
+      price: { min: 900_000, max: 1_300_000, stepValue: 10_000 },
+      fairPrice: { min: 1_000_000, max: 1_100_000, stepValue: 10_000 },
+      downPayment: { min: 100_000, max: 250_000, stepValue: 1000 },
+      passiveIncomePerMonth: { min: -8000, max: 8000, stepValue: 100 },
+      sellProbability: { min: 10, max: 17, stepValue: 1 },
+    },
+    {
+      eventName: 'Продаётся квартира',
+      assetName: '2-комн. Квартира',
+      price: { min: 1_200_000, max: 1_600_000, stepValue: 10_000 },
+      fairPrice: { min: 1_400_000, max: 1_500_000, stepValue: 10_000 },
+      downPayment: { min: 150_000, max: 300_000, stepValue: 1000 },
+      passiveIncomePerMonth: { min: -10_000, max: 10_000, stepValue: 100 },
+      sellProbability: { min: 10, max: 17, stepValue: 1 },
+    },
   ];
+
+  export const allRealEstates: BuyRealEstateInfo[] = [...garageEstate, ...flatEstate];
 }

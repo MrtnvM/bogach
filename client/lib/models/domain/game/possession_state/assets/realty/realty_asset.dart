@@ -10,8 +10,13 @@ abstract class RealtyAsset with _$RealtyAsset implements Asset {
   factory RealtyAsset({
     @required String name,
     @required AssetType type,
+    @required double buyPrice,
     @required double downPayment,
-    @required double cost,
+    @required double fairPrice,
+    @required double passiveIncomePerMonth,
+    @required double payback,
+    @required double sellProbability,
+    @required String id,
   }) = _RealtyAsset;
 
   factory RealtyAsset.fromJson(Map<String, dynamic> json) =>

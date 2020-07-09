@@ -5,11 +5,11 @@ import { PlayerActionHandler } from '../../../core/domain/player_action_handler'
 import { Game } from '../../../models/domain/game/game';
 import { Account } from '../../../models/domain/account';
 import { UserEntity } from '../../../models/domain/user';
-import { BuyRealEstateEvent } from './real_estate_buy_event';
+import { RealEstateBuyEvent } from './real_estate_buy_event';
 import { RealtyAsset } from '../../../models/domain/assets/realty_asset';
 
-type Event = BuyRealEstateEvent.Event;
-type Action = BuyRealEstateEvent.PlayerAction;
+type Event = RealEstateBuyEvent.Event;
+type Action = RealEstateBuyEvent.PlayerAction;
 
 interface ActionResult {
   readonly newAccountBalance: number;
@@ -37,13 +37,13 @@ interface ActionBuyParameters {
 export class RealEstateBuyEventHandler extends PlayerActionHandler {
 
   get gameEventType(): string {
-    return BuyRealEstateEvent.Type;
+    return RealEstateBuyEvent.Type;
   }
 
   async validate(event: any, action: any): Promise<boolean> {
     try {
-      BuyRealEstateEvent.validate(event);
-      BuyRealEstateEvent.validateAction(action);
+      RealEstateBuyEvent.validate(event);
+      RealEstateBuyEvent.validateAction(action);
     } catch (error) {
       console.error(error);
       return false;

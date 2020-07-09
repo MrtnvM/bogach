@@ -25,6 +25,7 @@ import { UserEntity } from '../models/domain/user';
 import { GameTemplateEntity } from '../models/domain/game/game_template';
 import { InsuranceTransformer } from '../transformers/game/insurance_transformer';
 import { ResetEventIndexTransformer } from '../transformers/game/reset_event_index_transformer';
+import { RealEstateBuyEventHandler } from '../events/estate/buy/real_estate_buy_event_handler';
 
 export class GameService {
   constructor(private gameProvider: GameProvider) {
@@ -42,6 +43,7 @@ export class GameService {
     new ExpenseHandler(),
     new MonthlyExpenseEventHandler(),
     new InsuranceHandler(),
+    new RealEstateBuyEventHandler(),
   ];
 
   private handlerMap: { [type: string]: PlayerActionHandler } = {};

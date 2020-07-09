@@ -13,8 +13,12 @@ import 'package:flutter_platform_loadable/flutter_platform_loadable.dart';
 class TemplateGameList extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final requestState = useGlobalState(
+    final templatesRequestState = useGlobalState(
       (s) => s.newGame.getGameTemplatesRequestState,
+    );
+
+    final createGameRequestState = useGlobalState(
+      (s) => s.newGame.createNewGameRequestState,
     );
 
     final gameTemplates = useGlobalState((s) => s.newGame.gameTemplates);
@@ -36,9 +40,11 @@ class TemplateGameList extends HookWidget {
       );
     };
 
+    final isLoading = templatesRequestState.isInProgress ||
+          createGameRequestState.isInProgress;
     return Loadable(
-      isLoading: requestState.isInProgress,
-      backgroundColor: ColorRes.mainGreen,
+      isLoading: isLoading,
+      backgroundColor: ColorRes.mainGreen.withOpacity(0.8),
       child: LoadableList<GameTemplate>(
         viewModel: LoadableListViewModel(
           items: gameTemplates,
@@ -46,7 +52,7 @@ class TemplateGameList extends HookWidget {
             gameTemplate: gameTemplates.items[i],
             onTemplateSelected: createNewGame,
           ),
-          loadListRequestState: requestState,
+          loadListRequestState: templatesRequestState,
           loadList: gameActions.loadGameTemplates,
           padding: const EdgeInsets.all(16),
         ),
