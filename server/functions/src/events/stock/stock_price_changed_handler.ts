@@ -53,7 +53,7 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     const stockName = event.name;
 
     const theSameStock = stockAssets.find((d) => {
-      return d.name === stockName && d.fairPrice === fairPrice;
+      return d.name === stockName;
     });
 
     const countInPortfolio = theSameStock?.countInPortfolio || 0;
@@ -73,12 +73,9 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     };
     const actionResult = this.applyAction(actionParameters, stockAction);
 
-    let newAssets: Asset[];
-    if (theSameStock) {
-      newAssets = this.updateAssets(actionResult, theSameStock, assets);
-    } else {
-      newAssets = this.addNewItemToAssets(actionResult, assets, fairPrice, stockName);
-    }
+    const newAssets = theSameStock
+      ? this.updateAssets(actionResult, theSameStock, assets)
+      : this.addNewItemToAssets(actionResult, assets, fairPrice, stockName);
 
     const updatedGame: Game = produce(game, (draft) => {
       draft.accounts[userId].cash = actionResult.newAccountBalance;
@@ -91,11 +88,13 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
   applyAction(actionParameters: ActionParameters, action: BuySellAction) {
     if (action === 'buy') {
       return this.applyBuyAction(actionParameters);
-    } else if (action === 'sell') {
-      return this.applySellAction(actionParameters);
-    } else {
-      throw new Error('Unknown action with stocks');
     }
+
+    if (action === 'sell') {
+      return this.applySellAction(actionParameters);
+    }
+
+    throw new Error('Unknown action with stocks');
   }
 
   applyBuyAction(actionParameters: ActionParameters): ActionResult {
