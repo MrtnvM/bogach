@@ -64,7 +64,7 @@ android {
 
         development {
             dimension "app"
-            applicationIdSuffix ".development"
+            applicationIdSuffix ".staging"
             versionNameSuffix "-development"
         }
 
