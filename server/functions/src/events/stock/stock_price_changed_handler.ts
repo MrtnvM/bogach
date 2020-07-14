@@ -168,14 +168,14 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
       countInPortfolio: actionResult.newStockCount,
       averagePrice: actionResult.newAveragePrice,
     };
-    const index = assets.findIndex((d) => d.id === newStock.id);
+    const index = assets.findIndex((d) => d.name === newStock.name);
 
     if (index >= 0) {
       newAssets[index] = newStock;
     }
 
     if (newStock.countInPortfolio === 0) {
-      newAssets = assets.filter((d) => d.id !== newStock.id);
+      newAssets = assets.filter((d) => d.name !== newStock.name);
     }
 
     return newAssets;
