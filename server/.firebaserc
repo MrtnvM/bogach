@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "cash-flow-uat",
+    "default": "cash-flow-staging",
     "uat": "cash-flow-uat",
     "staging": "cash-flow-staging"
   }
