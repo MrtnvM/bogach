@@ -22,4 +22,7 @@ if [ -f "firebase_service_account.json" ]; then
 fi
 
 cp "./environments/$ENV/google_application_credentials.json" "./google_application_credentials.json"
+echo "Changed google_application_credentials to $ENV version"
+
 cp "./environments/$ENV/firebase_service_account.json" "./firebase_service_account.json"
+echo "Changed firebase_service_account to $ENV version"
