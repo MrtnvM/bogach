@@ -59,6 +59,12 @@ class GameService {
 
     final games = gameDocs.documents.map((d) => Game.fromJson(d.data)).toList();
 
+    games.sort((g1, g2) {
+      final date1 = g1.updatedAt?.millisecondsSinceEpoch ?? 0;
+      final date2 = g2.updatedAt?.millisecondsSinceEpoch ?? 0;
+      return date2 - date1;
+    });
+
     return games;
   }
 
