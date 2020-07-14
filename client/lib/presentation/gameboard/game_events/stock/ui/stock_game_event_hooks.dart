@@ -56,14 +56,17 @@ VoidCallback useStockPlayerActionHandler({
 
 StockAsset useCurrentStock(GameEvent event) {
   final userId = useUserId();
-  final currentStock = useCurrentGame((g) {
-    final theSameStock = g.possessionState[userId].assets
+  final stockAssets = useCurrentGame((g) {
+    return g.possessionState[userId].assets
         .where((a) => a.type == AssetType.stock)
         .cast<StockAsset>()
-        .firstWhere((s) => s.name == event.name, orElse: () => null);
-
-    return theSameStock;
+        .toList();
   });
+
+  final currentStock = stockAssets.firstWhere(
+    (s) => s.name == event.name,
+    orElse: () => null,
+  );
 
   return currentStock;
 }
