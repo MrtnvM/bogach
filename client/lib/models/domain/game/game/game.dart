@@ -3,6 +3,8 @@ import 'package:cash_flow/models/domain/game/current_game_state/current_game_sta
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/game/possession_state/possession_state.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -21,7 +23,17 @@ abstract class Game with _$Game implements StoreListItem {
     @required Map<String, Account> accounts,
     @required Target target,
     @required List<GameEvent> currentEvents,
+    @JsonKey(fromJson: _timestampToDate) DateTime createdAt,
+    @JsonKey(fromJson: _timestampToDate) DateTime updatedAt,
   }) = _Game;
 
   factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
+}
+
+DateTime _timestampToDate(dynamic timestamp) {
+  final Timestamp timestampValue = timestamp;
+
+  return DateTime.fromMicrosecondsSinceEpoch(
+    timestampValue.microsecondsSinceEpoch,
+  );
 }

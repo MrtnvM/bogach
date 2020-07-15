@@ -7,9 +7,11 @@ class AppConfiguration {
 
   static CashApiEnvironment get environment => _environment;
 
+  static bool get initializationWasCalled => environment != null;
+
   // ignore: use_setters_to_change_properties
   static void init({@required CashApiEnvironment environment}) {
-    assert(_environment == null, 'Init should be called once!');
+    assert(!initializationWasCalled, 'Init should be called once!');
     assert(environment != null, 'Environment can\'t be null');
     _environment = environment;
   }

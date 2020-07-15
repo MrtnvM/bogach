@@ -73,6 +73,42 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911577434143:android:9157c8ba1d17e64a0dad2a",
+        "android_client_info": {
+          "package_name": "io.mobile.cashflow.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911577434143-brb7qtirn8f8up0e7med6998925aiach.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp0pF4Qn4p3C9HX2V8SJNiD7Nc2ckX5CY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911577434143-brb7qtirn8f8up0e7med6998925aiach.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911577434143-oaotur9dmsek2ckagj3n6iiskm6ldo42.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.mobile.cashflow"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

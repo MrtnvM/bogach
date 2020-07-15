@@ -10,16 +10,32 @@
       "outFiles": ["${workspaceFolder}/server/functions/libs/*.js"]
     },
     {
-      "name": "Flutter",
+      "name": "Flutter - Development",
       "type": "dart",
       "request": "launch",
-      "program": "client/lib/main.dart"
+      "program": "client/lib/main_development.dart",
+      "args": ["--flavor", "development"]
     },
     {
-      "name": "Flutter Attach",
+      "name": "Flutter - Staging",
       "type": "dart",
-      "request": "attach",
-      "program": "client/lib/main.dart"
+      "request": "launch",
+      "program": "client/lib/main_staging.dart",
+      "args": ["--flavor", "staging"]
+    },
+    {
+      "name": "Flutter - UAT",
+      "type": "dart",
+      "request": "launch",
+      "program": "client/lib/main_uat.dart",
+      "args": ["--flavor", "uat"]
+    },
+    {
+      "name": "Flutter - Production",
+      "type": "dart",
+      "request": "launch",
+      "program": "client/lib/main_production.dart",
+      "args": ["--flavor", "production"]
     },
     {
       "type": "node",

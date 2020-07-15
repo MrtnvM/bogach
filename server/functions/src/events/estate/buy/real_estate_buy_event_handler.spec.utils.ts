@@ -74,9 +74,9 @@ const createBuyRealEstateEvent = (data: RealEstateBuyEvent.Data) => {
   return event;
 };
 
-const createBuyRealEstateAction = (eventId: GameEventEntity.Id) => {
+const createBuyRealEstateAction = (actionEventId: GameEventEntity.Id) => {
   const action: RealEstateBuyEvent.PlayerAction = {
-    eventId,
+    eventId: actionEventId,
   };
 
   return action;
