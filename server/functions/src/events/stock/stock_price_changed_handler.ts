@@ -7,6 +7,7 @@ import { StockPriceChangedEvent } from './stock_price_changed_event';
 import { StockAsset } from '../../models/domain/assets/stock_asset';
 import { Account } from '../../models/domain/account';
 import { UserEntity } from '../../models/domain/user';
+import { DomainErrors } from '../../core/exceptions/domain/domain_errors';
 
 type Event = StockPriceChangedEvent.Event;
 type Action = StockPriceChangedEvent.PlayerAction;
@@ -110,12 +111,12 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
 
     const isEnoughMoney = userAccount.cash >= totalPrice;
     if (!isEnoughMoney) {
-      throw new Error('Not enough money');
+      throw DomainErrors.notEnoughCash;
     }
 
     const isEnoughCountAvailable = availableCount >= actionCount;
     if (!isEnoughCountAvailable) {
-      throw new Error('Not enough stocks available');
+      throw DomainErrors.notEnoughStocksOnMarket;
     }
 
     const newStockCount = countInPortfolio + actionCount;
@@ -140,11 +141,11 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
   applySellAction(actionParameters: ActionParameters): ActionResult {
     const isEnoughCountAvailable = actionParameters.availableCount >= actionParameters.actionCount;
     if (!isEnoughCountAvailable) {
-      throw new Error('Not enough stocks available');
+      throw DomainErrors.notEnoughStocksDemandForSell;
     }
 
     if (actionParameters.countInPortfolio < actionParameters.actionCount) {
-      throw new Error('Not enough stocks in portfolio');
+      throw DomainErrors.notEnoughStocksInPortfolio;
     }
 
     const newStockCount = actionParameters.countInPortfolio - actionParameters.actionCount;

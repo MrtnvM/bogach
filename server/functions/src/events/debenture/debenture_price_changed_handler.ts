@@ -7,6 +7,7 @@ import { Game } from '../../models/domain/game/game';
 import { Account } from '../../models/domain/account';
 import produce from 'immer';
 import { UserEntity } from '../../models/domain/user';
+import { DomainErrors } from '../../core/exceptions/domain/domain_errors';
 
 type Event = DebenturePriceChangedEvent.Event;
 type Action = DebenturePriceChangedEvent.PlayerAction;
@@ -103,11 +104,13 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler {
   async applyAction(actionParameters: ActionParameters, action: BuySellAction) {
     if (action === 'buy') {
       return this.applyBuyAction(actionParameters);
-    } else if (action === 'sell') {
-      return this.applySellAction(actionParameters);
-    } else {
-      throw new Error('Unknown action with debentures');
     }
+
+    if (action === 'sell') {
+      return this.applySellAction(actionParameters);
+    }
+
+    throw new Error('Unknown action with debentures');
   }
 
   async applyBuyAction(actionParameters: ActionParameters): Promise<ActionResult> {
@@ -123,12 +126,12 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler {
 
     const isEnoughMoney = userAccount.cash >= totalPrice;
     if (!isEnoughMoney) {
-      throw new Error('Not enough money');
+      throw DomainErrors.notEnoughCash;
     }
 
     const isEnoughCountAvailable = availableCount >= actionCount;
     if (!isEnoughCountAvailable) {
-      throw new Error('Not enough debentures available');
+      throw DomainErrors.notEnoughDebenturesOnMarket;
     }
 
     const newDebentureCount = countInPortfolio + actionCount;
@@ -162,11 +165,11 @@ export class DebenturePriceChangedHandler extends PlayerActionHandler {
 
     const isEnoughCountAvailable = availableCount >= actionCount;
     if (!isEnoughCountAvailable) {
-      throw new Error('Not enough debentures available');
+      throw DomainErrors.notEnoughDebenturesDemandForSell;
     }
 
     if (countInPortfolio < actionCount) {
-      throw new Error('Not enough debentures in portfolio');
+      throw DomainErrors.notEnoughDebenturesInPortfolio;
     }
 
     const newDebentureCount = countInPortfolio - actionCount;
