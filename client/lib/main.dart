@@ -27,8 +27,8 @@ import 'features/login/login_actions.dart';
 Future<void> main({
   @required CashApiEnvironment environment,
 }) async {
-  AppConfiguration.init(environment: environment);
   WidgetsFlutterBinding.ensureInitialized();
+  await AppConfiguration.init(environment: environment);
 
   final tokenStorage = TokenStorage();
   final alice = Alice(navigatorKey: appRouter.navigatorKey);
