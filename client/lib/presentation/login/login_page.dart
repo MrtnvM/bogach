@@ -64,12 +64,14 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
           type: _SocialButtonType.google,
         ),
         const SizedBox(height: 16),
-        _buildSocialMedias(
-          icon: Images.icVk,
-          title: Strings.vk,
-          type: _SocialButtonType.vk,
-        ),
-        const SizedBox(height: 16),
+        // TODO(Maxim): Implement authorisation through VK
+        //
+        // _buildSocialMedias(
+        //   icon: Images.icVk,
+        //   title: Strings.vk,
+        //   type: _SocialButtonType.vk,
+        // ),
+        // const SizedBox(height: 16),
         _buildAppleSignInButton(),
         const SizedBox(height: 16),
       ],
