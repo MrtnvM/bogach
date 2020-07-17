@@ -43,6 +43,7 @@ class CashFlowApiClient extends ApiClient {
   Stream<void> sendPlayerAction(PlayerActionRequestModel playerAction) => post(
         path: 'handleGameEvent',
         body: playerAction.toJson(),
+        validate: false,
         responseMapper: rm.voidResponse,
       );
 

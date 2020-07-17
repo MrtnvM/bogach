@@ -7,6 +7,7 @@ import { Game } from '../../../models/domain/game/game';
 import { Account } from '../../../models/domain/account';
 import { BusinessAsset } from '../../../models/domain/assets/business_asset';
 import { UserEntity } from '../../../models/domain/user';
+import { DomainErrors } from '../../../core/exceptions/domain/domain_errors';
 
 type Event = BusinessBuyEvent.Event;
 type Action = BusinessBuyEvent.PlayerAction;
@@ -140,7 +141,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     const canCredit = false;
     const isEnoughMoney = userAccount.cash >= priceToPay;
     if (!isEnoughMoney && !canCredit) {
-      throw new Error('Not enough money');
+      throw DomainErrors.notEnoughCash;
     }
 
     let newAccountBalance = 0;

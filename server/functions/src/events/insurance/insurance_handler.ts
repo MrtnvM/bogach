@@ -5,6 +5,7 @@ import { Account } from '../../models/domain/account';
 import { UserEntity } from '../../models/domain/user';
 import { Asset } from '../../models/domain/asset';
 import produce from 'immer';
+import { DomainErrors } from '../../core/exceptions/domain/domain_errors';
 
 type Event = InsuranceEvent.Event;
 type Action = InsuranceEvent.PlayerAction;
@@ -86,7 +87,7 @@ export class InsuranceHandler {
     // TODO implement credit and test
     const isEnoughMoney = userAccount.cash >= cost;
     if (!isEnoughMoney) {
-      throw new Error('Not enough money');
+      throw DomainErrors.notEnoughCash;
     }
 
     const newAccountBalance = userAccount.cash - cost;

@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:cash_flow/models/errors/domain_game_error.dart';
 import 'package:cash_flow/models/network/core/response_model.dart';
 import 'package:flutter_platform_network/flutter_platform_network.dart';
 
@@ -15,6 +18,10 @@ T Function(Response) standard<T>(T Function(Map<String, dynamic>) mapper) {
       } else if (isEmptyString) {
         return mapper({});
       }
+    }
+
+    if (isJsonResponse && data['type'] == 'domain') {
+      throw DomainGameError.fromJson(data);
     }
 
     throw ResponseErrorModel(response);
@@ -37,6 +44,10 @@ T Function(Response) jsonArray<T>(T Function(List<dynamic>) mapper) {
       }
     }
 
+    if (isJsonResponse && data['type'] == 'domain') {
+      throw DomainGameError.fromJson(data);
+    }
+
     throw ResponseErrorModel(response);
   };
 }
@@ -44,6 +55,13 @@ T Function(Response) jsonArray<T>(T Function(List<dynamic>) mapper) {
 VoidResponseModel voidResponse(Response response) {
   if ([200, 201, 204].contains(response.statusCode)) {
     return VoidResponseModel();
+  }
+
+  final data = json.decode(response.data);
+  final isJsonResponse = data is Map<String, dynamic>;
+
+  if (isJsonResponse && data['type'] == 'domain') {
+    throw DomainGameError.fromJson(data);
   }
 
   throw ResponseErrorModel(response);
