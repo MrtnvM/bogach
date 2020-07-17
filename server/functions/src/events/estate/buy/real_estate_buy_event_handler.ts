@@ -7,6 +7,7 @@ import { Account } from '../../../models/domain/account';
 import { UserEntity } from '../../../models/domain/user';
 import { RealEstateBuyEvent } from './real_estate_buy_event';
 import { RealtyAsset } from '../../../models/domain/assets/realty_asset';
+import { DomainErrors } from '../../../core/exceptions/domain/domain_errors';
 
 type Event = RealEstateBuyEvent.Event;
 type Action = RealEstateBuyEvent.PlayerAction;
@@ -35,7 +36,6 @@ interface ActionBuyParameters {
 }
 
 export class RealEstateBuyEventHandler extends PlayerActionHandler {
-
   get gameEventType(): string {
     return RealEstateBuyEvent.Type;
   }
@@ -131,7 +131,7 @@ export class RealEstateBuyEventHandler extends PlayerActionHandler {
     const canCredit = false;
     const isEnoughMoney = userAccount.cash >= priceToPay;
     if (!isEnoughMoney && !canCredit) {
-      throw new Error('Not enough money');
+      throw DomainErrors.notEnoughCash;
     }
 
     let newAccountBalance = 0;

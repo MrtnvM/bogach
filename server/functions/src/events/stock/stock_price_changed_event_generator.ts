@@ -41,7 +41,7 @@ const getStockCandles = (stockName: string): Candle[] => {
 };
 
 export namespace StockPriceChangedEventGenerator {
-  export const generate = (game: Game): StockPriceChangedEvent.Event => {
+  export const generate = (game: Game): StockPriceChangedEvent.Event | undefined => {
     const alreadyUsedStocks = game.currentEvents
       .filter((e) => e.type === StockPriceChangedEvent.Type)
       .map((e) => e.name);
@@ -49,6 +49,10 @@ export namespace StockPriceChangedEventGenerator {
     const availableStocks = game.config.stocks.filter((s) =>
       alreadyUsedStocks.every((stock) => stock !== s)
     );
+
+    if (availableStocks.length === 0) {
+      return undefined;
+    }
 
     const stockIndex = random.int(0, availableStocks.length - 1);
     const stockName = availableStocks[stockIndex];

@@ -1,9 +1,12 @@
 import 'dart:ui';
 
+import 'package:cash_flow/models/errors/domain_game_error.dart';
+import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_platform_network/flutter_platform_network.dart';
+import 'package:intl/intl.dart';
 
 void showNotImplementedDialog(BuildContext context) {
   showCashDialog(
@@ -87,6 +90,22 @@ void handleError({
   bool barrierDismissible = true,
   bool displayNegative = true,
 }) {
+  if (exception is DomainGameError) {
+    final scaffold = Scaffold.of(context);
+    final locale = Intl.defaultLocale;
+    final errorMessage = exception.message[locale] ?? Strings.commonError;
+
+    scaffold.showSnackBar(SnackBar(
+      content: Text(errorMessage),
+      action: SnackBarAction(
+        label: Strings.ok,
+        textColor: ColorRes.lightGreen,
+        onPressed: () => null,
+      ),
+    ));
+    return;
+  }
+
   switch (exception.runtimeType) {
     case NetworkConnectionException:
       showErrorDialog(
@@ -97,59 +116,48 @@ void handleError({
         displayNegative: displayNegative,
       );
       break;
+
     case PlatformException:
-      if (exception.code == 'ERROR_NETWORK_REQUEST_FAILED') {
-        showErrorDialog(
-          context: context,
-          message: Strings.noInternetError,
-          onRetry: onRetry,
-          barrierDismissible: barrierDismissible,
-          displayNegative: displayNegative,
-        );
-      } else {
-        showErrorDialog(
-          context: context,
-          onRetry: onRetry,
-          barrierDismissible: barrierDismissible,
-          displayNegative: displayNegative,
-        );
-      }
+      final errorMessage = exception.code == 'ERROR_NETWORK_REQUEST_FAILED'
+          ? Strings.noInternetError
+          : null;
+
+      showErrorDialog(
+        context: context,
+        message: errorMessage,
+        onRetry: onRetry,
+        barrierDismissible: barrierDismissible,
+        displayNegative: displayNegative,
+      );
       break;
 
     default:
-      if (errorMessage?.isNotEmpty == true) {
-        showErrorDialog(
-          context: context,
-          message: errorMessage,
-          onRetry: onRetry,
-          barrierDismissible: barrierDismissible,
-          displayNegative: displayNegative,
-        );
-      } else {
-        showErrorDialog(
-          context: context,
-          onRetry: onRetry,
-          barrierDismissible: barrierDismissible,
-          displayNegative: displayNegative,
-        );
-      }
+      final message = errorMessage?.isNotEmpty == true ? errorMessage : null;
+
+      showErrorDialog(
+        context: context,
+        message: message,
+        onRetry: onRetry,
+        barrierDismissible: barrierDismissible,
+        displayNegative: displayNegative,
+      );
       break;
   }
 }
 
 Future<void> showErrorDialog({
   @required BuildContext context,
-  String title = Strings.warning,
-  String message = Strings.commonError,
+  String title,
+  String message,
   VoidCallback onRetry,
   bool barrierDismissible = true,
   bool displayNegative = true,
 }) async {
   final response = await showCashDialog(
     context: context,
-    title: title,
-    message: message,
-    negativeButton: Strings.cancel,
+    title: title ?? Strings.warning,
+    message: message ?? Strings.commonError,
+    negativeButton: onRetry != null ? Strings.cancel : Strings.ok,
     positiveButton: onRetry != null ? Strings.retry : null,
     displayPositive: onRetry != null,
     displayNegative: displayNegative,
