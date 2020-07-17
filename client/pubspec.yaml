@@ -31,7 +31,7 @@ dependencies:
   firebase_messaging: ^6.0.15
 
   flutter_facebook_login: ^3.0.0
-  google_sign_in: ^4.4.4
+  google_sign_in: ^4.5.1
   apple_sign_in: ^0.1.0
 
   auto_size_text: ^2.1.0
