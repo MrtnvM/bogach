@@ -5,6 +5,7 @@ import produce from 'immer';
 import { stubs, utils } from './stock_price_changed_handler.spec.utils';
 import { StockPriceChangedHandler } from './stock_price_changed_handler';
 import { StockAsset } from '../../models/domain/assets/stock_asset';
+import { DomainErrors } from '../../core/exceptions/domain/domain_errors';
 
 describe('Stock price changed event handler', () => {
   const { eventId, userId, game, stock1, initialCash } = stubs;
@@ -147,7 +148,7 @@ describe('Stock price changed event handler', () => {
       await handler.handle(game, event, action, userId);
       throw new Error('Shoud fail on previous line');
     } catch (error) {
-      expect(error).toStrictEqual(new Error('Not enough stocks in portfolio'));
+      expect(error).toStrictEqual(DomainErrors.notEnoughStocksInPortfolio);
     }
   });
 
@@ -168,7 +169,7 @@ describe('Stock price changed event handler', () => {
       await handler.handle(game, event, action, userId);
       throw new Error('Shoud fail on previous line');
     } catch (error) {
-      expect(error).toStrictEqual(new Error('Not enough stocks available'));
+      expect(error).toStrictEqual(DomainErrors.notEnoughStocksDemandForSell);
     }
   });
 
@@ -189,7 +190,7 @@ describe('Stock price changed event handler', () => {
       await handler.handle(game, event, action, userId);
       throw new Error('Shoud fail on previous line');
     } catch (error) {
-      expect(error).toStrictEqual(new Error('Not enough stocks available'));
+      expect(error).toStrictEqual(DomainErrors.notEnoughStocksOnMarket);
     }
   });
 });

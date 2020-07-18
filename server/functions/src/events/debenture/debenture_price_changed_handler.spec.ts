@@ -5,6 +5,7 @@ import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
 import { DebenturePriceChangedHandler } from './debenture_price_changed_handler';
 import { stubs, utils } from './debenture_price_changed_handler.spec.utils';
 import produce from 'immer';
+import { DomainErrors } from '../../core/exceptions/domain/domain_errors';
 
 describe('Debenture price changed event handler', () => {
   const { eventId, userId, game, debenture1, initialCash } = stubs;
@@ -156,7 +157,7 @@ describe('Debenture price changed event handler', () => {
       await handler.handle(game, event, action, userId);
       throw new Error('Shoud fail on previous line');
     } catch (error) {
-      expect(error).toStrictEqual(new Error('Not enough debentures in portfolio'));
+      expect(error).toStrictEqual(DomainErrors.notEnoughDebenturesInPortfolio);
     }
   });
 
@@ -180,7 +181,7 @@ describe('Debenture price changed event handler', () => {
       await handler.handle(game, event, action, userId);
       throw new Error('Shoud fail on previous line');
     } catch (error) {
-      expect(error).toStrictEqual(new Error('Not enough debentures available'));
+      expect(error).toStrictEqual(DomainErrors.notEnoughDebenturesDemandForSell);
     }
   });
 
@@ -204,7 +205,7 @@ describe('Debenture price changed event handler', () => {
       await handler.handle(game, event, action, userId);
       throw new Error('Shoud fail on previous line');
     } catch (error) {
-      expect(error).toStrictEqual(new Error('Not enough debentures available'));
+      expect(error).toStrictEqual(DomainErrors.notEnoughDebenturesOnMarket);
     }
   });
 });
