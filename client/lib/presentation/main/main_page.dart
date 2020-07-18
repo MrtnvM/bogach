@@ -1,6 +1,7 @@
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/presentation/continue_game/continue_game_page.dart';
+import 'package:cash_flow/presentation/game_levels/game_levels_page.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/presentation/multiplayer/create_multiplayer_game_page.dart';
 import 'package:cash_flow/presentation/new_game/single_game_page.dart';
@@ -40,6 +41,11 @@ class MainPage extends HookWidget {
         ColorButton(
           onPressed: () => appRouter.goTo(SingleGamePage()),
           text: Strings.singleGame,
+        ),
+        const SizedBox(height: 24),
+        ColorButton(
+          onPressed: () => appRouter.goTo(GameLevelsPage()),
+          text: Strings.gameLevels,
         ),
         const SizedBox(height: 24),
         ColorButton(

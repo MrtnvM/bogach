@@ -201,6 +201,7 @@ class Strings {
   // New Game
   static const chooseGame = 'Выберите игру';
   static const singleGame = 'Одиночная игра';
+  static String get gameLevels => 'Квесты';
   static const multiPlayerGame = 'Игра с друзьями';
   static const continueGame = 'Продолжить игру';
   static const chooseLevel = 'Выберите уровень';
