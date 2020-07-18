@@ -9,6 +9,7 @@ abstract class GameLevel with _$GameLevel implements StoreListItem {
   factory GameLevel({
     @required String name,
     @required String icon,
+    @required String gameTemplateId,
   }) = _GameLevel;
 
   factory GameLevel.fromJson(Map<String, dynamic> json) =>

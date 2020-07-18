@@ -47,9 +47,22 @@ Epic<AppState> newGameEpic({@required GameService gameService}) {
         );
   });
 
+  final getGameLevelsEpic = epic((action$, store) {
+    return action$
+        .whereType<GetGameLevelsAsyncAction>()
+        .where((action) => action.isStarted)
+        .flatMap(
+          (action) => gameService
+              .getGameLevels()
+              .map(action.complete)
+              .onErrorReturnWith(action.fail),
+        );
+  });
+
   return combineEpics([
     getGameTemplates,
     createNewGame,
     getUserGamesEpic,
+    getGameLevelsEpic,
   ]);
 }

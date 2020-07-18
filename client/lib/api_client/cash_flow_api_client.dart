@@ -2,6 +2,7 @@ library cash_flow_api;
 
 import 'package:cash_flow/api_client/headers.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
+import 'package:cash_flow/models/domain/game/game_level/game_level.dart';
 import 'package:cash_flow/models/domain/room/room.dart';
 import 'package:cash_flow/models/network/request/game/create_room_request_model.dart';
 import 'package:cash_flow/models/network/responses/game_template_response_model.dart';
@@ -25,6 +26,13 @@ class CashFlowApiClient extends ApiClient {
             .map((item) => GameTemplateResponseModel.fromJson(item))
             .toList()),
         headers: [contentJson],
+      );
+
+  Stream<List<GameLevel>> getGameLevels() => get(
+        path: 'gameLevels',
+        responseMapper: rm.jsonArray(
+          (json) => json.map((item) => GameLevel.fromJson(item)).toList(),
+        ),
       );
 
   Stream<NewGameResponseModel> createNewGame({

@@ -21,6 +21,9 @@ _GameActions useGameActions() {
       loadGameTemplates: () {
         actionRunner.runAction(GetGameTemplatesAsyncAction());
       },
+      loadGameLevels: () {
+        return actionRunner.runAsyncAction(GetGameLevelsAsyncAction());
+      },
       createGame: (templateId) {
         return actionRunner.runAsyncAction(
           CreateNewGameAsyncAction(templateId: templateId),
@@ -55,6 +58,7 @@ _GameActions useGameActions() {
 class _GameActions {
   const _GameActions({
     this.loadGameTemplates,
+    this.loadGameLevels,
     this.createGame,
     this.startGame,
     this.stopGame,
@@ -64,6 +68,7 @@ class _GameActions {
   });
 
   final void Function() loadGameTemplates;
+  final void Function() loadGameLevels;
   final Future<String> Function(String templateId) createGame;
   final void Function(String gameId) startGame;
   final void Function() stopGame;
