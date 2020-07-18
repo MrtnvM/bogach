@@ -3,6 +3,7 @@ import * as config from '../config';
 
 import { GameProvider } from '../providers/game_provider';
 import { GameService } from '../services/game_service';
+import { GameLevelsService } from '../services/game_levels_service';
 import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from '../providers/firestore_selector';
@@ -12,6 +13,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
   const gameProvider = new GameProvider(firestore, selector);
   const gameService = new GameService(gameProvider);
+  const gameLevelsService = new GameLevelsService();
 
   const createGame = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request);
@@ -86,6 +88,12 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     return send(startNewMonthRequest, response);
   });
 
+  const getGameLevels = https.onRequest(async (request, response) => {
+    const gameLevels = Promise.resolve(gameLevelsService.getGameLevels());
+
+    return send(gameLevels, response);
+  });
+
   const send = <T>(data: Promise<T>, response: functions.Response) => {
     return data
       .then((result) => response.status(200).send(result))
@@ -111,5 +119,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     getGameTemplate,
     handleGameEvent,
     startNewMonth,
+    getGameLevels,
   };
 };
