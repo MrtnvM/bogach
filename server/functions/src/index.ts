@@ -27,6 +27,7 @@ export const getAllGameTemplates = GameAPI.getAllGameTemplates;
 export const handleGameEvent = GameAPI.handleGameEvent;
 export const startNewMonth = GameAPI.startNewMonth;
 export const gameLevels = GameAPI.getGameLevels;
+export const createGameByLevel = GameAPI.createGameByLevel;
 
 export const createRoom = RoomAPI.createRoom;
 export const setRoomParticipantReady = RoomAPI.setRoomParticipantReady;

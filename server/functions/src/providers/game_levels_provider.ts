@@ -3,7 +3,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { GameLevel } from '../models/domain/game_levels/game_level';
+import { GameLevel, GameLevelEntity } from '../models/domain/game_levels/game_level';
 import {
   GameLevelConfig,
   GameLevelConfigEntity,
@@ -14,15 +14,15 @@ import {
 } from '../models/domain/game_levels/game_levels_config';
 
 let gameLevelsConfigCache: GameLevelsConfig;
-let gameLevelConfigCache: { [levelId: string]: GameLevelConfig } = {};
+const gameLevelConfigCache: { [levelId: string]: GameLevelConfig } = {};
 
-export class GameLevelsService {
+export class GameLevelsProvider {
   getGameLevels(): GameLevel[] {
     const config = this.getGameLevelsConfig();
     return config.gameLevels;
   }
 
-  getGameLevelConfig(gameLevelId: string): GameLevelConfig {
+  getGameLevelConfig(gameLevelId: GameLevelEntity.Id): GameLevelConfig {
     const cachedGameLevelConfig = gameLevelConfigCache[gameLevelId];
 
     if (cachedGameLevelConfig) {

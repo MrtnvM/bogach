@@ -6,6 +6,7 @@ import { GameProvider } from '../providers/game_provider';
 import { GameService } from './game_service';
 import { GameContext } from '../models/domain/game/game_context';
 import { TestData } from './game_service.spec.utils';
+import { GameLevelsProvider } from '../providers/game_levels_provider';
 
 describe('Game Service - Singleplayer game', () => {
   test('Successfully handle not last game event', async () => {
@@ -15,7 +16,8 @@ describe('Game Service - Singleplayer game', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
 
     const gameProvider = instance(mockGameProvider);
-    const gameService = new GameService(gameProvider);
+    const gameLevelsProvider = instance(mock(GameLevelsProvider));
+    const gameService = new GameService(gameProvider, gameLevelsProvider);
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(firstEventId, firstEventPlayerAction, gameContext);
@@ -49,7 +51,8 @@ describe('Game Service - Singleplayer game', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
 
     const gameProvider = instance(mockGameProvider);
-    const gameService = new GameService(gameProvider);
+    const gameLevelsProvider = instance(mock(GameLevelsProvider));
+    const gameService = new GameService(gameProvider, gameLevelsProvider);
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
@@ -99,7 +102,8 @@ describe('Game Service - Singleplayer game', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
 
     const gameProvider = instance(mockGameProvider);
-    const gameService = new GameService(gameProvider);
+    const gameLevelsProvider = instance(mock(GameLevelsProvider));
+    const gameService = new GameService(gameProvider, gameLevelsProvider);
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
@@ -141,7 +145,8 @@ describe('Game Service - Singleplayer game', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
 
     const gameProvider = instance(mockGameProvider);
-    const gameService = new GameService(gameProvider);
+    const gameLevelsProvider = instance(mock(GameLevelsProvider));
+    const gameService = new GameService(gameProvider, gameLevelsProvider);
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);

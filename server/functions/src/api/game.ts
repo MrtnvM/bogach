@@ -3,7 +3,7 @@ import * as config from '../config';
 
 import { GameProvider } from '../providers/game_provider';
 import { GameService } from '../services/game_service';
-import { GameLevelsService } from '../services/game_levels_service';
+import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from '../providers/firestore_selector';
@@ -12,11 +12,12 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
   const gameProvider = new GameProvider(firestore, selector);
-  const gameService = new GameService(gameProvider);
-  const gameLevelsService = new GameLevelsService();
+  const gameLevelsProvider = new GameLevelsProvider();
+  const gameService = new GameService(gameProvider, gameLevelsProvider);
 
   const createGame = https.onRequest(async (request, response) => {
-    const apiRequest = APIRequest.from(request);
+    const apiRequest = APIRequest.from(request, response);
+    apiRequest.checkMethod('POST');
 
     const templateId = apiRequest.jsonField('templateId');
     const participantsIds = apiRequest.optionalJsonField('participantsIds');
@@ -27,13 +28,17 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   });
 
   const getAllGames = https.onRequest(async (request, response) => {
+    const apiRequest = APIRequest.from(request, response);
+    apiRequest.checkMethod('GET');
+
     const games = gameProvider.getAllGames();
 
     return send(games, response);
   });
 
   const getGame = https.onRequest(async (request, response) => {
-    const apiRequest = APIRequest.from(request);
+    const apiRequest = APIRequest.from(request, response);
+    apiRequest.checkMethod('GET');
 
     const gameId = apiRequest.queryParameter('game_id');
 
@@ -42,12 +47,16 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   });
 
   const getAllGameTemplates = https.onRequest(async (request, response) => {
+    const apiRequest = APIRequest.from(request, response);
+    apiRequest.checkMethod('GET');
+
     const gameTemplates = gameProvider.getAllGameTemplates();
     return send(gameTemplates, response);
   });
 
   const getGameTemplate = https.onRequest(async (request, response) => {
-    const apiRequest = APIRequest.from(request);
+    const apiRequest = APIRequest.from(request, response);
+    apiRequest.checkMethod('GET');
 
     const templateId = apiRequest.queryParameter('template_id');
 
@@ -56,12 +65,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   });
 
   const handleGameEvent = https.onRequest(async (request, response) => {
-    if (request.method !== 'POST') {
-      response.status(400).send('ERROR: Required should use POST method');
-      return;
-    }
-
-    const apiRequest = APIRequest.from(request);
+    const apiRequest = APIRequest.from(request, response);
+    apiRequest.checkMethod('POST');
 
     const action = apiRequest.optionalJsonField('action');
     const context = apiRequest.jsonField('context');
@@ -75,12 +80,9 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   });
 
   const startNewMonth = https.onRequest(async (request, response) => {
-    if (request.method !== 'POST') {
-      response.status(400).send('ERROR: Required should use POST method');
-      return;
-    }
+    const apiRequest = APIRequest.from(request, response);
+    apiRequest.checkMethod('POST');
 
-    const apiRequest = APIRequest.from(request);
     const context = apiRequest.jsonField('context');
 
     const startNewMonthRequest = gameService.startNewMonth(context).then(() => 'New month started');
@@ -89,9 +91,23 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   });
 
   const getGameLevels = https.onRequest(async (request, response) => {
-    const gameLevels = Promise.resolve(gameLevelsService.getGameLevels());
+    const apiRequest = APIRequest.from(request, response);
+    apiRequest.checkMethod('GET');
+
+    const gameLevels = Promise.resolve(gameLevelsProvider.getGameLevels());
 
     return send(gameLevels, response);
+  });
+
+  const createGameByLevel = https.onRequest(async (request, response) => {
+    const apiRequest = APIRequest.from(request, response);
+    apiRequest.checkMethod('POST');
+
+    const gameLevelId = apiRequest.jsonField('gameLevelId');
+    const userId = apiRequest.jsonField('userId');
+
+    const newGame = gameService.createNewGameByLevel(gameLevelId, [userId]);
+    return send(newGame, response);
   });
 
   const send = <T>(data: Promise<T>, response: functions.Response) => {
@@ -120,5 +136,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     handleGameEvent,
     startNewMonth,
     getGameLevels,
+    createGameByLevel,
   };
 };

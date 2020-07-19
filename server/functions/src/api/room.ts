@@ -18,12 +18,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const roomService = new RoomService(gameProvider, userProvider, firebaseMessaging);
 
   const createRoom = https.onRequest(async (request, response) => {
-    if (request.method !== 'POST') {
-      response.status(400).send('ERROR: Request should use POST method');
-      return;
-    }
-
-    const apiRequest = APIRequest.from(request);
+    const apiRequest = APIRequest.from(request, response);
+    apiRequest.checkMethod('POST');
 
     const gameTemplateId = apiRequest.jsonField('gameTemplateId');
     const currentUserId = apiRequest.jsonField('currentUserId');
@@ -34,12 +30,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   });
 
   const setRoomParticipantReady = https.onRequest(async (request, response) => {
-    if (request.method !== 'POST') {
-      response.status(400).send('ERROR: Request should use POST method');
-      return;
-    }
-
-    const apiRequest = APIRequest.from(request);
+    const apiRequest = APIRequest.from(request, response);
+    apiRequest.checkMethod('POST');
 
     const roomId = apiRequest.jsonField('roomId');
     const participantId = apiRequest.jsonField('participantId');
@@ -49,12 +41,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   });
 
   const createRoomGame = https.onRequest(async (request, response) => {
-    if (request.method !== 'POST') {
-      response.status(400).send('ERROR: Request should use POST method');
-      return;
-    }
-
-    const apiRequest = APIRequest.from(request);
+    const apiRequest = APIRequest.from(request, response);
+    apiRequest.checkMethod('POST');
 
     const roomId = apiRequest.jsonField('roomId');
 

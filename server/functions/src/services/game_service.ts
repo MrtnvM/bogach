@@ -1,4 +1,5 @@
 import { GameProvider } from '../providers/game_provider';
+import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { GameEventEntity } from '../models/domain/game/game_event';
 import { GameContext } from '../models/domain/game/game_context';
 import { PlayerActionHandler } from '../core/domain/player_action_handler';
@@ -26,9 +27,10 @@ import { GameTemplateEntity } from '../models/domain/game/game_template';
 import { InsuranceTransformer } from '../transformers/game/insurance_transformer';
 import { ResetEventIndexTransformer } from '../transformers/game/reset_event_index_transformer';
 import { RealEstateBuyEventHandler } from '../events/estate/buy/real_estate_buy_event_handler';
+import { GameLevelEntity } from '../models/domain/game_levels/game_level';
 
 export class GameService {
-  constructor(private gameProvider: GameProvider) {
+  constructor(private gameProvider: GameProvider, private gameLevelsProvider: GameLevelsProvider) {
     this.handlers.forEach((handler) => {
       this.handlerMap[handler.gameEventType] = handler;
     });
@@ -50,6 +52,14 @@ export class GameService {
 
   async createNewGame(templateId: GameTemplateEntity.Id, participantsIds: UserEntity.Id[]) {
     const createdGame = await this.gameProvider.createGame(templateId, participantsIds);
+    return createdGame;
+  }
+
+  async createNewGameByLevel(levelId: GameLevelEntity.Id, participantsIds: UserEntity.Id[]) {
+    const gameLevelConfig = this.gameLevelsProvider.getGameLevelConfig(levelId);
+    const { template } = gameLevelConfig;
+
+    const createdGame = await this.gameProvider.createGameByTemplate(template, participantsIds);
     return createdGame;
   }
 
