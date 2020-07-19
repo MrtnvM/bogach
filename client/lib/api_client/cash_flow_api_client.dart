@@ -48,6 +48,19 @@ class CashFlowApiClient extends ApiClient {
         headers: [contentJson],
       );
 
+  Stream<NewGameResponseModel> createNewGameByLevel({
+    @required String gameLevelId,
+    @required String userId,
+  }) =>
+      post(
+        path: 'createGameByLevel',
+        body: {'gameLevelId': gameLevelId, 'userId': userId},
+        responseMapper: rm.standard(
+          (json) => NewGameResponseModel.fromJson(json),
+        ),
+        headers: [contentJson],
+      );
+
   Stream<void> sendPlayerAction(PlayerActionRequestModel playerAction) => post(
         path: 'handleGameEvent',
         body: playerAction.toJson(),

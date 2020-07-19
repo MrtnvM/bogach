@@ -43,4 +43,11 @@ final newGameReducer = Reducer<NewGameState>()
 
       action.onSuccess((gameLevels) => s.gameLevels.updateList(gameLevels));
     }),
+  )
+  ..on<CreateNewGameByLevelAsyncAction>(
+    (state, action) => state.rebuild((s) {
+      s.createNewGameByLevelRequestState = action.requestState;
+
+      action.onSuccess((newGameId) => s.newGameId = newGameId);
+    }),
   );

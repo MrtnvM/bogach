@@ -29,6 +29,11 @@ _GameActions useGameActions() {
           CreateNewGameAsyncAction(templateId: templateId),
         );
       },
+      createGameByLevel: (gameLevelId) {
+        return actionRunner.runAsyncAction(
+          CreateNewGameByLevelAsyncAction(gameLevelId: gameLevelId),
+        );
+      },
       startGame: (gameId) {
         final gameContext = GameContext(gameId: gameId, userId: userId);
 
@@ -60,6 +65,7 @@ class _GameActions {
     this.loadGameTemplates,
     this.loadGameLevels,
     this.createGame,
+    this.createGameByLevel,
     this.startGame,
     this.stopGame,
     this.sendPlayerAction,
@@ -70,6 +76,7 @@ class _GameActions {
   final void Function() loadGameTemplates;
   final void Function() loadGameLevels;
   final Future<String> Function(String templateId) createGame;
+  final Future<String> Function(String gameLevelId) createGameByLevel;
   final void Function(String gameId) startGame;
   final void Function() stopGame;
   final Future<void> Function(PlayerAction, String) sendPlayerAction;

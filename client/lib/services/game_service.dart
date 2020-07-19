@@ -48,6 +48,15 @@ class GameService {
         .map((response) => response.id);
   }
 
+  Stream<String> createNewGameByLevel({
+    @required String gameLevelId,
+    @required String userId,
+  }) {
+    return apiClient
+        .createNewGameByLevel(gameLevelId: gameLevelId, userId: userId)
+        .map((response) => response.id);
+  }
+
   Stream<Game> getGame(GameContext gameContext) {
     return firestore
         .collection('games')

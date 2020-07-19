@@ -24,6 +24,8 @@ abstract class NewGameState
   StoreList<Game> get userGames;
 
   RequestState get createNewGameRequestState;
+  RequestState get createNewGameByLevelRequestState;
+
   @nullable
   String get newGameId;
 
@@ -35,5 +37,6 @@ abstract class NewGameState
     ..gameLevels = StoreList<GameLevel>()
     ..userGames = StoreList<Game>()
     ..createNewGameRequestState = RequestState.idle
+    ..createNewGameByLevelRequestState = RequestState.idle
     ..newGameId = null);
 }
