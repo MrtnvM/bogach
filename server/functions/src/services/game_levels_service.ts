@@ -5,11 +5,16 @@ import * as path from 'path';
 
 import { GameLevel } from '../models/domain/game_levels/game_level';
 import {
-  GameLevelConfigEntity,
   GameLevelConfig,
+  GameLevelConfigEntity,
 } from '../models/domain/game_levels/game_level_config';
+import {
+  GameLevelsConfigEntity,
+  GameLevelsConfig,
+} from '../models/domain/game_levels/game_levels_config';
 
-let gameLevelsConfigCache: GameLevelConfig;
+let gameLevelsConfigCache: GameLevelsConfig;
+let gameLevelConfigCache: { [levelId: string]: GameLevelConfig } = {};
 
 export class GameLevelsService {
   getGameLevels(): GameLevel[] {
@@ -17,7 +22,28 @@ export class GameLevelsService {
     return config.gameLevels;
   }
 
-  private getGameLevelsConfig(): GameLevelConfig {
+  getGameLevelConfig(gameLevelId: string): GameLevelConfig {
+    const cachedGameLevelConfig = gameLevelConfigCache[gameLevelId];
+
+    if (cachedGameLevelConfig) {
+      return cachedGameLevelConfig;
+    }
+
+    const gameLevelConfigPath = path.join(
+      this.getGameLevelsFolderPath(),
+      'levels',
+      `${gameLevelId}.json`
+    );
+
+    const rawData = fs.readFileSync(gameLevelConfigPath, 'utf8');
+    const gameLevelConfig = JSON.parse(rawData) as GameLevelConfig;
+    GameLevelConfigEntity.validate(gameLevelConfig);
+
+    gameLevelConfigCache[gameLevelId] = gameLevelConfig;
+    return gameLevelConfig;
+  }
+
+  private getGameLevelsConfig(): GameLevelsConfig {
     if (gameLevelsConfigCache) {
       return gameLevelsConfigCache;
     }
@@ -28,8 +54,8 @@ export class GameLevelsService {
     );
 
     const rawData = fs.readFileSync(gameLevelsConfigPath, 'utf8');
-    const gameLevelsConfig = JSON.parse(rawData) as GameLevelConfig;
-    GameLevelConfigEntity.validate(gameLevelsConfig);
+    const gameLevelsConfig = JSON.parse(rawData) as GameLevelsConfig;
+    GameLevelsConfigEntity.validate(gameLevelsConfig);
 
     gameLevelsConfigCache = gameLevelsConfig;
     return gameLevelsConfig;

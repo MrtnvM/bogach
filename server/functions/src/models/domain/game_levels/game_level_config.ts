@@ -1,17 +1,14 @@
-import { GameLevel, GameLevelEntity } from './game_level';
+import { GameTemplate, GameTemplateEntity } from '../game/game_template';
 import { Entity } from '../../../core/domain/entity';
 
 export interface GameLevelConfig {
-  readonly gameLevels: GameLevel[];
+  readonly template: GameTemplate;
 }
 
 export namespace GameLevelConfigEntity {
   export const validate = (config: any) => {
-    const entity = Entity.createEntityValidator<GameLevelConfig>(config, 'GameLevelConfig');
+    const entity = Entity.createEntityValidator<GameLevelConfig>(config, 'Game Level Config');
 
-    entity.hasArrayValue('gameLevels');
-
-    const levelsConfig = config as GameLevelConfig;
-    levelsConfig.gameLevels.forEach(GameLevelEntity.validate);
+    entity.hasObjectValue('template', GameTemplateEntity.validate);
   };
 }
