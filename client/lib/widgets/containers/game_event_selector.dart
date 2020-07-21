@@ -121,6 +121,7 @@ class SelectorViewModel {
     this.maxCount,
     this.changeableType = true,
     this.availableCash,
+
   });
 
   final double currentPrice;
