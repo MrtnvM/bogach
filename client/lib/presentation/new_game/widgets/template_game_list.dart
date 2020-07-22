@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/core/hooks/alert_hooks.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
@@ -41,7 +42,7 @@ class TemplateGameList extends HookWidget {
     };
 
     final isLoading = templatesRequestState.isInProgress ||
-          createGameRequestState.isInProgress;
+        createGameRequestState.isInProgress;
     return Loadable(
       isLoading: isLoading,
       backgroundColor: ColorRes.mainGreen.withOpacity(0.8),
@@ -50,7 +51,10 @@ class TemplateGameList extends HookWidget {
           items: gameTemplates,
           itemBuilder: (i) => GameTemplateItem(
             gameTemplate: gameTemplates.items[i],
-            onTemplateSelected: createNewGame,
+            onTemplateSelected: (template) {
+              AnalyticsSender.templateSelected(template.name);
+              createNewGame(template);
+            },
           ),
           loadListRequestState: templatesRequestState,
           loadList: gameActions.loadGameTemplates,

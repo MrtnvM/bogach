@@ -242,4 +242,15 @@ class AnalyticsSender {
       parameters: params,
     );
   }
+
+  static void templateSelected(String templateName) {
+    final params = {
+      'template_name': templateName,
+    };
+
+    firebaseAnalytics.logEvent(
+      name: 'template_selected_event',
+      parameters: params,
+    );
+  }
 }
