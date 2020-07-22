@@ -1,5 +1,7 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/insurance/models/insurance_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/insurance/ui/insurance_game_event_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
@@ -12,6 +14,7 @@ class InsuranceGameEvent extends HookWidget {
   const InsuranceGameEvent(this.event);
 
   final GameEvent event;
+  InsuranceEventData get eventData => event.data;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +35,20 @@ class InsuranceGameEvent extends HookWidget {
         ),
         const SizedBox(height: 28),
         PlayerActionBar(
-          confirm: sendPlayerAction,
-          skip: () => gameActions.skipPlayerAction(event.id),
+          confirm: () {
+            sendPlayerAction();
+            AnalyticsSender.sendBuyInsuranceEvent(
+              event.name,
+              eventData.cost,
+            );
+          },
+          skip: () {
+            gameActions.skipPlayerAction(event.id);
+            AnalyticsSender.sendSkipBuyInsuranceEvent(
+              event.name,
+              eventData.cost,
+            );
+          },
         ),
       ],
     );

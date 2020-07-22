@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/income/models/income_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/income/ui/income_game_event_hooks.dart';
@@ -35,7 +36,10 @@ class IncomeGameEvent extends HookWidget {
           ],
         ),
         const SizedBox(height: 28),
-        PlayerActionBar(confirm: sendPlayerAction),
+        PlayerActionBar(confirm: () {
+          sendPlayerAction();
+          AnalyticsSender.sendIncomeEvent(event.name, eventData.expense);
+        }),
       ],
     );
   }

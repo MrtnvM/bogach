@@ -1,4 +1,6 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/expense/models/expense_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
@@ -12,6 +14,7 @@ class ExpenseGameEvent extends HookWidget {
   const ExpenseGameEvent(this.event);
 
   final GameEvent event;
+  ExpenseEventData get eventData => event.data;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,10 @@ class ExpenseGameEvent extends HookWidget {
         ),
         const SizedBox(height: 28),
         PlayerActionBar(
-          confirm: sendPlayerAction,
+          confirm: () {
+            sendPlayerAction();
+            AnalyticsSender.sendExpenseEvent(event.name, eventData.expense);
+          },
         ),
       ],
     );
