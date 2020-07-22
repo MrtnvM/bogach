@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/app_hooks.dart';
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
@@ -8,6 +9,7 @@ import 'package:cash_flow/presentation/main/main_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/utils/core/device_preview.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart' hide Store;
 import 'package:flutter_platform_loadable/flutter_platform_loadable.dart';
@@ -64,11 +66,26 @@ class CashFlowApp extends HookWidget {
               child: DevicePreview.appBuilder(context, widget),
             ),
             navigatorKey: appRouter.navigatorKey,
+            navigatorObservers: [
+              ...getAnalyticsObservers(),
+            ],
             home: homePage,
             theme: theme,
           ),
         ),
       ),
     );
+  }
+
+  List<RouteObserver> getAnalyticsObservers() {
+    if (!AnalyticsSender.isEnabled) {
+      return [];
+    }
+
+    return [
+      FirebaseAnalyticsObserver(
+        analytics: AnalyticsSender.firebaseAnalytics,
+      )
+    ];
   }
 }

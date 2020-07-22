@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
@@ -39,8 +40,20 @@ class BusinessBuyGameEvent extends HookWidget {
         ),
         const SizedBox(height: 28),
         PlayerActionBar(
-          confirm: sendPlayerAction,
-          skip: () => gameActions.skipPlayerAction(event.id),
+          confirm: () {
+            sendPlayerAction();
+            AnalyticsSender.sendBuyBusinessEvent(
+              event.name,
+              eventData.currentPrice,
+            );
+          },
+          skip: () {
+             gameActions.skipPlayerAction(event.id);
+             AnalyticsSender.sendSkipBuyBusinessEvent(
+              event.name,
+              eventData.currentPrice,
+            );
+          },
         )
       ],
     );

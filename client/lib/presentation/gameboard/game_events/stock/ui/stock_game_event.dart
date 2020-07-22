@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
@@ -65,8 +66,23 @@ class StockGameEvent extends HookWidget {
         ),
         const SizedBox(height: 28),
         PlayerActionBar(
-          confirm: sendPlayerAction,
-          skip: () => gameActions.skipPlayerAction(event.id),
+          confirm: () {
+            sendPlayerAction();
+            AnalyticsSender.sendBuySellStockEvent(
+              buySellAction.value,
+              selectedCount.value,
+              event.name,
+              eventData.currentPrice,
+            );
+          },
+          skip: () {
+            gameActions.skipPlayerAction(event.id);
+            AnalyticsSender.sendSkipBuySellStockEvent(
+              buySellAction.value,
+              event.name,
+              eventData.currentPrice,
+            );
+          },
         )
       ],
     );

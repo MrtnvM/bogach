@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
@@ -56,8 +57,19 @@ class BusinessSellGameEvent extends HookWidget {
             } else {
               sendPlayerAction();
             }
+
+            AnalyticsSender.sendSellBusinessEvent(
+              event.name,
+              eventData.currentPrice,
+            );
           },
-          skip: () => gameActions.skipPlayerAction(event.id),
+          skip: () {
+            gameActions.skipPlayerAction(event.id);
+            AnalyticsSender.sendSkipSellBusinessEvent(
+              event.name,
+              eventData.currentPrice,
+            );
+          },
         )
       ],
     );
