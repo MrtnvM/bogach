@@ -67,9 +67,7 @@ class CashFlowApp extends HookWidget {
             ),
             navigatorKey: appRouter.navigatorKey,
             navigatorObservers: [
-              FirebaseAnalyticsObserver(
-                analytics: AnalyticsSender.firebaseAnalytics,
-              ),
+              ...getAnalyticsObservers(),
             ],
             home: homePage,
             theme: theme,
@@ -77,5 +75,17 @@ class CashFlowApp extends HookWidget {
         ),
       ),
     );
+  }
+
+  List<RouteObserver> getAnalyticsObservers() {
+    if (!AnalyticsSender.isEnabled) {
+      return [];
+    }
+
+    return [
+      FirebaseAnalyticsObserver(
+        analytics: AnalyticsSender.firebaseAnalytics,
+      )
+    ];
   }
 }

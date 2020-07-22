@@ -11,6 +11,8 @@ class AnalyticsSender {
   static final AnalyticsSender _instance = AnalyticsSender._internal();
   static final FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics();
 
+  static bool isEnabled = false;
+
   static void sendBuySellStockEvent(
     BuySellAction action,
     int count,
@@ -28,10 +30,7 @@ class AnalyticsSender {
       sell: (_) => 'stock_sell_event',
     );
 
-    firebaseAnalytics.logEvent(
-      name: eventName,
-      parameters: params,
-    );
+    _sendEvent(eventName, params);
   }
 
   static void sendSkipBuySellStockEvent(
@@ -46,46 +45,31 @@ class AnalyticsSender {
       sell: (_) => 'stock_skip_sell_event',
     );
 
-    firebaseAnalytics.logEvent(
-      name: eventName,
-      parameters: params,
-    );
+    _sendEvent(eventName, params);
   }
 
   static void sendBuyBusinessEvent(String businessName, int price) {
     final params = {'business_name': businessName, 'business_price': price};
 
-    firebaseAnalytics.logEvent(
-      name: 'business_buy_event',
-      parameters: params,
-    );
+    _sendEvent('business_buy_event', params);
   }
 
   static void sendSkipBuyBusinessEvent(String businessName, int price) {
     final params = {'business_name': businessName, 'business_price': price};
 
-    firebaseAnalytics.logEvent(
-      name: 'business_skip_buy_event',
-      parameters: params,
-    );
+    _sendEvent('business_skip_buy_event', params);
   }
 
   static void sendSellBusinessEvent(String businessName, int price) {
     final params = {'business_name': businessName, 'business_price': price};
 
-    firebaseAnalytics.logEvent(
-      name: 'business_sell_event',
-      parameters: params,
-    );
+    _sendEvent('business_sell_event', params);
   }
 
   static void sendSkipSellBusinessEvent(String businessName, int price) {
     final params = {'business_name': businessName, 'business_price': price};
 
-    firebaseAnalytics.logEvent(
-      name: 'business_skip_sell_event',
-      parameters: params,
-    );
+    _sendEvent('business_skip_sell_event', params);
   }
 
   static void sendBuySellDebentureEvent(
@@ -105,10 +89,7 @@ class AnalyticsSender {
       sell: (_) => 'debenture_sell_event',
     );
 
-    firebaseAnalytics.logEvent(
-      name: eventName,
-      parameters: params,
-    );
+    _sendEvent(eventName, params);
   }
 
   static void sendSkipBuySellDebentureEvent(
@@ -126,10 +107,7 @@ class AnalyticsSender {
       sell: (_) => 'debenture_skip_sell_event',
     );
 
-    firebaseAnalytics.logEvent(
-      name: eventName,
-      parameters: params,
-    );
+    _sendEvent(eventName, params);
   }
 
   static void sendExpenseEvent(String expenseName, int value) {
@@ -138,10 +116,7 @@ class AnalyticsSender {
       'expense_value': value,
     };
 
-    firebaseAnalytics.logEvent(
-      name: 'expense_event',
-      parameters: params,
-    );
+    _sendEvent('expense_event', params);
   }
 
   static void sendIncomeEvent(String incomeName, int value) {
@@ -150,28 +125,19 @@ class AnalyticsSender {
       'income_value': value,
     };
 
-    firebaseAnalytics.logEvent(
-      name: 'income_event',
-      parameters: params,
-    );
+    _sendEvent('income_event', params);
   }
 
   static void sendBuyInsuranceEvent(String insuranceEvent, int price) {
     final params = {'insurance_name': insuranceEvent, 'business_price': price};
 
-    firebaseAnalytics.logEvent(
-      name: 'business_buy_event',
-      parameters: params,
-    );
+    _sendEvent('business_buy_event', params);
   }
 
   static void sendSkipBuyInsuranceEvent(String insuranceEvent, int price) {
     final params = {'insurance_name': insuranceEvent, 'business_price': price};
 
-    firebaseAnalytics.logEvent(
-      name: 'business_skip_buy_event',
-      parameters: params,
-    );
+    _sendEvent('business_skip_buy_event', params);
   }
 
   static void sendMonthlyExpenseEvent(String expenseName, int value) {
@@ -180,10 +146,7 @@ class AnalyticsSender {
       'monthly_expense_value': value,
     };
 
-    firebaseAnalytics.logEvent(
-      name: 'monthly_expense_event',
-      parameters: params,
-    );
+    _sendEvent('monthly_expense_event', params);
   }
 
   static void sendBuyRealEstateEvent(String realEstateName, int price) {
@@ -192,10 +155,7 @@ class AnalyticsSender {
       'real_estate_price': price,
     };
 
-    firebaseAnalytics.logEvent(
-      name: 'real_estate_buy_event',
-      parameters: params,
-    );
+    _sendEvent('real_estate_buy_event', params);
   }
 
   static void sendSkipBuyRealEstateEvent(String realEstateName, int price) {
@@ -204,10 +164,7 @@ class AnalyticsSender {
       'real_estate_price': price,
     };
 
-    firebaseAnalytics.logEvent(
-      name: 'real_estate_skip_buy_event',
-      parameters: params,
-    );
+    _sendEvent('real_estate_skip_buy_event', params);
   }
 
   static void sendContinueGame(String userId) {
@@ -215,10 +172,7 @@ class AnalyticsSender {
       'userId': userId,
     };
 
-    firebaseAnalytics.logEvent(
-      name: 'continue_game_event',
-      parameters: params,
-    );
+    _sendEvent('continue_game_event', params);
   }
 
   static void sendMultiplayerGame(String userId) {
@@ -226,10 +180,7 @@ class AnalyticsSender {
       'userId': userId,
     };
 
-    firebaseAnalytics.logEvent(
-      name: 'multiplayer_game_event',
-      parameters: params,
-    );
+    _sendEvent('multiplayer_game_event', params);
   }
 
   static void sendNewGame(String userId) {
@@ -237,10 +188,7 @@ class AnalyticsSender {
       'userId': userId,
     };
 
-    firebaseAnalytics.logEvent(
-      name: 'new_game_event',
-      parameters: params,
-    );
+    _sendEvent('new_game_event', params);
   }
 
   static void templateSelected(String templateName) {
@@ -248,9 +196,17 @@ class AnalyticsSender {
       'template_name': templateName,
     };
 
+    _sendEvent('template_selected_event', params);
+  }
+
+  static void _sendEvent(String eventName, Map<String, dynamic> parameters) {
+    if (!isEnabled) {
+      return;
+    }
+
     firebaseAnalytics.logEvent(
-      name: 'template_selected_event',
-      parameters: params,
+      name: eventName,
+      parameters: parameters,
     );
   }
 }

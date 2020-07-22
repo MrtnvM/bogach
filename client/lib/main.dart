@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:alice/alice.dart';
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/store/store.dart';
 import 'package:cash_flow/app_configuration.dart';
 import 'package:cash_flow/cash_flow_app.dart';
@@ -75,4 +76,12 @@ Future<void> main({
 
 void configurePurchases() {
   InAppPurchaseConnection.enablePendingPurchases();
+}
+
+void configureAnalytics(CashApiEnvironment environment) {
+  if (environment == CashApiEnvironment.production) {
+    AnalyticsSender.isEnabled = true;
+  } else {
+    AnalyticsSender.isEnabled = false;
+  }
 }
