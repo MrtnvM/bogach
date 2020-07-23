@@ -79,7 +79,8 @@ void configurePurchases() {
 }
 
 void configureAnalytics(CashApiEnvironment environment) {
-  if (environment == CashApiEnvironment.production) {
+  if (environment == CashApiEnvironment.production ||
+      environment == CashApiEnvironment.uat) {
     AnalyticsSender.isEnabled = true;
   } else {
     AnalyticsSender.isEnabled = false;
