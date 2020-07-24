@@ -1,5 +1,6 @@
 import { GameEvent, GameEventEntity } from '../../models/domain/game/game_event';
 import { Entity } from '../../core/domain/entity';
+import { ValueRange } from '../../core/data/value_range';
 
 export namespace IncomeEvent {
   export const Type: GameEventEntity.Type = 'income-event';
@@ -11,6 +12,12 @@ export namespace IncomeEvent {
   }
 
   export type PlayerAction = {};
+
+  export type Info = {
+    readonly name: string;
+    readonly description: string;
+    readonly range: ValueRange;
+  };
 
   export const validate = (event: any) => {
     if (event?.type !== Type) {

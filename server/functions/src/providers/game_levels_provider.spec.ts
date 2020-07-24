@@ -1,7 +1,7 @@
 /// <reference types="@types/jest"/>
 
 import { GameLevelsProvider } from './game_levels_provider';
-import { GameLevelConfigEntity } from '../models/domain/game_levels/game_level_config';
+import { GameLevelEntity } from '../models/domain/game_levels/game_level';
 
 describe('Game Levels Service', () => {
   test('Successfully load game levels', () => {
@@ -14,10 +14,6 @@ describe('Game Levels Service', () => {
   test('Check game level configs', () => {
     const gameLevelsService = new GameLevelsProvider();
     const gameLevels = gameLevelsService.getGameLevels();
-
-    gameLevels.forEach((level) => {
-      const levelConfig = gameLevelsService.getGameLevelConfig(level.id);
-      GameLevelConfigEntity.validate(levelConfig);
-    });
+    gameLevels.forEach(GameLevelEntity.validate);
   });
 });

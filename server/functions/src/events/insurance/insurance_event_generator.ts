@@ -1,65 +1,38 @@
 import { InsuranceEvent } from './insurance_event';
 import uuid = require('uuid');
-import * as random from 'random';
-import { InsuranceAssetEntity } from '../../models/domain/assets/insurance_asset';
 import { randomValueFromRange } from '../../core/data/value_range';
+import { Game, GameEntity } from '../../models/domain/game/game';
 
 export namespace InsuranceEventGenerator {
-  export const generate = (): InsuranceEvent.Event => {
-    const id = uuid.v4();
-
-    const insuranceType = generateInsuranceType();
-    const insuranceDescription = getInsuranceDescription(insuranceType);
-    const duration = 12;
-
-    const cost = randomValueFromRange({
-      min: 2000,
-      max: 5000,
-      stepValue: 1000,
+  export const generate = (
+    game: Game,
+    insuranceInfo: InsuranceEvent.Info
+  ): InsuranceEvent.Event | undefined => {
+    const pastInsuranceEvents = GameEntity.getPastEventsOfType<InsuranceEvent.Event>({
+      game,
+      type: InsuranceEvent.Type,
+      maxHistoryLength: Math.max(insuranceInfo.duration - 4, 4),
     });
 
-    const value = randomValueFromRange({
-      min: cost + 2000,
-      max: cost + 10000,
-      stepValue: 1000,
-    });
+    const theSameInsuranceTypeEventIndex = pastInsuranceEvents.findIndex(
+      (e) => e.data.insuranceType === insuranceInfo.insuranceType
+    );
+
+    if (theSameInsuranceTypeEventIndex >= 0) {
+      return undefined;
+    }
 
     return {
-      id,
-      name: 'Страховка',
-      description: insuranceDescription,
+      id: uuid.v4(),
+      name: insuranceInfo.name,
+      description: insuranceInfo.description,
       type: InsuranceEvent.Type,
       data: {
-        insuranceType,
-        duration,
-        value,
-        cost,
+        insuranceType: insuranceInfo.insuranceType,
+        duration: insuranceInfo.duration,
+        value: randomValueFromRange(insuranceInfo.value),
+        cost: randomValueFromRange(insuranceInfo.cost),
       },
     };
-  };
-
-  const generateInsuranceType = (): InsuranceAssetEntity.InsuranceType => {
-    const randomInt = random.int(0, 100);
-    if (randomInt <= 50) {
-      return 'health';
-    } else {
-      return 'property';
-    }
-  };
-
-  const getInsuranceDescription = (type: InsuranceAssetEntity.InsuranceType): string => {
-    if (type === 'health') {
-      return (
-        'Страховая компания предлагает купить полис и защитить свое здоровье' +
-        ' от непредвиденных ситуаций. Действие полиса 1 год.'
-      );
-    } else if (type === 'property') {
-      return (
-        'Страховая компания предлагает купить полис и защитить свое имущество' +
-        ' от непредвиденных ситуаций. Действие полиса 1 год.'
-      );
-    } else {
-      throw Error('incorrect insuranceType: ' + type);
-    }
   };
 }

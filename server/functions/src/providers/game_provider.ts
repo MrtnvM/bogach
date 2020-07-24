@@ -18,6 +18,7 @@ import {
   StocksInitializerGameTransformer,
   DebentureInitializerGameTransformer,
 } from '../transformers/game_transformers';
+import { GameLevelEntity } from '../models/domain/game_levels/game_level';
 
 export class GameProvider {
   constructor(private firestore: Firestore, private selector: FirestoreSelector) {}
@@ -26,6 +27,8 @@ export class GameProvider {
     templateId: GameTemplateEntity.Id,
     participantsIds: UserEntity.Id[]
   ): Promise<Game> {
+    this.checkParticipantsIds(participantsIds);
+
     const template = await this.getGameTemplate(templateId);
 
     if (!template) {
@@ -37,11 +40,10 @@ export class GameProvider {
 
   async createGameByTemplate(
     template: GameTemplate,
-    participantsIds: UserEntity.Id[]
+    participantsIds: UserEntity.Id[],
+    level?: GameLevelEntity.Id
   ): Promise<Game> {
-    if (!Array.isArray(participantsIds) || !participantsIds || participantsIds.length === 0) {
-      throw new Error('ERROR: No participants IDs on game creation');
-    }
+    this.checkParticipantsIds(participantsIds);
 
     const participantsGameState = <T>(value: T) => {
       return createParticipantsGameState(participantsIds, value);
@@ -73,7 +75,7 @@ export class GameProvider {
       target: template.target,
       currentEvents: [],
       history: { months: [] },
-      config: { stocks: [], debentures: [] },
+      config: { level, stocks: [], debentures: [] },
     };
 
     game = applyGameTransformers(game, [
@@ -254,5 +256,11 @@ export class GameProvider {
 
     const updatedRoom = await this.firestore.updateItem(selector, room);
     return [updatedRoom, game];
+  }
+
+  private checkParticipantsIds(participantsIds: any) {
+    if (!Array.isArray(participantsIds) || !participantsIds || participantsIds.length === 0) {
+      throw new Error('ERROR: No participants IDs on game creation');
+    }
   }
 }

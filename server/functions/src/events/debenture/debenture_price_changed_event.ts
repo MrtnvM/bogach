@@ -20,6 +20,13 @@ export namespace DebenturePriceChangedEvent {
     readonly count: number;
   }
 
+  export type InfoConfig = {
+    readonly nameOptions: string[];
+    readonly nominal: Range;
+    readonly price: Range;
+    readonly profitability: Range;
+  };
+
   export const validate = (event: any) => {
     if (event?.type !== Type) {
       throw new Error('ERROR: Event type is not equal to ' + Type);

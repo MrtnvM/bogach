@@ -56,10 +56,15 @@ export class GameService {
   }
 
   async createNewGameByLevel(levelId: GameLevelEntity.Id, participantsIds: UserEntity.Id[]) {
-    const gameLevelConfig = this.gameLevelsProvider.getGameLevelConfig(levelId);
+    const gameLevelConfig = this.gameLevelsProvider.getGameLevel(levelId);
     const { template } = gameLevelConfig;
 
-    const createdGame = await this.gameProvider.createGameByTemplate(template, participantsIds);
+    const createdGame = await this.gameProvider.createGameByTemplate(
+      template,
+      participantsIds,
+      levelId
+    );
+
     return createdGame;
   }
 

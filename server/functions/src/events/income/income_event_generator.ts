@@ -3,11 +3,13 @@ import * as random from 'random';
 
 import { IncomeEvent } from './income_event';
 import { Game, GameEntity } from '../../models/domain/game/game';
-import { IncomeGeneratorConfig } from './income_generator_config';
 import { randomValueFromRange } from '../../core/data/value_range';
 
 export namespace IncomeEventGenerator {
-  export const generate = (game: Game): IncomeEvent.Event | undefined => {
+  export const generate = (
+    game: Game,
+    incomeEventInfo: IncomeEvent.Info[]
+  ): IncomeEvent.Event | undefined => {
     const pastIncomeEvents = GameEntity.getPastEventsOfType<IncomeEvent.Event>({
       game,
       type: IncomeEvent.Type,
@@ -17,7 +19,7 @@ export namespace IncomeEventGenerator {
     const alreadyHappendEvents = {};
     pastIncomeEvents.forEach((e) => (alreadyHappendEvents[e.name + e.description] = true));
 
-    const filtredIncomeEvents = IncomeGeneratorConfig.allIncomes.filter(
+    const filtredIncomeEvents = incomeEventInfo.filter(
       (e) => !alreadyHappendEvents[e.name + e.description]
     );
 

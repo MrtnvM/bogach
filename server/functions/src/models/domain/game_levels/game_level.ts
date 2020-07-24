@@ -1,11 +1,13 @@
 import { Entity } from '../../../core/domain/entity';
-import { GameTemplateEntity } from '../game/game_template';
+import { GameTemplate } from '../game/game_template';
+import { Rule } from '../../../generators/generator_rule';
 
 export interface GameLevel {
   readonly id: GameLevelEntity.Id;
   readonly name: string;
   readonly icon: string;
-  readonly gameTemplateId: GameTemplateEntity.Id;
+  readonly template: GameTemplate;
+  readonly rules: Rule[];
 }
 
 export namespace GameLevelEntity {
@@ -17,6 +19,5 @@ export namespace GameLevelEntity {
     entity.hasStringValue('id');
     entity.hasStringValue('name');
     entity.hasStringValue('icon');
-    entity.hasStringValue('gameTemplateId');
   };
 }
