@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/presentation/continue_game/continue_game_page.dart';
@@ -28,18 +29,21 @@ class MainPage extends HookWidget {
       showUser: true,
       child: Column(
         children: <Widget>[
-          _buildGameActions(context),
+          _buildGameActions(context, user),
           _buildAuthButton(user),
         ],
       ),
     );
   }
 
-  Widget _buildGameActions(BuildContext context) {
+  Widget _buildGameActions(BuildContext context, UserProfile userProfile) {
     return Column(
       children: <Widget>[
         ColorButton(
-          onPressed: () => appRouter.goTo(SingleGamePage()),
+          onPressed: () {
+            appRouter.goTo(SingleGamePage());
+            AnalyticsSender.sendNewGame(userProfile.userId);
+          },
           text: Strings.singleGame,
         ),
         const SizedBox(height: 24),
@@ -49,12 +53,18 @@ class MainPage extends HookWidget {
         ),
         const SizedBox(height: 24),
         ColorButton(
-          onPressed: () => appRouter.goTo(CreateMultiplayerGamePage()),
+          onPressed: () {
+            appRouter.goTo(CreateMultiplayerGamePage());
+            AnalyticsSender.sendMultiplayerGame(userProfile.userId);
+          },
           text: Strings.multiPlayerGame,
         ),
         const SizedBox(height: 24),
         ColorButton(
-          onPressed: () => appRouter.goTo(ContinueGamePage()),
+          onPressed: () {
+            appRouter.goTo(ContinueGamePage());
+            AnalyticsSender.sendContinueGame(userProfile.userId);
+          },
           text: Strings.continueGame,
         ),
         const SizedBox(height: 24),

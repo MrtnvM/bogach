@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/features/multiplayer/multiplayer_hooks.dart';
@@ -80,7 +81,10 @@ class CreateMultiplayerGamePage extends HookWidget {
         items: gameTemplates,
         itemBuilder: (i) => GameTemplateItem(
           gameTemplate: gameTemplates.items[i],
-          onTemplateSelected: onGameTempalateSelected,
+          onTemplateSelected: (template) {
+            onGameTempalateSelected(template);
+            AnalyticsSender.templateSelected(template.name);
+          },
         ),
         loadListRequestState: loadGameTempalatesRequestState,
         loadList: loadGameTemplates,

@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/real_estate/models/real_estate_buy_event_data.dart';
@@ -34,8 +35,20 @@ class RealEstateBuyGameEvent extends HookWidget {
         ),
         const SizedBox(height: 28),
         PlayerActionBar(
-          confirm: sendPlayerAction,
-          skip: () => gameActions.skipPlayerAction(event.id),
+          confirm: () {
+            sendPlayerAction();
+            AnalyticsSender.sendBuyRealEstateEvent(
+              event.name,
+              eventData.currentPrice,
+            );
+          },
+          skip: () {
+            gameActions.skipPlayerAction(event.id);
+            AnalyticsSender.sendSkipBuyRealEstateEvent(
+              event.name,
+              eventData.currentPrice,
+            );
+          },
         )
       ],
     );
