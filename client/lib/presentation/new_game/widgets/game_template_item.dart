@@ -43,8 +43,7 @@ class GameTemplateItem extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    '${gameTemplate.name} — '
-                    '${gameTemplate.accountState.cash.round().toPrice()}',
+                    '${gameTemplate.name}',
                     style: Styles.bodyBlackBold,
                   ),
                 ),

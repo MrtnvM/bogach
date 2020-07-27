@@ -7,6 +7,7 @@ import { utils, stubs } from './real_estate_buy_event_handler.spec.utils';
 import { RealEstateBuyEventHandler } from './real_estate_buy_event_handler';
 import { RealtyAsset } from '../../../models/domain/assets/realty_asset';
 import { RealEstateBuyEvent } from './real_estate_buy_event';
+import { DomainErrors } from '../../../core/exceptions/domain/domain_errors';
 
 describe('Realty buy event event handler', () => {
   const { eventId, userId, initialCash, game } = stubs;
@@ -104,8 +105,8 @@ describe('Realty buy event event handler', () => {
     const action = utils.createBuyRealEstateAction(eventId);
 
     await expect(handler.handle(game, event, action, userId)).rejects.toThrow(
-        new Error('Cant buy real estates with two the same liabilities')
-      );
+      new Error('Cant buy real estates with two the same liabilities')
+    );
   });
 
   test('Can not buy new real estate if not enough money', async () => {
@@ -127,8 +128,8 @@ describe('Realty buy event event handler', () => {
 
     const action = utils.createBuyRealEstateAction(eventId);
 
-    await expect(handler.handle(game, event, action, userId)).rejects.toThrow(
-        new Error('Not enough money')
-      );
+    await expect(handler.handle(game, event, action, userId)).rejects.toStrictEqual(
+      DomainErrors.notEnoughCash
+    );
   });
 });

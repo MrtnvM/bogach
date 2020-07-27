@@ -7,6 +7,7 @@ import { BusinessAsset } from '../../../models/domain/assets/business_asset';
 import { BusinessBuyEventHandler } from './business_buy_event_handler';
 import { Liability, LiabilityEntity } from '../../../models/domain/liability';
 import { BusinessBuyEvent } from './business_buy_event';
+import { DomainErrors } from '../../../core/exceptions/domain/domain_errors';
 
 describe('Business buy event event handler', () => {
   const { eventId, userId, game, initialCash } = stubs;
@@ -164,7 +165,7 @@ describe('Business buy event event handler', () => {
       await handler.handle(game, event, action, userId);
       throw new Error('Shoud fail on previous line');
     } catch (error) {
-      expect(error).toStrictEqual(new Error('Not enough money'));
+      expect(error).toStrictEqual(DomainErrors.notEnoughCash);
     }
   });
 });

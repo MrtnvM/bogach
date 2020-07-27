@@ -3,11 +3,13 @@ import * as random from 'random';
 
 import { ExpenseEvent } from './expense_event';
 import { Game, GameEntity } from '../../models/domain/game/game';
-import { ExpenseGeneratorConfig } from './expense_generator_config';
 import { randomValueFromRange } from '../../core/data/value_range';
 
 export namespace ExpenseEventGenerator {
-  export const generate = (game: Game): ExpenseEvent.Event | undefined => {
+  export const generate = (
+    game: Game,
+    expenseEventInfo: ExpenseEvent.Info[]
+  ): ExpenseEvent.Event | undefined => {
     const pastExpenseEvents = GameEntity.getPastEventsOfType<ExpenseEvent.Event>({
       game,
       type: ExpenseEvent.Type,
@@ -17,7 +19,7 @@ export namespace ExpenseEventGenerator {
     const alreadyHappendEvents = {};
     pastExpenseEvents.forEach((e) => (alreadyHappendEvents[e.name + e.description] = true));
 
-    let filtredExpenseEvents = ExpenseGeneratorConfig.allExpenses.filter(
+    let filtredExpenseEvents = expenseEventInfo.filter(
       (e) => !alreadyHappendEvents[e.name + e.description]
     );
 

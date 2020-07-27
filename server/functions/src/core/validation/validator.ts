@@ -55,6 +55,16 @@ export class Validator<T extends object> {
     }
   }
 
+  hasArrayValue(field: keyof T) {
+    this.hasValue(field);
+
+    const value = this.entity[field];
+
+    if (!Array.isArray(value)) {
+      this.throwError(`The entity does not have array value for '${field}' field`);
+    }
+  }
+
   hasValuesForKeys(field: keyof T, keys: string[]) {
     this.hasValue(field);
 

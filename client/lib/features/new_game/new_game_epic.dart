@@ -7,7 +7,7 @@ import 'package:redux_epics/redux_epics.dart';
 import 'package:rxdart/rxdart.dart';
 
 Epic<AppState> newGameEpic({@required GameService gameService}) {
-  final getGameTemplates = epic((action$, store) {
+  final getGameTemplatesEpic = epic((action$, store) {
     return action$
         .whereType<GetGameTemplatesAsyncAction>()
         .where((action) => action.isStarted)
@@ -19,7 +19,7 @@ Epic<AppState> newGameEpic({@required GameService gameService}) {
         );
   });
 
-  final createNewGame = epic((action$, store) {
+  final createNewGameEpic = epic((action$, store) {
     return action$
         .whereType<CreateNewGameAsyncAction>()
         .where((action) => action.isStarted)
@@ -27,6 +27,21 @@ Epic<AppState> newGameEpic({@required GameService gameService}) {
           (action) => gameService
               .createNewGame(
                 templateId: action.templateId,
+                userId: store.state.login.currentUser.userId,
+              )
+              .map(action.complete)
+              .onErrorReturnWith(action.fail),
+        );
+  });
+
+  final createNewGameByLevelEpic = epic((action$, store) {
+    return action$
+        .whereType<CreateNewGameByLevelAsyncAction>()
+        .where((action) => action.isStarted)
+        .flatMap(
+          (action) => gameService
+              .createNewGameByLevel(
+                gameLevelId: action.gameLevelId,
                 userId: store.state.login.currentUser.userId,
               )
               .map(action.complete)
@@ -47,9 +62,23 @@ Epic<AppState> newGameEpic({@required GameService gameService}) {
         );
   });
 
+  final getGameLevelsEpic = epic((action$, store) {
+    return action$
+        .whereType<GetGameLevelsAsyncAction>()
+        .where((action) => action.isStarted)
+        .flatMap(
+          (action) => gameService
+              .getGameLevels()
+              .map(action.complete)
+              .onErrorReturnWith(action.fail),
+        );
+  });
+
   return combineEpics([
-    getGameTemplates,
-    createNewGame,
+    getGameTemplatesEpic,
+    createNewGameEpic,
+    createNewGameByLevelEpic,
     getUserGamesEpic,
+    getGameLevelsEpic,
   ]);
 }

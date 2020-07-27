@@ -1,6 +1,7 @@
 import { GameEventEntity, GameEvent } from '../../models/domain/game/game_event';
 import { InsuranceAssetEntity } from '../../models/domain/assets/insurance_asset';
 import { Entity } from '../../core/domain/entity';
+import { ValueRange } from '../../core/data/value_range';
 
 export namespace InsuranceEvent {
   export const Type: GameEventEntity.Type = 'insurance-event';
@@ -17,6 +18,15 @@ export namespace InsuranceEvent {
   export interface PlayerAction {
     readonly eventId: GameEventEntity.Id;
   }
+
+  export type Info = {
+    readonly name: string;
+    readonly description: string;
+    readonly cost: ValueRange;
+    readonly value: ValueRange;
+    readonly duration: number;
+    readonly insuranceType: InsuranceAssetEntity.InsuranceType;
+  };
 
   export const validate = (event: any) => {
     if (event?.type !== Type) {

@@ -1,7 +1,7 @@
 import { ValueRange } from '../../core/data/value_range';
 
 export namespace IncomeGeneratorConfig {
-  type IncomeEventInfo = {
+  export type IncomeEventInfo = {
     readonly name: string;
     readonly description: string;
     readonly range: ValueRange;

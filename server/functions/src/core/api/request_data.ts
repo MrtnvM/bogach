@@ -3,7 +3,7 @@ import * as apiUtils from '../../utils/api';
 import { GameContextEntity, GameContext } from '../../models/domain/game/game_context';
 
 export namespace APIRequest {
-  export const from = (request: functions.https.Request) => {
+  export const from = (request: functions.https.Request, response: functions.Response) => {
     const jsonField = apiUtils.jsonBodyField(request);
     const optionalJsonField = apiUtils.optionalJsonBodyField(request);
     const queryParameter = apiUtils.queryParams(request);
@@ -12,7 +12,10 @@ export namespace APIRequest {
       let gameContext: GameContext;
 
       if (request.method.toUpperCase() === 'GET') {
-        gameContext = { gameId: queryParameter('game_id'), userId: queryParameter('user_id') };
+        gameContext = {
+          gameId: queryParameter('game_id'),
+          userId: queryParameter('user_id'),
+        };
       } else {
         gameContext = jsonField('context');
       }
@@ -25,6 +28,21 @@ export namespace APIRequest {
       return entity;
     };
 
-    return { getContext, parseEntity, jsonField, optionalJsonField, queryParameter };
+    const checkMethod = (method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH') => {
+      if (request.method !== method) {
+        const error = `ERROR: Request should use ${method} method`;
+        response.status(400).send(error);
+        throw error;
+      }
+    };
+
+    return {
+      getContext,
+      parseEntity,
+      jsonField,
+      optionalJsonField,
+      queryParameter,
+      checkMethod,
+    };
   };
 }

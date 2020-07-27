@@ -18,17 +18,11 @@ export namespace GameTemplateEntity {
   export const validate = (gameTemplate: any) => {
     const entity = Entity.createEntityValidator<GameTemplate>(gameTemplate, 'Game Template');
 
-    entity.hasValue('id');
-    entity.hasValue('name');
-    entity.hasValue('icon');
-    entity.hasValue('possessions');
-    entity.hasValue('accountState');
-    entity.hasValue('target');
-
-    const gameTemplateEntity = gameTemplate as GameTemplate;
-
-    GameTargetEntity.validate(gameTemplateEntity.target);
-    PossessionsEntity.validate(gameTemplateEntity.possessions);
-    AccountEntity.validate(gameTemplateEntity.accountState);
+    entity.hasStringValue('id');
+    entity.hasStringValue('name');
+    entity.hasStringValue('icon');
+    entity.hasObjectValue('possessions', PossessionsEntity.validate);
+    entity.hasObjectValue('accountState', AccountEntity.validate);
+    entity.hasObjectValue('target', GameTargetEntity.validate);
   };
 }

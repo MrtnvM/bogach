@@ -1,6 +1,7 @@
 import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
+import 'package:cash_flow/models/domain/game/game_level/game_level.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/models/domain/room/room.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
@@ -34,12 +35,25 @@ class GameService {
     return apiClient.getGameTemplates().map(mapToGameTemplates);
   }
 
+  Stream<List<GameLevel>> getGameLevels() {
+    return apiClient.getGameLevels();
+  }
+
   Stream<String> createNewGame({
     @required String templateId,
     @required String userId,
   }) {
     return apiClient
         .createNewGame(templateId: templateId, userId: userId)
+        .map((response) => response.id);
+  }
+
+  Stream<String> createNewGameByLevel({
+    @required String gameLevelId,
+    @required String userId,
+  }) {
+    return apiClient
+        .createNewGameByLevel(gameLevelId: gameLevelId, userId: userId)
         .map((response) => response.id);
   }
 

@@ -4,7 +4,6 @@ import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/game/possession_state/possession_state.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_platform_core/flutter_platform_core.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 

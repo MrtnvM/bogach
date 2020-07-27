@@ -6,6 +6,7 @@ import { PossessionState } from '../possession_state';
 import { Entity } from '../../../core/domain/entity';
 import { GameTarget, GameTargetEntity } from './game_target';
 import { ParticipantGameState } from './participant_game_state';
+import { GameLevelEntity } from '../game_levels/game_level';
 
 export interface Game {
   readonly id: GameEntity.Id;
@@ -61,6 +62,7 @@ export namespace GameEntity {
   };
 
   export type Config = {
+    readonly level?: GameLevelEntity.Id;
     readonly stocks: string[];
     readonly debentures: string[];
   };
