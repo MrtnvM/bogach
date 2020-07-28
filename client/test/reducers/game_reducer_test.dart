@@ -16,12 +16,14 @@ void main() {
         status: ParticipantProgressStatus.playerMove,
         currentMonthForParticipant: 1,
         monthResults: {},
+        progress: 0,
       ),
       anotherUser1: ParticipantProgress(
         currentEventIndex: 5,
         status: ParticipantProgressStatus.monthResult,
         currentMonthForParticipant: 1,
         monthResults: {},
+        progress: 0,
       ),
     };
 
@@ -40,12 +42,14 @@ void main() {
         status: ParticipantProgressStatus.monthResult,
         currentMonthForParticipant: 1,
         monthResults: {},
+        progress: 0,
       ),
       anotherUser1: ParticipantProgress(
         currentEventIndex: 4,
         status: ParticipantProgressStatus.playerMove,
         currentMonthForParticipant: 1,
         monthResults: {},
+        progress: 0,
       ),
     };
 
@@ -64,30 +68,35 @@ void main() {
         status: ParticipantProgressStatus.monthResult,
         currentMonthForParticipant: 2,
         monthResults: {},
+        progress: 0,
       ),
       anotherUser1: ParticipantProgress(
         currentEventIndex: 4,
         status: ParticipantProgressStatus.playerMove,
         currentMonthForParticipant: 1,
         monthResults: {},
+        progress: 0,
       ),
       anotherUser2: ParticipantProgress(
         currentEventIndex: 5,
         status: ParticipantProgressStatus.monthResult,
         currentMonthForParticipant: 1,
         monthResults: {},
+        progress: 0,
       ),
       anotherUser3: ParticipantProgress(
         currentEventIndex: 2,
         status: ParticipantProgressStatus.playerMove,
         currentMonthForParticipant: 2,
         monthResults: {},
+        progress: 0,
       ),
       anotherUser4: ParticipantProgress(
         currentEventIndex: 5,
         status: ParticipantProgressStatus.monthResult,
         currentMonthForParticipant: 2,
         monthResults: {},
+        progress: 0,
       ),
     };
 
@@ -106,18 +115,21 @@ void main() {
         status: ParticipantProgressStatus.monthResult,
         currentMonthForParticipant: 1,
         monthResults: {},
+        progress: 0,
       ),
       anotherUser1: ParticipantProgress(
         currentEventIndex: 4,
         status: ParticipantProgressStatus.playerMove,
         currentMonthForParticipant: 2,
         monthResults: {},
+        progress: 0,
       ),
       anotherUser2: ParticipantProgress(
         currentEventIndex: 5,
         status: ParticipantProgressStatus.monthResult,
         currentMonthForParticipant: 1,
         monthResults: {},
+        progress: 0,
       ),
     };
 
