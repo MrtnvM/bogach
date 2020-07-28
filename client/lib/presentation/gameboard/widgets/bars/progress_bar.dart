@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
@@ -95,7 +97,7 @@ class _ProgressLine extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(
-          width: constraints.maxWidth * progress,
+          width: constraints.maxWidth * max(progress, 0),
           decoration: const BoxDecoration(
 //            borderRadius: BorderRadius.all(Radius.circular(5)),
             color: ColorRes.primaryYellowColor,

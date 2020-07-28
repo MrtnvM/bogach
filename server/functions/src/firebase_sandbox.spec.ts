@@ -15,8 +15,9 @@ describe('Firebase sandbox', () => {
     const lastGame = await getLastGame();
     const gameLogger = GameLogger(lastGame);
 
+    gameLogger.logGameId();
     gameLogger.logUpdatedAt();
-    gameLogger.logCurrentEvents();
+    gameLogger.logGameState();
   });
 });
 
@@ -39,6 +40,8 @@ const GameLogger = (game: Game) => {
   };
 
   return {
+    logGameId: () => log('GameId', game.id),
+    logGameState: () => log('Game State', game.state),
     logCurrentEvents: () => log('Current Events', game.currentEvents),
     logHistory: () => log('History', game.history),
     logCreatedAt: () => log('Created At', dateFromTimestamp(game.updatedAt).toISOString()),

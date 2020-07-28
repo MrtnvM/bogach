@@ -28,9 +28,8 @@ describe('Game Service - Singleplayer game', () => {
     });
 
     const expectedGameState = produce(game.state, (draft) => {
-      const newCurrentEventIndex = 1;
-      draft.participantProgress[userId] = newCurrentEventIndex;
-      draft.participantsProgress[userId].currentEventIndex = newCurrentEventIndex;
+      draft.participantsProgress[userId].currentEventIndex = 1;
+      draft.participantsProgress[userId].progress = 0.0189;
       draft.winners = { 0: userId };
     });
 
@@ -42,10 +41,7 @@ describe('Game Service - Singleplayer game', () => {
   });
 
   test('Successfully handle last game event', async () => {
-    const { gameId, userId, lastEventId, lastEventPlayerAction } = TestData;
-    const game = produce(TestData.game, (draft) => {
-      draft.state.participantProgress[userId] = draft.currentEvents.length - 1;
-    });
+    const { gameId, game, userId, lastEventId, lastEventPlayerAction } = TestData;
 
     const mockGameProvider = mock(GameProvider);
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
@@ -65,12 +61,10 @@ describe('Game Service - Singleplayer game', () => {
     });
 
     const expectedGameState = produce(game.state, (draft) => {
-      const newCurrentEventIndex = 1;
-      draft.participantProgress[userId] = newCurrentEventIndex;
-
       const participantProgress = draft.participantsProgress[userId];
-      participantProgress.currentEventIndex = newCurrentEventIndex;
+      participantProgress.currentEventIndex = 1;
       participantProgress.status = 'month_result';
+      participantProgress.progress = 0.0291;
       participantProgress.monthResults['1'] = {
         cash: 29_100,
         totalIncome: 10_005,
@@ -94,7 +88,6 @@ describe('Game Service - Singleplayer game', () => {
   test('Successfull game over', async () => {
     const { gameId, userId, lastEventId, lastEventPlayerAction } = TestData;
     const game = produce(TestData.game, (draft) => {
-      draft.state.participantProgress[userId] = draft.currentEvents.length - 1;
       draft.accounts[userId].cash = 999999;
     });
 
@@ -117,9 +110,9 @@ describe('Game Service - Singleplayer game', () => {
 
     const expectedGameState = produce(game.state, (draft) => {
       const newCurrentEventIndex = 1;
-      draft.participantProgress[userId] = newCurrentEventIndex;
       draft.participantsProgress[userId].currentEventIndex = newCurrentEventIndex;
       draft.participantsProgress[userId].status = 'month_result';
+      draft.participantsProgress[userId].progress = 1.009099;
       draft.monthNumber += 1;
       draft.gameStatus = 'game_over';
       draft.winners = { 0: userId };
@@ -136,7 +129,6 @@ describe('Game Service - Singleplayer game', () => {
   test('Can not update completed game', async () => {
     const { gameId, userId, lastEventId, lastEventPlayerAction } = TestData;
     const game = produce(TestData.game, (draft) => {
-      draft.state.participantProgress[userId] = draft.currentEvents.length - 1;
       draft.accounts[userId].cash = 1_000_000;
       draft.state.gameStatus = 'game_over';
     });

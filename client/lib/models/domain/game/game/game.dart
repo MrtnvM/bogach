@@ -1,5 +1,6 @@
 import 'package:cash_flow/models/domain/game/account/account.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
+import 'package:cash_flow/models/domain/game/game_config/game_config.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/game/possession_state/possession_state.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
@@ -22,6 +23,7 @@ abstract class Game with _$Game implements StoreListItem {
     @required Map<String, Account> accounts,
     @required Target target,
     @required List<GameEvent> currentEvents,
+    @required GameConfig config,
     @JsonKey(fromJson: _timestampToDate) DateTime createdAt,
     @JsonKey(fromJson: _timestampToDate) DateTime updatedAt,
   }) = _Game;

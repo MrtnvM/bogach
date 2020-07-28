@@ -18,7 +18,7 @@ import {
   StocksInitializerGameTransformer,
   DebentureInitializerGameTransformer,
 } from '../transformers/game_transformers';
-import { GameLevelEntity } from '../models/domain/game_levels/game_level';
+import { GameLevel } from '../game_levels/models/game_level';
 
 export class GameProvider {
   constructor(private firestore: Firestore, private selector: FirestoreSelector) {}
@@ -41,7 +41,7 @@ export class GameProvider {
   async createGameByTemplate(
     template: GameTemplate,
     participantsIds: UserEntity.Id[],
-    level?: GameLevelEntity.Id
+    level?: GameLevel
   ): Promise<Game> {
     this.checkParticipantsIds(participantsIds);
 
@@ -59,12 +59,12 @@ export class GameProvider {
       state: {
         gameStatus: 'players_move',
         monthNumber: 1,
-        participantProgress: participantsGameState(0),
         participantsProgress: participantsGameState({
           status: 'player_move',
           currentEventIndex: 0,
           currentMonthForParticipant: 1,
           monthResults: {},
+          progress: 0,
         }),
         winners: {},
       },
@@ -75,7 +75,7 @@ export class GameProvider {
       target: template.target,
       currentEvents: [],
       history: { months: [] },
-      config: { level, stocks: [], debentures: [] },
+      config: { level: level?.id, monthLimit: level?.monthLimit, stocks: [], debentures: [] },
     };
 
     game = applyGameTransformers(game, [

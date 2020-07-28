@@ -3,6 +3,7 @@ import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
 import 'package:cash_flow/presentation/gameboard/game_event_page.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/progress_bar.dart';
+import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/containers/card_container.dart';
 import 'package:cash_flow/widgets/containers/container_with_header_image.dart';
 import 'package:cash_flow/widgets/progress/account_bar.dart';
@@ -15,7 +16,14 @@ class ActionsTab extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final target = useCurrentGame((g) => g.target);
-    final targetTitle = mapTargetTypeToString(target.type);
+    final currentMonth = useCurrentGame((g) => g.state.monthNumber);
+    final monthLimit = useCurrentGame((g) => g.config?.monthLimit);
+
+    final monthPast = monthLimit != null
+        ? '${Strings.monthsPast}: ${currentMonth - 1} / $monthLimit'
+        : null;
+
+    final targetTitle = monthPast ?? mapTargetTypeToString(target.type);
     final user = useGlobalState((s) => s.login.currentUser);
 
     return ContainerWithHeaderImage(

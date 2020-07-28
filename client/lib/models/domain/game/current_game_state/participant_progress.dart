@@ -11,6 +11,7 @@ abstract class ParticipantProgress with _$ParticipantProgress {
     @required int currentEventIndex,
     @required int currentMonthForParticipant,
     @required Map<String, MonthResult> monthResults,
+    @required double progress,
   }) = _ParticipantProgress;
 
   factory ParticipantProgress.fromJson(Map<String, dynamic> json) =>

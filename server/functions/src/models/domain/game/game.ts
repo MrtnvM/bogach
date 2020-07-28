@@ -6,7 +6,7 @@ import { PossessionState } from '../possession_state';
 import { Entity } from '../../../core/domain/entity';
 import { GameTarget, GameTargetEntity } from './game_target';
 import { ParticipantGameState } from './participant_game_state';
-import { GameLevelEntity } from '../game_levels/game_level';
+import { GameLevelEntity } from '../../../game_levels/models/game_level';
 
 export interface Game {
   readonly id: GameEntity.Id;
@@ -47,12 +47,12 @@ export namespace GameEntity {
     readonly currentMonthForParticipant: number;
     readonly status: 'player_move' | 'month_result';
     readonly monthResults: { [month: number]: MonthResult };
+    readonly progress: number;
   };
 
   export type State = {
     readonly gameStatus: Status;
     readonly monthNumber: number;
-    readonly participantProgress: { [userId: string]: GameEventIndex };
     readonly participantsProgress: { [userId: string]: ParticipantProgress };
     readonly winners: { [place: number]: UserEntity.Id };
   };
@@ -63,6 +63,7 @@ export namespace GameEntity {
 
   export type Config = {
     readonly level?: GameLevelEntity.Id;
+    readonly monthLimit?: number;
     readonly stocks: string[];
     readonly debentures: string[];
   };
@@ -91,7 +92,7 @@ export namespace GameEntity {
 
     stateEntity.checkUnion('gameStatus', GameStatusValues);
     stateEntity.hasNumberValue('monthNumber');
-    stateEntity.hasValuesForKeys('participantProgress', gameEntity.participants);
+    stateEntity.hasValuesForKeys('participantsProgress', gameEntity.participants);
   };
 
   export const getPastEventsOfType = <T extends GameEvent>(props: {

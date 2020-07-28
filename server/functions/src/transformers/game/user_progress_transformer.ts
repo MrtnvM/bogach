@@ -4,6 +4,7 @@ import { GameTransformer } from './game_transformer';
 import { Game, GameEntity } from '../../models/domain/game/game';
 import { GameEventEntity } from '../../models/domain/game/game_event';
 import { UserEntity } from '../../models/domain/user';
+import { GameTargetEntity } from '../../models/domain/game/game_target';
 
 export class UserProgressTransformer extends GameTransformer {
   constructor(private eventId: GameEventEntity.Id, private userId: UserEntity.Id) {
@@ -27,6 +28,7 @@ export class UserProgressTransformer extends GameTransformer {
         currentMonthForParticipant,
         status: 'player_move',
         monthResults,
+        progress: GameTargetEntity.calculateProgress(game, this.userId),
       };
     } else {
       newParticipantEventIndex = currentParticipantEventIndex;
@@ -36,11 +38,11 @@ export class UserProgressTransformer extends GameTransformer {
         currentMonthForParticipant,
         status: 'month_result',
         monthResults,
+        progress: GameTargetEntity.calculateProgress(game, this.userId),
       };
     }
 
     return produce(game, (draft) => {
-      draft.state.participantProgress[this.userId] = newParticipantEventIndex;
       draft.state.participantsProgress[this.userId] = newParticipantProgress;
     });
   }

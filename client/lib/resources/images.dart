@@ -16,6 +16,9 @@ class Images {
   static const bgCircleRight = 'assets/images/png/bg_circle_right.png';
   static const bgCircleLeft = 'assets/images/png/bg_circle_left.png';
 
+  static const fail = 'assets/images/png/fail.png';
+  static const win = 'assets/images/png/win.png';
+
   // Bottom bar icons
   static const financesBarIcon = 'assets/images/svg/footer_financal.svg';
   static const gameBoardBarIcon = 'assets/images/svg/footer_action.svg';
