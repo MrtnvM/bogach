@@ -62,8 +62,8 @@ export namespace GameEntity {
   };
 
   export type Config = {
-    readonly level?: GameLevelEntity.Id;
-    readonly monthLimit?: number;
+    readonly level?: GameLevelEntity.Id | null;
+    readonly monthLimit?: number | null;
     readonly stocks: string[];
     readonly debentures: string[];
   };

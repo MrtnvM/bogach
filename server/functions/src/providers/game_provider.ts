@@ -75,7 +75,12 @@ export class GameProvider {
       target: template.target,
       currentEvents: [],
       history: { months: [] },
-      config: { level: level?.id, monthLimit: level?.monthLimit, stocks: [], debentures: [] },
+      config: {
+        level: level?.id || null,
+        monthLimit: level?.monthLimit || null,
+        stocks: [],
+        debentures: [],
+      },
     };
 
     game = applyGameTransformers(game, [
