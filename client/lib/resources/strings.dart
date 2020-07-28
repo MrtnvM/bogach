@@ -188,6 +188,8 @@ class Strings {
 
   static String get monthIsOver => 'Месяц завершен!';
 
+  static String get monthsPast => 'Прошло месяцев';
+
   // Log in errors
   static String get invalidCredentials => 'Неправильный логин или пароль';
 
@@ -225,9 +227,15 @@ class Strings {
       'приложений.\nПожалуйста, Повторите попытку позже.';
 
   // Winners Page
-  static String get winnersPageTitle => 'Еее, бой!';
-  static String get winnersPageDescription =>
-      'Поздравляем! \n' 'Ты достиг своей цели всего за';
+  static String get winnersPageTitle => 'Поздравляем!';
+  static String get winnersPageDescription => 'Ты достиг своей цели всего за';
+
+  static String get gameFailedPageTitle => 'Цель не достигнута!';
+  static String get gameFailedPageDescription =>
+      'Ты явно можешь лучше!\nНужна еще одна попытка!';
+
+  static String get startAgain => 'Начать заново';
+
   static String months(int number) => Intl.plural(
         number,
         zero: 'месяцев',

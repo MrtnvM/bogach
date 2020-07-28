@@ -1,7 +1,7 @@
 /// <reference types="@types/jest"/>
 
 import { GameLevelsProvider } from './game_levels_provider';
-import { GameLevelEntity } from '../models/domain/game_levels/game_level';
+import { GameLevelEntity } from '../game_levels/models/game_level';
 
 describe('Game Levels Service', () => {
   test('Successfully load game levels', () => {

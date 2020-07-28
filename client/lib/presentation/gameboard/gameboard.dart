@@ -67,13 +67,18 @@ class GameBoard extends HookWidget {
       orElse: () => activeTab,
     );
 
-    return Scaffold(
-      backgroundColor: ColorRes.primaryWhiteColor,
-      body: content,
-      bottomNavigationBar: BottomBar(
+    final bottomBar = activeGameState.maybeMap(
+      gameOver: (_) => null,
+      orElse: () => BottomBar(
         items: tabItems,
         selectedItemIndex: selectedIndex.value,
       ),
+    );
+
+    return Scaffold(
+      backgroundColor: ColorRes.primaryWhiteColor,
+      body: content,
+      bottomNavigationBar: bottomBar,
     );
   }
 }

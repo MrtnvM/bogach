@@ -19,18 +19,28 @@ export class WinnersTransformer extends GameTransformer {
       }))
       .sort((p1, p2) => p2.progress - p1.progress);
 
-    const winners: { [place: number]: string } = usersProgress.reduce((prev, curr, index) => {
+    const winners = usersProgress.reduce((prev, curr, index) => {
       return { ...prev, [index]: curr.participantId };
     }, {});
 
     const isTargetArchived = usersProgress[0].progress >= 1;
+    const isGameLevelMonthLimitReached = game.config.monthLimit
+      ? game.state.monthNumber >= game.config.monthLimit
+      : false;
 
-    const gameStatus: GameEntity.Status =
-      isTargetArchived && isMoveCompleted ? 'game_over' : game.state.gameStatus;
+    const shouldCompleteGame =
+      isMoveCompleted && (isTargetArchived || isGameLevelMonthLimitReached);
+
+    const gameStatus: GameEntity.Status = shouldCompleteGame ? 'game_over' : game.state.gameStatus;
 
     return produce(game, (draft) => {
       draft.state.gameStatus = gameStatus;
       draft.state.winners = winners;
+
+      draft.participants.forEach((participantId) => {
+        const participantProgress = draft.state.participantsProgress[participantId];
+        participantProgress.progress = GameTargetEntity.calculateProgress(game, participantId);
+      });
     });
   }
 }

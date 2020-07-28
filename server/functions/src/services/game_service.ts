@@ -27,7 +27,7 @@ import { GameTemplateEntity } from '../models/domain/game/game_template';
 import { InsuranceTransformer } from '../transformers/game/insurance_transformer';
 import { ResetEventIndexTransformer } from '../transformers/game/reset_event_index_transformer';
 import { RealEstateBuyEventHandler } from '../events/estate/buy/real_estate_buy_event_handler';
-import { GameLevelEntity } from '../models/domain/game_levels/game_level';
+import { GameLevelEntity } from '../game_levels/models/game_level';
 
 export class GameService {
   constructor(private gameProvider: GameProvider, private gameLevelsProvider: GameLevelsProvider) {
@@ -56,13 +56,13 @@ export class GameService {
   }
 
   async createNewGameByLevel(levelId: GameLevelEntity.Id, participantsIds: UserEntity.Id[]) {
-    const gameLevelConfig = this.gameLevelsProvider.getGameLevel(levelId);
-    const { template } = gameLevelConfig;
+    const gameLevel = this.gameLevelsProvider.getGameLevel(levelId);
+    const { template } = gameLevel;
 
     const createdGame = await this.gameProvider.createGameByTemplate(
       template,
       participantsIds,
-      levelId
+      gameLevel
     );
 
     return createdGame;
@@ -92,8 +92,8 @@ export class GameService {
     const updatedGame = applyGameTransformers(game, [
       new UserProgressTransformer(eventId, userId),
       new ParticipantAccountsTransformer(),
-      new WinnersTransformer(),
       new PossessionStateTransformer(),
+      new WinnersTransformer(),
       new HistoryGameTransformer(),
       new GameEventsTransformer(),
       new MonthResultTransformer(),

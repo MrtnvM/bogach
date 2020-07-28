@@ -1,4 +1,4 @@
-import { EventConfig } from '../../event_config';
+import { EventConfig } from '../../models/event_config';
 
 export const eventConfig: EventConfig = {
   incomeEvents: [

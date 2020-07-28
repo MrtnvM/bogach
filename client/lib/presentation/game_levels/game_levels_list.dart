@@ -45,7 +45,7 @@ class GameLevelList extends HookWidget {
       child: LoadableList<GameLevel>(
         viewModel: LoadableListViewModel(
           items: gameLevels,
-          itemBuilder: (i) => GameLevelItem(
+          itemBuilder: (i) => GameLevelItemWidget(
             gameLevel: gameLevels.items[i],
             onLevelSelected: createNewGameByLevel,
           ),

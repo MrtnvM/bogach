@@ -1,4 +1,4 @@
-import { GameLevelsConfig } from '../models/domain/game_levels/game_levels_config';
+import { GameLevelsConfig } from './models/game_levels_config';
 import { HookahManLevel } from './levels/hookah_man/hookah_man';
 
 export const GameLevels: GameLevelsConfig = {

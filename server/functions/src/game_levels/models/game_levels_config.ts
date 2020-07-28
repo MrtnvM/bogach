@@ -1,5 +1,5 @@
 import { GameLevel, GameLevelEntity } from './game_level';
-import { Entity } from '../../../core/domain/entity';
+import { Entity } from '../../core/domain/entity';
 
 export interface GameLevelsConfig {
   readonly levelsMap: { [levelId: string]: GameLevel };

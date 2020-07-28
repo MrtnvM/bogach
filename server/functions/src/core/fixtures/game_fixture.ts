@@ -52,6 +52,7 @@ export namespace GameFixture {
         currentMonthForParticipant: 1,
         status: 'player_move',
         monthResults: { 0: monthResult },
+        progress: 0,
       };
     });
 
@@ -63,7 +64,6 @@ export namespace GameFixture {
       state: game?.state || {
         gameStatus: 'players_move',
         monthNumber: 1,
-        participantProgress: createParticipantsGameState(participants, 0),
         participantsProgress,
         winners: {},
       },

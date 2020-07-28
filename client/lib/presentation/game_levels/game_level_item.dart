@@ -2,8 +2,8 @@ import 'package:cash_flow/models/domain/game/game_level/game_level.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 
-class GameLevelItem extends StatelessWidget {
-  const GameLevelItem({
+class GameLevelItemWidget extends StatelessWidget {
+  const GameLevelItemWidget({
     @required this.gameLevel,
     @required this.onLevelSelected,
   });

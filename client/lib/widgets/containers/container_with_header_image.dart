@@ -117,7 +117,7 @@ class ContainerWithHeaderImage extends HookWidget {
       children: <Widget>[
         Align(
           alignment: Alignment.topRight,
-          child: Image(
+          child: const Image(
             image: AssetImage(Images.bgCircleRight),
             fit: BoxFit.contain,
             width: 93,
@@ -126,7 +126,7 @@ class ContainerWithHeaderImage extends HookWidget {
         ),
         Align(
           alignment: Alignment.bottomLeft,
-          child: Image(
+          child: const Image(
             image: AssetImage(Images.bgCircleLeft),
             fit: BoxFit.contain,
             width: 119,

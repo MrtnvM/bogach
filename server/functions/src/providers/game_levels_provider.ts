@@ -1,4 +1,4 @@
-import { GameLevel, GameLevelEntity } from '../models/domain/game_levels/game_level';
+import { GameLevel, GameLevelEntity } from '../game_levels/models/game_level';
 import { GameLevels } from '../game_levels/game_levels';
 
 export class GameLevelsProvider {

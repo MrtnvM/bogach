@@ -5,6 +5,7 @@ import { eventConfig } from './event_config';
 import { IncomeGenerateRule } from '../../../generators/rules/income_generate_rule';
 import { DebentureGenerateRule } from '../../../generators/rules/debenture_generate_rule';
 import { StockGenerateRule } from '../../../generators/rules/stock_generate_rule';
+import { ExpenseGenerateRule } from '../../../generators/rules/expense_generate_rule';
 
 const getIncomeGenenerateRule = () => {
   const incomeEvents = eventConfig.incomeEvents;
@@ -25,7 +26,7 @@ const getExpenseGenenerateRule = () => {
     minDistanceBetweenEvents: 2,
   };
 
-  return new IncomeGenerateRule(ruleConfig, expenseEvents);
+  return new ExpenseGenerateRule(ruleConfig, expenseEvents);
 };
 
 const getHealthInsuranceGenerateRule = () => {
