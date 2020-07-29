@@ -29,6 +29,11 @@ export namespace IncomeEventGenerator {
 
     const eventIndex = random.int(0, filtredIncomeEvents.length - 1);
     const eventInfo = filtredIncomeEvents[eventIndex];
+
+    return generateEvent(eventInfo);
+  };
+
+  export const generateEvent = (eventInfo: IncomeEvent.Info): IncomeEvent.Event => {
     const income = randomValueFromRange(eventInfo.range);
 
     return {

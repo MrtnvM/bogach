@@ -36,6 +36,11 @@ export namespace ExpenseEventGenerator {
 
     const eventIndex = random.int(0, filtredExpenseEvents.length - 1);
     const eventInfo = filtredExpenseEvents[eventIndex];
+
+    return generateEvent(eventInfo);
+  };
+
+  export const generateEvent = (eventInfo: ExpenseEvent.Info): ExpenseEvent.Event => {
     const expense = randomValueFromRange(eventInfo.range);
 
     return {
