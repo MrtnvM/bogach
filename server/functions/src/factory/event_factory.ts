@@ -1,4 +1,4 @@
-import { ValueRange } from '../core/data/value_range';
+import { valueRange, optionalValueRange, ValueRange } from '../core/data/value_range';
 
 import { IncomeEvent } from '../events/income/income_event';
 import { IncomeEventGenerator } from '../events/income/income_event_generator';
@@ -13,18 +13,8 @@ import { InsuranceGeneratorConfig } from '../events/insurance/insurance_generato
 
 import { DebentureEvent } from '../events/debenture/debenture_event';
 import { DebentureEventGenerator } from '../events/debenture/debenture_event_generator';
-
-const valueRange = (values: [number, number, number]): ValueRange => {
-  return {
-    min: values[0],
-    max: values[1],
-    stepValue: values[2],
-  };
-};
-
-const optioanlValueRange = (values?: [number, number, number]): ValueRange | undefined => {
-  return values && valueRange(values);
-};
+import { StockEvent } from '../events/stock/stock_event';
+import { StockEventGenerator } from '../events/stock/stock_event_generator';
 
 export namespace EventFactory {
   export const incomeEvent = (props: {
@@ -61,7 +51,7 @@ export namespace EventFactory {
     insuranceType: InsuranceAssetEntity.InsuranceType;
     name?: string;
     description?: string;
-    cost?: [number, number, number];
+    cost?: number | [number, number, number];
     value?: [number, number, number];
     duration?: number;
   }): InsuranceEvent.Event => {
@@ -70,8 +60,8 @@ export namespace EventFactory {
     const eventInfo: Partial<InsuranceEvent.Info> = {
       name,
       description,
-      cost: optioanlValueRange(cost),
-      value: optioanlValueRange(value),
+      cost: optionalValueRange(cost),
+      value: optionalValueRange(value),
       duration,
       insuranceType,
     };
@@ -106,7 +96,25 @@ export namespace EventFactory {
       nominal: valueRange(nominal),
       profitability: valueRange(profitability),
       price: valueRange(price),
-      availableCount: optioanlValueRange(availableCount),
+      availableCount: optionalValueRange(availableCount),
+    });
+  };
+
+  export const stockEvent = (props: {
+    name: string;
+    description?: string;
+    price: ValueRange;
+    fairPrice: ValueRange;
+    availableCount?: ValueRange;
+  }): StockEvent.Event => {
+    const { name, description, fairPrice, price, availableCount } = props;
+
+    return StockEventGenerator.generateEvent({
+      name,
+      description,
+      currentPrice: price,
+      fairPrice: fairPrice,
+      availableCount: availableCount,
     });
   };
 }

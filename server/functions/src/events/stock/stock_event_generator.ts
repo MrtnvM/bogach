@@ -2,10 +2,11 @@
 
 import * as uuid from 'uuid';
 import * as random from 'random';
-import { StockPriceChangedEvent } from './stock_price_changed_event';
+import { StockEvent } from './stock_event';
 import { Game } from '../../models/domain/game/game';
 import * as fs from 'fs';
 import * as path from 'path';
+import { randomValueFromRange, valueRange } from '../../core/data/value_range';
 
 type Candle = {
   High: number;
@@ -40,10 +41,10 @@ const getStockCandles = (stockName: string): Candle[] => {
   return stockCandles;
 };
 
-export namespace StockPriceChangedEventGenerator {
-  export const generate = (game: Game): StockPriceChangedEvent.Event | undefined => {
+export namespace StockEventGenerator {
+  export const generate = (game: Game): StockEvent.Event | undefined => {
     const alreadyUsedStocks = game.currentEvents
-      .filter((e) => e.type === StockPriceChangedEvent.Type)
+      .filter((e) => e.type === StockEvent.Type)
       .map((e) => e.name);
 
     const availableStocks = game.config.stocks.filter((s) =>
@@ -73,15 +74,29 @@ export namespace StockPriceChangedEventGenerator {
 
     const maxCount = random.int(9, 14) * 10;
 
+    return generateEvent({
+      name: stockName,
+      currentPrice: valueRange([currentPrice, currentPrice, 0]),
+      fairPrice: valueRange([yearAverageStockPrice, yearAverageStockPrice, 0]),
+      availableCount: valueRange([maxCount, maxCount, 0]),
+    });
+  };
+
+  export const generateEvent = (eventInfo: StockEvent.Info): StockEvent.Event => {
+    const { name, description, currentPrice, fairPrice, availableCount } = eventInfo;
+
+    const defaultAvailableCount = random.int(9, 14) * 10;
+
     return {
       id: uuid.v4(),
-      name: stockName,
-      description: '',
-      type: StockPriceChangedEvent.Type,
+      name: name,
+      description: description || '',
+      type: StockEvent.Type,
       data: {
-        currentPrice,
-        fairPrice: yearAverageStockPrice,
-        availableCount: maxCount,
+        currentPrice: randomValueFromRange(currentPrice),
+        fairPrice: randomValueFromRange(fairPrice),
+        availableCount:
+          (availableCount && randomValueFromRange(availableCount)) || defaultAvailableCount,
       },
     };
   };

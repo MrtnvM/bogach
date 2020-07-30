@@ -2,12 +2,12 @@
 
 import { GameEntity } from '../../models/domain/game/game';
 import produce from 'immer';
-import { stubs, utils } from './stock_price_changed_handler.spec.utils';
-import { StockPriceChangedHandler } from './stock_price_changed_handler';
+import { stubs, utils } from './stock_event_handler.spec.utils';
+import { StockEventHandler } from './stock_event_handler';
 import { StockAsset } from '../../models/domain/assets/stock_asset';
 import { DomainErrors } from '../../core/exceptions/domain/domain_errors';
 
-describe('Stock price changed event handler', () => {
+describe('Stock event handler', () => {
   const { eventId, userId, game, stock1, initialCash } = stubs;
 
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe('Stock price changed event handler', () => {
   });
 
   test('Successfully bought new stock', async () => {
-    const handler = new StockPriceChangedHandler();
+    const handler = new StockEventHandler();
 
     const event = utils.stockPriceChangedEvent({
       currentPrice: 100,
@@ -48,7 +48,7 @@ describe('Stock price changed event handler', () => {
   });
 
   test('Successfully update existing stock on buy', async () => {
-    const handler = new StockPriceChangedHandler();
+    const handler = new StockEventHandler();
 
     const currentPrice = 130;
     const maxCount = 10;
@@ -78,7 +78,7 @@ describe('Stock price changed event handler', () => {
   });
 
   test('Successfully update existing stock on sell', async () => {
-    const handler = new StockPriceChangedHandler();
+    const handler = new StockEventHandler();
 
     const currentPrice = 150;
     const maxCount = 10;
@@ -107,7 +107,7 @@ describe('Stock price changed event handler', () => {
   });
 
   test('Successfully remove stock if all is sold', async () => {
-    const handler = new StockPriceChangedHandler();
+    const handler = new StockEventHandler();
 
     const currentPrice = 140;
     const maxCount = 10;
@@ -132,7 +132,7 @@ describe('Stock price changed event handler', () => {
   });
 
   test('Cannot sell more stocks than already have', async () => {
-    const handler = new StockPriceChangedHandler();
+    const handler = new StockEventHandler();
 
     const currentPrice = 140;
     const maxCount = 10;
@@ -153,7 +153,7 @@ describe('Stock price changed event handler', () => {
   });
 
   test('Cannot sell more stocks than in action', async () => {
-    const handler = new StockPriceChangedHandler();
+    const handler = new StockEventHandler();
 
     const currentPrice = 140;
     const maxCount = 5;
@@ -174,7 +174,7 @@ describe('Stock price changed event handler', () => {
   });
 
   test('Cannot buy more stocks than in action', async () => {
-    const handler = new StockPriceChangedHandler();
+    const handler = new StockEventHandler();
 
     const currentPrice = 140;
     const maxCount = 5;

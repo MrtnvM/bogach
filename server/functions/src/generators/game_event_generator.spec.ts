@@ -11,7 +11,7 @@ import {
 import { GameEventGenerator } from './game_event_generator';
 import { DebentureGenerateRule } from './rules/debenture_generate_rule';
 import { DebentureEvent } from '../events/debenture/debenture_event';
-import { StockPriceChangedEvent } from '../events/stock/stock_price_changed_event';
+import { StockEvent } from '../events/stock/stock_event';
 
 describe('Game Event Generator', () => {
   const { game } = stubs;
@@ -62,7 +62,7 @@ describe('Game Event Generator', () => {
     const debentureEvents = gameEvents.filter((e) => e.type === DebentureEvent.Type);
     expect(debentureEvents.length).toEqual(1);
 
-    const stockEvents = gameEvents.filter((e) => e.type === StockPriceChangedEvent.Type);
+    const stockEvents = gameEvents.filter((e) => e.type === StockEvent.Type);
     expect(stockEvents.length).toEqual(6);
   });
 

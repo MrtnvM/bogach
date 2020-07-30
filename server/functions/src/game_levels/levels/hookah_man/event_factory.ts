@@ -1,4 +1,5 @@
 import { EventFactory } from '../../../factory/event_factory';
+import { valueRange } from '../../../core/data/value_range';
 
 namespace IncomeFactory {
   export const workBonus = (value: number) =>
@@ -112,9 +113,52 @@ namespace DebentureFactory {
     });
 }
 
+namespace StockFactory {
+  export const findex = (price: number, availableCount: number) =>
+    EventFactory.stockEvent({
+      name: 'FINDEX',
+      price: valueRange(price),
+      fairPrice: valueRange(2540),
+      availableCount: valueRange(availableCount),
+    });
+
+  export const gasPromGroup = (price: number, availableCount: number) =>
+    EventFactory.stockEvent({
+      name: 'Газ Пром Групп',
+      price: valueRange(price),
+      fairPrice: valueRange(360),
+      availableCount: valueRange(availableCount),
+    });
+
+  export const sberInvestBank = (price: number, availableCount: number) =>
+    EventFactory.stockEvent({
+      name: 'СберИнвестБанк',
+      price: valueRange(price),
+      fairPrice: valueRange(240),
+      availableCount: valueRange(availableCount),
+    });
+
+  export const metalPromInvest = (price: number, availableCount: number) =>
+    EventFactory.stockEvent({
+      name: 'МеталлПромИнвест',
+      price: valueRange(price),
+      fairPrice: valueRange(24),
+      availableCount: valueRange(availableCount),
+    });
+
+  export const nickTeslaAuto = (price: number, availableCount: number) =>
+    EventFactory.stockEvent({
+      name: 'Nick Tesla Auto',
+      price: valueRange(price),
+      fairPrice: valueRange(525),
+      availableCount: valueRange(availableCount),
+    });
+}
+
 export namespace HookahManEventFactory {
   export const Income = IncomeFactory;
   export const Expense = ExpenseFactory;
   export const Insurace = InsuraceFactory;
   export const Debenture = DebentureFactory;
+  export const Stock = StockFactory;
 }

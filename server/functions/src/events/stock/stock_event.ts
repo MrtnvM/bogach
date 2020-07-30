@@ -1,8 +1,9 @@
 import { GameEventEntity, GameEvent } from '../../models/domain/game/game_event';
 import { BuySellAction, BuySellActionValues } from '../../models/domain/actions/buy_sell_action';
 import { Entity } from '../../core/domain/entity';
+import { ValueRange } from '../../core/data/value_range';
 
-export namespace StockPriceChangedEvent {
+export namespace StockEvent {
   export const Type: GameEventEntity.Type = 'stock-price-changed-event';
 
   export type Event = GameEvent<Data>;
@@ -19,12 +20,20 @@ export namespace StockPriceChangedEvent {
     readonly count: number;
   }
 
+  export type Info = {
+    name: string;
+    description?: string;
+    currentPrice: ValueRange;
+    fairPrice: ValueRange;
+    availableCount?: ValueRange;
+  };
+
   export const validate = (event: any) => {
     if (event?.type !== Type) {
       throw new Error('ERROR: Event type is not equal to ' + Type);
     }
 
-    const entity = Entity.createEntityValidator<Data>(event.data, 'StockPriceChangedEvent.Data');
+    const entity = Entity.createEntityValidator<Data>(event.data, 'StockEvent.Data');
 
     entity.hasNumberValue('currentPrice');
     entity.hasNumberValue('fairPrice');
@@ -38,10 +47,7 @@ export namespace StockPriceChangedEvent {
   };
 
   export const validateAction = (action: any) => {
-    const entity = Entity.createEntityValidator<PlayerAction>(
-      action,
-      'StockPriceChangedEvent.PlayerAction'
-    );
+    const entity = Entity.createEntityValidator<PlayerAction>(action, 'StockEvent.PlayerAction');
 
     entity.hasValue('eventId');
     entity.checkUnion('action', BuySellActionValues);

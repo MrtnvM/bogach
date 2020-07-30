@@ -6,6 +6,34 @@ export type ValueRange = {
   readonly stepValue: number;
 };
 
+export const singleValueRange = (value: number): ValueRange => ({
+  min: value,
+  max: value,
+  stepValue: 0,
+});
+
+export const valueRange = (value: number | [number, number, number]): ValueRange => {
+  if (typeof value === 'number') {
+    return valueRange([value, value, 0]);
+  }
+
+  return {
+    min: value[0],
+    max: value[1],
+    stepValue: value[2],
+  };
+};
+
+export const optionalValueRange = (
+  value?: number | [number, number, number]
+): ValueRange | undefined => {
+  if (typeof value === 'number') {
+    return valueRange(value);
+  }
+
+  return value && valueRange(value);
+};
+
 export const randomValueFromRange = (range: ValueRange) => {
   if (range.min > range.max) {
     throw new Error('ERROR: Incorrect range ' + JSON.stringify(range));

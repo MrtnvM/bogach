@@ -3,14 +3,14 @@ import { AssetEntity, Asset } from '../../models/domain/asset';
 import { BuySellAction } from '../../models/domain/actions/buy_sell_action';
 import { Game } from '../../models/domain/game/game';
 import produce from 'immer';
-import { StockPriceChangedEvent } from './stock_price_changed_event';
+import { StockEvent } from './stock_event';
 import { StockAsset } from '../../models/domain/assets/stock_asset';
 import { Account } from '../../models/domain/account';
 import { UserEntity } from '../../models/domain/user';
 import { DomainErrors } from '../../core/exceptions/domain/domain_errors';
 
-type Event = StockPriceChangedEvent.Event;
-type Action = StockPriceChangedEvent.PlayerAction;
+type Event = StockEvent.Event;
+type Action = StockEvent.PlayerAction;
 
 interface ActionResult {
   readonly newStockCount: number;
@@ -28,15 +28,15 @@ interface ActionParameters {
   readonly totalPrice: number;
 }
 
-export class StockPriceChangedHandler extends PlayerActionHandler {
+export class StockEventHandler extends PlayerActionHandler {
   get gameEventType(): string {
-    return StockPriceChangedEvent.Type;
+    return StockEvent.Type;
   }
 
   async validate(event: any, action: any): Promise<boolean> {
     try {
-      StockPriceChangedEvent.validate(event);
-      StockPriceChangedEvent.validateAction(action);
+      StockEvent.validate(event);
+      StockEvent.validateAction(action);
     } catch (error) {
       console.error(error);
       return false;

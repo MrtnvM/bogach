@@ -1,15 +1,15 @@
 import { Rule } from '../generator_rule';
-import { StockPriceChangedEvent } from '../../events/stock/stock_price_changed_event';
-import { StockPriceChangedEventGenerator } from '../../events/stock/stock_price_changed_event_generator';
+import { StockEvent } from '../../events/stock/stock_event';
+import { StockEventGenerator } from '../../events/stock/stock_event_generator';
 import { Game } from '../../models/domain/game/game';
 
-export class StockGenerateRule extends Rule<StockPriceChangedEvent.Event> {
+export class StockGenerateRule extends Rule<StockEvent.Event> {
   getProbabilityLevel(): number {
     return 10;
   }
 
   generate(game: Game) {
-    return StockPriceChangedEventGenerator.generate(game);
+    return StockEventGenerator.generate(game);
   }
 
   getMinDistanceBetweenEvents(): number {
@@ -17,7 +17,7 @@ export class StockGenerateRule extends Rule<StockPriceChangedEvent.Event> {
   }
 
   getType(): string {
-    return StockPriceChangedEvent.Type;
+    return StockEvent.Type;
   }
 
   getMaxCountOfEventInMonth() {

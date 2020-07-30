@@ -40,7 +40,8 @@ export class GameEventsTransformer extends GameTransformer {
     const level = levelId && GameLevels.levelsMap[levelId];
 
     if (level) {
-      const levelGameEvents = level.levelEventConfig.events[game.state.monthNumber - 1];
+      const index = this.force ? 0 : game.state.monthNumber;
+      const levelGameEvents = level.levelEventConfig.events[index];
       return levelGameEvents;
     }
 
