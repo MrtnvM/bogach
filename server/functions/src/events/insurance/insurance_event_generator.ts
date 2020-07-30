@@ -22,6 +22,10 @@ export namespace InsuranceEventGenerator {
       return undefined;
     }
 
+    return generateEvent(insuranceInfo);
+  };
+
+  export const generateEvent = (insuranceInfo: InsuranceEvent.Info): InsuranceEvent.Event => {
     return {
       id: uuid.v4(),
       name: insuranceInfo.name,

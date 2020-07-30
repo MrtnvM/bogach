@@ -1,13 +1,13 @@
 import { Entity } from '../../core/domain/entity';
 import { GameTemplate, GameTemplateEntity } from '../../models/domain/game/game_template';
-import { Rule } from '../../generators/generator_rule';
+import { GameLevelEventConfig } from './event_config';
 
 export interface GameLevel {
   readonly id: GameLevelEntity.Id;
   readonly name: string;
   readonly icon: string;
   readonly template: GameTemplate;
-  readonly rules: Rule[];
+  readonly levelEventConfig: GameLevelEventConfig;
 
   /// Max month count in game.
   /// When limit is crossed game should be completed
@@ -24,7 +24,7 @@ export namespace GameLevelEntity {
     entity.hasStringValue('name');
     entity.hasStringValue('icon');
     entity.hasObjectValue('template', GameTemplateEntity.validate);
-    entity.hasArrayValue('rules');
+    entity.hasValue('levelEventConfig');
     entity.hasNumberValue('monthLimit');
 
     entity.checkWithRules([

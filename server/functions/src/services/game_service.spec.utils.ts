@@ -1,6 +1,6 @@
 import { GameEntity, Game } from '../models/domain/game/game';
 import { UserEntity } from '../models/domain/user';
-import { DebenturePriceChangedEvent } from '../events/debenture/debenture_price_changed_event';
+import { DebentureEvent } from '../events/debenture/debenture_event';
 import { GameEventEntity } from '../models/domain/game/game_event';
 import { GameFixture } from '../core/fixtures/game_fixture';
 
@@ -10,13 +10,13 @@ export const userId: UserEntity.Id = 'user1';
 export const firstEventId: GameEventEntity.Id = 'event1';
 export const lastEventId: GameEventEntity.Id = 'event2';
 
-export const firstEventPlayerAction: DebenturePriceChangedEvent.PlayerAction = {
+export const firstEventPlayerAction: DebentureEvent.PlayerAction = {
   eventId: firstEventId,
   action: 'buy',
   count: 1,
 };
 
-export const lastEventPlayerAction: DebenturePriceChangedEvent.PlayerAction = {
+export const lastEventPlayerAction: DebentureEvent.PlayerAction = {
   eventId: lastEventId,
   action: 'buy',
   count: 1,
@@ -65,11 +65,11 @@ export const game: Game = GameFixture.createGame({
     },
   },
   currentEvents: [
-    create<DebenturePriceChangedEvent.Event>({
+    create<DebentureEvent.Event>({
       id: firstEventId,
       name: 'Debenture Event 1',
       description: 'Debenture Event 1',
-      type: DebenturePriceChangedEvent.Type,
+      type: DebentureEvent.Type,
       data: {
         currentPrice: 1_100,
         nominal: 1_000,
@@ -77,11 +77,11 @@ export const game: Game = GameFixture.createGame({
         availableCount: 100,
       },
     }),
-    create<DebenturePriceChangedEvent.Event>({
+    create<DebentureEvent.Event>({
       id: lastEventId,
       name: 'Debenture Event 2',
       description: 'Debenture Event 2',
-      type: DebenturePriceChangedEvent.Type,
+      type: DebentureEvent.Type,
       data: {
         currentPrice: 900,
         nominal: 1_000,

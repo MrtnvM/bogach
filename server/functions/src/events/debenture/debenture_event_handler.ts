@@ -1,5 +1,5 @@
 import { PlayerActionHandler } from '../../core/domain/player_action_handler';
-import { DebenturePriceChangedEvent } from './debenture_price_changed_event';
+import { DebentureEvent } from './debenture_event';
 import { AssetEntity, Asset } from '../../models/domain/asset';
 import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
 import { BuySellAction } from '../../models/domain/actions/buy_sell_action';
@@ -9,8 +9,8 @@ import produce from 'immer';
 import { UserEntity } from '../../models/domain/user';
 import { DomainErrors } from '../../core/exceptions/domain/domain_errors';
 
-type Event = DebenturePriceChangedEvent.Event;
-type Action = DebenturePriceChangedEvent.PlayerAction;
+type Event = DebentureEvent.Event;
+type Action = DebentureEvent.PlayerAction;
 
 interface ActionResult {
   readonly newDebentureCount: number;
@@ -28,15 +28,15 @@ interface ActionParameters {
   readonly totalPrice: number;
 }
 
-export class DebenturePriceChangedHandler extends PlayerActionHandler {
+export class DebentureEventHandler extends PlayerActionHandler {
   get gameEventType(): string {
-    return DebenturePriceChangedEvent.Type;
+    return DebentureEvent.Type;
   }
 
   async validate(event: any, action: any): Promise<boolean> {
     try {
-      DebenturePriceChangedEvent.validate(event);
-      DebenturePriceChangedEvent.validateAction(action);
+      DebentureEvent.validate(event);
+      DebentureEvent.validateAction(action);
     } catch (error) {
       console.error(error);
       return false;

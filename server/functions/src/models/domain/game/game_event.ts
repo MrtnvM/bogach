@@ -1,6 +1,5 @@
 import * as uuid from 'uuid';
 import { Entity } from '../../../core/domain/entity';
-import { DebenturePriceChangedEvent } from '../../../events/debenture/debenture_price_changed_event';
 
 export interface GameEvent<EventData = any> {
   readonly id: GameEventEntity.Id;
@@ -39,11 +38,5 @@ export namespace GameEventEntity {
     entity.hasValue('name');
     entity.hasValue('description');
     entity.hasValue('type');
-
-    const type = gameEvent.type;
-
-    Entity.validate(gameEvent, type, [
-      [DebenturePriceChangedEvent.Type, DebenturePriceChangedEvent.validate],
-    ]);
   };
 }

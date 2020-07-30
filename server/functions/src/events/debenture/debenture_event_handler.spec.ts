@@ -2,8 +2,8 @@
 
 import { GameEntity } from '../../models/domain/game/game';
 import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
-import { DebenturePriceChangedHandler } from './debenture_price_changed_handler';
-import { stubs, utils } from './debenture_price_changed_handler.spec.utils';
+import { DebentureEventHandler } from './debenture_event_handler';
+import { stubs, utils } from './debenture_event_handler.spec.utils';
 import produce from 'immer';
 import { DomainErrors } from '../../core/exceptions/domain/domain_errors';
 
@@ -15,7 +15,7 @@ describe('Debenture price changed event handler', () => {
   });
 
   test('Successfully bought new debenture', async () => {
-    const handler = new DebenturePriceChangedHandler();
+    const handler = new DebentureEventHandler();
 
     const event = utils.debenturePriceChangedEvent({
       currentPrice: 1100,
@@ -50,7 +50,7 @@ describe('Debenture price changed event handler', () => {
   });
 
   test('Successfully update existing debenture on buy', async () => {
-    const handler = new DebenturePriceChangedHandler();
+    const handler = new DebentureEventHandler();
 
     const currentPrice = 1200;
     const availableCount = 20;
@@ -82,7 +82,7 @@ describe('Debenture price changed event handler', () => {
   });
 
   test('Successfully update existing debenture on sell', async () => {
-    const handler = new DebenturePriceChangedHandler();
+    const handler = new DebentureEventHandler();
 
     const currentPrice = 1100;
     const availableCount = 4;
@@ -113,7 +113,7 @@ describe('Debenture price changed event handler', () => {
   });
 
   test('Successfully remove debenture if all is sold', async () => {
-    const handler = new DebenturePriceChangedHandler();
+    const handler = new DebentureEventHandler();
 
     const currentPrice = 1100;
     const availableCount = 4;
@@ -138,7 +138,7 @@ describe('Debenture price changed event handler', () => {
   });
 
   test('Cannot sell more debentures than already have', async () => {
-    const handler = new DebenturePriceChangedHandler();
+    const handler = new DebentureEventHandler();
 
     const event = utils.debenturePriceChangedEvent({
       currentPrice: 1100,
@@ -162,7 +162,7 @@ describe('Debenture price changed event handler', () => {
   });
 
   test('Cannot sell more debentures than in action have', async () => {
-    const handler = new DebenturePriceChangedHandler();
+    const handler = new DebentureEventHandler();
 
     const event = utils.debenturePriceChangedEvent({
       currentPrice: 1100,
@@ -186,7 +186,7 @@ describe('Debenture price changed event handler', () => {
   });
 
   test('Cannot buy more debentures than in action have', async () => {
-    const handler = new DebenturePriceChangedHandler();
+    const handler = new DebentureEventHandler();
 
     const event = utils.debenturePriceChangedEvent({
       currentPrice: 900,

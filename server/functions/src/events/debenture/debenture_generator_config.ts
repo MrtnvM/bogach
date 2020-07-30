@@ -1,15 +1,11 @@
-export namespace DebentureGeneratorConfig {
-  type Range = {
-    readonly min: number;
-    readonly max: number;
-    readonly stepValue: number;
-  };
+import { ValueRange } from '../../core/data/value_range';
 
+export namespace DebentureGeneratorConfig {
   type Config = {
     readonly nameOptions: string[];
-    readonly nominal: Range;
-    readonly price: Range;
-    readonly profitability: Range;
+    readonly nominal: ValueRange;
+    readonly price: ValueRange;
+    readonly profitability: ValueRange;
   };
 
   export const govermentDebenture: Config = {

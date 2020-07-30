@@ -5,7 +5,7 @@ import { UserEntity } from '../models/domain/user';
 import { GameEventEntity } from '../models/domain/game/game_event';
 import { Possessions } from '../models/domain/possessions';
 import { instance, when, mock, anything } from 'ts-mockito';
-import { DebenturePriceChangedEvent } from '../events/debenture/debenture_price_changed_event';
+import { DebentureEvent } from '../events/debenture/debenture_event';
 import { DebentureGenerateRule } from './rules/debenture_generate_rule';
 import { StockPriceChangedEvent } from '../events/stock/stock_price_changed_event';
 import { StockGenerateRule } from './rules/stock_generate_rule';
@@ -48,7 +48,7 @@ export const debentureEvent = () => {
     id: 'event1',
     name: 'ОФЗ',
     description: 'ОФЗ',
-    type: DebenturePriceChangedEvent.Type,
+    type: DebentureEvent.Type,
     data: {
       currentPrice: 1100,
       nominal: 1000,
@@ -62,20 +62,20 @@ export const createMockedDebentureRule = (config: {
   minDistance?: number;
   maxEventsInMonth?: number;
   probabilityLevel?: number[];
-  events?: DebenturePriceChangedEvent.Event[];
+  events?: DebentureEvent.Event[];
 }) => {
   const mockDebentureRule = mock(DebentureGenerateRule);
 
   when(mockDebentureRule.getMinDistanceBetweenEvents()).thenReturn(config.minDistance || 0);
   when(mockDebentureRule.getProbabilityLevel()).thenReturn(...(config.probabilityLevel || [10]));
-  when(mockDebentureRule.getType()).thenReturn(DebenturePriceChangedEvent.Type);
+  when(mockDebentureRule.getType()).thenReturn(DebentureEvent.Type);
   when(mockDebentureRule.getMaxCountOfEventInMonth()).thenReturn(config.maxEventsInMonth || 0);
 
   const event = {
     id: 'event1',
     name: 'ОФЗ',
     description: 'ОФЗ',
-    type: DebenturePriceChangedEvent.Type,
+    type: DebentureEvent.Type,
     data: {
       currentPrice: 1100,
       nominal: 1000,

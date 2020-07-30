@@ -11,8 +11,13 @@ export const randomValueFromRange = (range: ValueRange) => {
     throw new Error('ERROR: Incorrect range ' + JSON.stringify(range));
   }
 
-  if (range.stepValue <= 0) {
-    throw new Error('ERROR: Step value should be greater 0 ' + JSON.stringify(range));
+  if (range.stepValue < 0) {
+    throw new Error('ERROR: Step value should be greater or equal 0 ' + JSON.stringify(range));
+  }
+
+  if (range.stepValue === 0) {
+    const possibleValues = [range.min, range.max];
+    return possibleValues[random.int(0, possibleValues.length - 1)];
   }
 
   const interval = range.max - range.min;

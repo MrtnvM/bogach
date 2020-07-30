@@ -3,7 +3,7 @@ import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { GameEventEntity } from '../models/domain/game/game_event';
 import { GameContext } from '../models/domain/game/game_context';
 import { PlayerActionHandler } from '../core/domain/player_action_handler';
-import { DebenturePriceChangedHandler } from '../events/debenture/debenture_price_changed_handler';
+import { DebentureEventHandler } from '../events/debenture/debenture_event_handler';
 import { StockPriceChangedHandler } from '../events/stock/stock_price_changed_handler';
 import { BusinessBuyEventHandler } from '../events/business/buy/business_buy_event_handler';
 import {
@@ -37,7 +37,7 @@ export class GameService {
   }
 
   private handlers: PlayerActionHandler[] = [
-    new DebenturePriceChangedHandler(),
+    new DebentureEventHandler(),
     new StockPriceChangedHandler(),
     new BusinessBuyEventHandler(),
     new BusinessSellEventHandler(),
