@@ -15,6 +15,7 @@ class Images {
   static const headerGreenBackground = 'assets/images/png/green_bg.png';
   static const bgCircleRight = 'assets/images/png/bg_circle_right.png';
   static const bgCircleLeft = 'assets/images/png/bg_circle_left.png';
+  static const infoIcon = 'assets/images/png/ic_info.png';
 
   static const fail = 'assets/images/png/fail.png';
   static const win = 'assets/images/png/win.png';

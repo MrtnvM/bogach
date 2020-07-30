@@ -1,4 +1,5 @@
 import 'package:cash_flow/presentation/gameboard/widgets/table/table_divider.dart';
+import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/containers/card_container.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class InfoTable extends StatelessWidget {
     this.titleTextStyle = Styles.tableHeaderTitleBlack,
     this.titleValueStyle = Styles.tableHeaderValueBlack,
     this.withShadow = true,
+    this.onInfoClick = null,
   }) : super(key: key);
 
   final String title;
@@ -22,6 +24,7 @@ class InfoTable extends StatelessWidget {
   final TextStyle titleTextStyle;
   final TextStyle titleValueStyle;
   final bool withShadow;
+  final Function onInfoClick;
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +62,13 @@ class InfoTable extends StatelessWidget {
             child: Text(title, style: titleTextStyle),
           ),
           if (titleValue != null) Text(titleValue, style: titleValueStyle),
+          if (onInfoClick != null) AssetImage(Images.defaultAvatar) as Widget,
         ],
       ),
       if (description != null) ...<Widget>[
         const SizedBox(height: 16),
         Container(
+          color: Colors.black,
           alignment: Alignment.centerLeft,
           child: Text(
             description,
