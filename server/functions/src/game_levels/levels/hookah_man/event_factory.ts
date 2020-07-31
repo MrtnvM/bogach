@@ -57,6 +57,46 @@ namespace ExpenseFactory {
       insuranceType: null,
       range: valueRange(value),
     });
+
+  export const doctor = (value: number) =>
+    EventFactory.expenseEvent({
+      name: 'Здоровье',
+      description: 'Внеплановое посещение врача',
+      insuranceType: 'health',
+      range: valueRange(value),
+    });
+
+  export const dentist = (value: number) =>
+    EventFactory.expenseEvent({
+      name: 'Здоровье',
+      description: 'Вы посетили стоматолога',
+      insuranceType: 'health',
+      range: valueRange(value),
+    });
+
+  export const cafe = (value: number) =>
+    EventFactory.expenseEvent({
+      name: 'Развлечения',
+      description: 'Вы с друзьями сходили в кафе',
+      insuranceType: null,
+      range: valueRange(value),
+    });
+
+  export const cinema = (value: number) =>
+    EventFactory.expenseEvent({
+      name: 'Развлечения',
+      description: 'Посещение премьеры фильма',
+      insuranceType: null,
+      range: valueRange(value),
+    });
+
+  export const computerRepair = (value: number) =>
+    EventFactory.expenseEvent({
+      name: 'Техника',
+      description: 'Сломался компьютер. Необходим ремонт',
+      insuranceType: 'property',
+      range: valueRange(value),
+    });
 }
 
 namespace InsuraceFactory {
@@ -87,7 +127,7 @@ namespace DebentureFactory {
 
   export const ofz2 = (price: number, availableCount: number) =>
     EventFactory.debentureEvent({
-      name: 'ОФЗ выпуск 1',
+      name: 'ОФЗ выпуск 2',
       profitability: valueRange(14),
       price: valueRange(price),
       nominal: valueRange(1000),
@@ -162,7 +202,7 @@ export namespace MonthlyExpenseFactory {
       description:
         'Для запланированного путешествия необходимо пройти курс английского. ' +
         'Eжемесячные расходы увеличены.',
-      value: valueRange(1000),
+      value: valueRange(3000),
       expenseName: 'Уроки английского',
     });
 }
@@ -173,5 +213,5 @@ export namespace HookahManEventFactory {
   export const Insurace = InsuraceFactory;
   export const Debenture = DebentureFactory;
   export const Stock = StockFactory;
-  export const monthlyExpenseEvent = MonthlyExpenseFactory;
+  export const MonthlyExpense = MonthlyExpenseFactory;
 }

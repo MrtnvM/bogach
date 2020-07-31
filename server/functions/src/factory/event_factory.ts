@@ -1,4 +1,4 @@
-import { optionalValueRange, ValueRange } from '../core/data/value_range';
+import { ValueRange } from '../core/data/value_range';
 
 import { IncomeEvent } from '../events/income/income_event';
 import { IncomeEventGenerator } from '../events/income/income_event_generator';
