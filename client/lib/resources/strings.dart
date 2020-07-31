@@ -190,6 +190,8 @@ class Strings {
 
   static String get monthsPast => 'Прошло месяцев';
 
+  static String get noGameEvents => 'Произошла ошибка.\nНет игровых событий';
+
   // Log in errors
   static String get invalidCredentials => 'Неправильный логин или пароль';
 
