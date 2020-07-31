@@ -3,6 +3,7 @@ import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/containers/card_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class InfoTable extends StatelessWidget {
   const InfoTable({
@@ -63,10 +64,13 @@ class InfoTable extends StatelessWidget {
           ),
           if (titleValue != null) Text(titleValue, style: titleValueStyle),
           if (onInfoClick != null)
-            Image.asset(
-              Images.defaultAvatar,
-              width: 16,
-              height: 16,
+            IconButton(
+              icon: SvgPicture.asset(
+                Images.infoIcon,
+                width: 16,
+                height: 16,
+              ),
+              onPressed: onInfoClick,
             ),
         ],
       ),

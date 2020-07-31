@@ -1,12 +1,12 @@
 class GameEventInfoDialogModel {
-  GameEventInfoDialogModel(
+  GameEventInfoDialogModel({
     this.title,
     this.description,
     this.keyPoints,
     this.riskLevel,
     this.profitabilityLevel,
     this.complexityLevel,
-  );
+  });
 
   final String title;
   final String description;

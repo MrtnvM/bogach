@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_model.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
@@ -25,6 +27,11 @@ class GameEventInfoDialogContent extends StatelessWidget {
           style: Styles.tableHeaderTitleBlack,
         ),
         const SizedBox(height: 32),
+         Text(
+          gameEventInfoDialogModel.description,
+          style: Styles.tableHeaderTitleBlack,
+        ),
+        const SizedBox(height: 16),
         for (var keyPoint in gameEventInfoDialogModel.keyPoints.entries) ...[
           RichText(
             text: TextSpan(
@@ -59,6 +66,7 @@ class GameEventInfoDialogContent extends StatelessWidget {
                   ),
                 ),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
                       "Риск",
@@ -82,7 +90,7 @@ class GameEventInfoDialogContent extends StatelessWidget {
     );
 
     final widgets = [];
-    for (int i = 0; i < 3; i++) {
+    for (var i = 0; i < 3; i++) {
       var image;
       if (ratingValue >= i + 1) {
         image = Image.asset(
