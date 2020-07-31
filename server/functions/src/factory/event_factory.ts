@@ -16,8 +16,8 @@ import { DebentureEventGenerator } from '../events/debenture/debenture_event_gen
 import { StockEvent } from '../events/stock/stock_event';
 import { StockEventGenerator } from '../events/stock/stock_event_generator';
 
-export namespace EventFactory {
-  export const incomeEvent = (props: {
+import { MonthlyExpenseEvent } from '../events/monthly_expense/monthly_expense_event';
+import { MonthlyExpenseEventGenerator } from '../events/monthly_expense/monthly_expense_event_generator';
     name: string;
     description: string;
     value: [number, number, number];
@@ -109,12 +109,7 @@ export namespace EventFactory {
   }): StockEvent.Event => {
     const { name, description, fairPrice, price, availableCount } = props;
 
-    return StockEventGenerator.generateEvent({
-      name,
-      description,
-      currentPrice: price,
-      fairPrice: fairPrice,
-      availableCount: availableCount,
-    });
+  export const monthlyExpenseEvent = (props: MonthlyExpenseEvent.Info) => {
+    return MonthlyExpenseEventGenerator.generateEvent(props);
   };
 }

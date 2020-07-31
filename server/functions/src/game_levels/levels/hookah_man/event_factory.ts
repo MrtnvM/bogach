@@ -155,10 +155,23 @@ namespace StockFactory {
     });
 }
 
+export namespace MonthlyExpenseFactory {
+  export const englishLessons = () =>
+    EventFactory.monthlyExpenseEvent({
+      name: 'Уроки английского',
+      description:
+        'Для запланированного путешествия необходимо пройти курс английского. ' +
+        'Eжемесячные расходы увеличены.',
+      value: valueRange(1000),
+      expenseName: 'Уроки английского',
+    });
+}
+
 export namespace HookahManEventFactory {
   export const Income = IncomeFactory;
   export const Expense = ExpenseFactory;
   export const Insurace = InsuraceFactory;
   export const Debenture = DebentureFactory;
   export const Stock = StockFactory;
+  export const monthlyExpenseEvent = MonthlyExpenseFactory;
 }
