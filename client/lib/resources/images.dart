@@ -16,6 +16,8 @@ class Images {
   static const bgCircleRight = 'assets/images/png/bg_circle_right.png';
   static const bgCircleLeft = 'assets/images/png/bg_circle_left.png';
   static const infoIcon = 'assets/images/png/ic_info.png';
+  static const lightingIcon = 'assets/images/png/ic_lighting.png';
+  static const lightingEmptyIcon = 'assets/images/png/ic_lighting_empty.png';
 
   static const fail = 'assets/images/png/fail.png';
   static const win = 'assets/images/png/win.png';

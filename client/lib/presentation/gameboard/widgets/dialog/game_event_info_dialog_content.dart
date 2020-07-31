@@ -1,4 +1,6 @@
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_model.dart';
+import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 
@@ -39,8 +41,64 @@ class GameEventInfoDialogContent extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-        ]
+        ],
+        Row(
+          children: [
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.only(
+                  top: 4,
+                  right: 8,
+                  bottom: 4,
+                  left: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: ColorRes.grey,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(40.0),
+                  ),
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      "Риск",
+                      style: Styles.tableHeaderValueBlack,
+                    ),
+                    ...drawIcons(),
+                  ],
+                ),
+              ),
+              flex: 1,
+            ),
+          ],
+        ),
       ],
     );
+  }
+
+  List<Widget> drawIcons() {
+    var ratingValue = RatingMapper.getRatingLevel(
+      gameEventInfoDialogModel.riskLevel,
+    );
+
+    final widgets = [];
+    for (int i = 0; i < 3; i++) {
+      var image;
+      if (ratingValue >= i + 1) {
+        image = Image.asset(
+          Images.lightingIcon,
+          width: 16,
+          height: 16,
+        );
+      } else {
+        image = Image.asset(
+          Images.lightingEmptyIcon,
+          width: 16,
+          height: 16,
+        );
+      }
+      widgets.add(image);
+    }
+    return widgets;
   }
 }

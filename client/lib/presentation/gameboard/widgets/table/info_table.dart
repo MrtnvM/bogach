@@ -62,7 +62,12 @@ class InfoTable extends StatelessWidget {
             child: Text(title, style: titleTextStyle),
           ),
           if (titleValue != null) Text(titleValue, style: titleValueStyle),
-          if (onInfoClick != null) AssetImage(Images.defaultAvatar) as Widget,
+          if (onInfoClick != null)
+            Image.asset(
+              Images.defaultAvatar,
+              width: 16,
+              height: 16,
+            ),
         ],
       ),
       if (description != null) ...<Widget>[
