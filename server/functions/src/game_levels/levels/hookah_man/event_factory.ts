@@ -6,14 +6,14 @@ namespace IncomeFactory {
     EventFactory.incomeEvent({
       name: 'Премия',
       description: 'Сегодня было гостей было больше чем обычно. Небольшой процент с продаж - ваш!',
-      value: [value, value, 0],
+      range: valueRange(value),
     });
 
   export const tip = (value: number) =>
     EventFactory.incomeEvent({
       name: 'Чаевые',
       description: 'Гости оставили Вам чаевые',
-      value: [value, value, 0],
+      range: valueRange(value),
     });
 }
 
@@ -23,7 +23,7 @@ namespace ExpenseFactory {
       name: 'Штраф',
       description: 'Разбил колбу от кальяна',
       insuranceType: null,
-      value: [value, value, 0],
+      range: valueRange(value),
     });
 
   export const fine2 = (value: number) =>
@@ -31,7 +31,7 @@ namespace ExpenseFactory {
       name: 'Штраф',
       description: 'Потерял чашу от кальяна',
       insuranceType: null,
-      value: [value, value, 0],
+      range: valueRange(value),
     });
 
   export const fine3 = (value: number) =>
@@ -39,7 +39,7 @@ namespace ExpenseFactory {
       name: 'Штраф',
       description: 'Клиент ушел не заплатив',
       insuranceType: null,
-      value: [value, value, 0],
+      range: valueRange(value),
     });
 
   export const canceledWorkBonus = (value: number) =>
@@ -47,7 +47,7 @@ namespace ExpenseFactory {
       name: 'Лишение премии',
       description: 'Уронил уголь на клиента',
       insuranceType: null,
-      value: [value, value, 0],
+      range: valueRange(value),
     });
 
   export const unexpectedRestDay = (value: number) =>
@@ -55,7 +55,7 @@ namespace ExpenseFactory {
       name: 'Внеплановый выходной',
       description: 'Отключили свет, день без работы',
       insuranceType: null,
-      value: [value, value, 0],
+      range: valueRange(value),
     });
 }
 
@@ -63,15 +63,15 @@ namespace InsuraceFactory {
   export const healthInsurance = (cost: number, value: number) =>
     EventFactory.insuranceEvent({
       insuranceType: 'health',
-      cost: [cost, cost, 0],
-      value: [value, value, 0],
+      cost: valueRange(cost),
+      value: valueRange(value),
     });
 
   export const propertyInsurance = (cost: number, value: number) =>
     EventFactory.insuranceEvent({
       insuranceType: 'property',
-      cost: [cost, cost, 0],
-      value: [value, value, 0],
+      cost: valueRange(cost),
+      value: valueRange(value),
     });
 }
 
@@ -79,37 +79,37 @@ namespace DebentureFactory {
   export const ofz1 = (price: number, availableCount: number) =>
     EventFactory.debentureEvent({
       name: 'ОФЗ выпуск 1',
-      profitability: [20, 20, 0],
-      price: [price, price, 0],
-      nominal: [1000, 1000, 0],
-      availableCount: [availableCount, availableCount, 0],
+      profitability: valueRange(20),
+      price: valueRange(price),
+      nominal: valueRange(1000),
+      availableCount: valueRange(availableCount),
     });
 
   export const ofz2 = (price: number, availableCount: number) =>
     EventFactory.debentureEvent({
       name: 'ОФЗ выпуск 1',
-      profitability: [14, 14, 0],
-      price: [price, price, 0],
-      nominal: [1000, 1000, 0],
-      availableCount: [availableCount, availableCount, 0],
+      profitability: valueRange(14),
+      price: valueRange(price),
+      nominal: valueRange(1000),
+      availableCount: valueRange(availableCount),
     });
 
   export const metalPromInvest = (price: number, availableCount: number) =>
     EventFactory.debentureEvent({
       name: 'МеталлПромИнвест',
-      profitability: [32, 32, 0],
-      price: [price, price, 0],
-      nominal: [1000, 1000, 0],
-      availableCount: [availableCount, availableCount, 0],
+      profitability: valueRange(32),
+      price: valueRange(price),
+      nominal: valueRange(1000),
+      availableCount: valueRange(availableCount),
     });
 
   export const search = (price: number, availableCount: number) =>
     EventFactory.debentureEvent({
       name: 'Поисковик. IT-компания',
-      profitability: [45, 45, 0],
-      price: [price, price, 0],
-      nominal: [1000, 1000, 0],
-      availableCount: [availableCount, availableCount, 0],
+      profitability: valueRange(45),
+      price: valueRange(price),
+      nominal: valueRange(1000),
+      availableCount: valueRange(availableCount),
     });
 }
 
@@ -117,7 +117,7 @@ namespace StockFactory {
   export const findex = (price: number, availableCount: number) =>
     EventFactory.stockEvent({
       name: 'FINDEX',
-      price: valueRange(price),
+      currentPrice: valueRange(price),
       fairPrice: valueRange(2540),
       availableCount: valueRange(availableCount),
     });
@@ -125,7 +125,7 @@ namespace StockFactory {
   export const gasPromGroup = (price: number, availableCount: number) =>
     EventFactory.stockEvent({
       name: 'Газ Пром Групп',
-      price: valueRange(price),
+      currentPrice: valueRange(price),
       fairPrice: valueRange(360),
       availableCount: valueRange(availableCount),
     });
@@ -133,7 +133,7 @@ namespace StockFactory {
   export const sberInvestBank = (price: number, availableCount: number) =>
     EventFactory.stockEvent({
       name: 'СберИнвестБанк',
-      price: valueRange(price),
+      currentPrice: valueRange(price),
       fairPrice: valueRange(240),
       availableCount: valueRange(availableCount),
     });
@@ -141,7 +141,7 @@ namespace StockFactory {
   export const metalPromInvest = (price: number, availableCount: number) =>
     EventFactory.stockEvent({
       name: 'МеталлПромИнвест',
-      price: valueRange(price),
+      currentPrice: valueRange(price),
       fairPrice: valueRange(24),
       availableCount: valueRange(availableCount),
     });
@@ -149,7 +149,7 @@ namespace StockFactory {
   export const nickTeslaAuto = (price: number, availableCount: number) =>
     EventFactory.stockEvent({
       name: 'Nick Tesla Auto',
-      price: valueRange(price),
+      currentPrice: valueRange(price),
       fairPrice: valueRange(525),
       availableCount: valueRange(availableCount),
     });

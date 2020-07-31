@@ -1,4 +1,4 @@
-import { valueRange, optionalValueRange, ValueRange } from '../core/data/value_range';
+import { optionalValueRange, ValueRange } from '../core/data/value_range';
 
 import { IncomeEvent } from '../events/income/income_event';
 import { IncomeEventGenerator } from '../events/income/income_event_generator';
@@ -18,41 +18,22 @@ import { StockEventGenerator } from '../events/stock/stock_event_generator';
 
 import { MonthlyExpenseEvent } from '../events/monthly_expense/monthly_expense_event';
 import { MonthlyExpenseEventGenerator } from '../events/monthly_expense/monthly_expense_event_generator';
-    name: string;
-    description: string;
-    value: [number, number, number];
-  }): IncomeEvent.Event => {
-    const { name, description, value } = props;
 
-    return IncomeEventGenerator.generateEvent({
-      name,
-      description,
-      range: valueRange(value),
-    });
+export namespace EventFactory {
+  export const incomeEvent = (props: IncomeEvent.Info) => {
+    return IncomeEventGenerator.generateEvent(props);
   };
 
-  export const expenseEvent = (props: {
-    name: string;
-    description: string;
-    insuranceType: InsuranceAssetEntity.InsuranceType | null;
-    value: [number, number, number];
-  }): ExpenseEvent.Event => {
-    const { name, description, value, insuranceType } = props;
-
-    return ExpenseEventGenerator.generateEvent({
-      name,
-      description,
-      insuranceType,
-      range: valueRange(value),
-    });
+  export const expenseEvent = (props: ExpenseEvent.Info) => {
+    return ExpenseEventGenerator.generateEvent(props);
   };
 
   export const insuranceEvent = (props: {
     insuranceType: InsuranceAssetEntity.InsuranceType;
     name?: string;
     description?: string;
-    cost?: number | [number, number, number];
-    value?: [number, number, number];
+    cost?: ValueRange;
+    value?: ValueRange;
     duration?: number;
   }): InsuranceEvent.Event => {
     const { insuranceType, name, description, cost, value, duration } = props;
@@ -60,8 +41,8 @@ import { MonthlyExpenseEventGenerator } from '../events/monthly_expense/monthly_
     const eventInfo: Partial<InsuranceEvent.Info> = {
       name,
       description,
-      cost: optionalValueRange(cost),
-      value: optionalValueRange(value),
+      cost,
+      value,
       duration,
       insuranceType,
     };
@@ -82,32 +63,13 @@ import { MonthlyExpenseEventGenerator } from '../events/monthly_expense/monthly_
     }
   };
 
-  export const debentureEvent = (props: {
-    name: string;
-    price: [number, number, number];
-    nominal: [number, number, number];
-    profitability: [number, number, number];
-    availableCount?: [number, number, number];
-  }): DebentureEvent.Event => {
-    const { name, nominal, profitability, price, availableCount } = props;
-
-    return DebentureEventGenerator.generateEvent({
-      name,
-      nominal: valueRange(nominal),
-      profitability: valueRange(profitability),
-      price: valueRange(price),
-      availableCount: optionalValueRange(availableCount),
-    });
+  export const debentureEvent = (props: DebentureEvent.Info) => {
+    return DebentureEventGenerator.generateEvent(props);
   };
 
-  export const stockEvent = (props: {
-    name: string;
-    description?: string;
-    price: ValueRange;
-    fairPrice: ValueRange;
-    availableCount?: ValueRange;
-  }): StockEvent.Event => {
-    const { name, description, fairPrice, price, availableCount } = props;
+  export const stockEvent = (props: StockEvent.Info) => {
+    return StockEventGenerator.generateEvent(props);
+  };
 
   export const monthlyExpenseEvent = (props: MonthlyExpenseEvent.Info) => {
     return MonthlyExpenseEventGenerator.generateEvent(props);
