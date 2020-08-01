@@ -30,10 +30,11 @@ const month3 = month(
 );
 
 const month4 = month(
-  HookahManEventFactory.Income.workBonus(1200),
+  HookahManEventFactory.Income.workBonus(1800),
   HookahManEventFactory.Expense.cafe(1500),
   HookahManEventFactory.Stock.sberInvestBank(245, 25),
   HookahManEventFactory.Debenture.search(900, 8),
+  HookahManEventFactory.Expense.canceledWorkBonus(500),
   HookahManEventFactory.Insurace.propertyInsurance(2000, 5000)
 );
 

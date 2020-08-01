@@ -5,14 +5,14 @@ namespace IncomeFactory {
   export const workBonus = (value: number) =>
     EventFactory.incomeEvent({
       name: 'Премия',
-      description: 'Сегодня было гостей было больше чем обычно. Небольшой процент с продаж - ваш!',
+      description: 'Сегодня гостей было больше чем обычно. Небольшой процент с продаж - ваш!',
       range: valueRange(value),
     });
 
   export const tip = (value: number) =>
     EventFactory.incomeEvent({
       name: 'Чаевые',
-      description: 'Гости оставили Вам чаевые',
+      description: 'Гости оставили Вам чаевые!',
       range: valueRange(value),
     });
 }
@@ -53,7 +53,7 @@ namespace ExpenseFactory {
   export const unexpectedRestDay = (value: number) =>
     EventFactory.expenseEvent({
       name: 'Внеплановый выходной',
-      description: 'Отключили свет, день без работы',
+      description: 'В кальянной отключили свет. День без работы',
       insuranceType: null,
       range: valueRange(value),
     });
