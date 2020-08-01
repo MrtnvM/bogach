@@ -3,8 +3,10 @@ import 'dart:ui';
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_model.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
+import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class GameEventInfoDialogContent extends StatelessWidget {
   const GameEventInfoDialogContent(this.gameEventInfoDialogModel);
@@ -13,21 +15,16 @@ class GameEventInfoDialogContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 20),
-      child: _buildBody(),
-    );
+    return _buildBody();
   }
 
   Widget _buildBody() {
     return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          gameEventInfoDialogModel.title,
-          style: Styles.tableHeaderTitleBlack,
-        ),
         const SizedBox(height: 32),
-         Text(
+        Text(
           gameEventInfoDialogModel.description,
           style: Styles.tableHeaderTitleBlack,
         ),
@@ -37,74 +34,112 @@ class GameEventInfoDialogContent extends StatelessWidget {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: '$keyPoint.key: ',
-                  style: Styles.tableHeaderTitleBlack,
+                  text: '${keyPoint.key}: ',
+                  style: Styles.tableHeaderValueBlack,
                 ),
                 TextSpan(
-                  text: '$keyPoint.key: ',
-                  style: Styles.tableHeaderValueBlack,
+                  text: '${keyPoint.value}',
+                  style: Styles.bodyBlack,
                 ),
               ],
             ),
           ),
           const SizedBox(height: 16),
         ],
-        Row(
-          children: [
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.only(
-                  top: 4,
-                  right: 8,
-                  bottom: 4,
-                  left: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: ColorRes.grey,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(40.0),
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      "Риск",
-                      style: Styles.tableHeaderValueBlack,
-                    ),
-                    ...drawIcons(),
-                  ],
-                ),
-              ),
-              flex: 1,
-            ),
-          ],
+        buildParameterContainer(
+          Strings.riskLevel,
+          gameEventInfoDialogModel.riskLevel,
+          Images.riskLightingIcon,
+          Images.riskLightingEmptyIcon,
+        ),
+        const SizedBox(height: 16),
+        buildParameterContainer(
+          Strings.profitabilityLevel,
+          gameEventInfoDialogModel.profitabilityLevel,
+          Images.profitabilityLightingIcon,
+          Images.profitabilityLightingEmptyIcon,
+        ),
+        const SizedBox(height: 16),
+        buildParameterContainer(
+          Strings.complexityLevel,
+          gameEventInfoDialogModel.complexityLevel,
+          Images.complexityLightingIcon,
+          Images.complexityLightingEmptyIcon,
         ),
       ],
     );
   }
 
-  List<Widget> drawIcons() {
-    var ratingValue = RatingMapper.getRatingLevel(
-      gameEventInfoDialogModel.riskLevel,
+  Container buildParameterContainer(
+    String name,
+    Rating level,
+    String activeIcon,
+    String deactiveIcon,
+  ) {
+    return Container(
+      padding: const EdgeInsets.only(
+        top: 4,
+        right: 8,
+        bottom: 4,
+        left: 8,
+      ),
+      decoration: BoxDecoration(
+        color: ColorRes.grey2,
+        borderRadius: const BorderRadius.all(
+          Radius.circular(40.0),
+        ),
+      ),
+      child: buildParameterContent(
+        name,
+        level,
+        activeIcon,
+        deactiveIcon,
+      ),
     );
+  }
 
-    final widgets = [];
+  Row buildParameterContent(
+    String name,
+    Rating level,
+    String activeIcon,
+    String deactiveIcon,
+  ) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Text(
+          name,
+          style: Styles.tableHeaderValueBlack,
+        ),
+        ...drawIcons(
+          level,
+          activeIcon,
+          deactiveIcon,
+        ),
+      ],
+    );
+  }
+
+  List<Widget> drawIcons(Rating level, String activeIcon, String deactiveIcon) {
+    final ratingValue = RatingMapper.getRatingLevel(level);
+
+    List<Widget> widgets = [];
     for (var i = 0; i < 3; i++) {
-      var image;
+      Widget image;
       if (ratingValue >= i + 1) {
-        image = Image.asset(
-          Images.lightingIcon,
-          width: 16,
-          height: 16,
+        image = SvgPicture.asset(
+          activeIcon,
+          width: 20,
+          height: 20,
         );
       } else {
-        image = Image.asset(
-          Images.lightingEmptyIcon,
-          width: 16,
-          height: 16,
+        image = SvgPicture.asset(
+          deactiveIcon,
+          width: 20,
+          height: 20,
         );
       }
+      widgets.add(const SizedBox(width: 8));
       widgets.add(image);
     }
     return widgets;

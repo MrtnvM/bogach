@@ -16,8 +16,12 @@ class Images {
   static const bgCircleRight = 'assets/images/png/bg_circle_right.png';
   static const bgCircleLeft = 'assets/images/png/bg_circle_left.png';
   static const infoIcon = 'assets/images/svg/ic_info.svg';
-  static const lightingIcon = 'assets/images/svg/ic_lighting.svg';
-  static const lightingEmptyIcon = 'assets/images/svg/ic_lighting_empty.svg';
+  static const riskLightingIcon = 'assets/images/svg/ic_risk_lighting.svg';
+  static const riskLightingEmptyIcon = 'assets/images/svg/ic_risk_lighting_empty.svg';
+  static const profitabilityLightingIcon = 'assets/images/svg/ic_profitability_lighting.svg';
+  static const profitabilityLightingEmptyIcon = 'assets/images/svg/ic_profitability_lighting_empty.svg';
+  static const complexityLightingIcon = 'assets/images/svg/ic_complexity_lighting.svg';
+  static const complexityLightingEmptyIcon = 'assets/images/svg/ic_complexity_lighting_empty.svg';
 
   static const fail = 'assets/images/png/fail.png';
   static const win = 'assets/images/png/win.png';

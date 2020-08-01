@@ -63,15 +63,7 @@ class InfoTable extends StatelessWidget {
             child: Text(title, style: titleTextStyle),
           ),
           if (titleValue != null) Text(titleValue, style: titleValueStyle),
-          if (onInfoClick != null)
-            IconButton(
-              icon: SvgPicture.asset(
-                Images.infoIcon,
-                width: 16,
-                height: 16,
-              ),
-              onPressed: onInfoClick,
-            ),
+          if (onInfoClick != null) _buildInfoIcon()
         ],
       ),
       if (description != null) ...<Widget>[
@@ -88,5 +80,22 @@ class InfoTable extends StatelessWidget {
         )
       ],
     ];
+  }
+
+  SizedBox _buildInfoIcon() {
+    return SizedBox(
+      width: 16,
+      height: 16,
+      child: IconButton(
+        padding: const EdgeInsets.all(0),
+        iconSize: 16,
+        icon: SvgPicture.asset(
+          Images.infoIcon,
+          width: 16,
+          height: 16,
+        ),
+        onPressed: onInfoClick,
+      ),
+    );
   }
 }

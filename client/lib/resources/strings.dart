@@ -167,6 +167,10 @@ class Strings {
   static const realty = 'Недвижимость';
   static const other = 'Прочие';
 
+  static const riskLevel = 'Риск';
+  static const profitabilityLevel = 'Доходность';
+  static const complexityLevel = 'Сложность';
+
   static String get monthResult => 'Итоги за месяц';
   static String get financialResults => 'Финансовые показатели';
   static String get financialResultsChange => 'Изменения показателей';
@@ -266,4 +270,6 @@ class Strings {
       'приглашает Вас сразиться в поединке капиталистов!';
   static String get joinRoomError =>
       'Не удалось подключиться к комнате игроков';
+
+      
 }

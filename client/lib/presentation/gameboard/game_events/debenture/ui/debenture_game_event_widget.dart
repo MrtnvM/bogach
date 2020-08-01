@@ -10,6 +10,7 @@ import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/containers/game_event_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -65,7 +66,15 @@ class DebentureGameEventWidget extends HookWidget {
           onInfoClick: () {
             showDialog(
               context: context,
-              child: GameEventInfoDialogContent(debentureDialogInfoModel),
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(
+                    debentureDialogInfoModel.title,
+                    style: Styles.tableHeaderTitleBlack,
+                  ),
+                  content: GameEventInfoDialogContent(debentureDialogInfoModel),
+                );
+              },
             );
           },
         ),
