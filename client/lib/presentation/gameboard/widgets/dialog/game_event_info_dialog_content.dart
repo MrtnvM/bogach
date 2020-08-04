@@ -46,35 +46,35 @@ class GameEventInfoDialogContent extends StatelessWidget {
           const SizedBox(height: 16),
         ],
         buildParameterContainer(
-          Strings.riskLevel,
-          gameEventInfoDialogModel.riskLevel,
-          Images.riskLightingIcon,
-          Images.riskLightingEmptyIcon,
+          name: Strings.riskLevel,
+          level: gameEventInfoDialogModel.riskLevel,
+          activeIcon: Images.riskLightingIcon,
+          deactiveIcon: Images.riskLightingEmptyIcon,
         ),
         const SizedBox(height: 16),
         buildParameterContainer(
-          Strings.profitabilityLevel,
-          gameEventInfoDialogModel.profitabilityLevel,
-          Images.profitabilityLightingIcon,
-          Images.profitabilityLightingEmptyIcon,
+          name: Strings.profitabilityLevel,
+          level: gameEventInfoDialogModel.profitabilityLevel,
+          activeIcon: Images.profitabilityLightingIcon,
+          deactiveIcon: Images.profitabilityLightingEmptyIcon,
         ),
         const SizedBox(height: 16),
         buildParameterContainer(
-          Strings.complexityLevel,
-          gameEventInfoDialogModel.complexityLevel,
-          Images.complexityLightingIcon,
-          Images.complexityLightingEmptyIcon,
+          name: Strings.complexityLevel,
+          level: gameEventInfoDialogModel.complexityLevel,
+          activeIcon: Images.complexityLightingIcon,
+          deactiveIcon: Images.complexityLightingEmptyIcon,
         ),
       ],
     );
   }
 
-  Container buildParameterContainer(
+  Container buildParameterContainer({
     String name,
     Rating level,
     String activeIcon,
     String deactiveIcon,
-  ) {
+  }) {
     return Container(
       padding: const EdgeInsets.symmetric(
         vertical: 4,
