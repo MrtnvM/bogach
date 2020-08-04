@@ -23,10 +23,9 @@ class GameEventInfoDialogContent extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const SizedBox(height: 32),
         Text(
           gameEventInfoDialogModel.description,
-          style: Styles.tableHeaderTitleBlack,
+          style: Styles.tableDialogSubtitleBlack,
         ),
         const SizedBox(height: 16),
         for (var keyPoint in gameEventInfoDialogModel.keyPoints.entries) ...[
@@ -35,7 +34,7 @@ class GameEventInfoDialogContent extends StatelessWidget {
               children: [
                 TextSpan(
                   text: '${keyPoint.key}: ',
-                  style: Styles.tableHeaderValueBlack,
+                  style: Styles.tableDialogSubtitleBlack,
                 ),
                 TextSpan(
                   text: '${keyPoint.value}',
@@ -77,11 +76,9 @@ class GameEventInfoDialogContent extends StatelessWidget {
     String deactiveIcon,
   ) {
     return Container(
-      padding: const EdgeInsets.only(
-        top: 4,
-        right: 8,
-        bottom: 4,
-        left: 8,
+      padding: const EdgeInsets.symmetric(
+        vertical: 4,
+        horizontal: 8,
       ),
       decoration: BoxDecoration(
         color: ColorRes.grey2,
@@ -109,7 +106,7 @@ class GameEventInfoDialogContent extends StatelessWidget {
       children: <Widget>[
         Text(
           name,
-          style: Styles.tableHeaderValueBlack,
+          style: Styles.tableDialogSubtitleBlack,
         ),
         ...drawIcons(
           level,
@@ -121,26 +118,18 @@ class GameEventInfoDialogContent extends StatelessWidget {
   }
 
   List<Widget> drawIcons(Rating level, String activeIcon, String deactiveIcon) {
-    final ratingValue = RatingMapper.getRatingLevel(level);
+    final ratingValue = RatingExtension.getRatingLevel(level);
 
     List<Widget> widgets = [];
     for (var i = 0; i < 3; i++) {
-      Widget image;
-      if (ratingValue >= i + 1) {
-        image = SvgPicture.asset(
-          activeIcon,
-          width: 20,
-          height: 20,
-        );
-      } else {
-        image = SvgPicture.asset(
-          deactiveIcon,
-          width: 20,
-          height: 20,
-        );
-      }
+      final icon = ratingValue >= i + 1 ? activeIcon : deactiveIcon;
+      final imageWidget = SvgPicture.asset(
+        icon,
+        width: 20,
+        height: 20,
+      );
       widgets.add(const SizedBox(width: 8));
-      widgets.add(image);
+      widgets.add(imageWidget);
     }
     return widgets;
   }

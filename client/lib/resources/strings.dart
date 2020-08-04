@@ -171,6 +171,16 @@ class Strings {
   static const profitabilityLevel = 'Доходность';
   static const complexityLevel = 'Сложность';
 
+  static const debentureDialogTitle = 'Облигации';
+  static const debentureDialogDescription =
+      'Облигации - когда вы даёте деньги в долг государству или компании';
+  static const debentureDialogKeyPoint1 = 'Как заработать';
+  static const debentureDialogKeyPointDescription1 =
+      "на процентах - должник возвращает больше денег, чем взял.";
+  static const debentureDialogKeyPoint2 = "Кому подойдёт";
+  static const debentureDialogKeyPointDescription2 = "Кому подойдёт";
+
+
   static String get monthResult => 'Итоги за месяц';
   static String get financialResults => 'Финансовые показатели';
   static String get financialResultsChange => 'Изменения показателей';
@@ -270,6 +280,4 @@ class Strings {
       'приглашает Вас сразиться в поединке капиталистов!';
   static String get joinRoomError =>
       'Не удалось подключиться к комнате игроков';
-
-      
 }

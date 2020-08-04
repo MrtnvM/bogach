@@ -15,7 +15,7 @@ class InfoTable extends StatelessWidget {
     this.titleTextStyle = Styles.tableHeaderTitleBlack,
     this.titleValueStyle = Styles.tableHeaderValueBlack,
     this.withShadow = true,
-    this.onInfoClick = null,
+    this.onInfoClick,
   }) : super(key: key);
 
   final String title;
@@ -25,7 +25,7 @@ class InfoTable extends StatelessWidget {
   final TextStyle titleTextStyle;
   final TextStyle titleValueStyle;
   final bool withShadow;
-  final Function onInfoClick;
+  final VoidCallback onInfoClick;
 
   @override
   Widget build(BuildContext context) {

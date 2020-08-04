@@ -68,9 +68,11 @@ class DebentureGameEventWidget extends HookWidget {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: Text(
-                    debentureDialogInfoModel.title,
-                    style: Styles.tableHeaderTitleBlack,
+                  title: Center(
+                    child: Text(
+                      debentureDialogInfoModel.title,
+                      style: Styles.tableHeaderTitleBlack,
+                    ),
                   ),
                   content: GameEventInfoDialogContent(debentureDialogInfoModel),
                 );

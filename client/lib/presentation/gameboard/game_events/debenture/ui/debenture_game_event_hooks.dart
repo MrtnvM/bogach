@@ -75,14 +75,13 @@ DebentureAsset useCurrentDebenture(GameEvent event) {
 GameEventInfoDialogModel useDebentureInfoDialogModel() {
   return useMemoized(
     () => GameEventInfoDialogModel(
-      title: "Облигации",
-      description:
-          "Облигации - когда вы даёте деньги в долг государству или компании",
+      title: Strings.debentureDialogTitle,
+      description: Strings.debentureDialogDescription,
       keyPoints: {
-        "Как заработать":
-            "на процентах - должник возвращает больше денег, чем взял.",
-        "Кому подойдёт":
-            "консервативным инвесторам, которые не хотят рисковать, но хотят доходность выше, чем по банковскому вкладу.",
+        Strings.debentureDialogKeyPoint1:
+            Strings.debentureDialogKeyPointDescription1,
+        Strings.debentureDialogKeyPoint2:
+            Strings.debentureDialogKeyPointDescription2,
       },
       riskLevel: Rating.low,
       profitabilityLevel: Rating.low,
