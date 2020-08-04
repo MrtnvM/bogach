@@ -54,7 +54,7 @@ class GameLevelList extends HookWidget {
           loadList: gameActions.loadGameLevels,
           padding: const EdgeInsets.all(16),
           emptyStateWidget: EmptyWidget(),
-          errorWidget: null,
+          errorWidget: ErrorWidget(gameActions.loadGameLevels),
         ),
       ),
     );

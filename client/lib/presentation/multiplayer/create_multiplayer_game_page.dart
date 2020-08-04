@@ -91,7 +91,7 @@ class CreateMultiplayerGamePage extends HookWidget {
         loadList: loadGameTemplates,
         padding: const EdgeInsets.all(16),
         emptyStateWidget: EmptyWidget(),
-        errorWidget: null,
+        errorWidget: ErrorWidget(loadGameTemplates),
       ),
     );
   }

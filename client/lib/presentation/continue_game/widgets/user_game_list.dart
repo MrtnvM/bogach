@@ -49,7 +49,7 @@ class UserGameList extends HookWidget {
           loadList: loadUserGames,
           padding: const EdgeInsets.all(16),
           emptyStateWidget: EmptyWidget(),
-          errorWidget: null,
+          errorWidget: ErrorWidget(loadUserGames),
         ),
       ),
     );
