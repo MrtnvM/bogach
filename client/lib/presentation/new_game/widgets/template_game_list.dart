@@ -7,6 +7,7 @@ import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard.dart';
 import 'package:cash_flow/presentation/new_game/widgets/game_template_item.dart';
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/widgets/common/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
@@ -59,6 +60,8 @@ class TemplateGameList extends HookWidget {
           loadListRequestState: templatesRequestState,
           loadList: gameActions.loadGameTemplates,
           padding: const EdgeInsets.all(16),
+          emptyStateWidget: EmptyWidget(),
+          errorWidget: null,
         ),
       ),
     );

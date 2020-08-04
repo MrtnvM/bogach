@@ -9,6 +9,7 @@ import 'package:cash_flow/presentation/multiplayer/room_page.dart';
 import 'package:cash_flow/presentation/new_game/widgets/game_template_item.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/widgets/common/empty_widget.dart';
 import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -89,6 +90,8 @@ class CreateMultiplayerGamePage extends HookWidget {
         loadListRequestState: loadGameTempalatesRequestState,
         loadList: loadGameTemplates,
         padding: const EdgeInsets.all(16),
+        emptyStateWidget: EmptyWidget(),
+        errorWidget: null,
       ),
     );
   }
