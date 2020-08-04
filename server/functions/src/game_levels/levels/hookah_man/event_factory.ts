@@ -202,7 +202,7 @@ export namespace MonthlyExpenseFactory {
       description:
         'Для запланированного путешествия необходимо пройти курс английского. ' +
         'Eжемесячные расходы увеличены.',
-      value: valueRange(3000),
+      value: valueRange(2500),
       expenseName: 'Уроки английского',
     });
 }

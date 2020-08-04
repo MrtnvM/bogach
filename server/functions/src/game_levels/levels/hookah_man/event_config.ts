@@ -9,7 +9,7 @@ const month1 = month(
   HookahManEventFactory.Debenture.ofz1(1100, 20),
   HookahManEventFactory.Insurace.healthInsurance(1000, 3000),
   HookahManEventFactory.Stock.nickTeslaAuto(324, 80),
-  HookahManEventFactory.Expense.unexpectedRestDay(1500)
+  HookahManEventFactory.Expense.unexpectedRestDay(1200)
 );
 
 const month2 = month(
@@ -17,7 +17,7 @@ const month2 = month(
   HookahManEventFactory.Income.workBonus(2500),
   HookahManEventFactory.Stock.gasPromGroup(378, 40),
   HookahManEventFactory.Debenture.search(800, 30),
-  HookahManEventFactory.Expense.fine1(1500),
+  HookahManEventFactory.Expense.fine1(1000),
   HookahManEventFactory.Stock.findex(2557, 20)
 );
 
@@ -40,7 +40,7 @@ const month4 = month(
 
 const month5 = month(
   HookahManEventFactory.Expense.computerRepair(3500),
-  HookahManEventFactory.Income.tip(500),
+  HookahManEventFactory.Income.tip(800),
   HookahManEventFactory.Debenture.ofz1(800, 20),
   HookahManEventFactory.Stock.gasPromGroup(410, 30)
 );
@@ -49,8 +49,9 @@ const month6 = month(
   HookahManEventFactory.Insurace.healthInsurance(2000, 3000),
   HookahManEventFactory.Stock.sberInvestBank(308, 20),
   HookahManEventFactory.Debenture.search(1050, 20),
-  HookahManEventFactory.Expense.fine3(1500),
-  HookahManEventFactory.Stock.findex(2330, 25)
+  HookahManEventFactory.Expense.fine3(1000),
+  HookahManEventFactory.Stock.findex(2330, 25),
+  HookahManEventFactory.Income.workBonus(1200)
 );
 
 const month7 = month(
