@@ -11,6 +11,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 
 class MonthResultCard extends HookWidget {
+  static const green = ColorRes.green;
+  static const red = ColorRes.red;
+
   @override
   Widget build(BuildContext context) {
     final userId = useUserId();
@@ -22,28 +25,6 @@ class MonthResultCard extends HookWidget {
 
     final currentResults = monthResults['${month - 1}'];
     final cashFlow = currentResults.totalIncome - currentResults.totalExpense;
-    final cashChange = calculateChange((r) => r.cash);
-    final incomeChange = calculateChange((r) => r.totalIncome);
-    final expenseChange = calculateChange((r) => r.totalExpense);
-    final assetsChange = calculateChange((r) => r.totalAssets);
-    final liabilityChange = calculateChange((r) => r.totalLiabilities);
-
-    const green = ColorRes.green;
-    const red = ColorRes.red;
-
-    final color = (value, shouldReverse) {
-      final isValueTooLow = double.parse(value.toStringAsFixed(1)) == 0.0;
-
-      if (isValueTooLow || value.isNaN || value.isInfinite) {
-        return ColorRes.mainBlack;
-      }
-
-      if (value > 0 && !shouldReverse) {
-        return green;
-      }
-
-      return red;
-    };
 
     return CardContainer(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 20),
@@ -70,39 +51,7 @@ class MonthResultCard extends HookWidget {
             value: cashFlow.toPrice(),
             color: cashFlow >= 0 ? green : red,
           ),
-          const TableDivider(),
-          const SizedBox(height: 20),
-          _buildSubtitle('${Strings.financialResultsChange}:'),
-          const TableDivider(),
-          _buildItem(
-            title: '${Strings.cash}:',
-            value: cashChange.toPercentWithSign(),
-            color: color(cashChange, false),
-          ),
-          _buildItemDivider(),
-          _buildItem(
-            title: '${Strings.incomes}:',
-            value: incomeChange.toPercentWithSign(),
-            color: color(incomeChange, false),
-          ),
-          _buildItemDivider(),
-          _buildItem(
-            title: '${Strings.expenses}:',
-            value: expenseChange.toPercentWithSign(),
-            color: color(expenseChange, true),
-          ),
-          _buildItemDivider(),
-          _buildItem(
-            title: '${Strings.assets}:',
-            value: assetsChange.toPercentWithSign(),
-            color: color(assetsChange, false),
-          ),
-          _buildItemDivider(),
-          _buildItem(
-            title: '${Strings.liabilities}:',
-            value: liabilityChange.toPercentWithSign(),
-            color: color(liabilityChange, true),
-          ),
+          ..._buildFinResultsChanges(calculateChange),
         ],
       ),
     );
@@ -152,6 +101,87 @@ class MonthResultCard extends HookWidget {
     return TableDivider(
       color: ColorRes.newGameBoardInvestmentsDividerColor.withAlpha(150),
     );
+  }
+
+  List<Widget> _buildFinResultsChanges(
+    double calculateChange(double Function(MonthResult result) selector),
+  ) {
+    final cashChange = calculateChange((r) => r.cash);
+    final incomeChange = calculateChange((r) => r.totalIncome);
+    final expenseChange = calculateChange((r) => r.totalExpense);
+    final assetsChange = calculateChange((r) => r.totalAssets);
+    final liabilityChange = calculateChange((r) => r.totalLiabilities);
+
+    final results = [
+      if (_shouldDisplayValue(cashChange))
+        _buildItem(
+          title: '${Strings.cash}:',
+          value: cashChange.toPercentWithSign(),
+          color: _getValueColor(cashChange, false),
+        ),
+      if (_shouldDisplayValue(incomeChange))
+        _buildItem(
+          title: '${Strings.incomes}:',
+          value: incomeChange.toPercentWithSign(),
+          color: _getValueColor(incomeChange, false),
+        ),
+      if (_shouldDisplayValue(expenseChange))
+        _buildItem(
+          title: '${Strings.expenses}:',
+          value: expenseChange.toPercentWithSign(),
+          color: _getValueColor(expenseChange, true),
+        ),
+      if (_shouldDisplayValue(assetsChange))
+        _buildItem(
+          title: '${Strings.assets}:',
+          value: assetsChange.toPercentWithSign(),
+          color: _getValueColor(assetsChange, false),
+        ),
+      if (_shouldDisplayValue(liabilityChange))
+        _buildItem(
+          title: '${Strings.liabilities}:',
+          value: liabilityChange.toPercentWithSign(),
+          color: _getValueColor(liabilityChange, true),
+        ),
+    ];
+
+    if (results.isEmpty) {
+      return [Container()];
+    }
+
+    return [
+      const TableDivider(),
+      const SizedBox(height: 20),
+      _buildSubtitle('${Strings.financialResultsChange}:'),
+      const TableDivider(),
+      for (int i = 0; i < results.length; i++) ...[
+        results[i],
+        if (i != results.length - 1) _buildItemDivider(),
+      ],
+    ];
+  }
+
+  Color _getValueColor(double value, bool shouldReverse) {
+    final isValueTooLow = double.parse(value.toStringAsFixed(1)) == 0.0;
+
+    if (isValueTooLow || value.isNaN || value.isInfinite) {
+      return ColorRes.mainBlack;
+    }
+
+    if (value > 0 && !shouldReverse) {
+      return green;
+    }
+
+    return red;
+  }
+
+  bool _shouldDisplayValue(double value) {
+    if (value.isNaN || value.isInfinite) {
+      return false;
+    }
+
+    final isValueTooLow = double.parse(value.toStringAsFixed(1)) == 0.0;
+    return !isValueTooLow;
   }
 }
 
