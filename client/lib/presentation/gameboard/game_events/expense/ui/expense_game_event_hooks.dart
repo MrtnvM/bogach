@@ -36,7 +36,7 @@ ExpenseWidgetData useExpenseEventData({
   }
 
   final data = {
-    Strings.sum: '-${eventExpenseValue.toPrice()}',
+    Strings.sum: '${(-eventExpenseValue).toPrice()}',
   };
 
   final expenseWidgetData = ExpenseWidgetData(

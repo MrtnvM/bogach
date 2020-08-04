@@ -32,7 +32,7 @@ class MonthlyExpenseEvent extends HookWidget {
           rows: <Widget>[
             TitleRow(
               title: Strings.monthlyExpenseTitle,
-              value: eventData.monthlyPayment.toPrice(),
+              value: (-eventData.monthlyPayment).toPrice(),
             ),
           ],
         ),
