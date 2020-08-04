@@ -45,6 +45,7 @@ class GameEventInfoDialogContent extends StatelessWidget {
           ),
           const SizedBox(height: 16),
         ],
+        const SizedBox(height: 16),
         buildParameterContainer(
           name: Strings.riskLevel,
           level: gameEventInfoDialogModel.riskLevel,

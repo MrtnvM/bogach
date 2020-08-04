@@ -69,7 +69,6 @@ class InfoTable extends StatelessWidget {
       if (description != null) ...<Widget>[
         const SizedBox(height: 16),
         Container(
-          color: Colors.black,
           alignment: Alignment.centerLeft,
           child: Text(
             description,
