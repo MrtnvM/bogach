@@ -2,7 +2,7 @@ library login_state;
 
 import 'package:built_value/built_value.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 
 part 'login_state.g.dart';
 

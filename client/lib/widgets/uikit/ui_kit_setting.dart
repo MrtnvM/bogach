@@ -1,7 +1,7 @@
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_control_panel/control_panel.dart';
-import 'package:uikit/uikit.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
+import 'package:dash_kit_uikit/dash_kit_uikit.dart';
 
 class UiKitSetting extends StatefulWidget implements ControlPanelSetting {
   const UiKitSetting();

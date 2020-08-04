@@ -6,8 +6,8 @@ import 'package:cash_flow/services/user_service.dart';
 import 'package:cash_flow/utils/core/epic.dart';
 import 'package:cash_flow/utils/core/tuple.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_platform_control_panel/control_panel.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:rxdart/rxdart.dart';
 

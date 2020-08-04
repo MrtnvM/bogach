@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:cash_flow/models/errors/domain_game_error.dart';
 import 'package:cash_flow/models/network/core/response_model.dart';
-import 'package:flutter_platform_network/flutter_platform_network.dart';
+import 'package:dash_kit_network/dash_kit_network.dart';
 
 T Function(Response) standard<T>(T Function(Map<String, dynamic>) mapper) {
   return (response) {
