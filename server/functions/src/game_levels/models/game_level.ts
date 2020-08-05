@@ -5,6 +5,7 @@ import { GameLevelEventConfig } from './event_config';
 export interface GameLevel {
   readonly id: GameLevelEntity.Id;
   readonly name: string;
+  readonly description: string;
   readonly icon: string;
   readonly template: GameTemplate;
   readonly levelEventConfig: GameLevelEventConfig;
@@ -22,6 +23,7 @@ export namespace GameLevelEntity {
 
     entity.hasStringValue('id');
     entity.hasStringValue('name');
+    entity.hasStringValue('description');
     entity.hasStringValue('icon');
     entity.hasObjectValue('template', GameTemplateEntity.validate);
     entity.hasValue('levelEventConfig');

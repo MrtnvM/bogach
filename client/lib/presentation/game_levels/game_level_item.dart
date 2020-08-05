@@ -39,8 +39,7 @@ class GameLevelItemWidget extends StatelessWidget {
                   children: <Widget>[
                     Text('${gameLevel.name}', style: Styles.bodyBlackBold),
                     const SizedBox(height: 8),
-                    Text('Накопить на PS4 за 7 месяцев',
-                        style: Styles.bodyBlack),
+                    Text('${gameLevel.description}', style: Styles.bodyBlack),
                   ],
                 ),
                 const Spacer(),
