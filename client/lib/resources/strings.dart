@@ -195,6 +195,21 @@ class Strings {
       'инвесторам, которые готовы потратить время,'
       ' разобраться и выбрать хорошие акции.';
 
+  static const realEstateDialogTitle = 'Недвижимость';
+  static const realEstateDialogDescription =
+      'Недвижимость - вы покупаете недвижимость, ожидая,'
+      ' что цена вырастет, или хотите сдавать в аренду';
+  static const realEstateDialogKeyPoint1 = 'Как заработать';
+  static const realEstateDialogKeyPointDescription1 =
+      'на росте стоимости - цена сданной застройщиком квартиры выше,'
+      ' чем на этапе строительства,'
+      ' квартира будет стоить больше, если рядом появится метро;'
+      ' на сдаче в аренду - квартира в Москве окупится в среднем через 15 лет.';
+  static const realEstateDialogKeyPoint2 = 'Кому подойдёт';
+  static const realEstateDialogKeyPointDescription2 =
+      'тем, у кого есть достаточно денег для приобретения квартиры'
+      ' и финансовая подушка.';
+
   static String get monthResult => 'Итоги за месяц';
   static String get financialResults => 'Финансовые показатели';
   static String get financialResultsChange => 'Изменения показателей';
