@@ -21,11 +21,11 @@ export namespace StockEvent {
   }
 
   export type Info = {
-    name: string;
-    description?: string;
-    currentPrice: ValueRange;
-    fairPrice: ValueRange;
-    availableCount?: ValueRange;
+    readonly name: string;
+    readonly description?: string;
+    readonly currentPrice: ValueRange;
+    readonly fairPrice: ValueRange;
+    readonly availableCount?: ValueRange;
   };
 
   export const validate = (event: any) => {

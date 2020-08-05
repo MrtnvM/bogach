@@ -41,7 +41,7 @@ const game: Game = GameFixture.createGame({
   },
 });
 
-const debenturePriceChangedEvent = (data: DebentureEvent.Data) => {
+const debentureEvent = (data: DebentureEvent.Data) => {
   const event: DebentureEvent.Event = {
     id: eventId,
     name: 'DebentureName',
@@ -54,7 +54,7 @@ const debenturePriceChangedEvent = (data: DebentureEvent.Data) => {
   return event;
 };
 
-const debentureOFZPriceChangedEvent = (currentPrice: number, availableCount: number) => {
+const debentureOFZEvent = (currentPrice: number, availableCount: number) => {
   const eventData: DebentureEvent.Data = {
     currentPrice,
     profitabilityPercent: 8,
@@ -74,7 +74,7 @@ const debentureOFZPriceChangedEvent = (currentPrice: number, availableCount: num
   return event;
 };
 
-const debenturePriceChangedPlayerAction = (action: DebentureEvent.PlayerAction) => {
+const debenturePlayerAction = (action: DebentureEvent.PlayerAction) => {
   DebentureEvent.validateAction(action);
   return action;
 };
@@ -89,7 +89,7 @@ export const stubs = {
 };
 
 export const utils = {
-  debenturePriceChangedEvent,
-  debenturePriceChangedPlayerAction,
-  debentureOFZPriceChangedEvent,
+  debentureEvent,
+  debenturePlayerAction,
+  debentureOFZEvent,
 };

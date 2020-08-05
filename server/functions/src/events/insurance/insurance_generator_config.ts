@@ -17,7 +17,7 @@ export namespace InsuranceGeneratorConfig {
         event?.description ??
         'Страховая компания предлагает купить полис ' +
           'и защитить свое здоровье от непредвиденных ситуаций',
-      insuranceType: event?.insuranceType ?? 'health',
+      insuranceType: 'health',
       cost,
       value,
       duration: event?.duration ?? 12,
@@ -41,7 +41,7 @@ export namespace InsuranceGeneratorConfig {
         event?.description ??
         'Страховая компания предлагает купить полис ' +
           'и защитить свое имущество от непредвиденных ситуаций',
-      insuranceType: event?.insuranceType ?? 'health',
+      insuranceType: 'property',
       cost,
       value,
       duration: event?.duration ?? 12,

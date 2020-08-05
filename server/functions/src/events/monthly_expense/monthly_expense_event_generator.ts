@@ -19,7 +19,7 @@ export namespace MonthlyExpenseEventGenerator {
     const alreadyHappendEvents = {};
     pastExpenseEvents.forEach((e) => (alreadyHappendEvents[e.name + e.description] = true));
 
-    let filtredExpenseEvents = expenseEventInfo.filter(
+    const filtredExpenseEvents = expenseEventInfo.filter(
       (e) => !alreadyHappendEvents[e.name + e.description]
     );
 

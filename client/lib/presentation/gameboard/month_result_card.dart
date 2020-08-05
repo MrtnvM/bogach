@@ -146,7 +146,7 @@ class MonthResultCard extends HookWidget {
     ];
 
     if (results.isEmpty) {
-      return [Container()];
+      return [];
     }
 
     return [

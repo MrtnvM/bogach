@@ -17,10 +17,10 @@ export namespace MonthlyExpenseEvent {
   }
 
   export type Info = {
-    name: string;
-    description: string;
-    value: ValueRange;
-    expenseName: string;
+    readonly name: string;
+    readonly description: string;
+    readonly value: ValueRange;
+    readonly expenseName: string;
   };
 
   export const validate = (event: any) => {
