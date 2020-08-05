@@ -8,3 +8,5 @@ server/firebase_service_account.json
 client/ios/Runner/GoogleService-Info.plist
 
 client/android/app/uat/
+client/android/app/staging/
+client/android/app/production/
