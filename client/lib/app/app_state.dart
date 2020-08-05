@@ -6,7 +6,7 @@ import 'package:cash_flow/features/login/login_state.dart';
 import 'package:cash_flow/features/multiplayer/multiplayer_state.dart';
 import 'package:cash_flow/features/purchase/purchase_state.dart';
 import 'package:cash_flow/features/new_game/new_game_state.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 
 part 'app_state.g.dart';
 

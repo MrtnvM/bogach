@@ -1,5 +1,5 @@
 import 'package:cash_flow/widgets/game_event/price_calculator.dart';
-import 'package:uikit/uikit.dart';
+import 'package:dash_kit_uikit/dash_kit_uikit.dart';
 
 class PriceCalculatorBuilder extends UiKitBuilder {
   @override

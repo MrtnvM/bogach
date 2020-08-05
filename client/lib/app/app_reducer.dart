@@ -4,7 +4,7 @@ import 'package:cash_flow/features/login/login_reducer.dart';
 import 'package:cash_flow/features/multiplayer/multiplayer_reducer.dart';
 import 'package:cash_flow/features/purchase/purchase_reducer.dart';
 import 'package:cash_flow/features/new_game/new_game_reducer.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 
 class AppReducer extends Reducer<AppState> {
   @override

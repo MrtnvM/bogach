@@ -73,6 +73,8 @@ class Strings {
 
   static String get unknownUser => 'Аноним';
 
+  static String get emptyList => 'Список пуст';
+
   static const rubleSymbol = '₽';
   static const title = '';
   static const wordIn = 'в';
@@ -166,6 +168,49 @@ class Strings {
   static const businessSell = 'Продажа бизнеса';
   static const realty = 'Недвижимость';
   static const other = 'Прочие';
+
+  static const riskLevel = 'Риск';
+  static const profitabilityLevel = 'Доходность';
+  static const complexityLevel = 'Сложность';
+
+  static const debentureDialogTitle = 'Облигации';
+  static const debentureDialogDescription =
+      'Облигации - когда вы даёте деньги в долг государству или компании';
+  static const debentureDialogKeyPoint1 = 'Как заработать';
+  static const debentureDialogKeyPointDescription1 =
+      'на процентах - должник возвращает больше денег, чем взял.';
+  static const debentureDialogKeyPoint2 = 'Кому подойдёт';
+  static const debentureDialogKeyPointDescription2 =
+      'консервативным инвесторам, которые не хотят рисковать, '
+      'но хотят доходность выше, чем по банковскому вкладу.';
+
+  static const stockDialogTitle = 'Акции';
+  static const stockDialogDescription =
+      'Акции - когда вы покупаете часть компании';
+  static const stockDialogKeyPoint1 = 'Как заработать';
+  static const stockDialogKeyPointDescription1 =
+      'на дивидендах - когда компания делится с акционером частью прибыли;'
+      ' на росте стоимости акций - когда бизнес компании растёт,'
+      ' спрос на её акции повышается и цена акций растёт.';
+  static const stockDialogKeyPoint2 = 'Кому подойдёт';
+  static const stockDialogKeyPointDescription2 =
+      'инвесторам, которые готовы потратить время,'
+      ' разобраться и выбрать хорошие акции.';
+
+  static const realEstateDialogTitle = 'Недвижимость';
+  static const realEstateDialogDescription =
+      'Недвижимость - вы покупаете недвижимость, ожидая,'
+      ' что цена вырастет, или хотите сдавать в аренду';
+  static const realEstateDialogKeyPoint1 = 'Как заработать';
+  static const realEstateDialogKeyPointDescription1 =
+      'на росте стоимости - цена сданной застройщиком квартиры выше,'
+      ' чем на этапе строительства,'
+      ' квартира будет стоить больше, если рядом появится метро;'
+      ' на сдаче в аренду - квартира в Москве окупится в среднем через 15 лет.';
+  static const realEstateDialogKeyPoint2 = 'Кому подойдёт';
+  static const realEstateDialogKeyPointDescription2 =
+      'тем, у кого есть достаточно денег для приобретения квартиры'
+      ' и финансовая подушка.';
 
   static String get monthResult => 'Итоги за месяц';
   static String get financialResults => 'Финансовые показатели';

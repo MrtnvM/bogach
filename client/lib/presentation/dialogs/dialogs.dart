@@ -5,7 +5,7 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_platform_network/flutter_platform_network.dart';
+import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:intl/intl.dart';
 
 void showNotImplementedDialog(BuildContext context) {

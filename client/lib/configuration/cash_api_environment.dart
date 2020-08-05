@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_platform_network/flutter_platform_network.dart';
+import 'package:dash_kit_network/dash_kit_network.dart';
 
 class CashApiEnvironment extends ApiEnvironment {
   const CashApiEnvironment({

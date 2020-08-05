@@ -12,7 +12,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart' hide Store;
-import 'package:flutter_platform_loadable/flutter_platform_loadable.dart';
+import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter_redux/flutter_redux.dart' as redux;
 import 'package:redux/redux.dart';
 

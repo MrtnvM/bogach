@@ -10,7 +10,7 @@ import 'package:cash_flow/models/network/responses/new_game_response_model.dart'
 import 'package:flutter/cupertino.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_platform_network/flutter_platform_network.dart';
+import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:cash_flow/models/network/request/game/player_action_request_model.dart';
 import 'package:cash_flow/api_client/response_mappers.dart' as rm;
 

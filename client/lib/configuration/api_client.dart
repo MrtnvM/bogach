@@ -1,7 +1,7 @@
-import 'package:alice/alice.dart';
+import 'package:alice_lightweight/alice.dart';
 import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/utils/debug.dart';
-import 'package:flutter_platform_network/flutter_platform_network.dart';
+import 'package:dash_kit_network/dash_kit_network.dart';
 
 CashFlowApiClient configureApiClient(Alice alice, ApiEnvironment environment) {
   final apiDio = _createApiDio(alice);

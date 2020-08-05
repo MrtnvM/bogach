@@ -1,6 +1,6 @@
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/widgets/game_event/monthly_income.dart';
-import 'package:uikit/uikit.dart';
+import 'package:dash_kit_uikit/dash_kit_uikit.dart';
 
 class MonthlyIncomeWidgetBuilder extends UiKitBuilder {
   @override

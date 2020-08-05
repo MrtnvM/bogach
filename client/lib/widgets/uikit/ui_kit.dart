@@ -3,7 +3,7 @@ import 'package:cash_flow/models/domain/game/game_event/game_event_type.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/business/buy/model/business_buy_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/business/buy/ui/business_buy_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/debenture_event_data.dart';
-import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event_widget.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/insurance/models/insurance_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/insurance/ui/insurance_game_event.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -117,7 +117,7 @@ class UiKit extends StatelessWidget {
   Widget _getGameEvents(BuildContext context) {
     return Column(
       children: <Widget>[
-        DebentureGameEvent(
+        DebentureGameEventWidget(
           event: GameEvent(
             id: 'event1',
             name: 'Облигации',

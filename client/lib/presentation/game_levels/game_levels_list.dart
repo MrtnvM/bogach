@@ -6,9 +6,10 @@ import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/game_levels/game_level_item.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard.dart';
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/widgets/common/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_platform_loadable/flutter_platform_loadable.dart';
+import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 
 class GameLevelList extends HookWidget {
   @override
@@ -52,6 +53,8 @@ class GameLevelList extends HookWidget {
           loadListRequestState: gameLevelsRequestState,
           loadList: gameActions.loadGameLevels,
           padding: const EdgeInsets.all(16),
+          emptyStateWidget: EmptyWidget(),
+          errorWidget: ErrorWidget(gameActions.loadGameLevels),
         ),
       ),
     );

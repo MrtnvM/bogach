@@ -9,8 +9,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
-import 'package:flutter_platform_network/flutter_platform_network.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
+import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

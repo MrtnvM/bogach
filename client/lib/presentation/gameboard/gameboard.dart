@@ -9,7 +9,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/bottom_bar.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
-import 'package:flutter_platform_loadable/flutter_platform_loadable.dart';
+import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 
 class GameBoard extends HookWidget {
   @override

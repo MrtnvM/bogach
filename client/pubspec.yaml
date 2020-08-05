@@ -9,9 +9,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_hooks: ^0.9.0
+  flutter_hooks: ^0.12.0
 
-  rxdart: ^0.24.0
+  rxdart: ^0.24.1
   flutter_secure_storage: ^3.3.1+1
   shared_preferences: ^0.5.6+1
   intl: ^0.16.1
@@ -19,7 +19,7 @@ dependencies:
 
   built_value: ^7.0.8
   built_collection: ^4.3.0
-  freezed_annotation: ^0.7.1
+  freezed_annotation: ^0.11.0
 
   firebase_core: ^0.4.3+1
   firebase_analytics: ^5.0.16
@@ -47,30 +47,11 @@ dependencies:
 
   in_app_purchase: ^0.3.3
 
-  flutter_platform_core:
-    git:
-      url: git://github.com/Cash-Flow-Team/flutter-platform-core
-      ref: v0.0.22
-
-  flutter_platform_network:
-    git:
-      url: git://github.com/Cash-Flow-Team/flutter_platform_network
-      ref: v0.0.15
-
-  flutter_platform_control_panel:
-    git:
-      url: git://github.com/Cash-Flow-Team/flutter-platform-control-panel
-      ref: v0.0.15
-
-  flutter_platform_loadable:
-    git:
-      url: git://github.com/Cash-Flow-Team/flutter-platform-loadable
-      ref: v0.0.17
-
-  uikit:
-    git:
-      url: git://github.com/Cash-Flow-Team/flutter-ui-kit
-      ref: v0.0.2
+  dash_kit_core: ^1.0.2
+  dash_kit_network: ^1.0.0
+  dash_kit_control_panel: ^1.0.0
+  dash_kit_loadable: ^1.0.0
+  dash_kit_uikit: ^1.0.0
 
   cupertino_icons: ^0.1.2
 
