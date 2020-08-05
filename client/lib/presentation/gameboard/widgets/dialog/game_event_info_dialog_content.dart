@@ -19,54 +19,59 @@ class GameEventInfoDialogContent extends StatelessWidget {
   }
 
   Widget _buildBody() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          gameEventInfoDialogModel.description,
-          style: Styles.tableDialogSubtitleBlack,
-        ),
-        const SizedBox(height: 16),
-        for (var keyPoint in gameEventInfoDialogModel.keyPoints.entries) ...[
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: '${keyPoint.key}: ',
-                  style: Styles.tableDialogSubtitleBlack,
-                ),
-                TextSpan(
-                  text: '${keyPoint.value}',
-                  style: Styles.bodyBlack,
-                ),
-              ],
-            ),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            gameEventInfoDialogModel.description,
+            style: Styles.tableDialogSubtitleBlack,
           ),
           const SizedBox(height: 16),
+          for (var keyPoint in gameEventInfoDialogModel.keyPoints.entries) ...[
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: '${keyPoint.key}: ',
+                    style: Styles.tableDialogSubtitleBlack,
+                  ),
+                  TextSpan(
+                    text: '${keyPoint.value}',
+                    style: Styles.bodyBlack,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
+          const SizedBox(height: 16),
+          buildParameterContainer(
+            name: Strings.riskLevel,
+            level: gameEventInfoDialogModel.riskLevel,
+            activeIcon: Images.riskLightingIcon,
+            deactiveIcon: Images.riskLightingEmptyIcon,
+          ),
+          const SizedBox(height: 16),
+          buildParameterContainer(
+            name: Strings.profitabilityLevel,
+            level: gameEventInfoDialogModel.profitabilityLevel,
+            activeIcon: Images.profitabilityLightingIcon,
+            deactiveIcon: Images.profitabilityLightingEmptyIcon,
+          ),
+          const SizedBox(height: 16),
+          buildParameterContainer(
+            name: Strings.complexityLevel,
+            level: gameEventInfoDialogModel.complexityLevel,
+            activeIcon: Images.complexityLightingIcon,
+            deactiveIcon: Images.complexityLightingEmptyIcon,
+          ),
         ],
-        const SizedBox(height: 16),
-        buildParameterContainer(
-          name: Strings.riskLevel,
-          level: gameEventInfoDialogModel.riskLevel,
-          activeIcon: Images.riskLightingIcon,
-          deactiveIcon: Images.riskLightingEmptyIcon,
-        ),
-        const SizedBox(height: 16),
-        buildParameterContainer(
-          name: Strings.profitabilityLevel,
-          level: gameEventInfoDialogModel.profitabilityLevel,
-          activeIcon: Images.profitabilityLightingIcon,
-          deactiveIcon: Images.profitabilityLightingEmptyIcon,
-        ),
-        const SizedBox(height: 16),
-        buildParameterContainer(
-          name: Strings.complexityLevel,
-          level: gameEventInfoDialogModel.complexityLevel,
-          activeIcon: Images.complexityLightingIcon,
-          deactiveIcon: Images.complexityLightingEmptyIcon,
-        ),
-      ],
+      ),
     );
   }
 
@@ -120,18 +125,15 @@ class GameEventInfoDialogContent extends StatelessWidget {
 
   List<Widget> drawIcons(Rating level, String activeIcon, String deactiveIcon) {
     final ratingValue = RatingExtension.getRatingLevel(level);
-
-    List<Widget> widgets = [];
-    for (var i = 0; i < 3; i++) {
-      final icon = ratingValue >= i + 1 ? activeIcon : deactiveIcon;
-      final imageWidget = SvgPicture.asset(
-        icon,
-        width: 20,
-        height: 20,
-      );
-      widgets.add(const SizedBox(width: 8));
-      widgets.add(imageWidget);
-    }
-    return widgets;
+    return [
+      for (var i = 0; i < 3; i++) ...[
+        const SizedBox(width: 8),
+        SvgPicture.asset(
+          ratingValue >= i + 1 ? activeIcon : deactiveIcon,
+          width: 20,
+          height: 20,
+        ),
+      ]
+    ];
   }
 }

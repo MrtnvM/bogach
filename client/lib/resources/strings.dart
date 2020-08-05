@@ -178,7 +178,7 @@ class Strings {
   static const debentureDialogKeyPointDescription1 =
       "на процентах - должник возвращает больше денег, чем взял.";
   static const debentureDialogKeyPoint2 = "Кому подойдёт";
-  static const debentureDialogKeyPointDescription2 = "Кому подойдёт";
+  static const debentureDialogKeyPointDescription2 = "консервативным инвесторам, которые не хотят рисковать, но хотят доходность выше, чем по банковскому вкладу.";
 
 
   static String get monthResult => 'Итоги за месяц';
