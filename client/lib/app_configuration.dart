@@ -1,4 +1,5 @@
 import 'package:cash_flow/configuration/cash_api_environment.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:package_info/package_info.dart';
 
@@ -14,8 +15,10 @@ class AppConfiguration {
   static Future<void> init({@required CashApiEnvironment environment}) async {
     assert(!initializationWasCalled, 'Init should be called once!');
 
-    _environment = _environment ?? await _getEnvironmentFromPackageName();
+    _environment = environment ?? await _getEnvironmentFromPackageName();
     print('Environment: ${_environment.name}');
+
+    _checkIsCorrectFirebaseEnvironmentSelected();
   }
 
   static bool get controlPanelEnabled =>
@@ -42,5 +45,27 @@ class AppConfiguration {
     }
 
     throw Exception('Cannot determine environment by package name');
+  }
+
+  static void _checkIsCorrectFirebaseEnvironmentSelected() {
+    FirebaseApp.instance.options.then((options) {
+      switch (environment) {
+        case CashApiEnvironment.development:
+          assert(options.projectID.contains('staging'));
+          break;
+
+        case CashApiEnvironment.staging:
+          assert(options.projectID.contains('staging'));
+          break;
+
+        case CashApiEnvironment.uat:
+          assert(options.projectID.contains('uat'));
+          break;
+
+        case CashApiEnvironment.production:
+          assert(options.projectID.contains('production'));
+          break;
+      }
+    });
   }
 }
