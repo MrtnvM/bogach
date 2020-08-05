@@ -1,7 +1,7 @@
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
-import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event_widget.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/expense/ui/expense_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/income/ui/income_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/insurance/ui/insurance_game_event.dart';
@@ -37,7 +37,7 @@ class GameEventPage extends HookWidget {
 
   Widget _buildEventBody(GameEvent event) {
     return event.type.map(
-      debenture: (_) => DebentureGameEvent(event: event),
+      debenture: (_) => DebentureGameEventWidget(event: event),
       stock: (_) => StockGameEvent(event),
       businessBuy: (_) => BusinessBuyGameEvent(event),
       businessSell: (_) => BusinessSellGameEvent(event),

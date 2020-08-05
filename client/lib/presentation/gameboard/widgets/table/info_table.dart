@@ -1,7 +1,9 @@
 import 'package:cash_flow/presentation/gameboard/widgets/table/table_divider.dart';
+import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/containers/card_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class InfoTable extends StatelessWidget {
   const InfoTable({
@@ -13,6 +15,7 @@ class InfoTable extends StatelessWidget {
     this.titleTextStyle = Styles.tableHeaderTitleBlack,
     this.titleValueStyle = Styles.tableHeaderValueBlack,
     this.withShadow = true,
+    this.onInfoClick,
   }) : super(key: key);
 
   final String title;
@@ -22,6 +25,7 @@ class InfoTable extends StatelessWidget {
   final TextStyle titleTextStyle;
   final TextStyle titleValueStyle;
   final bool withShadow;
+  final VoidCallback onInfoClick;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +63,7 @@ class InfoTable extends StatelessWidget {
             child: Text(title, style: titleTextStyle),
           ),
           if (titleValue != null) Text(titleValue, style: titleValueStyle),
+          if (onInfoClick != null) _buildInfoIcon()
         ],
       ),
       if (description != null) ...<Widget>[
@@ -74,5 +79,22 @@ class InfoTable extends StatelessWidget {
         )
       ],
     ];
+  }
+
+  SizedBox _buildInfoIcon() {
+    return SizedBox(
+      width: 16,
+      height: 16,
+      child: IconButton(
+        padding: const EdgeInsets.all(0),
+        iconSize: 16,
+        icon: SvgPicture.asset(
+          Images.infoIcon,
+          width: 16,
+          height: 16,
+        ),
+        onPressed: onInfoClick,
+      ),
+    );
   }
 }

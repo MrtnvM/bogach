@@ -6,15 +6,20 @@ import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/debenture_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_content.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/containers/game_event_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class DebentureGameEvent extends HookWidget {
-  const DebentureGameEvent({Key key, @required this.event}) : super(key: key);
+class DebentureGameEventWidget extends HookWidget {
+  const DebentureGameEventWidget({
+    Key key,
+    @required this.event,
+  }) : super(key: key);
   final GameEvent event;
 
   DebentureEventData get eventData => event.data;
@@ -38,6 +43,8 @@ class DebentureGameEvent extends HookWidget {
     final passiveIncomePerMonth =
         eventData.nominal * eventData.profitabilityPercent / 100 / 12;
 
+    final debentureDialogInfoModel = useDebentureInfoDialogModel();
+
     final selectorViewModel = SelectorViewModel(
       currentPrice: eventData.currentPrice,
       passiveIncomePerMonth: passiveIncomePerMonth,
@@ -56,6 +63,22 @@ class DebentureGameEvent extends HookWidget {
             for (final item in infoTableData.entries)
               TitleRow(title: item.key, value: item.value)
           ],
+          onInfoClick: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Center(
+                    child: Text(
+                      debentureDialogInfoModel.title,
+                      style: Styles.tableHeaderTitleBlack,
+                    ),
+                  ),
+                  content: GameEventInfoDialogContent(debentureDialogInfoModel),
+                );
+              },
+            );
+          },
         ),
         const SizedBox(height: 24),
         GameEventSelector(

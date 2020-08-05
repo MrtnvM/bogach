@@ -148,6 +148,13 @@ class Styles {
     fontWeight: FontWeight.w700,
   );
 
+  static const tableDialogSubtitleBlack = TextStyle(
+    fontFamily: _defaultFontFamily,
+    color: ColorRes.mainBlack,
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+  );
+
   static TextStyle bottomNavBarButtonTitle({bool isSelected = false}) {
     return TextStyle(
       color: isSelected ? ColorRes.mainGreen : ColorRes.primaryGreyColor,
