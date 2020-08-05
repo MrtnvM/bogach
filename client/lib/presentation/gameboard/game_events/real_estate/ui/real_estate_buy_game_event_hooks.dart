@@ -3,6 +3,7 @@ import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/real_estate/models/real_estate_buy_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/real_estate/models/real_estate_buy_player_action.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_model.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -38,4 +39,22 @@ VoidCallback useRealEstateBuyPlayerActionHandler(GameEvent event) {
         .sendPlayerAction(playerAction, event.id)
         .catchError((e) => handleError(context: context, exception: e));
   };
+}
+
+GameEventInfoDialogModel useRealEstateInfoDialogModel() {
+  return useMemoized(
+    () => GameEventInfoDialogModel(
+      title: Strings.realEstateDialogTitle,
+      description: Strings.realEstateDialogDescription,
+      keyPoints: {
+        Strings.realEstateDialogKeyPoint1:
+            Strings.realEstateDialogKeyPointDescription1,
+        Strings.realEstateDialogKeyPoint2:
+            Strings.realEstateDialogKeyPointDescription2,
+      },
+      riskLevel: Rating.medium,
+      profitabilityLevel: Rating.low,
+      complexityLevel: Rating.medium,
+    ),
+  );
 }

@@ -6,9 +6,11 @@ import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/model/stock_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/ui/stock_game_event_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_content.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/containers/game_event_selector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +39,8 @@ class StockGameEvent extends HookWidget {
     final cash = useCurrentGame((g) => g.accounts[userId].cash);
     final alreadyHave = useCurrentStock(event)?.countInPortfolio ?? 0;
 
+    final stockDialogInfoModel = useStockInfoDialogModel();
+
     final selectorViewModel = SelectorViewModel(
       currentPrice: eventData.currentPrice,
       alreadyHave: alreadyHave,
@@ -54,6 +58,22 @@ class StockGameEvent extends HookWidget {
             for (final item in infoTableData.entries)
               TitleRow(title: item.key, value: item.value)
           ],
+          onInfoClick: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Center(
+                    child: Text(
+                      stockDialogInfoModel.title,
+                      style: Styles.tableHeaderTitleBlack,
+                    ),
+                  ),
+                  content: GameEventInfoDialogContent(stockDialogInfoModel),
+                );
+              },
+            );
+          },
         ),
         const SizedBox(height: 24),
         GameEventSelector(
