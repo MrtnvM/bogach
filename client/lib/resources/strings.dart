@@ -2,8 +2,9 @@ import 'package:intl/intl.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class Strings {
-  static const unknownError =
-      'An error occurred while performing the operation';
+  static String get unknownErrorTitle => 'Произошла ошибка 😒';
+  static String get unknownError =>
+      'Давай проверим соединенение с интернетом и попробуем еще раз';
 
   // Common
   static String get submit => 'Отправить';
