@@ -5,7 +5,7 @@ import 'package:cash_flow/widgets/avatar/user_widget.dart';
 import 'package:cash_flow/widgets/inputs/drop_focus.dart';
 import 'package:cash_flow/widgets/texts/title_test.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_control_panel/control_panel.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CashFlowScaffold extends StatelessWidget {

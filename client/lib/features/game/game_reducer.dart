@@ -5,7 +5,7 @@ import 'package:cash_flow/models/domain/game/current_game_state/current_game_sta
 import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 
 final gameReducer = Reducer<GameState>()

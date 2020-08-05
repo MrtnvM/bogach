@@ -11,7 +11,7 @@ import 'package:cash_flow/utils/error_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_platform_control_panel/control_panel.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:meta/meta.dart';
 
 class UserService {

@@ -73,6 +73,8 @@ class Strings {
 
   static String get unknownUser => 'Аноним';
 
+  static String get emptyList => 'Список пуст';
+
   static const rubleSymbol = '₽';
   static const title = '';
   static const wordIn = 'в';

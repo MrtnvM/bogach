@@ -1,11 +1,11 @@
-import 'package:alice/alice.dart';
+import 'package:alice_lightweight/alice.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:cash_flow/widgets/settings/logout_setting.dart';
 import 'package:cash_flow/widgets/uikit/ui_kit_setting.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_platform_control_panel/control_panel.dart';
-import 'package:flutter_platform_network/flutter_platform_network.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
+import 'package:dash_kit_network/dash_kit_network.dart';
 
 class SettingsProvider extends ControlPanelSettingsProvider {
   SettingsProvider({@required this.alice, @required this.dios}) {

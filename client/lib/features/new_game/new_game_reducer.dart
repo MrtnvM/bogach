@@ -3,7 +3,7 @@ import 'package:cash_flow/features/new_game/new_game_state.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 
 final newGameReducer = Reducer<NewGameState>()
   ..on<GetGameTemplatesAsyncAction>(

@@ -4,7 +4,7 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_control_panel/control_panel.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CashAppBar extends StatelessWidget implements PreferredSizeWidget {

@@ -14,7 +14,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_platform_control_panel/control_panel.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:package_info/package_info.dart';
 import 'package:share/share.dart';
 

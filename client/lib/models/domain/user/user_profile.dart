@@ -1,6 +1,6 @@
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_profile.freezed.dart';

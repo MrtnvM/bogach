@@ -2,7 +2,7 @@ import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game_level/game_level.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 
 class GetGameTemplatesAsyncAction extends AsyncAction<List<GameTemplate>> {
   GetGameTemplatesAsyncAction({this.isRefreshing = false})

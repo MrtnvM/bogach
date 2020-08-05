@@ -3,7 +3,7 @@ import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/models/domain/player_action/player_action.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 
 class StartGameAction extends Action {
   StartGameAction(this.gameContext) : assert(gameContext != null);

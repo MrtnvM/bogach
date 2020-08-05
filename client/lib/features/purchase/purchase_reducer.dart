@@ -1,6 +1,6 @@
 import 'package:cash_flow/features/purchase/purchase_actions.dart';
 import 'package:cash_flow/features/purchase/purchase_state.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 
 final purchaseReducer = Reducer<PurchaseState>()
   ..on<StartListeningPurchasesAction>(

@@ -4,7 +4,7 @@ import 'package:cash_flow/widgets/game_event/monthly_income.uikit.dart';
 import 'package:cash_flow/widgets/game_event/price_calculator.uikit.dart';
 import 'package:cash_flow/widgets/game_event/value_slider.uikit.dart';
 
-import 'package:uikit/uikit.dart';
+import 'package:dash_kit_uikit/dash_kit_uikit.dart';
 
 void configureUiKit() {
   UiKit.register(

@@ -3,7 +3,7 @@ import 'package:cash_flow/models/domain/room/room.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/models/network/core/search_query_result.dart';
 import 'package:cash_flow/utils/core/tuple.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 
 class QueryUserProfilesAsyncAction
     extends AsyncAction<SearchQueryResult<UserProfile>> {

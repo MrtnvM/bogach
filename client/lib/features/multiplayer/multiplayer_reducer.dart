@@ -1,6 +1,6 @@
 import 'package:cash_flow/features/multiplayer/multiplayer_actions.dart';
 import 'package:cash_flow/features/multiplayer/multiplayer_state.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 
 final multiplayerReducer = Reducer<MultiplayerState>()

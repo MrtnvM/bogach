@@ -11,8 +11,8 @@ import 'package:cash_flow/resources/dynamic_links.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_platform_control_panel/control_panel.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:uni_links/uni_links.dart';
 
 void useSubscriptionToPurchases() {

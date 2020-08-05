@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cash_flow/app/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 
 class _GlobalStateHook<T> extends Hook<T> {
   const _GlobalStateHook({
@@ -63,5 +63,5 @@ T useGlobalState<T>(
   T Function(AppState) converter, {
   bool distinct = true,
 }) {
-  return Hook.use(_GlobalStateHook(converter: converter, distinct: distinct));
+  return use(_GlobalStateHook(converter: converter, distinct: distinct));
 }

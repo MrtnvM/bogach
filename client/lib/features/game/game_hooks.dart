@@ -6,7 +6,7 @@ import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/models/domain/player_action/player_action.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_platform_core/flutter_platform_core.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 
 T useCurrentGame<T>(T Function(Game) convertor) {
   return useGlobalState((s) => convertor(s.game.currentGame));
