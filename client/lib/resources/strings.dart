@@ -210,6 +210,20 @@ class Strings {
       'тем, у кого есть достаточно денег для приобретения квартиры'
       ' и финансовая подушка.';
 
+  static const businessDialogTitle = 'Бизнес';
+  static const businessDialogDescription =
+      'Бизнес - вы покупаете бизнес, ожидая,'
+      ' что вы будете получать ежемсячный доход и цена бизнеса вырастет';
+  static const businessDialogKeyPoint1 = 'Как заработать';
+  static const businessDialogKeyPointDescription1 =
+      'ежемесячный доход - бизнес каждый месяц приносит доход;'
+      ' на продаже - цена бизнеса изменяется,'
+      ' и вы можете выгодно его продать.';
+  static const businessDialogKeyPoint2 = 'Кому подойдёт';
+  static const businessDialogKeyPointDescription2 =
+      'тем, у кого есть достаточно денег для приобретения бизнеса'
+      ' и финансовая подушка.';
+
   static String get monthResult => 'Итоги за месяц';
   static String get financialResults => 'Финансовые показатели';
   static String get financialResultsChange => 'Изменения показателей';
