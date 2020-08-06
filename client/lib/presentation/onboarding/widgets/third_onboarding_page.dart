@@ -1,5 +1,5 @@
 import 'package:cash_flow/navigation/app_router.dart';
-import 'package:cash_flow/presentation/main/main_page.dart';
+import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/buttons/action_button.dart';
@@ -32,6 +32,6 @@ class ThirdOnBoardingPage extends StatelessWidget {
   }
 
   void _onStartPressed() {
-    appRouter.goTo(const MainPage());
+    appRouter.goTo(const LoginPage());
   }
 }

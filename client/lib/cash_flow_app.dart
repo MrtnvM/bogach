@@ -6,6 +6,7 @@ import 'package:cash_flow/core/hooks/push_notification_hooks.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/presentation/main/main_page.dart';
+import 'package:cash_flow/presentation/onboarding/onboarding_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/utils/core/device_preview.dart';
 import 'package:device_preview/device_preview.dart';
@@ -20,10 +21,12 @@ class CashFlowApp extends HookWidget {
   CashFlowApp({
     @required this.store,
     @required this.isAuthorised,
+    @required this.isFirstLaunch,
   }) : super(key: GlobalKey());
 
   final Store<AppState> store;
   final bool isAuthorised;
+  final bool isFirstLaunch;
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +53,6 @@ class CashFlowApp extends HookWidget {
       ),
     );
 
-    final homePage = isAuthorised ? const MainPage() : const LoginPage();
-
     return redux.StoreProvider(
       store: store,
       child: StreamBuilder(
@@ -69,7 +70,7 @@ class CashFlowApp extends HookWidget {
             navigatorObservers: [
               ...getAnalyticsObservers(),
             ],
-            home: homePage,
+            home: _getHomePage(),
             theme: theme,
           ),
         ),
@@ -87,5 +88,13 @@ class CashFlowApp extends HookWidget {
         analytics: AnalyticsSender.firebaseAnalytics,
       )
     ];
+  }
+
+  Widget _getHomePage() {
+    if (isFirstLaunch) {
+      return const OnBoardingPage();
+    }
+
+    return isAuthorised ? const MainPage() : const LoginPage();
   }
 }
