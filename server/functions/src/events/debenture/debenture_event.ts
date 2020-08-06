@@ -26,7 +26,7 @@ export namespace DebentureEvent {
     readonly nominal: ValueRange;
     readonly price: ValueRange;
     readonly profitability: ValueRange;
-    readonly availableCount?: ValueRange;
+    readonly availableCount: ValueRange;
   };
 
   export const validate = (event: any) => {

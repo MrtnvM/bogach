@@ -5,7 +5,7 @@ import { DebentureEvent } from './debenture_event';
 import { formatPrice } from '../../utils/currency';
 import { Game } from '../../models/domain/game/game';
 import { DebentureGeneratorConfig } from './debenture_generator_config';
-import { randomValueFromRange } from '../../core/data/value_range';
+import { randomValueFromRange, valueRange } from '../../core/data/value_range';
 
 export namespace DebentureEventGenerator {
   export const generate = (game: Game): DebentureEvent.Event => {
@@ -20,6 +20,7 @@ export namespace DebentureEventGenerator {
       price,
       nominal,
       profitability,
+      availableCount: valueRange([90, 200, 10]),
     });
   };
 
@@ -29,8 +30,7 @@ export namespace DebentureEventGenerator {
     const currentPrice = randomValueFromRange(price);
     const currentNominal = randomValueFromRange(nominal);
     const currentProfitability = randomValueFromRange(profitability);
-    const currentAvailableCount =
-      (availableCount && randomValueFromRange(availableCount)) || random.int(9, 20) * 10;
+    const currentAvailableCount = randomValueFromRange(availableCount);
 
     return {
       id: uuid.v4(),
