@@ -1,6 +1,7 @@
 import { GameEventEntity, GameEvent } from '../../../models/domain/game/game_event';
 import { BuySellAction, BuySellActionValues } from '../../../models/domain/actions/buy_sell_action';
 import { Entity } from '../../../core/domain/entity';
+import { ValueRange } from '../../../core/data/value_range';
 
 export namespace BusinessBuyEvent {
   export const Type: GameEventEntity.Type = 'business-buy-event';
@@ -22,6 +23,17 @@ export namespace BusinessBuyEvent {
     readonly eventId: GameEventEntity.Id;
     readonly action: BuySellAction;
   }
+
+  export type Info = {
+    readonly name: string;
+    readonly description: string;
+    readonly businessId: string;
+    readonly currentPrice: ValueRange;
+    readonly fairPrice: ValueRange;
+    readonly downPayment: ValueRange;
+    readonly passiveIncomePerMonth: ValueRange;
+    readonly sellProbability: ValueRange;
+  };
 
   export const validate = (event: any) => {
     if (event?.type !== Type) {

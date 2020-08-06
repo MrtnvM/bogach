@@ -1,32 +1,27 @@
 import { ValueRange } from '../core/data/value_range';
-
-import { IncomeEvent } from '../events/income/income_event';
 import { IncomeEventGenerator } from '../events/income/income_event_generator';
-
-import { ExpenseEvent } from '../events/expense/expense_event';
 import { ExpenseEventGenerator } from '../events/expense/expense_event_generator';
-
 import { InsuranceEvent } from '../events/insurance/insurance_event';
 import { InsuranceAssetEntity } from '../models/domain/assets/insurance_asset';
 import { InsuranceEventGenerator } from '../events/insurance/insurance_event_generator';
 import { InsuranceGeneratorConfig } from '../events/insurance/insurance_generator_config';
-
-import { DebentureEvent } from '../events/debenture/debenture_event';
 import { DebentureEventGenerator } from '../events/debenture/debenture_event_generator';
-import { StockEvent } from '../events/stock/stock_event';
 import { StockEventGenerator } from '../events/stock/stock_event_generator';
-
-import { MonthlyExpenseEvent } from '../events/monthly_expense/monthly_expense_event';
 import { MonthlyExpenseEventGenerator } from '../events/monthly_expense/monthly_expense_event_generator';
+import { BusinessSellEventGenerator } from '../events/business/sell/business_sell_event_generator';
+import { BusinessBuyEventGenerator } from '../events/business/buy/business_buy_event_generator';
 
 export namespace EventFactory {
-  export const incomeEvent = (props: IncomeEvent.Info) => {
-    return IncomeEventGenerator.generateEvent(props);
-  };
+  export const incomeEvent = IncomeEventGenerator.generateEvent;
 
-  export const expenseEvent = (props: ExpenseEvent.Info) => {
-    return ExpenseEventGenerator.generateEvent(props);
-  };
+  export const expenseEvent = ExpenseEventGenerator.generateEvent;
+  export const monthlyExpenseEvent = MonthlyExpenseEventGenerator.generateEvent;
+
+  export const debentureEvent = DebentureEventGenerator.generateEvent;
+  export const stockEvent = StockEventGenerator.generateEvent;
+
+  export const buyBussinessEvent = BusinessBuyEventGenerator.generateEvent;
+  export const sellBusinessEvent = BusinessSellEventGenerator.generateEvent;
 
   export const insuranceEvent = (props: {
     insuranceType: InsuranceAssetEntity.InsuranceType;
@@ -61,17 +56,5 @@ export namespace EventFactory {
       default:
         throw new Error('Unknown insurance type');
     }
-  };
-
-  export const debentureEvent = (props: DebentureEvent.Info) => {
-    return DebentureEventGenerator.generateEvent(props);
-  };
-
-  export const stockEvent = (props: StockEvent.Info) => {
-    return StockEventGenerator.generateEvent(props);
-  };
-
-  export const monthlyExpenseEvent = (props: MonthlyExpenseEvent.Info) => {
-    return MonthlyExpenseEventGenerator.generateEvent(props);
   };
 }
