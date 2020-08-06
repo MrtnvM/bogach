@@ -117,31 +117,31 @@ class MonthResultCard extends HookWidget {
         _buildItem(
           title: '${Strings.cash}:',
           value: cashChange.toPercentWithSign(),
-          color: _getValueColor(cashChange, false),
+          color: _getValueColor(cashChange, shouldReverse: false),
         ),
       if (_shouldDisplayValue(incomeChange))
         _buildItem(
           title: '${Strings.incomes}:',
           value: incomeChange.toPercentWithSign(),
-          color: _getValueColor(incomeChange, false),
+          color: _getValueColor(incomeChange, shouldReverse: false),
         ),
       if (_shouldDisplayValue(expenseChange))
         _buildItem(
           title: '${Strings.expenses}:',
           value: expenseChange.toPercentWithSign(),
-          color: _getValueColor(expenseChange, true),
+          color: _getValueColor(expenseChange, shouldReverse: true),
         ),
       if (_shouldDisplayValue(assetsChange))
         _buildItem(
           title: '${Strings.assets}:',
           value: assetsChange.toPercentWithSign(),
-          color: _getValueColor(assetsChange, false),
+          color: _getValueColor(assetsChange, shouldReverse: false),
         ),
       if (_shouldDisplayValue(liabilityChange))
         _buildItem(
           title: '${Strings.liabilities}:',
           value: liabilityChange.toPercentWithSign(),
-          color: _getValueColor(liabilityChange, true),
+          color: _getValueColor(liabilityChange, shouldReverse: true),
         ),
     ];
 
@@ -161,14 +161,14 @@ class MonthResultCard extends HookWidget {
     ];
   }
 
-  Color _getValueColor(double value, bool shouldReverse) {
+  Color _getValueColor(double value, {bool shouldReverse}) {
     final isValueTooLow = double.parse(value.toStringAsFixed(1)) == 0.0;
 
     if (isValueTooLow || value.isNaN || value.isInfinite) {
       return ColorRes.mainBlack;
     }
 
-    if (value > 0 && !shouldReverse) {
+    if (value > 0 && !shouldReverse || value < 0 && shouldReverse) {
       return green;
     }
 
