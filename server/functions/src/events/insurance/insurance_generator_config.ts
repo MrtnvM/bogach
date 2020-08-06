@@ -12,13 +12,12 @@ export namespace InsuranceGeneratorConfig {
     };
 
     const insuranceInfo: InsuranceEvent.Info = {
-      name: event?.name ?? 'Страховка',
+      name: event?.name ?? 'Страхование жизни',
       description:
         event?.description ??
         'Страховая компания предлагает купить полис ' +
-          'и защитить свое здоровье от непредвиденных ситуаций. ' +
-          'Действие полиса 1 год.',
-      insuranceType: event?.insuranceType ?? 'health',
+          'и защитить свое здоровье от непредвиденных ситуаций',
+      insuranceType: 'health',
       cost,
       value,
       duration: event?.duration ?? 12,
@@ -37,13 +36,12 @@ export namespace InsuranceGeneratorConfig {
     };
 
     const insuranceInfo: InsuranceEvent.Info = {
-      name: event?.name ?? 'Страховка',
+      name: event?.name ?? 'Страхование имущества',
       description:
         event?.description ??
         'Страховая компания предлагает купить полис ' +
-          'и защитить свое имущество  от непредвиденных ситуаций. ' +
-          'Действие полиса 1 год.',
-      insuranceType: event?.insuranceType ?? 'health',
+          'и защитить свое имущество от непредвиденных ситуаций',
+      insuranceType: 'property',
       cost,
       value,
       duration: event?.duration ?? 12,

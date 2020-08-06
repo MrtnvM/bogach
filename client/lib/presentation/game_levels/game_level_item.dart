@@ -34,10 +34,15 @@ class GameLevelItemWidget extends StatelessWidget {
           children: <Widget>[
             Row(
               children: <Widget>[
-                Expanded(
-                  child: Text('${gameLevel.name}', style: Styles.bodyBlackBold),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('${gameLevel.name}', style: Styles.bodyBlackBold),
+                    const SizedBox(height: 8),
+                    Text('${gameLevel.description}', style: Styles.bodyBlack),
+                  ],
                 ),
-                const SizedBox(width: 16),
+                const Spacer(),
                 getTemplateIcon(),
               ],
             ),

@@ -28,10 +28,27 @@ class GameEventPage extends HookWidget {
     final gameActions = useGameActions();
 
     return activeGameState.maybeWhen(
-      gameEvent: (eventIndex, _) => _buildEventBody(gameEvents[eventIndex]),
+      gameEvent: (eventIndex, _) {
+        if (gameEvents.isEmpty) {
+          return _buildNoGameEventsState();
+        }
+
+        return _buildEventBody(gameEvents[eventIndex]);
+      },
       waitingPlayers: (_) => WaitingPlayersCard(),
       monthResult: () => _buildMonthResult(gameActions.startNewMonth),
       orElse: () => Container(),
+    );
+  }
+
+  Widget _buildNoGameEventsState() {
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(32),
+      child: Text(
+        Strings.noGameEvents,
+        textAlign: TextAlign.center,
+      ),
     );
   }
 

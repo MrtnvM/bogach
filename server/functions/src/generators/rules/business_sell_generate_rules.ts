@@ -14,7 +14,7 @@ export class BusinessSellGenerateRule extends Rule<BusinessSellEvent.Event> {
   generate(game: Game) {
     const buyEvent = this.findBuyEvent(game.currentEvents)!;
 
-    return new BusinessSellEventGenerator().generate(buyEvent);
+    return BusinessSellEventGenerator.generate(buyEvent);
   }
 
   getMinDistanceBetweenEvents(): number {

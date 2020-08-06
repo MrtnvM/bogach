@@ -4,6 +4,7 @@ import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/features/new_game/new_game_actions.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
+import 'package:cash_flow/models/domain/game/game_level/game_level.dart';
 import 'package:cash_flow/models/domain/player_action/player_action.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
@@ -74,7 +75,7 @@ class _GameActions {
   });
 
   final void Function() loadGameTemplates;
-  final void Function() loadGameLevels;
+  final Future<List<GameLevel>> Function() loadGameLevels;
   final Future<String> Function(String templateId) createGame;
   final Future<String> Function(String gameLevelId) createGameByLevel;
   final void Function(String gameId) startGame;

@@ -3,7 +3,7 @@ import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
 import { UserEntity } from '../../models/domain/user';
 import { Possessions } from '../../models/domain/possessions';
 import { GameEventEntity } from '../../models/domain/game/game_event';
-import { DebenturePriceChangedEvent } from './debenture_price_changed_event';
+import { DebentureEvent } from './debenture_event';
 import { GameFixture } from '../../core/fixtures/game_fixture';
 
 const eventId: GameEventEntity.Id = 'event1';
@@ -41,41 +41,41 @@ const game: Game = GameFixture.createGame({
   },
 });
 
-const debenturePriceChangedEvent = (data: DebenturePriceChangedEvent.Data) => {
-  const event: DebenturePriceChangedEvent.Event = {
+const debentureEvent = (data: DebentureEvent.Data) => {
+  const event: DebentureEvent.Event = {
     id: eventId,
     name: 'DebentureName',
     description: 'Description',
-    type: DebenturePriceChangedEvent.Type,
+    type: DebentureEvent.Type,
     data: data,
   };
 
-  DebenturePriceChangedEvent.validate(event);
+  DebentureEvent.validate(event);
   return event;
 };
 
-const debentureOFZPriceChangedEvent = (currentPrice: number, availableCount: number) => {
-  const eventData: DebenturePriceChangedEvent.Data = {
+const debentureOFZEvent = (currentPrice: number, availableCount: number) => {
+  const eventData: DebentureEvent.Data = {
     currentPrice,
     profitabilityPercent: 8,
     nominal: 1000,
     availableCount,
   };
 
-  const event: DebenturePriceChangedEvent.Event = {
+  const event: DebentureEvent.Event = {
     id: eventId,
     name: 'ОФЗ',
     description: 'Description',
-    type: DebenturePriceChangedEvent.Type,
+    type: DebentureEvent.Type,
     data: eventData,
   };
 
-  DebenturePriceChangedEvent.validate(event);
+  DebentureEvent.validate(event);
   return event;
 };
 
-const debenturePriceChangedPlayerAction = (action: DebenturePriceChangedEvent.PlayerAction) => {
-  DebenturePriceChangedEvent.validateAction(action);
+const debenturePlayerAction = (action: DebentureEvent.PlayerAction) => {
+  DebentureEvent.validateAction(action);
   return action;
 };
 
@@ -89,7 +89,7 @@ export const stubs = {
 };
 
 export const utils = {
-  debenturePriceChangedEvent,
-  debenturePriceChangedPlayerAction,
-  debentureOFZPriceChangedEvent,
+  debentureEvent,
+  debenturePlayerAction,
+  debentureOFZEvent,
 };

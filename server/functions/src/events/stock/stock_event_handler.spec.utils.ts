@@ -4,7 +4,7 @@ import { Possessions } from '../../models/domain/possessions';
 import { GameContext } from '../../models/domain/game/game_context';
 import { GameEventEntity } from '../../models/domain/game/game_event';
 import { StockAsset } from '../../models/domain/assets/stock_asset';
-import { StockPriceChangedEvent } from './stock_price_changed_event';
+import { StockEvent } from './stock_event';
 import { GameFixture } from '../../core/fixtures/game_fixture';
 
 const eventId: GameEventEntity.Id = 'event1';
@@ -42,40 +42,40 @@ const game: Game = GameFixture.createGame({
   },
 });
 
-const stockPriceChangedEvent = (data: StockPriceChangedEvent.Data) => {
-  const event: StockPriceChangedEvent.Event = {
+const stockPriceChangedEvent = (data: StockEvent.Data) => {
+  const event: StockEvent.Event = {
     id: eventId,
     name: 'stockName',
     description: 'Description',
-    type: StockPriceChangedEvent.Type,
+    type: StockEvent.Type,
     data: data,
   };
 
-  StockPriceChangedEvent.validate(event);
+  StockEvent.validate(event);
   return event;
 };
 
 const stockSberbankPriceChangedEvent = (currentPrice: number, maxCount: number) => {
-  const stockPriceEventData: StockPriceChangedEvent.Data = {
+  const stockPriceEventData: StockEvent.Data = {
     currentPrice,
     fairPrice: 100,
     availableCount: maxCount,
   };
 
-  const event: StockPriceChangedEvent.Event = {
+  const event: StockEvent.Event = {
     id: eventId,
     name: 'Акции Сбербанка',
     description: 'Description',
-    type: StockPriceChangedEvent.Type,
+    type: StockEvent.Type,
     data: stockPriceEventData,
   };
 
-  StockPriceChangedEvent.validate(event);
+  StockEvent.validate(event);
   return event;
 };
 
-const stockPriceChangedPlayerAction = (action: StockPriceChangedEvent.PlayerAction) => {
-  StockPriceChangedEvent.validateAction(action);
+const stockPriceChangedPlayerAction = (action: StockEvent.PlayerAction) => {
+  StockEvent.validateAction(action);
   return action;
 };
 

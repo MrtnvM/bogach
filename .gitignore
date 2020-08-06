@@ -6,3 +6,7 @@ server/cash-flow-staging-firebase-adminsdk-9r4ck-d568e56f39.json
 server/firebase_service_account.json
 
 client/ios/Runner/GoogleService-Info.plist
+
+client/android/app/uat/
+client/android/app/staging/
+client/android/app/production/

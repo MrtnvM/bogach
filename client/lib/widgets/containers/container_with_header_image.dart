@@ -151,7 +151,10 @@ class ContainerWithHeaderImage extends HookWidget {
         if (subTitle != null)
           Text(
             subTitle,
-            style: Styles.bodyBlack.copyWith(color: ColorRes.white),
+            style: Styles.bodyBlack.copyWith(
+              color: ColorRes.white,
+              fontSize: 15,
+            ),
           ),
       ],
     );

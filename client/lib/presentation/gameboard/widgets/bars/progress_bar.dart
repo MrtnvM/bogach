@@ -96,10 +96,11 @@ class _ProgressLine extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return Container(
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.decelerate,
           width: constraints.maxWidth * max(progress, 0),
           decoration: const BoxDecoration(
-//            borderRadius: BorderRadius.all(Radius.circular(5)),
             color: ColorRes.primaryYellowColor,
           ),
         );

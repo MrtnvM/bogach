@@ -1,8 +1,9 @@
 import { GameEvent, GameEventEntity } from '../../models/domain/game/game_event';
 import { Entity } from '../../core/domain/entity';
 import { BuySellAction, BuySellActionValues } from '../../models/domain/actions/buy_sell_action';
+import { ValueRange } from '../../core/data/value_range';
 
-export namespace DebenturePriceChangedEvent {
+export namespace DebentureEvent {
   export const Type: GameEventEntity.Type = 'debenture-price-changed-event';
 
   export type Event = GameEvent<Data>;
@@ -20,11 +21,12 @@ export namespace DebenturePriceChangedEvent {
     readonly count: number;
   }
 
-  export type InfoConfig = {
-    readonly nameOptions: string[];
-    readonly nominal: Range;
-    readonly price: Range;
-    readonly profitability: Range;
+  export type Info = {
+    readonly name: string;
+    readonly nominal: ValueRange;
+    readonly price: ValueRange;
+    readonly profitability: ValueRange;
+    readonly availableCount: ValueRange;
   };
 
   export const validate = (event: any) => {

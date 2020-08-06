@@ -1,19 +1,19 @@
 import { PlayerActionHandler } from '../../core/domain/player_action_handler';
+import { DebentureEvent } from './debenture_event';
 import { AssetEntity, Asset } from '../../models/domain/asset';
+import { DebentureAsset } from '../../models/domain/assets/debenture_asset';
 import { BuySellAction } from '../../models/domain/actions/buy_sell_action';
 import { Game } from '../../models/domain/game/game';
-import produce from 'immer';
-import { StockPriceChangedEvent } from './stock_price_changed_event';
-import { StockAsset } from '../../models/domain/assets/stock_asset';
 import { Account } from '../../models/domain/account';
+import produce from 'immer';
 import { UserEntity } from '../../models/domain/user';
 import { DomainErrors } from '../../core/exceptions/domain/domain_errors';
 
-type Event = StockPriceChangedEvent.Event;
-type Action = StockPriceChangedEvent.PlayerAction;
+type Event = DebentureEvent.Event;
+type Action = DebentureEvent.PlayerAction;
 
 interface ActionResult {
-  readonly newStockCount: number;
+  readonly newDebentureCount: number;
   readonly newAccountBalance: number;
   readonly newAveragePrice: number;
 }
@@ -28,15 +28,15 @@ interface ActionParameters {
   readonly totalPrice: number;
 }
 
-export class StockPriceChangedHandler extends PlayerActionHandler {
+export class DebentureEventHandler extends PlayerActionHandler {
   get gameEventType(): string {
-    return StockPriceChangedEvent.Type;
+    return DebentureEvent.Type;
   }
 
   async validate(event: any, action: any): Promise<boolean> {
     try {
-      StockPriceChangedEvent.validate(event);
-      StockPriceChangedEvent.validateAction(action);
+      DebentureEvent.validate(event);
+      DebentureEvent.validateAction(action);
     } catch (error) {
       console.error(error);
       return false;
@@ -46,19 +46,24 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
   }
 
   async handle(game: Game, event: Event, action: Action, userId: UserEntity.Id): Promise<Game> {
-    const { currentPrice, fairPrice, availableCount } = event.data;
-    const { count: actionCount, action: stockAction } = action;
+    const { currentPrice, nominal, profitabilityPercent, availableCount } = event.data;
+    const { count: actionCount, action: debentureAction } = action;
 
     const assets = game.possessions[userId].assets;
-    const stockAssets = AssetEntity.getStocks(assets);
-    const stockName = event.name;
+    const debetureAssets = AssetEntity.getDebentures(assets);
 
-    const theSameStock = stockAssets.find((d) => {
-      return d.name === stockName;
+    const debentureName = event.name;
+
+    const theSameDebenture = debetureAssets.find((d) => {
+      return (
+        d.name === debentureName &&
+        d.nominal === nominal &&
+        d.profitabilityPercent === profitabilityPercent
+      );
     });
 
-    const countInPortfolio = theSameStock?.countInPortfolio || 0;
-    const currentAveragePrice = theSameStock?.averagePrice || 0;
+    const countInPortfolio = theSameDebenture?.count || 0;
+    const currentAveragePrice = theSameDebenture?.averagePrice || 0;
 
     const userAccount = game.accounts[userId];
     const totalPrice = currentPrice * actionCount;
@@ -72,11 +77,21 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
       currentAveragePrice,
       totalPrice,
     };
-    const actionResult = this.applyAction(actionParameters, stockAction);
 
-    const newAssets = theSameStock
-      ? this.updateAssets(actionResult, theSameStock, assets)
-      : this.addNewItemToAssets(actionResult, assets, fairPrice, stockName);
+    const actionResult = await this.applyAction(actionParameters, debentureAction);
+
+    let newAssets: Asset[];
+    if (theSameDebenture) {
+      newAssets = this.updateAssets(actionResult, theSameDebenture, assets);
+    } else {
+      newAssets = this.addNewItemToAssets(
+        actionResult,
+        assets,
+        nominal,
+        profitabilityPercent,
+        debentureName
+      );
+    }
 
     const updatedGame: Game = produce(game, (draft) => {
       draft.accounts[userId].cash = actionResult.newAccountBalance;
@@ -86,7 +101,7 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     return updatedGame;
   }
 
-  applyAction(actionParameters: ActionParameters, action: BuySellAction) {
+  async applyAction(actionParameters: ActionParameters, action: BuySellAction) {
     if (action === 'buy') {
       return this.applyBuyAction(actionParameters);
     }
@@ -95,10 +110,10 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
       return this.applySellAction(actionParameters);
     }
 
-    throw new Error('Unknown action with stocks');
+    throw new Error('Unknown action with debentures');
   }
 
-  applyBuyAction(actionParameters: ActionParameters): ActionResult {
+  async applyBuyAction(actionParameters: ActionParameters): Promise<ActionResult> {
     const {
       userAccount,
       countInPortfolio,
@@ -116,10 +131,10 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
 
     const isEnoughCountAvailable = availableCount >= actionCount;
     if (!isEnoughCountAvailable) {
-      throw DomainErrors.notEnoughStocksOnMarket;
+      throw DomainErrors.notEnoughDebenturesOnMarket;
     }
 
-    const newStockCount = countInPortfolio + actionCount;
+    const newDebentureCount = countInPortfolio + actionCount;
     const newAccountBalance = userAccount.cash - totalPrice;
 
     const pricesDifference = currentPrice - currentAveragePrice;
@@ -130,7 +145,7 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     const newAveragePrice = currentAveragePrice + newPriceOffset;
 
     const actionResult: ActionResult = {
-      newStockCount,
+      newDebentureCount,
       newAccountBalance,
       newAveragePrice,
     };
@@ -138,22 +153,31 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     return actionResult;
   }
 
-  applySellAction(actionParameters: ActionParameters): ActionResult {
-    const isEnoughCountAvailable = actionParameters.availableCount >= actionParameters.actionCount;
+  async applySellAction(actionParameters: ActionParameters): Promise<ActionResult> {
+    const {
+      userAccount,
+      countInPortfolio,
+      actionCount,
+      availableCount,
+      currentAveragePrice,
+      totalPrice,
+    } = actionParameters;
+
+    const isEnoughCountAvailable = availableCount >= actionCount;
     if (!isEnoughCountAvailable) {
-      throw DomainErrors.notEnoughStocksDemandForSell;
+      throw DomainErrors.notEnoughDebenturesDemandForSell;
     }
 
-    if (actionParameters.countInPortfolio < actionParameters.actionCount) {
-      throw DomainErrors.notEnoughStocksInPortfolio;
+    if (countInPortfolio < actionCount) {
+      throw DomainErrors.notEnoughDebenturesInPortfolio;
     }
 
-    const newStockCount = actionParameters.countInPortfolio - actionParameters.actionCount;
-    const newAccountBalance = actionParameters.userAccount.cash + actionParameters.totalPrice;
-    const newAveragePrice = actionParameters.currentAveragePrice;
+    const newDebentureCount = countInPortfolio - actionCount;
+    const newAccountBalance = userAccount.cash + totalPrice;
+    const newAveragePrice = currentAveragePrice;
 
     const actionResult: ActionResult = {
-      newStockCount,
+      newDebentureCount,
       newAccountBalance,
       newAveragePrice,
     };
@@ -161,22 +185,25 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
     return actionResult;
   }
 
-  updateAssets(actionResult: ActionResult, theSameStock: StockAsset, assets: Asset[]): Asset[] {
-    let newAssets = assets.slice();
-
-    const newStock = {
-      ...theSameStock,
-      countInPortfolio: actionResult.newStockCount,
+  updateAssets(
+    actionResult: ActionResult,
+    theSameDebenture: DebentureAsset,
+    assets: Asset[]
+  ): Asset[] {
+    const newDebenture = {
+      ...theSameDebenture,
+      count: actionResult.newDebentureCount,
       averagePrice: actionResult.newAveragePrice,
     };
-    const index = assets.findIndex((d) => d.name === newStock.name);
+    let newAssets = assets.slice();
+    const index = assets.indexOf(theSameDebenture);
 
     if (index >= 0) {
-      newAssets[index] = newStock;
+      newAssets[index] = newDebenture;
     }
 
-    if (newStock.countInPortfolio === 0) {
-      newAssets = assets.filter((d) => d.name !== newStock.name);
+    if (newDebenture.count === 0) {
+      newAssets = newAssets.filter((d) => d.id !== newDebenture.id);
     }
 
     return newAssets;
@@ -185,20 +212,22 @@ export class StockPriceChangedHandler extends PlayerActionHandler {
   addNewItemToAssets(
     actionResult: ActionResult,
     assets: Asset[],
-    fairPrice: number,
-    stockName: string
+    nominal: number,
+    profitabilityPercent: number,
+    debentureName: string
   ): Asset[] {
     const newAssets = assets.slice();
 
-    const newStock: StockAsset = {
-      fairPrice,
+    const newDebenture: DebentureAsset = {
       averagePrice: actionResult.newAveragePrice,
-      countInPortfolio: actionResult.newStockCount,
-      name: stockName,
-      type: 'stock',
+      nominal,
+      profitabilityPercent,
+      count: actionResult.newDebentureCount,
+      name: debentureName,
+      type: 'debenture',
     };
 
-    newAssets.push(newStock);
+    newAssets.push(newDebenture);
 
     return newAssets;
   }

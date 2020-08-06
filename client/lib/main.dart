@@ -9,7 +9,6 @@ import 'package:cash_flow/configuration/api_client.dart';
 import 'package:cash_flow/configuration/cash_api_environment.dart';
 import 'package:cash_flow/configuration/control_panel.dart';
 import 'package:cash_flow/configuration/error_reporting.dart';
-import 'package:cash_flow/configuration/firestore.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/configuration/ui_kit.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -35,10 +34,6 @@ Future<void> main({
   final alice = Alice(navigatorKey: appRouter.navigatorKey);
   final sharedPreferences = await SharedPreferences.getInstance();
   final apiClient = configureApiClient(alice, environment);
-
-  if (environment == CashApiEnvironment.development) {
-    await configureFirestoreLocalEnvironment();
-  }
 
   configurePurchases();
   configureControlPanel(alice, apiClient);

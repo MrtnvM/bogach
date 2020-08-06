@@ -1,13 +1,11 @@
+import * as random from 'random';
 import { Game } from '../../models/domain/game/game';
 import { BusinessSellEvent } from '../../events/business/sell/business_sell_event';
 import { BusinessSellEventGenerator } from '../../events/business/sell/business_sell_event_generator';
 import { BusinessAsset } from '../../models/domain/assets/business_asset';
-import * as random from 'random';
 import { Possessions } from '../../models/domain/possessions';
 
 export class BusinessSellEventProvider {
-  constructor(private businessSellEventGenerator: BusinessSellEventGenerator) {}
-
   generateBusinessSellEvent(game: Game): BusinessSellEvent.Event[] {
     let businessSellEvents: BusinessSellEvent.Event[] = [];
     const participants = game.participants;
@@ -35,7 +33,7 @@ export class BusinessSellEventProvider {
         continue;
       }
 
-      const businessSellEvent = this.businessSellEventGenerator.generate(asset as BusinessAsset);
+      const businessSellEvent = BusinessSellEventGenerator.generate(asset as BusinessAsset);
       businessSellEvents.push(businessSellEvent);
     }
 

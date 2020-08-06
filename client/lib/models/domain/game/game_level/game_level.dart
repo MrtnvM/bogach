@@ -9,6 +9,7 @@ abstract class GameLevel with _$GameLevel implements StoreListItem {
   factory GameLevel({
     @required String id,
     @required String name,
+    @required String description,
     @required String icon,
   }) = _GameLevel;
 

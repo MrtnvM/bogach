@@ -36,11 +36,17 @@ export class GameEventsTransformer extends GameTransformer {
   }
 
   private generateGameEvents(game: Game): GameEvent[] {
-    const level = game.config.level;
-    const rules = level ? GameLevels.levelsMap[level].rules : this.getDefaultRules();
+    const levelId = game.config.level;
+    const level = levelId && GameLevels.levelsMap[levelId];
+
+    if (level) {
+      const index = this.force ? 0 : game.state.monthNumber;
+      const levelGameEvents = level.levelEventConfig.events[index];
+      return levelGameEvents ?? [];
+    }
 
     const gameEventGenerator = new GameEventGenerator({
-      rules,
+      rules: this.getDefaultRules(),
     });
 
     const gameEvents = gameEventGenerator.generateEvents(game);

@@ -5,9 +5,9 @@ import { UserEntity } from '../models/domain/user';
 import { GameEventEntity } from '../models/domain/game/game_event';
 import { Possessions } from '../models/domain/possessions';
 import { instance, when, mock, anything } from 'ts-mockito';
-import { DebenturePriceChangedEvent } from '../events/debenture/debenture_price_changed_event';
+import { DebentureEvent } from '../events/debenture/debenture_event';
 import { DebentureGenerateRule } from './rules/debenture_generate_rule';
-import { StockPriceChangedEvent } from '../events/stock/stock_price_changed_event';
+import { StockEvent } from '../events/stock/stock_event';
 import { StockGenerateRule } from './rules/stock_generate_rule';
 
 const eventId: GameEventEntity.Id = 'event1';
@@ -48,7 +48,7 @@ export const debentureEvent = () => {
     id: 'event1',
     name: 'ОФЗ',
     description: 'ОФЗ',
-    type: DebenturePriceChangedEvent.Type,
+    type: DebentureEvent.Type,
     data: {
       currentPrice: 1100,
       nominal: 1000,
@@ -62,20 +62,20 @@ export const createMockedDebentureRule = (config: {
   minDistance?: number;
   maxEventsInMonth?: number;
   probabilityLevel?: number[];
-  events?: DebenturePriceChangedEvent.Event[];
+  events?: DebentureEvent.Event[];
 }) => {
   const mockDebentureRule = mock(DebentureGenerateRule);
 
   when(mockDebentureRule.getMinDistanceBetweenEvents()).thenReturn(config.minDistance || 0);
   when(mockDebentureRule.getProbabilityLevel()).thenReturn(...(config.probabilityLevel || [10]));
-  when(mockDebentureRule.getType()).thenReturn(DebenturePriceChangedEvent.Type);
+  when(mockDebentureRule.getType()).thenReturn(DebentureEvent.Type);
   when(mockDebentureRule.getMaxCountOfEventInMonth()).thenReturn(config.maxEventsInMonth || 0);
 
   const event = {
     id: 'event1',
     name: 'ОФЗ',
     description: 'ОФЗ',
-    type: DebenturePriceChangedEvent.Type,
+    type: DebentureEvent.Type,
     data: {
       currentPrice: 1100,
       nominal: 1000,
@@ -94,20 +94,20 @@ export const createMockedStockRule = (config: {
   minDistance?: number;
   maxEventsInMonth?: number;
   probabilityLevel?: number[];
-  events?: StockPriceChangedEvent.Event[];
+  events?: StockEvent.Event[];
 }) => {
   const mockStockRule = mock(StockGenerateRule);
 
   when(mockStockRule.getMinDistanceBetweenEvents()).thenReturn(config.minDistance || 0);
   when(mockStockRule.getProbabilityLevel()).thenReturn(...(config.probabilityLevel || [10]));
-  when(mockStockRule.getType()).thenReturn(StockPriceChangedEvent.Type);
+  when(mockStockRule.getType()).thenReturn(StockEvent.Type);
   when(mockStockRule.getMaxCountOfEventInMonth()).thenReturn(config.maxEventsInMonth || 0);
 
-  const event: StockPriceChangedEvent.Event = {
+  const event: StockEvent.Event = {
     id: 'event2',
     name: 'Yandex',
     description: 'Yandex',
-    type: StockPriceChangedEvent.Type,
+    type: StockEvent.Type,
     data: {
       currentPrice: 3100,
       fairPrice: 2900,

@@ -1,5 +1,6 @@
 import { GameEventEntity, GameEvent } from '../../models/domain/game/game_event';
 import { Entity } from '../../core/domain/entity';
+import { ValueRange } from '../../core/data/value_range';
 
 export namespace MonthlyExpenseEvent {
   export const Type: GameEventEntity.Type = 'monthly-expense-event';
@@ -14,6 +15,13 @@ export namespace MonthlyExpenseEvent {
   export interface PlayerAction {
     readonly eventId: GameEventEntity.Id;
   }
+
+  export type Info = {
+    readonly name: string;
+    readonly description: string;
+    readonly value: ValueRange;
+    readonly expenseName: string;
+  };
 
   export const validate = (event: any) => {
     if (event.type !== Type) {

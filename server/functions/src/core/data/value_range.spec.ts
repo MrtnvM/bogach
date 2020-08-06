@@ -43,7 +43,7 @@ describe('Value range', () => {
       max: 10,
       stepValue: 0,
     };
-    expect(() => randomValueFromRange(incorrectRange2)).toThrowError();
+    expect(() => randomValueFromRange(incorrectRange2)).not.toThrowError();
 
     const incorrectRange3: ValueRange = {
       min: 0,

@@ -1,15 +1,15 @@
 import { Rule } from '../generator_rule';
-import { DebenturePriceChangedEvent } from '../../events/debenture/debenture_price_changed_event';
-import { DebenturePriceChangedEventGenerator } from '../../events/debenture/debenture_price_changed_event_generator';
+import { DebentureEvent } from '../../events/debenture/debenture_event';
+import { DebentureEventGenerator } from '../../events/debenture/debenture_event_generator';
 import { Game } from '../../models/domain/game/game';
 
-export class DebentureGenerateRule extends Rule<DebenturePriceChangedEvent.Event> {
+export class DebentureGenerateRule extends Rule<DebentureEvent.Event> {
   getProbabilityLevel(): number {
     return 10;
   }
 
   generate(game: Game) {
-    return DebenturePriceChangedEventGenerator.generate(game);
+    return DebentureEventGenerator.generate(game);
   }
 
   getMinDistanceBetweenEvents(): number {
@@ -17,7 +17,7 @@ export class DebentureGenerateRule extends Rule<DebenturePriceChangedEvent.Event
   }
 
   getType(): string {
-    return DebenturePriceChangedEvent.Type;
+    return DebentureEvent.Type;
   }
 
   getMaxCountOfEventInMonth() {
