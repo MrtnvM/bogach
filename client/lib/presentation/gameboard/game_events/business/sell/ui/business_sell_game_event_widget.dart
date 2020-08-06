@@ -1,9 +1,10 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
-import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
+import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/business/buy/model/business_buy_event_data.dart';
-import 'package:cash_flow/presentation/gameboard/game_events/business/buy/ui/business_buy_game_event_hooks.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/business/sell/ui/business_sell_game_event_hooks.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/business/sell/ui/business_sell_items/businesses_to_sell_widget.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_content.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
@@ -14,22 +15,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class BusinessBuyGameEvent extends HookWidget {
-  const BusinessBuyGameEvent(this.event) : assert(event != null);
+class BusinessSellGameEventWidget extends HookWidget {
+  const BusinessSellGameEventWidget(this.event) : assert(event != null);
 
   final GameEvent event;
   BusinessBuyEventData get eventData => event.data;
 
   @override
   Widget build(BuildContext context) {
-    final buySellAction = useState(const BuySellAction.buy());
-    final infoTableData = useBusinessBuyInfoTableData(event);
+    final infoTableData = useBusinessSellInfoTableData(event);
     final gameActions = useGameActions();
-    final sendPlayerAction = useBusinessBuyPlayerActionHandler(
+    final checkedBusinessId = useState<String>();
+    final sendPlayerAction = useBusinessSellPlayerActionHandler(
       event: event,
-      action: buySellAction.value,
+      businessId: checkedBusinessId.value,
     );
-    final businessDialogInfoModel = useBusinessBuyInfoDialogModel();
+    final businessDialogInfoModel = useBusinessSellInfoDialogModel();
 
     return Column(
       children: <Widget>[
@@ -60,17 +61,32 @@ class BusinessBuyGameEvent extends HookWidget {
           },
         ),
         const SizedBox(height: 28),
+        BusinessesDescriptionToSellGameEvent(
+          event: event,
+          onItemCheck: (businessId) {
+            checkedBusinessId.value = businessId;
+          },
+        ),
+        const SizedBox(height: 28),
         PlayerActionBar(
           confirm: () {
-            sendPlayerAction();
-            AnalyticsSender.sendBuyBusinessEvent(
+            if (checkedBusinessId.value == null) {
+              showErrorDialog(
+                context: context,
+                message: Strings.sellBusinessNoChecked,
+              );
+            } else {
+              sendPlayerAction();
+            }
+
+            AnalyticsSender.sendSellBusinessEvent(
               event.name,
               eventData.currentPrice,
             );
           },
           skip: () {
-             gameActions.skipPlayerAction(event.id);
-             AnalyticsSender.sendSkipBuyBusinessEvent(
+            gameActions.skipPlayerAction(event.id);
+            AnalyticsSender.sendSkipSellBusinessEvent(
               event.name,
               eventData.currentPrice,
             );
