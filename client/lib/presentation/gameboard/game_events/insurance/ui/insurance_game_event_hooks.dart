@@ -3,6 +3,7 @@ import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/insurance/models/insurance_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/insurance/models/insurance_player_action.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_model.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -32,4 +33,22 @@ VoidCallback useInsurancePlayerActionHandler(String eventId) {
         .sendPlayerAction(action, eventId)
         .catchError((e) => handleError(context: context, exception: e));
   };
+}
+
+GameEventInfoDialogModel useInsuranceInfoDialogModel() {
+  return useMemoized(
+    () => GameEventInfoDialogModel(
+      title: Strings.insuranceDialogTitle,
+      description: Strings.insuranceDialogDescription,
+      keyPoints: {
+        Strings.insuranceDialogKeyPoint1:
+            Strings.insuranceDialogKeyPointDescription1,
+        Strings.insuranceDialogKeyPoint2:
+            Strings.insuranceDialogKeyPointDescription2,
+      },
+      riskLevel: Rating.low,
+      profitabilityLevel: Rating.medium,
+      complexityLevel: Rating.medium,
+    ),
+  );
 }
