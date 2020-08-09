@@ -94,9 +94,13 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const apiRequest = APIRequest.from(request, response);
     apiRequest.checkMethod('GET');
 
-    const gameLevels = Promise.resolve(gameLevelsProvider.getGameLevels());
+    const userId = apiRequest.queryParameter('user_id');
 
-    return send(gameLevels, response);
+    const gameLevels = gameLevelsProvider.getGameLevels();
+    const levelsIds = gameLevels.map((l) => l.id);
+    const userQuestGames = await gameProvider.getUserQuestGames(userId, levelsIds);
+
+    return send(Promise.resolve(gameLevels), response);
   });
 
   const createGameByLevel = https.onRequest(async (request, response) => {

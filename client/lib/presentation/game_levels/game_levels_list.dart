@@ -1,3 +1,4 @@
+import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/alert_hooks.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
@@ -15,6 +16,7 @@ import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 class GameLevelList extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    final userId = useUserId();
     final gameLevelsRequestState = useGlobalState(
       (s) => s.newGame.getGameLevelsRequestState,
     );
@@ -52,10 +54,12 @@ class GameLevelList extends HookWidget {
             onLevelSelected: createNewGameByLevel,
           ),
           loadListRequestState: gameLevelsRequestState,
-          loadList: gameActions.loadGameLevels,
+          loadList: () => gameActions.loadGameLevels(userId),
           padding: const EdgeInsets.all(16),
           emptyStateWidget: EmptyWidget(),
-          errorWidget: CommonErrorWidget(gameActions.loadGameLevels),
+          errorWidget: CommonErrorWidget(
+            () => gameActions.loadGameLevels(userId),
+          ),
         ),
       ),
     );

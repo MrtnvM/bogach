@@ -68,7 +68,7 @@ Epic<AppState> newGameEpic({@required GameService gameService}) {
         .where((action) => action.isStarted)
         .flatMap(
           (action) => gameService
-              .getGameLevels()
+              .getGameLevels(action.userId)
               .map(action.complete)
               .onErrorReturnWith(action.fail),
         );

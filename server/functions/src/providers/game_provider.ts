@@ -18,7 +18,7 @@ import {
   StocksInitializerGameTransformer,
   DebentureInitializerGameTransformer,
 } from '../transformers/game_transformers';
-import { GameLevel } from '../game_levels/models/game_level';
+import { GameLevel, GameLevelEntity } from '../game_levels/models/game_level';
 
 export class GameProvider {
   constructor(private firestore: Firestore, private selector: FirestoreSelector) {}
@@ -114,6 +114,31 @@ export class GameProvider {
 
     GameEntity.validate(game);
     return game as Game;
+  }
+
+  async getUserQuestGames(userId: UserEntity.Id, levelIds: GameLevelEntity.Id[]): Promise<Game[]> {
+    const selector = this.selector.games();
+
+    const participantsKey: keyof Game = 'participants';
+    const configKey: keyof Game = 'config';
+    const levelKey: keyof GameEntity.Config = 'level';
+
+    const query = selector
+      .where(participantsKey, 'array-contains', userId)
+      .where(`${configKey}.${levelKey}`, 'in', levelIds);
+
+    const userQuestGamesQueryResult = await this.firestore.getQueryItems(query);
+    userQuestGamesQueryResult.forEach(GameEntity.validate);
+
+    const userQuestGames = userQuestGamesQueryResult as Game[];
+    const userNotCompletedQuestGames = userQuestGames.filter(
+      (g) => g.state.gameStatus !== 'game_over'
+    );
+
+    console.warn('! userNotCompletedGames: ');
+    console.warn(userNotCompletedQuestGames);
+
+    return userNotCompletedQuestGames;
   }
 
   async updateGame(game: Game): Promise<Game> {
