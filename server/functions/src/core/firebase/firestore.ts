@@ -1,5 +1,5 @@
 import { nowInUtc } from '../../utils/datetime';
-import { DocumentReference, CollectionReference } from '../../providers/firestore_selector';
+import { DocumentReference, CollectionReference, Query } from '../../providers/firestore_selector';
 
 export interface FirestoreWriteOptions {
   createdAt?: boolean;
@@ -30,6 +30,23 @@ export class Firestore {
 
   getItemData(selector: DocumentReference) {
     return selector.get().then((snapshot) => snapshot.data());
+  }
+
+  async getQueryItems(selector: Query) {
+    try {
+      const items = await selector.get().then((querySnapshot) => {
+        const dataObjects = querySnapshot.docs
+          .map((d) => d.data())
+          .filter((d) => d !== undefined)
+          .map((d) => d as FirebaseFirestore.DocumentData);
+
+        return Promise.all(dataObjects);
+      });
+
+      return items;
+    } catch {
+      return [];
+    }
   }
 
   async createItem(selector: DocumentReference, item: any, options?: FirestoreWriteOptions) {

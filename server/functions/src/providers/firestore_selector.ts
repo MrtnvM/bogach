@@ -10,6 +10,8 @@ export type CollectionReference = FirebaseFirestore.CollectionReference<
   FirebaseFirestore.DocumentData
 >;
 
+export type Query = FirebaseFirestore.Query;
+
 export class FirestoreSelector {
   constructor(private firestore: admin.firestore.Firestore) {}
 
