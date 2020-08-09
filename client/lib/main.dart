@@ -12,6 +12,7 @@ import 'package:cash_flow/configuration/error_reporting.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/configuration/ui_kit.dart';
 import 'package:cash_flow/navigation/app_router.dart';
+import 'package:cash_flow/utils/core/launch_counter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ Future<void> main({
   final alice = Alice(navigatorKey: appRouter.navigatorKey);
   final sharedPreferences = await SharedPreferences.getInstance();
   final apiClient = configureApiClient(alice, environment);
+  final launchCounter = LaunchCounter(sharedPreferences);
 
   configurePurchases();
   configureControlPanel(alice, apiClient);
@@ -59,11 +61,19 @@ Future<void> main({
   final isAuthorized = currentUser != null;
   dispatch(SetCurrentUserAction(user: currentUser));
 
+  final isFirstLaunch = launchCounter.isFirstLaunch();
+  if (isFirstLaunch) {
+    await tokenStorage.clearTokens();
+  }
+
+  launchCounter.incrementLaunchCount();
+
   runZonedGuarded<Future<void>>(() async {
     runApp(
       CashFlowApp(
         store: storeProvider.store,
         isAuthorised: isAuthorized,
+        isFirstLaunch: isFirstLaunch,
       ),
     );
   }, Crashlytics.instance.recordError);
