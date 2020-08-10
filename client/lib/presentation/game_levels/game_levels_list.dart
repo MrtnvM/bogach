@@ -28,19 +28,27 @@ class GameLevelList extends HookWidget {
       needCancelButton: true,
     );
 
-    void Function(GameLevel) createNewGameByLevel;
-    createNewGameByLevel = (gameLevel) {
-      gameActions.createGameByLevel(gameLevel.id).then((createdGameId) {
-        gameActions.startGame(createdGameId);
+    void Function(GameLevel) startGameByLevel;
+    startGameByLevel = (gameLevel) {
+      final startGame = (gameId) {
+        gameActions.startGame(gameId);
 
         appRouter.goToRoot();
         appRouter.goTo(GameBoard());
-      }).catchError(
-        (error) => showCreateGameErrorAlert(
-          error,
-          () => createNewGameByLevel(gameLevel),
-        ),
-      );
+      };
+
+      if (gameLevel.currentGameId != null) {
+        startGame(gameLevel.currentGameId);
+        return;
+      }
+
+      gameActions
+          .createGameByLevel(gameLevel.id)
+          .then(startGame)
+          .catchError((error) => showCreateGameErrorAlert(
+                error,
+                () => startGameByLevel(gameLevel),
+              ));
     };
 
     return Loadable(
@@ -51,7 +59,7 @@ class GameLevelList extends HookWidget {
           items: gameLevels,
           itemBuilder: (i) => GameLevelItemWidget(
             gameLevel: gameLevels.items[i],
-            onLevelSelected: createNewGameByLevel,
+            onLevelSelected: startGameByLevel,
           ),
           loadListRequestState: gameLevelsRequestState,
           loadList: () => gameActions.loadGameLevels(userId),
