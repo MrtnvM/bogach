@@ -135,9 +135,6 @@ export class GameProvider {
       (g) => g.state.gameStatus !== 'game_over'
     );
 
-    console.warn('! userNotCompletedGames: ');
-    console.warn(userNotCompletedQuestGames);
-
     return userNotCompletedQuestGames;
   }
 

@@ -100,7 +100,20 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const levelsIds = gameLevels.map((l) => l.id);
     const userQuestGames = await gameProvider.getUserQuestGames(userId, levelsIds);
 
-    return send(Promise.resolve(gameLevels), response);
+    const levelsInfo = gameLevels.map((level) => {
+      const { id, name, description, icon } = level;
+      const questGame = userQuestGames.find((g) => g.config.level === id);
+
+      return {
+        id,
+        name,
+        description,
+        icon,
+        currentGameId: questGame?.id,
+      };
+    });
+
+    return send(Promise.resolve(levelsInfo), response);
   });
 
   const createGameByLevel = https.onRequest(async (request, response) => {
