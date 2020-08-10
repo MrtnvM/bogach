@@ -123,6 +123,12 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const gameLevelId = apiRequest.jsonField('gameLevelId');
     const userId = apiRequest.jsonField('userId');
 
+    try {
+      await gameProvider.removeUserQuestGamesForLevel(userId, gameLevelId);
+    } catch (error) {
+      console.error(error);
+    }
+
     const newGame = gameService.createNewGameByLevel(gameLevelId, [userId]);
     return send(newGame, response);
   });
