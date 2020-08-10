@@ -15,6 +15,8 @@ import { InsuranceGenerateRule } from '../../generators/rules/insurance_generate
 import { MonthlyExpenseGenerateRule } from '../../generators/rules/monthly_expense_generate_rule';
 import { StockGenerateRule } from '../../generators/rules/stock_generate_rule';
 import { RealEstateBuyRule } from '../../generators/rules/real_estate_buy_generate_rule';
+import { BusinessBuyGenerateRule } from '../../generators/rules/business_buy_generate_rule';
+import { BusinessSellGenerateRule } from '../../generators/rules/business_sell_generate_rules';
 
 export class GameEventsTransformer extends GameTransformer {
   constructor(private force: boolean = false) {
@@ -85,6 +87,9 @@ export class GameEventsTransformer extends GameTransformer {
     const stockRule = new StockGenerateRule();
     const realEstateRule = new RealEstateBuyRule();
 
+    const businessBuyGenerateRule = new BusinessBuyGenerateRule();
+    const businessSellGenerateRule = new BusinessSellGenerateRule();
+
     return [
       incomeRule,
       expenseRule,
@@ -94,6 +99,8 @@ export class GameEventsTransformer extends GameTransformer {
       monthlyExpenseRule,
       stockRule,
       realEstateRule,
+      businessBuyGenerateRule,
+      businessSellGenerateRule,
     ];
   }
 }

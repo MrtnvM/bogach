@@ -215,6 +215,34 @@ class Strings {
       'тем, у кого есть достаточно денег для приобретения квартиры'
       ' и финансовая подушка.';
 
+  static const businessDialogTitle = 'Бизнес';
+  static const businessDialogDescription =
+      'Бизнес - вы покупаете бизнес, ожидая,'
+      ' что вы будете получать ежемсячный доход и цена бизнеса вырастет';
+  static const businessDialogKeyPoint1 = 'Как заработать';
+  static const businessDialogKeyPointDescription1 =
+      'ежемесячный доход - бизнес каждый месяц приносит доход;'
+      ' на продаже - цена бизнеса изменяется,'
+      ' и вы можете выгодно его продать.';
+  static const businessDialogKeyPoint2 = 'Кому подойдёт';
+  static const businessDialogKeyPointDescription2 =
+      'тем, у кого есть достаточно денег для приобретения бизнеса'
+      ' и финансовая подушка.';
+
+  static const insuranceDialogTitle = 'Страховка';
+  static const insuranceDialogDescription =
+      'Страховка - вы покупаете страховку, ожидая,'
+      ' что она покроет бо́льшие траты, чем её стоимость';
+  static const insuranceDialogKeyPoint1 = 'Как заработать';
+  static const insuranceDialogKeyPointDescription1 =
+      'в случае наступления страхового случая'
+      ' вы экономите сумму определенного размера.';
+  static const insuranceDialogKeyPoint2 = 'Кому подойдёт';
+  static const insuranceDialogKeyPointDescription2 =
+      'тем, кто хочет обезопасить долю своего капитала от рисков'
+      '(машина, недвижимость), или защитить себя финансово'
+      ' от несчастного случая';
+
   static String get monthResult => 'Итоги за месяц';
   static String get financialResults => 'Финансовые показатели';
   static String get financialResultsChange => 'Изменения показателей';
