@@ -35,10 +35,9 @@ export class Firestore {
   async getQueryItems(selector: Query) {
     try {
       const items = await selector.get().then((querySnapshot) => {
-        const dataObjects = querySnapshot.docs
+        const dataObjects = querySnapshot.docs //
           .map((d) => d.data())
-          .filter((d) => d !== undefined)
-          .map((d) => d as FirebaseFirestore.DocumentData);
+          .filter((d) => d !== undefined);
 
         return Promise.all(dataObjects);
       });

@@ -19,7 +19,7 @@ import {
   DebentureInitializerGameTransformer,
 } from '../transformers/game_transformers';
 import { GameLevel, GameLevelEntity } from '../game_levels/models/game_level';
-import { firestore } from 'firebase-admin';
+import { firestore as FirestoreAdmin } from 'firebase-admin';
 
 export class GameProvider {
   constructor(private firestore: Firestore, private selector: FirestoreSelector) {}
@@ -139,13 +139,11 @@ export class GameProvider {
           return 0;
         }
 
-        const timestamp1 = (g1.updatedAt as any) as firestore.Timestamp;
-        const timestamp2 = (g2.updatedAt as any) as firestore.Timestamp;
+        const timestamp1 = (g1.updatedAt as any) as FirestoreAdmin.Timestamp;
+        const timestamp2 = (g2.updatedAt as any) as FirestoreAdmin.Timestamp;
 
         return timestamp2.seconds - timestamp1.seconds;
       });
-
-    console.log(userNotCompletedQuestGames.map((g) => g.id));
 
     return userNotCompletedQuestGames;
   }
