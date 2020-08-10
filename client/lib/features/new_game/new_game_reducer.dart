@@ -1,5 +1,7 @@
+import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/features/new_game/new_game_actions.dart';
 import 'package:cash_flow/features/new_game/new_game_state.dart';
+import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
@@ -41,22 +43,37 @@ final newGameReducer = Reducer<NewGameState>()
         isRefreshing: action.isRefreshing,
       );
 
-      action.onSuccess((gameLevels) => s.gameLevels.updateList(gameLevels));
+      action.onSuccess((gameLevels) {
+        s.gameLevels.updateList(gameLevels);
+
+        for (final level in gameLevels) {
+          s.currentGameForLevels[level.id] = level.currentGameId;
+        }
+      });
     }),
   )
   ..on<CreateNewGameByLevelAsyncAction>(
     (state, action) => state.rebuild((s) {
       s.createNewGameByLevelRequestState = action.requestState;
 
-      action.onSuccess((newGameId) => s.newGameId = newGameId);
+      action.onSuccess((newGameId) {
+        s.newGameId = newGameId;
+        s.currentGameForLevels[action.gameLevelId] = newGameId;
+      });
     }),
   )
-  ..on<ContinueGameByLevelAsyncAction>(
+  ..on<OnGameStateChangedAction>(
     (state, action) => state.rebuild((s) {
-      s.continueGameByLevelRequestState = action.requestState;
+      final game = action.game;
+      if (game == null) {
+        return;
+      }
 
-      action.onSuccess((game) {
-        s.newGameId = game.id;
-      });
+      final isGameCompleted = game.state.gameStatus == GameStatus.gameOver;
+      final isQuestGame = game.config.level != null;
+
+      if (isGameCompleted && isQuestGame) {
+        s.currentGameForLevels[game.config.level] = null;
+      }
     }),
   );

@@ -22,14 +22,18 @@ class GameLevelList extends HookWidget {
     );
 
     final gameLevels = useGlobalState((s) => s.newGame.gameLevels);
+    final currentGameForLevels = useGlobalState(
+      (s) => s.newGame.currentGameForLevels,
+    );
+
     final gameActions = useGameActions();
 
     final showCreateGameErrorAlert = useWarningAlert(
       needCancelButton: true,
     );
 
-    void Function(GameLevel) startGameByLevel;
-    startGameByLevel = (gameLevel) {
+    void Function(GameLevel, GameLevelAction) startGameByLevel;
+    startGameByLevel = (gameLevel, action) {
       final startGame = (gameId) {
         gameActions.startGame(gameId);
 
@@ -37,8 +41,13 @@ class GameLevelList extends HookWidget {
         appRouter.goTo(GameBoard());
       };
 
-      if (gameLevel.currentGameId != null) {
-        startGame(gameLevel.currentGameId);
+      if (action == GameLevelAction.continueGame) {
+        final gameId = currentGameForLevels[gameLevel.id];
+
+        if (gameId != null) {
+          startGame(gameId);
+        }
+
         return;
       }
 
@@ -47,7 +56,7 @@ class GameLevelList extends HookWidget {
           .then(startGame)
           .catchError((error) => showCreateGameErrorAlert(
                 error,
-                () => startGameByLevel(gameLevel),
+                () => startGameByLevel(gameLevel, action),
               ));
     };
 

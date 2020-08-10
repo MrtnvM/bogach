@@ -44,10 +44,3 @@ class CreateNewGameByLevelAsyncAction extends AsyncAction<String> {
 
   final String gameLevelId;
 }
-
-class ContinueGameByLevelAsyncAction extends AsyncAction<Game> {
-  ContinueGameByLevelAsyncAction({@required this.gameLevelId})
-      : assert(gameLevelId != null);
-
-  final String gameLevelId;
-}
