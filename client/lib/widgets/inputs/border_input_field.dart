@@ -74,7 +74,7 @@ class _BorderInputFieldState extends State<BorderInputField> {
           decoration: InputDecoration(
             isDense: true,
             suffix: _validationResult?.isNotEmpty == true
-                ? Icon(Icons.error, color: ColorRes.red, size: 14)
+                ? const Icon(Icons.error, color: ColorRes.red, size: 14)
                 : null,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
