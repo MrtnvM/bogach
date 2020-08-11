@@ -12,7 +12,11 @@ export class BusinessSellGenerateRule extends Rule<BusinessSellEvent.Event> {
   }
 
   generate(game: Game) {
-    const buyEvent = this.findBuyEvent(game.currentEvents)!;
+    const buyEvent = this.findBuyEvent(game.currentEvents);
+
+    if (!buyEvent) {
+      return undefined;
+    }
 
     return BusinessSellEventGenerator.generate(buyEvent);
   }
