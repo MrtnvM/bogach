@@ -22,6 +22,9 @@ class UserGameList extends HookWidget {
     final requestState = useGlobalState(
       (s) => s.newGame.getUserGamesRequestState,
     );
+    final createGameRequestState = useGlobalState(
+      (s) => s.newGame.createNewGameRequestState,
+    );
 
     final gameActions = useGameActions();
     final goToGame = (gameId) {
@@ -37,7 +40,8 @@ class UserGameList extends HookWidget {
     };
 
     return Loadable(
-      isLoading: requestState.isInProgress,
+      isLoading:
+          requestState.isInProgress || createGameRequestState.isInProgress,
       backgroundColor: ColorRes.mainGreen,
       child: LoadableList<Game>(
         viewModel: LoadableListViewModel(
