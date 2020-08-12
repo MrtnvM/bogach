@@ -72,6 +72,7 @@ class GameLevelList extends HookWidget {
           items: gameLevels,
           itemBuilder: (i) => GameLevelItemWidget(
             gameLevel: gameLevels.items[i],
+            currentGameId: currentGameForLevels[gameLevels.items[i].id],
             onLevelSelected: startGameByLevel,
           ),
           loadListRequestState: gameLevelsRequestState,
