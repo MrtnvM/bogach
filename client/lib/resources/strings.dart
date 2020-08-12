@@ -128,6 +128,7 @@ class Strings {
   static const investmentType = 'Наименование:';
   static const nominalCost = 'Номинальная стоимость:';
   static const alreadyHave = 'В наличии:';
+  static const changeInPortfolio = 'Измeнение цены:';
   static const incomePerMonth = 'Ежемесячный доход:';
   static const available = 'Доступно:';
   static const buyAllAvailable = 'Купить на все';
