@@ -5,76 +5,75 @@ import { GameLevelEventConfig } from '../../models/event_config';
 const month = (...events: GameEvent[]) => events;
 
 const month1 = month(
-  PsychologistEventFactory.Debenture.ofz1(1100, 20),
-  PsychologistEventFactory.Insurace.healthInsurance(1000, 3000),
-  PsychologistEventFactory.Stock.nickTeslaAuto(324, 80),
-  PsychologistEventFactory.Expense.unexpectedRestDay(1200)
+  PsychologistEventFactory.Insurace.healthInsurance(1000, 5000),
+  PsychologistEventFactory.Stock.vwAuto(210, 50),
+  PsychologistEventFactory.Debenture.ofz1(900, 20),
+  PsychologistEventFactory.Income.birthday(3000)
 );
 
 const month2 = month(
-  PsychologistEventFactory.MonthlyExpense.englishLessons(),
-  PsychologistEventFactory.Stock.gasPromGroup(378, 40),
-  PsychologistEventFactory.Debenture.search(800, 30),
-  PsychologistEventFactory.Expense.fine1(1000),
-  PsychologistEventFactory.Stock.findex(2557, 20)
+  PsychologistEventFactory.Debenture.rosNanoTech(1200, 20),
+  PsychologistEventFactory.Expense.unexpectedRestDay(1500),
+  PsychologistEventFactory.Stock.apple(1100, 10),
+  PsychologistEventFactory.Income.instaGuiges(2000),
+  PsychologistEventFactory.Debenture.search(900, 20)
 );
 
 const month3 = month(
-  PsychologistEventFactory.Debenture.metalPromInvest(1300, 40),
-  PsychologistEventFactory.Stock.nickTeslaAuto(589, 30),
-  PsychologistEventFactory.Expense.cinema(500),
-  PsychologistEventFactory.Debenture.ofz2(1300, 20),
-  PsychologistEventFactory.Stock.findex(2809, 20)
+  PsychologistEventFactory.Expense.dentist(4000),
+  PsychologistEventFactory.Stock.vwAuto(250, 30),
+  PsychologistEventFactory.Debenture.ofz1(900, 10),
+  PsychologistEventFactory.SalaryChange.clientGone(1500),
+  PsychologistEventFactory.Stock.gasPromGroup(320, 30)
 );
 
 const month4 = month(
-  PsychologistEventFactory.Expense.cafe(1500),
-  PsychologistEventFactory.Stock.sberInvestBank(245, 25),
+  PsychologistEventFactory.Expense.cafe(800),
+  PsychologistEventFactory.Stock.sberInvestBank(225, 25),
   PsychologistEventFactory.Debenture.search(900, 8),
-  PsychologistEventFactory.Expense.canceledWorkBonus(500),
   PsychologistEventFactory.Insurace.propertyInsurance(2000, 5000)
 );
 
 const month5 = month(
-  PsychologistEventFactory.Expense.computerRepair(3500),
+  PsychologistEventFactory.SalaryChange.newClient(1500),
+  PsychologistEventFactory.Expense.cinema(500),
   PsychologistEventFactory.Debenture.ofz1(800, 20),
   PsychologistEventFactory.Stock.gasPromGroup(410, 30)
 );
 
 const month6 = month(
-  PsychologistEventFactory.Insurace.healthInsurance(2000, 3000),
-  PsychologistEventFactory.Stock.sberInvestBank(308, 20),
-  PsychologistEventFactory.Debenture.search(1050, 20),
-  PsychologistEventFactory.Expense.fine3(1000),
-  PsychologistEventFactory.Stock.findex(2330, 25)
+  PsychologistEventFactory.Insurace.healthInsurance(1500, 4000),
+  PsychologistEventFactory.Stock.sberInvestBank(320, 20),
+  PsychologistEventFactory.Debenture.search(1100, 25),
+  PsychologistEventFactory.Expense.tvRepair(2000)
 );
 
 const month7 = month(
-  PsychologistEventFactory.Debenture.ofz2(1100, 20),
-  PsychologistEventFactory.Expense.dentist(3000),
-  PsychologistEventFactory.Stock.nickTeslaAuto(500, 10),
-  PsychologistEventFactory.Expense.unexpectedRestDay(1000)
+  PsychologistEventFactory.Stock.sberInvestBank(200, 15),
+  PsychologistEventFactory.Expense.doctor(5000),
+  PsychologistEventFactory.Stock.vwAuto(230, 15),
+  PsychologistEventFactory.SalaryChange.newClient(1500)
 );
 
 const month8 = month(
-  PsychologistEventFactory.Debenture.ofz2(1100, 20),
-  PsychologistEventFactory.Expense.dentist(3000),
-  PsychologistEventFactory.Stock.nickTeslaAuto(500, 10),
-  PsychologistEventFactory.Expense.unexpectedRestDay(1000)
+  PsychologistEventFactory.Expense.illedChild(2000),
+  PsychologistEventFactory.Stock.apple(1800, 10),
+  PsychologistEventFactory.Debenture.search(1050, 15),
+  PsychologistEventFactory.Insurace.propertyInsurance(2000, 4000)
 );
 
 const month9 = month(
-  PsychologistEventFactory.Debenture.ofz2(1100, 20),
-  PsychologistEventFactory.Expense.dentist(3000),
-  PsychologistEventFactory.Stock.nickTeslaAuto(500, 10),
-  PsychologistEventFactory.Expense.unexpectedRestDay(1000)
+  PsychologistEventFactory.Expense.dentist(1000),
+  PsychologistEventFactory.Stock.vwAuto(240, 10),
+  PsychologistEventFactory.Expense.cafe(800),
+  PsychologistEventFactory.Debenture.ofz1(900, 10)
 );
 
 const month10 = month(
-  PsychologistEventFactory.Debenture.ofz2(1100, 20),
-  PsychologistEventFactory.Expense.dentist(3000),
-  PsychologistEventFactory.Stock.nickTeslaAuto(500, 10),
-  PsychologistEventFactory.Expense.unexpectedRestDay(1000)
+  PsychologistEventFactory.SalaryChange.newClient(1500),
+  PsychologistEventFactory.Stock.vwAuto(500, 10),
+  PsychologistEventFactory.Expense.cinema(600),
+  PsychologistEventFactory.Debenture.rosNanoTech(1200, 20)
 );
 
 export const eventConfig: GameLevelEventConfig = {
