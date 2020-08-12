@@ -14,7 +14,6 @@ import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter_svg/svg.dart';
@@ -136,7 +135,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     );
   }
 
-  Widget _buildLaterButton(BuildContext context) {
+  Widget buildLaterButton(BuildContext context) {
     return Container(
       height: 46,
       width: 200,
