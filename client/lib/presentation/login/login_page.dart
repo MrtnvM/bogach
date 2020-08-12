@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         child: Column(
           children: <Widget>[
             _buildLoginForm(),
-            _buildLaterButton(context),
+            // _buildLaterButton(context),
           ],
         ),
       ),
