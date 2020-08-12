@@ -41,8 +41,9 @@ class GameEventSelectorState extends State<GameEventSelector> {
   Widget build(BuildContext context) {
     final availableCount = _buySellAction.when(
       buy: () {
-        final total =
-            vm.availableCash != null ? vm.availableCash ~/ vm.currentPrice : 0;
+        final total = vm.availableCash != null && vm.availableCash > 0
+            ? vm.availableCash ~/ vm.currentPrice
+            : 0;
         return min(vm.maxCount, total);
       },
       sell: () => vm.alreadyHave,
@@ -92,7 +93,7 @@ class GameEventSelectorState extends State<GameEventSelector> {
   }
 
   void _changeState(BuySellAction action) {
-    const selectedCount = 0;
+    const selectedCount = 1;
 
     setState(() {
       _buySellAction = action;
@@ -121,7 +122,6 @@ class SelectorViewModel {
     this.maxCount,
     this.changeableType = true,
     this.availableCash,
-
   });
 
   final double currentPrice;

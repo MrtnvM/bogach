@@ -1,4 +1,5 @@
 import 'package:cash_flow/api_client/cash_flow_api_client.dart';
+import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/models/domain/game/game_level/game_level.dart';
@@ -35,8 +36,8 @@ class GameService {
     return apiClient.getGameTemplates().map(mapToGameTemplates);
   }
 
-  Stream<List<GameLevel>> getGameLevels() {
-    return apiClient.getGameLevels();
+  Stream<List<GameLevel>> getGameLevels(String userId) {
+    return apiClient.getGameLevels(userId);
   }
 
   Stream<String> createNewGame({
@@ -65,13 +66,36 @@ class GameService {
         .map((snapshot) => Game.fromJson(snapshot.data));
   }
 
+  Future<Game> getGameByLevel(String levelId, String userId) async {
+    final gameDocs = await firestore
+        .collection('games')
+        .where('participants', arrayContains: userId)
+        .where('config.level', isEqualTo: levelId)
+        .getDocuments();
+
+    final games = gameDocs.documents
+        .map((d) => Game.fromJson(d.data))
+        .where((g) => g.state.gameStatus != GameStatus.gameOver)
+        .toList();
+
+    if (games.isEmpty) {
+      return null;
+    }
+
+    return games.first;
+  }
+
   Future<List<Game>> getUserGames(String userId) async {
     final gameDocs = await firestore
         .collection('games')
         .where('participants', arrayContains: userId)
+        .where('config.level', isNull: true)
         .getDocuments();
 
-    final games = gameDocs.documents.map((d) => Game.fromJson(d.data)).toList();
+    final games = gameDocs.documents
+        .map((d) => Game.fromJson(d.data))
+        .where((g) => g.state.gameStatus != GameStatus.gameOver)
+        .toList();
 
     games.sort((g1, g2) {
       final date1 = g1.updatedAt?.millisecondsSinceEpoch ?? 0;

@@ -1,20 +1,33 @@
 import 'package:cash_flow/models/domain/game/game_level/game_level.dart';
+import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class GameLevelItemWidget extends StatelessWidget {
+enum GameLevelAction { startNewGame, continueGame }
+
+class GameLevelItemWidget extends HookWidget {
   const GameLevelItemWidget({
     @required this.gameLevel,
     @required this.onLevelSelected,
   });
 
   final GameLevel gameLevel;
-  final void Function(GameLevel) onLevelSelected;
+  final void Function(GameLevel, GameLevelAction) onLevelSelected;
 
   @override
   Widget build(BuildContext context) {
+    final isCollapsed = useState(true);
+
     return GestureDetector(
-      onTap: () => onLevelSelected(gameLevel),
+      onTap: () {
+        if (gameLevel.currentGameId == null) {
+          onLevelSelected(gameLevel, GameLevelAction.startNewGame);
+        } else {
+          isCollapsed.value = !isCollapsed.value;
+        }
+      },
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.only(
@@ -46,8 +59,62 @@ class GameLevelItemWidget extends StatelessWidget {
                 getTemplateIcon(),
               ],
             ),
+            AnimatedContainer(
+              width: double.infinity,
+              curve: Curves.easeInOut,
+              margin: EdgeInsets.only(top: isCollapsed.value ? 0 : 16),
+              height: isCollapsed.value ? 0 : 40,
+              duration: const Duration(milliseconds: 300),
+              child: AnimatedOpacity(
+                curve: Curves.easeIn,
+                duration: const Duration(milliseconds: 200),
+                opacity: isCollapsed.value ? 0 : 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    _buildButton(
+                      title: Strings.startAgain,
+                      color: ColorRes.grey2,
+                      action: () {
+                        onLevelSelected(
+                          gameLevel,
+                          GameLevelAction.startNewGame,
+                        );
+                      },
+                    ),
+                    _buildButton(
+                      title: Strings.continueAction,
+                      color: ColorRes.yellow,
+                      action: () {
+                        onLevelSelected(
+                          gameLevel,
+                          GameLevelAction.continueGame,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildButton({String title, VoidCallback action, Color color}) {
+    return GestureDetector(
+      onTap: action,
+      child: Container(
+        height: 34,
+        width: 130,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(color: ColorRes.grey.withAlpha(70)),
+        ),
+        child: Text(title, style: Styles.bodyBlack.copyWith(fontSize: 12.5)),
       ),
     );
   }

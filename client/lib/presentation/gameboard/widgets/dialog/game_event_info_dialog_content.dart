@@ -86,9 +86,9 @@ class GameEventInfoDialogContent extends StatelessWidget {
         vertical: 4,
         horizontal: 8,
       ),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: ColorRes.grey2,
-        borderRadius: const BorderRadius.all(
+        borderRadius: BorderRadius.all(
           Radius.circular(40.0),
         ),
       ),

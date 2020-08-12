@@ -95,7 +95,7 @@ class ContainerWithHeaderImage extends HookWidget {
           Container(
             height: imageHeight,
             width: double.infinity,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: Styles.linearGradient,
             ),
             child: _buildHeaderBackground(),
@@ -114,10 +114,10 @@ class ContainerWithHeaderImage extends HookWidget {
 
   Widget _buildHeaderBackground() {
     return Stack(
-      children: <Widget>[
+      children: const <Widget>[
         Align(
           alignment: Alignment.topRight,
-          child: const Image(
+          child: Image(
             image: AssetImage(Images.bgCircleRight),
             fit: BoxFit.contain,
             width: 93,
@@ -126,7 +126,7 @@ class ContainerWithHeaderImage extends HookWidget {
         ),
         Align(
           alignment: Alignment.bottomLeft,
-          child: const Image(
+          child: Image(
             image: AssetImage(Images.bgCircleLeft),
             fit: BoxFit.contain,
             width: 119,

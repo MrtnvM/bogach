@@ -23,6 +23,8 @@ abstract class NewGameState
   StoreList<GameLevel> get gameLevels;
   StoreList<Game> get userGames;
 
+  Map<String, String> get currentGameForLevels;
+
   RequestState get createNewGameRequestState;
   RequestState get createNewGameByLevelRequestState;
 
@@ -33,6 +35,7 @@ abstract class NewGameState
     ..getGameTemplatesRequestState = RefreshableRequestState.idle
     ..getGameLevelsRequestState = RefreshableRequestState.idle
     ..getUserGamesRequestState = RefreshableRequestState.idle
+    ..currentGameForLevels = {}
     ..gameTemplates = StoreList<GameTemplate>()
     ..gameLevels = StoreList<GameLevel>()
     ..userGames = StoreList<Game>()

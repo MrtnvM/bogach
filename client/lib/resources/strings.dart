@@ -132,8 +132,8 @@ class Strings {
   static const available = 'Доступно:';
   static const buyAllAvailable = 'Купить на все';
   static const sellAllAvailable = 'Продать все';
-  static const purchasing = 'Купить';
-  static const selling = 'Продать';
+  static const purchasing = 'Покупка';
+  static const selling = 'Продажа';
   static const inputCount = 'Количество:';
   static const fairPrice = 'Справедливая цена:';
   static const sellProbability = 'Вероятность продажи:';

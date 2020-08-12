@@ -28,8 +28,8 @@ class CashFlowApiClient extends ApiClient {
         headers: [contentJson],
       );
 
-  Stream<List<GameLevel>> getGameLevels() => get(
-        path: 'gameLevels',
+  Stream<List<GameLevel>> getGameLevels(String userId) => get(
+        path: 'gameLevels?user_id=$userId',
         responseMapper: rm.jsonArray(
           (json) => json.map((item) => GameLevel.fromJson(item)).toList(),
         ),

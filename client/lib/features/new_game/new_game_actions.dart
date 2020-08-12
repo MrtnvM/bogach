@@ -30,10 +30,12 @@ class GetUserGamesAsyncAction extends AsyncAction<List<Game>> {
 }
 
 class GetGameLevelsAsyncAction extends AsyncAction<List<GameLevel>> {
-  GetGameLevelsAsyncAction({this.isRefreshing = false})
-      : assert(isRefreshing != null);
+  GetGameLevelsAsyncAction({@required this.userId, this.isRefreshing = false})
+      : assert(isRefreshing != null),
+        assert(userId != null);
 
   final bool isRefreshing;
+  final String userId;
 }
 
 class CreateNewGameByLevelAsyncAction extends AsyncAction<String> {

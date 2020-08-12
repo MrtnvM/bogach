@@ -18,7 +18,8 @@ import {
   StocksInitializerGameTransformer,
   DebentureInitializerGameTransformer,
 } from '../transformers/game_transformers';
-import { GameLevel } from '../game_levels/models/game_level';
+import { GameLevel, GameLevelEntity } from '../game_levels/models/game_level';
+import { firestore as FirestoreAdmin } from 'firebase-admin';
 
 export class GameProvider {
   constructor(private firestore: Firestore, private selector: FirestoreSelector) {}
@@ -114,6 +115,57 @@ export class GameProvider {
 
     GameEntity.validate(game);
     return game as Game;
+  }
+
+  async getUserQuestGames(userId: UserEntity.Id, levelIds: GameLevelEntity.Id[]): Promise<Game[]> {
+    const selector = this.selector.games();
+
+    const participantsKey: keyof Game = 'participants';
+    const configKey: keyof Game = 'config';
+    const levelKey: keyof GameEntity.Config = 'level';
+
+    const query = selector
+      .where(participantsKey, 'array-contains', userId)
+      .where(`${configKey}.${levelKey}`, 'in', levelIds);
+
+    const userQuestGamesQueryResult = await this.firestore.getQueryItems(query);
+    userQuestGamesQueryResult.forEach(GameEntity.validate);
+
+    const userQuestGames = userQuestGamesQueryResult as Game[];
+    const userNotCompletedQuestGames = userQuestGames
+      .filter((g) => g.state.gameStatus !== 'game_over')
+      .sort((g1, g2) => {
+        if (!g1.updatedAt || !g2.updatedAt) {
+          return 0;
+        }
+
+        const timestamp1 = (g1.updatedAt as any) as FirestoreAdmin.Timestamp;
+        const timestamp2 = (g2.updatedAt as any) as FirestoreAdmin.Timestamp;
+
+        return timestamp2.seconds - timestamp1.seconds;
+      });
+
+    return userNotCompletedQuestGames;
+  }
+
+  async removeUserQuestGamesForLevel(
+    userId: UserEntity.Id,
+    levelId: GameLevelEntity.Id
+  ): Promise<void> {
+    const selector = this.selector.games();
+
+    const participantsKey: keyof Game = 'participants';
+    const configKey: keyof Game = 'config';
+    const levelKey: keyof GameEntity.Config = 'level';
+
+    const query = selector
+      .where(participantsKey, 'array-contains', userId)
+      .where(`${configKey}.${levelKey}`, 'in', [levelId]);
+
+    const games = await query.get();
+    const deleteQuestGameOperations = games.docs.map((d) => d.ref.delete());
+
+    await Promise.all(deleteQuestGameOperations);
   }
 
   async updateGame(game: Game): Promise<Game> {

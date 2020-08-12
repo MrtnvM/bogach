@@ -94,9 +94,26 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const apiRequest = APIRequest.from(request, response);
     apiRequest.checkMethod('GET');
 
-    const gameLevels = Promise.resolve(gameLevelsProvider.getGameLevels());
+    const userId = apiRequest.queryParameter('user_id');
 
-    return send(gameLevels, response);
+    const gameLevels = gameLevelsProvider.getGameLevels();
+    const levelsIds = gameLevels.map((l) => l.id);
+    const userQuestGames = await gameProvider.getUserQuestGames(userId, levelsIds);
+
+    const levelsInfo = gameLevels.map((level) => {
+      const { id, name, description, icon } = level;
+      const questGame = userQuestGames.find((g) => g.config.level === id);
+
+      return {
+        id,
+        name,
+        description,
+        icon,
+        currentGameId: questGame?.id,
+      };
+    });
+
+    return send(Promise.resolve(levelsInfo), response);
   });
 
   const createGameByLevel = https.onRequest(async (request, response) => {
@@ -105,6 +122,12 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const gameLevelId = apiRequest.jsonField('gameLevelId');
     const userId = apiRequest.jsonField('userId');
+
+    try {
+      await gameProvider.removeUserQuestGamesForLevel(userId, gameLevelId);
+    } catch (error) {
+      console.error(error);
+    }
 
     const newGame = gameService.createNewGameByLevel(gameLevelId, [userId]);
     return send(newGame, response);

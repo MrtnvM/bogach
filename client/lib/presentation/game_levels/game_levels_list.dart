@@ -1,3 +1,4 @@
+import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/alert_hooks.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
@@ -15,30 +16,48 @@ import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 class GameLevelList extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    final userId = useUserId();
     final gameLevelsRequestState = useGlobalState(
       (s) => s.newGame.getGameLevelsRequestState,
     );
 
     final gameLevels = useGlobalState((s) => s.newGame.gameLevels);
+    final currentGameForLevels = useGlobalState(
+      (s) => s.newGame.currentGameForLevels,
+    );
+
     final gameActions = useGameActions();
 
     final showCreateGameErrorAlert = useWarningAlert(
       needCancelButton: true,
     );
 
-    void Function(GameLevel) createNewGameByLevel;
-    createNewGameByLevel = (gameLevel) {
-      gameActions.createGameByLevel(gameLevel.id).then((createdGameId) {
-        gameActions.startGame(createdGameId);
+    void Function(GameLevel, GameLevelAction) startGameByLevel;
+    startGameByLevel = (gameLevel, action) {
+      final startGame = (gameId) {
+        gameActions.startGame(gameId);
 
         appRouter.goToRoot();
         appRouter.goTo(GameBoard());
-      }).catchError(
-        (error) => showCreateGameErrorAlert(
-          error,
-          () => createNewGameByLevel(gameLevel),
-        ),
-      );
+      };
+
+      if (action == GameLevelAction.continueGame) {
+        final gameId = currentGameForLevels[gameLevel.id];
+
+        if (gameId != null) {
+          startGame(gameId);
+        }
+
+        return;
+      }
+
+      gameActions
+          .createGameByLevel(gameLevel.id)
+          .then(startGame)
+          .catchError((error) => showCreateGameErrorAlert(
+                error,
+                () => startGameByLevel(gameLevel, action),
+              ));
     };
 
     return Loadable(
@@ -49,13 +68,15 @@ class GameLevelList extends HookWidget {
           items: gameLevels,
           itemBuilder: (i) => GameLevelItemWidget(
             gameLevel: gameLevels.items[i],
-            onLevelSelected: createNewGameByLevel,
+            onLevelSelected: startGameByLevel,
           ),
           loadListRequestState: gameLevelsRequestState,
-          loadList: gameActions.loadGameLevels,
+          loadList: () => gameActions.loadGameLevels(userId),
           padding: const EdgeInsets.all(16),
           emptyStateWidget: EmptyWidget(),
-          errorWidget: CommonErrorWidget(gameActions.loadGameLevels),
+          errorWidget: CommonErrorWidget(
+            () => gameActions.loadGameLevels(userId),
+          ),
         ),
       ),
     );
