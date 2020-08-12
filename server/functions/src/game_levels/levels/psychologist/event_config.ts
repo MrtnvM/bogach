@@ -23,7 +23,7 @@ const month3 = month(
   PsychologistEventFactory.Expense.dentist(4000),
   PsychologistEventFactory.Stock.vwAuto(250, 30),
   PsychologistEventFactory.Debenture.ofz1(900, 10),
-  PsychologistEventFactory.SalaryChange.clientGone(1500),
+  PsychologistEventFactory.SalaryChange.clientGone(-1500),
   PsychologistEventFactory.Stock.gasPromGroup(320, 30)
 );
 
@@ -45,7 +45,8 @@ const month6 = month(
   PsychologistEventFactory.Insurace.healthInsurance(1500, 4000),
   PsychologistEventFactory.Stock.sberInvestBank(320, 20),
   PsychologistEventFactory.Debenture.search(1100, 25),
-  PsychologistEventFactory.Expense.tvRepair(2000)
+  PsychologistEventFactory.Expense.tvRepair(2000),
+  PsychologistEventFactory.Income.onlineConsulting(1300)
 );
 
 const month7 = month(
@@ -66,7 +67,8 @@ const month9 = month(
   PsychologistEventFactory.Expense.dentist(1000),
   PsychologistEventFactory.Stock.vwAuto(240, 10),
   PsychologistEventFactory.Expense.cafe(800),
-  PsychologistEventFactory.Debenture.ofz1(900, 10)
+  PsychologistEventFactory.Debenture.ofz1(900, 10),
+  PsychologistEventFactory.Income.sienceArticle(4500)
 );
 
 const month10 = month(
