@@ -165,6 +165,10 @@ class Strings {
   static const noInternetError = 'Не удалось подключиться к серверу. '
       'Пожалуйста, проверьте ваше интернет-соединение';
 
+  static const cannotAuthoriseThroughSocial =
+      'Вы зарегистрированы с указанной почтой через '
+      'другую соц. сеть. Выберете ее для авторизации';
+
   static const incomes = 'Доходы';
   static const expenses = 'Расходы';
   static const assets = 'Активы';
