@@ -102,7 +102,9 @@ class Strings {
   static const monthlyExpenseEvent = 'Новое событие';
   static const insuranceEvent = 'Страховка';
   static const monthlyExpenseTitle = 'Ежемесячные расходы';
+  static String get salaryChangeTitle => 'Зарплата';
   static const property = 'Недвижимость';
+  static const salaryChange = 'Изменения в зарплате';
   static const firstPayment = 'Первый взнос';
 
   static const commonError = 'Произошла ошибка';

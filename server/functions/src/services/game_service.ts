@@ -22,6 +22,7 @@ import { ExpenseHandler } from '../events/expense/expense_handler';
 import { BusinessSellEventHandler } from '../events/business/sell/business_sell_event_handler';
 import { MonthlyExpenseEventHandler } from '../events/monthly_expense/monthly_expense_event_handler';
 import { InsuranceHandler } from '../events/insurance/insurance_handler';
+import { SalaryChangeEventHandler } from '../events/salary_change/salary_change_event_handler';
 import { UserEntity } from '../models/domain/user';
 import { GameTemplateEntity } from '../models/domain/game/game_template';
 import { InsuranceTransformer } from '../transformers/game/insurance_transformer';
@@ -46,6 +47,7 @@ export class GameService {
     new MonthlyExpenseEventHandler(),
     new InsuranceHandler(),
     new RealEstateBuyEventHandler(),
+    new SalaryChangeEventHandler(),
   ];
 
   private handlerMap: { [type: string]: PlayerActionHandler } = {};
