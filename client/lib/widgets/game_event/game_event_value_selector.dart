@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -20,7 +22,7 @@ class GameEventValueSelector extends StatelessWidget {
     this.passiveIncomePerMonth = 0,
   })  : assert(action != null),
         assert(selectedCount != null),
-        assert(availableCount != null),
+        assert(availableCount != null && availableCount >= 0),
         assert(maxCount != null),
         assert(isChangeableType != null),
         assert(onCountChanged != null),
@@ -101,7 +103,7 @@ class GameEventValueSelector extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       onTap: () {
         if (availableCount > 0) {
-          onCountChanged(availableCount);
+          onCountChanged(min(availableCount, maxCount));
         }
       },
       child: Container(

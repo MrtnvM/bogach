@@ -48,7 +48,7 @@ class _InputFieldState extends State<InputField> {
       decoration: InputDecoration(
         isDense: true,
         suffix: validationResult?.isNotEmpty == true
-            ? Icon(Icons.error, color: ColorRes.red, size: 14)
+            ? const Icon(Icons.error, color: ColorRes.red, size: 14)
             : null,
         contentPadding: const EdgeInsets.symmetric(vertical: 9),
         labelText: _hasValue() || _hasFocus()

@@ -21,13 +21,13 @@ class GameBoard extends HookWidget {
     final tabItems = useMemoized(
       () => [
         BottomBarItem(
-          title: Strings.financesTabTitle,
-          image: Images.financesBarIcon,
+          title: Strings.actionsTabTitle,
+          image: Images.gameBoardBarIcon,
           onPressed: () => selectedIndex.value = 0,
         ),
         BottomBarItem(
-          title: Strings.actionsTabTitle,
-          image: Images.gameBoardBarIcon,
+          title: Strings.financesTabTitle,
+          image: Images.financesBarIcon,
           onPressed: () => selectedIndex.value = 1,
         ),
         // BottomBarItem(
@@ -51,10 +51,10 @@ class GameBoard extends HookWidget {
 
     switch (selectedIndex.value) {
       case 0:
-        activeTab = FinancesTab();
+        activeTab = ActionsTab();
         break;
       case 1:
-        activeTab = ActionsTab();
+        activeTab = FinancesTab();
         break;
       case 2:
         activeTab = FinancesTab();

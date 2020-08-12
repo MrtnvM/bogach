@@ -224,7 +224,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
 
   Future<void> _onLoginViaAppleClicked() async {
     final result = await AppleSignIn.performRequests([
-      AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+      const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
     ]);
 
     switch (result.status) {

@@ -54,7 +54,7 @@ class BuySellBar extends StatelessWidget {
 
     return Expanded(
       child: GestureDetector(
-        onTap: onSelected,
+        onTap: action == selectedAction ? () {} : onSelected,
         child: Container(
           height: 50,
           decoration: BoxDecoration(
