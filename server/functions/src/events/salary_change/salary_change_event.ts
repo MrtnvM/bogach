@@ -26,7 +26,7 @@ export namespace SalaryChangeEvent {
       throw new Error('ERROR: Event type is not equal to ' + Type);
     }
 
-    const entity = Entity.createEntityValidator<Data>(event.data, 'MonthlyExpenseEvent.Data');
+    const entity = Entity.createEntityValidator<Data>(event.data, 'SalaryChangeEvent.Data');
 
     entity.hasNumberValue('value');
 

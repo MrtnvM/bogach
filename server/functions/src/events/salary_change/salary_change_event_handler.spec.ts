@@ -33,7 +33,6 @@ describe('Salary change event handler', () => {
         },
       },
     });
-    const handler = new SalaryChangeEventHandler();
 
     const event: SalaryChangeEvent.Event = {
       id: 'event1',
@@ -49,6 +48,7 @@ describe('Salary change event handler', () => {
       eventId: 'event1',
     };
 
+    const handler = new SalaryChangeEventHandler();
     const newGame = await handler.handle(game, event, action, userId);
 
     const expectedGame = produce(game, (draft) => {

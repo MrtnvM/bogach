@@ -33,7 +33,7 @@ class SalaryChangeEvent extends HookWidget {
           rows: <Widget>[
             TitleRow(
               title: Strings.salaryChangeTitle,
-              value: (value > 0 ? '+' : '') + value.toPrice(),
+              value: value.toPriceWithSign(),
             ),
           ],
         ),
