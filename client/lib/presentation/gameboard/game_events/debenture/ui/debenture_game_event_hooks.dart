@@ -27,7 +27,7 @@ Map<String, String> useDebentureInfoTableData(GameEvent event) {
         );
 
   final currentPrice = eventData.currentPrice;
-  final previousPrice = currentDebenture?.averagePrice ?? 0.0;
+  final previousPrice = currentDebenture?.averagePrice;
   final priceChange = previousPrice == null
       ? 0.0
       : ((currentPrice - previousPrice) / previousPrice) * 100;

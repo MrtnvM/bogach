@@ -19,7 +19,7 @@ Map<String, String> useStockInfoTableData(GameEvent event) {
 
   final StockEventData eventData = event.data;
   final currentPrice = eventData.currentPrice;
-  final previousPrice = currentStock?.averagePrice ?? 0.0;
+  final previousPrice = currentStock?.averagePrice;
   final priceChange = previousPrice == null
       ? 0.0
       : ((currentPrice - previousPrice) / previousPrice) * 100;
