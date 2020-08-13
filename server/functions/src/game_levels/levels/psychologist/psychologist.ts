@@ -2,12 +2,12 @@ import { template } from './game_template';
 import { eventConfig } from './event_config';
 import { GameLevel } from '../../models/game_level';
 
-export const HookahManLevel: GameLevel = {
+export const PsychologistLevel: GameLevel = {
   id: template.id,
   name: template.name,
-  description: 'Накопить на PS4 за 7 месяцев',
+  description: 'Всего 100 000 до авто мечты',
   icon: template.icon,
   template,
-  monthLimit: 7,
+  monthLimit: 10,
   levelEventConfig: eventConfig,
 };

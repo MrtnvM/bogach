@@ -118,9 +118,17 @@ void handleError({
       break;
 
     case PlatformException:
-      final errorMessage = exception.code == 'ERROR_NETWORK_REQUEST_FAILED'
-          ? Strings.noInternetError
-          : null;
+      String errorMessage;
+
+      switch (exception.code) {
+        case 'ERROR_NETWORK_REQUEST_FAILED':
+          errorMessage = Strings.noInternetError;
+          break;
+
+        case 'ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL':
+          errorMessage = Strings.cannotAuthoriseThroughSocial;
+          break;
+      }
 
       showErrorDialog(
         context: context,

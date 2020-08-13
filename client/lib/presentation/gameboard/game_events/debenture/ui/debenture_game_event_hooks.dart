@@ -26,13 +26,21 @@ Map<String, String> useDebentureInfoTableData(GameEvent event) {
           currentDebenture.averagePrice.toPrice(),
         );
 
+  final currentPrice = eventData.currentPrice;
+  final previousPrice = currentDebenture?.averagePrice;
+  final priceChange = previousPrice == null
+      ? 0.0
+      : ((currentPrice - previousPrice) / previousPrice) * 100;
+
   final data = {
     Strings.investmentType: event.name,
     Strings.nominalCost: eventData.nominal.toPrice(),
+    Strings.currentPrice: eventData.currentPrice.toPrice(),
     Strings.passiveIncomePerMonth:
         (eventData.profitabilityPercent / 12).toPercent(),
-    // Strings.roi: ROI.fromInvestment(eventData).toPercent(),
     Strings.alreadyHave: alreadyHaveString,
+    if (alreadyHave > 0)
+      Strings.changeInPortfolio: priceChange.toPercentWithSign()
   };
 
   return data;

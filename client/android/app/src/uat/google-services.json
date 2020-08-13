@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "91375261919-6r7ip8fil6gefl6cdoo653smvs6vd3fu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.cashflow.uat",
+            "certificate_hash": "cd1a0362bcc6404bfb8acbe5b5ecca1ad6393ced"
+          }
+        },
+        {
           "client_id": "91375261919-n14fcjnbuqlmna2bnfimucamvat580ok.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

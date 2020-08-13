@@ -8,6 +8,11 @@ extension PriceFormatting on num {
     return formatCurrency.format(this);
   }
 
+  String toPriceWithSign() {
+    final price = toPrice();
+    return this > 0 ? '+$price' : price;
+  }
+
   String toPercent() {
     if (isInfinite || isNaN) {
       return '-';

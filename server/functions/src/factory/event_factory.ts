@@ -10,12 +10,15 @@ import { StockEventGenerator } from '../events/stock/stock_event_generator';
 import { MonthlyExpenseEventGenerator } from '../events/monthly_expense/monthly_expense_event_generator';
 import { BusinessSellEventGenerator } from '../events/business/sell/business_sell_event_generator';
 import { BusinessBuyEventGenerator } from '../events/business/buy/business_buy_event_generator';
+import { SalaryChangeEventGenerator } from '../events/salary_change/salary_change_event_generator';
 
 export namespace EventFactory {
   export const incomeEvent = IncomeEventGenerator.generateEvent;
 
   export const expenseEvent = ExpenseEventGenerator.generateEvent;
   export const monthlyExpenseEvent = MonthlyExpenseEventGenerator.generateEvent;
+
+  export const salaryChangeEvent = SalaryChangeEventGenerator.generateEvent;
 
   export const debentureEvent = DebentureEventGenerator.generateEvent;
   export const stockEvent = StockEventGenerator.generateEvent;

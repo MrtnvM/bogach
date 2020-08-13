@@ -18,6 +18,11 @@ Map<String, String> useStockInfoTableData(GameEvent event) {
   final alreadyHave = currentStock?.countInPortfolio ?? 0;
 
   final StockEventData eventData = event.data;
+  final currentPrice = eventData.currentPrice;
+  final previousPrice = currentStock?.averagePrice;
+  final priceChange = previousPrice == null
+      ? 0.0
+      : ((currentPrice - previousPrice) / previousPrice) * 100;
 
   final data = {
     Strings.investmentType: event.name,
@@ -29,6 +34,8 @@ Map<String, String> useStockInfoTableData(GameEvent event) {
             currentStock.countInPortfolio.toString(),
             currentStock.averagePrice.toPrice(),
           ),
+    if (alreadyHave > 0)
+      Strings.changeInPortfolio: priceChange.toPercentWithSign(),
   };
 
   return data;
@@ -78,10 +85,8 @@ GameEventInfoDialogModel useStockInfoDialogModel() {
       title: Strings.stockDialogTitle,
       description: Strings.stockDialogDescription,
       keyPoints: {
-        Strings.stockDialogKeyPoint1:
-            Strings.stockDialogKeyPointDescription1,
-        Strings.stockDialogKeyPoint2:
-            Strings.stockDialogKeyPointDescription2,
+        Strings.stockDialogKeyPoint1: Strings.stockDialogKeyPointDescription1,
+        Strings.stockDialogKeyPoint2: Strings.stockDialogKeyPointDescription2,
       },
       riskLevel: Rating.high,
       profitabilityLevel: Rating.high,

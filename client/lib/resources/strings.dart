@@ -102,7 +102,9 @@ class Strings {
   static const monthlyExpenseEvent = 'Новое событие';
   static const insuranceEvent = 'Страховка';
   static const monthlyExpenseTitle = 'Ежемесячные расходы';
+  static String get salaryChangeTitle => 'Зарплата';
   static const property = 'Недвижимость';
+  static const salaryChange = 'Изменения в зарплате';
   static const firstPayment = 'Первый взнос';
 
   static const commonError = 'Произошла ошибка';
@@ -126,6 +128,7 @@ class Strings {
   static const investmentType = 'Наименование:';
   static const nominalCost = 'Номинальная стоимость:';
   static const alreadyHave = 'В наличии:';
+  static const changeInPortfolio = 'Измeнение цены:';
   static const incomePerMonth = 'Ежемесячный доход:';
   static const available = 'Доступно:';
   static const buyAllAvailable = 'Купить на все';
@@ -161,6 +164,10 @@ class Strings {
 
   static const noInternetError = 'Не удалось подключиться к серверу. '
       'Пожалуйста, проверьте ваше интернет-соединение';
+
+  static const cannotAuthoriseThroughSocial =
+      'Вы зарегистрированы с указанной почтой через '
+      'другую соц. сеть. Выберете ее для авторизации';
 
   static const incomes = 'Доходы';
   static const expenses = 'Расходы';

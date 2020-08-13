@@ -11,6 +11,7 @@ import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';
+import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -28,6 +29,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> with ReduxState {
+  bool _isAuthorising = false;
+
   @override
   void initState() {
     super.initState();
@@ -36,14 +39,18 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
 
   @override
   Widget build(BuildContext context) {
-    return CashFlowScaffold(
-      title: Strings.loginTitle,
-      footerImage: Images.authImage,
-      child: Column(
-        children: <Widget>[
-          _buildLoginForm(),
-          _buildLaterButton(context),
-        ],
+    return Loadable(
+      isLoading: _isAuthorising,
+      backgroundColor: Colors.black.withAlpha(150),
+      child: CashFlowScaffold(
+        title: Strings.loginTitle,
+        footerImage: Images.authImage,
+        child: Column(
+          children: <Widget>[
+            _buildLoginForm(),
+            // _buildLaterButton(context),
+          ],
+        ),
       ),
     );
   }
@@ -128,7 +135,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     );
   }
 
-  Widget _buildLaterButton(BuildContext context) {
+  Widget buildLaterButton(BuildContext context) {
     return Container(
       height: 46,
       width: 200,
@@ -142,6 +149,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
   }
 
   void _onLoggedIn(_) {
+    setState(() => _isAuthorising = false);
     appRouter.startWith(const MainPage());
   }
 
@@ -167,6 +175,8 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
   }
 
   Future<void> _onLoginViaFacebookPressed() async {
+    setState(() => _isAuthorising = true);
+
     final facebookLogin = FacebookLogin();
     final result = await facebookLogin.logIn(['email']);
 
@@ -176,10 +186,12 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         break;
 
       case FacebookLoginStatus.error:
+        setState(() => _isAuthorising = false);
         handleError(context: context, exception: UnknownErrorException());
         break;
 
       default:
+        setState(() => _isAuthorising = false);
         break;
     }
   }
@@ -192,18 +204,23 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
   }
 
   void _onLoginViaFacebookError(error) {
+    setState(() => _isAuthorising = false);
     handleError(context: context, exception: error);
   }
 
   Future<void> _onLoginViaGoogleClicked() async {
-    final account = await GoogleSignIn()
-        .signIn()
-        .catchError((e) => showErrorDialog(context: context));
+    final account = await GoogleSignIn().signIn().catchError((e) {
+      setState(() => _isAuthorising = false);
+      showErrorDialog(context: context);
+    });
 
     if (account == null) {
-      //was cancelled by the user
+      // was cancelled by the user
+      setState(() => _isAuthorising = false);
       return;
     }
+
+    setState(() => _isAuthorising = true);
 
     final authentication = await account.authentication;
 
@@ -236,6 +253,8 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         final firstName = result.credential.fullName.givenName;
         final lastName = result.credential.fullName.givenName;
 
+        setState(() => _isAuthorising = true);
+
         dispatchAsyncAction(LoginViaAppleAsyncAction(
           idToken: identityToken,
           accessToken: accessToken,
@@ -247,15 +266,18 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         break;
 
       case AuthorizationStatus.error:
+        setState(() => _isAuthorising = false);
         handleError(context: context, exception: UnknownErrorException());
         break;
 
       case AuthorizationStatus.cancelled:
+        setState(() => _isAuthorising = false);
         break;
     }
   }
 
   void _onLoginViaAppleError(error) {
+    setState(() => _isAuthorising = false);
     handleError(context: context, exception: error);
   }
 }

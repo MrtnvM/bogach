@@ -12,7 +12,7 @@ export namespace InsuranceGeneratorConfig {
     };
 
     const insuranceInfo: InsuranceEvent.Info = {
-      name: event?.name ?? 'Страхование жизни',
+      name: event?.name ?? 'Страхование здоровья',
       description:
         event?.description ??
         'Страховая компания предлагает купить полис ' +

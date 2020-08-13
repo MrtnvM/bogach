@@ -28,7 +28,7 @@ class ValueSlider extends StatelessWidget {
         ),
         Expanded(
           child: Slider(
-            min: 0,
+            min: minCount.toDouble(),
             max: maxCount.toDouble(),
             activeColor: ColorRes.mainGreen,
             inactiveColor: ColorRes.lightGreen.withOpacity(0.6),

@@ -10,10 +10,12 @@ enum GameLevelAction { startNewGame, continueGame }
 class GameLevelItemWidget extends HookWidget {
   const GameLevelItemWidget({
     @required this.gameLevel,
-    @required this.onLevelSelected,
+    @required this.currentGameId,
+    @required @required this.onLevelSelected,
   });
 
   final GameLevel gameLevel;
+  final String currentGameId;
   final void Function(GameLevel, GameLevelAction) onLevelSelected;
 
   @override
@@ -22,7 +24,7 @@ class GameLevelItemWidget extends HookWidget {
 
     return GestureDetector(
       onTap: () {
-        if (gameLevel.currentGameId == null) {
+        if (currentGameId == null) {
           onLevelSelected(gameLevel, GameLevelAction.startNewGame);
         } else {
           isCollapsed.value = !isCollapsed.value;

@@ -14,7 +14,7 @@ import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 class GameBoard extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final selectedIndex = useState(1);
+    final selectedIndex = useState(0);
     final activeGameState = useGlobalState((s) => s.game.activeGameState);
     final gameExists = useCurrentGame((g) => g != null);
 
