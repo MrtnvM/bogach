@@ -15,7 +15,7 @@ const month2 = month(
   ProgrammerEventFactory.Expense.washingMachine(2000),
   ProgrammerEventFactory.Debenture.pik(1000, 20),
   ProgrammerEventFactory.Income.overworked(1000),
-  ProgrammerEventFactory.Stock.yandex(4000, 10)
+  ProgrammerEventFactory.Stock.yandex(3900, 10)
 );
 
 const month3 = month(
@@ -33,28 +33,28 @@ const month4 = month(
 
 const month5 = month(
   ProgrammerEventFactory.Expense.dentist(4000),
-  ProgrammerEventFactory.Stock.intel(2500, 30),
-  ProgrammerEventFactory.Stock.yandex(4600, 20),
+  ProgrammerEventFactory.Stock.intel(2100, 30),
+  ProgrammerEventFactory.Stock.yandex(4800, 20),
   ProgrammerEventFactory.Income.debt(5000)
 );
 
 const month6 = month(
   ProgrammerEventFactory.Income.cashback(3000),
   ProgrammerEventFactory.Stock.cocaCola(3100, 30),
-  ProgrammerEventFactory.Debenture.pik(900, 25),
+  ProgrammerEventFactory.Debenture.pik(850, 25),
   ProgrammerEventFactory.Expense.doctor(3000)
 );
 
 const month7 = month(
   ProgrammerEventFactory.Stock.intel(2600, 20),
   ProgrammerEventFactory.Expense.clothes(10000),
-  ProgrammerEventFactory.Stock.rosneft(370, 100)
+  ProgrammerEventFactory.Stock.rosneft(350, 100)
 );
 
 const month8 = month(
   ProgrammerEventFactory.Expense.cafe(2000),
   ProgrammerEventFactory.Stock.intel(3100, 20),
-  ProgrammerEventFactory.Debenture.pik(950, 30),
+  ProgrammerEventFactory.Debenture.pik(900, 30),
   ProgrammerEventFactory.Insurace.healthInsurance(600, 4000)
 );
 
@@ -69,7 +69,7 @@ const month10 = month(
   ProgrammerEventFactory.Stock.rosneft(380, 100),
   ProgrammerEventFactory.Expense.cafe(1500),
   ProgrammerEventFactory.Debenture.pik(1200, 20),
-  ProgrammerEventFactory.Income.salaryBonus(4500)
+  ProgrammerEventFactory.Income.salaryBonus(10000)
 );
 
 const month11 = month(
@@ -80,7 +80,7 @@ const month11 = month(
 );
 
 const month12 = month(
-  ProgrammerEventFactory.Stock.tesla(400, 40),
+  ProgrammerEventFactory.Stock.tesla(460, 40),
   ProgrammerEventFactory.Debenture.alphabetTase(1050, 40),
   ProgrammerEventFactory.Debenture.ofz1(1150, 30)
 );

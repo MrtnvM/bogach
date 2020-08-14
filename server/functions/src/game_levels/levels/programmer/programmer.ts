@@ -7,7 +7,7 @@ export const ProgrammerLevel: GameLevel = {
   name: template.name,
   description: 'Всего 180 000 до свадьбы',
   icon: template.icon,
-  template,
+  template: template,
   monthLimit: 12,
   levelEventConfig: eventConfig,
 };

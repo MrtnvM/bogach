@@ -131,7 +131,7 @@ namespace DebentureFactory {
   export const ofz1 = (price: number, availableCount: number) =>
     EventFactory.debentureEvent({
       name: 'ОФЗ выпуск 1',
-      profitability: valueRange(6),
+      profitability: valueRange(15),
       price: valueRange(price),
       nominal: valueRange(1000),
       availableCount: valueRange(availableCount),
@@ -140,7 +140,7 @@ namespace DebentureFactory {
   export const pik = (price: number, availableCount: number) =>
     EventFactory.debentureEvent({
       name: 'ПИК-Корпорация выпуск 2',
-      profitability: valueRange(8),
+      profitability: valueRange(16),
       price: valueRange(price),
       nominal: valueRange(1000),
       availableCount: valueRange(availableCount),
@@ -149,7 +149,7 @@ namespace DebentureFactory {
   export const alphabetTase = (price: number, availableCount: number) =>
     EventFactory.debentureEvent({
       name: 'Азбука Вкуса выпуск 1',
-      profitability: valueRange(9),
+      profitability: valueRange(17),
       price: valueRange(price),
       nominal: valueRange(1000),
       availableCount: valueRange(availableCount),

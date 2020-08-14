@@ -18,7 +18,7 @@ export const template: GameTemplate = {
       {
         id: 'expense1',
         name: 'Общее',
-        value: 40_000,
+        value: 36_000,
       },
       {
         id: 'expense2',
@@ -32,7 +32,7 @@ export const template: GameTemplate = {
   accountState: {
     cash: 20000,
     credit: 0,
-    cashFlow: 10_000,
+    cashFlow: 14_000,
   },
   target: {
     type: 'cash',
