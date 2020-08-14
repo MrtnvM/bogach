@@ -60,7 +60,7 @@ namespace ExpenseFactory {
   export const unexpectedRestDay = (value: number) =>
     EventFactory.expenseEvent({
       name: 'Внеплановый выходной',
-      description: 'Отключии электричество в офисе - пришлось отменить сеансы',
+      description: 'Отключили электричество в офисе - пришлось отменить сеансы',
       insuranceType: null,
       range: valueRange(value),
     });
