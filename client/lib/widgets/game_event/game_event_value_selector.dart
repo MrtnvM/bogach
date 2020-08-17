@@ -16,14 +16,16 @@ class GameEventValueSelector extends StatelessWidget {
     @required this.action,
     @required this.selectedCount,
     @required this.availableCount,
-    @required this.maxCount,
+    @required this.maxCountToBuy,
+    @required this.maxCountToSell,
     @required this.isChangeableType,
     @required this.onCountChanged,
     this.passiveIncomePerMonth = 0,
   })  : assert(action != null),
         assert(selectedCount != null),
         assert(availableCount != null && availableCount >= 0),
-        assert(maxCount != null),
+        assert(maxCountToBuy != null),
+        assert(maxCountToSell != null),
         assert(isChangeableType != null),
         assert(onCountChanged != null),
         super(key: key);
@@ -31,7 +33,8 @@ class GameEventValueSelector extends StatelessWidget {
   final BuySellAction action;
   final int selectedCount;
   final int availableCount;
-  final int maxCount;
+  final int maxCountToBuy;
+  final int maxCountToSell;
   final double passiveIncomePerMonth;
   final OnCountChangedCallback onCountChanged;
   final bool isChangeableType;
@@ -42,8 +45,10 @@ class GameEventValueSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ValueSlider(
+          currentAction: action,
           selectedCount: selectedCount,
-          maxCount: maxCount,
+          maxCountToBuy: maxCountToBuy,
+          maxCountToSell: maxCountToSell,
           minCount: 1,
           onCountChanged: onCountChanged,
         ),
@@ -77,7 +82,10 @@ class GameEventValueSelector extends StatelessWidget {
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () => onCountChanged(maxCount),
+      onTap: () {
+        final maxCount = _getMaxCount();
+        onCountChanged(maxCount);
+      },
       child: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(8),
@@ -102,9 +110,13 @@ class GameEventValueSelector extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        if (availableCount > 0) {
-          onCountChanged(min(availableCount, maxCount));
-        }
+        action.when(buy: () {
+          if (availableCount > 0) {
+            onCountChanged(min(availableCount, maxCountToBuy));
+          }
+        }, sell: () {
+          onCountChanged(availableCount);
+        });
       },
       child: Container(
         padding: const EdgeInsets.all(8),
@@ -129,5 +141,13 @@ class GameEventValueSelector extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  int _getMaxCount() {
+    return action.when(buy: () {
+      return maxCountToBuy;
+    }, sell: () {
+      return maxCountToSell;
+    });
   }
 }

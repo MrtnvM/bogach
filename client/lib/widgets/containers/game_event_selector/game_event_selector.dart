@@ -44,7 +44,7 @@ class GameEventSelectorState extends State<GameEventSelector> {
         final total = vm.availableCash != null && vm.availableCash > 0
             ? vm.availableCash ~/ vm.currentPrice
             : 0;
-        return min(vm.maxCount, total);
+        return min(vm.maxCountToBuy, total);
       },
       sell: () => vm.alreadyHave,
     );
@@ -71,7 +71,8 @@ class GameEventSelectorState extends State<GameEventSelector> {
                   action: _buySellAction,
                   selectedCount: _selectedCount,
                   availableCount: availableCount,
-                  maxCount: vm.maxCount,
+                  maxCountToBuy: vm.maxCountToBuy,
+                  maxCountToSell: vm.alreadyHave,
                   onCountChanged: _onSelectedCountChanged,
                   isChangeableType: vm.changeableType,
                   passiveIncomePerMonth: vm.passiveIncomePerMonth.toDouble(),
@@ -104,7 +105,7 @@ class GameEventSelectorState extends State<GameEventSelector> {
   }
 
   void _onCountInputFieldChanged(int count) {
-    final maxCount = widget.viewModel.maxCount;
+    final maxCount = widget.viewModel.maxCountToBuy;
 
     setState(() {
       _selectedCount = count > maxCount ? maxCount : count;
@@ -119,7 +120,7 @@ class SelectorViewModel {
     this.currentPrice,
     this.passiveIncomePerMonth = 0,
     this.alreadyHave,
-    this.maxCount,
+    this.maxCountToBuy,
     this.changeableType = true,
     this.availableCash,
   });
@@ -127,7 +128,7 @@ class SelectorViewModel {
   final double currentPrice;
   final double passiveIncomePerMonth;
   final int alreadyHave;
-  final int maxCount;
+  final int maxCountToBuy;
   final bool changeableType;
   final double availableCash;
 }
