@@ -16,13 +16,13 @@ typedef OnPlayerActionParamsChanged = void Function(
 class GameEventSelector extends HookWidget {
   const GameEventSelector({
     Key key,
-    @required this.vm,
+    @required this.viewModel,
     @required this.onPlayerActionParamsChanged,
-  })  : assert(vm != null),
+  })  : assert(viewModel != null),
         assert(onPlayerActionParamsChanged != null),
         super(key: key);
 
-  final SelectorViewModel vm;
+  final SelectorViewModel viewModel;
   final OnPlayerActionParamsChanged onPlayerActionParamsChanged;
 
   @override
@@ -33,10 +33,10 @@ class GameEventSelector extends HookWidget {
     final selectorStateModel = normalizeSelectorState(
       currentAction: _buySellAction.value,
       selectedCount: _selectedCount.value,
-      availableCash: vm.availableCash,
-      maxCountToBuy: vm.maxCount,
-      currentPrice: vm.currentPrice,
-      alreadyHave: vm.alreadyHave,
+      availableCash: viewModel.availableCash,
+      maxCountToBuy: viewModel.maxCount,
+      currentPrice: viewModel.currentPrice,
+      alreadyHave: viewModel.alreadyHave,
     );
 
     _selectedCount.value = selectorStateModel.selectedCount;
@@ -45,7 +45,7 @@ class GameEventSelector extends HookWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (vm.changeableType)
+          if (viewModel.changeableType)
             BuySellBar(
               selectedAction: _buySellAction.value,
               onActionChanged: (action) {
@@ -61,7 +61,7 @@ class GameEventSelector extends HookWidget {
               children: <Widget>[
                 PriceCalculator(
                   count: selectorStateModel.selectedCount,
-                  currentPrice: vm.currentPrice.toDouble(),
+                  currentPrice: viewModel.currentPrice.toDouble(),
                   onCountChanged: (count) {
                     _selectedCount.value = count;
                     onPlayerActionParamsChanged(_buySellAction.value, count);
@@ -77,8 +77,8 @@ class GameEventSelector extends HookWidget {
                     _selectedCount.value = count;
                     onPlayerActionParamsChanged(_buySellAction.value, count);
                   },
-                  isChangeableType: vm.changeableType,
-                  passiveIncomePerMonth: vm.passiveIncomePerMonth.toDouble(),
+                  isChangeableType: viewModel.changeableType,
+                  passiveIncomePerMonth: viewModel.passiveIncomePerMonth.toDouble(),
                 ),
               ],
             ),
