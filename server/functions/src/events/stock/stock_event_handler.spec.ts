@@ -152,27 +152,6 @@ describe('Stock event handler', () => {
     }
   });
 
-  test('Cannot sell more stocks than in action', async () => {
-    const handler = new StockEventHandler();
-
-    const currentPrice = 140;
-    const maxCount = 5;
-    const event = utils.stockSberbankPriceChangedEvent(currentPrice, maxCount);
-
-    const action = utils.stockPriceChangedPlayerAction({
-      eventId,
-      action: 'sell',
-      count: 6,
-    });
-
-    try {
-      await handler.handle(game, event, action, userId);
-      throw new Error('Shoud fail on previous line');
-    } catch (error) {
-      expect(error).toStrictEqual(DomainErrors.notEnoughStocksDemandForSell);
-    }
-  });
-
   test('Cannot buy more stocks than in action', async () => {
     const handler = new StockEventHandler();
 

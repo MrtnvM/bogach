@@ -27,14 +27,6 @@ export namespace DomainErrors {
     },
   };
 
-  export const notEnoughStocksDemandForSell: DomainError = {
-    type: 'domain',
-    code: 'not-enough-stocks-demand-for-sell',
-    message: {
-      ru: 'На рынке отсутствует спрос на указанное количество акций по текущей цене',
-    },
-  };
-
   export const notEnoughStocksInPortfolio: DomainError = {
     type: 'domain',
     code: 'not-enough-stocks-in-portfolio',
