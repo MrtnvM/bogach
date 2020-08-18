@@ -37,7 +37,7 @@ class ValueSlider extends StatelessWidget {
             inactiveColor: ColorRes.lightGreen.withOpacity(0.6),
             value: selectedCount.toDouble(),
             onChanged: (count) => onCountChanged(count.toInt()),
-            divisions: maxCount.toInt() - minCount.toInt(),
+            divisions: _getDivisionsCount(),
           ),
         ),
         Text(
@@ -46,5 +46,10 @@ class ValueSlider extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  int _getDivisionsCount() {
+    final difference = maxCount.toInt() - minCount.toInt();
+    return difference > 0 ? difference : 1;
   }
 }

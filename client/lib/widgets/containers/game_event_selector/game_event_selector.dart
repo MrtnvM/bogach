@@ -53,6 +53,7 @@ class GameEventSelector extends HookWidget {
                 _buySellAction.value = action;
                 onPlayerActionParamsChanged(action, _selectedCount.value);
               },
+              canSell: selectorStateModel.canSell,
             ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),

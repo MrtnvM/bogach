@@ -31,11 +31,14 @@ SelectorStateModel normalizeSelectorState({
     selectedCount,
   );
 
+  final canSell = alreadyHave > 0;
+
   return SelectorStateModel(
     availableCount: availableCount,
     maxCount: maxCount,
     minCount: minCount,
     selectedCount: normalizedSelectedCount,
+    canSell: canSell,
   );
 }
 
