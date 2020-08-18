@@ -49,7 +49,7 @@ class DebentureGameEventWidget extends HookWidget {
       currentPrice: eventData.currentPrice,
       passiveIncomePerMonth: passiveIncomePerMonth,
       alreadyHave: alreadyHave,
-      maxCountToBuy: eventData.availableCount,
+      maxCount: eventData.availableCount,
       changeableType: true,
       availableCash: cash,
     );
@@ -83,7 +83,7 @@ class DebentureGameEventWidget extends HookWidget {
         const SizedBox(height: 24),
         GameEventSelector(
           key: ValueKey(event.id),
-          viewModel: selectorViewModel,
+          vm: selectorViewModel,
           onPlayerActionParamsChanged: (action, count) {
             selectedCount.value = count;
             buySellAction.value = action;

@@ -44,7 +44,7 @@ class StockGameEvent extends HookWidget {
     final selectorViewModel = SelectorViewModel(
       currentPrice: eventData.currentPrice,
       alreadyHave: alreadyHaveCount,
-      maxCountToBuy: eventData.availableCount,
+      maxCount: eventData.availableCount,
       changeableType: true,
       availableCash: cash,
     );
@@ -78,7 +78,7 @@ class StockGameEvent extends HookWidget {
         const SizedBox(height: 24),
         GameEventSelector(
           key: ValueKey(event.id),
-          viewModel: selectorViewModel,
+          vm: selectorViewModel,
           onPlayerActionParamsChanged: (action, count) {
             selectedCount.value = count;
             buySellAction.value = action;

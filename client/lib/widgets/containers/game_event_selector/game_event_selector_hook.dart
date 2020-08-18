@@ -1,28 +1,70 @@
+import 'dart:math';
+
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
-/*import 'package:cash_flow/widgets/containers/card_container.dart';
-import 'package:cash_flow/widgets/game_event/buy_sell_bar.dart';
-import 'package:cash_flow/widgets/game_event/game_event_value_selector.dart';
-import 'package:cash_flow/widgets/game_event/price_calculator.dart';
+import 'package:cash_flow/widgets/containers/game_event_selector/selector_state_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-VoidCallback normalizeSelectorState({
-  @required GameEvent event,
+SelectorStateModel normalizeSelectorState({
+  @required BuySellAction currentAction,
   @required int selectedCount,
-  @required BuySellAction action,
+  @required double availableCash,
+  @required int maxCountToBuy,
+  @required double currentPrice,
+  @required int alreadyHave,
 }) {
-  final gameActions = useGameActions();
-  final context = useContext();
+  final availableCount = currentAction.when(
+    buy: () {
+      final total = availableCash != null && availableCash > 0
+          ? availableCash ~/ currentPrice
+          : 0;
+      return min(maxCountToBuy, total);
+    },
+    sell: () => alreadyHave,
+  );
 
-  return () {
-    final playerAction = StockPlayerAction(
-      action,
-      selectedCount,
-      event.id,
-    );
+  final maxCount = _getMaxCount(currentAction, maxCountToBuy, alreadyHave);
+  final minCount = _getMinCount(currentAction, alreadyHave);
+  final normalizedSelectedCount = _getSelectedCount(
+    minCount,
+    maxCount,
+    selectedCount,
+  );
 
-    gameActions
-        .sendPlayerAction(playerAction, event.id)
-        .catchError((e) => handleError(context: context, exception: e));
-  };
-}*/
+  return SelectorStateModel(
+    availableCount: availableCount,
+    maxCount: maxCount,
+    minCount: minCount,
+    selectedCount: normalizedSelectedCount,
+  );
+}
+
+int _getMaxCount(
+  BuySellAction currentAction,
+  int maxCountToBuy,
+  int alreadyHave,
+) {
+  return currentAction.when(buy: () {
+    return maxCountToBuy;
+  }, sell: () {
+    return alreadyHave;
+  });
+}
+
+int _getMinCount(BuySellAction currentAction, int alreadyHave) {
+  if (currentAction == const BuySellAction.sell() && alreadyHave == 0) {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+int _getSelectedCount(int minCount, int maxCount, int selectedCount) {
+  if (minCount > selectedCount) {
+    return selectedCount;
+  } else if (selectedCount > maxCount) {
+    return maxCount;
+  } else {
+    return selectedCount;
+  }
+}

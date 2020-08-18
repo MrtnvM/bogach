@@ -1,53 +1,45 @@
-import 'dart:math';
-
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/widgets/containers/card_container.dart';
+import 'package:cash_flow/widgets/containers/game_event_selector/game_event_selector_hook.dart';
 import 'package:cash_flow/widgets/game_event/buy_sell_bar.dart';
 import 'package:cash_flow/widgets/game_event/game_event_value_selector.dart';
 import 'package:cash_flow/widgets/game_event/price_calculator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 typedef OnPlayerActionParamsChanged = void Function(
   BuySellAction action,
   int selectedCount,
 );
 
-class GameEventSelector extends StatefulWidget {
+class GameEventSelector extends HookWidget {
   const GameEventSelector({
     Key key,
-    @required this.viewModel,
+    @required this.vm,
     @required this.onPlayerActionParamsChanged,
-  })  : assert(viewModel != null),
+  })  : assert(vm != null),
         assert(onPlayerActionParamsChanged != null),
         super(key: key);
 
-  final SelectorViewModel viewModel;
+  final SelectorViewModel vm;
   final OnPlayerActionParamsChanged onPlayerActionParamsChanged;
 
   @override
-  State<StatefulWidget> createState() {
-    return GameEventSelectorState();
-  }
-}
-
-class GameEventSelectorState extends State<GameEventSelector> {
-  var _selectedCount = 1;
-  var _buySellAction = const BuySellAction.buy();
-
-  SelectorViewModel get vm => widget.viewModel;
-
-  @override
   Widget build(BuildContext context) {
-    final availableCount = _buySellAction.when(
-      buy: () {
-        final total = vm.availableCash != null && vm.availableCash > 0
-            ? vm.availableCash ~/ vm.currentPrice
-            : 0;
-        return min(vm.maxCountToBuy, total);
-      },
-      sell: () => vm.alreadyHave,
+    final _selectedCount = useState(1);
+    final _buySellAction = useState(const BuySellAction.buy());
+
+    final selectorStateModel = normalizeSelectorState(
+      currentAction: _buySellAction.value,
+      selectedCount: _selectedCount.value,
+      availableCash: vm.availableCash,
+      maxCountToBuy: vm.maxCount,
+      currentPrice: vm.currentPrice,
+      alreadyHave: vm.alreadyHave,
     );
+
+    _selectedCount.value = selectorStateModel.selectedCount;
 
     return CardContainer(
       child: Column(
@@ -55,25 +47,35 @@ class GameEventSelectorState extends State<GameEventSelector> {
         children: <Widget>[
           if (vm.changeableType)
             BuySellBar(
-              selectedAction: _buySellAction,
-              onActionChanged: _changeState,
+              selectedAction: _buySellAction.value,
+              onActionChanged: (action) {
+                _selectedCount.value = 1;
+                _buySellAction.value = action;
+                onPlayerActionParamsChanged(action, _selectedCount.value);
+              },
             ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Column(
               children: <Widget>[
                 PriceCalculator(
-                  count: _selectedCount,
+                  count: selectorStateModel.selectedCount,
                   currentPrice: vm.currentPrice.toDouble(),
-                  onCountChanged: _onCountInputFieldChanged,
+                  onCountChanged: (count) {
+                    _selectedCount.value = count;
+                    onPlayerActionParamsChanged(_buySellAction.value, count);
+                  },
                 ),
                 GameEventValueSelector(
-                  action: _buySellAction,
-                  selectedCount: _selectedCount,
-                  availableCount: availableCount,
-                  maxCountToBuy: vm.maxCountToBuy,
-                  maxCountToSell: vm.alreadyHave,
-                  onCountChanged: _onSelectedCountChanged,
+                  action: _buySellAction.value,
+                  selectedCount: selectorStateModel.selectedCount,
+                  availableCount: selectorStateModel.availableCount,
+                  maxCount: selectorStateModel.maxCount,
+                  minCount: selectorStateModel.minCount,
+                  onCountChanged: (count) {
+                    _selectedCount.value = count;
+                    onPlayerActionParamsChanged(_buySellAction.value, count);
+                  },
                   isChangeableType: vm.changeableType,
                   passiveIncomePerMonth: vm.passiveIncomePerMonth.toDouble(),
                 ),
@@ -84,35 +86,6 @@ class GameEventSelectorState extends State<GameEventSelector> {
       ),
     );
   }
-
-  void _onSelectedCountChanged(int count) {
-    setState(() {
-      _selectedCount = count;
-    });
-
-    widget.onPlayerActionParamsChanged(_buySellAction, count);
-  }
-
-  void _changeState(BuySellAction action) {
-    const selectedCount = 1;
-
-    setState(() {
-      _buySellAction = action;
-      _selectedCount = selectedCount;
-    });
-
-    widget.onPlayerActionParamsChanged(action, selectedCount);
-  }
-
-  void _onCountInputFieldChanged(int count) {
-    final maxCount = widget.viewModel.maxCountToBuy;
-
-    setState(() {
-      _selectedCount = count > maxCount ? maxCount : count;
-    });
-
-    widget.onPlayerActionParamsChanged(_buySellAction, count);
-  }
 }
 
 class SelectorViewModel {
@@ -120,7 +93,7 @@ class SelectorViewModel {
     this.currentPrice,
     this.passiveIncomePerMonth = 0,
     this.alreadyHave,
-    this.maxCountToBuy,
+    this.maxCount,
     this.changeableType = true,
     this.availableCash,
   });
@@ -128,7 +101,7 @@ class SelectorViewModel {
   final double currentPrice;
   final double passiveIncomePerMonth;
   final int alreadyHave;
-  final int maxCountToBuy;
+  final int maxCount;
   final bool changeableType;
   final double availableCash;
 }

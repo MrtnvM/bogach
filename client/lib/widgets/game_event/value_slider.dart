@@ -11,16 +11,14 @@ class ValueSlider extends StatelessWidget {
     @required this.currentAction,
     @required this.selectedCount,
     this.minCount = 0,
-    @required this.maxCountToBuy,
-    @required this.maxCountToSell,
+    @required this.maxCount,
     this.onCountChanged,
   }) : super(key: key);
 
   final BuySellAction currentAction;
   final int selectedCount;
   final int minCount;
-  final int maxCountToBuy;
-  final int maxCountToSell;
+  final int maxCount;
   final OnCountChangedCallback onCountChanged;
 
   @override
@@ -28,45 +26,25 @@ class ValueSlider extends StatelessWidget {
     return Row(
       children: <Widget>[
         Text(
-          _getMinCount().toString(),
+          minCount.toString(),
           style: Styles.bodyBlack,
         ),
         Expanded(
           child: Slider(
-            min: _getMinCount().toDouble(),
-            max: _getMaxCount().toDouble(),
+            min: minCount.toDouble(),
+            max: maxCount.toDouble(),
             activeColor: ColorRes.mainGreen,
             inactiveColor: ColorRes.lightGreen.withOpacity(0.6),
             value: selectedCount.toDouble(),
             onChanged: (count) => onCountChanged(count.toInt()),
-            divisions: _getMaxCount().toInt() - _getMinCount().toInt(),
+            divisions: maxCount.toInt() - minCount.toInt(),
           ),
         ),
         Text(
-          _getMaxCount().toStringAsFixed(0),
+          maxCount.toStringAsFixed(0),
           style: Styles.bodyBlack,
         ),
       ],
     );
-  }
-
-  int _getMaxCount() {
-    if (currentAction == const BuySellAction.buy()) {
-      return maxCountToBuy;
-    } else if (currentAction == const BuySellAction.sell()) {
-      return maxCountToSell;
-    } else {
-      throw Exception('invalid type of buy sell action');
-    }
-  }
-
-  int _getMinCount() {
-    if (currentAction == const BuySellAction.sell() && maxCountToSell == 0) {
-      return 0;
-    } else if (currentAction == const BuySellAction.sell()) {
-      return 1;
-    } else {
-      return minCount;
-    }
   }
 }
