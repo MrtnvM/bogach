@@ -100,7 +100,7 @@ class BuySellBar extends StatelessWidget {
     }
 
     if (!isEnabled) {
-      return ColorRes.grey;
+      return ColorRes.grey2;
     }
 
     return ColorRes.lightGreen;
