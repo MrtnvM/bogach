@@ -85,21 +85,6 @@ const month12 = month(
   ProgrammerEventFactory.Debenture.ofz1(1150, 30)
 );
 
-
-const month13 = month(
-  ProgrammerEventFactory.Expense.dentist(2000),
-  ProgrammerEventFactory.Stock.cocaCola(3300, 15),
-  ProgrammerEventFactory.Expense.birthday(1500),
-  ProgrammerEventFactory.Debenture.ofz1(900, 30)
-);
-
-const month14 = month(
-  ProgrammerEventFactory.Stock.tesla(460, 40),
-  ProgrammerEventFactory.Debenture.alphabetTase(1050, 40),
-  ProgrammerEventFactory.Debenture.ofz1(1150, 30)
-);
-
-
 export const eventConfig: GameLevelEventConfig = {
   events: [
     month1,
