@@ -26,7 +26,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const createRoomRequest = roomService.createRoom(gameTemplateId, currentUserId);
 
-    return send(createRoomRequest, response);
+    await send(createRoomRequest, response);
+    return Promise.resolve();
   });
 
   const setRoomParticipantReady = https.onRequest(async (request, response) => {
@@ -37,7 +38,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const participantId = apiRequest.jsonField('participantId');
 
     const setReadyStatusRequest = roomService.onParticipantReady(roomId, participantId);
-    return send(setReadyStatusRequest, response);
+    await send(setReadyStatusRequest, response);
+    return Promise.resolve();
   });
 
   const createRoomGame = https.onRequest(async (request, response) => {
@@ -47,7 +49,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const roomId = apiRequest.jsonField('roomId');
 
     const createRoomRequest = roomService.createRoomGame(roomId);
-    return send(createRoomRequest, response);
+    await send(createRoomRequest, response);
+    return Promise.resolve();
   });
 
   const send = <T>(data: Promise<T>, response: functions.Response) => {

@@ -20,7 +20,7 @@ class GameEventValueSelector extends StatelessWidget {
     @required this.minCount,
     @required this.isChangeableType,
     @required this.onCountChanged,
-    this.passiveIncomePerMonth = 0,
+    @required this.passiveIncomePerMonth,
   })  : assert(action != null),
         assert(selectedCount != null),
         assert(availableCount != null && availableCount >= 0),

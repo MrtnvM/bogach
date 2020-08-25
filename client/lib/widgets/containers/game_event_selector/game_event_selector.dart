@@ -78,7 +78,8 @@ class GameEventSelector extends HookWidget {
                     onPlayerActionParamsChanged(_buySellAction.value, count);
                   },
                   isChangeableType: viewModel.changeableType,
-                  passiveIncomePerMonth: viewModel.passiveIncomePerMonth.toDouble(),
+                  passiveIncomePerMonth:
+                      viewModel.passiveIncomePerMonth.toDouble(),
                 ),
               ],
             ),

@@ -168,10 +168,6 @@ export class DebentureEventHandler extends PlayerActionHandler {
       throw DomainErrors.notEnoughDebenturesDemandForSell;
     }
 
-    if (countInPortfolio < actionCount) {
-      throw DomainErrors.notEnoughDebenturesInPortfolio;
-    }
-
     const newDebentureCount = countInPortfolio - actionCount;
     const newAccountBalance = userAccount.cash + totalPrice;
     const newAveragePrice = currentAveragePrice;

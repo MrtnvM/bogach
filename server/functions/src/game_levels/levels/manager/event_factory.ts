@@ -162,16 +162,25 @@ namespace DebentureFactory {
 
   export const pik = (price: number, availableCount: number) =>
     EventFactory.debentureEvent({
-      name: 'ПИК-Корпорация выпуск 2',
+      name: '"ЖилЗастройщик" выпуск 2',
       profitability: valueRange(16),
       price: valueRange(price),
       nominal: valueRange(1000),
       availableCount: valueRange(availableCount),
     });
 
-  export const alphabetTase = (price: number, availableCount: number) =>
+  export const alphabetTaste = (price: number, availableCount: number) =>
     EventFactory.debentureEvent({
-      name: 'Азбука Вкуса выпуск 1',
+      name: '"Вкусные Продукты" выпуск 1',
+      profitability: valueRange(17),
+      price: valueRange(price),
+      nominal: valueRange(1000),
+      availableCount: valueRange(availableCount),
+    });
+
+    export const goldMiner = (price: number, availableCount: number) =>
+    EventFactory.debentureEvent({
+      name: '"Золотодобытчик" выпуск 1',
       profitability: valueRange(17),
       price: valueRange(price),
       nominal: valueRange(1000),
@@ -182,7 +191,7 @@ namespace DebentureFactory {
 namespace StockFactory {
   export const tesla = (price: number, availableCount: number) =>
     EventFactory.stockEvent({
-      name: 'Tesla',
+      name: 'Nick Tesla Auto',
       currentPrice: valueRange(price),
       fairPrice: valueRange(320),
       availableCount: valueRange(availableCount),
@@ -190,7 +199,7 @@ namespace StockFactory {
 
   export const yandex = (price: number, availableCount: number) =>
     EventFactory.stockEvent({
-      name: 'Яндекс',
+      name: 'Группа ИТ компаний',
       currentPrice: valueRange(price),
       fairPrice: valueRange(4450),
       availableCount: valueRange(availableCount),
@@ -198,7 +207,7 @@ namespace StockFactory {
 
   export const cocaCola = (price: number, availableCount: number) =>
     EventFactory.stockEvent({
-      name: 'COCA-COLA',
+      name: 'DrinkingCompany',
       currentPrice: valueRange(price),
       fairPrice: valueRange(3100),
       availableCount: valueRange(availableCount),
@@ -206,7 +215,7 @@ namespace StockFactory {
 
   export const intel = (price: number, availableCount: number) =>
     EventFactory.stockEvent({
-      name: 'Intel',
+      name: 'MicroprocessorCo',
       currentPrice: valueRange(price),
       fairPrice: valueRange(2850),
       availableCount: valueRange(availableCount),
@@ -214,9 +223,17 @@ namespace StockFactory {
 
   export const rosneft = (price: number, availableCount: number) =>
     EventFactory.stockEvent({
-      name: 'Роснефть',
+      name: 'РусНефть',
       currentPrice: valueRange(price),
       fairPrice: valueRange(380),
+      availableCount: valueRange(availableCount),
+    });
+
+    export const gas = (price: number, availableCount: number) =>
+    EventFactory.stockEvent({
+      name: 'ГазПромышленность',
+      currentPrice: valueRange(price),
+      fairPrice: valueRange(200),
       availableCount: valueRange(availableCount),
     });
 }
