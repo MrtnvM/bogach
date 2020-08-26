@@ -28,7 +28,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const game = gameService.createNewGame(templateId, participantsIds || [userId]);
     await send(game, response);
-    return Promise.resolve();
   });
 
   const getAllGames = https.onRequest(async (request, response) => {
@@ -38,7 +37,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const games = gameProvider.getAllGames();
 
     await send(games, response);
-    return Promise.resolve();
   });
 
   const getGame = https.onRequest(async (request, response) => {
@@ -49,7 +47,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const game = gameProvider.getGame(gameId as GameEntity.Id);
     await send(game, response);
-    return Promise.resolve();
   });
 
   const getAllGameTemplates = https.onRequest(async (request, response) => {
@@ -58,7 +55,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const gameTemplates = gameProvider.getAllGameTemplates();
     await send(gameTemplates, response);
-    return Promise.resolve();
   });
 
   const getGameTemplate = https.onRequest(async (request, response) => {
@@ -69,7 +65,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const gameTemplate = gameProvider.getGameTemplate(templateId as GameTemplateEntity.Id);
     await send(gameTemplate, response);
-    return Promise.resolve();
   });
 
   const handleGameEvent = https.onRequest(async (request, response) => {
@@ -85,7 +80,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
       .then(() => 'Player action handled');
 
     await send(handleEvent, response);
-    return Promise.resolve();
   });
 
   const startNewMonth = https.onRequest(async (request, response) => {
@@ -97,24 +91,19 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const startNewMonthRequest = gameService.startNewMonth(context).then(() => 'New month started');
 
     await send(startNewMonthRequest, response);
-    return Promise.resolve();
   });
 
   const getGameLevels = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request, response);
-    console.log('before get');
     apiRequest.checkMethod('GET');
 
     const userId = apiRequest.queryParameter('user_id');
 
-    console.log('before gameLevelsProvider');
     const gameLevels = gameLevelsProvider.getGameLevels();
-    console.log('before levelsIds');
     console.log(gameLevels.toString());
     const levelsIds = gameLevels.map((l) => l.id);
     const userQuestGames = await gameProvider.getUserQuestGames(userId as UserEntity.Id, levelsIds);
 
-    console.log('before levels info');
     const levelsInfo = gameLevels.map((level) => {
       const { id, name, description, icon } = level;
       const questGame = userQuestGames.find((g) => g.config.level === id);
@@ -129,8 +118,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     });
 
     await send(Promise.resolve(levelsInfo), response);
-    console.log('before final promise');
-    return Promise.resolve();
   });
 
   const createGameByLevel = https.onRequest(async (request, response) => {

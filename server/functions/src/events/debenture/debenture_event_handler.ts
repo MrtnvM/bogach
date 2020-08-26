@@ -158,14 +158,12 @@ export class DebentureEventHandler extends PlayerActionHandler {
       userAccount,
       countInPortfolio,
       actionCount,
-      availableCount,
       currentAveragePrice,
       totalPrice,
     } = actionParameters;
 
-    const isEnoughCountAvailable = availableCount >= actionCount;
-    if (!isEnoughCountAvailable) {
-      throw DomainErrors.notEnoughDebenturesDemandForSell;
+    if (countInPortfolio < actionCount) {
+      throw DomainErrors.notEnoughDebenturesInPortfolio;
     }
 
     const newDebentureCount = countInPortfolio - actionCount;
