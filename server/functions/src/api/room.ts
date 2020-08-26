@@ -27,7 +27,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const createRoomRequest = roomService.createRoom(gameTemplateId, currentUserId);
 
     await send(createRoomRequest, response);
-    return Promise.resolve();
   });
 
   const setRoomParticipantReady = https.onRequest(async (request, response) => {
@@ -39,7 +38,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const setReadyStatusRequest = roomService.onParticipantReady(roomId, participantId);
     await send(setReadyStatusRequest, response);
-    return Promise.resolve();
   });
 
   const createRoomGame = https.onRequest(async (request, response) => {
@@ -50,7 +48,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const createRoomRequest = roomService.createRoomGame(roomId);
     await send(createRoomRequest, response);
-    return Promise.resolve();
   });
 
   const send = <T>(data: Promise<T>, response: functions.Response) => {
