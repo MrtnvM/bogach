@@ -21,11 +21,15 @@ final gameReducer = Reducer<GameState>()
       (s) {
         var newActiveGameState = s.activeGameState;
         final game = action.game;
+        final possesionState = game.possessionState;
+        var firstPossesionState;
+        if (possesionState.length > 0) {
+          firstPossesionState = game.possessionState[0];
+        }
 
         if (game.state.gameStatus == GameStatus.playersMove) {
           final userId = s.currentGameContext.userId;
           final progress = game.state.participantsProgress[userId];
-
           if (progress.status == ParticipantProgressStatus.monthResult) {
             final waitingPlayerList = getParticipantIdsForWaiting(
               userId,
