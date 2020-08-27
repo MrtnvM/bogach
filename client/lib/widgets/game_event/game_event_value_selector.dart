@@ -17,6 +17,7 @@ class GameEventValueSelector extends StatelessWidget {
     @required this.selectedCount,
     @required this.availableCount,
     @required this.maxCount,
+    @required this.minCount,
     @required this.isChangeableType,
     @required this.onCountChanged,
     this.passiveIncomePerMonth = 0,
@@ -24,6 +25,7 @@ class GameEventValueSelector extends StatelessWidget {
         assert(selectedCount != null),
         assert(availableCount != null && availableCount >= 0),
         assert(maxCount != null),
+        assert(minCount != null),
         assert(isChangeableType != null),
         assert(onCountChanged != null),
         super(key: key);
@@ -32,6 +34,7 @@ class GameEventValueSelector extends StatelessWidget {
   final int selectedCount;
   final int availableCount;
   final int maxCount;
+  final int minCount;
   final double passiveIncomePerMonth;
   final OnCountChangedCallback onCountChanged;
   final bool isChangeableType;
@@ -42,9 +45,10 @@ class GameEventValueSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ValueSlider(
+          currentAction: action,
           selectedCount: selectedCount,
           maxCount: maxCount,
-          minCount: 1,
+          minCount: minCount,
           onCountChanged: onCountChanged,
         ),
         if (isChangeableType && passiveIncomePerMonth != 0)
@@ -77,7 +81,9 @@ class GameEventValueSelector extends StatelessWidget {
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () => onCountChanged(maxCount),
+      onTap: () {
+        onCountChanged(maxCount);
+      },
       child: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(8),
@@ -102,9 +108,13 @@ class GameEventValueSelector extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        if (availableCount > 0) {
-          onCountChanged(min(availableCount, maxCount));
-        }
+        action.when(buy: () {
+          if (availableCount > 0) {
+            onCountChanged(min(availableCount, maxCount));
+          }
+        }, sell: () {
+          onCountChanged(availableCount);
+        });
       },
       child: Container(
         padding: const EdgeInsets.all(8),

@@ -1,3 +1,4 @@
+import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +8,14 @@ typedef OnCountChangedCallback = void Function(int);
 class ValueSlider extends StatelessWidget {
   const ValueSlider({
     Key key,
+    @required this.currentAction,
     @required this.selectedCount,
     this.minCount = 0,
     @required this.maxCount,
     this.onCountChanged,
   }) : super(key: key);
 
+  final BuySellAction currentAction;
   final int selectedCount;
   final int minCount;
   final int maxCount;
@@ -23,7 +26,7 @@ class ValueSlider extends StatelessWidget {
     return Row(
       children: <Widget>[
         Text(
-          selectedCount.toString(),
+          minCount.toString(),
           style: Styles.bodyBlack,
         ),
         Expanded(
@@ -34,7 +37,7 @@ class ValueSlider extends StatelessWidget {
             inactiveColor: ColorRes.lightGreen.withOpacity(0.6),
             value: selectedCount.toDouble(),
             onChanged: (count) => onCountChanged(count.toInt()),
-            divisions: maxCount.toInt(),
+            divisions: _getDivisionsCount(),
           ),
         ),
         Text(
@@ -43,5 +46,10 @@ class ValueSlider extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  int _getDivisionsCount() {
+    final difference = maxCount.toInt() - minCount.toInt();
+    return difference > 0 ? difference : 1;
   }
 }
