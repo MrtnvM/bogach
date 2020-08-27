@@ -13,6 +13,9 @@ SelectorStateModel normalizeSelectorState({
   @required double currentPrice,
   @required int alreadyHave,
 }) {
+  assert(maxCountToBuy > 0);
+  assert(currentPrice > 0);
+
   final availableCount = currentAction.when(
     buy: () {
       final total = availableCash != null && availableCash > 0
