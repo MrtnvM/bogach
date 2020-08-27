@@ -1,3 +1,4 @@
+import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/widgets/game_event/value_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -21,8 +22,10 @@ class _ValueSliderExample extends HookWidget {
     final count = useState(0);
 
     return ValueSlider(
+      currentAction: const BuySellAction.sell(),
       selectedCount: count.value,
       maxCount: 100,
+      minCount: 1,
       onCountChanged: (c) {
         count.value = c;
         print(c);

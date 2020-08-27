@@ -11,7 +11,7 @@ import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
-import 'package:cash_flow/widgets/containers/game_event_selector.dart';
+import 'package:cash_flow/widgets/containers/game_event_selector/game_event_selector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -37,13 +37,13 @@ class StockGameEvent extends HookWidget {
 
     final userId = useUserId();
     final cash = useCurrentGame((g) => g.accounts[userId].cash);
-    final alreadyHave = useCurrentStock(event)?.countInPortfolio ?? 0;
+    final alreadyHaveCount = useCurrentStock(event)?.countInPortfolio ?? 0;
 
     final stockDialogInfoModel = useStockInfoDialogModel();
 
     final selectorViewModel = SelectorViewModel(
       currentPrice: eventData.currentPrice,
-      alreadyHave: alreadyHave,
+      alreadyHave: alreadyHaveCount,
       maxCount: eventData.availableCount,
       changeableType: true,
       availableCash: cash,
