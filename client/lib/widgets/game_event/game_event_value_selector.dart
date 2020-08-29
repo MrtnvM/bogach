@@ -17,7 +17,7 @@ class GameEventValueSelector extends StatelessWidget {
     @required this.selectedCount,
     @required this.availableCount,
     @required this.maxCount,
-    @required this.minCount,
+    this.minCount,
     @required this.isChangeableType,
     @required this.onCountChanged,
     @required this.passiveIncomePerMonth,

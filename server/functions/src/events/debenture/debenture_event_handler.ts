@@ -54,12 +54,8 @@ export class DebentureEventHandler extends PlayerActionHandler {
 
     const debentureName = event.name;
 
-    const theSameDebenture = debetureAssets.find((d) => {
-      return (
-        d.name === debentureName &&
-        d.nominal === nominal &&
-        d.profitabilityPercent === profitabilityPercent
-      );
+    const theSameDebenture = debetureAssets.find((debenture) => {
+      return this.isDebentureTheSame(debenture, debentureName, nominal, profitabilityPercent);
     });
 
     const countInPortfolio = theSameDebenture?.count || 0;
@@ -189,6 +185,7 @@ export class DebentureEventHandler extends PlayerActionHandler {
       count: actionResult.newDebentureCount,
       averagePrice: actionResult.newAveragePrice,
     };
+
     let newAssets = assets.slice();
     const index = assets.indexOf(theSameDebenture);
 
@@ -197,7 +194,20 @@ export class DebentureEventHandler extends PlayerActionHandler {
     }
 
     if (newDebenture.count === 0) {
-      newAssets = newAssets.filter((d) => d.id !== newDebenture.id);
+      newAssets = newAssets.filter((asset) => {
+        if ((asset as DebentureAsset) === undefined) {
+          return true;
+        }
+
+        const isTheSame = this.isDebentureTheSame(
+          asset as DebentureAsset,
+          newDebenture.name,
+          newDebenture.nominal,
+          newDebenture.profitabilityPercent
+        );
+
+        return !isTheSame;
+      });
     }
 
     return newAssets;
@@ -224,5 +234,18 @@ export class DebentureEventHandler extends PlayerActionHandler {
     newAssets.push(newDebenture);
 
     return newAssets;
+  }
+
+  isDebentureTheSame(
+    debenture: DebentureAsset,
+    debentureName: String,
+    nominal: number,
+    profitabilityPercent: number
+  ): boolean {
+    return (
+      debenture.name === debentureName &&
+      debenture.profitabilityPercent === profitabilityPercent &&
+      debenture.nominal === nominal
+    );
   }
 }
