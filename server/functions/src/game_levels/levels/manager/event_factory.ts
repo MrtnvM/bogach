@@ -119,7 +119,7 @@ namespace ExpenseFactory {
 
   export const clothes = (value: number) =>
     EventFactory.expenseEvent({
-      name: 'Обновиление гардероба',
+      name: 'Обновление гардероба',
       description: 'Вы решили сменить стиль',
       insuranceType: null,
       range: valueRange(value),
