@@ -57,8 +57,10 @@ VoidCallback useStockPlayerActionHandler({
     );
 
     gameActions
-        .sendPlayerAction(playerAction, event.id)
-        .catchError((e) => handleError(context: context, exception: e));
+      .sendPlayerAction(playerAction, event.id)
+      .catchError((e) {
+        handleError(context: context, exception: e);
+      });
   };
 }
 

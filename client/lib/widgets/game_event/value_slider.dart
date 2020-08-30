@@ -10,7 +10,7 @@ class ValueSlider extends StatelessWidget {
     Key key,
     @required this.currentAction,
     @required this.selectedCount,
-    this.minCount = 0,
+    @required this.minCount,
     @required this.maxCount,
     this.onCountChanged,
   }) : super(key: key);

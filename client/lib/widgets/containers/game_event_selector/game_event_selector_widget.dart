@@ -13,8 +13,8 @@ typedef OnPlayerActionParamsChanged = void Function(
   int selectedCount,
 );
 
-class GameEventSelector extends HookWidget {
-  const GameEventSelector({
+class GameEventSelectorWidget extends HookWidget {
+  const GameEventSelectorWidget({
     Key key,
     @required this.viewModel,
     @required this.onPlayerActionParamsChanged,
@@ -78,7 +78,8 @@ class GameEventSelector extends HookWidget {
                     onPlayerActionParamsChanged(_buySellAction.value, count);
                   },
                   isChangeableType: viewModel.changeableType,
-                  passiveIncomePerMonth: viewModel.passiveIncomePerMonth.toDouble(),
+                  passiveIncomePerMonth:
+                      viewModel.passiveIncomePerMonth.toDouble(),
                 ),
               ],
             ),

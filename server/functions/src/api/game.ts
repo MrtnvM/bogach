@@ -7,6 +7,9 @@ import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from '../providers/firestore_selector';
+import { UserEntity } from '../models/domain/user';
+import { GameTemplateEntity } from '../models/domain/game/game_template';
+import { GameEntity } from '../models/domain/game/game';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
@@ -24,7 +27,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const userId = apiRequest.optionalJsonField('userId');
 
     const game = gameService.createNewGame(templateId, participantsIds || [userId]);
-    return send(game, response);
+    await send(game, response);
   });
 
   const getAllGames = https.onRequest(async (request, response) => {
@@ -33,7 +36,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const games = gameProvider.getAllGames();
 
-    return send(games, response);
+    await send(games, response);
   });
 
   const getGame = https.onRequest(async (request, response) => {
@@ -42,8 +45,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const gameId = apiRequest.queryParameter('game_id');
 
-    const game = gameProvider.getGame(gameId);
-    return send(game, response);
+    const game = gameProvider.getGame(gameId as GameEntity.Id);
+    await send(game, response);
   });
 
   const getAllGameTemplates = https.onRequest(async (request, response) => {
@@ -51,7 +54,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     apiRequest.checkMethod('GET');
 
     const gameTemplates = gameProvider.getAllGameTemplates();
-    return send(gameTemplates, response);
+    await send(gameTemplates, response);
   });
 
   const getGameTemplate = https.onRequest(async (request, response) => {
@@ -60,8 +63,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const templateId = apiRequest.queryParameter('template_id');
 
-    const gameTemplate = gameProvider.getGameTemplate(templateId);
-    return send(gameTemplate, response);
+    const gameTemplate = gameProvider.getGameTemplate(templateId as GameTemplateEntity.Id);
+    await send(gameTemplate, response);
   });
 
   const handleGameEvent = https.onRequest(async (request, response) => {
@@ -76,7 +79,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
       .handlePlayerAction(eventId, action, context)
       .then(() => 'Player action handled');
 
-    return send(handleEvent, response);
+    await send(handleEvent, response);
   });
 
   const startNewMonth = https.onRequest(async (request, response) => {
@@ -87,7 +90,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const startNewMonthRequest = gameService.startNewMonth(context).then(() => 'New month started');
 
-    return send(startNewMonthRequest, response);
+    await send(startNewMonthRequest, response);
   });
 
   const getGameLevels = https.onRequest(async (request, response) => {
@@ -97,8 +100,9 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const userId = apiRequest.queryParameter('user_id');
 
     const gameLevels = gameLevelsProvider.getGameLevels();
+    console.log(gameLevels.toString());
     const levelsIds = gameLevels.map((l) => l.id);
-    const userQuestGames = await gameProvider.getUserQuestGames(userId, levelsIds);
+    const userQuestGames = await gameProvider.getUserQuestGames(userId as UserEntity.Id, levelsIds);
 
     const levelsInfo = gameLevels.map((level) => {
       const { id, name, description, icon } = level;
@@ -113,7 +117,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
       };
     });
 
-    return send(Promise.resolve(levelsInfo), response);
+    await send(Promise.resolve(levelsInfo), response);
   });
 
   const createGameByLevel = https.onRequest(async (request, response) => {
@@ -130,7 +134,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     }
 
     const newGame = gameService.createNewGameByLevel(gameLevelId, [userId]);
-    return send(newGame, response);
+    await send(newGame, response);
+    return Promise.resolve();
   });
 
   const send = <T>(data: Promise<T>, response: functions.Response) => {
