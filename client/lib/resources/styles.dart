@@ -164,4 +164,19 @@ class Styles {
       fontStyle: FontStyle.normal,
     );
   }
+
+  static const onboardingTitle = TextStyle(
+    fontFamily: _defaultFontFamily,
+    color: ColorRes.white,
+    fontSize: 20,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.3,
+  );
+
+  static final onboardingSubtitle = TextStyle(
+    fontFamily: _defaultFontFamily,
+    color: ColorRes.white.withAlpha(200),
+    fontSize: 18,
+    fontWeight: FontWeight.w400,
+  );
 }
