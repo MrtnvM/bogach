@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>91375261919-9tivrvke9vanvc04ot2lgagomul75e4k.apps.googleusercontent.com</string>
+	<string>91375261919-fkq99fjedqljs8r5ipotv6ekm1ftdijt.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.91375261919-9tivrvke9vanvc04ot2lgagomul75e4k</string>
+	<string>com.googleusercontent.apps.91375261919-fkq99fjedqljs8r5ipotv6ekm1ftdijt</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>91375261919-q8ubm1g7jq84eurirr6qmqovcuh7ueuk.apps.googleusercontent.com</string>
+	<string>91375261919-6r7ip8fil6gefl6cdoo653smvs6vd3fu.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCjTD9obI_yZS00fI1vqfoTSzw9SHkDt7o</string>
 	<key>GCM_SENDER_ID</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>io.mobile.cashflow.uat</string>
+	<string>io.mobile.bogach.uat</string>
 	<key>PROJECT_ID</key>
 	<string>cash-flow-uat</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,7 +31,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:91375261919:ios:9610ed2e0ed81c56c8b16a</string>
+	<string>1:91375261919:ios:661feb3b764370d5c8b16a</string>
 	<key>DATABASE_URL</key>
 	<string>https://cash-flow-uat.firebaseio.com</string>
 </dict>
