@@ -6,6 +6,8 @@ import { produce } from 'immer';
 import { GameTransformer } from '../../game_transformer';
 import { Game } from '../../../../models/domain/game/game';
 import { DebentureGeneratorConfig } from '../../../../events/debenture/debenture_generator_config';
+import { valueRange, randomValueFromRange } from '../../../../core/data/value_range';
+import { DebentureEvent } from '../../../../events/debenture/debenture_event';
 
 export class DebentureInitializerGameTransformer extends GameTransformer {
   apply(game: Game): Game {
@@ -35,7 +37,25 @@ export class DebentureInitializerGameTransformer extends GameTransformer {
       }
     }
 
-    const selectedDebentures = Object.values(selectedIndexes).map((s) => debentures[s as number]);
+    const selectedDebentures = Object.values(selectedIndexes)
+      .map((s) => debentures[s as number])
+      .map((debentureName) => {
+        const config = DebentureGeneratorConfig.getConfig(debentureName);
+
+        const { price, profitability, nominal } = config;
+        const nominalInCurrentGame = randomValueFromRange(nominal);
+        const profitabilityInCurrentGame = randomValueFromRange(profitability);
+
+        const debentureInfo: DebentureEvent.Info = {
+          name: debentureName,
+          price,
+          nominal: valueRange(nominalInCurrentGame),
+          profitability: valueRange(profitabilityInCurrentGame),
+          availableCount: valueRange([90, 200, 10]),
+        };
+
+        return debentureInfo;
+      });
 
     return produce(game, (draft) => {
       draft.config.debentures = selectedDebentures;

@@ -7,6 +7,7 @@ import { Entity } from '../../../core/domain/entity';
 import { GameTarget, GameTargetEntity } from './game_target';
 import { ParticipantGameState } from './participant_game_state';
 import { GameLevelEntity } from '../../../game_levels/models/game_level';
+import { DebentureEvent } from '../../../events/debenture/debenture_event';
 
 export interface Game {
   readonly id: GameEntity.Id;
@@ -65,7 +66,7 @@ export namespace GameEntity {
     readonly level?: GameLevelEntity.Id | null;
     readonly monthLimit?: number | null;
     readonly stocks: string[];
-    readonly debentures: string[];
+    readonly debentures: DebentureEvent.Info[];
   };
 
   export const validate = (game: any) => {

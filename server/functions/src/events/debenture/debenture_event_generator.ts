@@ -4,24 +4,14 @@ import { Strings } from '../../resources/strings';
 import { DebentureEvent } from './debenture_event';
 import { formatPrice } from '../../utils/currency';
 import { Game } from '../../models/domain/game/game';
-import { DebentureGeneratorConfig } from './debenture_generator_config';
-import { randomValueFromRange, valueRange } from '../../core/data/value_range';
+import { randomValueFromRange } from '../../core/data/value_range';
 
 export namespace DebentureEventGenerator {
   export const generate = (game: Game): DebentureEvent.Event => {
     const debentureIndex = random.int(0, game.config.debentures.length - 1);
     const debenture = game.config.debentures[debentureIndex];
-    const config = DebentureGeneratorConfig.getConfig(debenture);
-
-    const { price, profitability, nominal } = config;
-
-    return generateEvent({
-      name: debenture,
-      price,
-      nominal,
-      profitability,
-      availableCount: valueRange([90, 200, 10]),
-    });
+    const event = generateEvent(debenture);
+    return event;
   };
 
   export const generateEvent = (eventInfo: DebentureEvent.Info): DebentureEvent.Event => {
