@@ -18,7 +18,8 @@ export class BusinessSellGenerateRule extends Rule<BusinessSellEvent.Event> {
       return undefined;
     }
 
-    return BusinessSellEventGenerator.generate(buyEvent);
+    const event = BusinessSellEventGenerator.generate(buyEvent);
+    return event;
   }
 
   getMinDistanceBetweenEvents(): number {
@@ -31,7 +32,13 @@ export class BusinessSellGenerateRule extends Rule<BusinessSellEvent.Event> {
 
   //TODO: fix issue with 2 buy events without sell events
   findBuyEvent(events: GameEvent[]): BusinessAsset | undefined {
-    const buyEvent = events.reverse().find((item) => item.type === BusinessBuyEvent.Type)?.data;
+    /// Fix of the bug
+    /// We can't apply the reverse method to immutable array
+    /// Reverse method is mutating the array
+    const copyOfEventsArray = [...events];
+    const reversedEvents = copyOfEventsArray.reverse();
+
+    const buyEvent = reversedEvents.find((item) => item.type === BusinessBuyEvent.Type)?.data;
     return buyEvent !== undefined ? undefined : (buyEvent as BusinessAsset);
   }
 }
