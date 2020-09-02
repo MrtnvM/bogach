@@ -1,6 +1,7 @@
 export interface User {
   readonly id: UserEntity.Id;
   readonly userName: string;
+  readonly currentQuestIndex?: number;
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }

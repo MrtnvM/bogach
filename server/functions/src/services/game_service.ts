@@ -29,9 +29,15 @@ import { InsuranceTransformer } from '../transformers/game/insurance_transformer
 import { ResetEventIndexTransformer } from '../transformers/game/reset_event_index_transformer';
 import { RealEstateBuyEventHandler } from '../events/estate/buy/real_estate_buy_event_handler';
 import { GameLevelEntity } from '../game_levels/models/game_level';
+import { UserProvider } from '../providers/user_provider';
+import { Game } from '../models/domain/game/game';
 
 export class GameService {
-  constructor(private gameProvider: GameProvider, private gameLevelsProvider: GameLevelsProvider) {
+  constructor(
+    private gameProvider: GameProvider,
+    private gameLevelsProvider: GameLevelsProvider,
+    private userProvider: UserProvider
+  ) {
     this.handlers.forEach((handler) => {
       this.handlerMap[handler.gameEventType] = handler;
     });
@@ -103,6 +109,7 @@ export class GameService {
     ]);
 
     await this.gameProvider.updateGame(updatedGame);
+    await this.updateCurrentUserQuestIndexIfNeeded(updatedGame, userId);
   }
 
   async startNewMonth(context: GameContext) {
@@ -122,5 +129,22 @@ export class GameService {
 
       await this.gameProvider.updateGame(updatedGame);
     }
+  }
+
+  async updateCurrentUserQuestIndexIfNeeded(game: Game, userId: UserEntity.Id) {
+    const shouldOpenNewQuestForUser =
+      game.state.gameStatus === 'game_over' &&
+      game.config.level != null &&
+      game.state.participantsProgress[userId].progress >= 1;
+
+    if (!shouldOpenNewQuestForUser) {
+      return;
+    }
+
+    const gameLevels = this.gameLevelsProvider.getGameLevels();
+    const questIndex = gameLevels.findIndex((l) => l.id === game.config.level);
+    const newQuestIndex = Math.min(questIndex + 1, gameLevels.length - 1);
+
+    await this.userProvider.updateCurrentQuestIndex(userId, newQuestIndex);
   }
 }

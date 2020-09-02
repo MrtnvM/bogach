@@ -45,6 +45,8 @@ class SetCurrentUserAction extends Action {
   final FirebaseUser user;
 }
 
+class LoadCurrentUserProfileAsyncAction extends AsyncAction<UserProfile> {}
+
 class SendDevicePushTokenAsyncAction extends AsyncAction {
   SendDevicePushTokenAsyncAction({
     @required this.userId,
@@ -54,4 +56,10 @@ class SendDevicePushTokenAsyncAction extends AsyncAction {
 
   final String userId;
   final String pushToken;
+}
+
+class UpdateCurrentQuestIndexAction extends Action {
+  UpdateCurrentQuestIndexAction(this.newQuestIndex);
+
+  final int newQuestIndex;
 }

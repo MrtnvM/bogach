@@ -168,6 +168,12 @@ class UserService {
     );
   }
 
+  Future<UserProfile> loadProfile(String userId) async {
+    final snapshot = await firestore.collection('users').document(userId).get();
+    final profile = UserProfile.fromJson(snapshot.data);
+    return profile;
+  }
+
   Future<List<UserProfile>> loadProfiles(List<String> profileIds) async {
     final profiles = await Future.wait(
       profileIds.map((id) => firestore.collection('users').document(id).get()),
