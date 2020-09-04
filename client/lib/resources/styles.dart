@@ -7,6 +7,7 @@ const _defaultFontFamily = 'Montserrat';
 const List<Color> _gradientColors = [ColorRes.mainGreen, ColorRes.lightGreen];
 const List<double> _gradientStops = [0.0, 1.0];
 
+// ignore: avoid_classes_with_only_static_members
 class Styles {
   static const linearGradient = LinearGradient(
     colors: _gradientColors,
