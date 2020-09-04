@@ -11,5 +11,5 @@
     "resolveJsonModule": true
   },
   "compileOnSave": true,
-  "include": ["src"]
+  "include": ["src", "src/game_levels/levels/shop_assistant/.ts"]
 }

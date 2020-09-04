@@ -1,16 +1,15 @@
 import { GameTemplate } from '../../../models/domain/game/game_template';
 
 export const template: GameTemplate = {
-  id: 'waiter',
-  name: 'Официант',
-  icon:
-    'https://www.shareicon.net/data/256x256/2016/08/04/806819_man_512x512.png',
+  id: 'shop_assistant',
+  name: 'Продавец-консультант',
+  icon: 'https://image.flaticon.com/icons/png/128/3361/3361382.png',
   possessions: {
     incomes: [
       {
         id: 'income1',
         name: 'Зарплата',
-        value: 45000,
+        value: 49000,
         type: 'salary',
       },
     ],
@@ -18,24 +17,24 @@ export const template: GameTemplate = {
       {
         id: 'expense1',
         name: 'Общее',
-        value: 21000,
+        value: 22000,
       },
       {
         id: 'expense2',
         name: 'Съёмная квартира',
-        value: 17000,
+        value: 19000,
       },
     ],
     assets: [],
     liabilities: [],
   },
   accountState: {
-    cash: 11000,
+    cash: 12000,
     credit: 0,
-    cashFlow: 7000,
+    cashFlow: 8000,
   },
   target: {
     type: 'cash',
-    value: 65000,
+    value: 75000,
   },
 };
