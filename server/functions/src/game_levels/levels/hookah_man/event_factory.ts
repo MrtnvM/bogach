@@ -12,7 +12,7 @@ namespace IncomeFactory {
   export const tip = (value: number) =>
     EventFactory.incomeEvent({
       name: 'Чаевые',
-      description: 'Гости оставили Вам чаевые!',
+      description: 'Гости оставили вам чаевые!',
       range: valueRange(value),
     });
 }

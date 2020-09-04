@@ -1,5 +1,10 @@
+import 'dart:math';
+
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/features/game/game_actions.dart';
+import 'package:cash_flow/features/login/login_actions.dart';
+import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
+import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/network/request/game/player_action_request_model.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/user_service.dart';
@@ -25,7 +30,24 @@ Epic<AppState> gameEpic({
           .onErrorReturnWith((e) => OnGameErrorAction(e));
 
       final gameSubscription = game
-          .map<Action>((state) => OnGameStateChangedAction(state))
+          .flatMap<Action>((game) {
+            if (!shouldOpenNewQuestForUser(game)) {
+              return Stream.value(OnGameStateChangedAction(game));
+            }
+
+            final currentQuest = game.config.level;
+            final quests = store.state.newGame.gameLevels.items;
+            final currentQuestIndex = quests.indexWhere(
+              (l) => l.id == currentQuest,
+            );
+
+            final newQuestIndex = min(currentQuestIndex + 1, quests.length - 1);
+
+            return Stream.fromIterable([
+              OnGameStateChangedAction(game),
+              UpdateCurrentQuestIndexAction(newQuestIndex),
+            ]);
+          })
           .onErrorReturnWith((e) => OnGameErrorAction(e))
           .takeUntil(action$.whereType<StopActiveGameAction>());
 
@@ -67,4 +89,15 @@ Epic<AppState> gameEpic({
     sendGameEventPlayerActionEpic,
     startNewMonthEpic,
   ]);
+}
+
+bool shouldOpenNewQuestForUser(Game game) {
+  final userId = game.participants.first;
+  final gameLevel = game.config.level;
+
+  final isGameCompleted = game.state.gameStatus == GameStatus.gameOver;
+  final isQuestGame = gameLevel != null;
+  final isUserWon = game.state.participantsProgress[userId].progress >= 1;
+
+  return isGameCompleted && isQuestGame && isUserWon;
 }

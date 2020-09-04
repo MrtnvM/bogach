@@ -161,30 +161,6 @@ describe('Debenture price changed event handler', () => {
     }
   });
 
-  test('Cannot sell more debentures than in action have', async () => {
-    const handler = new DebentureEventHandler();
-
-    const event = utils.debentureEvent({
-      currentPrice: 1100,
-      profitabilityPercent: 8,
-      nominal: 1000,
-      availableCount: 10,
-    });
-
-    const action = utils.debenturePlayerAction({
-      eventId,
-      action: 'sell',
-      count: 11,
-    });
-
-    try {
-      await handler.handle(game, event, action, userId);
-      throw new Error('Shoud fail on previous line');
-    } catch (error) {
-      expect(error).toStrictEqual(DomainErrors.notEnoughDebenturesDemandForSell);
-    }
-  });
-
   test('Cannot buy more debentures than in action have', async () => {
     const handler = new DebentureEventHandler();
 

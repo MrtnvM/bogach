@@ -12,6 +12,7 @@ abstract class UserProfile with _$UserProfile implements StoreListItem {
     @required String userId,
     @JsonKey(name: 'userName') String fullName,
     String avatarUrl,
+    int currentQuestIndex,
   }) = _UserProfile;
 
   factory UserProfile.fromJson(Map<String, dynamic> json) =>

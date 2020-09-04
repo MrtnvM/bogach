@@ -139,11 +139,6 @@ export class StockEventHandler extends PlayerActionHandler {
   }
 
   applySellAction(actionParameters: ActionParameters): ActionResult {
-    const isEnoughCountAvailable = actionParameters.availableCount >= actionParameters.actionCount;
-    if (!isEnoughCountAvailable) {
-      throw DomainErrors.notEnoughStocksDemandForSell;
-    }
-
     if (actionParameters.countInPortfolio < actionParameters.actionCount) {
       throw DomainErrors.notEnoughStocksInPortfolio;
     }

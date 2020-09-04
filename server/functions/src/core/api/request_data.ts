@@ -1,6 +1,8 @@
 import * as functions from 'firebase-functions';
 import * as apiUtils from '../../utils/api';
 import { GameContextEntity, GameContext } from '../../models/domain/game/game_context';
+import { GameEntity } from '../../models/domain/game/game';
+import { UserEntity } from '../../models/domain/user';
 
 export namespace APIRequest {
   export const from = (request: functions.https.Request, response: functions.Response) => {
@@ -13,8 +15,8 @@ export namespace APIRequest {
 
       if (request.method.toUpperCase() === 'GET') {
         gameContext = {
-          gameId: queryParameter('game_id'),
-          userId: queryParameter('user_id'),
+          gameId: queryParameter('game_id') as GameEntity.Id,
+          userId: queryParameter('user_id') as UserEntity.Id,
         };
       } else {
         gameContext = jsonField('context');

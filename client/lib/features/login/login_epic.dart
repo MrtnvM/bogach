@@ -69,11 +69,24 @@ Epic<AppState> loginEpic({@required UserService userService}) {
             .onErrorReturnWith(action.fail));
   });
 
+  final loadUserProfileEpic = epic((action$, store) {
+    return action$
+        .whereType<LoadCurrentUserProfileAsyncAction>()
+        .where((action) => action.isStarted)
+        .where((action) => store.state.login.currentUser?.id != null)
+        .flatMap((action) => userService
+            .loadProfile(store.state.login.currentUser.id)
+            .asStream()
+            .map(action.complete)
+            .onErrorReturnWith(action.fail));
+  });
+
   return combineEpics([
     logoutEpic,
     loginViaFacebookEpic,
     loginViaGoogleEpic,
     loginViaAppleEpic,
     sendUserPushTokenEpic,
+    loadUserProfileEpic,
   ]);
 }
