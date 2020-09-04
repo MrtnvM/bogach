@@ -91,8 +91,6 @@ class CashFlowApp extends HookWidget {
   }
 
   Widget _getHomePage() {
-    return const OnBoardingPage();
-
     if (isFirstLaunch) {
       return const OnBoardingPage();
     }
