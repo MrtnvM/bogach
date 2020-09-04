@@ -10,13 +10,15 @@ import { FirestoreSelector } from '../providers/firestore_selector';
 import { UserEntity } from '../models/domain/user';
 import { GameTemplateEntity } from '../models/domain/game/game_template';
 import { GameEntity } from '../models/domain/game/game';
+import { UserProvider } from '../providers/user_provider';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
   const gameProvider = new GameProvider(firestore, selector);
   const gameLevelsProvider = new GameLevelsProvider();
-  const gameService = new GameService(gameProvider, gameLevelsProvider);
+  const userProvider = new UserProvider(firestore, selector);
+  const gameService = new GameService(gameProvider, gameLevelsProvider, userProvider);
 
   const createGame = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request, response);

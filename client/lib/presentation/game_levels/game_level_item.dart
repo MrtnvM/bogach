@@ -24,81 +24,99 @@ class GameLevelItemWidget extends HookWidget {
 
     return GestureDetector(
       onTap: () {
+        if (onLevelSelected == null) {
+          return;
+        }
+
         if (currentGameId == null) {
-          onLevelSelected(gameLevel, GameLevelAction.startNewGame);
+          onLevelSelected?.call(gameLevel, GameLevelAction.startNewGame);
         } else {
           isCollapsed.value = !isCollapsed.value;
         }
       },
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.only(
-          top: 16,
-          bottom: 16,
-          left: 16,
-          right: 16,
-        ),
-        margin: const EdgeInsets.only(bottom: 16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
-          border: Border.all(color: Colors.white),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('${gameLevel.name}', style: Styles.bodyBlackBold),
-                    const SizedBox(height: 8),
-                    Text('${gameLevel.description}', style: Styles.bodyBlack),
-                  ],
-                ),
-                const Spacer(),
-                getTemplateIcon(),
-              ],
-            ),
-            AnimatedContainer(
-              width: double.infinity,
-              curve: Curves.easeInOut,
-              margin: EdgeInsets.only(top: isCollapsed.value ? 0 : 16),
-              height: isCollapsed.value ? 0 : 40,
-              duration: const Duration(milliseconds: 300),
-              child: AnimatedOpacity(
-                curve: Curves.easeIn,
-                duration: const Duration(milliseconds: 200),
-                opacity: isCollapsed.value ? 0 : 1,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    _buildButton(
-                      title: Strings.startAgain,
-                      color: ColorRes.grey2,
-                      action: () {
-                        onLevelSelected(
-                          gameLevel,
-                          GameLevelAction.startNewGame,
-                        );
-                      },
-                    ),
-                    _buildButton(
-                      title: Strings.continueAction,
-                      color: ColorRes.yellow,
-                      action: () {
-                        onLevelSelected(
-                          gameLevel,
-                          GameLevelAction.continueGame,
-                        );
-                      },
-                    ),
-                  ],
+      child: Opacity(
+        opacity: onLevelSelected == null ? 0.7 : 1,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.only(
+            top: 16,
+            bottom: 16,
+            left: 16,
+            right: 16,
+          ),
+          margin: const EdgeInsets.only(bottom: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
+            border: Border.all(color: Colors.white),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          if (onLevelSelected == null) ...[
+                            Icon(Icons.lock, size: 11),
+                            const SizedBox(width: 4),
+                          ],
+                          Text(
+                            '${gameLevel.name}',
+                            style: Styles.bodyBlackBold,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text('${gameLevel.description}', style: Styles.bodyBlack),
+                    ],
+                  ),
+                  const Spacer(),
+                  getTemplateIcon(),
+                ],
+              ),
+              AnimatedContainer(
+                width: double.infinity,
+                curve: Curves.easeInOut,
+                margin: EdgeInsets.only(top: isCollapsed.value ? 0 : 16),
+                height: isCollapsed.value ? 0 : 40,
+                duration: const Duration(milliseconds: 300),
+                child: AnimatedOpacity(
+                  curve: Curves.easeIn,
+                  duration: const Duration(milliseconds: 200),
+                  opacity: isCollapsed.value ? 0 : 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      _buildButton(
+                        title: Strings.startAgain,
+                        color: ColorRes.grey2,
+                        action: () {
+                          onLevelSelected(
+                            gameLevel,
+                            GameLevelAction.startNewGame,
+                          );
+                        },
+                      ),
+                      _buildButton(
+                        title: Strings.continueAction,
+                        color: ColorRes.yellow,
+                        action: () {
+                          onLevelSelected(
+                            gameLevel,
+                            GameLevelAction.continueGame,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
