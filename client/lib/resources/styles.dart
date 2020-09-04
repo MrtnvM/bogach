@@ -169,13 +169,13 @@ class Styles {
     fontFamily: _defaultFontFamily,
     color: ColorRes.white,
     fontSize: 20,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     letterSpacing: 0.3,
   );
 
   static final onboardingSubtitle = TextStyle(
     fontFamily: _defaultFontFamily,
-    color: ColorRes.white.withAlpha(200),
+    color: ColorRes.white.withAlpha(220),
     fontSize: 18,
     fontWeight: FontWeight.w400,
   );

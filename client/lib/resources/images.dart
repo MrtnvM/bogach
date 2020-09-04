@@ -31,9 +31,9 @@ class Images {
   static const fail = 'assets/images/png/fail.png';
   static const win = 'assets/images/png/win.png';
 
-  static const onboardingFinance = 'assets/images/png/finance.png';
-  static const onboardingCalculator = 'assets/images/png/calculator.png';
-  static const onboardingMoney = 'assets/images/png/money.png';
+  static const onboarding1 = 'assets/images/png/finances 1.png';
+  static const onboarding2 = 'assets/images/png/finances 2.png';
+  static const onboarding3 = 'assets/images/png/finances 3.png';
 
   // Bottom bar icons
   static const financesBarIcon = 'assets/images/svg/footer_financal.svg';

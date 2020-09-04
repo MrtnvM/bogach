@@ -39,15 +39,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 children: <Widget>[
                   SmoothPageIndicator(
                     controller: _controller,
-                    // PageController
                     count: 3,
-
                     effect: const WormEffect(
                       dotColor: ColorRes.white,
                       activeDotColor: ColorRes.yellow,
-                      dotHeight: 12,
-                      dotWidth: 12,
-                      spacing: 18,
+                      dotHeight: 8,
+                      dotWidth: 8,
+                      spacing: 24,
                     ),
                     // your preferred effect
                     onDotClicked: _controller.jumpToPage,

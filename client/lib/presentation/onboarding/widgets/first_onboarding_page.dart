@@ -1,5 +1,6 @@
 import 'package:cash_flow/presentation/onboarding/widgets/onboarding_scaffold.dart';
 import 'package:cash_flow/resources/images.dart';
+import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
 
 class FirstOnBoardingPage extends StatelessWidget {
@@ -10,11 +11,9 @@ class FirstOnBoardingPage extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       child: OnboardingScaffold(
-        title: 'Финансовая грамотность',
-        subtitle:
-            'Используй финансовые инструменты для достижения своих целей. '
-            '\nНаучим как это делать',
-        image: Images.onboardingFinance,
+        title: Strings.onboardingTitle1,
+        subtitle: Strings.onboardingDescription1,
+        image: Images.onboarding1,
       ),
     );
   }

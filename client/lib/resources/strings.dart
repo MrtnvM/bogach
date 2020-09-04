@@ -351,4 +351,18 @@ class Strings {
       'приглашает Вас сразиться в поединке капиталистов!';
   static String get joinRoomError =>
       'Не удалось подключиться к комнате игроков';
+
+  // Onboarding
+  static String get onboardingTitle1 => 'Финансовая грамотность';
+  static String get onboardingDescription1 =>
+      'Используй финансовые инструменты для достижения своих целей';
+
+  static String get onboardingTitle2 => 'Денежный поток';
+  static String get onboardingDescription2 =>
+      'Научись управлять своим денежным потоком для достижения '
+      'финансовой свободы';
+
+  static String get onboardingTitle3 => 'Инвестирование';
+  static String get onboardingDescription3 =>
+      'Попробуй себя в качестве инвестора не рискуя реальными деньгами';
 }

@@ -52,7 +52,7 @@ class OnboardingScaffold extends StatelessWidget {
                   style: Styles.onboardingSubtitle,
                   textAlign: TextAlign.center,
                 ),
-                const Spacer(),
+                const SizedBox(height: 32),
                 if (actionWidget != null) actionWidget,
               ],
             ),
