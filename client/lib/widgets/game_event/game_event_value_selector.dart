@@ -82,7 +82,13 @@ class GameEventValueSelector extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        onCountChanged(maxCount);
+        action.when(buy: () {
+          if (availableCount > 0) {
+            onCountChanged(min(availableCount, maxCount));
+          }
+        }, sell: () {
+          onCountChanged(availableCount);
+        });
       },
       child: Container(
         alignment: Alignment.center,
@@ -105,37 +111,24 @@ class GameEventValueSelector extends StatelessWidget {
   }
 
   Widget _buildAvailableButton() {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: () {
-        action.when(buy: () {
-          if (availableCount > 0) {
-            onCountChanged(min(availableCount, maxCount));
-          }
-        }, sell: () {
-          onCountChanged(availableCount);
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        alignment: Alignment.center,
-        child: RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: Strings.available,
-                style: Styles.body1.copyWith(
-                  decoration: TextDecoration.underline,
-                  color: ColorRes.black64,
-                ),
+    return Container(
+      padding: const EdgeInsets.all(8),
+      alignment: Alignment.center,
+      child: RichText(
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text: Strings.available,
+              style: Styles.body1.copyWith(
+                color: ColorRes.black64,
               ),
-              const WidgetSpan(child: SizedBox(width: 8)),
-              TextSpan(
-                text: availableCount.toStringAsFixed(0),
-                style: Styles.bodyBlack,
-              ),
-            ],
-          ),
+            ),
+            const WidgetSpan(child: SizedBox(width: 8)),
+            TextSpan(
+              text: availableCount.toStringAsFixed(0),
+              style: Styles.bodyBlack,
+            ),
+          ],
         ),
       ),
     );
