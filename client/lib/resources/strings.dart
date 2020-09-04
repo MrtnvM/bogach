@@ -271,7 +271,7 @@ class Strings {
 
   static String get monthIsOver => 'Месяц завершен!';
 
-  static String get monthsPast => 'Прошло месяцев';
+  static String get month => 'Месяц';
 
   static String get noGameEvents => 'Произошла ошибка.\nНет игровых событий';
 
