@@ -20,7 +20,7 @@ class ActionsTab extends HookWidget {
     final monthLimit = useCurrentGame((g) => g.config?.monthLimit);
 
     final monthPast = monthLimit != null
-        ? '${Strings.monthsPast}: ${currentMonth - 1} / $monthLimit'
+        ? '${Strings.month}: $currentMonth / $monthLimit'
         : null;
 
     final targetTitle = monthPast ?? mapTargetTypeToString(target.type);

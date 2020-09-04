@@ -26,8 +26,8 @@ Map<String, String> useStockInfoTableData(GameEvent event) {
 
   final data = {
     Strings.investmentType: event.name,
-    Strings.yearAvaragePrive: eventData.fairPrice.toPrice(),
     Strings.currentPrice: eventData.currentPrice.toPrice(),
+    Strings.yearAvaragePrive: eventData.fairPrice.toPrice(),
     Strings.alreadyHave: alreadyHave == 0
         ? alreadyHave.toString()
         : Strings.getUserAvailableCount(
@@ -56,11 +56,9 @@ VoidCallback useStockPlayerActionHandler({
       event.id,
     );
 
-    gameActions
-      .sendPlayerAction(playerAction, event.id)
-      .catchError((e) {
-        handleError(context: context, exception: e);
-      });
+    gameActions.sendPlayerAction(playerAction, event.id).catchError((e) {
+      handleError(context: context, exception: e);
+    });
   };
 }
 
