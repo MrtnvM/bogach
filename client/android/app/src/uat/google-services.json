@@ -8,6 +8,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:91375261919:android:7ce0446e3b0077bbc8b16a",
+        "android_client_info": {
+          "package_name": "io.mobile.bogach.uat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91375261919-ke5qgthi75miu0ihvg6ddqshqp7svs67.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaBQDDStFC4K-L94ig5wnpz4f_y9p5m94"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91375261919-ke5qgthi75miu0ihvg6ddqshqp7svs67.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "91375261919-fkq99fjedqljs8r5ipotv6ekm1ftdijt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.mobile.bogach.uat"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:91375261919:android:30349136373b5e52c8b16a",
         "android_client_info": {
           "package_name": "io.mobile.cashflow.uat"
@@ -80,10 +116,10 @@
               "client_type": 3
             },
             {
-              "client_id": "91375261919-9tivrvke9vanvc04ot2lgagomul75e4k.apps.googleusercontent.com",
+              "client_id": "91375261919-fkq99fjedqljs8r5ipotv6ekm1ftdijt.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "io.mobile.cashflow.uat"
+                "bundle_id": "io.mobile.bogach.uat"
               }
             }
           ]
