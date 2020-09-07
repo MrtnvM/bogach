@@ -364,5 +364,5 @@ class Strings {
 
   static String get onboardingTitle3 => 'Инвестирование';
   static String get onboardingDescription3 =>
-      'Попробуй себя в качестве инвестора не рискуя реальными деньгами';
+      'Попробуй себя в роли инвестора не рискуя реальными деньгами';
 }
