@@ -1,4 +1,4 @@
-import 'package:cash_flow/presentation/onboarding/widgets/first_onboarding_pag.dart';
+import 'package:cash_flow/presentation/onboarding/widgets/first_onboarding_page.dart';
 import 'package:cash_flow/presentation/onboarding/widgets/second_onboarding_page.dart';
 import 'package:cash_flow/presentation/onboarding/widgets/third_onboarding_page.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -18,6 +18,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorRes.mainGreen,
       body: Stack(
         children: <Widget>[
           PageView(
@@ -29,7 +30,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             ],
           ),
           Positioned(
-            bottom: 48,
+            bottom: 40,
             left: 0,
             right: 0,
             child: SafeArea(
@@ -38,11 +39,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 children: <Widget>[
                   SmoothPageIndicator(
                     controller: _controller,
-                    // PageController
                     count: 3,
                     effect: const WormEffect(
                       dotColor: ColorRes.white,
                       activeDotColor: ColorRes.yellow,
+                      dotHeight: 8,
+                      dotWidth: 8,
+                      spacing: 24,
                     ),
                     // your preferred effect
                     onDotClicked: _controller.jumpToPage,

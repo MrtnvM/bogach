@@ -7,6 +7,7 @@ const _defaultFontFamily = 'Montserrat';
 const List<Color> _gradientColors = [ColorRes.mainGreen, ColorRes.lightGreen];
 const List<double> _gradientStops = [0.0, 1.0];
 
+// ignore: avoid_classes_with_only_static_members
 class Styles {
   static const linearGradient = LinearGradient(
     colors: _gradientColors,
@@ -164,4 +165,19 @@ class Styles {
       fontStyle: FontStyle.normal,
     );
   }
+
+  static const onboardingTitle = TextStyle(
+    fontFamily: _defaultFontFamily,
+    color: ColorRes.white,
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.3,
+  );
+
+  static final onboardingSubtitle = TextStyle(
+    fontFamily: _defaultFontFamily,
+    color: ColorRes.white.withAlpha(220),
+    fontSize: 18,
+    fontWeight: FontWeight.w400,
+  );
 }
