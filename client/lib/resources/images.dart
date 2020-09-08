@@ -35,6 +35,8 @@ class Images {
   static const onboarding2 = 'assets/images/png/finances 2.png';
   static const onboarding3 = 'assets/images/png/finances 3.png';
 
+  static const questsAccess = 'assets/images/png/quests_access.png';
+
   // Bottom bar icons
   static const financesBarIcon = 'assets/images/svg/footer_financal.svg';
   static const gameBoardBarIcon = 'assets/images/svg/footer_action.svg';

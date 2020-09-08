@@ -365,4 +365,15 @@ class Strings {
   static String get onboardingTitle3 => 'Инвестирование';
   static String get onboardingDescription3 =>
       'Попробуй себя в роли инвестора не рискуя реальными деньгами';
+
+  // Quests access
+  static String get quests => 'Квесты';
+  static String get questsAccessDescription =>
+      ' - это спроектированные сценарии, нацеленые на '
+      'тренировку навыков обращения с финансами';
+  static String get questsAccessAdvantage1 =>
+      'Получи доступ к обновляемой базе квестов';
+  static String get questsAccessAdvantage2 => 'Испытай себя в разных ситуациях';
+  static String get questsAccessAdvantage3 => 'Найди лучшие стратегии';
+  static String get buyQuestsAccess => 'Купить за 149 ₽';
 }
