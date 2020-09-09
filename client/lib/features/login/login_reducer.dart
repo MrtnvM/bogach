@@ -1,4 +1,3 @@
-import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/features/login/login_actions.dart';
 import 'package:cash_flow/features/login/login_state.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
@@ -27,9 +26,7 @@ final loginReducer = Reducer<LoginState>()
     }),
   )
   ..on<SetCurrentUserAction>(
-    (state, action) => state.rebuild(
-      (s) => s..currentUser = mapToUserProfile(action.user),
-    ),
+    (state, action) => state.rebuild((s) => s.currentUser = action.user),
   )
   ..on<LoadCurrentUserProfileAsyncAction>(
     (state, action) => state.rebuild(

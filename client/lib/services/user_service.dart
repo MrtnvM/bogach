@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cash_flow/cache/user_cache.dart';
 import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/models/network/core/search_query_result.dart';
@@ -19,12 +20,14 @@ class UserService {
     @required this.firebaseAuth,
     @required this.firestore,
     @required this.firebaseMessaging,
+    @required this.userCache,
   })  : assert(firebaseAuth != null),
         assert(firestore != null);
 
   final FirebaseAuth firebaseAuth;
   final Firestore firestore;
   final FirebaseMessaging firebaseMessaging;
+  final UserCache userCache;
 
   Stream<UserProfile> login({
     @required String email,
@@ -44,17 +47,19 @@ class UserService {
     );
 
     return Stream.fromFuture(logInOperation)
-        .map((result) => mapToUserProfile(result.user))
-        .asyncMap(_saveUserToFirestore)
+        .asyncMap((result) => _getUpdatedUser(result.user))
         .transform(errorHandler);
   }
 
   Stream<void> logout() {
-    return Stream.fromFuture(firebaseAuth.signOut());
+    return Stream.fromFuture(() async {
+      userCache.deleteUserProfile();
+      firebaseAuth.signOut();
+    }());
   }
 
-  Stream<void> register({@required RegisterRequestModel model}) {
-    final errorHandler = ErrorHandler((code) {
+  Stream<UserProfile> register({@required RegisterRequestModel model}) {
+    final errorHandler = ErrorHandler<UserProfile>((code) {
       if (code == 'ERROR_EMAIL_ALREADY_IN_USE') {
         return const EmailHasBeenTakenException();
       }
@@ -85,8 +90,7 @@ class UserService {
 
     return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
-        .map((authResponse) => mapToUserProfile(authResponse.user))
-        .asyncMap(_saveUserToFirestore);
+        .asyncMap((response) => _getUpdatedUser(response.user));
   }
 
   Stream<UserProfile> loginViaGoogle({
@@ -100,8 +104,7 @@ class UserService {
 
     return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
-        .map((authResponse) => mapToUserProfile(authResponse.user))
-        .asyncMap(_saveUserToFirestore);
+        .asyncMap((authResponse) => _getUpdatedUser(authResponse.user));
   }
 
   Stream<UserProfile> loginViaApple({
@@ -131,11 +134,10 @@ class UserService {
 
     return Stream.fromFuture(future)
         .transform(ErrorHandler())
-        .map(mapToUserProfile)
-        .asyncMap(_saveUserToFirestore);
+        .asyncMap(_getUpdatedUser);
   }
 
-  Future<void> signUpUser(RegisterRequestModel model) async {
+  Future<UserProfile> signUpUser(RegisterRequestModel model) async {
     await firebaseAuth.createUserWithEmailAndPassword(
       email: model.email,
       password: model.password,
@@ -145,9 +147,9 @@ class UserService {
     final userUpdateInfo = UserUpdateInfo();
     userUpdateInfo.displayName = model.nickName;
     await user.updateProfile(userUpdateInfo);
-    await _saveUserToFirestore(mapToUserProfile(user));
+    final updatedUser = _getUpdatedUser(user);
 
-    return user;
+    return updatedUser;
   }
 
   // TODO(maxim): Remove searching players
@@ -170,6 +172,10 @@ class UserService {
 
   Future<UserProfile> loadProfile(String userId) async {
     final snapshot = await firestore.collection('users').document(userId).get();
+    if (snapshot?.data == null) {
+      return null;
+    }
+
     final profile = UserProfile.fromJson(snapshot.data);
     return profile;
   }
@@ -201,17 +207,33 @@ class UserService {
         .setData({'token': pushToken, 'device': Platform.operatingSystem});
   }
 
-  Future<UserProfile> _saveUserToFirestore(UserProfile user) async {
-    await firestore.collection('users').document(user.userId).setData({
-      'userId': user.userId,
-      'userName': user.fullName,
-      'avatarUrl': user.avatarUrl,
-    });
+  Future<UserProfile> _getUpdatedUser(FirebaseUser user) async {
+    final userId = user.uid;
+    final cachedUserProfile = userCache.getUserProfile();
+    final firestoreUser = await loadProfile(userId);
+    var updatedUser = firestoreUser;
+
+    if (firestoreUser != null) {
+      updatedUser = firestoreUser.copyWith(
+        fullName: user.displayName,
+        avatarUrl: user.photoUrl,
+      );
+    }
+
+    if (cachedUserProfile == null && updatedUser == null) {
+      updatedUser = mapToUserProfile(user);
+    }
+
+    if (cachedUserProfile != updatedUser) {
+      final userData = updatedUser.toJson();
+      await firestore.collection('users').document(userId).setData(userData);
+      userCache.setUserProfile(updatedUser);
+    }
 
     firebaseMessaging.getToken().then((token) {
-      sendUserPushToken(userId: user.userId, pushToken: token);
+      sendUserPushToken(userId: userId, pushToken: token);
     });
 
-    return user;
+    return updatedUser;
   }
 }

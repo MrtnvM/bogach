@@ -4,6 +4,7 @@ import 'package:alice_lightweight/alice.dart';
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/store/store.dart';
 import 'package:cash_flow/app_configuration.dart';
+import 'package:cash_flow/cache/user_cache.dart';
 import 'package:cash_flow/cash_flow_app.dart';
 import 'package:cash_flow/configuration/api_client.dart';
 import 'package:cash_flow/configuration/cash_api_environment.dart';
@@ -35,6 +36,7 @@ Future<void> main({
   final tokenStorage = TokenStorage();
   final alice = Alice(navigatorKey: appRouter.navigatorKey);
   final sharedPreferences = await SharedPreferences.getInstance();
+  final userCache = UserCache(sharedPreferences);
   final apiClient = configureApiClient(alice, environment);
   final launchCounter = LaunchCounter(sharedPreferences);
 
@@ -48,6 +50,7 @@ Future<void> main({
     apiClient,
     sharedPreferences,
     tokenStorage,
+    userCache,
   );
 
   final storeProvider = configureStoreProvider(rootEpic);
@@ -57,7 +60,7 @@ Future<void> main({
   Intl.defaultLocale = 'ru';
   await initializeDateFormatting('ru');
 
-  final currentUser = await FirebaseAuth.instance.currentUser();
+  final currentUser = userCache.getUserProfile();
 
   final isAuthorized = currentUser != null;
   dispatch(SetCurrentUserAction(user: currentUser));
