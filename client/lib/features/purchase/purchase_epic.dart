@@ -67,6 +67,17 @@ Epic<AppState> purchaseEpic({@required PurchaseService purchaseService}) {
             .onErrorReturnWith(action.fail));
   });
 
+  final buyQuestsAccessEpic = epic((action$, store) {
+    return action$
+        .whereType<BuyQuestsAccessAsyncAction>()
+        .where((action) => action.isStarted)
+        .flatMap((action) => purchaseService
+            .buyQuestsAcceess()
+            .asStream()
+            .map(action.complete)
+            .onErrorReturnWith(action.fail));
+  });
+
   return combineEpics([
     purchaseEpic,
     isAvailableEpic,
@@ -74,5 +85,6 @@ Epic<AppState> purchaseEpic({@required PurchaseService purchaseService}) {
     queryPastPurchasesEpic,
     buyConsumableEpic,
     buyNonConsumableEpic,
+    buyQuestsAccessEpic,
   ]);
 }

@@ -1,12 +1,11 @@
 import 'package:cash_flow/app/state_hooks.dart';
-import 'package:cash_flow/core/hooks/alert_hooks.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/features/login/login_actions.dart';
 import 'package:cash_flow/models/domain/game/game_level/game_level.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/game_levels/game_level_item.dart';
-import 'package:cash_flow/presentation/gameboard/gameboard.dart';
+import 'package:cash_flow/presentation/purchases/quests_access_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/common/common_error_widget.dart';
 import 'package:cash_flow/widgets/common/empty_widget.dart';
@@ -20,9 +19,7 @@ class GameLevelList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final userId = useUserId();
-    final user = useCurrentUser();
     final actionRunner = useActionRunner();
-    final currentQuestIndex = user.currentQuestIndex ?? 0;
     final gameLevelsRequestState = useGlobalState(
       (s) => s.newGame.getGameLevelsRequestState,
     );
@@ -31,43 +28,7 @@ class GameLevelList extends HookWidget {
     );
 
     final gameLevels = useGlobalState((s) => s.newGame.gameLevels);
-    final currentGameForLevels = useGlobalState(
-      (s) => s.newGame.currentGameForLevels,
-    );
-
     final gameActions = useGameActions();
-
-    final showCreateGameErrorAlert = useWarningAlert(
-      needCancelButton: true,
-    );
-
-    void Function(GameLevel, GameLevelAction) startGameByLevel;
-    startGameByLevel = (gameLevel, action) {
-      final startGame = (gameId) {
-        gameActions.startGame(gameId);
-
-        appRouter.goToRoot();
-        appRouter.goTo(GameBoard());
-      };
-
-      if (action == GameLevelAction.continueGame) {
-        final gameId = currentGameForLevels[gameLevel.id];
-
-        if (gameId != null) {
-          startGame(gameId);
-        }
-
-        return;
-      }
-
-      gameActions
-          .createGameByLevel(gameLevel.id)
-          .then(startGame)
-          .catchError((error) => showCreateGameErrorAlert(
-                error,
-                () => startGameByLevel(gameLevel, action),
-              ));
-    };
 
     return Loadable(
       isLoading: gameLevelsRequestState.isInProgress ||
@@ -75,21 +36,16 @@ class GameLevelList extends HookWidget {
       backgroundColor: ColorRes.mainGreen.withOpacity(0.8),
       child: RefreshIndicator(
         color: ColorRes.mainGreen,
-        onRefresh: () {
-          return Future.wait([
-            gameActions.refreshGameLevels(userId),
-            actionRunner.runAsyncAction(LoadCurrentUserProfileAsyncAction())
-          ]);
-        },
+        onRefresh: () => Future.wait([
+          gameActions.refreshGameLevels(userId),
+          actionRunner.runAsyncAction(LoadCurrentUserProfileAsyncAction())
+        ]),
         child: LoadableList<GameLevel>(
           viewModel: LoadableListViewModel(
             items: gameLevels,
-            itemBuilder: (i) => GameLevelItemWidget(
+            itemBuilder: (i) => _GameLevelItemWidget(
               gameLevel: gameLevels.items[i],
-              currentGameId: currentGameForLevels[gameLevels.items[i].id],
-              onLevelSelected: i <= currentQuestIndex || DemoMode.isEnabled
-                  ? startGameByLevel
-                  : null,
+              index: i,
             ),
             loadListRequestState: gameLevelsRequestState,
             loadList: () {
@@ -104,6 +60,46 @@ class GameLevelList extends HookWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _GameLevelItemWidget extends HookWidget {
+  const _GameLevelItemWidget({
+    @required this.gameLevel,
+    @required this.index,
+  });
+
+  final GameLevel gameLevel;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final currentGameForLevels = useGlobalState(
+      (s) => s.newGame.currentGameForLevels,
+    );
+
+    final user = useCurrentUser();
+    final currentQuestIndex = user.currentQuestIndex ?? 0;
+
+    final hasQuestsAccess = useGlobalState((s) => s.purchase.hasQuestsAccess);
+    final isQuestPurchased = index < 1 || hasQuestsAccess;
+    final isQuestOpenedByUser = index <= currentQuestIndex;
+    final isQuestAvailable =
+        (isQuestPurchased && isQuestOpenedByUser) || DemoMode.isEnabled;
+
+    final gameActions = useGameActions();
+
+    return GameLevelItemWidget(
+      gameLevel: gameLevel,
+      currentGameId: currentGameForLevels[gameLevel.id],
+      onLevelSelected: isQuestAvailable
+          ? gameActions.startGameByLevel
+          : !isQuestPurchased && isQuestOpenedByUser
+              ? (level, action) => appRouter.goTo(QuestsAccessPage(
+                    gameLevel: level,
+                  ))
+              : null,
     );
   }
 }

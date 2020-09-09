@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:built_collection/built_collection.dart';
+import 'package:cash_flow/core/errors/purchase_errors.dart';
+import 'package:cash_flow/core/purchases/purchases.dart';
 import 'package:cash_flow/models/errors/past_purchase_error.dart';
 import 'package:cash_flow/models/errors/products_not_found_error.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +12,7 @@ import 'package:rxdart/rxdart.dart';
 class PurchaseService {
   PurchaseService();
 
-  final InAppPurchaseConnection _connection = InAppPurchaseConnection.instance;
+  final _connection = InAppPurchaseConnection.instance;
 
   /// Subscribe to any incoming purchases at app initialization. These can
   /// propagate from either storefront.
@@ -81,5 +83,52 @@ class PurchaseService {
     return Stream.fromFuture(_connection.buyNonConsumable(
       purchaseParam: purchaseParam,
     ));
+  }
+
+  Future<void> buyQuestsAcceess() async {
+    final response = await InAppPurchaseConnection.instance.queryProductDetails(
+      {questsAccessProductId},
+    );
+
+    if (response.notFoundIDs.isNotEmpty) {
+      throw NoInAppPurchaseProductsError();
+    }
+
+    final product = response.productDetails.first;
+
+    final pastPurchasesResponse =
+        await InAppPurchaseConnection.instance.queryPastPurchases();
+
+    if (response.error != null) {
+      throw QueryPastPurchasesRequestError(response.error);
+    }
+
+    for (final purchase in pastPurchasesResponse.pastPurchases) {
+      if (purchase.productID == questsAccessProductId) {
+        // Deliver the purchase to the user in your app.
+
+        if (Platform.isIOS) {
+          // Mark that you've delivered the purchase.
+          // Only the App Store requires
+          // this final confirmation.
+          InAppPurchaseConnection.instance.completePurchase(purchase);
+        }
+
+        return;
+      }
+    }
+
+    InAppPurchaseConnection.instance.buyNonConsumable(
+      purchaseParam: PurchaseParam(productDetails: product),
+    );
+
+    return _connection.purchaseUpdatedStream
+        .map(
+          (products) => products.firstWhere(
+            (p) => p.productID == questsAccessProductId,
+            orElse: () => null,
+          ),
+        )
+        .firstWhere((p) => p != null);
   }
 }

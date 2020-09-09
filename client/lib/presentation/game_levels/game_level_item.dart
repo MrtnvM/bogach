@@ -71,7 +71,11 @@ class GameLevelItemWidget extends HookWidget {
                         ],
                       ),
                       const SizedBox(height: 8),
-                      Text('${gameLevel.description}', style: Styles.bodyBlack),
+                      Text(
+                        '${gameLevel.description}',
+                        style: Styles.bodyBlack,
+                        maxLines: 2,
+                      ),
                     ],
                   ),
                   const Spacer(),

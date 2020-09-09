@@ -1,0 +1,1 @@
+const questsAccessProductId = 'bogach.quests';
