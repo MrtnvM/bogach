@@ -72,7 +72,7 @@ Epic<AppState> purchaseEpic({@required PurchaseService purchaseService}) {
         .whereType<BuyQuestsAccessAsyncAction>()
         .where((action) => action.isStarted)
         .flatMap((action) => purchaseService
-            .buyQuestsAcceess()
+            .buyQuestsAcceess(store.state.login.currentUser.id)
             .asStream()
             .map(action.complete)
             .onErrorReturnWith(action.fail));

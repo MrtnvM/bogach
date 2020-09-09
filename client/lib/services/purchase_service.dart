@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:built_collection/built_collection.dart';
+import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/core/errors/purchase_errors.dart';
 import 'package:cash_flow/core/purchases/purchases.dart';
 import 'package:cash_flow/models/errors/past_purchase_error.dart';
@@ -10,8 +11,9 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PurchaseService {
-  PurchaseService();
+  PurchaseService({@required this.apiClient});
 
+  final CashFlowApiClient apiClient;
   final _connection = InAppPurchaseConnection.instance;
 
   /// Subscribe to any incoming purchases at app initialization. These can
@@ -85,7 +87,7 @@ class PurchaseService {
     ));
   }
 
-  Future<void> buyQuestsAcceess() async {
+  Future<void> buyQuestsAcceess(String userId) async {
     final response = await InAppPurchaseConnection.instance.queryProductDetails(
       {questsAccessProductId},
     );
@@ -129,6 +131,14 @@ class PurchaseService {
             orElse: () => null,
           ),
         )
-        .firstWhere((p) => p != null);
+        .where((p) => p != null)
+        .flatMap(
+      (purchase) {
+        final productIds = [purchase, ...pastPurchasesResponse.pastPurchases]
+            .map((p) => hashProductId(p.productID));
+
+        return apiClient.sendPurchasedProducts(userId, productIds);
+      },
+    ).first;
   }
 }

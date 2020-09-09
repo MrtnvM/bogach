@@ -52,7 +52,9 @@ Epic<AppState> createRootEpic(
     firebaseMessaging: firebaseMessaging,
   );
 
-  final purchaseService = PurchaseService();
+  final purchaseService = PurchaseService(
+    apiClient: apiClient,
+  );
 
   return rootEpic(
     userService: userService,
