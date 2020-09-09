@@ -21,14 +21,16 @@
     "firebase-functions": "^3.3.0",
     "immer": "^6.0.3",
     "random": "^2.2.0",
+    "sha256": "^0.2.0",
     "ts-mockito": "^2.5.0",
     "uuid": "^3.4.0"
   },
   "devDependencies": {
+    "@types/sha256": "^0.2.0",
+    "@types/jest": "^25.1.4",
     "@types/node": "^14.0.13",
     "@types/random": "^2.1.1",
     "@types/uuid": "^3.4.7",
-    "@types/jest": "^25.1.4",
     "firebase-functions-test": "^0.1.6",
     "jest": "^24.9.0",
     "ts-jest": "^24.2.0",
