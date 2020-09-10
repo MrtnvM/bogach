@@ -45,7 +45,7 @@ Epic<AppState> gameEpic({
 
             return Stream.fromIterable([
               OnGameStateChangedAction(game),
-              UpdateCurrentQuestIndexAction(newQuestIndex),
+              UpdateCurrentQuestIndexAsyncAction(newQuestIndex),
             ]);
           })
           .onErrorReturnWith((e) => OnGameErrorAction(e))

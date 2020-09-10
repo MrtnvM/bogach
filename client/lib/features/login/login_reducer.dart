@@ -36,12 +36,10 @@ final loginReducer = Reducer<LoginState>()
       },
     ),
   )
-  ..on<UpdateCurrentQuestIndexAction>(
+  ..on<UpdateCurrentQuestIndexAsyncAction>(
     (state, action) => state.rebuild(
       (s) {
-        s.currentUser = s.currentUser.copyWith(
-          currentQuestIndex: action.newQuestIndex,
-        );
+        action.onSuccess((user) => s.currentUser = user);
       },
     ),
   );

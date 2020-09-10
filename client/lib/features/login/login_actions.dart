@@ -57,8 +57,8 @@ class SendDevicePushTokenAsyncAction extends AsyncAction {
   final String pushToken;
 }
 
-class UpdateCurrentQuestIndexAction extends Action {
-  UpdateCurrentQuestIndexAction(this.newQuestIndex);
+class UpdateCurrentQuestIndexAsyncAction extends AsyncAction<UserProfile> {
+  UpdateCurrentQuestIndexAsyncAction(this.newQuestIndex);
 
   final int newQuestIndex;
 }

@@ -4,7 +4,6 @@ import * as config from '../config';
 import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from '../providers/firestore_selector';
-import { UserEntity } from '../models/domain/user';
 import { UserProvider } from '../providers/user_provider';
 import { PurchaseService } from '../services/purchase_service';
 

@@ -177,6 +177,11 @@ class UserService {
     }
 
     final profile = UserProfile.fromJson(snapshot.data);
+    final currentUserProfile = userCache.getUserProfile();
+    if (currentUserProfile?.id == profile.id) {
+      userCache.setUserProfile(profile);
+    }
+
     return profile;
   }
 
@@ -205,6 +210,20 @@ class UserService {
         .collection('devices')
         .document(userId)
         .setData({'token': pushToken, 'device': Platform.operatingSystem});
+  }
+
+  UserProfile updateCurrentQuestIndex(int newQuestIndex) {
+    final userProfile = userCache.getUserProfile();
+    if (userProfile == null) {
+      return null;
+    }
+
+    final updatedProfile = userProfile.copyWith(
+      currentQuestIndex: newQuestIndex,
+    );
+
+    userCache.setUserProfile(updatedProfile);
+    return updatedProfile;
   }
 
   Future<UserProfile> _getUpdatedUser(FirebaseUser user) async {

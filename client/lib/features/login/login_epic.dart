@@ -81,6 +81,24 @@ Epic<AppState> loginEpic({@required UserService userService}) {
             .onErrorReturnWith(action.fail));
   });
 
+  final updateCurrentQuestIndexEpic = epic((action$, store) {
+    return action$
+        .whereType<UpdateCurrentQuestIndexAsyncAction>()
+        .where((action) => action.isStarted)
+        .flatMap((action) {
+      try {
+        final updatedProfile = userService.updateCurrentQuestIndex(
+          action.newQuestIndex,
+        );
+
+        return Stream.value(action.complete(updatedProfile));
+        // ignore: avoid_catches_without_on_clauses
+      } catch (error) {
+        return Stream.value(action.fail(error));
+      }
+    });
+  });
+
   return combineEpics([
     logoutEpic,
     loginViaFacebookEpic,
@@ -88,5 +106,6 @@ Epic<AppState> loginEpic({@required UserService userService}) {
     loginViaAppleEpic,
     sendUserPushTokenEpic,
     loadUserProfileEpic,
+    updateCurrentQuestIndexEpic,
   ]);
 }
