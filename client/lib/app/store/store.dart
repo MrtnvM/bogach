@@ -2,6 +2,7 @@ import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/app/app_reducer.dart';
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/root_epic.dart';
+import 'package:cash_flow/cache/user_cache.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/purchase_service.dart';
 import 'package:cash_flow/services/user_service.dart';
@@ -34,6 +35,7 @@ Epic<AppState> createRootEpic(
   CashFlowApiClient apiClient,
   SharedPreferences sharedPreferences,
   TokenStorage tokenStorage,
+  UserCache userCache,
 ) {
   final firestore = Firestore.instance;
   final firebaseDatabase = FirebaseDatabase.instance;
@@ -50,9 +52,12 @@ Epic<AppState> createRootEpic(
     firebaseAuth: firebaseAuth,
     firestore: firestore,
     firebaseMessaging: firebaseMessaging,
+    userCache: userCache,
   );
 
-  final purchaseService = PurchaseService();
+  final purchaseService = PurchaseService(
+    apiClient: apiClient,
+  );
 
   return rootEpic(
     userService: userService,

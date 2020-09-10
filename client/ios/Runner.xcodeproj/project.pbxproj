@@ -15,7 +15,6 @@
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		AC8A30E2246077E200856F10 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC8A30E1246077E200856F10 /* StoreKit.framework */; };
 		AC8B1F0324A8D07F001AAA6F /* config in Resources */ = {isa = PBXBuildFile; fileRef = AC8B1F0224A8D07E001AAA6F /* config */; };
-		C83DFB3024E45001006140FF /* Pods_Runner.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C83DFB2B24E44FD0006140FF /* Pods_Runner.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C83DFB3324E4501E006140FF /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C83DFB3224E4501E006140FF /* Pods_Runner.framework */; };
 		C84A3CFA24BCF8020077BEF8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C84A3CF924BCF8010077BEF8 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
@@ -27,7 +26,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				C83DFB3024E45001006140FF /* Pods_Runner.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -186,7 +184,7 @@
 			buildConfigurationList = 97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Runner" */;
 			buildPhases = (
 				B818F1953ACD99078BAB70D2 /* [CP] Check Pods Manifest.lock */,
-				9740EEB61CF901F6004384FC /* Run Script */,
+				9740EEB61CF901F6004384FC /* Flutter Flavor */,
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				AC8B1F0424A8D0A9001AAA6F /* Copy GoogleService-Info.plist file */,
@@ -334,14 +332,14 @@
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin\n";
 		};
-		9740EEB61CF901F6004384FC /* Run Script */ = {
+		9740EEB61CF901F6004384FC /* Flutter Flavor */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Run Script";
+			name = "Flutter Flavor";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;

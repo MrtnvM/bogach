@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:cash_flow/models/errors/domain_game_error.dart';
+import 'package:cash_flow/models/errors/past_purchase_error.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
@@ -111,6 +112,16 @@ void handleError({
       showErrorDialog(
         context: context,
         message: Strings.noInternetError,
+        onRetry: onRetry,
+        barrierDismissible: barrierDismissible,
+        displayNegative: displayNegative,
+      );
+      break;
+
+    case PastPurchaseError:
+      showErrorDialog(
+        context: context,
+        message: Strings.restorePurchasesError,
         onRetry: onRetry,
         barrierDismissible: barrierDismissible,
         displayNegative: displayNegative,

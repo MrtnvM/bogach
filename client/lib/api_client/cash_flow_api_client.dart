@@ -95,4 +95,11 @@ class CashFlowApiClient extends ApiClient {
         body: {'roomId': roomId},
         responseMapper: rm.voidResponse,
       );
+
+  Stream<void> sendPurchasedProducts(String userId, List<String> productIds) =>
+      post(
+        path: 'updatePurchases',
+        body: {'userId': userId, 'productIds': productIds},
+        responseMapper: rm.voidResponse,
+      );
 }

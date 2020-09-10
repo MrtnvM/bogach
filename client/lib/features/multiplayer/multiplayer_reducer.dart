@@ -1,9 +1,11 @@
+import 'package:cash_flow/features/login/login_actions.dart';
 import 'package:cash_flow/features/multiplayer/multiplayer_actions.dart';
 import 'package:cash_flow/features/multiplayer/multiplayer_state.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 
 final multiplayerReducer = Reducer<MultiplayerState>()
+  ..on<LogoutAsyncAction>((state, action) => MultiplayerState.initial())
   ..on<QueryUserProfilesAsyncAction>(
     (state, action) => state.rebuild((s) {
       s.userProfilesQueryRequestState = action.requestState;

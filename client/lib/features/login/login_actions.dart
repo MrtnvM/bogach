@@ -1,5 +1,4 @@
 import 'package:cash_flow/models/domain/user/user_profile.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 
@@ -42,7 +41,7 @@ class LoginViaAppleAsyncAction extends AsyncAction<UserProfile> {
 class SetCurrentUserAction extends Action {
   SetCurrentUserAction({@required this.user});
 
-  final FirebaseUser user;
+  final UserProfile user;
 }
 
 class LoadCurrentUserProfileAsyncAction extends AsyncAction<UserProfile> {}
@@ -58,8 +57,8 @@ class SendDevicePushTokenAsyncAction extends AsyncAction {
   final String pushToken;
 }
 
-class UpdateCurrentQuestIndexAction extends Action {
-  UpdateCurrentQuestIndexAction(this.newQuestIndex);
+class UpdateCurrentQuestIndexAsyncAction extends AsyncAction<UserProfile> {
+  UpdateCurrentQuestIndexAsyncAction(this.newQuestIndex);
 
   final int newQuestIndex;
 }

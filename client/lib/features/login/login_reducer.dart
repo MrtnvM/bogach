@@ -1,10 +1,10 @@
-import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/features/login/login_actions.dart';
 import 'package:cash_flow/features/login/login_state.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 
 final loginReducer = Reducer<LoginState>()
+  ..on<LogoutAsyncAction>((state, action) => LoginState.initial())
   ..on<LoginViaFacebookAsyncAction>(
     (state, action) => state.rebuild((s) {
       s.loginRequestState = action.requestState;
@@ -27,9 +27,7 @@ final loginReducer = Reducer<LoginState>()
     }),
   )
   ..on<SetCurrentUserAction>(
-    (state, action) => state.rebuild(
-      (s) => s..currentUser = mapToUserProfile(action.user),
-    ),
+    (state, action) => state.rebuild((s) => s.currentUser = action.user),
   )
   ..on<LoadCurrentUserProfileAsyncAction>(
     (state, action) => state.rebuild(
@@ -38,12 +36,10 @@ final loginReducer = Reducer<LoginState>()
       },
     ),
   )
-  ..on<UpdateCurrentQuestIndexAction>(
+  ..on<UpdateCurrentQuestIndexAsyncAction>(
     (state, action) => state.rebuild(
       (s) {
-        s.currentUser = s.currentUser.copyWith(
-          currentQuestIndex: action.newQuestIndex,
-        );
+        action.onSuccess((user) => s.currentUser = user);
       },
     ),
   );

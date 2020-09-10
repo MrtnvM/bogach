@@ -56,3 +56,5 @@ class BuyNonConsumableAsyncAction extends AsyncAction<bool> {
 
   final ProductDetails product;
 }
+
+class BuyQuestsAccessAsyncAction extends AsyncAction<void> {}
