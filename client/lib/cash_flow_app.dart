@@ -35,9 +35,9 @@ class CashFlowApp extends HookWidget {
     );
 
     useSubscriptionToPurchases();
-    usePushNotificationsPermissionRequest(useDelay: true);
+    // usePushNotificationsPermissionRequest(useDelay: true);
     useUserPushTokenUploader();
-    usePushNotificationsHandler();
+    // usePushNotificationsHandler();
     // useDynamicLinkHandler();
     useDeepLinkHandler();
 
