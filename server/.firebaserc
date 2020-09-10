@@ -2,6 +2,7 @@
   "projects": {
     "default": "cash-flow-staging",
     "uat": "cash-flow-uat",
-    "staging": "cash-flow-staging"
+    "staging": "cash-flow-staging",
+    "production": "bogach-production"
   }
 }

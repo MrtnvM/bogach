@@ -12,7 +12,7 @@ describe('Purchase Service', () => {
   test('Successfully update quests access', async () => {
     const userId = 'user1';
     const initialProfile: User = {
-      id: userId,
+      userId,
       userName: 'John Dow',
       boughtQuestsAccess: undefined,
     };

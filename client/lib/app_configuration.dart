@@ -28,10 +28,6 @@ class AppConfiguration {
     final packageInfo = await PackageInfo.fromPlatform();
     final package = packageInfo.packageName;
 
-    if (package.contains('production')) {
-      return CashApiEnvironment.production;
-    }
-
     if (package.contains('uat')) {
       return CashApiEnvironment.uat;
     }
@@ -44,7 +40,7 @@ class AppConfiguration {
       return CashApiEnvironment.development;
     }
 
-    throw Exception('Cannot determine environment by package name');
+    return CashApiEnvironment.production;
   }
 
   static void _checkIsCorrectFirebaseEnvironmentSelected() {

@@ -1,5 +1,5 @@
 export interface User {
-  readonly id: UserEntity.Id;
+  readonly userId: UserEntity.Id;
   readonly userName: string;
   readonly currentQuestIndex?: number;
   readonly boughtQuestsAccess?: boolean;
