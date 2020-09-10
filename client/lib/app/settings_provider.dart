@@ -1,4 +1,5 @@
 import 'package:alice_lightweight/alice.dart';
+import 'package:cash_flow/widgets/settings/purchases_setting.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:cash_flow/widgets/settings/logout_setting.dart';
@@ -47,6 +48,7 @@ class SettingsProvider extends ControlPanelSettingsProvider {
       const UiKitSetting(),
       NetworkSetting(networkProps),
       const LogoutSetting(),
+      const PurchasesSetting(),
     ];
   }
 

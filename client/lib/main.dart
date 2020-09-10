@@ -26,7 +26,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'features/login/login_actions.dart';
 
 Future<void> main({
-  @required CashApiEnvironment environment,
+  @required CashApiEnvironment environment = CashApiEnvironment.production,
 }) async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppConfiguration.init(environment: environment);
