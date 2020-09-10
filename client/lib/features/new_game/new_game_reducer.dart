@@ -1,4 +1,5 @@
 import 'package:cash_flow/features/game/game_actions.dart';
+import 'package:cash_flow/features/login/login_actions.dart';
 import 'package:cash_flow/features/new_game/new_game_actions.dart';
 import 'package:cash_flow/features/new_game/new_game_state.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
@@ -8,6 +9,7 @@ import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 
 final newGameReducer = Reducer<NewGameState>()
+  ..on<LogoutAsyncAction>((state, action) => NewGameState.initial())
   ..on<GetGameTemplatesAsyncAction>(
     (state, action) => state.rebuild((s) {
       s.getGameTemplatesRequestState = action.mapToRefreshableRequestState(

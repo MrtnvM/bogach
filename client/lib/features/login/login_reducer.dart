@@ -4,6 +4,7 @@ import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 
 final loginReducer = Reducer<LoginState>()
+  ..on<LogoutAsyncAction>((state, action) => LoginState.initial())
   ..on<LoginViaFacebookAsyncAction>(
     (state, action) => state.rebuild((s) {
       s.loginRequestState = action.requestState;

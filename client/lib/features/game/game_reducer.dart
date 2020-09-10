@@ -1,5 +1,6 @@
 import 'package:cash_flow/features/game/game_actions.dart';
 import 'package:cash_flow/features/game/game_state.dart';
+import 'package:cash_flow/features/login/login_actions.dart';
 import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
@@ -9,6 +10,7 @@ import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 
 final gameReducer = Reducer<GameState>()
+  ..on<LogoutAsyncAction>((state, action) => GameState.initial())
   ..on<StartGameAction>(
     (state, action) => state.rebuild(
       (s) => s
