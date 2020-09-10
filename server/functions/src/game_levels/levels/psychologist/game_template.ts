@@ -4,7 +4,7 @@ export const template: GameTemplate = {
   id: 'psychologist',
   name: 'Психолог',
   icon:
-    'https://cdn1.vectorstock.com/i/thumb-large/59/10/psychologist-consultant-icon-vector-18105910.jpg',
+    'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/quest_icons_images%2Fpsychologist.png?alt=media&token=d2722d79-e95f-41c8-a732-7179b6d27cdb',
   possessions: {
     incomes: [
       {

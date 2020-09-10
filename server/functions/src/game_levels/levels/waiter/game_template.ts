@@ -4,7 +4,7 @@ export const template: GameTemplate = {
   id: 'waiter',
   name: 'Официант',
   icon:
-    'https://www.shareicon.net/data/256x256/2016/08/04/806819_man_512x512.png',
+    'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/quest_icons_images%2Fwaiter.png?alt=media&token=9d628ff1-7643-4072-8c34-e47be1ef3526',
   possessions: {
     incomes: [
       {
