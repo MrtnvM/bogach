@@ -66,31 +66,6 @@ class _PurchaseListPageState extends State<PurchaseListPage> with ReduxState {
     );
   }
 
-  void _onItemPressed(String productId) {
-    dispatchAsyncAction(IsPurchasesAvailableAsyncAction())
-        .listen((action) => action
-          ..onSuccess((isAvailable) => _onPurchaseAvailableSuccess(
-                productId: productId,
-                isAvailable: isAvailable,
-              ))
-          ..onError((error) => _onPurchaseAvailableError(error: error)));
-  }
-
-  void _onPurchaseAvailableSuccess({
-    @required String productId,
-    @required bool isAvailable,
-  }) {
-    if (isAvailable) {
-      _purchaseItem(productId);
-    } else {
-      showErrorDialog(context: context, message: Strings.storesUnavailable);
-    }
-  }
-
-  void _onPurchaseAvailableError({dynamic error}) {
-    handleError(context: context, exception: error);
-  }
-
   void _purchaseItem(String productId) {
     // Buy same product again
     dispatchAsyncAction(QueryProductsForSaleAsyncAction(ids: {productId}))

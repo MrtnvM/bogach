@@ -172,7 +172,7 @@ class _AdvantagesWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 8),
       child: Row(
         children: <Widget>[
-          Icon(
+          const Icon(
             Icons.check_circle,
             color: Colors.white,
             size: 18,
@@ -230,7 +230,7 @@ class _BuyButton extends HookWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Icon(Icons.check, color: Colors.white),
+              const Icon(Icons.check, color: Colors.white),
               const SizedBox(width: 8),
               Text(
                 Strings.buyQuestsAccess,
