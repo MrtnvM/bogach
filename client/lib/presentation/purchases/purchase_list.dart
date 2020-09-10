@@ -4,6 +4,7 @@ import 'package:cash_flow/features/purchase/purchase_actions.dart';
 import 'package:cash_flow/features/purchase/purchase_state.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/appbar/app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,8 @@ import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 class PurchaseListPage extends StatefulWidget {
+  const PurchaseListPage();
+
   @override
   State<StatefulWidget> createState() {
     return _PurchaseListPageState();
@@ -42,35 +45,43 @@ class _PurchaseListPageState extends State<PurchaseListPage> with ReduxState {
 
   Widget _buildBody(PurchaseState state) {
     return ListView(
-      children: state.pastPurchases.map(_buildItem).toList(),
+      children: [
+        const Text('Past purchases', style: Styles.navBarTitle),
+        ...state.pastPurchases.map(_buildItem).toList(),
+        const Divider(),
+        const Text('Possible purchases', style: Styles.navBarTitle),
+        ...buildPossiblePurchases([
+          'test_subscription_1_month',
+          'android.test.purchased',
+          'test_consumable',
+        ]),
+      ],
     );
   }
 
   Widget _buildItem(PurchaseDetails item) {
-    return InkWell(
-      onTap: () => _onItemPressed(item),
-      child: Container(
-        child: Text(item.toString()),
-      ),
+    return ListTile(
+      title: Text(item.productID),
+      subtitle: Text(item.getDescription()),
     );
   }
 
-  void _onItemPressed(PurchaseDetails item) {
+  void _onItemPressed(String productId) {
     dispatchAsyncAction(IsPurchasesAvailableAsyncAction())
         .listen((action) => action
           ..onSuccess((isAvailable) => _onPurchaseAvailableSuccess(
-                item: item,
+                productId: productId,
                 isAvailable: isAvailable,
               ))
           ..onError((error) => _onPurchaseAvailableError(error: error)));
   }
 
   void _onPurchaseAvailableSuccess({
-    @required PurchaseDetails item,
+    @required String productId,
     @required bool isAvailable,
   }) {
     if (isAvailable) {
-      _purchaseItem(item);
+      _purchaseItem(productId);
     } else {
       showErrorDialog(context: context, message: Strings.storesUnavailable);
     }
@@ -80,9 +91,9 @@ class _PurchaseListPageState extends State<PurchaseListPage> with ReduxState {
     handleError(context: context, exception: error);
   }
 
-  void _purchaseItem(PurchaseDetails item) {
+  void _purchaseItem(String productId) {
     // Buy same product again
-    dispatchAsyncAction(QueryProductsForSaleAsyncAction(ids: {item.productID}))
+    dispatchAsyncAction(QueryProductsForSaleAsyncAction(ids: {productId}))
         .listen((action) => action
           ..onSuccess(_onSuccessQueryProducts)
           ..onError(_onErrorQueryProducts));
@@ -94,5 +105,53 @@ class _PurchaseListPageState extends State<PurchaseListPage> with ReduxState {
 
   void _onErrorQueryProducts(dynamic error) {
     handleError(context: context, exception: error);
+  }
+
+  List<Widget> buildPossiblePurchases(List<String> list) {
+    return list
+        .map((e) => ListTile(
+              title: Text(e),
+              onTap: () => _purchaseItem(e),
+            ))
+        .toList();
+  }
+}
+
+extension PurchaseDetailsExtension on PurchaseDetails {
+  String getDescription() {
+    final transactionDateString =
+        DateTime.fromMillisecondsSinceEpoch(int.parse(transactionDate))
+            .toIso8601String();
+    final statusString = status.toString();
+    final platformString = platform.name;
+
+    return '$transactionDateString\n$statusString\n$platformString\n';
+  }
+
+  InAppPlatform get platform {
+    if (skPaymentTransaction == null) {
+      return InAppPlatform.android;
+    }
+
+    if (billingClientPurchase == null) {
+      return InAppPlatform.ios;
+    }
+
+    throw Exception('Unknown platform exception');
+  }
+}
+
+enum InAppPlatform { ios, android }
+
+extension InAppPlatformExtension on InAppPlatform {
+  String get name {
+    switch (this) {
+      case InAppPlatform.ios:
+        return 'ios';
+      case InAppPlatform.android:
+        return 'android';
+      default:
+        return '';
+    }
   }
 }

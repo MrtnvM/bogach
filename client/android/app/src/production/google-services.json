@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "751206071255",
+    "firebase_url": "https://bogach-production.firebaseio.com",
+    "project_id": "bogach-production",
+    "storage_bucket": "bogach-production.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:751206071255:android:ce71d72cc8fc16f9352992",
+        "android_client_info": {
+          "package_name": "io.mobile.bogach"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "751206071255-hapmvuboo8k8gkv0jaa18ok5pc7is0j6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.bogach",
+            "certificate_hash": "72c3c39a9b9b08c46e916592f949602f079bb15b"
+          }
+        },
+        {
+          "client_id": "751206071255-n6m6pvn7ccq1s88u5av3qegnbhc2521m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC84VwNeEg-2nrBkUqCiYffWp3ezoDa5qM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "751206071255-n6m6pvn7ccq1s88u5av3qegnbhc2521m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

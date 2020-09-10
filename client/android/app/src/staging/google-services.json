@@ -8,6 +8,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:911577434143:android:f9234bf3fe5846260dad2a",
+        "android_client_info": {
+          "package_name": "io.mobile.bogach.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911577434143-brb7qtirn8f8up0e7med6998925aiach.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp0pF4Qn4p3C9HX2V8SJNiD7Nc2ckX5CY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911577434143-brb7qtirn8f8up0e7med6998925aiach.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911577434143-qus6j1a5o4s0cmqlpkogi6b9lb8am9ve.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.mobile.bogach.uat"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:911577434143:android:26621e58220481b40dad2a",
         "android_client_info": {
           "package_name": "io.mobile.cashflow"
@@ -64,10 +100,10 @@
               "client_type": 3
             },
             {
-              "client_id": "911577434143-cqa3fpp3sg3g0u3c14amjj583utpurso.apps.googleusercontent.com",
+              "client_id": "911577434143-qus6j1a5o4s0cmqlpkogi6b9lb8am9ve.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "io.mobile.cashflow.staging"
+                "bundle_id": "io.mobile.bogach.uat"
               }
             }
           ]
@@ -148,10 +184,10 @@
               "client_type": 3
             },
             {
-              "client_id": "911577434143-cqa3fpp3sg3g0u3c14amjj583utpurso.apps.googleusercontent.com",
+              "client_id": "911577434143-qus6j1a5o4s0cmqlpkogi6b9lb8am9ve.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "io.mobile.cashflow.staging"
+                "bundle_id": "io.mobile.bogach.uat"
               }
             }
           ]

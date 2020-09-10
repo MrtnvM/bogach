@@ -8,6 +8,7 @@
     "start": "yarn shell",
     "deploy-staging": "firebase deploy -P staging --only functions",
     "deploy-uat": "firebase deploy -P uat --only functions",
+    "production": "firebase deploy -P production --only functions",
     "start-emulator": "yarn build && firebase emulators:start --only functions",
     "logs": "firebase functions:log"
   },

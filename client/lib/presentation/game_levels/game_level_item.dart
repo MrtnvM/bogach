@@ -60,9 +60,9 @@ class GameLevelItemWidget extends HookWidget {
                     children: <Widget>[
                       Row(
                         children: <Widget>[
-                          if (onLevelSelected == null) ...[
+                          if (onLevelSelected == null) ... const [
                             Icon(Icons.lock, size: 11),
-                            const SizedBox(width: 4),
+                            SizedBox(width: 4),
                           ],
                           Text(
                             '${gameLevel.name}',

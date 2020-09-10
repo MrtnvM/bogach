@@ -18,9 +18,9 @@ dependencies:
   uni_links: ^0.4.0
   crypto: 2.1.4
 
-  built_value: ^7.0.8
-  built_collection: ^4.3.0
-  freezed_annotation: ^0.11.0
+  built_value: ^7.1.0
+  built_collection: ^4.3.2
+  freezed_annotation: ^0.11.0+1
 
   firebase_core: ^0.4.3+1
   firebase_analytics: ^5.0.16
@@ -39,7 +39,7 @@ dependencies:
 
   json_serializable: ^3.2.5
 
-  flutter_svg: ^0.17.4
+  flutter_svg: ^0.18.1
 
   url_launcher: ^5.4.2
   share: '>=0.6.4+3 <2.0.0'
@@ -68,9 +68,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  build_runner: ^1.0.0
-  freezed: ^0.10.7
-  built_value_generator: ^7.0.4
+  build_runner: ^1.10.1
+  freezed: ^0.11.6
+  built_value_generator: ^7.1.0
 
 flutter:
   uses-material-design: true
