@@ -80,7 +80,8 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         // ),
         // const SizedBox(height: 16),
         _buildAppleSignInButton(),
-        const SizedBox(height: 16),
+        const SizedBox(height: 32),
+        buildPrivacyPolicy(),
       ],
     );
   }
@@ -132,6 +133,36 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
                   type: _SocialButtonType.apple,
                 )
               : Container(),
+    );
+  }
+
+  Widget buildPrivacyPolicy() {
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: Strings.authAndAccept,
+            style: Styles.onboardingSubtitle,
+          ),
+          TextSpan(
+            text: Strings.termsOfUse,
+            style: Styles.onboardingSubtitle.copyWith(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          TextSpan(
+            text: Strings.and,
+            style: Styles.onboardingSubtitle,
+          ),
+          TextSpan(
+            text: Strings.privacyPolicy,
+            style: Styles.onboardingSubtitle.copyWith(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

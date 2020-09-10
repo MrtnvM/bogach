@@ -385,4 +385,9 @@ class Strings {
   static String get buyQuestsAccess => 'Купить за 149 ₽';
   static String get startQuest => 'Перейти к квесту';
   static String get questsAccessRestorePurchases => 'Восстановить\nпокупки';
+
+  static String get authAndAccept => 'Авторизуясь, вы принимаете ';
+  static String get termsOfUse => 'пользовательское соглашение';
+  static String get and => ' и ';
+  static String get privacyPolicy => 'политику приватности';
 }
