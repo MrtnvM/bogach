@@ -59,14 +59,14 @@ class MainPage extends HookWidget {
           onPressed: () => appRouter.goTo(GameLevelsPage()),
           text: Strings.gameLevels,
         ),
-        const SizedBox(height: 24),
-        ColorButton(
-          onPressed: () {
-            appRouter.goTo(CreateMultiplayerGamePage());
-            AnalyticsSender.sendMultiplayerGame(userProfile.userId);
-          },
-          text: Strings.multiPlayerGame,
-        ),
+        // const SizedBox(height: 24),
+        // ColorButton(
+        //   onPressed: () {
+        //     appRouter.goTo(CreateMultiplayerGamePage());
+        //     AnalyticsSender.sendMultiplayerGame(userProfile.userId);
+        //   },
+        //   text: Strings.multiPlayerGame,
+        // ),
         const SizedBox(height: 24),
         ColorButton(
           onPressed: () {
