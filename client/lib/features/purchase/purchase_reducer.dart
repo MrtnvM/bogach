@@ -38,24 +38,37 @@ final purchaseReducer = Reducer<PurchaseState>()
   )
   ..on<QueryPastPurchasesAsyncAction>(
     (state, action) => state.rebuild((s) {
-      s..getPastPurchasesRequestState = RequestState.idle;
+      s.getPastPurchasesRequestState = action.requestState;
 
-      action
-        ..onSuccess((purchases) {
-          final boughtQuestsAccess = purchases.any(
-            (p) =>
-                p.productID == questsAccessProductId &&
-                p.status == PurchaseStatus.purchased,
-          );
+      action.onSuccess((purchases) {
+        final boughtQuestsAccess = purchases.any(
+          (p) =>
+              p.productID == questsAccessProductId &&
+              p.status == PurchaseStatus.purchased,
+        );
 
-          s
-            ..pastPurchases = purchases.toBuilder()
-            ..hasQuestsAccess = s.hasQuestsAccess || boughtQuestsAccess;
-        });
+        s
+          ..pastPurchases = purchases.toBuilder()
+          ..hasQuestsAccess = s.hasQuestsAccess || boughtQuestsAccess;
+      });
     }),
   )
   ..on<BuyQuestsAccessAsyncAction>(
     (state, action) => state.rebuild((s) {
       s.buyQuestsAccessRequestState = action.requestState;
+    }),
+  )
+  ..on<LoadCurrentUserProfileAsyncAction>(
+    (state, action) => state.rebuild((s) {
+      action.onSuccess((userProfile) {
+        final boughtQuestsAccess = userProfile?.boughtQuestsAccess == true;
+        s.hasQuestsAccess = s.hasQuestsAccess || boughtQuestsAccess;
+      });
+    }),
+  )
+  ..on<SetCurrentUserAction>(
+    (state, action) => state.rebuild((s) {
+      final boughtQuestsAccess = action.user?.boughtQuestsAccess == true;
+      s.hasQuestsAccess = s.hasQuestsAccess || boughtQuestsAccess;
     }),
   );

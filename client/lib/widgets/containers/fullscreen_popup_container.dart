@@ -7,11 +7,13 @@ class FullscreenPopupContainer extends StatelessWidget {
     @required this.backgroundColor,
     @required this.content,
     this.onClose,
+    this.topRightActionWidget,
   }) : super(key: key);
 
   final Color backgroundColor;
   final Widget content;
   final VoidCallback onClose;
+  final Widget topRightActionWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -20,28 +22,36 @@ class FullscreenPopupContainer extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () => Future.value(false),
-      child: Stack(
-        children: <Widget>[
-          Scaffold(
-            backgroundColor: backgroundColor,
-            body: Container(
+      child: Scaffold(
+        backgroundColor: backgroundColor,
+        body: Stack(
+          children: <Widget>[
+            Container(
               width: double.infinity,
               child: content,
             ),
-          ),
-          GestureDetector(
-            onTap: onClose ?? appRouter.goBack,
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              margin: EdgeInsets.only(top: topPadding),
-              child: Icon(
-                Icons.clear,
-                color: Colors.white.withAlpha(150),
-                size: 28,
+            GestureDetector(
+              onTap: onClose ?? appRouter.goBack,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                margin: EdgeInsets.only(top: topPadding),
+                child: Icon(
+                  Icons.clear,
+                  color: Colors.white.withAlpha(150),
+                  size: 28,
+                ),
               ),
             ),
-          ),
-        ],
+            if (topRightActionWidget != null)
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: EdgeInsets.only(top: topPadding),
+                  child: topRightActionWidget,
+                ),
+              )
+          ],
+        ),
       ),
     );
   }

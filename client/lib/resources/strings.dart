@@ -168,6 +168,10 @@ class Strings {
   static const noInternetError = 'Не удалось подключиться к серверу. '
       'Пожалуйста, проверьте ваше интернет-соединение';
 
+  static String get restorePurchasesError => 'Не удалось восстановить покупки. '
+      'Пожалуйста, проверьте ваше интернет-соединение '
+      'и ипользуемый аккаунт для магазина';
+
   static const cannotAuthoriseThroughSocial =
       'Вы зарегистрированы с указанной почтой через '
       'другую соц. сеть. Выберете ее для авторизации';
@@ -379,4 +383,6 @@ class Strings {
   static String get questsAccessAdvantage2 => 'Испытай себя в разных ситуациях';
   static String get questsAccessAdvantage3 => 'Найди лучшие стратегии';
   static String get buyQuestsAccess => 'Купить за 149 ₽';
+  static String get startQuest => 'Перейти к квесту';
+  static String get questsAccessRestorePurchases => 'Восстановить\nпокупки';
 }

@@ -11,6 +11,9 @@ _PurchaseActions usePurchaseActions() {
       buyQuestsAccess: () {
         return actionRunner.runAsyncAction(BuyQuestsAccessAsyncAction());
       },
+      restorePurchases: () {
+        return actionRunner.runAsyncAction(QueryPastPurchasesAsyncAction());
+      },
     ),
   );
 }
@@ -18,7 +21,9 @@ _PurchaseActions usePurchaseActions() {
 class _PurchaseActions {
   _PurchaseActions({
     @required this.buyQuestsAccess,
+    @required this.restorePurchases,
   });
 
   final Future<void> Function() buyQuestsAccess;
+  final Future<void> Function() restorePurchases;
 }

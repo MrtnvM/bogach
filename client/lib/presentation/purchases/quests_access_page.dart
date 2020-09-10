@@ -3,6 +3,7 @@ import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/features/purchase/purchase_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_level/game_level.dart';
+import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/game_levels/game_level_item.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
@@ -23,7 +24,8 @@ class QuestsAccessPage extends HookWidget {
   Widget build(BuildContext context) {
     final isOperationInProgress = useGlobalState((s) {
       return s.purchase.buyQuestsAccessRequestState.isInProgress ||
-          s.purchase.getPastPurchasesRequestState.isInProgress;
+          s.purchase.getPastPurchasesRequestState.isInProgress ||
+          s.newGame.createNewGameByLevelRequestState.isInProgress;
     });
 
     final isStoreAvailable = useFuture(
@@ -31,11 +33,28 @@ class QuestsAccessPage extends HookWidget {
       initialData: true,
     );
 
+    final hasQuestsAccess = useGlobalState((s) => s.purchase.hasQuestsAccess);
+    final gameActions = useGameActions();
+
+    final startGame = () => gameActions.startGameByLevel(
+          gameLevel,
+          GameLevelAction.startNewGame,
+        );
+
+    useEffect(() {
+      if (hasQuestsAccess) {
+        startGame();
+      }
+
+      return null;
+    }, [hasQuestsAccess]);
+
     return Loadable(
       isLoading: isOperationInProgress,
       backgroundColor: Colors.black.withAlpha(100),
       child: FullscreenPopupContainer(
         backgroundColor: ColorRes.questAccessPageBackgound,
+        topRightActionWidget: const _RestorePurchasesButton(),
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -46,11 +65,40 @@ class QuestsAccessPage extends HookWidget {
             const SizedBox(height: 32),
             const _AdvantagesWidget(),
             const SizedBox(height: 48),
-            _BuyButton(
-              gameLevel: gameLevel,
-              isStoreAvailable: isStoreAvailable.data,
-            ),
+            if (hasQuestsAccess)
+              _StartQuestButton(onPressed: startGame)
+            else
+              _BuyButton(
+                gameLevel: gameLevel,
+                isStoreAvailable: isStoreAvailable.data,
+              ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _RestorePurchasesButton extends HookWidget {
+  const _RestorePurchasesButton({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final purchaseActions = usePurchaseActions();
+    final restorePurchases = () {
+      purchaseActions.restorePurchases().catchError(
+            (error) => handleError(context: context, exception: error),
+          );
+    };
+
+    return GestureDetector(
+      onTap: restorePurchases,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          Strings.questsAccessRestorePurchases,
+          style: Styles.body1.copyWith(color: Colors.white.withAlpha(230)),
+          textAlign: TextAlign.end,
         ),
       ),
     );
@@ -203,6 +251,33 @@ class _BuyButton extends HookWidget {
           ),
         ]
       ],
+    );
+  }
+}
+
+class _StartQuestButton extends StatelessWidget {
+  const _StartQuestButton({Key key, this.onPressed}) : super(key: key);
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(Object context) {
+    return RaisedButton(
+      color: ColorRes.green,
+      onPressed: onPressed,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(
+            Strings.startQuest,
+            style: Styles.body1.copyWith(
+              fontWeight: FontWeight.w600,
+              fontSize: 15,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
