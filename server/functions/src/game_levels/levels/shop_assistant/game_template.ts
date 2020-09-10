@@ -3,7 +3,8 @@ import { GameTemplate } from '../../../models/domain/game/game_template';
 export const template: GameTemplate = {
   id: 'shop_assistant',
   name: 'Продавец-консультант',
-  icon: 'https://image.flaticon.com/icons/png/128/3361/3361382.png',
+  icon:
+    'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/quest_icons_images%2Fshop_assistent.png?alt=media&token=ac85e1fc-fafd-4f55-8243-855f28d19725',
   possessions: {
     incomes: [
       {

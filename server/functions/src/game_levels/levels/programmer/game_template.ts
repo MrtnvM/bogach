@@ -4,7 +4,7 @@ export const template: GameTemplate = {
   id: 'programmer',
   name: 'Программист',
   icon:
-    'https://s1.iconbird.com/ico/2013/6/382/w256h2561372594116ManRed2.png',
+    'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/quest_icons_images%2Fprogrammer.png?alt=media&token=5adae820-e84d-4cc4-af7f-86533f893c1f',
   possessions: {
     incomes: [
       {
