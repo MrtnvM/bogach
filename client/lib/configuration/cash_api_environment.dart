@@ -38,7 +38,7 @@ class CashApiEnvironment extends ApiEnvironment {
 
   static const production = CashApiEnvironment(
     name: 'production',
-    baseUrl: '',
+    baseUrl: 'https://europe-west2-bogach-production.cloudfunctions.net/',
     validateRequestsByDefault: false,
     isRequestsAuthorisedByDefault: false,
   );
