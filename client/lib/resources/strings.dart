@@ -390,4 +390,5 @@ class Strings {
   static String get termsOfUse => 'пользовательское соглашение';
   static String get and => ' и ';
   static String get privacyPolicy => 'политику приватности';
+  static String get canNotOpenLink => 'Произошла ошибка при открытии ссылки';
 }

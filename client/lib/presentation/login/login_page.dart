@@ -13,11 +13,13 @@ import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage();
@@ -150,6 +152,10 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
             style: Styles.onboardingSubtitle.copyWith(
               decoration: TextDecoration.underline,
             ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                _launchURL('http://bogach-game.tilda.ws/terms-of-use');
+              },
           ),
           TextSpan(
             text: Strings.and,
@@ -160,6 +166,10 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
             style: Styles.onboardingSubtitle.copyWith(
               decoration: TextDecoration.underline,
             ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                _launchURL('http://bogach-game.tilda.ws/privacy-policy');
+              },
           ),
         ],
       ),
@@ -310,6 +320,17 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
   void _onLoginViaAppleError(error) {
     setState(() => _isAuthorising = false);
     handleError(context: context, exception: error);
+  }
+
+  void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      showErrorDialog(
+          context: context,
+          title: Strings.commonError,
+          message: Strings.canNotOpenLink);
+    }
   }
 }
 
