@@ -170,7 +170,7 @@ class Strings {
 
   static String get restorePurchasesError => 'Не удалось восстановить покупки. '
       'Пожалуйста, проверьте ваше интернет-соединение '
-      'и ипользуемый аккаунт для магазина';
+      'и используемый аккаунт для магазина';
 
   static const cannotAuthoriseThroughSocial =
       'Вы зарегистрированы с указанной почтой через '
@@ -376,7 +376,7 @@ class Strings {
   // Quests access
   static String get quests => 'Квесты';
   static String get questsAccessDescription =>
-      ' - это спроектированные сценарии, нацеленые на '
+      ' - это спроектированные сценарии, нацеленные на '
       'тренировку навыков обращения с финансами';
   static String get questsAccessAdvantage1 =>
       'Получи доступ к обновляемой базе квестов';
