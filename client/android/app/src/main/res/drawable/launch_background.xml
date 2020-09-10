@@ -2,9 +2,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@color/colorPrimary" />
 
-    <item>
+    <item
+        android:width="250dp"
+        android:height="250dp"
+        android:gravity="center">
         <bitmap
-            android:gravity="center"
-            android:src="@drawable/bogach" />
+            android:gravity="fill"
+            android:src="@drawable/bogach768" />
     </item>
 </layer-list>
