@@ -13,7 +13,7 @@ export class UserProvider {
   }
 
   async updateUserProfile(user: User): Promise<User> {
-    const selector = this.selector.user(user.id);
+    const selector = this.selector.user(user.userId);
     const profile = await this.firestore.updateItem(selector, user);
     return profile as User;
   }
