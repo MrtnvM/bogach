@@ -13,5 +13,5 @@ export namespace Purchases {
     return hash3;
   };
 
-  export const questsAccessProductId = id('bogach.quests');
+  export const questsAccessProductId = id('bogach.quests.access');
 }

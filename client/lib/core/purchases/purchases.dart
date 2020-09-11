@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 
-const questsAccessProductId = 'bogach.quests';
+const questsAccessProductId = 'bogach.quests.access';
 
 String hashProductId(String productId) {
   const salt = '(c) Bogach Team';
