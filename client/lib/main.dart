@@ -35,7 +35,7 @@ Future<void> main({
   final alice = Alice(navigatorKey: appRouter.navigatorKey);
   final sharedPreferences = await SharedPreferences.getInstance();
   final userCache = UserCache(sharedPreferences);
-  final apiClient = configureApiClient(alice, environment);
+  final apiClient = configureApiClient(alice, AppConfiguration.environment);
   final launchCounter = LaunchCounter(sharedPreferences);
 
   configurePurchases();
