@@ -13,7 +13,7 @@ namespace IncomeFactory {
     EventFactory.incomeEvent({
       name: 'Продажа',
       description:
-        'Ваш инстаграм привлек новых клиентов ' +
+        'Ваш инстаграм привлек новых клиентов, ' +
         'и вы продали гайды по психологическому спокойствию',
       range: valueRange(value),
     });
