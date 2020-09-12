@@ -28,6 +28,7 @@ import 'features/login/login_actions.dart';
 Future<void> main({
   @required CashApiEnvironment environment,
 }) async {
+  environment = environment ?? CashApiEnvironment.production;
   WidgetsFlutterBinding.ensureInitialized();
   await AppConfiguration.init(environment: environment);
 
@@ -35,7 +36,7 @@ Future<void> main({
   final alice = Alice(navigatorKey: appRouter.navigatorKey);
   final sharedPreferences = await SharedPreferences.getInstance();
   final userCache = UserCache(sharedPreferences);
-  final apiClient = configureApiClient(alice, AppConfiguration.environment);
+  final apiClient = configureApiClient(alice, environment);
   final launchCounter = LaunchCounter(sharedPreferences);
 
   configurePurchases();
