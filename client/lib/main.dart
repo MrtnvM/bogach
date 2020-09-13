@@ -22,8 +22,8 @@ import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'features/login/login_actions.dart';
+import 'package:cash_flow/features/login/login_actions.dart';
+import 'package:cash_flow/features/purchase/purchase_actions.dart';
 
 Future<void> main({
   @required CashApiEnvironment environment,
@@ -63,6 +63,7 @@ Future<void> main({
 
   final isAuthorized = currentUser != null;
   dispatch(SetCurrentUserAction(user: currentUser));
+  dispatch(StartListeningPurchasesAction());
 
   final isFirstLaunch = launchCounter.isFirstLaunch();
   if (isFirstLaunch) {

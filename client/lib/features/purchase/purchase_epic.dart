@@ -12,9 +12,7 @@ Epic<AppState> purchaseEpic({@required PurchaseService purchaseService}) {
         .whereType<StartListeningPurchasesAction>() //
         .flatMap((action) => purchaseService
             .listenPurchaseUpdates()
-            .takeUntil(action$.whereType<StopListeningPurchasesAction>())
-            .map((purchases) => ListeningPurchasesSuccessAction(purchases))
-            .onErrorReturnWith((e) => ListeningPurchasesSuccessAction(e)));
+            .map((purchases) => OnPurchasesUpdatedAction(purchases)));
   });
 
   final isAvailableEpic = epic((action$, store) {
@@ -42,9 +40,17 @@ Epic<AppState> purchaseEpic({@required PurchaseService purchaseService}) {
         .whereType<QueryPastPurchasesAsyncAction>()
         .where((action) => action.isStarted)
         .flatMap((action) => purchaseService
-            .queryPastPurchases()
+            .queryPastPurchases(store.state.login.currentUser?.id)
+            .asStream()
             .map(action.complete)
             .onErrorReturnWith(action.fail));
+  });
+
+  final onPastPurchasesRestored = epic((action$, store) {
+    return action$ //
+        .whereType<OnPastPurchasesRestoredAction>()
+        .flatMap((_) => purchaseService.pastPurchases
+            .map((purchases) => OnPastPurchasesRestoredAction(purchases)));
   });
 
   final buyConsumableEpic = epic((action$, store) {
@@ -83,6 +89,7 @@ Epic<AppState> purchaseEpic({@required PurchaseService purchaseService}) {
     isAvailableEpic,
     queryProductsForSaleEpic,
     queryPastPurchasesEpic,
+    onPastPurchasesRestored,
     buyConsumableEpic,
     buyNonConsumableEpic,
     buyQuestsAccessEpic,

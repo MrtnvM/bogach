@@ -212,13 +212,14 @@ class _BuyButton extends HookWidget {
 
     VoidCallback buyQuestsAccess;
     buyQuestsAccess = () {
-      purchaseActions
-          .buyQuestsAccess()
-          .then((_) => gameActions.startGameByLevel(
-                gameLevel,
-                GameLevelAction.startNewGame,
-              ))
-          .catchError((error) => errorAlert(error, buyQuestsAccess));
+      purchaseActions.buyQuestsAccess().then((_) {
+        gameActions.startGameByLevel(
+          gameLevel,
+          GameLevelAction.startNewGame,
+        );
+      }).catchError((error) {
+        errorAlert(error, buyQuestsAccess);
+      });
     };
 
     return Column(

@@ -14,18 +14,15 @@ abstract class PurchaseState
 
   PurchaseState._();
 
-  RequestState get listenPurchasesRequestState;
   RequestState get getPastPurchasesRequestState;
   RequestState get buyQuestsAccessRequestState;
 
   BuiltList<PurchaseDetails> get updatedPurchases;
-
   BuiltList<PurchaseDetails> get pastPurchases;
 
   bool get hasQuestsAccess;
 
   static PurchaseState initial() => PurchaseState((b) => b
-    ..listenPurchasesRequestState = RequestState.idle
     ..getPastPurchasesRequestState = RequestState.idle
     ..buyQuestsAccessRequestState = RequestState.idle
     ..hasQuestsAccess = false

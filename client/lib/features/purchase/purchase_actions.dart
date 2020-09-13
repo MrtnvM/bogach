@@ -7,20 +7,10 @@ class StartListeningPurchasesAction extends Action {
   StartListeningPurchasesAction();
 }
 
-class ListeningPurchasesSuccessAction extends Action {
-  ListeningPurchasesSuccessAction(this.purchases);
+class OnPurchasesUpdatedAction extends Action {
+  OnPurchasesUpdatedAction(this.purchases);
 
-  final BuiltList<PurchaseDetails> purchases;
-}
-
-class ListeningPurchasesErrorAction extends Action {
-  ListeningPurchasesErrorAction(this.error);
-
-  final dynamic error;
-}
-
-class StopListeningPurchasesAction extends Action {
-  StopListeningPurchasesAction();
+  final List<PurchaseDetails> purchases;
 }
 
 class IsPurchasesAvailableAsyncAction extends AsyncAction<bool> {
@@ -39,6 +29,12 @@ class QueryProductsForSaleAsyncAction
 class QueryPastPurchasesAsyncAction
     extends AsyncAction<BuiltList<PurchaseDetails>> {
   QueryPastPurchasesAsyncAction();
+}
+
+class OnPastPurchasesRestoredAction extends Action {
+  OnPastPurchasesRestoredAction(this.pastPurchases);
+
+  final List<PurchaseDetails> pastPurchases;
 }
 
 class BuyConsumableAsyncAction extends AsyncAction<bool> {
