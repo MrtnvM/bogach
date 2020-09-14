@@ -1,3 +1,4 @@
+import 'package:cash_flow/app_configuration.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
@@ -98,6 +99,7 @@ class CashFlowScaffold extends StatelessWidget {
         constraints: const BoxConstraints(maxHeight: 220),
         alignment: Alignment.bottomCenter,
         child: ControlPanelGate(
+          isEnabled: AppConfiguration.controlPanelEnabled,
           child: Center(
             child: Image.asset(
               footerImage,
