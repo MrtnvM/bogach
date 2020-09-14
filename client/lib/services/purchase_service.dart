@@ -9,6 +9,7 @@ import 'package:cash_flow/core/errors/purchase_errors.dart';
 import 'package:cash_flow/core/purchases/purchases.dart';
 import 'package:cash_flow/models/errors/products_not_found_error.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 
 class PurchaseService {
   PurchaseService({@required this.apiClient});
@@ -24,7 +25,7 @@ class PurchaseService {
   Stream<List<PurchaseDetails>> listenPurchaseUpdates() {
     return _connection.purchaseUpdatedStream.doOnData((purchases) {
       _completeFailedPurchases(purchases);
-      print('Purchase Updated Stream: $purchases');
+      Logger.i('Purchase Updated Stream: $purchases');
     });
   }
 
@@ -53,7 +54,7 @@ class PurchaseService {
     final response = await _connection.queryPastPurchases();
 
     if (response.error != null) {
-      print('Query of Past Purchases failed: ${response.error}');
+      Logger.e('Query of Past Purchases failed: ${response.error}');
       throw QueryPastPurchasesRequestError(response.error);
     }
 
@@ -61,11 +62,9 @@ class PurchaseService {
 
     // TODO(Artem): _verifyPurchase(purchase);
 
-    if (Platform.isIOS) {
-      await Future.wait(
-        pastPurchases.map(_connection.completePurchase).toList(),
-      );
-    }
+    pastPurchases
+        .where((p) => p.pendingCompletePurchase)
+        .forEach(_connection.completePurchase);
 
     final completedPurchases = pastPurchases //
         .where((p) => p.status == PurchaseStatus.purchased)
@@ -74,8 +73,8 @@ class PurchaseService {
     if (completedPurchases.isNotEmpty) {
       if (userId != null) {
         sendPurchasedProductsToServer(userId, pastPurchases).listen(
-          (_) => print('Past purchases successfuly uploaded to server'),
-          onError: (e) => print('Past purchases uploading failed: $e'),
+          (_) => Logger.i('Past purchases successfuly uploaded to server'),
+          onError: (e) => Logger.e('Past purchases uploading failed: $e'),
         );
       }
 
@@ -127,7 +126,7 @@ class PurchaseService {
         await _connection.completePurchase(currentPurchase);
       }
 
-      print('Purchase ($questsAccessProductId) already completed!');
+      Logger.i('Purchase (${product.id}) already completed!');
       // Delivering the purchase to the user
       // By returning we indicates that purchase completed
       return;
@@ -149,25 +148,25 @@ class PurchaseService {
         purchaseParam: PurchaseParam(productDetails: product),
       );
 
-      print('Purchase ($questsAccessProductId) result: $result');
+      Logger.i('Purchase (${product.id}) result: $result');
 
       // ignore: avoid_catches_without_on_clauses
     } catch (error) {
-      print('Error on buying product (${product.id}): $error');
+      Logger.e('Error on buying product (${product.id}): $error');
       rethrow;
     }
 
     final purchase = await purchaseRequest;
-    print(purchase);
+    Logger.i('Purchasing (${product.id}): $purchase');
 
     final completionResult = await _connection.completePurchase(purchase);
-    print(completionResult);
+    Logger.i('Is purchase completed (${product.id}): $completionResult');
 
     await sendPurchasedProductsToServer(userId, [purchase])
         .timeout(const Duration(seconds: 30))
         .first;
 
-    print('Quest access purchase uploaded to server');
+    Logger.i('Purchase (${product.id}) uploaded to server');
   }
 
   Stream<void> sendPurchasedProductsToServer(
@@ -208,12 +207,12 @@ class PurchaseService {
         }
 
         if (result.responseCode == BillingResponse.ok) {
-          print('Purchase (${purchase.productID}) was completed!');
+          Logger.i('Purchase (${purchase.productID}) was completed!');
         }
 
         // ignore: avoid_catches_without_on_clauses
       } catch (error) {
-        print('Can not complete purchase (${purchase.productID}): $error');
+        Logger.e('Can not complete purchase (${purchase.productID}): $error');
       }
     }
   }
