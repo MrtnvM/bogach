@@ -81,6 +81,8 @@ class Strings {
 
   static String get emptyList => 'Список пуст';
 
+  static String get unavailable => 'Недоступно';
+
   static const rubleSymbol = '₽';
   static const title = '';
   static const wordIn = 'в';

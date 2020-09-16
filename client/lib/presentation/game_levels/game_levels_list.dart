@@ -79,6 +79,16 @@ class _GameLevelItemWidget extends HookWidget {
       (s) => s.newGame.currentGameForLevels,
     );
 
+    final onLevelSelected = _getOnLevelSelectedFn();
+
+    return GameLevelItemWidget(
+      gameLevel: gameLevel,
+      currentGameId: currentGameForLevels[gameLevel.id],
+      onLevelSelected: onLevelSelected,
+    );
+  }
+
+  Function(GameLevel, GameLevelAction) _getOnLevelSelectedFn() {
     final user = useCurrentUser();
     final currentQuestIndex = user.currentQuestIndex ?? 0;
 
@@ -90,16 +100,14 @@ class _GameLevelItemWidget extends HookWidget {
 
     final gameActions = useGameActions();
 
-    return GameLevelItemWidget(
-      gameLevel: gameLevel,
-      currentGameId: currentGameForLevels[gameLevel.id],
-      onLevelSelected: isQuestAvailable
-          ? gameActions.startGameByLevel
-          : !isQuestPurchased && isQuestOpenedByUser
-              ? (level, action) => appRouter.goTo(QuestsAccessPage(
-                    gameLevel: level,
-                  ))
-              : null,
-    );
+    if (isQuestAvailable) {
+      return gameActions.startGameByLevel;
+    }
+
+    if (isQuestOpenedByUser && !isQuestPurchased) {
+      return (level, _) => appRouter.goTo(QuestsAccessPage(gameLevel: level));
+    }
+
+    return null;
   }
 }

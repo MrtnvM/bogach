@@ -22,6 +22,20 @@ class GameLevelItemWidget extends HookWidget {
   Widget build(BuildContext context) {
     final isCollapsed = useState(true);
 
+    var widget = _buildContent(isCollapsed);
+
+    if (onLevelSelected == null) {
+      widget = Banner(
+        message: Strings.unavailable,
+        location: BannerLocation.topEnd,
+        child: widget,
+      );
+    }
+
+    return widget;
+  }
+
+  Widget _buildContent(ValueNotifier<bool> isCollapsed) {
     return GestureDetector(
       onTap: () {
         if (onLevelSelected == null) {
@@ -60,7 +74,7 @@ class GameLevelItemWidget extends HookWidget {
                     children: <Widget>[
                       Row(
                         children: <Widget>[
-                          if (onLevelSelected == null) ... const [
+                          if (onLevelSelected == null) ...const [
                             Icon(Icons.lock, size: 11),
                             SizedBox(width: 4),
                           ],
