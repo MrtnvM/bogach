@@ -38,7 +38,7 @@ class Strings {
   static String get start => 'Начать';
 
   static String getAuthButtonTitle(String socialNetwork) =>
-      'Войти через $socialNetwork';
+      'Вход с $socialNetwork';
 
   static String get labelRepeatPassword => 'Повторите пароль';
 
