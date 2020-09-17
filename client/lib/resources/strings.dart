@@ -38,7 +38,7 @@ class Strings {
   static String get start => 'Начать';
 
   static String getAuthButtonTitle(String socialNetwork) =>
-      'Войти через $socialNetwork';
+      'Вход с $socialNetwork';
 
   static String get labelRepeatPassword => 'Повторите пароль';
 
@@ -80,6 +80,8 @@ class Strings {
   static String get unknownUser => 'Аноним';
 
   static String get emptyList => 'Список пуст';
+
+  static String get unavailable => 'Недоступно';
 
   static const rubleSymbol = '₽';
   static const title = '';
