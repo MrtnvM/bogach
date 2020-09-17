@@ -5,7 +5,7 @@ namespace IncomeFactory {
   export const birthday = (value: number) =>
     EventFactory.incomeEvent({
       name: 'Подарок',
-      description: 'Вы отметили день рождения и друзья сделали вам подарок!',
+      description: 'Вы отметили день рождения, и друзья сделали вам подарок!',
       range: valueRange(value),
     });
 
@@ -13,7 +13,7 @@ namespace IncomeFactory {
     EventFactory.incomeEvent({
       name: 'Продажа',
       description:
-        'Ваш инстаграм привлек новых клиентов, ' +
+        'Ваш инстаграм привлёк новых клиентов, ' +
         'и вы продали гайды по психологическому спокойствию',
       range: valueRange(value),
     });
