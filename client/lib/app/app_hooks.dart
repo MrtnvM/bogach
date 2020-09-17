@@ -4,7 +4,6 @@ import 'package:cash_flow/core/hooks/dynamic_link_hooks.dart';
 import 'package:cash_flow/core/hooks/push_notification_hooks.dart';
 import 'package:cash_flow/features/login/login_actions.dart';
 import 'package:cash_flow/features/multiplayer/multiplayer_hooks.dart';
-import 'package:cash_flow/features/purchase/purchase_actions.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/multiplayer/room_page.dart';
 import 'package:cash_flow/resources/dynamic_links.dart';
@@ -14,15 +13,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:uni_links/uni_links.dart';
-
-void useSubscriptionToPurchases() {
-  final actionRunner = useActionRunner();
-
-  useEffect(() {
-    actionRunner.runAction(StartListeningPurchasesAction());
-    return () => actionRunner.runAction(StopListeningPurchasesAction());
-  }, []);
-}
 
 void useUserPushTokenUploader() {
   final currentUser = useCurrentUser();

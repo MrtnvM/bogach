@@ -1,15 +1,14 @@
-import 'package:cash_flow/core/hooks/global_state_hook.dart';
-import 'package:cash_flow/core/hooks/media_query_hooks.dart';
+import 'package:cash_flow/app/app_state.dart';
+import 'package:cash_flow/core/utils/app_store_connector.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/navigation_bar.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ContainerWithHeaderImage extends HookWidget {
+class ContainerWithHeaderImage extends StatefulWidget {
   const ContainerWithHeaderImage({
     Key key,
     @required this.children,
@@ -26,61 +25,87 @@ class ContainerWithHeaderImage extends HookWidget {
   final String imageSvg;
 
   @override
+  _ContainerWithHeaderImageState createState() =>
+      _ContainerWithHeaderImageState();
+}
+
+class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
+  final scrollController = ScrollController();
+
+  double topAlign = -1.0;
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(onScroll);
+  }
+
+  @override
+  void dispose() {
+    scrollController.removeListener(onScroll);
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final scrollController = useMemoized(() => ScrollController());
-    final isStartingNewMonth = useGlobalState(
-      (s) => s.game.startNewMonthRequestState.isInProgress,
-    );
-
-    final isSendingTurnEvent = useGlobalState((state) {
-      final activeGameState = state.game.activeGameState;
-
-      final isSent = activeGameState.maybeWhen(
-        gameEvent: (eventIndex, sendingEventIndex) =>
-            eventIndex == sendingEventIndex,
-        orElse: () => false,
-      );
-
-      return isSent;
-    });
-
-    final topAlign = useState(-1.0);
-
-    final notchSize = useNotchSize();
-    final imageHeight = _getBackgroundImageSize(notchSize.top);
+    final mediaQuery = MediaQuery.of(context);
+    final nocthHeight = mediaQuery.padding.top;
+    final imageHeight = _getBackgroundImageSize(nocthHeight);
     final contentOffset = imageHeight - 24;
-    final scrollOffset = imageHeight * 1.55;
-
-    useEffect(() {
-      final listener = () {
-        return topAlign.value = -1 - scrollController.offset / scrollOffset;
-      };
-
-      scrollController?.addListener(listener);
-      return () => scrollController?.removeListener(listener);
-    }, []);
-
-    final shouldDisplayLoader = isSendingTurnEvent || isStartingNewMonth;
 
     return Stack(
       children: <Widget>[
         _buildHeader(
           imageHeight: imageHeight,
-          topAlign: topAlign.value,
-          topPadding: notchSize.top,
+          topAlign: topAlign,
+          topPadding: nocthHeight,
         ),
         ListView(
           physics: const ClampingScrollPhysics(),
           controller: scrollController,
           padding: EdgeInsets.only(top: contentOffset, bottom: 16),
-          children: children,
+          children: widget.children,
         ),
-        if (shouldDisplayLoader) _buildLoader(),
+        AppStateConnector(
+          converter: shouldDisplayLoader,
+          builder: (context, shouldDisplayLoader) {
+            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+              onScroll();
+            });
+
+            return shouldDisplayLoader ? _buildLoader() : Container();
+          },
+        ),
         NavigationBar(
           scrollController: scrollController,
         ),
       ],
     );
+  }
+
+  bool shouldDisplayLoader(AppState s) {
+    final isStartingNewMonth = s.game.startNewMonthRequestState.isInProgress;
+
+    final activeGameState = s.game.activeGameState;
+    final isSendingTurnEvent = activeGameState.maybeWhen(
+      gameEvent: (eventIndex, sendingEventIndex) =>
+          eventIndex == sendingEventIndex,
+      orElse: () => false,
+    );
+
+    return isSendingTurnEvent || isStartingNewMonth;
+  }
+
+  void onScroll() {
+    final mediaQuery = MediaQuery.of(context);
+    final nocthHeight = mediaQuery.padding.top;
+    final imageHeight = _getBackgroundImageSize(nocthHeight);
+    final scrollOffset = imageHeight * 1.55;
+
+    setState(() {
+      topAlign = -1 - scrollController.offset / scrollOffset;
+    });
   }
 
   Widget _buildHeader({
@@ -144,13 +169,13 @@ class ContainerWithHeaderImage extends HookWidget {
         _buildHeaderContentImage(),
         const SizedBox(height: 8),
         Text(
-          navBarTitle,
+          widget.navBarTitle,
           style: Styles.bodyBlackBold.copyWith(color: ColorRes.white),
         ),
         const SizedBox(height: 8),
-        if (subTitle != null)
+        if (widget.subTitle != null)
           Text(
-            subTitle,
+            widget.subTitle,
             style: Styles.bodyBlack.copyWith(
               color: ColorRes.white,
               fontSize: 15,
@@ -161,13 +186,13 @@ class ContainerWithHeaderImage extends HookWidget {
   }
 
   Widget _buildHeaderContentImage() {
-    if (imageUrl != null) {
+    if (widget.imageUrl != null) {
       return UserAvatar(
-        url: imageUrl,
+        url: widget.imageUrl,
         size: 54,
       );
     }
-    if (imageSvg != null) {
+    if (widget.imageSvg != null) {
       return Container(
         width: 54,
         height: 54,
@@ -177,7 +202,7 @@ class ContainerWithHeaderImage extends HookWidget {
           color: ColorRes.white,
         ),
         child: SvgPicture.asset(
-          imageSvg,
+          widget.imageSvg,
           color: ColorRes.mainGreen,
         ),
       );
@@ -197,7 +222,7 @@ class ContainerWithHeaderImage extends HookWidget {
   }
 
   double _getBackgroundImageSize(double topPadding) {
-    if (subTitle != null) {
+    if (widget.subTitle != null) {
       return topPadding + 160;
     }
     return topPadding + 140;

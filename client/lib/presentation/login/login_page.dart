@@ -322,7 +322,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     handleError(context: context, exception: error);
   }
 
-  void _launchURL(String url) async {
+  Future<void> _launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {

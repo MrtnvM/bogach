@@ -33,7 +33,6 @@ class CashFlowApp extends HookWidget {
       (s) => s.multiplayer.joinRoomRequestState.isInProgress,
     );
 
-    useSubscriptionToPurchases();
     // usePushNotificationsPermissionRequest(useDelay: true);
     useUserPushTokenUploader();
     // usePushNotificationsHandler();

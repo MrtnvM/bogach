@@ -1,36 +1,39 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/core/errors/purchase_errors.dart';
 import 'package:cash_flow/core/purchases/purchases.dart';
-import 'package:cash_flow/models/errors/past_purchase_error.dart';
 import 'package:cash_flow/models/errors/products_not_found_error.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 
 class PurchaseService {
   PurchaseService({@required this.apiClient});
 
   final CashFlowApiClient apiClient;
   final _connection = InAppPurchaseConnection.instance;
+  final _pastPurchases = StreamController<List<PurchaseDetails>>();
+
+  Stream<List<PurchaseDetails>> get pastPurchases => _pastPurchases.stream;
 
   /// Subscribe to any incoming purchases at app initialization. These can
   /// propagate from either storefront.
-  Stream<BuiltList<PurchaseDetails>> listenPurchaseUpdates() {
-    // TODO(Artem): Handle new purchases on the mobile side.
-    return _connection.purchaseUpdatedStream
-        .map((items) => items.toBuiltList());
+  Stream<List<PurchaseDetails>> listenPurchaseUpdates() {
+    return _connection.purchaseUpdatedStream.doOnData((purchases) {
+      _completeFailedPurchases(purchases);
+      Logger.i('Purchase Updated Stream: $purchases');
+    });
   }
 
   Stream<bool> isAvailable() {
     return Stream.fromFuture(_connection.isAvailable());
   }
 
-  Stream<BuiltList<ProductDetails>> queryProductDetails({
-    Set<String> ids,
-  }) {
+  Stream<BuiltList<ProductDetails>> queryProductDetails({Set<String> ids}) {
     return Stream.fromFuture(_connection.queryProductDetails(ids))
         .map((response) {
       if (response.notFoundIDs.isNotEmpty) {
@@ -47,23 +50,38 @@ class PurchaseService {
   /// restoring these across devices you'll need to persist them on your own
   /// server and query that as well.
   // TODO(Artem): Persist purchases on our server
-  Stream<BuiltList<PurchaseDetails>> queryPastPurchases() {
-    return Stream.fromFuture(_connection.queryPastPurchases())
-        .flatMap((response) {
-      if (response.error != null) {
-        return Stream.error(PastPurchaseError(response.error.code));
+  Future<BuiltList<PurchaseDetails>> queryPastPurchases(String userId) async {
+    final response = await _connection.queryPastPurchases();
+
+    if (response.error != null) {
+      Logger.e('Query of Past Purchases failed: ${response.error}');
+      throw QueryPastPurchasesRequestError(response.error);
+    }
+
+    final pastPurchases = response.pastPurchases;
+
+    // TODO(Artem): _verifyPurchase(purchase);
+
+    pastPurchases
+        .where((p) => p.pendingCompletePurchase)
+        .forEach(_connection.completePurchase);
+
+    final completedPurchases = pastPurchases //
+        .where((p) => p.status == PurchaseStatus.purchased)
+        .toList();
+
+    if (completedPurchases.isNotEmpty) {
+      if (userId != null) {
+        sendPurchasedProductsToServer(userId, pastPurchases).listen(
+          (_) => Logger.i('Past purchases successfuly uploaded to server'),
+          onError: (e) => Logger.e('Past purchases uploading failed: $e'),
+        );
       }
 
-      // TODO(Artem): _verifyPurchase(purchase);
+      _pastPurchases.add(completedPurchases);
+    }
 
-      if (Platform.isIOS) {
-        return Stream.fromFutures(
-                response.pastPurchases.map(_connection.completePurchase))
-            .map((_) => response.pastPurchases.toBuiltList());
-      }
-
-      return Stream.value(response.pastPurchases.toBuiltList());
-    });
+    return pastPurchases.toBuiltList();
   }
 
   /// To restore consumable purchases across devices, you should keep track of
@@ -88,7 +106,7 @@ class PurchaseService {
   }
 
   Future<void> buyQuestsAcceess(String userId) async {
-    final response = await InAppPurchaseConnection.instance.queryProductDetails(
+    final response = await _connection.queryProductDetails(
       {questsAccessProductId},
     );
 
@@ -97,48 +115,105 @@ class PurchaseService {
     }
 
     final product = response.productDetails.first;
-
-    final pastPurchasesResponse =
-        await InAppPurchaseConnection.instance.queryPastPurchases();
-
-    if (response.error != null) {
-      throw QueryPastPurchasesRequestError(response.error);
-    }
-
-    for (final purchase in pastPurchasesResponse.pastPurchases) {
-      if (purchase.productID == questsAccessProductId) {
-        // Deliver the purchase to the user in your app.
-
-        if (Platform.isIOS) {
-          // Mark that you've delivered the purchase.
-          // Only the App Store requires
-          // this final confirmation.
-          InAppPurchaseConnection.instance.completePurchase(purchase);
-        }
-
-        return;
-      }
-    }
-
-    InAppPurchaseConnection.instance.buyNonConsumable(
-      purchaseParam: PurchaseParam(productDetails: product),
+    final pastPurchases = await queryPastPurchases(userId);
+    final currentPurchase = pastPurchases.firstWhere(
+      (p) => p.productID == product.id,
+      orElse: () => null,
     );
 
-    return _connection.purchaseUpdatedStream
+    if (currentPurchase != null) {
+      if (currentPurchase.pendingCompletePurchase) {
+        await _connection.completePurchase(currentPurchase);
+      }
+
+      Logger.i('Purchase (${product.id}) already completed!');
+      // Delivering the purchase to the user
+      // By returning we indicates that purchase completed
+      return;
+    }
+
+    final purchaseRequest = _connection.purchaseUpdatedStream
         .map(
           (products) => products.firstWhere(
-            (p) => p.productID == questsAccessProductId,
+            (p) => p.productID == product.id,
             orElse: () => null,
           ),
         )
         .where((p) => p != null)
-        .flatMap(
-      (purchase) {
-        final productIds = [purchase, ...pastPurchasesResponse.pastPurchases]
-            .map((p) => hashProductId(p.productID));
+        .timeout(const Duration(seconds: 30))
+        .first;
 
-        return apiClient.sendPurchasedProducts(userId, productIds);
-      },
-    ).first;
+    try {
+      final result = await _connection.buyNonConsumable(
+        purchaseParam: PurchaseParam(productDetails: product),
+      );
+
+      Logger.i('Purchase (${product.id}) result: $result');
+
+      // ignore: avoid_catches_without_on_clauses
+    } catch (error) {
+      Logger.e('Error on buying product (${product.id}): $error');
+      rethrow;
+    }
+
+    final purchase = await purchaseRequest;
+    Logger.i('Purchasing (${product.id}): $purchase');
+
+    final completionResult = await _connection.completePurchase(purchase);
+    Logger.i('Is purchase completed (${product.id}): $completionResult');
+
+    await sendPurchasedProductsToServer(userId, [purchase])
+        .timeout(const Duration(seconds: 30))
+        .first;
+
+    Logger.i('Purchase (${product.id}) uploaded to server');
+  }
+
+  Stream<void> sendPurchasedProductsToServer(
+    String userId,
+    List<PurchaseDetails> purchases,
+  ) {
+    final productIds = purchases //
+        .map((p) => hashProductId(p.productID))
+        .toList();
+
+    return apiClient.sendPurchasedProducts(userId, productIds);
+  }
+
+  Future<void> _completeFailedPurchases(List<PurchaseDetails> purchases) async {
+    if (!Platform.isIOS) {
+      return;
+    }
+
+    final failedPurchases = purchases //
+        .where((p) => p.status == PurchaseStatus.error)
+        .toList();
+
+    for (final purchase in failedPurchases) {
+      try {
+        final result = await _connection.completePurchase(purchase);
+
+        final retryStatuses = [
+          BillingResponse.billingUnavailable,
+          BillingResponse.error,
+          BillingResponse.serviceDisconnected,
+          BillingResponse.serviceUnavailable,
+        ];
+
+        if (retryStatuses.contains(result.responseCode)) {
+          Future.delayed(const Duration(minutes: 1)).then((_) {
+            _completeFailedPurchases([purchase]);
+          });
+        }
+
+        if (result.responseCode == BillingResponse.ok) {
+          Logger.i('Purchase (${purchase.productID}) was completed!');
+        }
+
+        // ignore: avoid_catches_without_on_clauses
+      } catch (error) {
+        Logger.e('Can not complete purchase (${purchase.productID}): $error');
+      }
+    }
   }
 }

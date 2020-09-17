@@ -83,7 +83,8 @@ class _GameLevelItemWidget extends HookWidget {
     final currentQuestIndex = user.currentQuestIndex ?? 0;
 
     final hasQuestsAccess = useGlobalState((s) => s.purchase.hasQuestsAccess);
-    final isQuestPurchased = index < 1 || hasQuestsAccess;
+    final isQuestPurchased =
+        index < 1 || hasQuestsAccess || user.boughtQuestsAccess;
     final isQuestOpenedByUser = index <= currentQuestIndex;
     final isQuestAvailable =
         (isQuestPurchased && isQuestOpenedByUser) || DemoMode.isEnabled;

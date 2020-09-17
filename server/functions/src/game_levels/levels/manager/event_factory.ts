@@ -5,7 +5,7 @@ namespace IncomeFactory {
   export const birthday = (value: number) =>
     EventFactory.incomeEvent({
       name: 'Подарок',
-      description: 'Вы отметили день рождения и друзья сделали вам подарок!',
+      description: 'Вы отметили день рождения, и друзья сделали вам подарок!',
       range: valueRange(value),
     });
 
@@ -178,7 +178,7 @@ namespace DebentureFactory {
       availableCount: valueRange(availableCount),
     });
 
-    export const goldMiner = (price: number, availableCount: number) =>
+  export const goldMiner = (price: number, availableCount: number) =>
     EventFactory.debentureEvent({
       name: '"Золотодобытчик" выпуск 1',
       profitability: valueRange(17),
@@ -229,7 +229,7 @@ namespace StockFactory {
       availableCount: valueRange(availableCount),
     });
 
-    export const gas = (price: number, availableCount: number) =>
+  export const gas = (price: number, availableCount: number) =>
     EventFactory.stockEvent({
       name: 'ГазПромышленность',
       currentPrice: valueRange(price),
