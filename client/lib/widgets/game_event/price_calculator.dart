@@ -8,8 +8,8 @@ typedef OnCountChangedCallback = void Function(int);
 
 class PriceCalculator extends StatelessWidget {
   const PriceCalculator({
-    Key key,
     @required this.currentPrice,
+    Key key,
     this.onCountChanged,
     this.count = 1,
   })  : assert(currentPrice != null),
@@ -22,28 +22,26 @@ class PriceCalculator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: <Widget>[
-          const Text(Strings.inputCount, style: Styles.bodyBlack),
-          const SizedBox(width: 12),
-          Expanded(child: Text('$count', style: Styles.bodyBlack)),
-          RichText(
-            text: TextSpan(
-              children: [
-                const TextSpan(text: ' = ', style: Styles.bodyBlack),
-                TextSpan(
-                  text: (currentPrice * count.toDouble()).toPrice(),
-                  style: Styles.body2.copyWith(
-                    color: ColorRes.mainGreen,
-                    fontSize: 15,
-                  ),
+    return Row(
+      children: <Widget>[
+        const Text(Strings.inputCount, style: Styles.bodyBlack),
+        const SizedBox(width: 12),
+        Expanded(child: Text('$count', style: Styles.bodyBlack)),
+        RichText(
+          text: TextSpan(
+            children: [
+              const TextSpan(text: ' = ', style: Styles.bodyBlack),
+              TextSpan(
+                text: (currentPrice * count.toDouble()).toPrice(),
+                style: Styles.body2.copyWith(
+                  color: ColorRes.mainGreen,
+                  fontSize: 15,
                 ),
-              ],
-            ),
-          )
-        ],
-      ),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 }

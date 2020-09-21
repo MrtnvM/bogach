@@ -55,7 +55,7 @@ Future<dynamic> showAlert({
 
   final continueButton = _buildDialogButton(
     submitButtonText,
-    onSubmit != null ? onSubmit : () {},
+    onSubmit ?? () {},
   );
 
   final actions = [continueButton];
@@ -80,11 +80,11 @@ Future<dynamic> showAlert({
 
 Widget _buildDialogButton(String text, VoidCallback onPressed) {
   return FlatButton(
-    child: Text(text, style: _buttonsStyle),
     onPressed: () {
       appRouter.goBack();
       onPressed();
     },
+    child: Text(text, style: _buttonsStyle),
   );
 }
 

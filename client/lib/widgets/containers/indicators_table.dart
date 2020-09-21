@@ -106,27 +106,27 @@ class IndicatorsTable extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Expanded(
+          flex: 13,
           child: Text(
             item.name,
             style: style,
           ),
-          flex: 13,
         ),
         Expanded(
+          flex: 10,
           child: Text(
             item.attribute,
             style: style,
             textAlign: TextAlign.end,
           ),
-          flex: 10,
         ),
         Expanded(
+          flex: 10,
           child: Text(
             item.value,
             style: style,
             textAlign: TextAlign.end,
           ),
-          flex: 10,
         ),
       ],
     );
@@ -140,27 +140,27 @@ class IndicatorsTable extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Expanded(
+          flex: 13,
           child: Text(
             item.name,
             style: textStyle,
           ),
-          flex: 13,
         ),
         Expanded(
+          flex: 10,
           child: Text(
             item.attribute,
             style: textStyle,
             textAlign: TextAlign.end,
           ),
-          flex: 10,
         ),
         Expanded(
+          flex: 10,
           child: Text(
             item.value,
             style: textStyle,
             textAlign: TextAlign.end,
           ),
-          flex: 10,
         ),
       ],
     );

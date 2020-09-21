@@ -32,7 +32,7 @@ class ProgressBar extends HookWidget {
           _ProgressTitle(target: target, currentValue: currentTargetValue),
           ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(5)),
-            child: Container(
+            child: SizedBox(
               height: 20,
               child: Stack(
                 children: [

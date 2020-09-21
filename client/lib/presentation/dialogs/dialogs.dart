@@ -54,13 +54,11 @@ Future<DialogResponse> showCashDialog({
                   children: <Widget>[
                     if (displayPositive)
                       Expanded(
-                        child: Container(
-                          child: FlatButton(
-                            child: Text(positiveButton ?? Strings.ok),
-                            onPressed: () {
-                              Navigator.pop(context, DialogResponse.confirm);
-                            },
-                          ),
+                        child: FlatButton(
+                          onPressed: () {
+                            Navigator.pop(context, DialogResponse.confirm);
+                          },
+                          child: Text(positiveButton ?? Strings.ok),
                         ),
                       ),
                     if (displayPositive && displayNegative)
@@ -68,10 +66,10 @@ Future<DialogResponse> showCashDialog({
                     if (displayNegative)
                       Expanded(
                         child: FlatButton(
-                          child: Text(negativeButton ?? Strings.cancel),
                           onPressed: () {
                             Navigator.pop(context, DialogResponse.decline);
                           },
+                          child: Text(negativeButton ?? Strings.cancel),
                         ),
                       ),
                   ],

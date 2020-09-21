@@ -12,7 +12,6 @@ typedef OnCountChangedCallback = void Function(int count);
 
 class GameEventValueSelector extends StatelessWidget {
   const GameEventValueSelector({
-    Key key,
     @required this.action,
     @required this.selectedCount,
     @required this.availableCount,
@@ -21,6 +20,7 @@ class GameEventValueSelector extends StatelessWidget {
     @required this.isChangeableType,
     @required this.onCountChanged,
     @required this.passiveIncomePerMonth,
+    Key key,
   })  : assert(action != null),
         assert(selectedCount != null),
         assert(availableCount != null && availableCount >= 0),

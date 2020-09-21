@@ -45,8 +45,8 @@ class SetGameContextAction extends Action {
 
 class SendPlayerMoveAsyncAction extends AsyncAction<void> {
   SendPlayerMoveAsyncAction({
-    this.playerAction,
     @required this.eventId,
+    this.playerAction,
   });
 
   final PlayerAction playerAction;

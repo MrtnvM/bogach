@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class OnboardingScaffold extends StatelessWidget {
   const OnboardingScaffold({
-    Key key,
     @required this.title,
     @required this.subtitle,
     @required this.image,
+    Key key,
     this.actionWidget,
   }) : super(key: key);
 
@@ -28,7 +28,7 @@ class OnboardingScaffold extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.only(top: 32),
             alignment: Alignment.center,
-            child: Container(
+            child: SizedBox(
               height: imageSize,
               width: imageSize,
               child: Image.asset(image),

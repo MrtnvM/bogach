@@ -67,7 +67,7 @@ class RoomPage extends HookWidget {
         title: Strings.waitingPlayers,
         showUser: true,
         showBackArrow: true,
-        child: Container(
+        child: SizedBox(
           height: 300,
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -115,7 +115,7 @@ class RoomPage extends HookWidget {
     @required VoidCallback startGame,
     @required bool canStartGame,
   }) {
-    return Container(
+    return SizedBox(
       height: 50,
       width: 200,
       child: ColorButton(
@@ -129,7 +129,7 @@ class RoomPage extends HookWidget {
   Widget _buildReadyButton({
     VoidCallback join,
   }) {
-    return Container(
+    return SizedBox(
       height: 50,
       width: 200,
       child: ColorButton(
@@ -141,7 +141,7 @@ class RoomPage extends HookWidget {
   }
 
   Widget _buildInviteByLinkButton(VoidCallback inviteByLink) {
-    return Container(
+    return SizedBox(
       height: 50,
       width: 280,
       child: ColorButton(
@@ -181,7 +181,7 @@ class RoomPage extends HookWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Container(
+          SizedBox(
             height: 94,
             child: UserProfileItem(profile),
           ),

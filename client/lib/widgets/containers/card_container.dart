@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 class CardContainer extends StatelessWidget {
   const CardContainer({
-    Key key,
     @required this.child,
+    Key key,
     this.padding,
     this.backgroundColor,
   }) : super(key: key);

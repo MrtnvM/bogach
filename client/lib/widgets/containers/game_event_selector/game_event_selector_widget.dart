@@ -15,9 +15,9 @@ typedef OnPlayerActionParamsChanged = void Function(
 
 class GameEventSelectorWidget extends HookWidget {
   const GameEventSelectorWidget({
-    Key key,
     @required this.viewModel,
     @required this.onPlayerActionParamsChanged,
+    Key key,
   })  : assert(viewModel != null),
         assert(onPlayerActionParamsChanged != null),
         super(key: key);

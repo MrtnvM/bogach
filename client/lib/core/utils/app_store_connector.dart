@@ -4,9 +4,9 @@ import 'package:flutter_redux/flutter_redux.dart';
 
 class AppStateConnector<T> extends StatelessWidget {
   const AppStateConnector({
-    Key key,
     @required this.converter,
     @required this.builder,
+    Key key,
     this.onInit,
     this.distinct = true,
   }) : super(key: key);

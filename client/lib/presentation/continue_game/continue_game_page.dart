@@ -30,7 +30,7 @@ class ContinueGamePage extends StatelessWidget {
         ),
         Positioned(
           bottom: 40,
-          child: Container(
+          child: SizedBox(
             height: 50,
             width: 200,
             child: ColorButton(

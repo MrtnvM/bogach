@@ -24,6 +24,7 @@ class _PurchasesSettingState extends State<PurchasesSetting> with ReduxState {
       margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       child: RaisedButton(
         color: Colors.green.withAlpha(240),
+        onPressed: openPurchases,
         child: FittedBox(
           child: Text(
             'Purchases',
@@ -34,7 +35,6 @@ class _PurchasesSettingState extends State<PurchasesSetting> with ReduxState {
             ),
           ),
         ),
-        onPressed: openPurchases,
       ),
     );
   }

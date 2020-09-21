@@ -7,11 +7,11 @@ typedef OnCountChangedCallback = void Function(int);
 
 class ValueSlider extends StatelessWidget {
   const ValueSlider({
-    Key key,
     @required this.currentAction,
     @required this.selectedCount,
     @required this.minCount,
     @required this.maxCount,
+    Key key,
     this.onCountChanged,
   }) : super(key: key);
 

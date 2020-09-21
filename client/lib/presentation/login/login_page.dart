@@ -95,16 +95,21 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     @required _SocialButtonType type,
   }) {
     return FlatButton(
+      color: Colors.white,
+      onPressed: () => loginViaSocial(type),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4.0),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           SvgPicture.asset(icon, width: 24, height: 24),
           const SizedBox(width: 12),
           Flexible(
-            child: Container(
+            child: SizedBox(
               height: 44,
               child: Center(
-                child: Container(
+                child: SizedBox(
                   width: 200,
                   child: Text(
                     Strings.getAuthButtonTitle(title),
@@ -116,11 +121,6 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
             ),
           ),
         ],
-      ),
-      color: Colors.white,
-      onPressed: () => loginViaSocial(type),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4.0),
       ),
     );
   }
@@ -178,7 +178,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
   }
 
   Widget buildLaterButton(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 46,
       width: 200,
       child: ColorButton(

@@ -26,11 +26,6 @@ class BorderButton extends StatelessWidget {
             onPressed: onPressed,
           )
         : OutlineButton(
-            child: AutoSizeText(
-              text.toUpperCase(),
-              textAlign: TextAlign.center,
-              style: Styles.body1,
-            ),
             color: color,
             onPressed: onPressed,
             borderSide: BorderSide(color: color),
@@ -38,6 +33,11 @@ class BorderButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(6.0),
             ),
             highlightedBorderColor: color,
+            child: AutoSizeText(
+              text.toUpperCase(),
+              textAlign: TextAlign.center,
+              style: Styles.body1,
+            ),
           );
   }
 }
