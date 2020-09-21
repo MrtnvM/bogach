@@ -60,7 +60,7 @@ class RoomPage extends HookWidget {
           .catchError((e) => handleError(context: context, exception: e));
     };
 
-    return Loadable(
+    return LoadableView(
       backgroundColor: ColorRes.black80,
       isLoading: isActionInProgress,
       child: CashFlowScaffold(

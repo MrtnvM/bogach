@@ -15,6 +15,7 @@ import 'package:flutter_hooks/flutter_hooks.dart' hide Store;
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter_redux/flutter_redux.dart' as redux;
 import 'package:redux/redux.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 
 class CashFlowApp extends HookWidget {
   CashFlowApp({
@@ -59,7 +60,7 @@ class CashFlowApp extends HookWidget {
           enabled: snapShoot.hasData && snapShoot.data,
           builder: (context) => MaterialApp(
             debugShowCheckedModeBanner: false,
-            builder: (context, widget) => Loadable(
+            builder: (context, widget) => LoadableView(
               backgroundColor: ColorRes.black80,
               isLoading: isJoiningToRoom,
               child: DevicePreview.appBuilder(context, widget),

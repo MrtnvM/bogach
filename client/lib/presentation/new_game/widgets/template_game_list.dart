@@ -12,6 +12,7 @@ import 'package:cash_flow/widgets/common/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 
 class TemplateGameList extends HookWidget {
   @override
@@ -45,10 +46,10 @@ class TemplateGameList extends HookWidget {
 
     final isLoading = templatesRequestState.isInProgress ||
         createGameRequestState.isInProgress;
-    return Loadable(
+    return LoadableView(
       isLoading: isLoading,
       backgroundColor: ColorRes.mainGreen.withOpacity(0.8),
-      child: LoadableList<GameTemplate>(
+      child: LoadableListView<GameTemplate>(
         viewModel: LoadableListViewModel(
           items: gameTemplates,
           itemBuilder: (i) => GameTemplateItem(

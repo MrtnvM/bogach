@@ -7,6 +7,7 @@ class CashApiEnvironment extends ApiEnvironment {
     @required this.name,
     bool validateRequestsByDefault = true,
     bool isRequestsAuthorisedByDefault = false,
+    this.isAnalyticsEnabled = false,
   }) : super(
           baseUrl: baseUrl,
           validateRequestsByDefaut: validateRequestsByDefault,
@@ -14,12 +15,14 @@ class CashApiEnvironment extends ApiEnvironment {
         );
 
   final String name;
+  final bool isAnalyticsEnabled;
 
   static const development = CashApiEnvironment(
     name: 'development',
     baseUrl: 'http://localhost:5001/cash-flow-uat/europe-west2/',
     validateRequestsByDefault: false,
     isRequestsAuthorisedByDefault: false,
+    isAnalyticsEnabled: false,
   );
 
   static const staging = CashApiEnvironment(
@@ -27,6 +30,7 @@ class CashApiEnvironment extends ApiEnvironment {
     baseUrl: 'https://europe-west2-cash-flow-staging.cloudfunctions.net/',
     validateRequestsByDefault: false,
     isRequestsAuthorisedByDefault: false,
+    isAnalyticsEnabled: false,
   );
 
   static const uat = CashApiEnvironment(
@@ -34,6 +38,7 @@ class CashApiEnvironment extends ApiEnvironment {
     baseUrl: 'https://europe-west2-cash-flow-uat.cloudfunctions.net/',
     validateRequestsByDefault: false,
     isRequestsAuthorisedByDefault: false,
+    isAnalyticsEnabled: true,
   );
 
   static const production = CashApiEnvironment(
@@ -41,5 +46,6 @@ class CashApiEnvironment extends ApiEnvironment {
     baseUrl: 'https://europe-west2-bogach-production.cloudfunctions.net/',
     validateRequestsByDefault: false,
     isRequestsAuthorisedByDefault: false,
+    isAnalyticsEnabled: true,
   );
 }

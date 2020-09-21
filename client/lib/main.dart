@@ -44,6 +44,7 @@ Future<void> main({
   configureErrorReporting();
   setOrientationPortrait();
   configureUiKit();
+  configureAnalytics(environment);
 
   final rootEpic = createRootEpic(
     apiClient,
@@ -88,10 +89,5 @@ void configurePurchases() {
 }
 
 void configureAnalytics(CashApiEnvironment environment) {
-  if (environment == CashApiEnvironment.production ||
-      environment == CashApiEnvironment.uat) {
-    AnalyticsSender.isEnabled = true;
-  } else {
-    AnalyticsSender.isEnabled = false;
-  }
+  AnalyticsSender.isEnabled = environment.isAnalyticsEnabled;
 }

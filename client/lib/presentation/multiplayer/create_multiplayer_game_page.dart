@@ -46,7 +46,7 @@ class CreateMultiplayerGamePage extends HookWidget {
       });
     };
 
-    return Loadable(
+    return LoadableView(
       isLoading: createRoomRequestState.isInProgress,
       backgroundColor: ColorRes.black80,
       child: CashFlowScaffold(
@@ -78,7 +78,7 @@ class CreateMultiplayerGamePage extends HookWidget {
     @required RefreshableRequestState loadGameTempalatesRequestState,
     @required VoidCallback loadGameTemplates,
   }) {
-    return LoadableList<GameTemplate>(
+    return LoadableListView<GameTemplate>(
       viewModel: LoadableListViewModel(
         items: gameTemplates,
         itemBuilder: (i) => GameTemplateItem(

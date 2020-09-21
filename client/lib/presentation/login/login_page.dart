@@ -9,6 +9,7 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
+import 'package:cash_flow/resources/urls.dart';
 import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
@@ -41,7 +42,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
 
   @override
   Widget build(BuildContext context) {
-    return Loadable(
+    return LoadableView(
       isLoading: _isAuthorising,
       backgroundColor: Colors.black.withAlpha(150),
       child: CashFlowScaffold(
@@ -154,7 +155,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                _launchURL('http://bogach-game.tilda.ws/terms-of-use');
+                _launchURL(Urls.termsOfUseUrl);
               },
           ),
           TextSpan(
@@ -168,7 +169,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                _launchURL('http://bogach-game.tilda.ws/privacy-policy');
+                _launchURL(Urls.policyUrl);
               },
           ),
         ],
@@ -327,9 +328,10 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
       await launch(url);
     } else {
       showErrorDialog(
-          context: context,
-          title: Strings.commonError,
-          message: Strings.canNotOpenLink);
+        context: context,
+        title: Strings.commonError,
+        message: Strings.canNotOpenLink,
+      );
     }
   }
 }
