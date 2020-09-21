@@ -30,6 +30,6 @@ class ErrorHandler<S> extends StreamTransformerBase<S, S> {
   }
 
   void _recordError(error, stacktrace) {
-    Crashlytics.instance.recordError(error, stacktrace);
+    FirebaseCrashlytics.instance.recordError(error, stacktrace);
   }
 }
