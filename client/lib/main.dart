@@ -44,6 +44,7 @@ Future<void> main({
   configureErrorReporting();
   setOrientationPortrait();
   configureUiKit();
+  configureAnalytics(environment);
 
   final rootEpic = createRootEpic(
     apiClient,

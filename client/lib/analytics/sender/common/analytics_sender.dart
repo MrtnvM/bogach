@@ -2,13 +2,8 @@ import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
 class AnalyticsSender {
-  factory AnalyticsSender() {
-    return _instance;
-  }
+  AnalyticsSender._();
 
-  AnalyticsSender._internal();
-
-  static final AnalyticsSender _instance = AnalyticsSender._internal();
   static final FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics();
 
   static bool isEnabled = false;
