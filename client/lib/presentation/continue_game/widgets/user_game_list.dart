@@ -39,11 +39,11 @@ class UserGameList extends HookWidget {
       actionRunner.runAction(GetUserGamesAsyncAction(userId: userId));
     };
 
-    return Loadable(
+    return LoadableView(
       isLoading:
           requestState.isInProgress || createGameRequestState.isInProgress,
       backgroundColor: ColorRes.mainGreen,
-      child: LoadableList<Game>(
+      child: LoadableListView<Game>(
         viewModel: LoadableListViewModel(
           items: userGames,
           itemBuilder: (i) => GameItem(

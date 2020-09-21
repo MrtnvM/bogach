@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
 
   @override
   Widget build(BuildContext context) {
-    return Loadable(
+    return LoadableView(
       isLoading: _isAuthorising,
       backgroundColor: Colors.black.withAlpha(150),
       child: CashFlowScaffold(

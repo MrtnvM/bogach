@@ -18,7 +18,7 @@ class ConnectedBlockedLoadable extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppStateConnector<bool>(
       converter: converter,
-      builder: (context, isLoading) => BlockedLoadable(
+      builder: (context, isLoading) => BlockedLoadableView(
         isLoading: isLoading,
         child: child,
       ),

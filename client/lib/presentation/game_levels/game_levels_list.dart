@@ -30,7 +30,7 @@ class GameLevelList extends HookWidget {
     final gameLevels = useGlobalState((s) => s.newGame.gameLevels);
     final gameActions = useGameActions();
 
-    return Loadable(
+    return LoadableView(
       isLoading: gameLevelsRequestState.isInProgress ||
           createQuestGameRequestState.isInProgress,
       backgroundColor: ColorRes.mainGreen.withOpacity(0.8),
@@ -40,7 +40,7 @@ class GameLevelList extends HookWidget {
           gameActions.refreshGameLevels(userId),
           actionRunner.runAsyncAction(LoadCurrentUserProfileAsyncAction())
         ]),
-        child: LoadableList<GameLevel>(
+        child: LoadableListView<GameLevel>(
           viewModel: LoadableListViewModel(
             items: gameLevels,
             itemBuilder: (i) => _GameLevelItemWidget(

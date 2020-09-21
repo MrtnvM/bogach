@@ -16,7 +16,7 @@ class ConnectedLoadable extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppStateConnector<bool>(
       converter: converter,
-      builder: (context, isLoading) => Loadable(
+      builder: (context, isLoading) => LoadableView(
         isLoading: isLoading,
         child: child,
       ),
