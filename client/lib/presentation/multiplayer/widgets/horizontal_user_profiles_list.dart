@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class HorizontalUserProfileList extends StatelessWidget {
   const HorizontalUserProfileList({
-    Key key,
     @required this.profiles,
     @required this.onProfileSelected,
+    Key key,
   }) : super(key: key);
 
   final List<UserProfile> profiles;
@@ -14,7 +14,7 @@ class HorizontalUserProfileList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 100,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,

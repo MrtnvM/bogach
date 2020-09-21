@@ -54,30 +54,28 @@ class BottomBar extends StatelessWidget {
   }
 
   Widget _buildBarButton({BottomBarItem item, bool isSelected}) {
-    return Container(
-      child: GestureDetector(
-        onTap: item.onPressed,
-        behavior: HitTestBehavior.translucent,
-        child: SafeArea(
-          child: Container(
-            height: 56,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SvgPicture.asset(
-                  item.image,
-                  width: 24,
-                  height: 24,
-                  color: isSelected
-                      ? ColorRes.mainGreen
-                      : ColorRes.primaryGreyColor,
-                ),
-                Text(
-                  item.title,
-                  style: Styles.bottomNavBarButtonTitle(isSelected: isSelected),
-                ),
-              ],
-            ),
+    return GestureDetector(
+      onTap: item.onPressed,
+      behavior: HitTestBehavior.translucent,
+      child: SafeArea(
+        child: SizedBox(
+          height: 56,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SvgPicture.asset(
+                item.image,
+                width: 24,
+                height: 24,
+                color: isSelected
+                    ? ColorRes.mainGreen
+                    : ColorRes.primaryGreyColor,
+              ),
+              Text(
+                item.title,
+                style: Styles.bottomNavBarButtonTitle(isSelected: isSelected),
+              ),
+            ],
           ),
         ),
       ),

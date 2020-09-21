@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 
 class PlayerActionBar extends StatelessWidget {
   const PlayerActionBar({
-    Key key,
     @required this.confirm,
+    Key key,
     this.takeLoan,
     this.skip,
   }) : super(key: key);

@@ -25,6 +25,7 @@ class _LogoutSettingState extends State<LogoutSetting> with ReduxState {
       margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       child: RaisedButton(
         color: Colors.green.withAlpha(240),
+        onPressed: openUiKit,
         child: FittedBox(
           child: Text(
             'Log Out',
@@ -35,7 +36,6 @@ class _LogoutSettingState extends State<LogoutSetting> with ReduxState {
             ),
           ),
         ),
-        onPressed: openUiKit,
       ),
     );
   }

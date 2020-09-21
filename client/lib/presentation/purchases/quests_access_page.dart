@@ -115,7 +115,7 @@ class _HeadlineImage extends StatelessWidget {
     final screenWidth = mediaQuery.size.width;
     final imageSize = screenWidth * 0.75;
 
-    return Container(
+    return SizedBox(
       height: imageSize,
       width: imageSize,
       child: Image.asset(Images.questsAccess),
@@ -194,9 +194,9 @@ class _AdvantagesWidget extends StatelessWidget {
 
 class _BuyButton extends HookWidget {
   const _BuyButton({
-    Key key,
     @required this.gameLevel,
     @required this.isStoreAvailable,
+    Key key,
   }) : super(key: key);
 
   final GameLevel gameLevel;

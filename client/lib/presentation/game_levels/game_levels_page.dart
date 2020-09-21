@@ -11,8 +11,8 @@ class GameLevelsPage extends StatelessWidget {
       title: Strings.chooseLevel,
       showUser: true,
       horizontalPadding: 10,
-      child: _buildBody(),
       showBackArrow: true,
+      child: _buildBody(),
     );
   }
 

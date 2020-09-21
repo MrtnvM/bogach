@@ -59,7 +59,7 @@ dependencies:
   smooth_page_indicator: ^0.2.0
 
 dev_dependencies:
-  effective_dart: ^1.2.1
+  effective_dart: ^1.2.4
   flutter_launcher_icons:
     git:
       url: git://github.com/fluttercommunity/flutter_launcher_icons

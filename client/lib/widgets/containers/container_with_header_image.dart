@@ -11,9 +11,9 @@ import 'package:dash_kit_core/dash_kit_core.dart';
 
 class ContainerWithHeaderImage extends StatefulWidget {
   const ContainerWithHeaderImage({
-    Key key,
     @required this.children,
     @required this.navBarTitle,
+    Key key,
     this.subTitle,
     this.imageUrl,
     this.imageSvg,

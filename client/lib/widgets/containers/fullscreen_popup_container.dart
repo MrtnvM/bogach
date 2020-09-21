@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class FullscreenPopupContainer extends StatelessWidget {
   const FullscreenPopupContainer({
-    Key key,
     @required this.backgroundColor,
     @required this.content,
+    Key key,
     this.onClose,
     this.topRightActionWidget,
   }) : super(key: key);
@@ -26,7 +26,7 @@ class FullscreenPopupContainer extends StatelessWidget {
         backgroundColor: backgroundColor,
         body: Stack(
           children: <Widget>[
-            Container(
+            SizedBox(
               width: double.infinity,
               child: content,
             ),

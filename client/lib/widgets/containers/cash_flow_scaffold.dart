@@ -11,9 +11,9 @@ import 'package:flutter_svg/svg.dart';
 
 class CashFlowScaffold extends StatelessWidget {
   const CashFlowScaffold({
-    Key key,
     @required this.child,
     @required this.title,
+    Key key,
     this.showUser = false,
     this.footerImage,
     this.horizontalPadding = 32,

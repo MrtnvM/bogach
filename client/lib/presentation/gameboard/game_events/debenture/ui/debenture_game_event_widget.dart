@@ -17,8 +17,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class DebentureGameEventWidget extends HookWidget {
   const DebentureGameEventWidget({
-    Key key,
     @required this.event,
+    Key key,
   }) : super(key: key);
   final GameEvent event;
 
