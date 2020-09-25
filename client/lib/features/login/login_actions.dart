@@ -1,3 +1,4 @@
+import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
@@ -57,7 +58,7 @@ class SendDevicePushTokenAsyncAction extends AsyncAction {
   final String pushToken;
 }
 
-class UpdateCurrentQuestIndexAsyncAction extends AsyncAction<UserProfile> {
+class UpdateCurrentQuestIndexAsyncAction extends BaseAction {
   UpdateCurrentQuestIndexAsyncAction(this.newQuestIndex);
 
   final int newQuestIndex;
