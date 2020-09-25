@@ -55,7 +55,7 @@ Future<void> main({
     userCache,
   );
 
-  final storeProvider = configureStoreProvider(rootEpic);
+  final storeProvider = configureStoreProvider();
   ReduxConfig.storeProvider = storeProvider;
   final dispatch = ReduxConfig.storeProvider.store.dispatch;
 
