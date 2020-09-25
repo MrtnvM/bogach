@@ -92,7 +92,7 @@ final gameReducer = Reducer<GameState>()
       );
 
       if (sendingEventIndex == null || sendingEventIndex < 0) {
-        Crashlytics.instance.recordError(
+        FirebaseCrashlytics.instance.recordError(
             'Game Reducer: Event with id ${action.eventId} not found', null);
         return;
       }
@@ -121,7 +121,7 @@ final gameReducer = Reducer<GameState>()
       s.startNewMonthRequestState = action.requestState;
     }),
   )
-  ..on<SetGameParticipnatsProfiles>(
+  ..on<SetGameParticipantsProfiles>(
     (state, action) => state.rebuild((s) {
       s.participantProfiles = StoreList<UserProfile>(action.userProfiles);
     }),

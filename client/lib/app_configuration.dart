@@ -44,24 +44,23 @@ class AppConfiguration {
   }
 
   static void _checkIsCorrectFirebaseEnvironmentSelected() {
-    FirebaseApp.instance.options.then((options) {
-      switch (environment) {
-        case CashApiEnvironment.development:
-          assert(options.projectID.contains('staging'));
-          break;
+    final options = Firebase.app().options;
+    switch (environment) {
+      case CashApiEnvironment.development:
+        assert(options.projectId.contains('staging'));
+        break;
 
-        case CashApiEnvironment.staging:
-          assert(options.projectID.contains('staging'));
-          break;
+      case CashApiEnvironment.staging:
+        assert(options.projectId.contains('staging'));
+        break;
 
-        case CashApiEnvironment.uat:
-          assert(options.projectID.contains('uat'));
-          break;
+      case CashApiEnvironment.uat:
+        assert(options.projectId.contains('uat'));
+        break;
 
-        case CashApiEnvironment.production:
-          assert(options.projectID.contains('production'));
-          break;
-      }
-    });
+      case CashApiEnvironment.production:
+        assert(options.projectId.contains('production'));
+        break;
+    }
   }
 }

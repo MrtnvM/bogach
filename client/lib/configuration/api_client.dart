@@ -1,5 +1,6 @@
 import 'package:alice_lightweight/alice.dart';
 import 'package:cash_flow/api_client/cash_flow_api_client.dart';
+import 'package:cash_flow/configuration/trace_interceptor.dart';
 import 'package:cash_flow/utils/debug.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 
@@ -29,6 +30,8 @@ Dio _createApiDio(Alice alice) {
       responseBody: true,
     ));
   });
+
+  apiDio.interceptors.add(TraceInterceptor());
 
   return apiDio;
 }

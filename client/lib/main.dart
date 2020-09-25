@@ -14,6 +14,7 @@ import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/configuration/ui_kit.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/utils/core/launch_counter.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
@@ -30,6 +31,7 @@ Future<void> main({
 }) async {
   environment = environment ?? CashApiEnvironment.production;
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeFirebase();
   await AppConfiguration.init(environment: environment);
 
   final tokenStorage = TokenStorage();
@@ -81,7 +83,11 @@ Future<void> main({
         isFirstLaunch: isFirstLaunch,
       ),
     );
-  }, Crashlytics.instance.recordError);
+  }, FirebaseCrashlytics.instance.recordError);
+}
+
+Future<void> initializeFirebase() async {
+  await Firebase.initializeApp();
 }
 
 void configurePurchases() {

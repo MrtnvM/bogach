@@ -55,8 +55,8 @@ class SendPlayerMoveAsyncAction extends AsyncAction<void> {
 
 class StartNewMonthAsyncAction extends AsyncAction {}
 
-class SetGameParticipnatsProfiles extends Action {
-  SetGameParticipnatsProfiles(this.userProfiles) : assert(userProfiles != null);
+class SetGameParticipantsProfiles extends Action {
+  SetGameParticipantsProfiles(this.userProfiles) : assert(userProfiles != null);
 
   final List<UserProfile> userProfiles;
 }

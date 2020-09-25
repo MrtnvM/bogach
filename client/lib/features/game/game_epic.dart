@@ -21,15 +21,13 @@ Epic<AppState> gameEpic({
   final startGameEpic = epic((action$, store) {
     return action$.whereType<StartGameAction>() //
         .flatMap((action) {
-      final game = gameService.getGame(action.gameContext);
-
-      final userProfiles = game
+      final userProfiles = gameService.getGame(action.gameContext)
           .take(1)
           .asyncMap((game) => userService.loadProfiles(game.participants))
-          .map<Action>((profiles) => SetGameParticipnatsProfiles(profiles))
+          .map<Action>((profiles) => SetGameParticipantsProfiles(profiles))
           .onErrorReturnWith((e) => OnGameErrorAction(e));
 
-      final gameSubscription = game
+      final gameSubscription = gameService.getGame(action.gameContext)
           .flatMap<Action>((game) {
             if (!shouldOpenNewQuestForUser(game)) {
               return Stream.value(OnGameStateChangedAction(game));

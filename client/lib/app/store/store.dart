@@ -37,7 +37,7 @@ Epic<AppState> createRootEpic(
   TokenStorage tokenStorage,
   UserCache userCache,
 ) {
-  final firestore = Firestore.instance;
+  final firestore = FirebaseFirestore.instance;
   final firebaseDatabase = FirebaseDatabase.instance;
   final firebaseAuth = FirebaseAuth.instance;
   final firebaseMessaging = FirebaseMessaging();

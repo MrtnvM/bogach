@@ -25,7 +25,7 @@ class UserService {
         assert(firestore != null);
 
   final FirebaseAuth firebaseAuth;
-  final Firestore firestore;
+  final FirebaseFirestore firestore;
   final FirebaseMessaging firebaseMessaging;
   final UserCache userCache;
 
@@ -84,9 +84,7 @@ class UserService {
   }
 
   Stream<UserProfile> loginViaFacebook({@required String token}) {
-    final authCredential = FacebookAuthProvider.getCredential(
-      accessToken: token,
-    );
+    final authCredential = FacebookAuthProvider.credential(token);
 
     return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
@@ -97,7 +95,7 @@ class UserService {
     @required String accessToken,
     @required String idToken,
   }) {
-    final authCredential = GoogleAuthProvider.getCredential(
+    final authCredential = GoogleAuthProvider.credential(
       accessToken: accessToken,
       idToken: idToken,
     );
@@ -113,8 +111,8 @@ class UserService {
     @required String firstName,
     @required String lastName,
   }) {
-    const authProvider = OAuthProvider(providerId: 'apple.com');
-    final credential = authProvider.getCredential(
+    final authProvider = OAuthProvider('apple.com');
+    final credential = authProvider.credential(
       idToken: idToken,
       accessToken: accessToken,
     );
@@ -124,12 +122,10 @@ class UserService {
       final user = response.user;
 
       if (firstName != null && lastName != null) {
-        final updateInfo = UserUpdateInfo();
-        updateInfo.displayName = '$firstName $lastName';
-        await user.updateProfile(updateInfo);
+        await user.updateProfile(displayName: '$firstName $lastName');
       }
 
-      return firebaseAuth.currentUser();
+      return firebaseAuth.currentUser;
     });
 
     return Stream.fromFuture(future)
@@ -143,10 +139,8 @@ class UserService {
       password: model.password,
     );
 
-    final user = await firebaseAuth.currentUser();
-    final userUpdateInfo = UserUpdateInfo();
-    userUpdateInfo.displayName = model.nickName;
-    await user.updateProfile(userUpdateInfo);
+    final user = firebaseAuth.currentUser;
+    await user.updateProfile(displayName: model.nickName);
     final updatedUser = _getUpdatedUser(user);
 
     return updatedUser;
@@ -159,10 +153,9 @@ class UserService {
     final users = await firestore
         .collection('users')
         .where('userName', isGreaterThanOrEqualTo: searchString)
-        .getDocuments()
-        .then((snapshot) => snapshot.documents
-            .map((d) => UserProfile.fromJson(d.data))
-            .toList());
+        .get()
+        .then((snapshot) =>
+            snapshot.docs.map((d) => UserProfile.fromJson(d.data())).toList());
 
     return SearchQueryResult(
       searchString: searchString,
@@ -171,12 +164,12 @@ class UserService {
   }
 
   Future<UserProfile> loadProfile(String userId) async {
-    final snapshot = await firestore.collection('users').document(userId).get();
+    final snapshot = await firestore.collection('users').doc(userId).get();
     if (snapshot?.data == null) {
       return null;
     }
 
-    final profile = UserProfile.fromJson(snapshot.data);
+    final profile = UserProfile.fromJson(snapshot.data());
     final currentUserProfile = userCache.getUserProfile();
     if (currentUserProfile?.id == profile.id) {
       userCache.setUserProfile(profile);
@@ -187,18 +180,18 @@ class UserService {
 
   Future<List<UserProfile>> loadProfiles(List<String> profileIds) async {
     final profiles = await Future.wait(
-      profileIds.map((id) => firestore.collection('users').document(id).get()),
+      profileIds.map((id) => firestore.collection('users').doc(id).get()),
     );
 
     final emptyProfiles = profiles //
         .where((p) => p.data == null)
-        .map((p) => p.documentID);
+        .map((p) => p.id);
 
     Logger.d('WARNING: not found profiles with IDs: $emptyProfiles');
 
     return profiles
         .where((p) => p.data != null)
-        .map((snapshot) => UserProfile.fromJson(snapshot.data))
+        .map((snapshot) => UserProfile.fromJson(snapshot.data()))
         .toList();
   }
 
@@ -206,10 +199,10 @@ class UserService {
     @required String userId,
     @required String pushToken,
   }) async {
-    await Firestore.instance
+    await firestore
         .collection('devices')
-        .document(userId)
-        .setData({'token': pushToken, 'device': Platform.operatingSystem});
+        .doc(userId)
+        .set({'token': pushToken, 'device': Platform.operatingSystem});
   }
 
   UserProfile updateCurrentQuestIndex(int newQuestIndex) {
@@ -226,7 +219,7 @@ class UserService {
     return updatedProfile;
   }
 
-  Future<UserProfile> _getUpdatedUser(FirebaseUser user) async {
+  Future<UserProfile> _getUpdatedUser(User user) async {
     final userId = user.uid;
     final cachedUserProfile = userCache.getUserProfile();
     final firestoreUser = await loadProfile(userId);
@@ -235,7 +228,7 @@ class UserService {
     if (firestoreUser != null) {
       updatedUser = firestoreUser.copyWith(
         fullName: user.displayName,
-        avatarUrl: user.photoUrl,
+        avatarUrl: user.photoURL,
       );
     }
 
@@ -245,7 +238,7 @@ class UserService {
 
     if (cachedUserProfile != updatedUser) {
       final userData = updatedUser.toJson();
-      await firestore.collection('users').document(userId).setData(userData);
+      await firestore.collection('users').doc(userId).set(userData);
       userCache.setUserProfile(updatedUser);
     }
 

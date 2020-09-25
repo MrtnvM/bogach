@@ -29,7 +29,7 @@ class GameService {
         assert(firebaseDatabase != null);
 
   final CashFlowApiClient apiClient;
-  final Firestore firestore;
+  final FirebaseFirestore firestore;
   final FirebaseDatabase firebaseDatabase;
 
   Stream<List<GameTemplate>> getGameTemplates() {
@@ -61,9 +61,9 @@ class GameService {
   Stream<Game> getGame(GameContext gameContext) {
     return firestore
         .collection('games')
-        .document(gameContext.gameId)
+        .doc(gameContext.gameId)
         .snapshots()
-        .map((snapshot) => Game.fromJson(snapshot.data));
+        .map((snapshot) => Game.fromJson(snapshot.data()));
   }
 
   Future<Game> getGameByLevel(String levelId, String userId) async {
@@ -71,10 +71,10 @@ class GameService {
         .collection('games')
         .where('participants', arrayContains: userId)
         .where('config.level', isEqualTo: levelId)
-        .getDocuments();
+        .get();
 
-    final games = gameDocs.documents
-        .map((d) => Game.fromJson(d.data))
+    final games = gameDocs.docs
+        .map((d) => Game.fromJson(d.data()))
         .where((g) => g.state.gameStatus != GameStatus.gameOver)
         .toList();
 
@@ -90,10 +90,10 @@ class GameService {
         .collection('games')
         .where('participants', arrayContains: userId)
         .where('config.level', isNull: true)
-        .getDocuments();
+        .get();
 
-    final games = gameDocs.documents
-        .map((d) => Game.fromJson(d.data))
+    final games = gameDocs.docs
+        .map((d) => Game.fromJson(d.data()))
         .where((g) => g.state.gameStatus != GameStatus.gameOver)
         .toList();
 
@@ -129,17 +129,17 @@ class GameService {
   Stream<Room> subscribeOnRoomUpdates(String roomId) {
     return firestore
         .collection('rooms')
-        .document(roomId)
+        .doc(roomId)
         .snapshots()
-        .map((snapshot) => Room.fromJson(snapshot.data));
+        .map((snapshot) => Room.fromJson(snapshot.data()));
   }
 
   Future<Room> getRoom(String roomId) {
     return firestore
         .collection('rooms')
-        .document(roomId)
+        .doc(roomId)
         .get()
-        .then((snapshot) => Room.fromJson(snapshot.data));
+        .then((snapshot) => Room.fromJson(snapshot.data()));
   }
 
   Future<void> shareRoomInviteLink({
