@@ -11,15 +11,17 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 StoreProvider<AppState> configureStoreProvider() {
   return StoreProvider(
-      initialState: AppState.initial(),
-      actionObservers: [ReduxActionObserver.instance]);
+    initialState: AppState.initial(),
+    actionObservers: [ReduxActionObserver.instance],
+  );
 }
 
-Epic<AppState> createRootEpic(
+void configureDependencyInjection(
   CashFlowApiClient apiClient,
   SharedPreferences sharedPreferences,
   TokenStorage tokenStorage,
@@ -47,9 +49,7 @@ Epic<AppState> createRootEpic(
     apiClient: apiClient,
   );
 
-  return rootEpic(
-    userService: userService,
-    gameService: gameService,
-    purchaseService: purchaseService,
-  );
+  GetIt.I.registerSingleton<GameService>(gameService);
+  GetIt.I.registerSingleton<UserService>(userService);
+  GetIt.I.registerSingleton<PurchaseService>(purchaseService);
 }
