@@ -1,3 +1,4 @@
+import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/features/login/login_actions.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
@@ -21,11 +22,19 @@ class LogoutSetting extends StatefulWidget implements ControlPanelSetting {
 class _LogoutSettingState extends State<LogoutSetting> with ReduxState {
   @override
   Widget build(BuildContext context) {
+    final dispatch = useDispatcher();
+
+    final logout = () {
+      dispatch(LogoutAsyncAction())
+          .then((_) => _onLogoutFinished())
+          .catchError((_) => _onLogoutFinished());
+    };
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       child: RaisedButton(
         color: Colors.green.withAlpha(240),
-        onPressed: openUiKit,
+        onPressed: logout,
         child: FittedBox(
           child: Text(
             'Log Out',
@@ -40,12 +49,7 @@ class _LogoutSettingState extends State<LogoutSetting> with ReduxState {
     );
   }
 
-  void openUiKit() {
-    dispatchAsyncAction(LogoutAsyncAction()).listen((action) =>
-        action.onSuccess(_onLogoutFinished)..onError(_onLogoutFinished));
-  }
-
-  void _onLogoutFinished(_) {
+  void _onLogoutFinished() {
     appRouter.startWith(const LoginPage());
   }
 }
