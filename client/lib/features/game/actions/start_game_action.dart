@@ -26,9 +26,9 @@ class StartGameAction extends BaseAction {
   FutureOr<AppState> reduce() {
     final gameService = GetIt.I.get<GameService>();
     final userService = GetIt.I.get<UserService>();
+    final action$ = GetIt.I.get<ReduxActionObserver>().onAction;
 
-    final onStopActiveGame =
-        ReduxActionObserver.instance.onAction.whereType<StopActiveGameAction>();
+    final onStopActiveGame = action$.whereType<StopActiveGameAction>();
 
     final userProfiles = gameService
         .getGame(gameContext)
