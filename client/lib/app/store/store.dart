@@ -15,9 +15,12 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 StoreProvider<AppState> configureStoreProvider() {
+  final actionObserver = ReduxActionObserver();
+  GetIt.I.registerSingleton<ReduxActionObserver>(actionObserver);
+
   return StoreProvider(
     initialState: AppState.initial(),
-    actionObservers: [ReduxActionObserver.instance],
+    actionObservers: [actionObserver],
   );
 }
 

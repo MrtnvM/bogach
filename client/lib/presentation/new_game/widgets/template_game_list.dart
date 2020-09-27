@@ -1,7 +1,13 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/alert_hooks.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/features/game/actions/start_game_action.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
+import 'package:cash_flow/features/network/network_request.dart';
+import 'package:cash_flow/features/new_game/actions/create_new_game_action.dart';
+import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard.dart';
@@ -18,15 +24,17 @@ class TemplateGameList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final templatesRequestState = useGlobalState(
-      (s) => s.newGame.getGameTemplatesRequestState,
+      (s) => s.network.getRequestState(NetworkRequest.loadGameTemplates),
     );
 
     final createGameRequestState = useGlobalState(
-      (s) => s.newGame.createNewGameRequestState,
+      (s) => s.network.getRequestState(NetworkRequest.createGame),
     );
 
     final gameTemplates = useGlobalState((s) => s.newGame.gameTemplates);
     final gameActions = useGameActions();
+    final dispatch = useDispatcher();
+    final userId = useUserId();
 
     final showCreateGameErrorAlert = useWarningAlert(
       needCancelButton: true,
@@ -34,6 +42,12 @@ class TemplateGameList extends HookWidget {
 
     void Function(GameTemplate) createNewGame;
     createNewGame = (template) {
+      dispatch(CreateNewGameAsyncAction(templateId: template.id))
+        .then((createdGameId) {
+          final gameContext = GameContext(gameId: createdGameId, userId: userId);
+          dispatch(StartGameAction(cre))
+        })
+
       gameActions.createGame(template.id).then((createdGameId) {
         gameActions.startGame(createdGameId);
 

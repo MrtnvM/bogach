@@ -1,6 +1,7 @@
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/features/game/actions/start_game_by_level_action.dart';
 import 'package:cash_flow/features/login/login_actions.dart';
 import 'package:cash_flow/features/network/network_request.dart';
 import 'package:cash_flow/features/new_game/actions/get_game_levels_action.dart';
@@ -12,11 +13,10 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/common/common_error_widget.dart';
 import 'package:cash_flow/widgets/common/empty_widget.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
-import 'package:dash_kit_core/dash_kit_core.dart' hide StoreProvider;
+import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
-import 'package:async_redux/async_redux.dart';
 
 class GameLevelList extends HookWidget {
   @override
@@ -105,7 +105,8 @@ class _GameLevelItemWidget extends HookWidget {
     final dispatch = useDispatcher();
 
     if (isQuestAvailable) {
-      return (gameLevel, action) => dispatch(StartGameByLevelAction());
+      return (gameLevel, action) =>
+          dispatch(StartGameByLevelAction(gameLevel, action));
     }
 
     if (isQuestOpenedByUser && !isQuestPurchased) {

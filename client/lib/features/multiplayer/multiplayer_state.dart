@@ -15,7 +15,6 @@ abstract class MultiplayerState
 
   StoreList<UserProfile> get userProfiles;
   SearchQueryResult get userProfilesQuery;
-  RequestState get userProfilesQueryRequestState;
 
   @nullable
   GameTemplate get selectedGameTemplate;
@@ -23,19 +22,7 @@ abstract class MultiplayerState
   @nullable
   Room get currentRoom;
 
-  RequestState get createRoomRequestState;
-  RequestState get createRoomGameRequestState;
-  RequestState get joinRoomRequestState;
-  RequestState get setPlayerReadyRequestState;
-  RequestState get createRoomInviteLinkRequestState;
-
   static MultiplayerState initial() => MultiplayerState((b) => b
     ..userProfiles = StoreList<UserProfile>()
-    ..userProfilesQuery = const SearchQueryResult()
-    ..userProfilesQueryRequestState = RequestState.idle
-    ..createRoomRequestState = RequestState.idle
-    ..createRoomGameRequestState = RequestState.idle
-    ..joinRoomRequestState = RequestState.idle
-    ..setPlayerReadyRequestState = RequestState.idle
-    ..createRoomInviteLinkRequestState = RequestState.idle);
+    ..userProfilesQuery = const SearchQueryResult());
 }
