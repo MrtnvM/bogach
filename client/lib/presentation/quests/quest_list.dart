@@ -7,6 +7,8 @@ import 'package:cash_flow/features/new_game/actions/start_quest_game_action.dart
 import 'package:cash_flow/features/profile/actions/load_current_user_profile_action.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/navigation/app_router.dart';
+import 'package:cash_flow/presentation/dialogs/dialogs.dart';
+import 'package:cash_flow/presentation/gameboard/gameboard.dart';
 import 'package:cash_flow/presentation/purchases/quests_access_page.dart';
 import 'package:cash_flow/presentation/quests/quest_item_widget.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -92,6 +94,7 @@ class _QuestItemWidget extends HookWidget {
   }
 
   Function(Quest, QuestAction) _getOnQuestSelectedFn() {
+    final context = useContext();
     final user = useCurrentUser();
     final currentQuestIndex = user.currentQuestIndex ?? 0;
 
@@ -105,8 +108,11 @@ class _QuestItemWidget extends HookWidget {
     final dispatch = useDispatcher();
 
     if (isQuestAvailable) {
-      return (quest, action) =>
-          dispatch(StartQuestGameAction(quest.id, action));
+      return (quest, action) {
+        return dispatch(StartQuestGameAction(quest.id, action))
+            .then((_) => appRouter.goTo(GameBoard()))
+            .catchError((e) => handleError(context: context, exception: e));
+      };
     }
 
     if (isQuestOpenedByUser && !isQuestPurchased) {
