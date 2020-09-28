@@ -87,10 +87,10 @@ class StopActiveGameAction extends BaseAction {
 
 bool _shouldOpenNewQuestForUser(Game game) {
   final userId = game.participants.first;
-  final gameLevel = game.config.level;
+  final quest = game.config.level;
 
   final isGameCompleted = game.state.gameStatus == GameStatus.gameOver;
-  final isQuestGame = gameLevel != null;
+  final isQuestGame = quest != null;
   final isUserWon = game.state.participantsProgress[userId].progress >= 1;
 
   return isGameCompleted && isQuestGame && isUserWon;

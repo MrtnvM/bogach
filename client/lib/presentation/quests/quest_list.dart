@@ -7,8 +7,8 @@ import 'package:cash_flow/features/new_game/actions/start_quest_game_action.dart
 import 'package:cash_flow/features/profile/actions/load_current_user_profile_action.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/navigation/app_router.dart';
-import 'package:cash_flow/presentation/game_levels/quest_item_widget.dart';
 import 'package:cash_flow/presentation/purchases/quests_access_page.dart';
+import 'package:cash_flow/presentation/quests/quest_item_widget.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/common/common_error_widget.dart';
 import 'package:cash_flow/widgets/common/empty_widget.dart';
@@ -29,7 +29,7 @@ class QuestList extends HookWidget {
       (s) => s.network.getRequestState(NetworkRequest.createQuestGame),
     );
 
-    final gameLevels = useGlobalState((s) => s.newGame.quests);
+    final quests = useGlobalState((s) => s.newGame.quests);
 
     final dispatch = useDispatcher();
 
@@ -45,9 +45,9 @@ class QuestList extends HookWidget {
         ]),
         child: LoadableListView<Quest>(
           viewModel: LoadableListViewModel(
-            items: gameLevels,
+            items: quests,
             itemBuilder: (i) => _QuestItemWidget(
-              gameLevel: gameLevels.items[i],
+              quests: quests.items[i],
               index: i,
             ),
             loadListRequestState: gameLevelsRequestState,
@@ -69,24 +69,24 @@ class QuestList extends HookWidget {
 
 class _QuestItemWidget extends HookWidget {
   const _QuestItemWidget({
-    @required this.gameLevel,
+    @required this.quests,
     @required this.index,
   });
 
-  final Quest gameLevel;
+  final Quest quests;
   final int index;
 
   @override
   Widget build(BuildContext context) {
-    final currentGameForLevels = useGlobalState(
+    final currentGameForQuests = useGlobalState(
       (s) => s.newGame.currentGameForQuests,
     );
 
     final onLevelSelected = _getOnQuestSelectedFn();
 
     return QuestItemWidget(
-      quest: gameLevel,
-      currentGameId: currentGameForLevels[gameLevel.id],
+      quest: quests,
+      currentGameId: currentGameForQuests[quests.id],
       onQuestSelected: onLevelSelected,
     );
   }
@@ -105,8 +105,8 @@ class _QuestItemWidget extends HookWidget {
     final dispatch = useDispatcher();
 
     if (isQuestAvailable) {
-      return (gameLevel, action) =>
-          dispatch(StartQuestGameAction(gameLevel.id, action));
+      return (quest, action) =>
+          dispatch(StartQuestGameAction(quest.id, action));
     }
 
     if (isQuestOpenedByUser && !isQuestPurchased) {

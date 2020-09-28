@@ -1,4 +1,4 @@
-import 'package:cash_flow/presentation/game_levels/quest_list.dart';
+import 'package:cash_flow/presentation/quests/quest_list.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';

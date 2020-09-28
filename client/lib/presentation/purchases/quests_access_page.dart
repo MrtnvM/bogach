@@ -6,7 +6,7 @@ import 'package:cash_flow/features/purchase/actions/buy_quests_access_action.dar
 import 'package:cash_flow/features/purchase/actions/query_past_purchases_action.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
-import 'package:cash_flow/presentation/game_levels/quest_item_widget.dart';
+import 'package:cash_flow/presentation/quests/quest_item_widget.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
