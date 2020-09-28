@@ -15,6 +15,7 @@ enum NetworkRequest {
   getUserGames,
   getQuests,
   createQuestGame,
+  sendPlayerAction,
 
   // Multiplayer
   createRoom,
