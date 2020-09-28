@@ -24,6 +24,10 @@ class SetRequestStateAction extends BaseAction {
 
   @override
   String toString() {
-    return '${super.toString()} ($request = $requestState)';
+    final state = requestState //
+        .toString()
+        .replaceAll('${(RequestState).toString()}.', '');
+
+    return '$request: $state';
   }
 }
