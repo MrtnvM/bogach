@@ -16,7 +16,7 @@ class SetCurrentUserAction extends BaseAction {
         state.purchase.hasQuestsAccess || boughtQuestsAccess;
 
     return state.rebuild((s) {
-      s.profile.currentUser = user;
+      s.profile = s.profile.copyWith(currentUser: user);
       s.purchase.hasQuestsAccess = hasQuestsAccess;
     });
   }
