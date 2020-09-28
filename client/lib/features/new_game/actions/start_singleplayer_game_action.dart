@@ -18,20 +18,13 @@ class StartSinglePlayerGameAction extends BaseAction {
   @override
   FutureOr<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
-
-    final createGameRequest = gameService
-        .createNewGame(
-          templateId: templateId,
-          userId: state.profile.currentUser.userId,
-        )
-        .first;
+    final userId = state.profile.currentUser.id;
 
     final newGameId = await performRequest(
-      createGameRequest,
+      gameService.createNewGame(templateId: templateId, userId: userId),
       NetworkRequest.createGame,
     );
 
-    final userId = state.profile.currentUser.id;
     final gameContext = GameContext(gameId: newGameId, userId: userId);
     dispatch(StartGameAction(gameContext));
 

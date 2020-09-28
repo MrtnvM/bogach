@@ -71,10 +71,11 @@ class PurchaseService {
 
     if (completedPurchases.isNotEmpty) {
       if (userId != null) {
-        sendPurchasedProductsToServer(userId, pastPurchases).listen(
-          (_) => Logger.i('Past purchases successfuly uploaded to server'),
-          onError: (e) => Logger.e('Past purchases uploading failed: $e'),
-        );
+        sendPurchasedProductsToServer(userId, pastPurchases).then((_) {
+          Logger.i('Past purchases successfuly uploaded to server');
+        }).catchError((e) {
+          Logger.e('Past purchases uploading failed: $e');
+        });
       }
 
       _pastPurchases.add(completedPurchases);
@@ -162,13 +163,12 @@ class PurchaseService {
     Logger.i('Is purchase completed (${product.id}): $completionResult');
 
     await sendPurchasedProductsToServer(userId, [purchase])
-        .timeout(const Duration(seconds: 30))
-        .first;
+        .timeout(const Duration(seconds: 30));
 
     Logger.i('Purchase (${product.id}) uploaded to server');
   }
 
-  Stream<void> sendPurchasedProductsToServer(
+  Future<void> sendPurchasedProductsToServer(
     String userId,
     List<PurchaseDetails> purchases,
   ) {
@@ -176,7 +176,7 @@ class PurchaseService {
         .map((p) => hashProductId(p.productID))
         .toList();
 
-    return apiClient.sendPurchasedProducts(userId, productIds);
+    return apiClient.sendPurchasedProducts(userId, productIds).first;
   }
 
   Future<void> _completeFailedPurchases(List<PurchaseDetails> purchases) async {

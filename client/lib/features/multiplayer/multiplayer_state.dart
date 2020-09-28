@@ -22,7 +22,9 @@ abstract class MultiplayerState
   @nullable
   Room get currentRoom;
 
-  static MultiplayerState initial() => MultiplayerState((b) => b
-    ..userProfiles = StoreList<UserProfile>()
-    ..userProfilesQuery = const SearchQueryResult());
+  static MultiplayerState initial() => MultiplayerState(
+        (b) => b
+          ..userProfiles = StoreList<UserProfile>()
+          ..userProfilesQuery = const SearchQueryResult(),
+      );
 }

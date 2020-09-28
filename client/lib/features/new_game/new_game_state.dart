@@ -24,10 +24,12 @@ abstract class NewGameState
   @nullable
   String get newGameId;
 
-  static NewGameState initial() => NewGameState((b) => b
-    ..currentGameForQuests = {}
-    ..gameTemplates = StoreList<GameTemplate>()
-    ..quests = StoreList<Quest>()
-    ..userGames = StoreList<Game>()
-    ..newGameId = null);
+  static NewGameState initial() => NewGameState(
+        (b) => b
+          ..currentGameForQuests = {}
+          ..gameTemplates = StoreList<GameTemplate>()
+          ..quests = StoreList<Quest>()
+          ..userGames = StoreList<Game>()
+          ..newGameId = null,
+      );
 }

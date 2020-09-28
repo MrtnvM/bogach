@@ -24,12 +24,9 @@ class StartQuestGameAction extends BaseAction {
     switch (action) {
       case QuestAction.startNewGame:
         final gameService = GetIt.I.get<GameService>();
-        final startQuestGameRequest = gameService
-            .createQuestGame(gameLevelId: questId, userId: userId)
-            .first;
 
         gameId = await performRequest(
-          startQuestGameRequest,
+          gameService.createQuestGame(gameLevelId: questId, userId: userId),
           NetworkRequest.createQuestGame,
         );
         break;

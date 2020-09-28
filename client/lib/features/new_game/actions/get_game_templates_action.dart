@@ -19,7 +19,7 @@ class GetGameTemplatesAction extends BaseAction {
     final gameService = GetIt.I.get<GameService>();
 
     final gameTemplates = await performRequest(
-      gameService.getGameTemplates().first,
+      gameService.getGameTemplates(),
       NetworkRequest.loadGameTemplates,
     );
 

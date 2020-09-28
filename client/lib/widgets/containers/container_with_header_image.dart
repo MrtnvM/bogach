@@ -1,5 +1,6 @@
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/core/utils/app_store_connector.dart';
+import 'package:cash_flow/features/network/network_request.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/navigation_bar.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
@@ -86,7 +87,8 @@ class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
   }
 
   bool shouldDisplayLoader(AppState s) {
-    final isStartingNewMonth = s.game.startNewMonthRequestState.isInProgress;
+    final isStartingNewMonth =
+        s.network.getRequestState(NetworkRequest.startNewMonth).isInProgress;
 
     final activeGameState = s.game.activeGameState;
     final isSendingTurnEvent = activeGameState.maybeWhen(

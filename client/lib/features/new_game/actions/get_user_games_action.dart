@@ -23,16 +23,14 @@ class GetUserGamesAction extends BaseAction {
   FutureOr<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
 
-    gameService.getUserGames(userId);
-
     final games = await performRequest(
       gameService.getUserGames(userId),
       NetworkRequest.getUserGames,
       isRefreshing: isRefreshing,
     );
 
-    return state.rebuild(
-      (s) => s.newGame.userGames = StoreList<Game>(games),
-    );
+    return state.rebuild((s) {
+      s.newGame.userGames = StoreList<Game>(games);
+    });
   }
 }

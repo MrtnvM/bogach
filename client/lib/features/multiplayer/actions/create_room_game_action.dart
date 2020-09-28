@@ -13,7 +13,7 @@ class CreateRoomGameAction extends BaseAction {
     final roomId = state.multiplayer.currentRoom.id;
 
     await performRequest(
-      gameService.createRoomGame(roomId).first,
+      gameService.createRoomGame(roomId),
       NetworkRequest.createRoomGame,
     );
 

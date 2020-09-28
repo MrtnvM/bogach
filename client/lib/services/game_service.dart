@@ -32,30 +32,32 @@ class GameService {
   final FirebaseFirestore firestore;
   final FirebaseDatabase firebaseDatabase;
 
-  Stream<List<GameTemplate>> getGameTemplates() {
-    return apiClient.getGameTemplates().map(mapToGameTemplates);
+  Future<List<GameTemplate>> getGameTemplates() {
+    return apiClient.getGameTemplates().map(mapToGameTemplates).first;
   }
 
-  Stream<List<Quest>> getQuests(String userId) {
-    return apiClient.getQuests(userId);
+  Future<List<Quest>> getQuests(String userId) {
+    return apiClient.getQuests(userId).first;
   }
 
-  Stream<String> createNewGame({
+  Future<String> createNewGame({
     @required String templateId,
     @required String userId,
   }) {
     return apiClient
         .createNewGame(templateId: templateId, userId: userId)
-        .map((response) => response.id);
+        .map((response) => response.id)
+        .first;
   }
 
-  Stream<String> createQuestGame({
+  Future<String> createQuestGame({
     @required String gameLevelId,
     @required String userId,
   }) {
     return apiClient
         .createNewQuestGame(questId: gameLevelId, userId: userId)
-        .map((response) => response.id);
+        .map((response) => response.id)
+        .first;
   }
 
   Stream<Game> getGame(GameContext gameContext) {
@@ -106,24 +108,24 @@ class GameService {
     return games;
   }
 
-  Stream<void> sendPlayerAction(PlayerActionRequestModel playerAction) {
-    return apiClient.sendPlayerAction(playerAction);
+  Future<void> sendPlayerAction(PlayerActionRequestModel playerAction) {
+    return apiClient.sendPlayerAction(playerAction).first;
   }
 
-  Stream<void> startNewMonth(GameContext gameContext) {
-    return apiClient.startNewMonth(gameContext);
+  Future<void> startNewMonth(GameContext gameContext) {
+    return apiClient.startNewMonth(gameContext).first;
   }
 
-  Stream<Room> createRoom(CreateRoomRequestModel requestModel) {
-    return apiClient.createRoom(requestModel);
+  Future<Room> createRoom(CreateRoomRequestModel requestModel) {
+    return apiClient.createRoom(requestModel).first;
   }
 
-  Stream<void> setRoomParticipantReady(String roomId, String participantId) {
-    return apiClient.setRoomParticipantReady(roomId, participantId);
+  Future<void> setRoomParticipantReady(String roomId, String participantId) {
+    return apiClient.setRoomParticipantReady(roomId, participantId).first;
   }
 
-  Stream<void> createRoomGame(String roomId) {
-    return apiClient.createRoomGame(roomId);
+  Future<void> createRoomGame(String roomId) {
+    return apiClient.createRoomGame(roomId).first;
   }
 
   Stream<Room> subscribeOnRoomUpdates(String roomId) {

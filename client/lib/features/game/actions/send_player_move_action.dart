@@ -33,8 +33,6 @@ class SendPlayerMoveAction extends BaseAction {
       ),
       orElse: () => activeGameState,
     )));
-
-    return super.before();
   }
 
   @override
@@ -55,20 +53,15 @@ class SendPlayerMoveAction extends BaseAction {
     }
 
     final context = state.game.currentGameContext;
-    final request = gameService
-        .sendPlayerAction(PlayerActionRequestModel(
-          playerAction: playerAction,
-          gameContext: context,
-          eventId: eventId,
-        ))
-        .first;
 
-    try {
-      await performRequest(request, NetworkRequest.sendPlayerAction);
-      return null;
-
-      // ignore: avoid_catches_without_on_clauses
-    } catch (error) {
+    await performRequest(
+      gameService.sendPlayerAction(PlayerActionRequestModel(
+        playerAction: playerAction,
+        gameContext: context,
+        eventId: eventId,
+      )),
+      NetworkRequest.sendPlayerAction,
+    ).catchError((error) {
       final activeGameState = state.game.activeGameState.maybeMap(
         gameEvent: (gameEventState) => gameEventState.copyWith(
           sendingEventIndex: -1,
@@ -78,7 +71,9 @@ class SendPlayerMoveAction extends BaseAction {
 
       dispatch(SetActiveGameState(activeGameState));
 
-      rethrow;
-    }
+      throw error;
+    });
+
+    return null;
   }
 }

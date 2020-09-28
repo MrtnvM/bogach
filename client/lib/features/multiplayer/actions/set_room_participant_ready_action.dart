@@ -17,12 +17,10 @@ class SetRoomParticipantReadyAction extends BaseAction {
     final gameService = GetIt.I.get<GameService>();
 
     performRequest(
-      gameService
-          .setRoomParticipantReady(
-            state.multiplayer.currentRoom.id,
-            participantId,
-          )
-          .first,
+      gameService.setRoomParticipantReady(
+        state.multiplayer.currentRoom.id,
+        participantId,
+      ),
       NetworkRequest.setRoomParticipantReady,
     );
 

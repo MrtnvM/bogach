@@ -22,7 +22,7 @@ class CreateRoomAction extends BaseAction {
     );
 
     final room = await performRequest(
-      gameService.createRoom(requestModel).first,
+      gameService.createRoom(requestModel),
       NetworkRequest.createRoom,
     );
 

@@ -20,7 +20,7 @@ class GetQuestsAction extends BaseAction {
     final gameService = GetIt.I.get<GameService>();
 
     final quests = await performRequest(
-      gameService.getQuests(userId).first,
+      gameService.getQuests(userId),
       NetworkRequest.getQuests,
       isRefreshing: isRefreshing,
     );

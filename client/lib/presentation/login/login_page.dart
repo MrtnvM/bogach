@@ -299,7 +299,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         final accessToken =
             String.fromCharCodes(result.credential.authorizationCode);
         final firstName = result.credential.fullName.givenName;
-        final lastName = result.credential.fullName.givenName;
+        final lastName = result.credential.fullName.familyName;
 
         setState(() => _isAuthorising = true);
 
