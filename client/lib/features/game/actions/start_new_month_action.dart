@@ -7,15 +7,14 @@ import 'package:cash_flow/services/game_service.dart';
 import 'package:get_it/get_it.dart';
 
 class StartNewMonthAction extends BaseAction {
+  NetworkRequest get operaionKey => NetworkRequest.startNewMonth;
+
   @override
   FutureOr<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
     final gameContext = state.game.currentGameContext;
 
-    await performRequest(
-      gameService.startNewMonth(gameContext),
-      NetworkRequest.startNewMonth,
-    );
+    await gameService.startNewMonth(gameContext);
 
     return null;
   }

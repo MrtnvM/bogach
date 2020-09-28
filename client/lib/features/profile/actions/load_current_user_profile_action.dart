@@ -9,20 +9,18 @@ import 'package:get_it/get_it.dart';
 
 class LoadCurrentUserProfileAction extends BaseAction {
   @override
-  FutureOr<AppState> reduce() async {
-    final userId = state.profile.currentUser?.id;
+  NetworkRequest get operationKey => NetworkRequest.loadCurrentUserProfile;
 
-    if (userId == null) {
-      return null;
-    }
+  @override
+  bool abortDispatch() => state.profile.currentUser?.id == null;
+
+  @override
+  FutureOr<AppState> reduce() async {
+    final userId = state.profile.currentUser.id;
 
     final userService = GetIt.I.get<UserService>();
 
-    final currentUser = await performRequest(
-      userService.loadProfile(userId),
-      NetworkRequest.loadCurrentUserProfile,
-    );
-
+    final currentUser = await userService.loadProfile(userId);
     dispatch(SetCurrentUserAction(currentUser));
 
     return null;

@@ -21,6 +21,9 @@ class SendPlayerMoveAction extends BaseAction {
   final String eventId;
 
   @override
+  NetworkRequest get operationKey => NetworkRequest.sendPlayerAction;
+
+  @override
   FutureOr<void> before() {
     final sendingEventIndex = state.game.currentGame?.currentEvents?.indexWhere(
       (e) => e.id == eventId,
@@ -53,15 +56,13 @@ class SendPlayerMoveAction extends BaseAction {
     }
 
     final context = state.game.currentGameContext;
+    final requestModel = PlayerActionRequestModel(
+      playerAction: playerAction,
+      gameContext: context,
+      eventId: eventId,
+    );
 
-    await performRequest(
-      gameService.sendPlayerAction(PlayerActionRequestModel(
-        playerAction: playerAction,
-        gameContext: context,
-        eventId: eventId,
-      )),
-      NetworkRequest.sendPlayerAction,
-    ).catchError((error) {
+    await gameService.sendPlayerAction(requestModel).catchError((error) {
       final activeGameState = state.game.activeGameState.maybeMap(
         gameEvent: (gameEventState) => gameEventState.copyWith(
           sendingEventIndex: -1,

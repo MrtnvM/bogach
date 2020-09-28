@@ -10,6 +10,9 @@ import 'package:get_it/get_it.dart';
 
 class CreateRoomAction extends BaseAction {
   @override
+  NetworkRequest get operationKey => NetworkRequest.createRoom;
+
+  @override
   FutureOr<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
 
@@ -21,11 +24,7 @@ class CreateRoomAction extends BaseAction {
       gameTemplateId: gameTemplateId,
     );
 
-    final room = await performRequest(
-      gameService.createRoom(requestModel),
-      NetworkRequest.createRoom,
-    );
-
+    final room = await gameService.createRoom(requestModel);
     dispatch(StartListeningRoomUpdatesAction(room.id));
 
     return state.rebuild((s) {

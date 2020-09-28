@@ -14,13 +14,13 @@ class QueryProductsForSaleAction extends BaseAction {
   final Set<String> ids;
 
   @override
+  NetworkRequest get operationKey => NetworkRequest.queryProductDetails;
+
+  @override
   FutureOr<AppState> reduce() async {
     final purchaseService = GetIt.I.get<PurchaseService>();
 
-    final productsForSale = await performRequest(
-      purchaseService.queryProductDetails(ids: ids),
-      NetworkRequest.queryProductDetails,
-    );
+    final productsForSale = await purchaseService.queryProductDetails(ids: ids);
 
     return state.rebuild((s) {
       s.purchase.productsForSale = productsForSale.toBuilder();

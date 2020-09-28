@@ -8,22 +8,20 @@ import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
 class GetQuestsAction extends BaseAction {
-  GetQuestsAction({@required this.userId, this.isRefreshing = false})
-      : assert(isRefreshing != null),
-        assert(userId != null);
+  GetQuestsAction({@required this.userId, bool isRefreshing})
+      : assert(userId != null),
+        super(isRefreshing: isRefreshing);
 
-  final bool isRefreshing;
   final String userId;
+
+  @override
+  NetworkRequest get operationKey => NetworkRequest.getQuests;
 
   @override
   FutureOr<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
 
-    final quests = await performRequest(
-      gameService.getQuests(userId),
-      NetworkRequest.getQuests,
-      isRefreshing: isRefreshing,
-    );
+    final quests = await gameService.getQuests(userId);
 
     return state.rebuild((s) {
       s.newGame.quests.updateList(quests);

@@ -16,13 +16,16 @@ class StartSinglePlayerGameAction extends BaseAction {
   final String templateId;
 
   @override
+  NetworkRequest get operationKey => NetworkRequest.createGame;
+
+  @override
   FutureOr<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
     final userId = state.profile.currentUser.id;
 
-    final newGameId = await performRequest(
-      gameService.createNewGame(templateId: templateId, userId: userId),
-      NetworkRequest.createGame,
+    final newGameId = await gameService.createNewGame(
+      templateId: templateId,
+      userId: userId,
     );
 
     final gameContext = GameContext(gameId: newGameId, userId: userId);

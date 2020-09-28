@@ -9,19 +9,17 @@ import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:get_it/get_it.dart';
 
 class GetGameTemplatesAction extends BaseAction {
-  GetGameTemplatesAction({this.isRefreshing = false})
-      : assert(isRefreshing != null);
+  GetGameTemplatesAction({bool isRefreshing = false})
+      : super(isRefreshing: isRefreshing);
 
-  final bool isRefreshing;
+  @override
+  NetworkRequest get operationKey => NetworkRequest.loadGameTemplates;
 
   @override
   FutureOr<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
 
-    final gameTemplates = await performRequest(
-      gameService.getGameTemplates(),
-      NetworkRequest.loadGameTemplates,
-    );
+    final gameTemplates = await gameService.getGameTemplates();
 
     return state.rebuild((s) {
       s.newGame.gameTemplates = StoreList<GameTemplate>(gameTemplates);

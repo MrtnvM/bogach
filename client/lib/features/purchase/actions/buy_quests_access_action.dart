@@ -8,6 +8,9 @@ import 'package:get_it/get_it.dart';
 
 class BuyQuestsAccessAction extends BaseAction {
   @override
+  NetworkRequest get operationKey => NetworkRequest.buyQuestsAcceess;
+
+  @override
   FutureOr<AppState> reduce() async {
     final userId = state.profile.currentUser?.id;
 
@@ -16,11 +19,7 @@ class BuyQuestsAccessAction extends BaseAction {
     }
 
     final purchaseService = GetIt.I.get<PurchaseService>();
-
-    await performRequest(
-      purchaseService.buyQuestsAcceess(userId),
-      NetworkRequest.buyQuestsAcceess,
-    );
+    await purchaseService.buyQuestsAcceess(userId);
 
     return null;
   }

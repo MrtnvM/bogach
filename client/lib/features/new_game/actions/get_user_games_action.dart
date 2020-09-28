@@ -12,22 +12,20 @@ import 'package:get_it/get_it.dart';
 class GetUserGamesAction extends BaseAction {
   GetUserGamesAction({
     @required this.userId,
-    this.isRefreshing = false,
+    bool isRefreshing = false,
   })  : assert(userId != null),
-        assert(isRefreshing != null);
+        super(isRefreshing: isRefreshing);
 
   final String userId;
-  final bool isRefreshing;
+
+  @override
+  NetworkRequest get operationKey => NetworkRequest.getUserGames;
 
   @override
   FutureOr<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
 
-    final games = await performRequest(
-      gameService.getUserGames(userId),
-      NetworkRequest.getUserGames,
-      isRefreshing: isRefreshing,
-    );
+    final games = await gameService.getUserGames(userId);
 
     return state.rebuild((s) {
       s.newGame.userGames = StoreList<Game>(games);

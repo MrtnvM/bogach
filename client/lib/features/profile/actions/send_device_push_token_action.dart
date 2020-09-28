@@ -18,15 +18,15 @@ class SendDevicePushTokenAction extends BaseAction {
   final String pushToken;
 
   @override
+  NetworkRequest get operationKey => NetworkRequest.sendDevicePushToken;
+
+  @override
   FutureOr<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
 
-    await performRequest(
-      userService.sendUserPushToken(
-        userId: userId,
-        pushToken: pushToken,
-      ),
-      NetworkRequest.sendUserPushToken,
+    await userService.sendUserPushToken(
+      userId: userId,
+      pushToken: pushToken,
     );
 
     return null;

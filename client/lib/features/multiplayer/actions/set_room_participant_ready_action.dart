@@ -13,15 +13,15 @@ class SetRoomParticipantReadyAction extends BaseAction {
   final String participantId;
 
   @override
-  FutureOr<AppState> reduce() {
+  NetworkRequest get operationKey => NetworkRequest.setRoomParticipantReady;
+
+  @override
+  FutureOr<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
 
-    performRequest(
-      gameService.setRoomParticipantReady(
-        state.multiplayer.currentRoom.id,
-        participantId,
-      ),
-      NetworkRequest.setRoomParticipantReady,
+    await gameService.setRoomParticipantReady(
+      state.multiplayer.currentRoom.id,
+      participantId,
     );
 
     return null;

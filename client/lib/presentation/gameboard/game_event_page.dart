@@ -30,7 +30,7 @@ class GameEventPage extends HookWidget {
     final gameEvents = useCurrentGame((g) => g.currentEvents);
     final dispatch = useDispatcher();
 
-    final startNewMonth = () => dispatch(StartNewMonthAsyncAction());
+    final startNewMonth = () => dispatch(StartNewMonthAction());
 
     return activeGameState.maybeWhen(
       gameEvent: (eventIndex, _) {

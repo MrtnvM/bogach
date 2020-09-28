@@ -15,6 +15,9 @@ class JoinRoomAction extends BaseAction {
   final String roomId;
 
   @override
+  NetworkRequest get operationKey => NetworkRequest.joinRoom;
+
+  @override
   FutureOr<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
     final userService = GetIt.I.get<UserService>();
@@ -28,10 +31,7 @@ class JoinRoomAction extends BaseAction {
       return Tuple(room, profiles);
     };
 
-    final result = await performRequest(
-      joinRoomRequest(),
-      NetworkRequest.joinRoom,
-    );
+    final result = await joinRoomRequest();
 
     final room = result.item1;
     final participantProfiles = result.item2;

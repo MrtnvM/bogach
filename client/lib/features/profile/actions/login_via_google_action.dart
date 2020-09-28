@@ -19,15 +19,15 @@ class LoginViaGoogleAction extends BaseAction {
   final String idToken;
 
   @override
+  NetworkRequest get operationKey => NetworkRequest.loginViaGoogle;
+
+  @override
   FutureOr<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
 
-    final currentUser = await performRequest(
-      userService.loginViaGoogle(
-        accessToken: accessToken,
-        idToken: idToken,
-      ),
-      NetworkRequest.loginViaGoogle,
+    final currentUser = await userService.loginViaGoogle(
+      accessToken: accessToken,
+      idToken: idToken,
     );
 
     dispatch(SetCurrentUserAction(currentUser));

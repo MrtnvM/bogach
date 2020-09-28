@@ -6,7 +6,7 @@ enum NetworkRequest {
 
   // Profile
   loadCurrentUserProfile,
-  sendUserPushToken,
+  sendDevicePushToken,
 
   // Game
   loadGameTemplates,

@@ -20,6 +20,7 @@ class OnGameStateChangedAction extends BaseAction {
       if (game.state.gameStatus == GameStatus.playersMove) {
         final userId = s.game.currentGameContext.userId;
         final progress = game.state.participantsProgress[userId];
+
         if (progress.status == ParticipantProgressStatus.monthResult) {
           final waitingPlayerList = getParticipantIdsForWaiting(
             userId,

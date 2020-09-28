@@ -12,15 +12,15 @@ class ShareRoomInviteLinkAction extends BaseAction {
   final String roomId;
 
   @override
+  NetworkRequest get operationKey => NetworkRequest.shareRoomInviteLink;
+
+  @override
   FutureOr<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
 
-    await performRequest(
-      gameService.shareRoomInviteLink(
-        roomId: roomId,
-        currentUser: state.profile.currentUser,
-      ),
-      NetworkRequest.shareRoomInviteLink,
+    await gameService.shareRoomInviteLink(
+      roomId: roomId,
+      currentUser: state.profile.currentUser,
     );
 
     return null;

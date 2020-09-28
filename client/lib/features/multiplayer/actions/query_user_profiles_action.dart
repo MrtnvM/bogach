@@ -12,13 +12,13 @@ class QueryUserProfilesAction extends BaseAction {
   final String query;
 
   @override
+  NetworkRequest get operationKey => NetworkRequest.queryUserProfiles;
+
+  @override
   FutureOr<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
 
-    final result = await performRequest(
-      userService.searchUsers(query),
-      NetworkRequest.queryUserProfiles,
-    );
+    final result = await userService.searchUsers(query);
 
     return state.rebuild((s) {
       s.multiplayer.userProfiles.updateList(result.items);

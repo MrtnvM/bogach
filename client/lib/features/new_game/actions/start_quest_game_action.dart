@@ -16,6 +16,9 @@ class StartQuestGameAction extends BaseAction {
   final QuestAction action;
 
   @override
+  NetworkRequest get operationKey => NetworkRequest.createQuestGame;
+
+  @override
   FutureOr<AppState> reduce() async {
     final userId = state.profile.currentUser.id;
 
@@ -25,9 +28,9 @@ class StartQuestGameAction extends BaseAction {
       case QuestAction.startNewGame:
         final gameService = GetIt.I.get<GameService>();
 
-        gameId = await performRequest(
-          gameService.createQuestGame(gameLevelId: questId, userId: userId),
-          NetworkRequest.createQuestGame,
+        gameId = await gameService.createQuestGame(
+          gameLevelId: questId,
+          userId: userId,
         );
         break;
 

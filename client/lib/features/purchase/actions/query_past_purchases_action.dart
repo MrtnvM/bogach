@@ -10,7 +10,8 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:built_collection/built_collection.dart';
 
 class QueryPastPurchasesAction extends BaseAction {
-  QueryPastPurchasesAction();
+  @override
+  NetworkRequest get operationKey => NetworkRequest.queryPastPurchases;
 
   @override
   FutureOr<AppState> reduce() async {
@@ -21,11 +22,7 @@ class QueryPastPurchasesAction extends BaseAction {
     }
 
     final purchaseService = GetIt.I.get<PurchaseService>();
-
-    await performRequest(
-      purchaseService.queryPastPurchases(userId),
-      NetworkRequest.queryPastPurchases,
-    );
+    await purchaseService.queryPastPurchases(userId);
 
     return null;
   }
@@ -37,13 +34,10 @@ class OnPastPurchasesRestoredAction extends BaseAction {
   final List<PurchaseDetails> pastPurchases;
 
   @override
+  bool abortDispatch() => state.profile.currentUser?.id == null;
+
+  @override
   FutureOr<AppState> reduce() {
-    final userId = state.profile.currentUser?.id;
-
-    if (userId == null) {
-      return null;
-    }
-
     final purchases = pastPurchases;
     final boughtQuestsAccess = purchases.any(
       (p) =>

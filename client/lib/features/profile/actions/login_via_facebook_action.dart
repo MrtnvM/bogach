@@ -14,14 +14,13 @@ class LoginViaFacebookAction extends BaseAction {
   final String token;
 
   @override
+  NetworkRequest get operationKey => NetworkRequest.loginViaFacebook;
+
+  @override
   FutureOr<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
 
-    final currentUser = await performRequest(
-      userService.loginViaFacebook(token: token),
-      NetworkRequest.loginViaFacebook,
-    );
-
+    final currentUser = await userService.loginViaFacebook(token: token);
     dispatch(SetCurrentUserAction(currentUser));
 
     return null;
