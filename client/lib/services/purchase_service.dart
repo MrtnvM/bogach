@@ -29,13 +29,12 @@ class PurchaseService {
     });
   }
 
-  Stream<bool> isAvailable() {
-    return Stream.fromFuture(_connection.isAvailable());
+  Future<bool> isAvailable() {
+    return _connection.isAvailable();
   }
 
-  Stream<BuiltList<ProductDetails>> queryProductDetails({Set<String> ids}) {
-    return Stream.fromFuture(_connection.queryProductDetails(ids))
-        .map((response) {
+  Future<BuiltList<ProductDetails>> queryProductDetails({Set<String> ids}) {
+    return _connection.queryProductDetails(ids).then((response) {
       if (response.notFoundIDs.isNotEmpty) {
         throw ProductsNotFoundError(response.notFoundIDs);
       }
@@ -89,20 +88,20 @@ class PurchaseService {
   /// Consumed products are no longer considered to be "owned" by payment
   /// platforms and will not be delivered by calling [queryPastPurchases].
   // TODO(Artem): Persist purchases on our server
-  Stream<bool> buyConsumable({@required ProductDetails productDetails}) {
+  Future<bool> buyConsumable({@required ProductDetails productDetails}) {
     final purchaseParam = PurchaseParam(productDetails: productDetails);
 
-    return Stream.fromFuture(_connection.buyConsumable(
+    return _connection.buyConsumable(
       purchaseParam: purchaseParam,
-    ));
+    );
   }
 
-  Stream<bool> buyNonConsumable({@required ProductDetails productDetails}) {
+  Future<bool> buyNonConsumable({@required ProductDetails productDetails}) {
     final purchaseParam = PurchaseParam(productDetails: productDetails);
 
-    return Stream.fromFuture(_connection.buyNonConsumable(
+    return _connection.buyNonConsumable(
       purchaseParam: purchaseParam,
-    ));
+    );
   }
 
   Future<void> buyQuestsAcceess(String userId) async {

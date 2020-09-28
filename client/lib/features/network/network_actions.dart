@@ -21,4 +21,9 @@ class SetRequestStateAction extends BaseAction {
       (s) => s.network.requestStates[request] = requestState,
     );
   }
+
+  @override
+  String toString() {
+    return '${super.toString()} ($request = $requestState)';
+  }
 }

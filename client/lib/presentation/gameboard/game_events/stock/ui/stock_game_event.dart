@@ -1,5 +1,7 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
+import 'package:cash_flow/features/game/actions/send_player_move_action.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
@@ -28,7 +30,6 @@ class StockGameEvent extends HookWidget {
     final buySellAction = useState(const BuySellAction.buy());
     final selectedCount = useState(1);
     final infoTableData = useStockInfoTableData(event);
-    final gameActions = useGameActions();
     final sendPlayerAction = useStockPlayerActionHandler(
       event: event,
       selectedCount: selectedCount.value,
@@ -40,6 +41,8 @@ class StockGameEvent extends HookWidget {
     final alreadyHaveCount = useCurrentStock(event)?.countInPortfolio ?? 0;
 
     final stockDialogInfoModel = useStockInfoDialogModel();
+
+    final dispatch = useDispatcher();
 
     final selectorViewModel = SelectorViewModel(
       currentPrice: eventData.currentPrice,
@@ -96,7 +99,8 @@ class StockGameEvent extends HookWidget {
             );
           },
           skip: () {
-            gameActions.skipPlayerAction(event.id);
+            dispatch(SendPlayerMoveAction(eventId: event.id));
+
             AnalyticsSender.sendSkipBuySellStockEvent(
               buySellAction.value,
               event.name,

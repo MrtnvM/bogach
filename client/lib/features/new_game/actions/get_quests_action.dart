@@ -7,8 +7,8 @@ import 'package:cash_flow/services/game_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
-class GetGameLevelsAction extends BaseAction {
-  GetGameLevelsAction({@required this.userId, this.isRefreshing = false})
+class GetQuestsAction extends BaseAction {
+  GetQuestsAction({@required this.userId, this.isRefreshing = false})
       : assert(isRefreshing != null),
         assert(userId != null);
 
@@ -19,17 +19,17 @@ class GetGameLevelsAction extends BaseAction {
   FutureOr<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
 
-    final gameLevels = await performRequest(
-      gameService.getGameLevels(userId).first,
-      NetworkRequest.getGameLevels,
+    final quests = await performRequest(
+      gameService.getQuests(userId).first,
+      NetworkRequest.getQuests,
       isRefreshing: isRefreshing,
     );
 
     return state.rebuild((s) {
-      s.newGame.gameLevels.updateList(gameLevels);
+      s.newGame.quests.updateList(quests);
 
-      for (final level in gameLevels) {
-        s.newGame.currentGameForLevels[level.id] = level.currentGameId;
+      for (final quest in quests) {
+        s.newGame.currentGameForQuests[quest.id] = quest.currentGameId;
       }
     });
   }

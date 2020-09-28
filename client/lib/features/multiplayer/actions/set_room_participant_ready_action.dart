@@ -6,8 +6,8 @@ import 'package:cash_flow/features/network/network_request.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:get_it/get_it.dart';
 
-class SetRoomParticipantReadyAsyncAction extends BaseAction {
-  SetRoomParticipantReadyAsyncAction(this.participantId)
+class SetRoomParticipantReadyAction extends BaseAction {
+  SetRoomParticipantReadyAction(this.participantId)
       : assert(participantId != null);
 
   final String participantId;

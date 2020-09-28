@@ -62,7 +62,7 @@ class OnGameStateChangedAction extends BaseAction {
       final isQuestGame = game.config.level != null;
 
       if (isGameCompleted && isQuestGame) {
-        s.newGame.currentGameForLevels[game.config.level] = null;
+        s.newGame.currentGameForQuests[game.config.level] = null;
       }
     });
   }

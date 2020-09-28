@@ -1,4 +1,6 @@
+import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/features/game/actions/start_new_month_action.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event_widget.dart';
@@ -26,7 +28,9 @@ class GameEventPage extends HookWidget {
   Widget build(BuildContext context) {
     final activeGameState = useGlobalState((s) => s.game.activeGameState);
     final gameEvents = useCurrentGame((g) => g.currentEvents);
-    final gameActions = useGameActions();
+    final dispatch = useDispatcher();
+
+    final startNewMonth = () => dispatch(StartNewMonthAsyncAction());
 
     return activeGameState.maybeWhen(
       gameEvent: (eventIndex, _) {
@@ -37,7 +41,7 @@ class GameEventPage extends HookWidget {
         return _buildEventBody(gameEvents[eventIndex]);
       },
       waitingPlayers: (_) => WaitingPlayersCard(),
-      monthResult: () => _buildMonthResult(gameActions.startNewMonth),
+      monthResult: () => _buildMonthResult(startNewMonth),
       orElse: () => Container(),
     );
   }

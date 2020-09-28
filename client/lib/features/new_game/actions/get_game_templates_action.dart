@@ -8,8 +8,8 @@ import 'package:cash_flow/services/game_service.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:get_it/get_it.dart';
 
-class GetGameTemplatesAsyncAction extends BaseAction {
-  GetGameTemplatesAsyncAction({this.isRefreshing = false})
+class GetGameTemplatesAction extends BaseAction {
+  GetGameTemplatesAction({this.isRefreshing = false})
       : assert(isRefreshing != null);
 
   final bool isRefreshing;

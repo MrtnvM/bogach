@@ -1,5 +1,6 @@
 import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/app/app_state.dart';
+import 'package:cash_flow/app/store/redux_action_logger.dart';
 import 'package:cash_flow/app/store/redux_action_observer.dart';
 import 'package:cash_flow/cache/user_cache.dart';
 import 'package:cash_flow/services/game_service.dart';
@@ -15,12 +16,16 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 StoreProvider<AppState> configureStoreProvider() {
+  final actionLogger = ReduxActionLogger();
   final actionObserver = ReduxActionObserver();
   GetIt.I.registerSingleton<ReduxActionObserver>(actionObserver);
 
   return StoreProvider(
     initialState: AppState.initial(),
-    actionObservers: [actionObserver],
+    actionObservers: [
+      actionObserver,
+      actionLogger,
+    ],
   );
 }
 

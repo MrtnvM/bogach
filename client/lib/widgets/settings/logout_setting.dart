@@ -1,5 +1,5 @@
 import 'package:cash_flow/core/hooks/dispatcher.dart';
-import 'package:cash_flow/features/login/login_actions.dart';
+import 'package:cash_flow/features/profile/actions/logout_action.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +25,7 @@ class _LogoutSettingState extends State<LogoutSetting> with ReduxState {
     final dispatch = useDispatcher();
 
     final logout = () {
-      dispatch(LogoutAsyncAction())
+      dispatch(LogoutAction())
           .then((_) => _onLogoutFinished())
           .catchError((_) => _onLogoutFinished());
     };

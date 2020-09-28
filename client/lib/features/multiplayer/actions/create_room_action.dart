@@ -13,7 +13,7 @@ class CreateRoomAction extends BaseAction {
   FutureOr<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
 
-    final userId = state.login.currentUser.id;
+    final userId = state.profile.currentUser.id;
     final gameTemplateId = state.multiplayer.selectedGameTemplate.id;
 
     final requestModel = CreateRoomRequestModel(

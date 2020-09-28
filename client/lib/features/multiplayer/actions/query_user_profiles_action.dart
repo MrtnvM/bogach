@@ -6,8 +6,8 @@ import 'package:cash_flow/features/network/network_request.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:get_it/get_it.dart';
 
-class QueryUserProfilesAsyncAction extends BaseAction {
-  QueryUserProfilesAsyncAction([this.query]);
+class QueryUserProfilesAction extends BaseAction {
+  QueryUserProfilesAction([this.query]);
 
   final String query;
 

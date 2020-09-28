@@ -1,7 +1,13 @@
 import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
-import 'package:cash_flow/features/game/game_hooks.dart';
-import 'package:cash_flow/features/multiplayer/multiplayer_hooks.dart';
+import 'package:cash_flow/features/game/actions/start_game_action.dart';
+import 'package:cash_flow/features/multiplayer/actions/create_room_game_action.dart';
+import 'package:cash_flow/features/multiplayer/actions/room_listening_actions.dart';
+import 'package:cash_flow/features/multiplayer/actions/set_room_participant_ready_action.dart';
+import 'package:cash_flow/features/multiplayer/actions/share_room_invite_link_action.dart';
+import 'package:cash_flow/features/network/network_request.dart';
+import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/models/domain/room/room_participant.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -28,17 +34,19 @@ class RoomPage extends HookWidget {
     final userProfiles = useGlobalState((s) {
       return StoreList<UserProfile>([
         ...s.multiplayer.userProfiles.items,
-        s.login.currentUser,
+        s.profile.currentUser,
       ]);
     });
 
     final isActionInProgress = useGlobalState(
       (s) =>
-          s.multiplayer.createRoomGameRequestState.isInProgress ||
-          s.multiplayer.setPlayerReadyRequestState.isInProgress,
+          s.network
+              .getRequestState(NetworkRequest.createRoomGame)
+              .isInProgress ||
+          s.network
+              .getRequestState(NetworkRequest.setRoomParticipantReady)
+              .isInProgress,
     );
-
-    final multiplayerActions = useMultiplayerActions();
 
     final isCurrentUserRoomOwner = room.owner.id == userId;
     final participantsList = room.participants
@@ -52,11 +60,12 @@ class RoomPage extends HookWidget {
 
     final canStartGame = room.participants.length >= 2;
 
-    useAutoTransitionToCreatedGame();
+    _useAutoTransitionToCreatedGame();
+
+    final dispatch = useDispatcher();
 
     final inviteByLink = () {
-      multiplayerActions
-          .shareRoomInviteLink(room.id)
+      dispatch(ShareRoomInviteLinkAction(room.id))
           .catchError((e) => handleError(context: context, exception: e));
     };
 
@@ -95,13 +104,13 @@ class RoomPage extends HookWidget {
                 _buildInviteByLinkButton(inviteByLink),
                 const SizedBox(height: 16),
                 _buildStartGameButton(
-                  startGame: multiplayerActions.createRoomGame,
+                  startGame: () => dispatch(CreateRoomGameAction()),
                   canStartGame: canStartGame,
                 ),
               ],
               if (!isCurrentUserRoomOwner && isParticipantAlreadyJoined)
                 _buildReadyButton(
-                  join: () => multiplayerActions.setPlayerReady(userId),
+                  join: () => dispatch(SetRoomParticipantReadyAction(userId)),
                 ),
               const SizedBox(height: 16),
             ],
@@ -204,20 +213,21 @@ class RoomPage extends HookWidget {
   }
 }
 
-void useAutoTransitionToCreatedGame() {
+void _useAutoTransitionToCreatedGame() {
+  final userId = useUserId();
   final room = useGlobalState((s) => s.multiplayer.currentRoom);
-  final multiplayerActions = useMultiplayerActions();
-  final gameActions = useGameActions();
+  final dispatch = useDispatcher();
 
   useEffect(() {
     if (room?.gameId != null) {
-      gameActions.startGame(room.gameId);
+      final gameContext = GameContext(gameId: room.gameId, userId: userId);
+      dispatch(StartGameAction(gameContext));
 
       Future.delayed(const Duration(milliseconds: 100)).then((_) async {
         appRouter.goToRoot();
         appRouter.goTo(GameBoard());
 
-        multiplayerActions.stopListeningRoomUpdates(room.id);
+        dispatch(StopListeningRoomUpdatesAction(room.id));
       });
     }
 

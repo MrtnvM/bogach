@@ -6,8 +6,8 @@ import 'package:cash_flow/features/network/network_request.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:get_it/get_it.dart';
 
-class ShareRoomInviteLinkAsyncAction extends BaseAction {
-  ShareRoomInviteLinkAsyncAction(this.roomId) : assert(roomId != null);
+class ShareRoomInviteLinkAction extends BaseAction {
+  ShareRoomInviteLinkAction(this.roomId) : assert(roomId != null);
 
   final String roomId;
 
@@ -18,7 +18,7 @@ class ShareRoomInviteLinkAsyncAction extends BaseAction {
     await performRequest(
       gameService.shareRoomInviteLink(
         roomId: roomId,
-        currentUser: state.login.currentUser,
+        currentUser: state.profile.currentUser,
       ),
       NetworkRequest.shareRoomInviteLink,
     );

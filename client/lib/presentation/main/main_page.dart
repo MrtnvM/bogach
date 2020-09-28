@@ -1,9 +1,10 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/state_hooks.dart';
-import 'package:cash_flow/features/login/login_actions.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
+import 'package:cash_flow/features/profile/actions/load_current_user_profile_action.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/presentation/continue_game/continue_game_page.dart';
-import 'package:cash_flow/presentation/game_levels/game_levels_page.dart';
+import 'package:cash_flow/presentation/game_levels/quests_page.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/presentation/new_game/single_game_page.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -12,7 +13,6 @@ import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:cash_flow/widgets/buttons/text_button.dart';
 import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -23,10 +23,10 @@ class MainPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final user = useCurrentUser();
-    final actionRunner = useActionRunner();
+    final dispatch = useDispatcher();
 
     useEffect(() {
-      actionRunner.runAction(LoadCurrentUserProfileAsyncAction());
+      dispatch(LoadCurrentUserProfileAction());
       return null;
     }, []);
 
@@ -55,7 +55,7 @@ class MainPage extends HookWidget {
         ),
         const SizedBox(height: 24),
         ColorButton(
-          onPressed: () => appRouter.goTo(GameLevelsPage()),
+          onPressed: () => appRouter.goTo(QuestsPage()),
           text: Strings.gameLevels,
         ),
         // const SizedBox(height: 24),

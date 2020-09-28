@@ -8,7 +8,7 @@ class SingleGamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CashFlowScaffold(
-      title: Strings.chooseLevel,
+      title: Strings.chooseQuest,
       showUser: true,
       horizontalPadding: 10,
       showBackArrow: true,

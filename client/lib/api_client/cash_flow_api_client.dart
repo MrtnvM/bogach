@@ -2,7 +2,7 @@ library cash_flow_api;
 
 import 'package:cash_flow/api_client/headers.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
-import 'package:cash_flow/models/domain/game/game_level/game_level.dart';
+import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/models/domain/room/room.dart';
 import 'package:cash_flow/models/network/request/game/create_room_request_model.dart';
 import 'package:cash_flow/models/network/responses/game_template_response_model.dart';
@@ -28,10 +28,10 @@ class CashFlowApiClient extends ApiClient {
         headers: [contentJson],
       );
 
-  Stream<List<GameLevel>> getGameLevels(String userId) => get(
+  Stream<List<Quest>> getQuests(String userId) => get(
         path: 'gameLevels?user_id=$userId',
         responseMapper: rm.jsonArray(
-          (json) => json.map((item) => GameLevel.fromJson(item)).toList(),
+          (json) => json.map((item) => Quest.fromJson(item)).toList(),
         ),
       );
 
@@ -48,13 +48,13 @@ class CashFlowApiClient extends ApiClient {
         headers: [contentJson],
       );
 
-  Stream<NewGameResponseModel> createNewGameByLevel({
-    @required String gameLevelId,
+  Stream<NewGameResponseModel> createNewQuestGame({
+    @required String questId,
     @required String userId,
   }) =>
       post(
         path: 'createGameByLevel',
-        body: {'gameLevelId': gameLevelId, 'userId': userId},
+        body: {'gameLevelId': questId, 'userId': userId},
         responseMapper: rm.standard(
           (json) => NewGameResponseModel.fromJson(json),
         ),

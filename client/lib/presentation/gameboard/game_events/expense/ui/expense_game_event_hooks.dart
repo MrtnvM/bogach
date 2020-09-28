@@ -1,4 +1,5 @@
-import 'package:cash_flow/features/game/game_hooks.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
+import 'package:cash_flow/features/game/actions/send_player_move_action.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/game/possession_state/assets/asset.dart';
 import 'package:cash_flow/models/domain/game/possession_state/assets/insurance/insurance_asset.dart';
@@ -48,15 +49,14 @@ ExpenseWidgetData useExpenseEventData({
   return expenseWidgetData;
 }
 
-VoidCallback useExpensePlayerActionHandler({
-  @required GameEvent event,
-}) {
-  final gameActions = useGameActions();
+VoidCallback useExpensePlayerActionHandler({@required GameEvent event}) {
   final context = useContext();
+  final dispatch = useDispatcher();
 
   return () {
-    gameActions
-        .sendPlayerAction(const EmptyPlayerAction(), event.id)
-        .catchError((e) => handleError(context: context, exception: e));
+    dispatch(SendPlayerMoveAction(
+      eventId: event.id,
+      playerAction: const EmptyPlayerAction(),
+    )).catchError((e) => handleError(context: context, exception: e));
   };
 }

@@ -2,8 +2,8 @@ import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
-import 'package:cash_flow/models/domain/game/game_level/game_level.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
+import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/models/domain/room/room.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/models/network/request/game/create_room_request_model.dart';
@@ -36,8 +36,8 @@ class GameService {
     return apiClient.getGameTemplates().map(mapToGameTemplates);
   }
 
-  Stream<List<GameLevel>> getGameLevels(String userId) {
-    return apiClient.getGameLevels(userId);
+  Stream<List<Quest>> getQuests(String userId) {
+    return apiClient.getQuests(userId);
   }
 
   Stream<String> createNewGame({
@@ -49,12 +49,12 @@ class GameService {
         .map((response) => response.id);
   }
 
-  Stream<String> createNewGameByLevel({
+  Stream<String> createQuestGame({
     @required String gameLevelId,
     @required String userId,
   }) {
     return apiClient
-        .createNewGameByLevel(gameLevelId: gameLevelId, userId: userId)
+        .createNewQuestGame(questId: gameLevelId, userId: userId)
         .map((response) => response.id);
   }
 

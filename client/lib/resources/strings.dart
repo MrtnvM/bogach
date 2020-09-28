@@ -300,7 +300,7 @@ class Strings {
   static String get gameLevels => 'Квесты';
   static const multiPlayerGame = 'Игра с друзьями';
   static const continueGame = 'Продолжить игру';
-  static const chooseLevel = 'Выберите уровень';
+  static const chooseQuest = 'Выберите уровень';
   static const reach = 'Набрать';
   static const goBack = 'Вернуться назад';
 

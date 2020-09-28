@@ -1,13 +1,13 @@
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
-import 'package:cash_flow/features/game/actions/start_game_by_level_action.dart';
-import 'package:cash_flow/features/login/login_actions.dart';
 import 'package:cash_flow/features/network/network_request.dart';
-import 'package:cash_flow/features/new_game/actions/get_game_levels_action.dart';
-import 'package:cash_flow/models/domain/game/game_level/game_level.dart';
+import 'package:cash_flow/features/new_game/actions/get_quests_action.dart';
+import 'package:cash_flow/features/new_game/actions/start_quest_game_action.dart';
+import 'package:cash_flow/features/profile/actions/load_current_user_profile_action.dart';
+import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/navigation/app_router.dart';
-import 'package:cash_flow/presentation/game_levels/game_level_item.dart';
+import 'package:cash_flow/presentation/game_levels/quest_item_widget.dart';
 import 'package:cash_flow/presentation/purchases/quests_access_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/common/common_error_widget.dart';
@@ -18,18 +18,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 
-class GameLevelList extends HookWidget {
+class QuestList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final userId = useUserId();
     final gameLevelsRequestState = useGlobalState(
-      (s) => s.network.getRequestState(NetworkRequest.getGameLevels),
+      (s) => s.network.getRequestState(NetworkRequest.getQuests),
     );
     final createQuestGameRequestState = useGlobalState(
-      (s) => s.network.getRequestState(NetworkRequest.createNewGameByLevel),
+      (s) => s.network.getRequestState(NetworkRequest.createQuestGame),
     );
 
-    final gameLevels = useGlobalState((s) => s.newGame.gameLevels);
+    final gameLevels = useGlobalState((s) => s.newGame.quests);
 
     final dispatch = useDispatcher();
 
@@ -40,25 +40,25 @@ class GameLevelList extends HookWidget {
       child: RefreshIndicator(
         color: ColorRes.mainGreen,
         onRefresh: () => Future.wait([
-          dispatch(GetGameLevelsAction(userId: userId, isRefreshing: true)),
-          dispatch(LoadCurrentUserProfileAsyncAction())
+          dispatch(GetQuestsAction(userId: userId, isRefreshing: true)),
+          dispatch(LoadCurrentUserProfileAction())
         ]),
-        child: LoadableListView<GameLevel>(
+        child: LoadableListView<Quest>(
           viewModel: LoadableListViewModel(
             items: gameLevels,
-            itemBuilder: (i) => _GameLevelItemWidget(
+            itemBuilder: (i) => _QuestItemWidget(
               gameLevel: gameLevels.items[i],
               index: i,
             ),
             loadListRequestState: gameLevelsRequestState,
             loadList: () {
-              dispatch(GetGameLevelsAction(userId: userId));
-              dispatch(LoadCurrentUserProfileAsyncAction());
+              dispatch(GetQuestsAction(userId: userId));
+              dispatch(LoadCurrentUserProfileAction());
             },
             padding: const EdgeInsets.all(16),
             emptyStateWidget: EmptyWidget(),
             errorWidget: CommonErrorWidget(
-              () => dispatch(GetGameLevelsAction(userId: userId)),
+              () => dispatch(GetQuestsAction(userId: userId)),
             ),
           ),
         ),
@@ -67,31 +67,31 @@ class GameLevelList extends HookWidget {
   }
 }
 
-class _GameLevelItemWidget extends HookWidget {
-  const _GameLevelItemWidget({
+class _QuestItemWidget extends HookWidget {
+  const _QuestItemWidget({
     @required this.gameLevel,
     @required this.index,
   });
 
-  final GameLevel gameLevel;
+  final Quest gameLevel;
   final int index;
 
   @override
   Widget build(BuildContext context) {
     final currentGameForLevels = useGlobalState(
-      (s) => s.newGame.currentGameForLevels,
+      (s) => s.newGame.currentGameForQuests,
     );
 
-    final onLevelSelected = _getOnLevelSelectedFn();
+    final onLevelSelected = _getOnQuestSelectedFn();
 
-    return GameLevelItemWidget(
-      gameLevel: gameLevel,
+    return QuestItemWidget(
+      quest: gameLevel,
       currentGameId: currentGameForLevels[gameLevel.id],
-      onLevelSelected: onLevelSelected,
+      onQuestSelected: onLevelSelected,
     );
   }
 
-  Function(GameLevel, GameLevelAction) _getOnLevelSelectedFn() {
+  Function(Quest, QuestAction) _getOnQuestSelectedFn() {
     final user = useCurrentUser();
     final currentQuestIndex = user.currentQuestIndex ?? 0;
 
@@ -106,11 +106,11 @@ class _GameLevelItemWidget extends HookWidget {
 
     if (isQuestAvailable) {
       return (gameLevel, action) =>
-          dispatch(StartGameByLevelAction(gameLevel, action));
+          dispatch(StartQuestGameAction(gameLevel.id, action));
     }
 
     if (isQuestOpenedByUser && !isQuestPurchased) {
-      return (level, _) => appRouter.goTo(QuestsAccessPage(gameLevel: level));
+      return (level, _) => appRouter.goTo(QuestsAccessPage(quest: level));
     }
 
     return null;

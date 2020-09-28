@@ -1,22 +1,22 @@
-import 'package:cash_flow/models/domain/game/game_level/game_level.dart';
+import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-enum GameLevelAction { startNewGame, continueGame }
+enum QuestAction { startNewGame, continueGame }
 
-class GameLevelItemWidget extends HookWidget {
-  const GameLevelItemWidget({
-    @required this.gameLevel,
+class QuestItemWidget extends HookWidget {
+  const QuestItemWidget({
+    @required this.quest,
     @required this.currentGameId,
-    @required @required this.onLevelSelected,
+    @required @required this.onQuestSelected,
   });
 
-  final GameLevel gameLevel;
+  final Quest quest;
   final String currentGameId;
-  final void Function(GameLevel, GameLevelAction) onLevelSelected;
+  final void Function(Quest, QuestAction) onQuestSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class GameLevelItemWidget extends HookWidget {
 
     var widget = _buildContent(isCollapsed);
 
-    if (onLevelSelected == null) {
+    if (onQuestSelected == null) {
       widget = Banner(
         message: Strings.unavailable,
         location: BannerLocation.topEnd,
@@ -38,18 +38,18 @@ class GameLevelItemWidget extends HookWidget {
   Widget _buildContent(ValueNotifier<bool> isCollapsed) {
     return GestureDetector(
       onTap: () {
-        if (onLevelSelected == null) {
+        if (onQuestSelected == null) {
           return;
         }
 
         if (currentGameId == null) {
-          onLevelSelected?.call(gameLevel, GameLevelAction.startNewGame);
+          onQuestSelected?.call(quest, QuestAction.startNewGame);
         } else {
           isCollapsed.value = !isCollapsed.value;
         }
       },
       child: Opacity(
-        opacity: onLevelSelected == null ? 0.7 : 1,
+        opacity: onQuestSelected == null ? 0.7 : 1,
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.only(
@@ -74,19 +74,19 @@ class GameLevelItemWidget extends HookWidget {
                     children: <Widget>[
                       Row(
                         children: <Widget>[
-                          if (onLevelSelected == null) ...const [
+                          if (onQuestSelected == null) ...const [
                             Icon(Icons.lock, size: 11),
                             SizedBox(width: 4),
                           ],
                           Text(
-                            '${gameLevel.name}',
+                            '${quest.name}',
                             style: Styles.bodyBlackBold,
                           ),
                         ],
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '${gameLevel.description}',
+                        '${quest.description}',
                         style: Styles.bodyBlack,
                         maxLines: 2,
                       ),
@@ -113,20 +113,14 @@ class GameLevelItemWidget extends HookWidget {
                         title: Strings.startAgain,
                         color: ColorRes.grey2,
                         action: () {
-                          onLevelSelected(
-                            gameLevel,
-                            GameLevelAction.startNewGame,
-                          );
+                          onQuestSelected(quest, QuestAction.startNewGame);
                         },
                       ),
                       _buildButton(
                         title: Strings.continueAction,
                         color: ColorRes.yellow,
                         action: () {
-                          onLevelSelected(
-                            gameLevel,
-                            GameLevelAction.continueGame,
-                          );
+                          onQuestSelected(quest, QuestAction.continueGame);
                         },
                       ),
                     ],
@@ -159,7 +153,7 @@ class GameLevelItemWidget extends HookWidget {
 
   Widget getTemplateIcon() {
     return Image.network(
-      gameLevel.icon,
+      quest.icon,
       height: 38,
       width: 38,
     );

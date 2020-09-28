@@ -1,5 +1,6 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
-import 'package:cash_flow/features/game/game_hooks.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
+import 'package:cash_flow/features/game/actions/send_player_move_action.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/business/buy/model/business_buy_event_data.dart';
@@ -24,13 +25,13 @@ class BusinessSellGameEventWidget extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final infoTableData = useBusinessSellInfoTableData(event);
-    final gameActions = useGameActions();
     final checkedBusinessId = useState<String>();
     final sendPlayerAction = useBusinessSellPlayerActionHandler(
       event: event,
       businessId: checkedBusinessId.value,
     );
     final businessDialogInfoModel = useBusinessSellInfoDialogModel();
+    final dispatch = useDispatcher();
 
     return Column(
       children: <Widget>[
@@ -85,7 +86,8 @@ class BusinessSellGameEventWidget extends HookWidget {
             );
           },
           skip: () {
-            gameActions.skipPlayerAction(event.id);
+            dispatch(SendPlayerMoveAction(eventId: event.id));
+
             AnalyticsSender.sendSkipSellBusinessEvent(
               event.name,
               eventData.currentPrice,

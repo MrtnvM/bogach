@@ -1,26 +1,26 @@
 import 'package:cash_flow/app/state_hooks.dart';
-import 'package:cash_flow/core/hooks/alert_hooks.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/dynamic_link_hooks.dart';
 import 'package:cash_flow/core/hooks/push_notification_hooks.dart';
-import 'package:cash_flow/features/login/login_actions.dart';
-import 'package:cash_flow/features/multiplayer/multiplayer_hooks.dart';
+import 'package:cash_flow/features/multiplayer/actions/join_room_action.dart';
+import 'package:cash_flow/features/profile/actions/send_device_push_token_action.dart';
 import 'package:cash_flow/navigation/app_router.dart';
+import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/multiplayer/room_page.dart';
 import 'package:cash_flow/resources/dynamic_links.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:uni_links/uni_links.dart';
 
 void useUserPushTokenUploader() {
   final currentUser = useCurrentUser();
-  final actionRunner = useActionRunner();
+  final dispatch = useDispatcher();
 
   usePushTokenSubscription((token) {
     if (currentUser != null) {
-      actionRunner.runAction(SendDevicePushTokenAsyncAction(
+      dispatch(SendDevicePushTokenAction(
         userId: currentUser.userId,
         pushToken: token,
       ));
@@ -106,24 +106,28 @@ void useDeepLinkHandler() {
 }
 
 _AppActions useAppActions() {
-  final multiplayerActions = useMultiplayerActions();
-  final failedJoiningToRoomAlert = useWarningAlert(
-    message: (_) => Strings.joinRoomError,
-    needCancelButton: true,
-  );
+  final context = useContext();
+  final dispatch = useDispatcher();
 
   return useMemoized(
     () => _AppActions(
       joinRoom: (roomId) {
         VoidCallback joinRoom;
+
         joinRoom = () {
-          multiplayerActions.joinRoom(roomId).then((value) async {
+          dispatch(JoinRoomAction(roomId)).then((_) async {
             await Future.delayed(const Duration(milliseconds: 50));
 
             appRouter.goToRoot();
             appRouter.goTo(RoomPage());
           }).catchError((error) {
-            failedJoiningToRoomAlert(error, joinRoom);
+            handleError(
+              context: context,
+              exception: error,
+              onRetry: joinRoom,
+              errorMessage: Strings.joinRoomError,
+            );
+
             Logger.e('ERROR ON JOINING TO ROOM ($roomId):\n$error');
           });
         };

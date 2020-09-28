@@ -2,9 +2,9 @@ library app_state;
 
 import 'package:built_value/built_value.dart';
 import 'package:cash_flow/features/game/game_state.dart';
-import 'package:cash_flow/features/login/login_state.dart';
 import 'package:cash_flow/features/multiplayer/multiplayer_state.dart';
 import 'package:cash_flow/features/network/network_state.dart';
+import 'package:cash_flow/features/profile/profile_state.dart';
 import 'package:cash_flow/features/purchase/purchase_state.dart';
 import 'package:cash_flow/features/new_game/new_game_state.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
@@ -17,7 +17,7 @@ abstract class AppState
 
   AppState._();
 
-  LoginState get login;
+  ProfileState get profile;
   PurchaseState get purchase;
   NetworkState get network;
 
@@ -28,7 +28,7 @@ abstract class AppState
   static AppState initial() {
     return AppState(
       (b) => b
-        ..login = LoginState.initial().toBuilder()
+        ..profile = ProfileState.initial().toBuilder()
         ..purchase = PurchaseState.initial().toBuilder()
         ..network = NetworkState.initial().toBuilder()
         ..game = GameState.initial().toBuilder()

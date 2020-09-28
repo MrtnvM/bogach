@@ -1,19 +1,18 @@
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'game_level.freezed.dart';
-part 'game_level.g.dart';
+part 'quest.freezed.dart';
+part 'quest.g.dart';
 
 @freezed
-abstract class GameLevel with _$GameLevel implements StoreListItem {
-  factory GameLevel({
+abstract class Quest with _$Quest implements StoreListItem {
+  factory Quest({
     @required String id,
     @required String name,
     @required String description,
     @required String icon,
     String currentGameId,
-  }) = _GameLevel;
+  }) = _Quest;
 
-  factory GameLevel.fromJson(Map<String, dynamic> json) =>
-      _$GameLevelFromJson(json);
+  factory Quest.fromJson(Map<String, dynamic> json) => _$QuestFromJson(json);
 }

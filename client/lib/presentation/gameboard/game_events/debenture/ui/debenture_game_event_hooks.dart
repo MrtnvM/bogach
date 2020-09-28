@@ -1,4 +1,6 @@
 import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
+import 'package:cash_flow/features/game/actions/send_player_move_action.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/game/possession_state/assets/asset.dart';
@@ -51,8 +53,8 @@ VoidCallback useDebenturePlayerActionHandler({
   @required int selectedCount,
   @required BuySellAction action,
 }) {
-  final gameActions = useGameActions();
   final context = useContext();
+  final dispatch = useDispatcher();
 
   return () {
     final playerAction = DebenturePlayerAction(
@@ -61,9 +63,10 @@ VoidCallback useDebenturePlayerActionHandler({
       event.id,
     );
 
-    gameActions
-        .sendPlayerAction(playerAction, event.id)
-        .catchError((e) => handleError(context: context, exception: e));
+    dispatch(SendPlayerMoveAction(
+      eventId: event.id,
+      playerAction: playerAction,
+    )).catchError((e) => handleError(context: context, exception: e));
   };
 }
 

@@ -51,11 +51,9 @@ class UserService {
         .transform(errorHandler);
   }
 
-  Stream<void> logout() {
-    return Stream.fromFuture(() async {
-      userCache.deleteUserProfile();
-      firebaseAuth.signOut();
-    }());
+  Future<void> logout() async {
+    userCache.deleteUserProfile();
+    await firebaseAuth.signOut();
   }
 
   Stream<UserProfile> register({@required RegisterRequestModel model}) {
@@ -83,15 +81,16 @@ class UserService {
         .transform(errorHandler);
   }
 
-  Stream<UserProfile> loginViaFacebook({@required String token}) {
+  Future<UserProfile> loginViaFacebook({@required String token}) {
     final authCredential = FacebookAuthProvider.credential(token);
 
     return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
-        .asyncMap((response) => _getUpdatedUser(response.user));
+        .asyncMap((response) => _getUpdatedUser(response.user))
+        .first;
   }
 
-  Stream<UserProfile> loginViaGoogle({
+  Future<UserProfile> loginViaGoogle({
     @required String accessToken,
     @required String idToken,
   }) {
@@ -102,10 +101,11 @@ class UserService {
 
     return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
         .transform(ErrorHandler())
-        .asyncMap((authResponse) => _getUpdatedUser(authResponse.user));
+        .asyncMap((authResponse) => _getUpdatedUser(authResponse.user))
+        .first;
   }
 
-  Stream<UserProfile> loginViaApple({
+  Future<UserProfile> loginViaApple({
     @required String accessToken,
     @required String idToken,
     @required String firstName,
@@ -130,7 +130,8 @@ class UserService {
 
     return Stream.fromFuture(future)
         .transform(ErrorHandler())
-        .asyncMap(_getUpdatedUser);
+        .asyncMap(_getUpdatedUser)
+        .first;
   }
 
   Future<UserProfile> signUpUser(RegisterRequestModel model) async {

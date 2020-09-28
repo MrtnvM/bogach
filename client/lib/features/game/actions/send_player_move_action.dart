@@ -9,8 +9,8 @@ import 'package:cash_flow/services/game_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
-class SendPlayerMoveAsyncAction extends BaseAction {
-  SendPlayerMoveAsyncAction({
+class SendPlayerMoveAction extends BaseAction {
+  SendPlayerMoveAction({
     @required this.eventId,
     this.playerAction,
   });

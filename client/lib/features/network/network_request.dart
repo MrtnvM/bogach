@@ -1,16 +1,31 @@
 enum NetworkRequest {
+  // Auth
+  loginViaFacebook,
+  loginViaGoogle,
+  loginViaApple,
+
+  // Profile
+  loadCurrentUserProfile,
+  sendUserPushToken,
+
+  // Game
   loadGameTemplates,
   createGame,
   startNewMonth,
   getUserGames,
-  getGameLevels,
-  createNewGameByLevel,
+  getQuests,
+  createQuestGame,
 
   // Multiplayer
   createRoom,
   createRoomGame,
   joinRoom,
-  searchUserProfiles,
+  queryUserProfiles,
   setRoomParticipantReady,
   shareRoomInviteLink,
+
+  // Purchase
+  queryProductDetails,
+  queryPastPurchases,
+  buyQuestsAcceess,
 }

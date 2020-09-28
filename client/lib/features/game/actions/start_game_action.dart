@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:cash_flow/features/game/actions/on_game_error.dart';
 import 'package:cash_flow/features/game/actions/set_game_participants_profiles_action.dart';
+import 'package:cash_flow/features/profile/actions/update_current_quest_index_action.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:get_it/get_it.dart';
@@ -11,7 +12,6 @@ import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/store/redux_action_observer.dart';
 import 'package:cash_flow/features/game/actions/on_game_state_changed_action.dart';
-import 'package:cash_flow/features/login/login_actions.dart';
 import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/services/game_service.dart';
@@ -47,7 +47,7 @@ class StartGameAction extends BaseAction {
           }
 
           final currentQuest = game.config.level;
-          final quests = state.newGame.gameLevels.items;
+          final quests = state.newGame.quests.items;
           final currentQuestIndex = quests.indexWhere(
             (l) => l.id == currentQuest,
           );
@@ -56,7 +56,7 @@ class StartGameAction extends BaseAction {
 
           return Stream<BaseAction>.fromIterable([
             OnGameStateChangedAction(game),
-            UpdateCurrentQuestIndexAsyncAction(newQuestIndex),
+            UpdateCurrentQuestIndexAction(newQuestIndex),
           ]);
         })
         .onErrorReturnWith((e) => OnGameErrorAction(e))
@@ -66,9 +66,9 @@ class StartGameAction extends BaseAction {
         .takeUntil(onStopActiveGame)
         .listen(dispatch);
 
-    return state.rebuild(
-      (s) => s.game.activeGameState = ActiveGameState.waitingForStart(),
-    );
+    return state.rebuild((s) {
+      return s.game.activeGameState = ActiveGameState.waitingForStart();
+    });
   }
 
   @override
