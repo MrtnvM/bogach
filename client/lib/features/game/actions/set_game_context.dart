@@ -9,6 +9,8 @@ class SetGameContextAction extends BaseAction {
 
   @override
   AppState reduce() {
-    return state.rebuild((s) => s.game.currentGameContext = gameContext);
+    return state.rebuild((s) {
+      return s.game.currentGameContext = gameContext;
+    });
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:cash_flow/features/game/actions/on_game_error.dart';
+import 'package:cash_flow/features/game/actions/set_game_context.dart';
 import 'package:cash_flow/features/game/actions/set_game_participants_profiles_action.dart';
 import 'package:cash_flow/features/profile/actions/update_current_quest_index_action.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
@@ -23,12 +24,14 @@ class StartGameAction extends BaseAction {
   final GameContext gameContext;
 
   @override
-  FutureOr<AppState> reduce() {
+  FutureOr<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
     final userService = GetIt.I.get<UserService>();
     final action$ = GetIt.I.get<ReduxActionObserver>().onAction;
 
     final onStopActiveGame = action$.whereType<StopActiveGameAction>();
+
+    await dispatchFuture(SetGameContextAction(gameContext));
 
     final userProfiles = gameService
         .getGame(gameContext)
