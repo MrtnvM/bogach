@@ -1,6 +1,6 @@
+import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
-import 'package:cash_flow/features/network/network_request.dart';
 import 'package:cash_flow/features/new_game/actions/start_quest_game_action.dart';
 import 'package:cash_flow/features/purchase/actions/buy_quests_access_action.dart';
 import 'package:cash_flow/features/purchase/actions/query_past_purchases_action.dart';
@@ -25,13 +25,12 @@ class QuestsAccessPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isOperationInProgress = useGlobalState((s) {
-      final getRequestState = s.network.getRequestState;
-
-      return getRequestState(NetworkRequest.buyQuestsAcceess).isInProgress ||
-          getRequestState(NetworkRequest.queryPastPurchases).isInProgress ||
-          getRequestState(NetworkRequest.createQuestGame).isInProgress;
-    });
+    final isOperationInProgress = useGlobalState(
+      (s) =>
+          s.getOperationState(Operation.buyQuestsAcceess).isInProgress ||
+          s.getOperationState(Operation.queryPastPurchases).isInProgress ||
+          s.getOperationState(Operation.createQuestGame).isInProgress,
+    );
 
     final isStoreAvailable = useFuture(
       InAppPurchaseConnection.instance.isAvailable(),

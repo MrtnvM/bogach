@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
-import 'package:cash_flow/features/network/network_request.dart';
+import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
@@ -15,7 +15,7 @@ class GetQuestsAction extends BaseAction {
   final String userId;
 
   @override
-  NetworkRequest get operationKey => NetworkRequest.getQuests;
+  Operation get operationKey => Operation.getQuests;
 
   @override
   FutureOr<AppState> reduce() async {

@@ -1,4 +1,4 @@
-enum NetworkRequest {
+enum Operation {
   // Auth
   loginViaFacebook,
   loginViaGoogle,

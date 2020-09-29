@@ -1,3 +1,4 @@
+import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
@@ -6,7 +7,6 @@ import 'package:cash_flow/features/multiplayer/actions/create_room_game_action.d
 import 'package:cash_flow/features/multiplayer/actions/room_listening_actions.dart';
 import 'package:cash_flow/features/multiplayer/actions/set_room_participant_ready_action.dart';
 import 'package:cash_flow/features/multiplayer/actions/share_room_invite_link_action.dart';
-import 'package:cash_flow/features/network/network_request.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/models/domain/room/room_participant.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
@@ -40,12 +40,8 @@ class RoomPage extends HookWidget {
 
     final isActionInProgress = useGlobalState(
       (s) =>
-          s.network
-              .getRequestState(NetworkRequest.createRoomGame)
-              .isInProgress ||
-          s.network
-              .getRequestState(NetworkRequest.setRoomParticipantReady)
-              .isInProgress,
+          s.getOperationState(Operation.createRoomGame).isInProgress ||
+          s.getOperationState(Operation.setRoomParticipantReady).isInProgress,
     );
 
     final isCurrentUserRoomOwner = room.owner.id == userId;

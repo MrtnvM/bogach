@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
+import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/purchases/purchases.dart';
-import 'package:cash_flow/features/network/network_request.dart';
 import 'package:cash_flow/services/purchase_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -11,7 +11,7 @@ import 'package:built_collection/built_collection.dart';
 
 class QueryPastPurchasesAction extends BaseAction {
   @override
-  NetworkRequest get operationKey => NetworkRequest.queryPastPurchases;
+  Operation get operationKey => Operation.queryPastPurchases;
 
   @override
   FutureOr<AppState> reduce() async {
@@ -34,7 +34,7 @@ class OnPastPurchasesRestoredAction extends BaseAction {
   final List<PurchaseDetails> pastPurchases;
 
   @override
-  bool abortDispatch() => state.profile.currentUser?.id == null;
+  bool abortDispatch() => state.profile.currentUser == null;
 
   @override
   FutureOr<AppState> reduce() {

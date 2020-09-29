@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
-import 'package:cash_flow/features/network/network_request.dart';
+import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
@@ -18,7 +18,7 @@ class SendDevicePushTokenAction extends BaseAction {
   final String pushToken;
 
   @override
-  NetworkRequest get operationKey => NetworkRequest.sendDevicePushToken;
+  Operation get operationKey => Operation.sendDevicePushToken;
 
   @override
   FutureOr<AppState> reduce() async {

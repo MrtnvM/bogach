@@ -1,7 +1,7 @@
+import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
-import 'package:cash_flow/features/network/network_request.dart';
 import 'package:cash_flow/features/new_game/actions/get_quests_action.dart';
 import 'package:cash_flow/features/new_game/actions/start_quest_game_action.dart';
 import 'package:cash_flow/features/profile/actions/load_current_user_profile_action.dart';
@@ -24,11 +24,11 @@ class QuestList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final userId = useUserId();
-    final gameLevelsRequestState = useGlobalState(
-      (s) => s.network.getRequestState(NetworkRequest.getQuests),
+    final getQuestsRequestState = useGlobalState(
+      (s) => s.getOperationState(Operation.getQuests),
     );
     final createQuestGameRequestState = useGlobalState(
-      (s) => s.network.getRequestState(NetworkRequest.createQuestGame),
+      (s) => s.getOperationState(Operation.createQuestGame),
     );
 
     final quests = useGlobalState((s) => s.newGame.quests);
@@ -36,7 +36,7 @@ class QuestList extends HookWidget {
     final dispatch = useDispatcher();
 
     return LoadableView(
-      isLoading: gameLevelsRequestState.isInProgress ||
+      isLoading: getQuestsRequestState.isInProgress ||
           createQuestGameRequestState.isInProgress,
       backgroundColor: ColorRes.mainGreen.withOpacity(0.8),
       child: RefreshIndicator(
@@ -52,7 +52,7 @@ class QuestList extends HookWidget {
               quests: quests.items[i],
               index: i,
             ),
-            loadListRequestState: gameLevelsRequestState,
+            loadListRequestState: getQuestsRequestState,
             loadList: () {
               dispatch(GetQuestsAction(userId: userId));
               dispatch(LoadCurrentUserProfileAction());

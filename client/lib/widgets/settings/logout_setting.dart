@@ -4,7 +4,6 @@ import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
 
 class LogoutSetting extends StatefulWidget implements ControlPanelSetting {
   const LogoutSetting();
@@ -19,7 +18,7 @@ class LogoutSetting extends StatefulWidget implements ControlPanelSetting {
       );
 }
 
-class _LogoutSettingState extends State<LogoutSetting> with ReduxState {
+class _LogoutSettingState extends State<LogoutSetting> {
   @override
   Widget build(BuildContext context) {
     final dispatch = useDispatcher();

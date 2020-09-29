@@ -1,11 +1,12 @@
+import 'dart:async';
+
 import 'package:async_redux/async_redux.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
-import 'package:rxdart/subjects.dart';
 
 class ReduxActionObserver extends ActionObserver {
-  final _onAction = PublishSubject<Action>();
+  final _onAction = StreamController<ReduxAction>();
 
-  Stream<Action> get onAction => _onAction.stream;
+  Stream<ReduxAction> get onAction => _onAction.stream;
 
   @override
   void observe(ReduxAction action, int dispatchCount, {bool ini}) {

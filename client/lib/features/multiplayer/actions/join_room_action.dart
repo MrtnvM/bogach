@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
+import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/features/multiplayer/actions/room_listening_actions.dart';
-import 'package:cash_flow/features/network/network_request.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:cash_flow/utils/core/tuple.dart';
@@ -15,7 +15,7 @@ class JoinRoomAction extends BaseAction {
   final String roomId;
 
   @override
-  NetworkRequest get operationKey => NetworkRequest.joinRoom;
+  Operation get operationKey => Operation.joinRoom;
 
   @override
   FutureOr<AppState> reduce() async {

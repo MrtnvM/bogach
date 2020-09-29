@@ -1,7 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:cash_flow/app/app_state.dart';
+import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/utils/app_store_connector.dart';
-import 'package:cash_flow/features/network/network_request.dart';
 import 'package:cash_flow/features/purchase/actions/buy_actions.dart';
 import 'package:cash_flow/features/purchase/actions/query_past_purchases_action.dart';
 import 'package:cash_flow/features/purchase/actions/query_products_for_sale_action.dart';
@@ -30,12 +30,12 @@ class _PurchaseListPageState extends State<PurchaseListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CashAppBar.withBackButton(title: Strings.purchases),
-      body: AppStateConnector<RequestState>(
+      body: AppStateConnector<OperationState>(
         onInit: (s) {
           StoreProvider.dispatch(context, QueryPastPurchasesAction());
         },
         converter: (s) {
-          return s.network.getRequestState(NetworkRequest.queryPastPurchases);
+          return s.getOperationState(Operation.queryPastPurchases);
         },
         builder: (context, requestState) => LoadableView(
           isLoading: requestState.isInProgress,

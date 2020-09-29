@@ -15,12 +15,12 @@ import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-StoreProvider<AppState> configureStoreProvider() {
+Store<AppState> configureStore() {
   final actionLogger = ReduxActionLogger();
   final actionObserver = ReduxActionObserver();
   GetIt.I.registerSingleton<ReduxActionObserver>(actionObserver);
 
-  return StoreProvider(
+  return Store(
     initialState: AppState.initial(),
     actionObservers: [
       actionObserver,

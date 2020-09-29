@@ -20,7 +20,6 @@ import 'package:cash_flow/utils/core/launch_counter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:dash_kit_core/dash_kit_core.dart' hide StoreProvider;
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -57,9 +56,7 @@ Future<void> main({
     userCache,
   );
 
-  final storeProvider = configureStoreProvider();
-  ReduxConfig.storeProvider = storeProvider;
-  final dispatch = ReduxConfig.storeProvider.store.dispatch;
+  final store = configureStore();
 
   Intl.defaultLocale = 'ru';
   await initializeDateFormatting('ru');
@@ -67,8 +64,8 @@ Future<void> main({
   final currentUser = userCache.getUserProfile();
 
   final isAuthorized = currentUser != null;
-  dispatch(SetCurrentUserAction(currentUser));
-  dispatch(StartListeningPurchasesAction());
+  store.dispatch(SetCurrentUserAction(currentUser));
+  store.dispatch(StartListeningPurchasesAction());
 
   final isFirstLaunch = launchCounter.isFirstLaunch();
   if (isFirstLaunch) {
@@ -80,7 +77,7 @@ Future<void> main({
   runZonedGuarded<Future<void>>(() async {
     runApp(
       StoreProvider<AppState>(
-        store: storeProvider.store,
+        store: store,
         child: CashFlowApp(
           isAuthorised: isAuthorized,
           isFirstLaunch: isFirstLaunch,

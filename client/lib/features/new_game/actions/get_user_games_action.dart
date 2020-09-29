@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
-import 'package:cash_flow/features/network/network_request.dart';
+import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
@@ -19,7 +19,7 @@ class GetUserGamesAction extends BaseAction {
   final String userId;
 
   @override
-  NetworkRequest get operationKey => NetworkRequest.getUserGames;
+  Operation get operationKey => Operation.getUserGames;
 
   @override
   FutureOr<AppState> reduce() async {

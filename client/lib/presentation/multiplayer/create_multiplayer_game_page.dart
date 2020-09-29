@@ -1,9 +1,9 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/multiplayer/actions/create_room_action.dart';
 import 'package:cash_flow/features/multiplayer/actions/select_multiplayer_game_template_action.dart';
-import 'package:cash_flow/features/network/network_request.dart';
 import 'package:cash_flow/features/new_game/actions/get_game_templates_action.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -25,11 +25,11 @@ class CreateMultiplayerGamePage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final createRoomRequestState = useGlobalState((s) {
-      return s.network.getRequestState(NetworkRequest.createRoom);
+      return s.getOperationState(Operation.createRoom);
     });
 
     final getGameTemplatesRequestState = useGlobalState((s) {
-      return s.network.getRequestState(NetworkRequest.loadGameTemplates);
+      return s.getOperationState(Operation.loadGameTemplates);
     });
 
     final gameTemplates = useGlobalState((s) => s.newGame.gameTemplates);
@@ -81,7 +81,7 @@ class CreateMultiplayerGamePage extends HookWidget {
   Widget _buildGameTemplateList({
     @required StoreList<GameTemplate> gameTemplates,
     @required void onGameTempalateSelected(GameTemplate template),
-    @required RequestState loadGameTempalatesRequestState,
+    @required OperationState loadGameTempalatesRequestState,
     @required VoidCallback loadGameTemplates,
   }) {
     return LoadableListView<GameTemplate>(

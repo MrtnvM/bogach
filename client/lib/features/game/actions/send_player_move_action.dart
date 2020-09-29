@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
+import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/features/game/actions/set_active_game_state.dart';
 import 'package:cash_flow/models/domain/player_action/player_action.dart';
 import 'package:cash_flow/models/network/request/game/player_action_request_model.dart';
@@ -9,7 +10,6 @@ import 'package:cash_flow/services/game_service.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
-import 'package:cash_flow/features/network/network_request.dart';
 
 class SendPlayerMoveAction extends BaseAction {
   SendPlayerMoveAction({
@@ -21,7 +21,7 @@ class SendPlayerMoveAction extends BaseAction {
   final String eventId;
 
   @override
-  NetworkRequest get operationKey => NetworkRequest.sendPlayerAction;
+  Operation get operationKey => Operation.sendPlayerAction;
 
   @override
   FutureOr<void> before() {

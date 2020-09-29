@@ -1,7 +1,7 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
-import 'package:cash_flow/features/network/network_request.dart';
 import 'package:cash_flow/features/new_game/actions/get_game_templates_action.dart';
 import 'package:cash_flow/features/new_game/actions/start_singleplayer_game_action.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
@@ -21,11 +21,11 @@ class TemplateGameList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final templatesRequestState = useGlobalState(
-      (s) => s.network.getRequestState(NetworkRequest.loadGameTemplates),
+      (s) => s.getOperationState(Operation.loadGameTemplates),
     );
 
     final createGameRequestState = useGlobalState(
-      (s) => s.network.getRequestState(NetworkRequest.createGame),
+      (s) => s.getOperationState(Operation.createGame),
     );
 
     final gameTemplates = useGlobalState((s) => s.newGame.gameTemplates);
