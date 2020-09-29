@@ -24,7 +24,7 @@ class TraceInterceptor extends Interceptor {
   }
 
   void _stopTracing(Response response) {
-    final path = response.request.path;
+    final path = response.request.fullUrl;
     final metric = traces[path];
 
     metric
@@ -36,10 +36,14 @@ class TraceInterceptor extends Interceptor {
   }
 
   void _startTracing(RequestOptions options) {
-    traces[options.path] = FirebasePerformance.instance.newHttpMetric(
-      options.baseUrl,
+    traces[options.fullUrl] = FirebasePerformance.instance.newHttpMetric(
+      options.fullUrl,
       getHttpMethodFromString(options.method),
     );
-    traces[options.path].start();
+    traces[options.fullUrl].start();
   }
+}
+
+extension RequestOptionsExtension on RequestOptions {
+  String get fullUrl => '$baseUrl$path';
 }
