@@ -45,7 +45,7 @@ abstract class AppState
   static AppState initial() {
     return AppState(
       (b) => b
-        ..profile = ProfileState.initial()
+        ..profile = ProfileState.initial().toBuilder()
         ..purchase = PurchaseState.initial().toBuilder()
         ..game = GameState.initial().toBuilder()
         ..newGame = NewGameState.initial().toBuilder()

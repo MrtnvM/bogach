@@ -1,13 +1,18 @@
+import 'package:built_value/built_value.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'profile_state.freezed.dart';
+part 'profile_state.g.dart';
 
-@freezed
-abstract class ProfileState with _$ProfileState {
-  const factory ProfileState({
-    UserProfile currentUser,
-  }) = _ProfileState;
+abstract class ProfileState
+    implements Built<ProfileState, ProfileStateBuilder> {
+  factory ProfileState([void Function(ProfileStateBuilder) updates]) =
+      _$ProfileState;
+  ProfileState._();
 
-  static ProfileState initial() => const ProfileState();
+  @nullable
+  UserProfile get currentUser;
+
+  static ProfileState initial() => ProfileState(
+        (b) => b..currentUser = null,
+      );
 }
