@@ -24,14 +24,18 @@ class StartGameAction extends BaseAction {
   final GameContext gameContext;
 
   @override
+  FutureOr<void> before() async {
+    await super.before();
+    await dispatchFuture(SetGameContextAction(gameContext));
+  }
+
+  @override
   FutureOr<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
     final userService = GetIt.I.get<UserService>();
     final action$ = GetIt.I.get<ReduxActionObserver>().onAction;
 
     final onStopActiveGame = action$.whereType<StopActiveGameAction>();
-
-    await dispatchFuture(SetGameContextAction(gameContext));
 
     final userProfiles = gameService
         .getGame(gameContext)
