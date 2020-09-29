@@ -256,7 +256,11 @@ class _BuyButton extends HookWidget {
           const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Text(Strings.storeConnectionError, style: Styles.body1),
+            child: Text(
+              Strings.storeConnectionError,
+              style: Styles.body1,
+              textAlign: TextAlign.center,
+            ),
           ),
         ]
       ],
