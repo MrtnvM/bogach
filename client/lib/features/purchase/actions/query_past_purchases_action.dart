@@ -14,14 +14,13 @@ class QueryPastPurchasesAction extends BaseAction {
   Operation get operationKey => Operation.queryPastPurchases;
 
   @override
+  bool abortDispatch() => state.profile.currentUser == null;
+
+  @override
   FutureOr<AppState> reduce() async {
-    final userId = state.profile.currentUser?.id;
-
-    if (userId == null) {
-      return null;
-    }
-
     final purchaseService = GetIt.I.get<PurchaseService>();
+
+    final userId = state.profile.currentUser?.id;
     await purchaseService.queryPastPurchases(userId);
 
     return null;
