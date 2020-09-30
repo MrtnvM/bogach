@@ -250,12 +250,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onLoginError(error) {
+    Logger.e(error);
     setState(() => _isAuthorising = false);
     handleError(context: context, exception: error);
   }
 
   Future<void> _onLoginViaGoogleClicked() async {
     final account = await GoogleSignIn().signIn().catchError((e) {
+      Logger.e(e);
       setState(() => _isAuthorising = false);
       showErrorDialog(context: context);
     });
@@ -310,7 +312,7 @@ class _LoginPageState extends State<LoginPage> {
               lastName: lastName,
             ))
             .then((_) => _onLoggedIn())
-            .catchError(_onLoginViaAppleError);
+            .catchError(_onLoginError);
 
         break;
 
@@ -323,11 +325,6 @@ class _LoginPageState extends State<LoginPage> {
         setState(() => _isAuthorising = false);
         break;
     }
-  }
-
-  void _onLoginViaAppleError(error) {
-    setState(() => _isAuthorising = false);
-    handleError(context: context, exception: error);
   }
 
   Future<void> _launchURL(String url) async {
