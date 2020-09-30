@@ -33,11 +33,11 @@ class GameService {
   final FirebaseDatabase firebaseDatabase;
 
   Future<List<GameTemplate>> getGameTemplates() {
-    return apiClient.getGameTemplates().map(mapToGameTemplates).first;
+    return apiClient.getGameTemplates().then(mapToGameTemplates);
   }
 
   Future<List<Quest>> getQuests(String userId) {
-    return apiClient.getQuests(userId).first;
+    return apiClient.getQuests(userId);
   }
 
   Future<String> createNewGame({
@@ -46,8 +46,7 @@ class GameService {
   }) {
     return apiClient
         .createNewGame(templateId: templateId, userId: userId)
-        .map((response) => response.id)
-        .first;
+        .then((response) => response.id);
   }
 
   Future<String> createQuestGame({
@@ -56,8 +55,7 @@ class GameService {
   }) {
     return apiClient
         .createNewQuestGame(questId: gameLevelId, userId: userId)
-        .map((response) => response.id)
-        .first;
+        .then((response) => response.id);
   }
 
   Stream<Game> getGame(GameContext gameContext) {
@@ -109,23 +107,23 @@ class GameService {
   }
 
   Future<void> sendPlayerAction(PlayerActionRequestModel playerAction) {
-    return apiClient.sendPlayerAction(playerAction).first;
+    return apiClient.sendPlayerAction(playerAction);
   }
 
   Future<void> startNewMonth(GameContext gameContext) {
-    return apiClient.startNewMonth(gameContext).first;
+    return apiClient.startNewMonth(gameContext);
   }
 
   Future<Room> createRoom(CreateRoomRequestModel requestModel) {
-    return apiClient.createRoom(requestModel).first;
+    return apiClient.createRoom(requestModel);
   }
 
   Future<void> setRoomParticipantReady(String roomId, String participantId) {
-    return apiClient.setRoomParticipantReady(roomId, participantId).first;
+    return apiClient.setRoomParticipantReady(roomId, participantId);
   }
 
   Future<void> createRoomGame(String roomId) {
-    return apiClient.createRoomGame(roomId).first;
+    return apiClient.createRoomGame(roomId);
   }
 
   Stream<Room> subscribeOnRoomUpdates(String roomId) {

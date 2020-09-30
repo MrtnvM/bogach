@@ -20,7 +20,7 @@ class CashFlowApiClient extends ApiClient {
     @required Dio dio,
   }) : super(environment: environment, dio: dio, delegate: null);
 
-  Stream<List<GameTemplateResponseModel>> getGameTemplates() => get(
+  Future<List<GameTemplateResponseModel>> getGameTemplates() => get(
         path: 'getAllGameTemplates',
         responseMapper: rm.jsonArray((json) => json
             .map((item) => GameTemplateResponseModel.fromJson(item))
@@ -28,14 +28,14 @@ class CashFlowApiClient extends ApiClient {
         headers: [contentJson],
       );
 
-  Stream<List<Quest>> getQuests(String userId) => get(
+  Future<List<Quest>> getQuests(String userId) => get(
         path: 'gameLevels?user_id=$userId',
         responseMapper: rm.jsonArray(
           (json) => json.map((item) => Quest.fromJson(item)).toList(),
         ),
       );
 
-  Stream<NewGameResponseModel> createNewGame({
+  Future<NewGameResponseModel> createNewGame({
     @required String templateId,
     @required String userId,
   }) =>
@@ -48,7 +48,7 @@ class CashFlowApiClient extends ApiClient {
         headers: [contentJson],
       );
 
-  Stream<NewGameResponseModel> createNewQuestGame({
+  Future<NewGameResponseModel> createNewQuestGame({
     @required String questId,
     @required String userId,
   }) =>
@@ -61,26 +61,26 @@ class CashFlowApiClient extends ApiClient {
         headers: [contentJson],
       );
 
-  Stream<void> sendPlayerAction(PlayerActionRequestModel playerAction) => post(
+  Future<void> sendPlayerAction(PlayerActionRequestModel playerAction) => post(
         path: 'handleGameEvent',
         body: playerAction.toJson(),
         validate: false,
         responseMapper: rm.voidResponse,
       );
 
-  Stream<void> startNewMonth(GameContext gameContext) => post(
+  Future<void> startNewMonth(GameContext gameContext) => post(
         path: 'startNewMonth',
         body: {'context': gameContext.toJson()},
         responseMapper: rm.voidResponse,
       );
 
-  Stream<Room> createRoom(CreateRoomRequestModel requestModel) => post(
+  Future<Room> createRoom(CreateRoomRequestModel requestModel) => post(
         path: 'createRoom',
         body: requestModel.toJson(),
         responseMapper: rm.standard((json) => Room.fromJson(json)),
       );
 
-  Stream<void> setRoomParticipantReady(String roomId, String participantId) =>
+  Future<void> setRoomParticipantReady(String roomId, String participantId) =>
       post(
         path: 'setRoomParticipantReady',
         body: {
@@ -90,13 +90,13 @@ class CashFlowApiClient extends ApiClient {
         responseMapper: rm.voidResponse,
       );
 
-  Stream<void> createRoomGame(String roomId) => post(
+  Future<void> createRoomGame(String roomId) => post(
         path: 'createRoomGame',
         body: {'roomId': roomId},
         responseMapper: rm.voidResponse,
       );
 
-  Stream<void> sendPurchasedProducts(String userId, List<String> productIds) =>
+  Future<void> sendPurchasedProducts(String userId, List<String> productIds) =>
       post(
         path: 'updatePurchases',
         body: {'userId': userId, 'productIds': productIds},
