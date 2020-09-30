@@ -16,11 +16,11 @@ class StartListeningRoomUpdatesAction extends BaseAction {
   @override
   FutureOr<AppState> reduce() {
     final gameService = GetIt.I.get<GameService>();
-    final actionObserver = GetIt.I.get<ReduxActionObserver>();
+    final action$ = GetIt.I.get<ReduxActionObserver>().onAction;
 
     gameService
         .subscribeOnRoomUpdates(roomId)
-        .takeUntil(actionObserver.onAction
+        .takeUntil(action$
             .whereType<StopListeningRoomUpdatesAction>()
             .where((a) => a.roomId == roomId))
         .map<BaseAction>((room) => OnCurrentRoomUpdatedAction(room))
@@ -38,6 +38,8 @@ class StopListeningRoomUpdatesAction extends BaseAction {
 
   @override
   FutureOr<AppState> reduce() {
-    return null;
+    return state.rebuild((s) {
+      s.multiplayer.currentRoom = null;
+    });
   }
 }

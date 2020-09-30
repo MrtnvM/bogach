@@ -252,7 +252,7 @@ packages:
       name: dash_kit_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   dash_kit_loadable:
     dependency: "direct main"
     description:

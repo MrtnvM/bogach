@@ -15,13 +15,18 @@ class OnCurrentRoomUpdatedAction extends BaseAction {
 
   @override
   FutureOr<AppState> reduce() async {
-    if (room != null) {
-      _loadProfiles();
-    }
-
     return state.rebuild((s) {
       s.multiplayer.currentRoom = room;
     });
+  }
+
+  @override
+  void after() {
+    super.after();
+
+    if (room != null) {
+      _loadProfiles();
+    }
   }
 
   void _loadProfiles() {
