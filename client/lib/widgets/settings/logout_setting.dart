@@ -1,4 +1,3 @@
-import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/features/profile/actions/logout_action.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
@@ -42,7 +41,8 @@ class _LogoutSettingState extends State<LogoutSetting> {
   }
 
   void _logout() {
-    StoreProvider.dispatchFuture(context, LogoutAction())
+    context
+        .dispatch(LogoutAction())
         .then((_) => _onLogoutFinished())
         .catchError((_) => _onLogoutFinished());
   }

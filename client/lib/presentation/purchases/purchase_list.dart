@@ -11,7 +11,7 @@ import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/appbar/app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:dash_kit_core/dash_kit_core.dart' hide StoreProvider;
+import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:async_redux/async_redux.dart';
@@ -31,9 +31,7 @@ class _PurchaseListPageState extends State<PurchaseListPage> {
     return Scaffold(
       appBar: CashAppBar.withBackButton(title: Strings.purchases),
       body: AppStateConnector<OperationState>(
-        onInit: (s) {
-          StoreProvider.dispatch(context, QueryPastPurchasesAction());
-        },
+        onInit: (s) => context.dispatch(QueryPastPurchasesAction()),
         converter: (s) {
           return s.getOperationState(Operation.queryPastPurchases);
         },
@@ -72,9 +70,7 @@ class _PurchaseListPageState extends State<PurchaseListPage> {
   }
 
   void _purchaseItem(String productId) {
-    final dispatch = (action) => StoreProvider.dispatchFuture(context, action);
-
-    dispatch(QueryProductsForSaleAction(ids: {productId})).then((_) {
+    context.dispatch(QueryProductsForSaleAction(ids: {productId})).then((_) {
       final appState = StoreProvider.state<AppState>(context);
       final productsForSale = appState.purchase.productsForSale;
 
@@ -83,7 +79,9 @@ class _PurchaseListPageState extends State<PurchaseListPage> {
         orElse: () => null,
       );
 
-      dispatch(BuyConsumableAction(product: product));
+      if (mounted) {
+        context.dispatch(BuyConsumableAction(product: product));
+      }
     }).catchError((error) {
       handleError(context: context, exception: error);
     });

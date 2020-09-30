@@ -23,6 +23,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:async_redux/async_redux.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage();
@@ -243,7 +244,8 @@ class _LoginPageState extends State<LoginPage> {
   void _loginViaFacebook(String token) {
     final action = LoginViaFacebookAction(token: token);
 
-    StoreProvider.dispatchFuture(context, action)
+    context
+        .dispatch(action)
         .then((_) => _onLoggedIn())
         .catchError(_onLoginError);
   }
@@ -276,12 +278,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _loginViaGoogle({String token, String idToken}) {
-    final action = LoginViaGoogleAction(
-      accessToken: token,
-      idToken: idToken,
-    );
-
-    StoreProvider.dispatchFuture(context, action)
+    context
+        .dispatch(LoginViaGoogleAction(
+          accessToken: token,
+          idToken: idToken,
+        ))
         .then((_) => _onLoggedIn())
         .catchError(_onLoginError);
   }
@@ -302,14 +303,13 @@ class _LoginPageState extends State<LoginPage> {
 
         setState(() => _isAuthorising = true);
 
-        final action = LoginViaAppleAction(
-          idToken: identityToken,
-          accessToken: accessToken,
-          firstName: firstName,
-          lastName: lastName,
-        );
-
-        StoreProvider.dispatchFuture(context, action)
+        context
+            .dispatch(LoginViaAppleAction(
+              idToken: identityToken,
+              accessToken: accessToken,
+              firstName: firstName,
+              lastName: lastName,
+            ))
             .then((_) => _onLoggedIn())
             .catchError(_onLoginViaAppleError);
 

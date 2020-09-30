@@ -251,10 +251,10 @@ packages:
     description:
       path: "."
       ref: async_redux
-      resolved-ref: "97f9646eb0b3d8fda6933aeb98c301bbbeab72a4"
+      resolved-ref: "16f39ac365edcff2fa4c4767b21d892ba55998f0"
       url: "git://github.com/Dash-Kit/dash-kit-core"
     source: git
-    version: "1.0.5"
+    version: "2.0.0"
   dash_kit_loadable:
     dependency: "direct main"
     description:
@@ -600,7 +600,7 @@ packages:
       name: in_app_purchase
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.4+9"
+    version: "0.3.4+10"
   intl:
     dependency: "direct main"
     description:
@@ -782,7 +782,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.3"
   pool:
     dependency: transitive
     description:
