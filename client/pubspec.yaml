@@ -49,16 +49,10 @@ dependencies:
 
   in_app_purchase: ^0.3.3
 
-  dash_kit_core:
-    git:
-      url: git://github.com/Dash-Kit/dash-kit-core
-      ref: async_redux
-  dash_kit_network: ^1.0.2
+  dash_kit_core: ^2.0.1
+  dash_kit_network: ^2.0.0
   dash_kit_control_panel: ^1.0.0
-  dash_kit_loadable:
-    git:
-      url: git://github.com/Dash-Kit/dash-kit-loadable
-      ref: async_redux
+  dash_kit_loadable: ^2.0.0
   dash_kit_uikit: ^1.0.0
 
   cupertino_icons: ^0.1.2

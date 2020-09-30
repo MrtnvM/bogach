@@ -176,7 +176,7 @@ class PurchaseService {
         .map((p) => hashProductId(p.productID))
         .toList();
 
-    return apiClient.sendPurchasedProducts(userId, productIds).first;
+    return apiClient.sendPurchasedProducts(userId, productIds);
   }
 
   Future<void> _completeFailedPurchases(List<PurchaseDetails> purchases) async {
