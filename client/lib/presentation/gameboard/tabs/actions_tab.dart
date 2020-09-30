@@ -1,4 +1,4 @@
-import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
 import 'package:cash_flow/presentation/gameboard/game_event_page.dart';
@@ -24,7 +24,7 @@ class ActionsTab extends HookWidget {
         : null;
 
     final targetTitle = monthPast ?? mapTargetTypeToString(target.type);
-    final user = useGlobalState((s) => s.login.currentUser);
+    final user = useCurrentUser();
 
     return ContainerWithHeaderImage(
       navBarTitle: user.fullName,

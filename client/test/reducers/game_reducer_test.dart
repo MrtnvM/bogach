@@ -1,4 +1,4 @@
-import 'package:cash_flow/features/game/game_reducer.dart';
+import 'package:cash_flow/features/game/actions/on_game_state_changed_action.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
 import 'package:flutter_test/flutter_test.dart';
 

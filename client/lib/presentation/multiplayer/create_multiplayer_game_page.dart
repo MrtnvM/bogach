@@ -1,7 +1,10 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/app/operation.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
-import 'package:cash_flow/features/game/game_hooks.dart';
-import 'package:cash_flow/features/multiplayer/multiplayer_hooks.dart';
+import 'package:cash_flow/features/multiplayer/actions/create_room_action.dart';
+import 'package:cash_flow/features/multiplayer/actions/select_multiplayer_game_template_action.dart';
+import 'package:cash_flow/features/new_game/actions/get_game_templates_action.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
@@ -21,21 +24,22 @@ import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 class CreateMultiplayerGamePage extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final createRoomRequestState =
-        useGlobalState((s) => s.multiplayer.createRoomRequestState);
-    final getGameTemplatesRequestState =
-        useGlobalState((s) => s.newGame.getGameTemplatesRequestState);
+    final createRoomRequestState = useGlobalState((s) {
+      return s.getOperationState(Operation.createRoom);
+    });
+
+    final getGameTemplatesRequestState = useGlobalState((s) {
+      return s.getOperationState(Operation.loadGameTemplates);
+    });
 
     final gameTemplates = useGlobalState((s) => s.newGame.gameTemplates);
-    final gameAcitons = useGameActions();
-    final multiplayerActions = useMultiplayerActions();
+    final dispatch = useDispatcher();
 
     //ignore: avoid_types_on_closure_parameters
     final onGameTempalateSelected = (GameTemplate template) {
-      multiplayerActions.selectGameTemplate(template);
+      dispatch(SelectMultiplayerGameTemplateAction(template));
 
-      multiplayerActions
-          .createRoom()
+      dispatch(CreateRoomAction())
           .then((_) => appRouter.goTo(RoomPage()))
           .catchError((error) {
         Logger.e('ERROR: On room creation with template ID: ${template.id}');
@@ -50,7 +54,7 @@ class CreateMultiplayerGamePage extends HookWidget {
       isLoading: createRoomRequestState.isInProgress,
       backgroundColor: ColorRes.black80,
       child: CashFlowScaffold(
-        title: Strings.chooseLevel,
+        title: Strings.chooseQuest,
         showUser: true,
         horizontalPadding: 10,
         showBackArrow: true,
@@ -63,7 +67,9 @@ class CreateMultiplayerGamePage extends HookWidget {
                 gameTemplates: gameTemplates,
                 onGameTempalateSelected: onGameTempalateSelected,
                 loadGameTempalatesRequestState: getGameTemplatesRequestState,
-                loadGameTemplates: gameAcitons.loadGameTemplates,
+                loadGameTemplates: () {
+                  dispatch(GetGameTemplatesAction());
+                },
               ),
             ),
           ],
@@ -75,7 +81,7 @@ class CreateMultiplayerGamePage extends HookWidget {
   Widget _buildGameTemplateList({
     @required StoreList<GameTemplate> gameTemplates,
     @required void onGameTempalateSelected(GameTemplate template),
-    @required RefreshableRequestState loadGameTempalatesRequestState,
+    @required OperationState loadGameTempalatesRequestState,
     @required VoidCallback loadGameTemplates,
   }) {
     return LoadableListView<GameTemplate>(

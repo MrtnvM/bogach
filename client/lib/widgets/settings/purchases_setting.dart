@@ -2,7 +2,6 @@ import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/purchases/purchase_list.dart';
 import 'package:flutter/material.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
 
 class PurchasesSetting extends StatefulWidget implements ControlPanelSetting {
   const PurchasesSetting();
@@ -17,7 +16,7 @@ class PurchasesSetting extends StatefulWidget implements ControlPanelSetting {
       );
 }
 
-class _PurchasesSettingState extends State<PurchasesSetting> with ReduxState {
+class _PurchasesSettingState extends State<PurchasesSetting> {
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -4,9 +4,6 @@ import 'package:cash_flow/cache/user_cache.dart';
 import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/models/network/core/search_query_result.dart';
-import 'package:cash_flow/models/network/errors/email_has_been_taken_exception.dart';
-import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
-import 'package:cash_flow/models/network/errors/invalid_email_exception.dart';
 import 'package:cash_flow/models/network/request/register_request_model.dart';
 import 'package:cash_flow/utils/error_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,83 +26,55 @@ class UserService {
   final FirebaseMessaging firebaseMessaging;
   final UserCache userCache;
 
-  Stream<UserProfile> login({
+  Future<UserProfile> login({
     @required String email,
     @required String password,
   }) {
-    final errorHandler = ErrorHandler<UserProfile>((code) {
-      if (code == 'ERROR_USER_NOT_FOUND') {
-        return const InvalidCredentialsException();
-      }
-
-      return null;
-    });
-
-    final logInOperation = firebaseAuth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-
-    return Stream.fromFuture(logInOperation)
-        .asyncMap((result) => _getUpdatedUser(result.user))
-        .transform(errorHandler);
+    return firebaseAuth
+        .signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        )
+        .then((result) => _getUpdatedUser(result.user))
+        .catchError(ErrorHandler().handleError);
   }
 
-  Stream<void> logout() {
-    return Stream.fromFuture(() async {
-      userCache.deleteUserProfile();
-      firebaseAuth.signOut();
-    }());
+  Future<void> logout() async {
+    userCache.deleteUserProfile();
+    await firebaseAuth.signOut();
   }
 
-  Stream<UserProfile> register({@required RegisterRequestModel model}) {
-    final errorHandler = ErrorHandler<UserProfile>((code) {
-      if (code == 'ERROR_EMAIL_ALREADY_IN_USE') {
-        return const EmailHasBeenTakenException();
-      }
-
-      return null;
-    });
-
-    return Stream.fromFuture(signUpUser(model)).transform(errorHandler);
+  Future<UserProfile> register({@required RegisterRequestModel model}) {
+    return signUpUser(model).catchError(ErrorHandler().handleError);
   }
 
-  Stream<void> resetPassword({@required String email}) {
-    final errorHandler = ErrorHandler((code) {
-      if (code == 'ERROR_USER_NOT_FOUND') {
-        return const InvalidEmailException();
-      }
-
-      return null;
-    });
-
-    return Stream.fromFuture(firebaseAuth.sendPasswordResetEmail(email: email))
-        .transform(errorHandler);
+  Future<void> resetPassword({@required String email}) {
+    return firebaseAuth
+        .sendPasswordResetEmail(email: email)
+        .catchError(ErrorHandler().handleError);
   }
 
-  Stream<UserProfile> loginViaFacebook({@required String token}) {
-    final authCredential = FacebookAuthProvider.credential(token);
-
-    return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
-        .transform(ErrorHandler())
-        .asyncMap((response) => _getUpdatedUser(response.user));
+  Future<UserProfile> loginViaFacebook({@required String token}) {
+    return firebaseAuth
+        .signInWithCredential(FacebookAuthProvider.credential(token))
+        .then((response) => _getUpdatedUser(response.user))
+        .catchError(ErrorHandler().handleError);
   }
 
-  Stream<UserProfile> loginViaGoogle({
+  Future<UserProfile> loginViaGoogle({
     @required String accessToken,
     @required String idToken,
   }) {
-    final authCredential = GoogleAuthProvider.credential(
-      accessToken: accessToken,
-      idToken: idToken,
-    );
-
-    return Stream.fromFuture(firebaseAuth.signInWithCredential(authCredential))
-        .transform(ErrorHandler())
-        .asyncMap((authResponse) => _getUpdatedUser(authResponse.user));
+    return firebaseAuth
+        .signInWithCredential(GoogleAuthProvider.credential(
+          accessToken: accessToken,
+          idToken: idToken,
+        ))
+        .then((authResponse) => _getUpdatedUser(authResponse.user))
+        .catchError(ErrorHandler().handleError);
   }
 
-  Stream<UserProfile> loginViaApple({
+  Future<UserProfile> loginViaApple({
     @required String accessToken,
     @required String idToken,
     @required String firstName,
@@ -117,7 +86,7 @@ class UserService {
       accessToken: accessToken,
     );
 
-    final future = Future(() async {
+    final loginRequest = Future(() async {
       final response = await firebaseAuth.signInWithCredential(credential);
       final user = response.user;
 
@@ -128,9 +97,9 @@ class UserService {
       return firebaseAuth.currentUser;
     });
 
-    return Stream.fromFuture(future)
-        .transform(ErrorHandler())
-        .asyncMap(_getUpdatedUser);
+    return loginRequest
+        .then(_getUpdatedUser)
+        .catchError(ErrorHandler().handleError);
   }
 
   Future<UserProfile> signUpUser(RegisterRequestModel model) async {

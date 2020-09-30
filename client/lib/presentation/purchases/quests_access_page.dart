@@ -1,10 +1,12 @@
-import 'package:cash_flow/core/hooks/alert_hooks.dart';
+import 'package:cash_flow/app/operation.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
-import 'package:cash_flow/features/game/game_hooks.dart';
-import 'package:cash_flow/features/purchase/purchase_hooks.dart';
-import 'package:cash_flow/models/domain/game/game_level/game_level.dart';
+import 'package:cash_flow/features/new_game/actions/start_quest_game_action.dart';
+import 'package:cash_flow/features/purchase/actions/buy_quests_access_action.dart';
+import 'package:cash_flow/features/purchase/actions/query_past_purchases_action.dart';
+import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
-import 'package:cash_flow/presentation/game_levels/game_level_item.dart';
+import 'package:cash_flow/presentation/quests/quest_item_widget.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -17,17 +19,18 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 
 class QuestsAccessPage extends HookWidget {
-  const QuestsAccessPage({@required this.gameLevel});
+  const QuestsAccessPage({@required this.quest});
 
-  final GameLevel gameLevel;
+  final Quest quest;
 
   @override
   Widget build(BuildContext context) {
-    final isOperationInProgress = useGlobalState((s) {
-      return s.purchase.buyQuestsAccessRequestState.isInProgress ||
-          s.purchase.getPastPurchasesRequestState.isInProgress ||
-          s.newGame.createNewGameByLevelRequestState.isInProgress;
-    });
+    final isOperationInProgress = useGlobalState(
+      (s) =>
+          s.getOperationState(Operation.buyQuestsAcceess).isInProgress ||
+          s.getOperationState(Operation.queryPastPurchases).isInProgress ||
+          s.getOperationState(Operation.createQuestGame).isInProgress,
+    );
 
     final isStoreAvailable = useFuture(
       InAppPurchaseConnection.instance.isAvailable(),
@@ -35,12 +38,14 @@ class QuestsAccessPage extends HookWidget {
     );
 
     final hasQuestsAccess = useGlobalState((s) => s.purchase.hasQuestsAccess);
-    final gameActions = useGameActions();
+    final dispatch = useDispatcher();
 
-    final startGame = () => gameActions.startGameByLevel(
-          gameLevel,
-          GameLevelAction.startNewGame,
-        );
+    final startGame = () {
+      return dispatch(StartQuestGameAction(
+        quest.id,
+        QuestAction.startNewGame,
+      ));
+    };
 
     useEffect(() {
       if (hasQuestsAccess) {
@@ -70,7 +75,7 @@ class QuestsAccessPage extends HookWidget {
               _StartQuestButton(onPressed: startGame)
             else
               _BuyButton(
-                gameLevel: gameLevel,
+                quest: quest,
                 isStoreAvailable: isStoreAvailable.data,
               ),
           ],
@@ -85,11 +90,12 @@ class _RestorePurchasesButton extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final purchaseActions = usePurchaseActions();
+    final dispatch = useDispatcher();
+
     final restorePurchases = () {
-      purchaseActions.restorePurchases().catchError(
-            (error) => handleError(context: context, exception: error),
-          );
+      dispatch(QueryPastPurchasesAction()).catchError(
+        (error) => handleError(context: context, exception: error),
+      );
     };
 
     return GestureDetector(
@@ -194,33 +200,34 @@ class _AdvantagesWidget extends StatelessWidget {
 
 class _BuyButton extends HookWidget {
   const _BuyButton({
-    @required this.gameLevel,
+    @required this.quest,
     @required this.isStoreAvailable,
     Key key,
   }) : super(key: key);
 
-  final GameLevel gameLevel;
+  final Quest quest;
   final bool isStoreAvailable;
 
   @override
   Widget build(BuildContext context) {
-    final gameActions = useGameActions();
-    final purchaseActions = usePurchaseActions();
-
-    final errorAlert = useWarningAlert(
-      message: (_) => Strings.storeConnectionError,
-    );
+    final dispatch = useDispatcher();
 
     VoidCallback buyQuestsAccess;
-    buyQuestsAccess = () {
-      purchaseActions.buyQuestsAccess().then((_) {
-        gameActions.startGameByLevel(
-          gameLevel,
-          GameLevelAction.startNewGame,
+    buyQuestsAccess = () async {
+      try {
+        await dispatch(BuyQuestsAccessAction());
+        await dispatch(
+          StartQuestGameAction(quest.id, QuestAction.startNewGame),
         );
-      }).catchError((error) {
-        errorAlert(error, buyQuestsAccess);
-      });
+
+        // ignore: avoid_catches_without_on_clauses
+      } catch (error) {
+        handleError(
+          context: context,
+          exception: error,
+          onRetry: buyQuestsAccess,
+        );
+      }
     };
 
     return Column(
@@ -249,7 +256,11 @@ class _BuyButton extends HookWidget {
           const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Text(Strings.storeConnectionError, style: Styles.body1),
+            child: Text(
+              Strings.storeConnectionError,
+              style: Styles.body1,
+              textAlign: TextAlign.center,
+            ),
           ),
         ]
       ],

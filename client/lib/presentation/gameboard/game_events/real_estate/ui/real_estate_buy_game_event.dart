@@ -1,5 +1,6 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
-import 'package:cash_flow/features/game/game_hooks.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
+import 'package:cash_flow/features/game/actions/send_player_move_action.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/real_estate/models/real_estate_buy_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/real_estate/ui/real_estate_buy_game_event_hooks.dart';
@@ -22,10 +23,9 @@ class RealEstateBuyGameEvent extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final infoTableData = useRealEstateBuyInfoTableData(event);
-    final gameActions = useGameActions();
     final sendPlayerAction = useRealEstateBuyPlayerActionHandler(event);
-
     final realEstateDialogInfoModel = useRealEstateInfoDialogModel();
+    final dispatch = useDispatcher();
 
     return Column(
       children: <Widget>[
@@ -65,7 +65,8 @@ class RealEstateBuyGameEvent extends HookWidget {
             );
           },
           skip: () {
-            gameActions.skipPlayerAction(event.id);
+            dispatch(SendPlayerMoveAction(eventId: event.id));
+
             AnalyticsSender.sendSkipBuyRealEstateEvent(
               event.name,
               eventData.currentPrice,

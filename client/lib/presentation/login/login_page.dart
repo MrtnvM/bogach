@@ -1,6 +1,8 @@
 import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
-import 'package:cash_flow/features/login/login_actions.dart';
+import 'package:cash_flow/features/profile/actions/login_via_apple_action.dart';
+import 'package:cash_flow/features/profile/actions/login_via_facebook_action.dart';
+import 'package:cash_flow/features/profile/actions/login_via_google_action.dart';
 import 'package:cash_flow/models/errors/unknown_error.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
@@ -17,10 +19,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:async_redux/async_redux.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage();
@@ -31,7 +34,7 @@ class LoginPage extends StatefulWidget {
   }
 }
 
-class _LoginPageState extends State<LoginPage> with ReduxState {
+class _LoginPageState extends State<LoginPage> {
   bool _isAuthorising = false;
 
   @override
@@ -190,7 +193,7 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
     );
   }
 
-  void _onLoggedIn(_) {
+  void _onLoggedIn() {
     setState(() => _isAuthorising = false);
     appRouter.startWith(const MainPage());
   }
@@ -239,13 +242,15 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
   }
 
   void _loginViaFacebook(String token) {
-    dispatchAsyncAction(LoginViaFacebookAsyncAction(token: token))
-        .listen((action) => action
-          ..onSuccess(_onLoggedIn)
-          ..onError(_onLoginViaFacebookError));
+    final action = LoginViaFacebookAction(token: token);
+
+    context
+        .dispatch(action)
+        .then((_) => _onLoggedIn())
+        .catchError(_onLoginError);
   }
 
-  void _onLoginViaFacebookError(error) {
+  void _onLoginError(error) {
     setState(() => _isAuthorising = false);
     handleError(context: context, exception: error);
   }
@@ -273,12 +278,13 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
   }
 
   void _loginViaGoogle({String token, String idToken}) {
-    dispatchAsyncAction(LoginViaGoogleAsyncAction(
-      accessToken: token,
-      idToken: idToken,
-    )).listen((action) => action
-      ..onSuccess(_onLoggedIn)
-      ..onError(_onLoginViaFacebookError));
+    context
+        .dispatch(LoginViaGoogleAction(
+          accessToken: token,
+          idToken: idToken,
+        ))
+        .then((_) => _onLoggedIn())
+        .catchError(_onLoginError);
   }
 
   Future<void> _onLoginViaAppleClicked() async {
@@ -293,18 +299,20 @@ class _LoginPageState extends State<LoginPage> with ReduxState {
         final accessToken =
             String.fromCharCodes(result.credential.authorizationCode);
         final firstName = result.credential.fullName.givenName;
-        final lastName = result.credential.fullName.givenName;
+        final lastName = result.credential.fullName.familyName;
 
         setState(() => _isAuthorising = true);
 
-        dispatchAsyncAction(LoginViaAppleAsyncAction(
-          idToken: identityToken,
-          accessToken: accessToken,
-          firstName: firstName,
-          lastName: lastName,
-        )).listen((action) => action
-          ..onSuccess(_onLoggedIn)
-          ..onError(_onLoginViaAppleError));
+        context
+            .dispatch(LoginViaAppleAction(
+              idToken: identityToken,
+              accessToken: accessToken,
+              firstName: firstName,
+              lastName: lastName,
+            ))
+            .then((_) => _onLoggedIn())
+            .catchError(_onLoginViaAppleError);
+
         break;
 
       case AuthorizationStatus.error:

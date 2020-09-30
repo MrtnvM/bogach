@@ -1,6 +1,6 @@
 import 'package:cash_flow/app/app_state.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:async_redux/async_redux.dart';
 
 class AppStateConnector<T> extends StatelessWidget {
   const AppStateConnector({

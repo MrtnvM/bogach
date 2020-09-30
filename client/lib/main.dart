@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:alice_lightweight/alice.dart';
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/store/store.dart';
 import 'package:cash_flow/app_configuration.dart';
 import 'package:cash_flow/cache/user_cache.dart';
@@ -12,19 +13,19 @@ import 'package:cash_flow/configuration/control_panel.dart';
 import 'package:cash_flow/configuration/error_reporting.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/configuration/ui_kit.dart';
+import 'package:cash_flow/features/profile/actions/set_current_user_action.dart';
+import 'package:cash_flow/features/purchase/actions/listening_purchases_actions.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/utils/core/launch_counter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cash_flow/features/login/login_actions.dart';
-import 'package:cash_flow/features/purchase/purchase_actions.dart';
+import 'package:async_redux/async_redux.dart';
 
 Future<void> main({
   @required CashApiEnvironment environment,
@@ -48,16 +49,14 @@ Future<void> main({
   configureUiKit();
   configureAnalytics(environment);
 
-  final rootEpic = createRootEpic(
+  configureDependencyInjection(
     apiClient,
     sharedPreferences,
     tokenStorage,
     userCache,
   );
 
-  final storeProvider = configureStoreProvider(rootEpic);
-  ReduxConfig.storeProvider = storeProvider;
-  final dispatch = ReduxConfig.storeProvider.store.dispatch;
+  final store = configureStore();
 
   Intl.defaultLocale = 'ru';
   await initializeDateFormatting('ru');
@@ -65,8 +64,8 @@ Future<void> main({
   final currentUser = userCache.getUserProfile();
 
   final isAuthorized = currentUser != null;
-  dispatch(SetCurrentUserAction(user: currentUser));
-  dispatch(StartListeningPurchasesAction());
+  store.dispatch(SetCurrentUserAction(currentUser));
+  store.dispatch(StartListeningPurchasesAction());
 
   final isFirstLaunch = launchCounter.isFirstLaunch();
   if (isFirstLaunch) {
@@ -77,10 +76,12 @@ Future<void> main({
 
   runZonedGuarded<Future<void>>(() async {
     runApp(
-      CashFlowApp(
-        store: storeProvider.store,
-        isAuthorised: isAuthorized,
-        isFirstLaunch: isFirstLaunch,
+      StoreProvider<AppState>(
+        store: store,
+        child: CashFlowApp(
+          isAuthorised: isAuthorized,
+          isFirstLaunch: isFirstLaunch,
+        ),
       ),
     );
   }, FirebaseCrashlytics.instance.recordError);

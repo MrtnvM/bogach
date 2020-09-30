@@ -2,7 +2,7 @@ library new_game_state;
 
 import 'package:built_value/built_value.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
-import 'package:cash_flow/models/domain/game/game_level/game_level.dart';
+import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 
@@ -15,31 +15,21 @@ abstract class NewGameState
 
   NewGameState._();
 
-  RefreshableRequestState get getGameTemplatesRequestState;
-  RefreshableRequestState get getGameLevelsRequestState;
-  RefreshableRequestState get getUserGamesRequestState;
-
   StoreList<GameTemplate> get gameTemplates;
-  StoreList<GameLevel> get gameLevels;
+  StoreList<Quest> get quests;
   StoreList<Game> get userGames;
 
-  Map<String, String> get currentGameForLevels;
-
-  RequestState get createNewGameRequestState;
-  RequestState get createNewGameByLevelRequestState;
+  Map<String, String> get currentGameForQuests;
 
   @nullable
   String get newGameId;
 
-  static NewGameState initial() => NewGameState((b) => b
-    ..getGameTemplatesRequestState = RefreshableRequestState.idle
-    ..getGameLevelsRequestState = RefreshableRequestState.idle
-    ..getUserGamesRequestState = RefreshableRequestState.idle
-    ..currentGameForLevels = {}
-    ..gameTemplates = StoreList<GameTemplate>()
-    ..gameLevels = StoreList<GameLevel>()
-    ..userGames = StoreList<Game>()
-    ..createNewGameRequestState = RequestState.idle
-    ..createNewGameByLevelRequestState = RequestState.idle
-    ..newGameId = null);
+  static NewGameState initial() => NewGameState(
+        (b) => b
+          ..currentGameForQuests = {}
+          ..gameTemplates = StoreList<GameTemplate>()
+          ..quests = StoreList<Quest>()
+          ..userGames = StoreList<Game>()
+          ..newGameId = null,
+      );
 }

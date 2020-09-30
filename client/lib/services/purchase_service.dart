@@ -29,13 +29,12 @@ class PurchaseService {
     });
   }
 
-  Stream<bool> isAvailable() {
-    return Stream.fromFuture(_connection.isAvailable());
+  Future<bool> isAvailable() {
+    return _connection.isAvailable();
   }
 
-  Stream<BuiltList<ProductDetails>> queryProductDetails({Set<String> ids}) {
-    return Stream.fromFuture(_connection.queryProductDetails(ids))
-        .map((response) {
+  Future<BuiltList<ProductDetails>> queryProductDetails({Set<String> ids}) {
+    return _connection.queryProductDetails(ids).then((response) {
       if (response.notFoundIDs.isNotEmpty) {
         throw ProductsNotFoundError(response.notFoundIDs);
       }
@@ -72,10 +71,11 @@ class PurchaseService {
 
     if (completedPurchases.isNotEmpty) {
       if (userId != null) {
-        sendPurchasedProductsToServer(userId, pastPurchases).listen(
-          (_) => Logger.i('Past purchases successfuly uploaded to server'),
-          onError: (e) => Logger.e('Past purchases uploading failed: $e'),
-        );
+        sendPurchasedProductsToServer(userId, pastPurchases).then((_) {
+          Logger.i('Past purchases successfuly uploaded to server');
+        }).catchError((e) {
+          Logger.e('Past purchases uploading failed: $e');
+        });
       }
 
       _pastPurchases.add(completedPurchases);
@@ -89,20 +89,20 @@ class PurchaseService {
   /// Consumed products are no longer considered to be "owned" by payment
   /// platforms and will not be delivered by calling [queryPastPurchases].
   // TODO(Artem): Persist purchases on our server
-  Stream<bool> buyConsumable({@required ProductDetails productDetails}) {
+  Future<bool> buyConsumable({@required ProductDetails productDetails}) {
     final purchaseParam = PurchaseParam(productDetails: productDetails);
 
-    return Stream.fromFuture(_connection.buyConsumable(
+    return _connection.buyConsumable(
       purchaseParam: purchaseParam,
-    ));
+    );
   }
 
-  Stream<bool> buyNonConsumable({@required ProductDetails productDetails}) {
+  Future<bool> buyNonConsumable({@required ProductDetails productDetails}) {
     final purchaseParam = PurchaseParam(productDetails: productDetails);
 
-    return Stream.fromFuture(_connection.buyNonConsumable(
+    return _connection.buyNonConsumable(
       purchaseParam: purchaseParam,
-    ));
+    );
   }
 
   Future<void> buyQuestsAcceess(String userId) async {
@@ -163,13 +163,12 @@ class PurchaseService {
     Logger.i('Is purchase completed (${product.id}): $completionResult');
 
     await sendPurchasedProductsToServer(userId, [purchase])
-        .timeout(const Duration(seconds: 30))
-        .first;
+        .timeout(const Duration(seconds: 30));
 
     Logger.i('Purchase (${product.id}) uploaded to server');
   }
 
-  Stream<void> sendPurchasedProductsToServer(
+  Future<void> sendPurchasedProductsToServer(
     String userId,
     List<PurchaseDetails> purchases,
   ) {
@@ -177,7 +176,7 @@ class PurchaseService {
         .map((p) => hashProductId(p.productID))
         .toList();
 
-    return apiClient.sendPurchasedProducts(userId, productIds);
+    return apiClient.sendPurchasedProducts(userId, productIds).first;
   }
 
   Future<void> _completeFailedPurchases(List<PurchaseDetails> purchases) async {

@@ -2,8 +2,8 @@ import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
-import 'package:cash_flow/models/domain/game/game_level/game_level.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
+import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/models/domain/room/room.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/models/network/request/game/create_room_request_model.dart';
@@ -32,30 +32,32 @@ class GameService {
   final FirebaseFirestore firestore;
   final FirebaseDatabase firebaseDatabase;
 
-  Stream<List<GameTemplate>> getGameTemplates() {
-    return apiClient.getGameTemplates().map(mapToGameTemplates);
+  Future<List<GameTemplate>> getGameTemplates() {
+    return apiClient.getGameTemplates().map(mapToGameTemplates).first;
   }
 
-  Stream<List<GameLevel>> getGameLevels(String userId) {
-    return apiClient.getGameLevels(userId);
+  Future<List<Quest>> getQuests(String userId) {
+    return apiClient.getQuests(userId).first;
   }
 
-  Stream<String> createNewGame({
+  Future<String> createNewGame({
     @required String templateId,
     @required String userId,
   }) {
     return apiClient
         .createNewGame(templateId: templateId, userId: userId)
-        .map((response) => response.id);
+        .map((response) => response.id)
+        .first;
   }
 
-  Stream<String> createNewGameByLevel({
+  Future<String> createQuestGame({
     @required String gameLevelId,
     @required String userId,
   }) {
     return apiClient
-        .createNewGameByLevel(gameLevelId: gameLevelId, userId: userId)
-        .map((response) => response.id);
+        .createNewQuestGame(questId: gameLevelId, userId: userId)
+        .map((response) => response.id)
+        .first;
   }
 
   Stream<Game> getGame(GameContext gameContext) {
@@ -106,24 +108,24 @@ class GameService {
     return games;
   }
 
-  Stream<void> sendPlayerAction(PlayerActionRequestModel playerAction) {
-    return apiClient.sendPlayerAction(playerAction);
+  Future<void> sendPlayerAction(PlayerActionRequestModel playerAction) {
+    return apiClient.sendPlayerAction(playerAction).first;
   }
 
-  Stream<void> startNewMonth(GameContext gameContext) {
-    return apiClient.startNewMonth(gameContext);
+  Future<void> startNewMonth(GameContext gameContext) {
+    return apiClient.startNewMonth(gameContext).first;
   }
 
-  Stream<Room> createRoom(CreateRoomRequestModel requestModel) {
-    return apiClient.createRoom(requestModel);
+  Future<Room> createRoom(CreateRoomRequestModel requestModel) {
+    return apiClient.createRoom(requestModel).first;
   }
 
-  Stream<void> setRoomParticipantReady(String roomId, String participantId) {
-    return apiClient.setRoomParticipantReady(roomId, participantId);
+  Future<void> setRoomParticipantReady(String roomId, String participantId) {
+    return apiClient.setRoomParticipantReady(roomId, participantId).first;
   }
 
-  Stream<void> createRoomGame(String roomId) {
-    return apiClient.createRoomGame(roomId);
+  Future<void> createRoomGame(String roomId) {
+    return apiClient.createRoomGame(roomId).first;
   }
 
   Stream<Room> subscribeOnRoomUpdates(String roomId) {

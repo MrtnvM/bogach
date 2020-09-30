@@ -1,27 +1,31 @@
 import 'dart:async';
 
 import 'package:cash_flow/app/app_state.dart';
+import 'package:cash_flow/app/operation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_hooks/flutter_hooks.dart' hide Store;
 import 'package:dash_kit_core/dash_kit_core.dart';
 
-class _GlobalStateHook<T> extends Hook<T> {
+class _GlobalStateHook<T, S extends GlobalState> extends Hook<T> {
   const _GlobalStateHook({
+    @required this.store,
     @required this.converter,
     this.distinct = true,
   })  : assert(converter != null),
         assert(distinct != null);
 
-  final T Function(AppState) converter;
+  final T Function(S) converter;
   final bool distinct;
+  final Store<S> store;
 
   @override
   HookState<T, Hook<T>> createState() {
-    return _GlobalStateStateHook<T>();
+    return _GlobalStateStateHook<T, S>();
   }
 }
 
-class _GlobalStateStateHook<T> extends HookState<T, _GlobalStateHook<T>> {
+class _GlobalStateStateHook<T, S extends GlobalState>
+    extends HookState<T, _GlobalStateHook<T, S>> {
   StreamSubscription _storeSubscription;
   T _state;
 
@@ -29,9 +33,9 @@ class _GlobalStateStateHook<T> extends HookState<T, _GlobalStateHook<T>> {
   void initHook() {
     super.initHook();
 
-    _updateState(ReduxConfig.storeProvider.store.state);
+    _updateState(hook.store.state);
 
-    final onStoreChanged = ReduxConfig.storeProvider.store.onChange;
+    final onStoreChanged = hook.store.onChange;
     _storeSubscription = onStoreChanged.listen(_updateState);
   }
 
@@ -48,7 +52,7 @@ class _GlobalStateStateHook<T> extends HookState<T, _GlobalStateHook<T>> {
     _state = null;
   }
 
-  void _updateState(GlobalState globalState) {
+  void _updateState(S globalState) {
     final state = hook.converter(globalState);
 
     if (hook.distinct && state == _state) {
@@ -63,5 +67,12 @@ T useGlobalState<T>(
   T Function(AppState) converter, {
   bool distinct = true,
 }) {
-  return use(_GlobalStateHook(converter: converter, distinct: distinct));
+  final context = useContext();
+  final store = StoreProvider.of<AppState>(context, 'useGlobalState hook');
+
+  return use(_GlobalStateHook(
+    store: store,
+    converter: converter,
+    distinct: distinct,
+  ));
 }

@@ -1,7 +1,10 @@
 import 'package:built_collection/built_collection.dart';
+import 'package:cash_flow/app/app_state.dart';
+import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/utils/app_store_connector.dart';
-import 'package:cash_flow/features/purchase/purchase_actions.dart';
-import 'package:cash_flow/features/purchase/purchase_state.dart';
+import 'package:cash_flow/features/purchase/actions/buy_actions.dart';
+import 'package:cash_flow/features/purchase/actions/query_past_purchases_action.dart';
+import 'package:cash_flow/features/purchase/actions/query_products_for_sale_action.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
@@ -11,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:async_redux/async_redux.dart';
 
 class PurchaseListPage extends StatefulWidget {
   const PurchaseListPage();
@@ -21,41 +25,40 @@ class PurchaseListPage extends StatefulWidget {
   }
 }
 
-class _PurchaseListPageState extends State<PurchaseListPage> with ReduxState {
-  @override
-  void initState() {
-    super.initState();
-
-    dispatchAsyncAction(QueryPastPurchasesAsyncAction());
-  }
-
+class _PurchaseListPageState extends State<PurchaseListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CashAppBar.withBackButton(title: Strings.purchases),
-      body: AppStateConnector<PurchaseState>(
-        converter: (s) => s.purchase,
-        builder: (context, state) => LoadableView(
-          isLoading: state.getPastPurchasesRequestState.isInProgress,
-          child: _buildBody(state),
+      body: AppStateConnector<OperationState>(
+        onInit: (s) => context.dispatch(QueryPastPurchasesAction()),
+        converter: (s) {
+          return s.getOperationState(Operation.queryPastPurchases);
+        },
+        builder: (context, requestState) => LoadableView(
+          isLoading: requestState.isInProgress,
+          child: _buildBody(),
         ),
       ),
     );
   }
 
-  Widget _buildBody(PurchaseState state) {
-    return ListView(
-      children: [
-        const Text('Past purchases', style: Styles.navBarTitle),
-        ...state.pastPurchases.map(_buildItem).toList(),
-        const Divider(),
-        const Text('Possible purchases', style: Styles.navBarTitle),
-        ...buildPossiblePurchases([
-          'test_subscription_1_month',
-          'android.test.purchased',
-          'test_consumable',
-        ]),
-      ],
+  Widget _buildBody() {
+    return AppStateConnector<BuiltList<PurchaseDetails>>(
+      converter: (s) => s.purchase.pastPurchases,
+      builder: (context, pastPurchases) => ListView(
+        children: [
+          const Text('Past purchases', style: Styles.navBarTitle),
+          ...pastPurchases.map(_buildItem).toList(),
+          const Divider(),
+          const Text('Possible purchases', style: Styles.navBarTitle),
+          ...buildPossiblePurchases([
+            'test_subscription_1_month',
+            'android.test.purchased',
+            'test_consumable',
+          ]),
+        ],
+      ),
     );
   }
 
@@ -67,27 +70,26 @@ class _PurchaseListPageState extends State<PurchaseListPage> with ReduxState {
   }
 
   void _purchaseItem(String productId) {
-    // Buy same product again
-    dispatchAsyncAction(QueryProductsForSaleAsyncAction(ids: {productId}))
-        .listen((action) => action
-          ..onSuccess(_onSuccessQueryProducts)
-          ..onError(_onErrorQueryProducts));
-  }
+    context.dispatch(QueryProductsForSaleAction(ids: {productId})).then((_) {
+      final appState = StoreProvider.state<AppState>(context);
+      final productsForSale = appState.purchase.productsForSale;
 
-  void _onSuccessQueryProducts(BuiltList<ProductDetails> products) {
-    dispatchAsyncAction(BuyConsumableAsyncAction(product: products.first));
-  }
+      final product = productsForSale.firstWhere(
+        (p) => p.id == productId,
+        orElse: () => null,
+      );
 
-  void _onErrorQueryProducts(dynamic error) {
-    handleError(context: context, exception: error);
+      if (mounted) {
+        context.dispatch(BuyConsumableAction(product: product));
+      }
+    }).catchError((error) {
+      handleError(context: context, exception: error);
+    });
   }
 
   List<Widget> buildPossiblePurchases(List<String> list) {
     return list
-        .map((e) => ListTile(
-              title: Text(e),
-              onTap: () => _purchaseItem(e),
-            ))
+        .map((e) => ListTile(title: Text(e), onTap: () => _purchaseItem(e)))
         .toList();
   }
 }
@@ -123,8 +125,10 @@ extension InAppPlatformExtension on InAppPlatform {
     switch (this) {
       case InAppPlatform.ios:
         return 'ios';
+
       case InAppPlatform.android:
         return 'android';
+
       default:
         return '';
     }

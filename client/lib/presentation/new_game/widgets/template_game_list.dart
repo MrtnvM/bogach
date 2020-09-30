@@ -1,9 +1,12 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
-import 'package:cash_flow/core/hooks/alert_hooks.dart';
+import 'package:cash_flow/app/operation.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
-import 'package:cash_flow/features/game/game_hooks.dart';
+import 'package:cash_flow/features/new_game/actions/get_game_templates_action.dart';
+import 'package:cash_flow/features/new_game/actions/start_singleplayer_game_action.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/navigation/app_router.dart';
+import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard.dart';
 import 'package:cash_flow/presentation/new_game/widgets/game_template_item.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -18,34 +21,34 @@ class TemplateGameList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final templatesRequestState = useGlobalState(
-      (s) => s.newGame.getGameTemplatesRequestState,
+      (s) => s.getOperationState(Operation.loadGameTemplates),
     );
 
     final createGameRequestState = useGlobalState(
-      (s) => s.newGame.createNewGameRequestState,
+      (s) => s.getOperationState(Operation.createGame),
     );
 
     final gameTemplates = useGlobalState((s) => s.newGame.gameTemplates);
-    final gameActions = useGameActions();
-
-    final showCreateGameErrorAlert = useWarningAlert(
-      needCancelButton: true,
-    );
+    final dispatch = useDispatcher();
 
     void Function(GameTemplate) createNewGame;
     createNewGame = (template) {
-      gameActions.createGame(template.id).then((createdGameId) {
-        gameActions.startGame(createdGameId);
-
-        appRouter.goToRoot();
+      dispatch(StartSinglePlayerGameAction(templateId: template.id)).then((_) {
         appRouter.goTo(GameBoard());
       }).catchError(
-        (e) => showCreateGameErrorAlert(e, () => createNewGame(template)),
+        (e) => handleError(
+          context: context,
+          exception: e,
+          onRetry: () => createNewGame(template),
+        ),
       );
     };
 
     final isLoading = templatesRequestState.isInProgress ||
         createGameRequestState.isInProgress;
+
+    final loadGameTemplates = () => dispatch(GetGameTemplatesAction());
+
     return LoadableView(
       isLoading: isLoading,
       backgroundColor: ColorRes.mainGreen.withOpacity(0.8),
@@ -60,10 +63,10 @@ class TemplateGameList extends HookWidget {
             },
           ),
           loadListRequestState: templatesRequestState,
-          loadList: gameActions.loadGameTemplates,
+          loadList: loadGameTemplates,
           padding: const EdgeInsets.all(16),
           emptyStateWidget: EmptyWidget(),
-          errorWidget: CommonErrorWidget(gameActions.loadGameTemplates),
+          errorWidget: CommonErrorWidget(loadGameTemplates),
         ),
       ),
     );
