@@ -35,32 +35,39 @@ class QuestList extends HookWidget {
 
     final dispatch = useDispatcher();
 
-    return LoadableView(
-      isLoading: getQuestsRequestState.isInProgress ||
-          createQuestGameRequestState.isInProgress,
-      backgroundColor: ColorRes.mainGreen.withOpacity(0.8),
-      child: RefreshIndicator(
-        color: ColorRes.mainGreen,
-        onRefresh: () => Future.wait([
-          dispatch(GetQuestsAction(userId: userId, isRefreshing: true)),
-          dispatch(LoadCurrentUserProfileAction())
-        ]),
-        child: LoadableListView<Quest>(
-          viewModel: LoadableListViewModel(
-            items: quests,
-            itemBuilder: (i) => _QuestItemWidget(
-              quests: quests.items[i],
-              index: i,
-            ),
-            loadListRequestState: getQuestsRequestState,
-            loadList: () {
-              dispatch(GetQuestsAction(userId: userId));
-              dispatch(LoadCurrentUserProfileAction());
-            },
-            padding: const EdgeInsets.all(16),
-            emptyStateWidget: EmptyWidget(),
-            errorWidget: CommonErrorWidget(
-              () => dispatch(GetQuestsAction(userId: userId)),
+    final mediaQuery = MediaQuery.of(context);
+    final screenWidth = mediaQuery.size.width;
+    final textScaleFactor = screenWidth <= 350 ? 0.8 : 1.0;
+
+    return MediaQuery(
+      data: mediaQuery.copyWith(textScaleFactor: textScaleFactor),
+      child: LoadableView(
+        isLoading: getQuestsRequestState.isInProgress ||
+            createQuestGameRequestState.isInProgress,
+        backgroundColor: ColorRes.mainGreen.withOpacity(0.8),
+        child: RefreshIndicator(
+          color: ColorRes.mainGreen,
+          onRefresh: () => Future.wait([
+            dispatch(GetQuestsAction(userId: userId, isRefreshing: true)),
+            dispatch(LoadCurrentUserProfileAction())
+          ]),
+          child: LoadableListView<Quest>(
+            viewModel: LoadableListViewModel(
+              items: quests,
+              itemBuilder: (i) => _QuestItemWidget(
+                quests: quests.items[i],
+                index: i,
+              ),
+              loadListRequestState: getQuestsRequestState,
+              loadList: () {
+                dispatch(GetQuestsAction(userId: userId));
+                dispatch(LoadCurrentUserProfileAction());
+              },
+              padding: const EdgeInsets.all(16),
+              emptyStateWidget: EmptyWidget(),
+              errorWidget: CommonErrorWidget(
+                () => dispatch(GetQuestsAction(userId: userId)),
+              ),
             ),
           ),
         ),
