@@ -134,7 +134,7 @@ export class GameService {
         return progress.status === 'month_result';
       });
 
-      return isAllParticipantsCompletedMonth ? updatedGame : undefined;
+      return { isAllParticipantsCompletedMonth, game: updatedGame };
     }
 
     return undefined;

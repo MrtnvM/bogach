@@ -85,13 +85,13 @@ export class RoomService {
     await this.gameProvider.updateRoom(room);
   }
 
-  async createRoomGame(roomId: RoomEntity.Id): Promise<Room> {
-    const [room] = await this.gameProvider.createRoomGame(roomId);
+  async createRoomGame(roomId: RoomEntity.Id) {
+    const [room, game] = await this.gameProvider.createRoomGame(roomId);
 
     if (room.participants.length < 2) {
       throw new Error('ERROR: Multiplayer game cannot have lower than 2 participants');
     }
 
-    return room;
+    return { room, game };
   }
 }

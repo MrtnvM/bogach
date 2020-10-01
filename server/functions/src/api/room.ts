@@ -52,11 +52,11 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const roomId = apiRequest.jsonField('roomId');
 
     const createRoomRequest = async () => {
-      const room = await roomService.createRoomGame(roomId);
+      const { room, game } = await roomService.createRoomGame(roomId);
 
       await scheduleMonthEndTimer({
         startDate: new Date(),
-        gameId: room.gameId || '',
+        gameId: game.id,
         monthNumber: 1,
       });
 

@@ -94,14 +94,19 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const context = apiRequest.jsonField('context');
 
     const startNewMonthRequest = async () => {
-      const game = await gameService.startNewMonth(context);
+      const result = await gameService.startNewMonth(context);
 
-      if (game) {
-        await scheduleMonthEndTimer({
-          startDate: new Date(),
-          gameId: game.id,
-          monthNumber: game.state.monthNumber,
-        });
+      if (result) {
+        const { game, isAllParticipantsCompletedMonth } = result;
+        const shouldStartTimer = isAllParticipantsCompletedMonth && game.type === 'multiplayer';
+
+        if (shouldStartTimer) {
+          await scheduleMonthEndTimer({
+            startDate: new Date(),
+            gameId: game.id,
+            monthNumber: game.state.monthNumber,
+          });
+        }
       }
 
       return 'New month started';
