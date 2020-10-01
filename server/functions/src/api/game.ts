@@ -11,6 +11,7 @@ import { UserEntity } from '../models/domain/user';
 import { GameTemplateEntity } from '../models/domain/game/game_template';
 import { GameEntity } from '../models/domain/game/game';
 import { UserProvider } from '../providers/user_provider';
+import { scheduleMonthEndTimer } from './external/timer';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
@@ -85,14 +86,28 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   });
 
   const startNewMonth = https.onRequest(async (request, response) => {
+    console.log('Request : ' + JSON.stringify(request.body));
+
     const apiRequest = APIRequest.from(request, response);
     apiRequest.checkMethod('POST');
 
     const context = apiRequest.jsonField('context');
 
-    const startNewMonthRequest = gameService.startNewMonth(context).then(() => 'New month started');
+    const startNewMonthRequest = async () => {
+      const game = await gameService.startNewMonth(context);
 
-    await send(startNewMonthRequest, response);
+      if (game) {
+        await scheduleMonthEndTimer({
+          startDate: new Date(),
+          gameId: game.id,
+          monthNumber: game.state.monthNumber,
+        });
+      }
+
+      return 'New month started';
+    };
+
+    await send(startNewMonthRequest(), response);
   });
 
   const getGameLevels = https.onRequest(async (request, response) => {

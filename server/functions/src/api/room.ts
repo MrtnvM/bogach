@@ -8,14 +8,19 @@ import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from '../providers/firestore_selector';
 import { FirebaseMessaging } from '../core/firebase/firebase_messaging';
 import { UserProvider } from '../providers/user_provider';
+import { GameService } from '../services/game_service';
+import { GameLevelsProvider } from '../providers/game_levels_provider';
+import { scheduleMonthEndTimer } from './external/timer';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
   const gameProvider = new GameProvider(firestore, selector);
+  const gameLevelProvider = new GameLevelsProvider();
   const userProvider = new UserProvider(firestore, selector);
   const firebaseMessaging = new FirebaseMessaging();
   const roomService = new RoomService(gameProvider, userProvider, firebaseMessaging);
+  const gameService = new GameService(gameProvider, gameLevelProvider, userProvider);
 
   const createRoom = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request, response);
@@ -46,8 +51,29 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const roomId = apiRequest.jsonField('roomId');
 
-    const createRoomRequest = roomService.createRoomGame(roomId);
-    await send(createRoomRequest, response);
+    const createRoomRequest = async () => {
+      const room = await roomService.createRoomGame(roomId);
+
+      await scheduleMonthEndTimer({
+        startDate: new Date(),
+        gameId: room.gameId || '',
+        monthNumber: 1,
+      });
+
+      return room;
+    };
+    return send(createRoomRequest(), response);
+  });
+
+  const completeMonth = https.onRequest(async (request, response) => {
+    const apiRequest = APIRequest.from(request, response);
+    apiRequest.checkMethod('POST');
+
+    const gameId = apiRequest.jsonField('game_id');
+    const monthNumber = apiRequest.jsonField('month_number');
+
+    const completeMonthRequest = gameService.completeMonth(gameId, monthNumber);
+    return send(completeMonthRequest, response);
   });
 
   const send = <T>(data: Promise<T>, response: functions.Response) => {
@@ -65,5 +91,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     createRoom,
     setRoomParticipantReady,
     createRoomGame,
+    completeMonth,
   };
 };

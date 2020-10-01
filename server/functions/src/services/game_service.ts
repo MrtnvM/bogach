@@ -30,7 +30,7 @@ import { ResetEventIndexTransformer } from '../transformers/game/reset_event_ind
 import { RealEstateBuyEventHandler } from '../events/estate/buy/real_estate_buy_event_handler';
 import { GameLevelEntity } from '../game_levels/models/game_level';
 import { UserProvider } from '../providers/user_provider';
-import { Game } from '../models/domain/game/game';
+import { Game, GameEntity } from '../models/domain/game/game';
 
 export class GameService {
   constructor(
@@ -121,20 +121,29 @@ export class GameService {
     const participantProgress = game.state.participantsProgress[userId];
 
     if (participantProgress.status === 'month_result') {
-      const updatedGame = applyGameTransformers(game, [
+      let updatedGame = applyGameTransformers(game, [
         new ResetEventIndexTransformer(userId),
         new InsuranceTransformer(userId),
         new PossessionStateTransformer(),
       ]);
 
-      await this.gameProvider.updateGame(updatedGame);
+      updatedGame = await this.gameProvider.updateGame(updatedGame);
+
+      const isAllParticipantsCompletedMonth = updatedGame.participants.every((participantId) => {
+        const progress = game.state.participantsProgress[participantId];
+        return progress.status === 'month_result';
+      });
+
+      return isAllParticipantsCompletedMonth ? updatedGame : undefined;
     }
+
+    return undefined;
   }
 
   async updateCurrentUserQuestIndexIfNeeded(game: Game, userId: UserEntity.Id) {
     const shouldOpenNewQuestForUser =
       game.state.gameStatus === 'game_over' &&
-      game.config.level != null &&
+      game.config.level !== null &&
       game.state.participantsProgress[userId].progress >= 1;
 
     if (!shouldOpenNewQuestForUser) {
@@ -146,5 +155,36 @@ export class GameService {
     const newQuestIndex = Math.min(questIndex + 1, gameLevels.length - 1);
 
     await this.userProvider.updateCurrentQuestIndex(userId, newQuestIndex);
+  }
+
+  async completeMonth(gameId: GameEntity.Id, monthNumber: number) {
+    const game = await this.gameProvider.getGame(gameId);
+    if (!game) throw new Error('No game with ID: ' + gameId);
+
+    const isGameCompleted = game.state.gameStatus === 'game_over';
+    const isMonthAlreadyCompleted = game.state.monthNumber !== monthNumber;
+
+    if (isGameCompleted || isMonthAlreadyCompleted) {
+      return;
+    }
+
+    const updatedGame = applyGameTransformers(game, [
+      ...game.participants.map((participantId) => {
+        const eventId = undefined;
+        const shouldCompleteMonth = true;
+
+        return new UserProgressTransformer(eventId, participantId, shouldCompleteMonth);
+      }),
+
+      new ParticipantAccountsTransformer(),
+      new PossessionStateTransformer(),
+      new WinnersTransformer(),
+      new HistoryGameTransformer(),
+      new GameEventsTransformer(),
+      new MonthResultTransformer(),
+      new MonthTransformer(),
+    ]);
+
+    await this.gameProvider.updateGame(updatedGame);
   }
 }
