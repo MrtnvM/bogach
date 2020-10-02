@@ -24,13 +24,13 @@ class SendPlayerMoveAction extends BaseAction {
   Operation get operationKey => Operation.sendPlayerAction;
 
   @override
-  FutureOr<void> before() {
+  FutureOr<void> before() async {
     final sendingEventIndex = state.game.currentGame?.currentEvents?.indexWhere(
       (e) => e.id == eventId,
     );
     final activeGameState = state.game.activeGameState;
 
-    dispatch(SetActiveGameState(activeGameState.maybeMap(
+    await dispatchFuture(SetActiveGameState(activeGameState.maybeMap(
       gameEvent: (gameEventState) => gameEventState.copyWith(
         sendingEventIndex: sendingEventIndex,
       ),

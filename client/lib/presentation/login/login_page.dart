@@ -14,6 +14,8 @@ import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/resources/urls.dart';
 import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -22,7 +24,6 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage();
@@ -142,18 +143,24 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildPrivacyPolicy() {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final fontSize = screenHeight < 580 ? 15.0 : 18.0;
+
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
         children: [
           TextSpan(
             text: Strings.authAndAccept,
-            style: Styles.onboardingSubtitle,
+            style: Styles.onboardingSubtitle.copyWith(
+              fontSize: fontSize,
+            ),
           ),
           TextSpan(
             text: Strings.termsOfUse,
             style: Styles.onboardingSubtitle.copyWith(
               decoration: TextDecoration.underline,
+              fontSize: fontSize,
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
@@ -162,12 +169,15 @@ class _LoginPageState extends State<LoginPage> {
           ),
           TextSpan(
             text: Strings.and,
-            style: Styles.onboardingSubtitle,
+            style: Styles.onboardingSubtitle.copyWith(
+              fontSize: fontSize,
+            ),
           ),
           TextSpan(
             text: Strings.privacyPolicy,
             style: Styles.onboardingSubtitle.copyWith(
               decoration: TextDecoration.underline,
+              fontSize: fontSize,
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
@@ -250,12 +260,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onLoginError(error) {
+    Logger.e(error);
     setState(() => _isAuthorising = false);
     handleError(context: context, exception: error);
   }
 
   Future<void> _onLoginViaGoogleClicked() async {
     final account = await GoogleSignIn().signIn().catchError((e) {
+      Logger.e(e);
       setState(() => _isAuthorising = false);
       showErrorDialog(context: context);
     });
@@ -310,7 +322,7 @@ class _LoginPageState extends State<LoginPage> {
               lastName: lastName,
             ))
             .then((_) => _onLoggedIn())
-            .catchError(_onLoginViaAppleError);
+            .catchError(_onLoginError);
 
         break;
 
@@ -323,11 +335,6 @@ class _LoginPageState extends State<LoginPage> {
         setState(() => _isAuthorising = false);
         break;
     }
-  }
-
-  void _onLoginViaAppleError(error) {
-    setState(() => _isAuthorising = false);
-    handleError(context: context, exception: error);
   }
 
   Future<void> _launchURL(String url) async {

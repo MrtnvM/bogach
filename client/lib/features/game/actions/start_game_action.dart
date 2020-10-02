@@ -25,7 +25,7 @@ class StartGameAction extends BaseAction {
 
   @override
   FutureOr<void> before() async {
-    await super.before();
+    super.before();
     await dispatchFuture(SetGameContextAction(gameContext));
   }
 

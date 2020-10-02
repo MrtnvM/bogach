@@ -109,14 +109,14 @@ class QuestItemWidget extends HookWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      _buildButton(
+                      _QuestActionButton(
                         title: Strings.startAgain,
                         color: ColorRes.grey2,
                         action: () {
                           onQuestSelected(quest, QuestAction.startNewGame);
                         },
                       ),
-                      _buildButton(
+                      _QuestActionButton(
                         title: Strings.continueAction,
                         color: ColorRes.yellow,
                         action: () {
@@ -134,12 +134,36 @@ class QuestItemWidget extends HookWidget {
     );
   }
 
-  Widget _buildButton({String title, VoidCallback action, Color color}) {
+  Widget getTemplateIcon() {
+    return Image.network(
+      quest.icon,
+      height: 38,
+      width: 38,
+    );
+  }
+}
+
+class _QuestActionButton extends StatelessWidget {
+  const _QuestActionButton({
+    Key key,
+    this.action,
+    this.color,
+    this.title,
+  }) : super(key: key);
+
+  final VoidCallback action;
+  final Color color;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return GestureDetector(
       onTap: action,
       child: Container(
         height: 34,
-        width: 130,
+        width: screenWidth < 350 ? 100 : 130,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: color,
@@ -148,14 +172,6 @@ class QuestItemWidget extends HookWidget {
         ),
         child: Text(title, style: Styles.bodyBlack.copyWith(fontSize: 12.5)),
       ),
-    );
-  }
-
-  Widget getTemplateIcon() {
-    return Image.network(
-      quest.icon,
-      height: 38,
-      width: 38,
     );
   }
 }

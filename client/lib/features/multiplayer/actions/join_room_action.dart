@@ -6,7 +6,6 @@ import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/features/multiplayer/actions/room_listening_actions.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/user_service.dart';
-import 'package:cash_flow/utils/core/tuple.dart';
 import 'package:get_it/get_it.dart';
 
 class JoinRoomAction extends BaseAction {
@@ -22,25 +21,25 @@ class JoinRoomAction extends BaseAction {
     final gameService = GetIt.I.get<GameService>();
     final userService = GetIt.I.get<UserService>();
 
-    final joinRoomRequest = () async {
-      final room = await gameService.getRoom(roomId);
+    final room = await gameService.getRoom(roomId);
 
-      final participantsIds = room.participants.map((p) => p.id).toList();
-      final profiles = await userService.loadProfiles(participantsIds);
-
-      return Tuple(room, profiles);
-    };
-
-    final result = await joinRoomRequest();
-
-    final room = result.item1;
-    final participantProfiles = result.item2;
-
-    dispatch(StartListeningRoomUpdatesAction(room.id));
+    final participantsIds = room.participants.map((p) => p.id).toList();
+    final participantProfiles = await userService.loadProfiles(participantsIds);
 
     return state.rebuild((s) {
       s.multiplayer.currentRoom = room;
       s.multiplayer.userProfiles.addAll(participantProfiles);
     });
+  }
+
+  @override
+  void after() {
+    super.after();
+
+    final room = state.multiplayer.currentRoom;
+
+    if (room != null) {
+      dispatch(StartListeningRoomUpdatesAction(room.id));
+    }
   }
 }

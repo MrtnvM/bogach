@@ -25,10 +25,20 @@ class CreateRoomAction extends BaseAction {
     );
 
     final room = await gameService.createRoom(requestModel);
-    dispatch(StartListeningRoomUpdatesAction(room.id));
 
     return state.rebuild((s) {
       s.multiplayer.currentRoom = room;
     });
+  }
+
+  @override
+  void after() {
+    super.after();
+
+    final room = state.multiplayer.currentRoom;
+
+    if (room != null) {
+      dispatch(StartListeningRoomUpdatesAction(room.id));
+    }
   }
 }

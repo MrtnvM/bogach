@@ -36,8 +36,8 @@ class CreateMultiplayerGamePage extends HookWidget {
     final dispatch = useDispatcher();
 
     //ignore: avoid_types_on_closure_parameters
-    final onGameTempalateSelected = (GameTemplate template) {
-      dispatch(SelectMultiplayerGameTemplateAction(template));
+    final onGameTempalateSelected = (GameTemplate template) async {
+      await dispatch(SelectMultiplayerGameTemplateAction(template));
 
       dispatch(CreateRoomAction())
           .then((_) => appRouter.goTo(RoomPage()))

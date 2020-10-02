@@ -22,34 +22,42 @@ class StartQuestGameAction extends BaseAction {
   FutureOr<AppState> reduce() async {
     final userId = state.profile.currentUser.id;
 
-    String gameId;
+    final getGameId = () async {
+      switch (action) {
+        case QuestAction.startNewGame:
+          final gameService = GetIt.I.get<GameService>();
 
-    switch (action) {
-      case QuestAction.startNewGame:
-        final gameService = GetIt.I.get<GameService>();
+          return await gameService.createQuestGame(
+            gameLevelId: questId,
+            userId: userId,
+          );
+          break;
 
-        gameId = await gameService.createQuestGame(
-          gameLevelId: questId,
-          userId: userId,
-        );
-        break;
+        case QuestAction.continueGame:
+          final currentGameForLevels = state.newGame.currentGameForQuests;
+          return currentGameForLevels[questId];
+          break;
+      }
+    };
 
-      case QuestAction.continueGame:
-        final currentGameForLevels = state.newGame.currentGameForQuests;
-        gameId = currentGameForLevels[questId];
-        break;
-    }
-
-    if (gameId == null) {
-      return null;
-    }
-
-    final gameContext = GameContext(gameId: gameId, userId: userId);
-    dispatch(StartGameAction(gameContext));
+    final gameId = await getGameId();
 
     return state.rebuild((s) {
       s.newGame.newGameId = gameId;
       s.newGame.currentGameForQuests[questId] = gameId;
     });
+  }
+
+  @override
+  void after() {
+    super.after();
+
+    final gameId = state.newGame.newGameId;
+    final userId = state.profile.currentUser.userId;
+
+    if (gameId != null) {
+      final gameContext = GameContext(gameId: gameId, userId: userId);
+      dispatch(StartGameAction(gameContext));
+    }
   }
 }

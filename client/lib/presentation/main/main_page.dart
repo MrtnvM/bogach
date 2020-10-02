@@ -5,6 +5,7 @@ import 'package:cash_flow/features/profile/actions/load_current_user_profile_act
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/presentation/continue_game/continue_game_page.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
+import 'package:cash_flow/presentation/multiplayer/create_multiplayer_game_page.dart';
 import 'package:cash_flow/presentation/new_game/single_game_page.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/quests/quests_page.dart';
@@ -58,14 +59,14 @@ class MainPage extends HookWidget {
           onPressed: () => appRouter.goTo(QuestsPage()),
           text: Strings.gameLevels,
         ),
-        // const SizedBox(height: 24),
-        // ColorButton(
-        //   onPressed: () {
-        //     appRouter.goTo(CreateMultiplayerGamePage());
-        //     AnalyticsSender.sendMultiplayerGame(userProfile.userId);
-        //   },
-        //   text: Strings.multiPlayerGame,
-        // ),
+        const SizedBox(height: 24),
+        ColorButton(
+          onPressed: () {
+            appRouter.goTo(CreateMultiplayerGamePage());
+            AnalyticsSender.sendMultiplayerGame(userProfile.userId);
+          },
+          text: Strings.multiPlayerGame,
+        ),
         const SizedBox(height: 24),
         ColorButton(
           onPressed: () {
