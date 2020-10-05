@@ -8,6 +8,7 @@ class CashApiEnvironment extends ApiEnvironment {
     bool validateRequestsByDefault = true,
     bool isRequestsAuthorisedByDefault = false,
     this.isAnalyticsEnabled = false,
+    this.isLoggerEnabled = false,
   }) : super(
           baseUrl: baseUrl,
           validateRequestsByDefaut: validateRequestsByDefault,
@@ -16,6 +17,7 @@ class CashApiEnvironment extends ApiEnvironment {
 
   final String name;
   final bool isAnalyticsEnabled;
+  final bool isLoggerEnabled;
 
   static const development = CashApiEnvironment(
     name: 'development',
@@ -23,6 +25,7 @@ class CashApiEnvironment extends ApiEnvironment {
     validateRequestsByDefault: false,
     isRequestsAuthorisedByDefault: false,
     isAnalyticsEnabled: false,
+    isLoggerEnabled: true,
   );
 
   static const staging = CashApiEnvironment(
@@ -31,6 +34,7 @@ class CashApiEnvironment extends ApiEnvironment {
     validateRequestsByDefault: false,
     isRequestsAuthorisedByDefault: false,
     isAnalyticsEnabled: false,
+    isLoggerEnabled: true,
   );
 
   static const uat = CashApiEnvironment(
@@ -39,6 +43,7 @@ class CashApiEnvironment extends ApiEnvironment {
     validateRequestsByDefault: false,
     isRequestsAuthorisedByDefault: false,
     isAnalyticsEnabled: true,
+    isLoggerEnabled: true,
   );
 
   static const production = CashApiEnvironment(
@@ -47,5 +52,6 @@ class CashApiEnvironment extends ApiEnvironment {
     validateRequestsByDefault: false,
     isRequestsAuthorisedByDefault: false,
     isAnalyticsEnabled: true,
+    isLoggerEnabled: false,
   );
 }
