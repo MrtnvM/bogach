@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 
@@ -19,9 +21,10 @@ class CashApiEnvironment extends ApiEnvironment {
   final bool isAnalyticsEnabled;
   final bool isLoggerEnabled;
 
-  static const development = CashApiEnvironment(
+  static final development = CashApiEnvironment(
     name: 'development',
-    baseUrl: 'http://localhost:5001/cash-flow-uat/europe-west2/',
+    baseUrl:
+        'http://${Platform.isIOS ? 'localhost' : '10.0.2.2'}:5001/cash-flow-staging/europe-west2/',
     validateRequestsByDefault: false,
     isRequestsAuthorisedByDefault: false,
     isAnalyticsEnabled: false,
