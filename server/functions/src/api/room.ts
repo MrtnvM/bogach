@@ -10,7 +10,7 @@ import { FirebaseMessaging } from '../core/firebase/firebase_messaging';
 import { UserProvider } from '../providers/user_provider';
 import { GameService } from '../services/game_service';
 import { GameLevelsProvider } from '../providers/game_levels_provider';
-import { scheduleMonthEndTimer } from './external/timer';
+import { TimerProvider } from '../providers/timer_provider';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
@@ -18,9 +18,11 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const gameProvider = new GameProvider(firestore, selector);
   const gameLevelProvider = new GameLevelsProvider();
   const userProvider = new UserProvider(firestore, selector);
+  const timerProvider = new TimerProvider();
   const firebaseMessaging = new FirebaseMessaging();
-  const roomService = new RoomService(gameProvider, userProvider, firebaseMessaging);
-  const gameService = new GameService(gameProvider, gameLevelProvider, userProvider);
+
+  const roomService = new RoomService(gameProvider, userProvider, timerProvider, firebaseMessaging);
+  const gameService = new GameService(gameProvider, gameLevelProvider, userProvider, timerProvider);
 
   const createRoom = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request, response);
@@ -52,16 +54,10 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const roomId = apiRequest.jsonField('roomId');
 
     const createRoomRequest = async () => {
-      const { room, game } = await roomService.createRoomGame(roomId);
-
-      await scheduleMonthEndTimer({
-        startDate: new Date(),
-        gameId: game.id,
-        monthNumber: 1,
-      });
-
+      const { room } = await roomService.createRoomGame(roomId);
       return room;
     };
+
     return send(createRoomRequest(), response);
   });
 

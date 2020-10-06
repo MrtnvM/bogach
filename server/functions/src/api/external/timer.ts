@@ -8,7 +8,7 @@ declare var process: {
 };
 
 export const scheduleMonthEndTimer = (params: {
-  startDate: Date;
+  startDateInUTC: string;
   gameId: GameEntity.Id;
   monthNumber: number;
 }) => {
@@ -25,7 +25,7 @@ export const scheduleMonthEndTimer = (params: {
   const apiEndpoint = 'https://bogach-multiplayer-timer.herokuapp.com/schedule_timer';
 
   const body = {
-    start_date: params.startDate.toUTCString(),
+    start_date: params.startDateInUTC,
     game_id: params.gameId,
     month_number: params.monthNumber,
     callback_url: callbackUrl,
@@ -39,10 +39,8 @@ export const scheduleMonthEndTimer = (params: {
         'Content-Type': 'application/json',
       },
     }),
-    new Promise(function (resolve, reject) {
-      setTimeout(function () {
-        reject('Timed out');
-      }, 500);
+    new Promise((resolve, reject) => {
+      setTimeout(() => reject('Timed out'), 500);
     }),
   ]);
 

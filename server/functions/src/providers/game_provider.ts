@@ -58,6 +58,7 @@ export class GameProvider {
       name: template.name,
       type: gameType,
       state: {
+        moveStartDateInUTC: new Date().toISOString(),
         gameStatus: 'players_move',
         monthNumber: 1,
         participantsProgress: participantsGameState({
@@ -297,7 +298,9 @@ export class GameProvider {
       throw new Error('ERROR: Game already created');
     }
 
-    const participantIds = room.participants.filter((p) => p.status === 'ready').map((p) => p.id);
+    const participantIds = room.participants //
+      .filter((p) => p.status === 'ready')
+      .map((p) => p.id);
 
     if (participantIds.length < 2) {
       throw new Error("ERROR: Multiplayer game can't have lower than 2 participants");
@@ -310,8 +313,8 @@ export class GameProvider {
     });
 
     RoomEntity.validate(room);
-
     const updatedRoom = await this.firestore.updateItem(selector, room);
+
     return [updatedRoom, game];
   }
 

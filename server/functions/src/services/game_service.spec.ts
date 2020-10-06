@@ -8,6 +8,7 @@ import { GameContext } from '../models/domain/game/game_context';
 import { TestData } from './game_service.spec.utils';
 import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { UserProvider } from '../providers/user_provider';
+import { TimerProvider } from '../providers/timer_provider';
 
 describe('Game Service - Singleplayer game', () => {
   test('Successfully handle not last game event', async () => {
@@ -19,7 +20,13 @@ describe('Game Service - Singleplayer game', () => {
     const gameProvider = instance(mockGameProvider);
     const gameLevelsProvider = instance(mock(GameLevelsProvider));
     const userProvider = instance(mock(UserProvider));
-    const gameService = new GameService(gameProvider, gameLevelsProvider, userProvider);
+    const timerProvider = instance(mock(TimerProvider));
+    const gameService = new GameService(
+      gameProvider,
+      gameLevelsProvider,
+      userProvider,
+      timerProvider
+    );
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(firstEventId, firstEventPlayerAction, gameContext);
@@ -51,7 +58,13 @@ describe('Game Service - Singleplayer game', () => {
     const gameProvider = instance(mockGameProvider);
     const gameLevelsProvider = instance(mock(GameLevelsProvider));
     const userProvider = instance(mock(UserProvider));
-    const gameService = new GameService(gameProvider, gameLevelsProvider, userProvider);
+    const timerProvider = instance(mock(TimerProvider));
+    const gameService = new GameService(
+      gameProvider,
+      gameLevelsProvider,
+      userProvider,
+      timerProvider
+    );
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
@@ -88,7 +101,7 @@ describe('Game Service - Singleplayer game', () => {
     expect(newGame.possessions).not.toStrictEqual(game.possessions);
   });
 
-  test('Successfull game over', async () => {
+  test('Successfully game over', async () => {
     const { gameId, userId, lastEventId, lastEventPlayerAction } = TestData;
     const game = produce(TestData.game, (draft) => {
       draft.accounts[userId].cash = 999999;
@@ -98,9 +111,15 @@ describe('Game Service - Singleplayer game', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
 
     const gameProvider = instance(mockGameProvider);
-    const gameLevelsProvider = instance(mock(GameLevelsProvider));
+    const gameLevelsProvider = new GameLevelsProvider();
     const userProvider = instance(mock(UserProvider));
-    const gameService = new GameService(gameProvider, gameLevelsProvider, userProvider);
+    const timerProvider = instance(mock(TimerProvider));
+    const gameService = new GameService(
+      gameProvider,
+      gameLevelsProvider,
+      userProvider,
+      timerProvider
+    );
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
@@ -143,7 +162,13 @@ describe('Game Service - Singleplayer game', () => {
     const gameProvider = instance(mockGameProvider);
     const gameLevelsProvider = instance(mock(GameLevelsProvider));
     const userProvider = instance(mock(UserProvider));
-    const gameService = new GameService(gameProvider, gameLevelsProvider, userProvider);
+    const timerProvider = instance(mock(TimerProvider));
+    const gameService = new GameService(
+      gameProvider,
+      gameLevelsProvider,
+      userProvider,
+      timerProvider
+    );
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);

@@ -28,9 +28,13 @@ export class UserProgressTransformer extends GameTransformer {
 
     const newEventIndex = shouldCompleteMonth ? currentEventIndex : currentEventIndex + 1;
 
+    const newCurrentMonthForParticipant = shouldCompleteMonth
+      ? game.state.monthNumber
+      : currentMonthForParticipant;
+
     const newParticipantProgress: GameEntity.ParticipantProgress = {
       currentEventIndex: newEventIndex,
-      currentMonthForParticipant,
+      currentMonthForParticipant: newCurrentMonthForParticipant,
       status: shouldCompleteMonth ? 'month_result' : 'player_move',
       monthResults,
       progress: GameTargetEntity.calculateProgress(game, this.userId),

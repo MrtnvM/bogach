@@ -11,7 +11,7 @@ import { UserEntity } from '../models/domain/user';
 import { GameTemplateEntity } from '../models/domain/game/game_template';
 import { GameEntity } from '../models/domain/game/game';
 import { UserProvider } from '../providers/user_provider';
-import { scheduleMonthEndTimer } from './external/timer';
+import { TimerProvider } from '../providers/timer_provider';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
@@ -19,7 +19,13 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const gameProvider = new GameProvider(firestore, selector);
   const gameLevelsProvider = new GameLevelsProvider();
   const userProvider = new UserProvider(firestore, selector);
-  const gameService = new GameService(gameProvider, gameLevelsProvider, userProvider);
+  const timerProvider = new TimerProvider();
+  const gameService = new GameService(
+    gameProvider,
+    gameLevelsProvider,
+    userProvider,
+    timerProvider
+  );
 
   const createGame = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request, response);
@@ -94,21 +100,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const context = apiRequest.jsonField('context');
 
     const startNewMonthRequest = async () => {
-      const result = await gameService.startNewMonth(context);
-
-      if (result) {
-        const { game, isAllParticipantsCompletedMonth } = result;
-        const shouldStartTimer = isAllParticipantsCompletedMonth && game.type === 'multiplayer';
-
-        if (shouldStartTimer) {
-          await scheduleMonthEndTimer({
-            startDate: new Date(),
-            gameId: game.id,
-            monthNumber: game.state.monthNumber,
-          });
-        }
-      }
-
+      await gameService.startNewMonth(context);
       return 'New month started';
     };
 
