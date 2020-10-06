@@ -159,13 +159,63 @@ class PurchaseService {
     final purchase = await purchaseRequest;
     Logger.i('Purchasing (${product.id}): $purchase');
 
-    final completionResult = await _connection.completePurchase(purchase);
-    Logger.i('Is purchase completed (${product.id}): $completionResult');
-
     await sendPurchasedProductsToServer(userId, [purchase])
         .timeout(const Duration(seconds: 30));
 
     Logger.i('Purchase (${product.id}) uploaded to server');
+
+    final completionResult = await _connection.completePurchase(purchase);
+    Logger.i('Is purchase completed (${product.id}): $completionResult');
+  }
+
+  Future<int> buyMultiplayerGames({
+    @required String userId,
+    @required String productId,
+  }) async {
+    final response = await _connection.queryProductDetails(
+      {productId},
+    );
+
+    if (response.notFoundIDs.isNotEmpty) {
+      throw NoInAppPurchaseProductsError();
+    }
+
+    final product = response.productDetails.first;
+    final purchaseRequest = _connection.purchaseUpdatedStream
+        .map(
+          (products) => products.firstWhere(
+            (p) => p.productID == product.id,
+            orElse: () => null,
+          ),
+        )
+        .where((p) => p != null)
+        .timeout(const Duration(seconds: 30))
+        .first;
+
+    try {
+      final result = await _connection.buyConsumable(
+        purchaseParam: PurchaseParam(productDetails: product),
+      );
+
+      Logger.i('Purchase (${product.id}) result: $result');
+
+      // ignore: avoid_catches_without_on_clauses
+    } catch (error) {
+      Logger.e('Error on buying product (${product.id}): $error');
+      rethrow;
+    }
+
+    final purchase = await purchaseRequest;
+    Logger.i('Purchasing (${product.id}): $purchase');
+
+    await sendPurchasedProductsToServer(userId, [purchase])
+        .timeout(const Duration(seconds: 30));
+    Logger.i('Purchase (${product.id}) uploaded to server');
+
+    final completionResult = await _connection.completePurchase(purchase);
+    Logger.i('Is purchase completed (${product.id}): $completionResult');
+
+    return getMultiplayerGamePurchaseFromId(purchase.productID).gamesCount;
   }
 
   Future<void> sendPurchasedProductsToServer(

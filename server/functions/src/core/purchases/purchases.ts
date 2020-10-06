@@ -14,4 +14,8 @@ export namespace Purchases {
   };
 
   export const questsAccessProductId = id('bogach.quests.access');
+  export const multiplayer1ProductId = id('bogach.multiplayer.1');
+  export const multiplayer5ProductId = id('bogach.multiplayer.5');
+  export const multiplayer10ProductId = id('bogach.multiplayer.10');
+  
 }

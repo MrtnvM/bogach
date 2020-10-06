@@ -220,7 +220,6 @@ class _BuyButton extends HookWidget {
           StartQuestGameAction(quest.id, QuestAction.startNewGame),
         );
 
-        // ignore: avoid_catches_without_on_clauses
       } catch (error) {
         handleError(
           context: context,

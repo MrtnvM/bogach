@@ -11,7 +11,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
   const userProvider = new UserProvider(firestore, selector);
-  const userService = new PurchaseService(userProvider);
+  const purchaseService = new PurchaseService(userProvider);
 
   const updatePurchases = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request, response);
@@ -20,7 +20,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const userId = apiRequest.jsonField('userId');
     const productIds = apiRequest.jsonField('productIds');
 
-    const updatePurchasesOperation = userService.updatePurchases(userId, productIds);
+    const updatePurchasesOperation = purchaseService.updatePurchases(userId, productIds);
     await send(updatePurchasesOperation, response);
   });
 

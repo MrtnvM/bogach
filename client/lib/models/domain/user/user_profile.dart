@@ -14,6 +14,7 @@ abstract class UserProfile with _$UserProfile implements StoreListItem {
     String avatarUrl,
     int currentQuestIndex,
     @JsonKey(defaultValue: false) bool boughtQuestsAccess,
+    @JsonKey(defaultValue: 0) int multiplayerGamesCount,
   }) = _UserProfile;
 
   factory UserProfile.fromJson(Map<String, dynamic> json) =>

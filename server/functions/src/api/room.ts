@@ -11,6 +11,7 @@ import { UserProvider } from '../providers/user_provider';
 import { GameService } from '../services/game_service';
 import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { TimerProvider } from '../providers/timer_provider';
+import { PurchaseService } from '../services/purchase_service';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
@@ -23,6 +24,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
   const roomService = new RoomService(gameProvider, userProvider, timerProvider, firebaseMessaging);
   const gameService = new GameService(gameProvider, gameLevelProvider, userProvider, timerProvider);
+  const purchaseService = new PurchaseService(userProvider);
 
   const createRoom = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request, response);
@@ -55,10 +57,11 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const createRoomRequest = async () => {
       const { room } = await roomService.createRoomGame(roomId);
+      await purchaseService.reduceMultiplayerGames(room.participants.map((participant) => participant.id));
       return room;
     };
 
-    return send(createRoomRequest(), response);
+    await send(createRoomRequest(), response);
   });
 
   const completeMonth = https.onRequest(async (request, response) => {
@@ -69,7 +72,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const monthNumber = apiRequest.jsonField('month_number');
 
     const completeMonthRequest = gameService.completeMonth(gameId, monthNumber);
-    return send(completeMonthRequest, response);
+    await send(completeMonthRequest, response);
   });
 
   const send = <T>(data: Promise<T>, response: functions.Response) => {

@@ -12,6 +12,7 @@ import { GameTemplateEntity } from '../models/domain/game/game_template';
 import { GameEntity } from '../models/domain/game/game';
 import { UserProvider } from '../providers/user_provider';
 import { TimerProvider } from '../providers/timer_provider';
+import { PurchaseService } from '../services/purchase_service';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
@@ -36,6 +37,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const userId = apiRequest.optionalJsonField('userId');
 
     const game = gameService.createNewGame(templateId, participantsIds || [userId]);
+
     await send(game, response);
   });
 

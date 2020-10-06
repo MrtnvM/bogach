@@ -5,6 +5,7 @@ export interface User {
   readonly boughtQuestsAccess?: boolean;
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
+  readonly multiplayerGamesCount?: number;
 }
 
 export interface UserDevice {

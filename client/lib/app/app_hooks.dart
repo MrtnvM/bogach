@@ -1,12 +1,14 @@
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/dynamic_link_hooks.dart';
+import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/hooks/push_notification_hooks.dart';
 import 'package:cash_flow/features/multiplayer/actions/join_room_action.dart';
 import 'package:cash_flow/features/profile/actions/send_device_push_token_action.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/multiplayer/room_page.dart';
+import 'package:cash_flow/presentation/purchases/games_access_page.dart';
 import 'package:cash_flow/resources/dynamic_links.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/foundation.dart';
@@ -108,13 +110,22 @@ void useDeepLinkHandler() {
 _AppActions useAppActions() {
   final context = useContext();
   final dispatch = useDispatcher();
+  final multiplayerGamesCount = useGlobalState(
+      (state) => state.profile.currentUser?.multiplayerGamesCount ?? 0);
 
   return useMemoized(
     () => _AppActions(
       joinRoom: (roomId) {
         VoidCallback joinRoom;
 
-        joinRoom = () {
+        joinRoom = () async {
+          if (multiplayerGamesCount <= 0) {
+            final response = await appRouter.goTo(const GamesAccessPage());
+            if (response == null) {
+              return;
+            }
+          }
+
           dispatch(JoinRoomAction(roomId)).then((_) async {
             await Future.delayed(const Duration(milliseconds: 50));
 

@@ -393,4 +393,7 @@ class Strings {
   static String get and => ' и ';
   static String get privacyPolicy => 'политику приватности';
   static String get canNotOpenLink => 'Произошла ошибка при открытии ссылки';
+  static String get purchase1Game => '1 игра';
+  static String get purchase5Game => '5 игр + 1 в подарок';
+  static String get purchase10Game => '10 игр + 2 в подарок';
 }

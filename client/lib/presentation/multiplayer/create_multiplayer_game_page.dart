@@ -10,6 +10,7 @@ import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/multiplayer/room_page.dart';
 import 'package:cash_flow/presentation/new_game/widgets/game_template_item.dart';
+import 'package:cash_flow/presentation/purchases/games_access_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/common/common_error_widget.dart';
@@ -34,9 +35,10 @@ class CreateMultiplayerGamePage extends HookWidget {
 
     final gameTemplates = useGlobalState((s) => s.newGame.gameTemplates);
     final dispatch = useDispatcher();
+    final multiplayerGamesCount =
+        useGlobalState((s) => s.profile.currentUser.multiplayerGamesCount);
 
-    //ignore: avoid_types_on_closure_parameters
-    final onGameTempalateSelected = (GameTemplate template) async {
+    final Function(GameTemplate) onGameTempalateSelected = (template) async {
       await dispatch(SelectMultiplayerGameTemplateAction(template));
 
       dispatch(CreateRoomAction())
@@ -48,6 +50,16 @@ class CreateMultiplayerGamePage extends HookWidget {
         // TODO(Maxim): Show detailed error
         handleError(context: context, exception: error);
       });
+    };
+
+    final Function(GameTemplate) buyGames = (template) async {
+      final response = await appRouter.goTo<bool>(const GamesAccessPage());
+
+      if (response == null) {
+        return;
+      }
+
+      onGameTempalateSelected(template);
     };
 
     return LoadableView(
@@ -65,7 +77,9 @@ class CreateMultiplayerGamePage extends HookWidget {
               color: ColorRes.mainGreen,
               child: _buildGameTemplateList(
                 gameTemplates: gameTemplates,
-                onGameTempalateSelected: onGameTempalateSelected,
+                onGameTempalateSelected: multiplayerGamesCount <= 0
+                    ? buyGames
+                    : onGameTempalateSelected,
                 loadGameTempalatesRequestState: getGameTemplatesRequestState,
                 loadGameTemplates: () {
                   dispatch(GetGameTemplatesAction());
