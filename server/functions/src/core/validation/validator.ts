@@ -70,7 +70,7 @@ export class Validator<T extends object> {
 
     const value = this.entity[field];
     const objectKeys = Object.keys(value).sort();
-    const sortedExpectedKeys = keys.sort();
+    const sortedExpectedKeys = [...keys].sort();
 
     if (JSON.stringify(objectKeys) !== JSON.stringify(sortedExpectedKeys)) {
       const expectedKeys = sortedExpectedKeys.join(', ');
