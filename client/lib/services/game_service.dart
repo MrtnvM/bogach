@@ -131,6 +131,7 @@ class GameService {
         .collection('rooms')
         .doc(roomId)
         .snapshots()
+        .where((snapshot) => snapshot?.data() != null)
         .map((snapshot) => Room.fromJson(snapshot.data()));
   }
 
