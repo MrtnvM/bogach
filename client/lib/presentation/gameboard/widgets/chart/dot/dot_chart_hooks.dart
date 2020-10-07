@@ -1,3 +1,4 @@
+import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:charts_flutter/flutter.dart';
 
@@ -12,11 +13,34 @@ List<List<DotModel>> useDotModels(Game game) {
 
   final listOfPlayerDots = <List<DotModel>>[];
 
-  var maxMonthValue = 0;
-
   final currentMonth = game.state.monthNumber;
 
-  game.state.participantsProgress.forEach((userId, progress) {
+  _fillDotsForOptimal(
+    gameTarget: game.target.value.toInt(),
+    firstDot: firstDot,
+    currentMonth: currentMonth,
+    initialCash: initialCash,
+    monthLimit: game.config.monthLimit,
+    dotsList: listOfPlayerDots,
+  );
+
+  _fillDotsForPlayers(
+    participantsProgress: game.state.participantsProgress,
+    firstDot: firstDot,
+    currentMonth: currentMonth,
+    listOfPlayerDots: listOfPlayerDots,
+  );
+
+  return listOfPlayerDots;
+}
+
+void _fillDotsForPlayers({
+  Map<String, ParticipantProgress> participantsProgress,
+  DotModel firstDot,
+  int currentMonth,
+  List<List<DotModel>> listOfPlayerDots,
+}) {
+  participantsProgress.forEach((userId, progress) {
     final dots = <DotModel>[];
     dots.add(firstDot);
 
@@ -29,22 +53,27 @@ List<List<DotModel>> useDotModels(Game game) {
           yValue: monthResults.cash.toInt(),
         );
         dots.add(dot);
-
-        if (intMonth > maxMonthValue) {
-          maxMonthValue = intMonth;
-        }
       }
     });
 
     listOfPlayerDots.add(dots);
   });
+}
 
-  final gameDifference = game.target.value.toInt() - initialCash;
-  final optimalStep = gameDifference ~/ game.config.monthLimit;
+void _fillDotsForOptimal({
+  int gameTarget,
+  DotModel firstDot,
+  int currentMonth,
+  int initialCash,
+  int monthLimit,
+  List<List<DotModel>> dotsList,
+}) {
+  final gameDifference = gameTarget - initialCash;
+  final optimalStep = gameDifference ~/ monthLimit;
   final optimalPathDots = <DotModel>[];
   optimalPathDots.add(firstDot);
 
-  for (var monthIndex = 0; monthIndex < maxMonthValue; monthIndex++) {
+  for (var monthIndex = 0; monthIndex < currentMonth; monthIndex++) {
     final differenceFromStart = (monthIndex + 1) * optimalStep;
     final optimalCashValue = initialCash + differenceFromStart;
 
@@ -55,20 +84,25 @@ List<List<DotModel>> useDotModels(Game game) {
     optimalPathDots.add(dot);
   }
 
-  listOfPlayerDots.add(optimalPathDots);
-
-  return listOfPlayerDots;
+  dotsList.add(optimalPathDots);
 }
 
 List<Series> useGraphicSeries(List<List<DotModel>> dotModels) {
   var graphicId = 0;
 
+  final palettes = MaterialPalette.getOrderedPalettes(dotModels.length);
+  final palettesIterator = palettes.iterator;
+  palettesIterator.moveNext();
+
   final series = dotModels.map((subListDots) {
+    final palette = palettesIterator.current;
+    palettesIterator.moveNext();
+
     graphicId++;
 
     return Series<DotModel, int>(
       id: graphicId.toString(),
-      colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
+      colorFn: (_, __) => palette.shadeDefault,
       domainFn: (model, _) => model.xValue,
       measureFn: (model, _) => model.yValue,
       data: subListDots,
