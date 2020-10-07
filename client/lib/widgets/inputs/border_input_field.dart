@@ -29,7 +29,7 @@ class _BorderInputFieldState extends State<BorderInputField> {
       _key.currentState?.validate();
     });
 
-    if (widget.props.autoValidate == true &&
+    if (widget.props.autovalidateMode != AutovalidateMode.disabled &&
         widget.props.validatorRules != null &&
         widget.props.controller?.text?.isNotEmpty == true) {
       _validationResult = validate(
@@ -123,7 +123,7 @@ class _BorderInputFieldState extends State<BorderInputField> {
           style: Styles.body1.copyWith(color: ColorRes.black),
           obscureText: widget.props.obscureText,
           keyboardType: widget.props.keyboardType,
-          autovalidate: widget.props.autoValidate,
+          autovalidateMode: widget.props.autovalidateMode,
           inputFormatters: widget.props.inputFormatters,
         ),
       ],
