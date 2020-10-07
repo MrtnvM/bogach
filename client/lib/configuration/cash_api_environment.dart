@@ -19,7 +19,7 @@ class CashApiEnvironment extends ApiEnvironment {
 
   static const development = CashApiEnvironment(
     name: 'development',
-    baseUrl: 'http://localhost:5001/cash-flow-uat/europe-west2/',
+    baseUrl: 'http://localhost:5001/cash-flow-staging/europe-west2/',
     validateRequestsByDefault: false,
     isRequestsAuthorisedByDefault: false,
     isAnalyticsEnabled: false,
