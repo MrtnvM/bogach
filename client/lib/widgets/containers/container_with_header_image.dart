@@ -109,10 +109,11 @@ class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
     final nocthHeight = mediaQuery.padding.top;
     final imageHeight = _getBackgroundImageSize(nocthHeight);
     final scrollOffset = imageHeight * 1.55;
+    final newTopAlign = -1 - scrollController.offset / scrollOffset;
 
-    setState(() {
-      topAlign = -1 - scrollController.offset / scrollOffset;
-    });
+    if (newTopAlign != topAlign) {
+      setState(() => topAlign = newTopAlign);
+    }
   }
 
   Widget _buildHeader({
@@ -143,8 +144,9 @@ class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
             ),
           ),
           if (isMultiplayerGame)
-            Align(
-              alignment: Alignment.topRight,
+            Positioned(
+              top: 0,
+              right: 0,
               child: _Timer(),
             ),
         ],

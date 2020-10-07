@@ -29,7 +29,7 @@ class NavigationBar extends HookWidget {
 
     useEffect(() {
       final listener = () {
-        return opacity.value = 1 - scrollController.offset / 50;
+        opacity.value = 1 - scrollController.offset / 50;
       };
 
       scrollController?.addListener(listener);
