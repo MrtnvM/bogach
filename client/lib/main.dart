@@ -36,7 +36,7 @@ Future<void> main({
 
   if (environment.isLoggerEnabled) {
     Logger.init();
-    Logger.enabled = environment.isLoggerEnabled;
+    Logger.enabled = true;
   }
 
   await initializeFirebase();
