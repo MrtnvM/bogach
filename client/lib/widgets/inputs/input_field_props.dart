@@ -16,7 +16,7 @@ class InputFieldProps {
     this.obscureText = false,
     this.textCapitalization = TextCapitalization.none,
     this.keyboardType = TextInputType.text,
-    this.autoValidate = false,
+    this.autovalidateMode = AutovalidateMode.disabled,
     this.maxLines = 1,
     this.lines = 1,
     this.maxLength = 64,
@@ -37,7 +37,7 @@ class InputFieldProps {
   final bool obscureText;
   final TextCapitalization textCapitalization;
   final TextInputType keyboardType;
-  final bool autoValidate;
+  final AutovalidateMode autovalidateMode;
   final int maxLines;
   final int lines;
   final int maxLength;
