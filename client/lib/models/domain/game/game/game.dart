@@ -16,7 +16,7 @@ abstract class Game with _$Game implements StoreListItem {
   factory Game({
     @required String id,
     @required String name,
-    @required String type,
+    @required GameType type,
     @required CurrentGameState state,
     @required List<String> participants,
     @required Map<String, PossessionState> possessionState,
@@ -29,6 +29,11 @@ abstract class Game with _$Game implements StoreListItem {
   }) = _Game;
 
   factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
+}
+
+enum GameType {
+  singleplayer,
+  multiplayer,
 }
 
 DateTime _timestampToDate(dynamic timestamp) {

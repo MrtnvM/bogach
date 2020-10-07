@@ -4,6 +4,7 @@ import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/utils/app_store_connector.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
+import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/navigation_bar.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
@@ -122,7 +123,7 @@ class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
     double topAlign,
   }) {
     final game = StoreProvider.state<AppState>(context).game.currentGame;
-    final isMultiplayerGame = game.type == 'multiplayer';
+    final isMultiplayerGame = game.type == GameType.multiplayer;
 
     return Align(
       alignment: Alignment(0, topAlign),
@@ -267,11 +268,7 @@ class _Timer extends HookWidget {
             : remainingSeconds.value;
 
     final minutes = (remainingSecondsValue ~/ 60).toString();
-    final secondsValue = '0${remainingSecondsValue % 60}';
-    final seconds = secondsValue.substring(
-      secondsValue.length - 2,
-      secondsValue.length,
-    );
+    final seconds = '${remainingSecondsValue % 60}'.padLeft(2, '0');
     const timerSize = 40.0;
 
     return Container(
