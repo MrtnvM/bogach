@@ -7,40 +7,38 @@ import { UserEntity } from '../../models/domain/user';
 import { GameTargetEntity } from '../../models/domain/game/game_target';
 
 export class UserProgressTransformer extends GameTransformer {
-  constructor(private eventId: GameEventEntity.Id, private userId: UserEntity.Id) {
+  constructor(
+    private eventId: GameEventEntity.Id | undefined,
+    private userId: UserEntity.Id,
+    private completeMonth: boolean = false
+  ) {
     super();
   }
 
   apply(game: Game): Game {
-    const currentParticipantEventIndex = game.currentEvents.findIndex((e) => e.id === this.eventId);
-    const isNotLastEvent = currentParticipantEventIndex < game.currentEvents.length - 1;
+    const currentEventIndex = this.completeMonth
+      ? game.currentEvents.length - 1
+      : game.currentEvents.findIndex((e) => e.id === this.eventId);
+
     const currentParticipantProgress = game.state.participantsProgress[this.userId];
     const { monthResults, currentMonthForParticipant } = currentParticipantProgress;
 
-    let newParticipantEventIndex: number;
-    let newParticipantProgress: GameEntity.ParticipantProgress;
+    const shouldCompleteMonth =
+      this.completeMonth || currentEventIndex >= game.currentEvents.length - 1;
 
-    if (isNotLastEvent) {
-      newParticipantEventIndex = currentParticipantEventIndex + 1;
+    const newEventIndex = shouldCompleteMonth ? currentEventIndex : currentEventIndex + 1;
 
-      newParticipantProgress = {
-        currentEventIndex: newParticipantEventIndex,
-        currentMonthForParticipant,
-        status: 'player_move',
-        monthResults,
-        progress: GameTargetEntity.calculateProgress(game, this.userId),
-      };
-    } else {
-      newParticipantEventIndex = currentParticipantEventIndex;
+    const newCurrentMonthForParticipant = shouldCompleteMonth
+      ? game.state.monthNumber
+      : currentMonthForParticipant;
 
-      newParticipantProgress = {
-        currentEventIndex: newParticipantEventIndex,
-        currentMonthForParticipant,
-        status: 'month_result',
-        monthResults,
-        progress: GameTargetEntity.calculateProgress(game, this.userId),
-      };
-    }
+    const newParticipantProgress: GameEntity.ParticipantProgress = {
+      currentEventIndex: newEventIndex,
+      currentMonthForParticipant: newCurrentMonthForParticipant,
+      status: shouldCompleteMonth ? 'month_result' : 'player_move',
+      monthResults,
+      progress: GameTargetEntity.calculateProgress(game, this.userId),
+    };
 
     return produce(game, (draft) => {
       draft.state.participantsProgress[this.userId] = newParticipantProgress;

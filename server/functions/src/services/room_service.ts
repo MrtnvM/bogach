@@ -6,11 +6,13 @@ import { UserEntity } from '../models/domain/user';
 import { checkIds } from '../core/validation/type_checks';
 import { Strings } from '../resources/strings';
 import { GameTemplateEntity } from '../models/domain/game/game_template';
+import { TimerProvider } from '../providers/timer_provider';
 
 export class RoomService {
   constructor(
     private gameProvider: GameProvider,
     private userProvider: UserProvider,
+    private timerProvider: TimerProvider,
     private firebaseMessaging: FirebaseMessaging
   ) {}
 
@@ -85,13 +87,19 @@ export class RoomService {
     await this.gameProvider.updateRoom(room);
   }
 
-  async createRoomGame(roomId: RoomEntity.Id): Promise<Room> {
-    const [room] = await this.gameProvider.createRoomGame(roomId);
+  async createRoomGame(roomId: RoomEntity.Id) {
+    const [room, game] = await this.gameProvider.createRoomGame(roomId);
 
     if (room.participants.length < 2) {
       throw new Error('ERROR: Multiplayer game cannot have lower than 2 participants');
     }
 
-    return room;
+    this.timerProvider.scheduleTimer({
+      startDateInUTC: game.state.moveStartDateInUTC,
+      gameId: game.id,
+      monthNumber: 1,
+    });
+
+    return { room, game };
   }
 }

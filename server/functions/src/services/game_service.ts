@@ -16,6 +16,7 @@ import {
   MonthResultTransformer,
   applyGameTransformers,
   HistoryGameTransformer,
+  UpdateMoveStartDateTransformer,
 } from '../transformers/game_transformers';
 import { IncomeHandler } from '../events/income/income_handler';
 import { ExpenseHandler } from '../events/expense/expense_handler';
@@ -30,13 +31,15 @@ import { ResetEventIndexTransformer } from '../transformers/game/reset_event_ind
 import { RealEstateBuyEventHandler } from '../events/estate/buy/real_estate_buy_event_handler';
 import { GameLevelEntity } from '../game_levels/models/game_level';
 import { UserProvider } from '../providers/user_provider';
-import { Game } from '../models/domain/game/game';
+import { TimerProvider } from '../providers/timer_provider';
+import { Game, GameEntity } from '../models/domain/game/game';
 
 export class GameService {
   constructor(
     private gameProvider: GameProvider,
     private gameLevelsProvider: GameLevelsProvider,
-    private userProvider: UserProvider
+    private userProvider: UserProvider,
+    private timerProvider: TimerProvider
   ) {
     this.handlers.forEach((handler) => {
       this.handlerMap[handler.gameEventType] = handler;
@@ -60,6 +63,15 @@ export class GameService {
 
   async createNewGame(templateId: GameTemplateEntity.Id, participantsIds: UserEntity.Id[]) {
     const createdGame = await this.gameProvider.createGame(templateId, participantsIds);
+
+    if (createdGame.type === 'multiplayer') {
+      this.timerProvider.scheduleTimer({
+        startDateInUTC: createdGame.state.moveStartDateInUTC,
+        gameId: createdGame.id,
+        monthNumber: 1,
+      });
+    }
+
     return createdGame;
   }
 
@@ -105,8 +117,13 @@ export class GameService {
       new HistoryGameTransformer(),
       new GameEventsTransformer(),
       new MonthResultTransformer(),
+      new UpdateMoveStartDateTransformer(),
       new MonthTransformer(),
     ]);
+
+    if (game.state.monthNumber < updatedGame.state.monthNumber) {
+      this.scheduleCompleteMonthTimer(updatedGame);
+    }
 
     await this.gameProvider.updateGame(updatedGame);
     await this.updateCurrentUserQuestIndexIfNeeded(updatedGame, userId);
@@ -120,21 +137,78 @@ export class GameService {
 
     const participantProgress = game.state.participantsProgress[userId];
 
+    let updatedGame: Game | undefined;
+
     if (participantProgress.status === 'month_result') {
-      const updatedGame = applyGameTransformers(game, [
+      const now = new Date();
+      const moveStartDate = new Date(game.state.moveStartDateInUTC);
+      const diff = now.getTime() - moveStartDate.getTime();
+      const diffInMinutes = diff / 1000 / 60;
+      const shouldScheduleMoveTimer = diffInMinutes > 1.0;
+
+      updatedGame = applyGameTransformers(game, [
         new ResetEventIndexTransformer(userId),
         new InsuranceTransformer(userId),
         new PossessionStateTransformer(),
+        ...(shouldScheduleMoveTimer ? [new UpdateMoveStartDateTransformer(true)] : []),
       ]);
 
-      await this.gameProvider.updateGame(updatedGame);
+      if (shouldScheduleMoveTimer) {
+        this.scheduleCompleteMonthTimer(updatedGame);
+      }
+
+      updatedGame = await this.gameProvider.updateGame(updatedGame);
+      return updatedGame;
     }
+
+    return undefined;
+  }
+
+  async completeMonth(gameId: GameEntity.Id, monthNumber: number) {
+    const game = await this.gameProvider.getGame(gameId);
+    if (!game) throw new Error('No game with ID: ' + gameId);
+
+    const isGameCompleted = game.state.gameStatus === 'game_over';
+
+    const isTheSameMonth = game.state.monthNumber === monthNumber;
+    const atLeastOneParticipantStartedNewMonth = game.participants.some((id) => {
+      return game.state.participantsProgress[id].currentMonthForParticipant === monthNumber;
+    });
+    const canCompleteMonth = isTheSameMonth && atLeastOneParticipantStartedNewMonth;
+
+    if (isGameCompleted || !canCompleteMonth) {
+      return;
+    }
+
+    const updatedGame = applyGameTransformers(game, [
+      ...game.participants.map((participantId) => {
+        const eventId = undefined;
+        const shouldCompleteMonth = true;
+
+        return new UserProgressTransformer(eventId, participantId, shouldCompleteMonth);
+      }),
+
+      new ParticipantAccountsTransformer(),
+      new PossessionStateTransformer(),
+      new WinnersTransformer(),
+      new HistoryGameTransformer(),
+      new GameEventsTransformer(),
+      new MonthResultTransformer(),
+      new UpdateMoveStartDateTransformer(),
+      new MonthTransformer(),
+    ]);
+
+    if (updatedGame.state.monthNumber > monthNumber) {
+      this.scheduleCompleteMonthTimer(updatedGame);
+    }
+
+    await this.gameProvider.updateGame(updatedGame);
   }
 
   async updateCurrentUserQuestIndexIfNeeded(game: Game, userId: UserEntity.Id) {
     const shouldOpenNewQuestForUser =
       game.state.gameStatus === 'game_over' &&
-      game.config.level != null &&
+      game.config.level !== null &&
       game.state.participantsProgress[userId].progress >= 1;
 
     if (!shouldOpenNewQuestForUser) {
@@ -146,5 +220,18 @@ export class GameService {
     const newQuestIndex = Math.min(questIndex + 1, gameLevels.length - 1);
 
     await this.userProvider.updateCurrentQuestIndex(userId, newQuestIndex);
+  }
+
+  private scheduleCompleteMonthTimer(updatedGame: Game) {
+    const isMultiplayerGame = updatedGame.type === 'multiplayer';
+    if (!isMultiplayerGame) {
+      return;
+    }
+
+    this.timerProvider.scheduleTimer({
+      startDateInUTC: updatedGame.state.moveStartDateInUTC,
+      gameId: updatedGame.id,
+      monthNumber: updatedGame.state.monthNumber,
+    });
   }
 }

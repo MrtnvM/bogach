@@ -34,6 +34,7 @@ export const createGameByLevel = GameAPI.createGameByLevel;
 export const createRoom = RoomAPI.createRoom;
 export const setRoomParticipantReady = RoomAPI.setRoomParticipantReady;
 export const createRoomGame = RoomAPI.createRoomGame;
+export const completeMonth = RoomAPI.completeMonth;
 
 export const updatePurchases = PurchaseAPI.updatePurchases;
 
