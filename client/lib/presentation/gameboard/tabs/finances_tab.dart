@@ -22,7 +22,12 @@ class FinancesTab extends HookWidget {
         Container(
           width: 300,
           height: 300,
-          padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+          padding: const EdgeInsets.only(
+            top: 32,
+            left: 16,
+            right: 16,
+            bottom: 32,
+          ),
           child: DotUserProgressChart(game: game),
         ),
         _buildList(IncomesList(), isFirst: true),
