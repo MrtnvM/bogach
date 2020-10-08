@@ -1,23 +1,19 @@
+import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
+import 'package:cash_flow/resources/strings.dart';
 import 'package:charts_flutter/flutter.dart';
 
 import 'dot_model.dart';
 
 List<List<DotModel>> useDotModels(Game game) {
   final initialCash = game.config.initialCash;
-  final firstDot = DotModel(
-    xValue: 0,
-    yValue: initialCash,
-  );
 
   final listOfPlayerDots = <List<DotModel>>[];
-
   final currentMonth = game.state.monthNumber;
 
   _fillDotsForOptimal(
     gameTarget: game.target.value.toInt(),
-    firstDot: firstDot,
     currentMonth: currentMonth,
     initialCash: initialCash,
     monthLimit: game.config.monthLimit,
@@ -26,7 +22,7 @@ List<List<DotModel>> useDotModels(Game game) {
 
   _fillDotsForPlayers(
     participantsProgress: game.state.participantsProgress,
-    firstDot: firstDot,
+    initialCash: initialCash,
     currentMonth: currentMonth,
     listOfPlayerDots: listOfPlayerDots,
   );
@@ -36,12 +32,19 @@ List<List<DotModel>> useDotModels(Game game) {
 
 void _fillDotsForPlayers({
   Map<String, ParticipantProgress> participantsProgress,
-  DotModel firstDot,
+  int initialCash,
   int currentMonth,
   List<List<DotModel>> listOfPlayerDots,
 }) {
   participantsProgress.forEach((userId, progress) {
     final dots = <DotModel>[];
+
+    final firstDot = DotModel(
+      userId: userId,
+      xValue: 0,
+      yValue: initialCash,
+    );
+
     dots.add(firstDot);
 
     progress.monthResults.forEach((month, monthResults) {
@@ -49,6 +52,7 @@ void _fillDotsForPlayers({
 
       if (currentMonth != intMonth) {
         final dot = DotModel(
+          userId: userId,
           xValue: intMonth,
           yValue: monthResults.cash.toInt(),
         );
@@ -62,12 +66,17 @@ void _fillDotsForPlayers({
 
 void _fillDotsForOptimal({
   int gameTarget,
-  DotModel firstDot,
   int currentMonth,
   int initialCash,
   int monthLimit,
   List<List<DotModel>> dotsList,
 }) {
+  final firstDot = DotModel(
+    userId: null,
+    xValue: 0,
+    yValue: initialCash,
+  );
+
   final gameDifference = gameTarget - initialCash;
   final optimalStep = gameDifference ~/ monthLimit;
   final optimalPathDots = <DotModel>[];
@@ -78,6 +87,7 @@ void _fillDotsForOptimal({
     final optimalCashValue = initialCash + differenceFromStart;
 
     final dot = DotModel(
+      userId: null,
       xValue: monthIndex + 1,
       yValue: optimalCashValue,
     );
@@ -88,8 +98,6 @@ void _fillDotsForOptimal({
 }
 
 List<Series> useGraphicSeries(List<List<DotModel>> dotModels) {
-  var graphicId = 0;
-
   final palettes = MaterialPalette.getOrderedPalettes(dotModels.length);
   final palettesIterator = palettes.iterator;
   palettesIterator.moveNext();
@@ -98,7 +106,7 @@ List<Series> useGraphicSeries(List<List<DotModel>> dotModels) {
     final palette = palettesIterator.current;
     palettesIterator.moveNext();
 
-    graphicId++;
+    final graphicId = _getUserName(subListDots.first.userId);
 
     return Series<DotModel, int>(
       id: graphicId.toString(),
@@ -110,4 +118,22 @@ List<Series> useGraphicSeries(List<List<DotModel>> dotModels) {
   }).toList();
 
   return series;
+}
+
+String _getUserName(String userId) {
+  if (userId == null) {
+    return Strings.optimalPath;
+  } else {
+    final userProfiles = useGlobalState((s) {
+      final users = [s.profile.currentUser];
+      users.addAll(s.multiplayer.userProfiles.items);
+      return users;
+    });
+
+    final user = userProfiles.firstWhere((user) {
+      return user.id == userId;
+    });
+
+    return user.fullName;
+  }
 }

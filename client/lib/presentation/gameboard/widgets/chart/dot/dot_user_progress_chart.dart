@@ -27,9 +27,14 @@ class DotUserProgressChart extends HookWidget {
         ),
         SeriesLegend(
           position: BehaviorPosition.bottom,
-          outsideJustification: OutsideJustification.end,
-          desiredMaxRows: 2,
-          cellPadding: const EdgeInsets.only(right: 4.0, bottom: 4.0),
+          outsideJustification: OutsideJustification.start,
+          desiredMaxRows: 6,
+          horizontalFirst: false,
+          cellPadding: const EdgeInsets.only(
+            right: 16,
+            bottom: 4,
+            top: 8,
+          ),
           showMeasures: true,
         )
       ],

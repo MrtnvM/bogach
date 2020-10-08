@@ -13,23 +13,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class FinancesTab extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final game = useGlobalState((s) => s.game.currentGame);
 
     return ContainerWithHeaderImage(
       navBarTitle: Strings.financesTabTitle,
       imageSvg: Images.financesBarIcon,
       children: [
-        Container(
-          width: 300,
-          height: 300,
-          padding: const EdgeInsets.only(
-            top: 32,
-            left: 16,
-            right: 16,
-            bottom: 32,
-          ),
-          child: DotUserProgressChart(game: game),
-        ),
+        
         _buildList(IncomesList(), isFirst: true),
         _buildList(ExpensesList()),
         _buildList(AssetsList()),
