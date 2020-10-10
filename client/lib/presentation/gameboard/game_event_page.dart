@@ -38,7 +38,9 @@ class GameEventPage extends HookWidget {
           return _buildNoGameEventsState();
         }
 
-        return _buildEventBody(gameEvents[eventIndex]);
+        return Container(
+          child: _buildEventBody(gameEvents[eventIndex]),
+        );
       },
       waitingPlayers: (_) => WaitingPlayersCard(),
       monthResult: () => _buildMonthResult(startNewMonth),

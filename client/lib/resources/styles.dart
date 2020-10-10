@@ -73,6 +73,7 @@ class Styles {
     fontWeight: FontWeight.w600,
     fontSize: 12,
     color: _defaultTextColor,
+    fontFamily: _defaultFontFamily,
   );
 
   static const overline = TextStyle(

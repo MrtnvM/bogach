@@ -10,6 +10,7 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
+import 'package:cash_flow/widgets/tutorial/gameboard_tutorial_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
@@ -181,6 +182,10 @@ class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
   }
 
   Widget _buildHeaderContent() {
+    final gameTutorial = GameboardTutorialWidget.of(context);
+    final appState = StoreProvider.state<AppState>(context);
+    final isQuestGame = appState.game.currentGame.config.level != null;
+
     return Column(
       children: <Widget>[
         const SizedBox(height: 16),
@@ -194,6 +199,7 @@ class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
         if (widget.subTitle != null)
           Text(
             widget.subTitle,
+            key: isQuestGame ? gameTutorial.monthKey : null,
             style: Styles.bodyBlack.copyWith(
               color: ColorRes.white,
               fontSize: 15,

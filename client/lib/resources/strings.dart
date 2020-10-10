@@ -69,6 +69,9 @@ class Strings {
       'Кажется ты нашел функционал, над которым мы усердно работаем';
 
   static String get financesTabTitle => 'Финансы';
+  static String get financesTabTitleDescription => 'Подробную информацию по '
+      'доходам, расходам, активам и пассивам можно посмотреть тут';
+
   static String get actionsTabTitle => 'Действия';
   static String get historyTabTitle => 'История';
 
@@ -98,7 +101,10 @@ class Strings {
   static const price = 'Стоимость:';
   static const cost = 'Стоимость';
   static const defence = 'Защита';
-  static const cash = 'Наличные';
+
+  static String get cash => 'Наличные';
+  static String get cashDescription => 'Cумма денег, которая у тебя на руках';
+
   static const count = 'Количество';
   static const sum = 'Сумма';
   static const stock = 'Акции';
@@ -273,14 +279,41 @@ class Strings {
   static String get targetTypePassiveIncome => 'Пассивный доход';
 
   static String get cashFlow => 'Денежный поток';
+  static String get cashFlowDescription =>
+      'Практически главный показатель в игре\n\n'
+      'Это сумма, на которую ты становишься богаче каждый месяц\n\n'
+      'Денежный поток - это доходы минус расходы';
 
   static String get cashFlowShort => 'Поток';
 
   static String get credit => 'Кредит';
+  static String get creditDescription =>
+      'Cумма денег, которые ты занял у банка\n\n'
+      'Будь осторожен, проценты по кредиту бьют по твоему денежному потоку, '
+      'однако кредит может дать быстрый его рост!\n\n'
+      'Используй его с умом!';
 
   static String get monthIsOver => 'Месяц завершен!';
 
   static String get month => 'Месяц';
+  static String get monthDescription => 'Показывает текущий номер месяца '
+      'и сколько всего месяцев, есть для осуществления цели';
+
+  static String get currentProgress => 'Текущий прогресс';
+  static String get currentProgressDescription =>
+      'Это твоя цель с отображением в цифрах текущего прогресса';
+
+  static String get gameEvent => 'Событие';
+  static String get gameEventDescription =>
+      'В течение месяца ты будешь сталкиваться с набором событий, '
+      'в виде покупки/продажи ценных бумаг и бизнесов, доходов и расходов, '
+      'страховок и прочего. \n\n'
+      'Будь вниматален и принимай верные решения на пути к цели!';
+
+  static String get gameEventActions => 'Действия';
+  static String get gameEventActionsDescription =>
+      'Здесь Вы можете подтвердить выбор (например: продажу / покупку), '
+      'взять в кредит, или просто пропустить событие';
 
   static String get noGameEvents => 'Произошла ошибка.\nНет игровых событий';
 

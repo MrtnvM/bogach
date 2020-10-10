@@ -5,6 +5,7 @@ import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/styles.dart';
+import 'package:cash_flow/widgets/tutorial/gameboard_tutorial_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
@@ -20,6 +21,7 @@ class ProgressBar extends HookWidget {
       (g) => mapGameToCurrentTargetValue(g, userId),
     );
     final progress = currentTargetValue / target.value;
+    final gameTutorial = useGameboardTutorial();
 
     return Container(
       padding: const EdgeInsets.only(left: 16.0, top: 14.0, right: 16),
@@ -28,8 +30,12 @@ class ProgressBar extends HookWidget {
         color: ColorRes.primaryWhiteColor,
       ),
       child: Column(
+        key: gameTutorial?.currentProgressKey,
         children: [
-          _ProgressTitle(target: target, currentValue: currentTargetValue),
+          _ProgressTitle(
+            target: target,
+            currentValue: currentTargetValue,
+          ),
           ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(5)),
             child: SizedBox(
