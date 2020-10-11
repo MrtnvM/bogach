@@ -1,9 +1,7 @@
-import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/presentation/gameboard/possessions/assets_list.dart';
 import 'package:cash_flow/presentation/gameboard/possessions/expenses_list.dart';
 import 'package:cash_flow/presentation/gameboard/possessions/incomes_list.dart';
 import 'package:cash_flow/presentation/gameboard/possessions/liabilities_list.dart';
-import 'package:cash_flow/presentation/gameboard/widgets/chart/dot/dot_user_progress_chart.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/containers/container_with_header_image.dart';
@@ -18,7 +16,6 @@ class FinancesTab extends HookWidget {
       navBarTitle: Strings.financesTabTitle,
       imageSvg: Images.financesBarIcon,
       children: [
-        
         _buildList(IncomesList(), isFirst: true),
         _buildList(ExpensesList()),
         _buildList(AssetsList()),

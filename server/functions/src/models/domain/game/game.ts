@@ -67,6 +67,7 @@ export namespace GameEntity {
     readonly monthLimit?: number | null;
     readonly stocks: string[];
     readonly debentures: DebentureEvent.Info[];
+    readonly initialCash: number;
   };
 
   export const validate = (game: any) => {

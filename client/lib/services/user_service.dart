@@ -134,7 +134,7 @@ class UserService {
 
   Future<UserProfile> loadProfile(String userId) async {
     final snapshot = await firestore.collection('users').doc(userId).get();
-    if (snapshot?.data == null) {
+    if (snapshot?.data() == null) {
       return null;
     }
 

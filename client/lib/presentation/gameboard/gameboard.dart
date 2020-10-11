@@ -1,7 +1,9 @@
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
+import 'package:cash_flow/models/domain/game/game/type/game_type.dart';
 import 'package:cash_flow/presentation/gameboard/tabs/actions_tab.dart';
 import 'package:cash_flow/presentation/gameboard/tabs/finances_tab.dart';
+import 'package:cash_flow/presentation/gameboard/tabs/progress_tab.dart';
 import 'package:cash_flow/presentation/gameboard/winners_page.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,10 @@ class GameBoard extends HookWidget {
     final activeGameState = useGlobalState((s) => s.game.activeGameState);
     final gameExists = useCurrentGame((g) => g != null);
 
+    final isMultiplayer = useGlobalState((s) {
+      return s.game.currentGame.type == GameType.multiplayer();
+    });
+
     final tabItems = useMemoized(
       () => [
         BottomBarItem(
@@ -30,11 +36,12 @@ class GameBoard extends HookWidget {
           image: Images.financesBarIcon,
           onPressed: () => selectedIndex.value = 1,
         ),
-        // BottomBarItem(
-        //   title: Strings.historyTabTitle,
-        //   image: Images.historyBarIcon,
-        //   onPressed: () => selectedIndex.value = 2,
-        // ),
+        if (isMultiplayer)
+          BottomBarItem(
+            title: Strings.progressTabTitle,
+            image: Images.financesBarIcon,
+            onPressed: () => selectedIndex.value = 2,
+          ),
       ],
     );
 
@@ -57,7 +64,7 @@ class GameBoard extends HookWidget {
         activeTab = FinancesTab();
         break;
       case 2:
-        activeTab = FinancesTab();
+        activeTab = ProgressTab();
         break;
     }
 

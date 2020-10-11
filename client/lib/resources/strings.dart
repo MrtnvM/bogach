@@ -70,7 +70,7 @@ class Strings {
 
   static String get financesTabTitle => 'Финансы';
   static String get actionsTabTitle => 'Действия';
-  static String get historyTabTitle => 'История';
+  static String get progressTabTitle => 'Прогресс';
 
   static String get monthlyPayment => 'Ежемесячный платеж:';
 

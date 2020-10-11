@@ -1,6 +1,7 @@
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
+import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:charts_flutter/flutter.dart';
 
@@ -12,13 +13,16 @@ List<List<DotModel>> useDotModels(Game game) {
   final listOfPlayerDots = <List<DotModel>>[];
   final currentMonth = game.state.monthNumber;
 
-  _fillDotsForOptimal(
-    gameTarget: game.target.value.toInt(),
-    currentMonth: currentMonth,
-    initialCash: initialCash,
-    monthLimit: game.config.monthLimit,
-    dotsList: listOfPlayerDots,
-  );
+  final monthLimit = game.config.monthLimit;
+  if (monthLimit != null) {
+    _fillDotsForOptimal(
+      gameTarget: game.target.value.toInt(),
+      currentMonth: currentMonth,
+      initialCash: initialCash,
+      monthLimit: game.config.monthLimit,
+      dotsList: listOfPlayerDots,
+    );
+  }
 
   _fillDotsForPlayers(
     participantsProgress: game.state.participantsProgress,
@@ -130,10 +134,15 @@ String _getUserName(String userId) {
       return users;
     });
 
-    final user = userProfiles.firstWhere((user) {
-      return user.id == userId;
-    });
+    final user = userProfiles.firstWhere(
+      (user) => user.id == userId,
+      orElse: () => null,
+    );
 
-    return user.fullName;
+    if (user == null) {
+      return "TODO";
+    } else {
+      return user.fullName;
+    }
   }
 }

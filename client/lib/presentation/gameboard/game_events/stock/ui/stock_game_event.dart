@@ -54,21 +54,12 @@ class StockGameEvent extends HookWidget {
       availableCash: cash,
     );
 
-    final game = useGlobalState((s) => s.game.currentGame);
-
     return Column(
       children: <Widget>[
         InfoTable(
           title: Strings.stock,
           withShadow: false,
           rows: <Widget>[
-            Row(children: [
-              Container(
-                width: 320,
-                height: 300,
-                child: DotUserProgressChart(game: game),
-              ),
-            ]),
             for (final item in infoTableData.entries)
               TitleRow(title: item.key, value: item.value)
           ],

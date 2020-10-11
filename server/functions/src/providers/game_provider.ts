@@ -81,6 +81,7 @@ export class GameProvider {
         monthLimit: level?.monthLimit || null,
         stocks: [],
         debentures: [],
+        initialCash: template.accountState.cash,
       },
     };
 
