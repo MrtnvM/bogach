@@ -45,11 +45,13 @@ class AppConfiguration {
 
   static void _checkIsCorrectFirebaseEnvironmentSelected() {
     final options = Firebase.app().options;
-    switch (environment) {
-      case CashApiEnvironment.development:
-        assert(options.projectId.contains('staging'));
-        break;
 
+    if (environment == CashApiEnvironment.development) {
+      assert(options.projectId.contains('staging'));
+      return;
+    }
+
+    switch (environment) {
       case CashApiEnvironment.staging:
         assert(options.projectId.contains('staging'));
         break;

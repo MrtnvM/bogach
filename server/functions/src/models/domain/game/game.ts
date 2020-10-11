@@ -54,6 +54,7 @@ export namespace GameEntity {
   export type State = {
     readonly gameStatus: Status;
     readonly monthNumber: number;
+    readonly moveStartDateInUTC: string;
     readonly participantsProgress: { [userId: string]: ParticipantProgress };
     readonly winners: { [place: number]: UserEntity.Id };
   };

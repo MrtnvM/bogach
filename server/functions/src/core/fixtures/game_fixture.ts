@@ -64,6 +64,7 @@ export namespace GameFixture {
       state: game?.state || {
         gameStatus: 'players_move',
         monthNumber: 1,
+        moveStartDateInUTC: new Date().toISOString(),
         participantsProgress,
         winners: {},
       },

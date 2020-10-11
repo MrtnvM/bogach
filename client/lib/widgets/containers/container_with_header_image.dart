@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/utils/app_store_connector.dart';
+import 'package:cash_flow/features/game/game_hooks.dart';
+import 'package:cash_flow/models/domain/game/game/type/game_type.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/navigation_bar.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
@@ -9,6 +13,7 @@ import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 class ContainerWithHeaderImage extends StatefulWidget {
   const ContainerWithHeaderImage({
@@ -105,10 +110,11 @@ class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
     final nocthHeight = mediaQuery.padding.top;
     final imageHeight = _getBackgroundImageSize(nocthHeight);
     final scrollOffset = imageHeight * 1.55;
+    final newTopAlign = -1 - scrollController.offset / scrollOffset;
 
-    setState(() {
-      topAlign = -1 - scrollController.offset / scrollOffset;
-    });
+    if (newTopAlign != topAlign) {
+      setState(() => topAlign = newTopAlign);
+    }
   }
 
   Widget _buildHeader({
@@ -116,6 +122,9 @@ class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
     double topPadding,
     double topAlign,
   }) {
+    final game = StoreProvider.state<AppState>(context).game.currentGame;
+    final isMultiplayerGame = game.type == GameType.multiplayer();
+
     return Align(
       alignment: Alignment(0, topAlign),
       child: Stack(
@@ -135,6 +144,12 @@ class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
               child: _buildHeaderContent(),
             ),
           ),
+          if (isMultiplayerGame)
+            Positioned(
+              top: 0,
+              right: 0,
+              child: _Timer(),
+            ),
         ],
       ),
     );
@@ -229,5 +244,67 @@ class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
       return topPadding + 160;
     }
     return topPadding + 140;
+  }
+}
+
+class _Timer extends HookWidget {
+  @override
+  Widget build(BuildContext context) {
+    final moveStartDate = useCurrentGame((s) => s.state.moveStartDateInUTC);
+    final remainingSeconds = useState(getRemainingSeconds(moveStartDate));
+
+    useEffect(() {
+      final subscription = Stream.periodic(const Duration(seconds: 1))
+          .map((_) => getRemainingSeconds(moveStartDate))
+          .takeWhile((seconds) => seconds >= 0)
+          .listen((seconds) => remainingSeconds.value = seconds);
+
+      return subscription.cancel;
+    }, [moveStartDate]);
+
+    final remainingSecondsValue =
+        remainingSeconds.value < 0 || remainingSeconds.value > 60
+            ? 0
+            : remainingSeconds.value;
+
+    final minutes = (remainingSecondsValue ~/ 60).toString();
+    final seconds = '${remainingSecondsValue % 60}'.padLeft(2, '0');
+    const timerSize = 40.0;
+
+    return Container(
+      width: 80,
+      height: timerSize,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      decoration: BoxDecoration(
+        color: ColorRes.mainGreen,
+        border: Border.all(color: ColorRes.white64, width: 1),
+        borderRadius: BorderRadius.circular(timerSize / 2),
+        boxShadow: [
+          BoxShadow(blurRadius: 5, color: Colors.black.withAlpha(100)),
+        ],
+      ),
+      child: Align(
+        alignment: Alignment.center,
+        child: Text(
+          '$minutes:$seconds',
+          style: Styles.body1.copyWith(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+
+  int getRemainingSeconds(DateTime moveStartDate) {
+    final now = DateTime.now().toUtc();
+
+    final moveEndTime = moveStartDate.add(const Duration(seconds: 60));
+    final remainingTimeInMs =
+        moveEndTime.millisecondsSinceEpoch - now.millisecondsSinceEpoch;
+    final remainingSeconds = remainingTimeInMs / 1000;
+
+    return remainingSeconds.toInt();
   }
 }

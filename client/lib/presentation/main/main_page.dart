@@ -15,7 +15,7 @@ import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:cash_flow/widgets/buttons/text_button.dart';
 import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide TextButton;
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class MainPage extends HookWidget {

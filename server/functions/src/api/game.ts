@@ -11,6 +11,7 @@ import { UserEntity } from '../models/domain/user';
 import { GameTemplateEntity } from '../models/domain/game/game_template';
 import { GameEntity } from '../models/domain/game/game';
 import { UserProvider } from '../providers/user_provider';
+import { TimerProvider } from '../providers/timer_provider';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
@@ -18,7 +19,13 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const gameProvider = new GameProvider(firestore, selector);
   const gameLevelsProvider = new GameLevelsProvider();
   const userProvider = new UserProvider(firestore, selector);
-  const gameService = new GameService(gameProvider, gameLevelsProvider, userProvider);
+  const timerProvider = new TimerProvider();
+  const gameService = new GameService(
+    gameProvider,
+    gameLevelsProvider,
+    userProvider,
+    timerProvider
+  );
 
   const createGame = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request, response);
@@ -85,14 +92,19 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   });
 
   const startNewMonth = https.onRequest(async (request, response) => {
+    console.log('Request : ' + JSON.stringify(request.body));
+
     const apiRequest = APIRequest.from(request, response);
     apiRequest.checkMethod('POST');
 
     const context = apiRequest.jsonField('context');
 
-    const startNewMonthRequest = gameService.startNewMonth(context).then(() => 'New month started');
+    const startNewMonthRequest = async () => {
+      await gameService.startNewMonth(context);
+      return 'New month started';
+    };
 
-    await send(startNewMonthRequest, response);
+    await send(startNewMonthRequest(), response);
   });
 
   const getGameLevels = https.onRequest(async (request, response) => {

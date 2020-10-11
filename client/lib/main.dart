@@ -17,6 +17,7 @@ import 'package:cash_flow/features/profile/actions/set_current_user_action.dart'
 import 'package:cash_flow/features/purchase/actions/listening_purchases_actions.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/utils/core/launch_counter.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,12 @@ Future<void> main({
 }) async {
   environment = environment ?? CashApiEnvironment.production;
   WidgetsFlutterBinding.ensureInitialized();
+
+  if (environment.isLoggerEnabled) {
+    Logger.init();
+    Logger.enabled = true;
+  }
+
   await initializeFirebase();
   await AppConfiguration.init(environment: environment);
 

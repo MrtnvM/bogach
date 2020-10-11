@@ -30,7 +30,7 @@ class _InputFieldState extends State<InputField> {
       key.currentState.validate();
     });
 
-    if (widget.props.autoValidate == true &&
+    if (widget.props.autovalidateMode != AutovalidateMode.disabled &&
         widget.props.validatorRules != null &&
         widget.props.controller?.text?.isNotEmpty == true) {
       validationResult = validate(value, widget.props.validatorRules);
@@ -44,7 +44,7 @@ class _InputFieldState extends State<InputField> {
       maxLines: 1,
       controller: widget.props.controller,
       focusNode: widget.props.focusNode,
-      autovalidate: widget.props.autoValidate,
+      autovalidateMode: widget.props.autovalidateMode,
       decoration: InputDecoration(
         isDense: true,
         suffix: validationResult?.isNotEmpty == true

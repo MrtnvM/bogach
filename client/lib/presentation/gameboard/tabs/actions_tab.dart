@@ -11,8 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class ActionsTab extends HookWidget {
-  final scrollController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
     final target = useCurrentGame((g) => g.target);
