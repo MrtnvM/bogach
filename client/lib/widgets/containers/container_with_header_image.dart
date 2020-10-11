@@ -199,7 +199,7 @@ class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
         if (widget.subTitle != null)
           Text(
             widget.subTitle,
-            key: isQuestGame ? gameTutorial.monthKey : null,
+            key: isQuestGame ? gameTutorial?.monthKey : null,
             style: Styles.bodyBlack.copyWith(
               color: ColorRes.white,
               fontSize: 15,

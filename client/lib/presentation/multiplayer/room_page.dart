@@ -2,6 +2,7 @@ import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/features/config/config_hooks.dart';
 import 'package:cash_flow/features/game/actions/start_game_action.dart';
 import 'package:cash_flow/features/multiplayer/actions/create_room_game_action.dart';
 import 'package:cash_flow/features/multiplayer/actions/room_listening_actions.dart';
@@ -14,6 +15,7 @@ import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard.dart';
 import 'package:cash_flow/presentation/multiplayer/widgets/user_profile_item.dart';
+import 'package:cash_flow/presentation/tutorial/tutorial_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
@@ -135,6 +137,7 @@ class RoomPage extends HookWidget {
 void _useAutoTransitionToCreatedGame() {
   final userId = useUserId();
   final room = useGlobalState((s) => s.multiplayer.currentRoom);
+  final isTutorialPassed = useConfig((c) => c.isGameboardTutorialPassed);
   final dispatch = useDispatcher();
 
   useEffect(() {
@@ -144,7 +147,12 @@ void _useAutoTransitionToCreatedGame() {
 
       Future.delayed(const Duration(milliseconds: 100)).then((_) async {
         appRouter.goToRoot();
-        appRouter.goTo(GameBoard());
+
+        if (isTutorialPassed) {
+          appRouter.goTo(const GameBoard());
+        } else {
+          appRouter.goTo(const TutorialPage());
+        }
 
         dispatch(StopListeningRoomUpdatesAction(room.id));
       });

@@ -7,7 +7,6 @@ import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/containers/card_container.dart';
 import 'package:cash_flow/widgets/containers/container_with_header_image.dart';
 import 'package:cash_flow/widgets/progress/account_bar.dart';
-import 'package:cash_flow/widgets/tutorial/gameboard_tutorial_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -17,15 +16,6 @@ class ActionsTab extends HookWidget {
     final target = useCurrentGame((g) => g.target);
     final currentMonth = useCurrentGame((g) => g.state.monthNumber);
     final monthLimit = useCurrentGame((g) => g.config?.monthLimit);
-    final gameboardTutorial = useGameboardTutorial();
-
-    useEffect(() {
-      Future.delayed(const Duration(microseconds: 300)).then((_) {
-        gameboardTutorial.showTutorial(context);
-      });
-
-      return null;
-    }, []);
 
     final monthPast = monthLimit != null
         ? '${Strings.month}: $currentMonth / $monthLimit'

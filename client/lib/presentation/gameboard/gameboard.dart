@@ -14,6 +14,8 @@ import 'package:cash_flow/resources/images.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 
 class GameBoard extends HookWidget {
+  const GameBoard({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final selectedIndex = useState(0);
@@ -49,17 +51,13 @@ class GameBoard extends HookWidget {
       orElse: () => activeTab,
     );
 
-    return GameboardTutorialWidget(
-      child: Builder(
-        builder: (context) => Scaffold(
-          backgroundColor: ColorRes.primaryWhiteColor,
-          body: content,
-          bottomNavigationBar: _buildBottomBar(
-            context: context,
-            activeGameState: activeGameState,
-            selectedIndex: selectedIndex,
-          ),
-        ),
+    return Scaffold(
+      backgroundColor: ColorRes.primaryWhiteColor,
+      body: content,
+      bottomNavigationBar: _buildBottomBar(
+        context: context,
+        activeGameState: activeGameState,
+        selectedIndex: selectedIndex,
       ),
     );
   }

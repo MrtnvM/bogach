@@ -36,7 +36,7 @@ class UserGameList extends HookWidget {
       dispatch(StartGameAction(gameContext));
 
       appRouter.goToRoot();
-      appRouter.goTo(GameBoard());
+      appRouter.goTo(const GameBoard());
     };
 
     final loadUserGames = () {

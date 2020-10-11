@@ -1,5 +1,10 @@
+import 'package:cash_flow/app/app_state.dart';
+import 'package:cash_flow/features/config/actions/mark_gameboard_tutorial_as_passed_action.dart';
+import 'package:cash_flow/navigation/app_router.dart';
+import 'package:cash_flow/presentation/gameboard/gameboard.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:tutorial_coach_mark/animated_focus_light.dart';
@@ -34,6 +39,11 @@ class GameboardTutorialWidget extends InheritedWidget {
         .dependOnInheritedWidgetOfExactType<GameboardTutorialWidget>();
   }
 
+  @override
+  bool updateShouldNotify(GameboardTutorialWidget oldWidget) {
+    return false;
+  }
+
   void showTutorial(BuildContext context) {
     TutorialCoachMark(
       context,
@@ -50,12 +60,19 @@ class GameboardTutorialWidget extends InheritedWidget {
           Scrollable.ensureVisible(gameEventActionsKey.currentContext);
         }
       },
+      onClickSkip: () => _onTutorialPassed(context),
+      onFinish: () => _onTutorialPassed(context),
     )..show();
   }
 
-  @override
-  bool updateShouldNotify(GameboardTutorialWidget oldWidget) {
-    return false;
+  void _onTutorialPassed(BuildContext context) {
+    StoreProvider.dispatch<AppState>(
+      context,
+      MarkGameboardTutorialAsPassedAction(),
+    );
+
+    appRouter.goBack();
+    appRouter.goTo(const GameBoard());
   }
 
   List<TargetFocus> getTargets() {
