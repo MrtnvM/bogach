@@ -156,7 +156,9 @@ class UserService {
         .where((p) => p.data == null)
         .map((p) => p.id);
 
-    Logger.d('WARNING: not found profiles with IDs: $emptyProfiles');
+    if (emptyProfiles.isNotEmpty) {
+      Logger.d('WARNING: not found profiles with IDs: $emptyProfiles');
+    }
 
     return profiles
         .where((p) => p.data != null)
