@@ -1,5 +1,6 @@
 import 'package:cash_flow/models/domain/game/account/account.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
+import 'package:cash_flow/models/domain/game/game/type/game_type.dart';
 import 'package:cash_flow/models/domain/game/game_config/game_config.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/game/possession_state/possession_state.dart';
@@ -16,6 +17,7 @@ abstract class Game with _$Game implements StoreListItem {
   factory Game({
     @required String id,
     @required String name,
+    @JsonKey(fromJson: GameType.fromJson, toJson: GameType.toJson)
     @required GameType type,
     @required CurrentGameState state,
     @required List<String> participants,
@@ -29,11 +31,6 @@ abstract class Game with _$Game implements StoreListItem {
   }) = _Game;
 
   factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
-}
-
-enum GameType {
-  singleplayer,
-  multiplayer,
 }
 
 DateTime _timestampToDate(dynamic timestamp) {

@@ -1,7 +1,9 @@
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
+import 'package:cash_flow/models/domain/game/game/type/game_type.dart';
 import 'package:cash_flow/presentation/gameboard/tabs/actions_tab.dart';
 import 'package:cash_flow/presentation/gameboard/tabs/finances_tab.dart';
+import 'package:cash_flow/presentation/gameboard/tabs/progress_tab.dart';
 import 'package:cash_flow/presentation/gameboard/winners_page.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
@@ -17,26 +19,35 @@ class GameBoard extends HookWidget {
     final selectedIndex = useState(0);
     final activeGameState = useGlobalState((s) => s.game.activeGameState);
     final gameExists = useCurrentGame((g) => g != null);
-
-    final tabItems = useMemoized(
-      () => [
-        BottomBarItem(
-          title: Strings.actionsTabTitle,
-          image: Images.gameBoardBarIcon,
-          onPressed: () => selectedIndex.value = 0,
-        ),
-        BottomBarItem(
-          title: Strings.financesTabTitle,
-          image: Images.financesBarIcon,
-          onPressed: () => selectedIndex.value = 1,
-        ),
-        // BottomBarItem(
-        //   title: Strings.historyTabTitle,
-        //   image: Images.historyBarIcon,
-        //   onPressed: () => selectedIndex.value = 2,
-        // ),
-      ],
+    final isMultiplayer = useCurrentGame(
+      (g) => g?.type == GameType.multiplayer(),
     );
+
+    final tabItems = useMemoized(() {
+      final actionsTab = BottomBarItem(
+        title: Strings.actionsTabTitle,
+        image: Images.gameBoardBarIcon,
+        onPressed: () => selectedIndex.value = 0,
+      );
+
+      final financesTab = BottomBarItem(
+        title: Strings.financesTabTitle,
+        image: Images.financesBarIcon,
+        onPressed: () => selectedIndex.value = 1,
+      );
+
+      if (!isMultiplayer) {
+        return [actionsTab, financesTab];
+      }
+
+      final progressTab = BottomBarItem(
+        title: Strings.progressTabTitle,
+        image: Images.financesBarIcon,
+        onPressed: () => selectedIndex.value = 2,
+      );
+
+      return [financesTab, actionsTab, progressTab];
+    }, [isMultiplayer]);
 
     if (!gameExists) {
       return LoadableView(
@@ -57,7 +68,7 @@ class GameBoard extends HookWidget {
         activeTab = FinancesTab();
         break;
       case 2:
-        activeTab = FinancesTab();
+        activeTab = ProgressTab();
         break;
     }
 

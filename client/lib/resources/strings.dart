@@ -70,7 +70,7 @@ class Strings {
 
   static String get financesTabTitle => 'Финансы';
   static String get actionsTabTitle => 'Действия';
-  static String get historyTabTitle => 'История';
+  static String get progressTabTitle => 'Прогресс';
 
   static String get monthlyPayment => 'Ежемесячный платеж:';
 
@@ -393,4 +393,6 @@ class Strings {
   static String get and => ' и ';
   static String get privacyPolicy => 'политику приватности';
   static String get canNotOpenLink => 'Произошла ошибка при открытии ссылки';
+
+  static String get optimalPath => 'Оптимальный путь';
 }
