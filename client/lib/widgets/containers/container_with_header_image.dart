@@ -4,7 +4,7 @@ import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/utils/app_store_connector.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
-import 'package:cash_flow/models/domain/game/game/game.dart';
+import 'package:cash_flow/models/domain/game/game/type/game_type.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/navigation_bar.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
@@ -123,7 +123,7 @@ class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
     double topAlign,
   }) {
     final game = StoreProvider.state<AppState>(context).game.currentGame;
-    final isMultiplayerGame = game.type == GameType.multiplayer;
+    final isMultiplayerGame = game.type == GameType.multiplayer();
 
     return Align(
       alignment: Alignment(0, topAlign),
@@ -250,25 +250,9 @@ class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
 class _Timer extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final moveStartDate = useCurrentGame((s) => s.state.moveStartDateInUTC);
-    final remainingSeconds = useState(getRemainingSeconds(moveStartDate));
-
-    useEffect(() {
-      final subscription = Stream.periodic(const Duration(seconds: 1))
-          .map((_) => getRemainingSeconds(moveStartDate))
-          .takeWhile((seconds) => seconds >= 0)
-          .listen((seconds) => remainingSeconds.value = seconds);
-
-      return subscription.cancel;
-    }, [moveStartDate]);
-
-    final remainingSecondsValue =
-        remainingSeconds.value < 0 || remainingSeconds.value > 60
-            ? 0
-            : remainingSeconds.value;
-
-    final minutes = (remainingSecondsValue ~/ 60).toString();
-    final seconds = '${remainingSecondsValue % 60}'.padLeft(2, '0');
+    final remainingSeconds = _useTimerRemainingSeconds();
+    final minutes = (remainingSeconds ~/ 60).toString();
+    final seconds = '${remainingSeconds % 60}'.padLeft(2, '0');
     const timerSize = 40.0;
 
     return Container(
@@ -296,15 +280,44 @@ class _Timer extends HookWidget {
       ),
     );
   }
+}
 
-  int getRemainingSeconds(DateTime moveStartDate) {
-    final now = DateTime.now().toUtc();
+int _useTimerRemainingSeconds() {
+  final moveStartDate = useCurrentGame((s) => s.state.moveStartDateInUTC);
+  final remainingSeconds = useState(_getRemainingSeconds(moveStartDate));
 
-    final moveEndTime = moveStartDate.add(const Duration(seconds: 60));
-    final remainingTimeInMs =
-        moveEndTime.millisecondsSinceEpoch - now.millisecondsSinceEpoch;
-    final remainingSeconds = remainingTimeInMs / 1000;
+  useEffect(() {
+    if (moveStartDate == null) {
+      return null;
+    }
 
-    return remainingSeconds.toInt();
+    final subscription = Stream.periodic(const Duration(seconds: 1))
+        .map((_) => _getRemainingSeconds(moveStartDate))
+        .takeWhile((seconds) => seconds >= 0)
+        .listen((seconds) => remainingSeconds.value = seconds);
+
+    return subscription.cancel;
+  }, [moveStartDate]);
+
+  final remainingSecondsValue =
+      remainingSeconds.value < 0 || remainingSeconds.value > 60
+          ? 0
+          : remainingSeconds.value;
+
+  return remainingSecondsValue;
+}
+
+int _getRemainingSeconds(DateTime moveStartDate) {
+  if (moveStartDate == null) {
+    return 0;
   }
+
+  final now = DateTime.now().toUtc();
+
+  final moveEndTime = moveStartDate.add(const Duration(seconds: 60));
+  final remainingTimeInMs =
+      moveEndTime.millisecondsSinceEpoch - now.millisecondsSinceEpoch;
+  final remainingSeconds = remainingTimeInMs / 1000;
+
+  return remainingSeconds.toInt();
 }

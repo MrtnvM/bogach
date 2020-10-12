@@ -70,7 +70,7 @@ class Strings {
 
   static String get financesTabTitle => 'Финансы';
   static String get actionsTabTitle => 'Действия';
-  static String get historyTabTitle => 'История';
+  static String get progressTabTitle => 'Прогресс';
 
   static String get monthlyPayment => 'Ежемесячный платеж:';
 
@@ -396,4 +396,6 @@ class Strings {
   static String get purchase1Game => '1 игра';
   static String get purchase5Game => '5 игр + 1 в подарок';
   static String get purchase10Game => '10 игр + 2 в подарок';
+
+  static String get optimalPath => 'Оптимальный путь';
 }
