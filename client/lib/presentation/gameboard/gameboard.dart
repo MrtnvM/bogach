@@ -19,31 +19,35 @@ class GameBoard extends HookWidget {
     final selectedIndex = useState(0);
     final activeGameState = useGlobalState((s) => s.game.activeGameState);
     final gameExists = useCurrentGame((g) => g != null);
-
-    final isMultiplayer = useGlobalState((s) {
-      return s.game.currentGame.type == GameType.multiplayer();
-    });
-
-    final tabItems = useMemoized(
-      () => [
-        BottomBarItem(
-          title: Strings.actionsTabTitle,
-          image: Images.gameBoardBarIcon,
-          onPressed: () => selectedIndex.value = 0,
-        ),
-        BottomBarItem(
-          title: Strings.financesTabTitle,
-          image: Images.financesBarIcon,
-          onPressed: () => selectedIndex.value = 1,
-        ),
-        if (isMultiplayer)
-          BottomBarItem(
-            title: Strings.progressTabTitle,
-            image: Images.financesBarIcon,
-            onPressed: () => selectedIndex.value = 2,
-          ),
-      ],
+    final isMultiplayer = useCurrentGame(
+      (g) => g?.type == GameType.multiplayer(),
     );
+
+    final tabItems = useMemoized(() {
+      final actionsTab = BottomBarItem(
+        title: Strings.actionsTabTitle,
+        image: Images.gameBoardBarIcon,
+        onPressed: () => selectedIndex.value = 0,
+      );
+
+      final financesTab = BottomBarItem(
+        title: Strings.financesTabTitle,
+        image: Images.financesBarIcon,
+        onPressed: () => selectedIndex.value = 1,
+      );
+
+      if (!isMultiplayer) {
+        return [actionsTab, financesTab];
+      }
+
+      final progressTab = BottomBarItem(
+        title: Strings.progressTabTitle,
+        image: Images.financesBarIcon,
+        onPressed: () => selectedIndex.value = 2,
+      );
+
+      return [financesTab, actionsTab, progressTab];
+    }, [isMultiplayer]);
 
     if (!gameExists) {
       return LoadableView(
