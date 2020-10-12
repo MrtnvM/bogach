@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cash_flow/app_configuration.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -41,7 +43,12 @@ class CashFlowScaffold extends StatelessWidget {
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    _buildHeader(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: max(10 - horizontalPadding, 0),
+                      ),
+                      child: _buildHeader(),
+                    ),
                     const SizedBox(height: 24),
                   ],
                 ),

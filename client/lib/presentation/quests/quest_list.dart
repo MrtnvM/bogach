@@ -31,6 +31,8 @@ class QuestList extends HookWidget {
       (s) => s.getOperationState(Operation.createQuestGame),
     );
 
+    final user = useCurrentUser();
+    final currentQuestIndex = user.currentQuestIndex ?? 0;
     final quests = useGlobalState((s) => s.newGame.quests);
 
     final dispatch = useDispatcher();
@@ -38,6 +40,19 @@ class QuestList extends HookWidget {
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
     final textScaleFactor = screenWidth <= 350 ? 0.8 : 1.0;
+
+    final animationController = useAnimationController(
+      duration: const Duration(milliseconds: 300),
+    );
+
+    final offsetAnimation = Tween(begin: 0.0, end: 10.0)
+        .chain(CurveTween(curve: Curves.elasticIn))
+        .animate(animationController)
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              animationController.reverse();
+            }
+          });
 
     return MediaQuery(
       data: mediaQuery.copyWith(textScaleFactor: textScaleFactor),
@@ -54,10 +69,32 @@ class QuestList extends HookWidget {
           child: LoadableListView<Quest>(
             viewModel: LoadableListViewModel(
               items: quests,
-              itemBuilder: (i) => _QuestItemWidget(
-                quests: quests.items[i],
-                index: i,
-              ),
+              itemBuilder: (i) {
+                if (i == currentQuestIndex) {
+                  return AnimatedBuilder(
+                    animation: offsetAnimation,
+                    builder: (context, child) => Padding(
+                      padding: EdgeInsets.only(
+                        left: offsetAnimation.value + 10,
+                        right: 10 - offsetAnimation.value,
+                      ),
+                      child: _QuestItemWidget(
+                        quests: quests.items[i],
+                        index: i,
+                      ),
+                    ),
+                  );
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: _QuestItemWidget(
+                    quests: quests.items[i],
+                    index: i,
+                    defaultAction: animationController.forward,
+                  ),
+                );
+              },
               loadListRequestState: getQuestsRequestState,
               loadList: () {
                 dispatch(GetQuestsAction(userId: userId));
@@ -80,10 +117,12 @@ class _QuestItemWidget extends HookWidget {
   const _QuestItemWidget({
     @required this.quests,
     @required this.index,
+    this.defaultAction,
   });
 
   final Quest quests;
   final int index;
+  final VoidCallback defaultAction;
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +135,8 @@ class _QuestItemWidget extends HookWidget {
     return QuestItemWidget(
       quest: quests,
       currentGameId: currentGameForQuests[quests.id],
-      onQuestSelected: onLevelSelected,
+      isLocked: onLevelSelected == null,
+      onQuestSelected: onLevelSelected ?? (l, a) => defaultAction(),
     );
   }
 

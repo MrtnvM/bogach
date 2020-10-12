@@ -146,43 +146,26 @@ class _LoginPageState extends State<LoginPage> {
     final screenHeight = MediaQuery.of(context).size.height;
     final fontSize = screenHeight < 580 ? 15.0 : 18.0;
 
+    final style = Styles.onboardingSubtitle.copyWith(fontSize: fontSize);
+    final linkStyle = style.copyWith(decoration: TextDecoration.underline);
+
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
         children: [
-          TextSpan(
-            text: Strings.authAndAccept,
-            style: Styles.onboardingSubtitle.copyWith(
-              fontSize: fontSize,
-            ),
-          ),
+          TextSpan(text: Strings.authAndAccept, style: style),
           TextSpan(
             text: Strings.termsOfUse,
-            style: Styles.onboardingSubtitle.copyWith(
-              decoration: TextDecoration.underline,
-              fontSize: fontSize,
-            ),
+            style: linkStyle,
             recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                _launchURL(Urls.termsOfUseUrl);
-              },
+              ..onTap = () => _launchURL(Urls.termsOfUseUrl),
           ),
-          TextSpan(
-            text: Strings.and,
-            style: Styles.onboardingSubtitle.copyWith(
-              fontSize: fontSize,
-            ),
-          ),
+          TextSpan(text: Strings.and, style: style),
           TextSpan(
             text: Strings.privacyPolicy,
-            style: Styles.onboardingSubtitle.copyWith(
-              decoration: TextDecoration.underline,
-              fontSize: fontSize,
-            ),
+            style: linkStyle,
             recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                _launchURL(Urls.policyUrl);
-              },
+              ..onTap = () => _launchURL(Urls.policyUrl),
           ),
         ],
       ),
