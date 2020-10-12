@@ -1,7 +1,6 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
-import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/actions/send_player_move_action.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
@@ -9,7 +8,6 @@ import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/model/stock_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/ui/stock_game_event_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
-import 'package:cash_flow/presentation/gameboard/widgets/chart/dot/dot_user_progress_chart.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_content.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';

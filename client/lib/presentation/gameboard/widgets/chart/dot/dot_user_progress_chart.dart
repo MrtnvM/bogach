@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class DotUserProgressChart extends HookWidget {
-  DotUserProgressChart({this.game});
+  const DotUserProgressChart({this.game});
 
   final Game game;
 

@@ -1,7 +1,6 @@
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
-import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:charts_flutter/flutter.dart';
 
@@ -140,7 +139,7 @@ String _getUserName(String userId) {
     );
 
     if (user == null) {
-      return "TODO";
+      return 'TODO';
     } else {
       return user.fullName;
     }
