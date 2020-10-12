@@ -11,45 +11,39 @@ class QuestItemWidget extends HookWidget {
   const QuestItemWidget({
     @required this.quest,
     @required this.currentGameId,
-    @required @required this.onQuestSelected,
+    @required this.onQuestSelected,
+    @required this.isLocked,
   });
 
   final Quest quest;
   final String currentGameId;
+  final bool isLocked;
   final void Function(Quest, QuestAction) onQuestSelected;
 
   @override
   Widget build(BuildContext context) {
     final isCollapsed = useState(true);
 
-    var widget = _buildContent(isCollapsed);
-
-    if (onQuestSelected == null) {
-      widget = Banner(
-        message: Strings.unavailable,
-        location: BannerLocation.topEnd,
-        child: widget,
-      );
-    }
-
-    return widget;
+    return _buildContent(isCollapsed);
   }
 
   Widget _buildContent(ValueNotifier<bool> isCollapsed) {
     return GestureDetector(
       onTap: () {
-        if (onQuestSelected == null) {
+        if (isLocked) {
+          onQuestSelected?.call(null, QuestAction.startNewGame);
           return;
         }
 
         if (currentGameId == null) {
           onQuestSelected?.call(quest, QuestAction.startNewGame);
-        } else {
-          isCollapsed.value = !isCollapsed.value;
+          return;
         }
+
+        isCollapsed.value = !isCollapsed.value;
       },
       child: Opacity(
-        opacity: onQuestSelected == null ? 0.7 : 1,
+        opacity: isLocked ? 0.7 : 1,
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.only(
@@ -74,7 +68,7 @@ class QuestItemWidget extends HookWidget {
                     children: <Widget>[
                       Row(
                         children: <Widget>[
-                          if (onQuestSelected == null) ...const [
+                          if (isLocked) ...const [
                             Icon(Icons.lock, size: 11),
                             SizedBox(width: 4),
                           ],
