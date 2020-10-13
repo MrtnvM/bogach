@@ -39,6 +39,6 @@ class Images {
 
   // Bottom bar icons
   static const financesBarIcon = 'assets/images/svg/footer_financal.svg';
+  static const progressBarIcon = 'assets/images/svg/footer_progress.svg';
   static const gameBoardBarIcon = 'assets/images/svg/footer_action.svg';
-  static const historyBarIcon = 'assets/images/svg/footer_history.svg';
 }
