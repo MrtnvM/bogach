@@ -20,8 +20,7 @@ class QueryPastPurchasesAction extends BaseAction {
   FutureOr<AppState> reduce() async {
     final purchaseService = GetIt.I.get<PurchaseService>();
 
-    final userId = state.profile.currentUser?.id;
-    await purchaseService.queryPastPurchases(userId);
+    await purchaseService.queryPastPurchases();
 
     return null;
   }
