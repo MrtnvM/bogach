@@ -76,7 +76,7 @@ class _QuestsAccessDescription extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 36),
       child: Text(
-        'У вас кончились игры, хотите купить еще?',
+        'У вас кончились игры, хотите купить ещё?',
         style: Styles.body2.copyWith(
           letterSpacing: 0.4,
           fontSize: 15,
@@ -117,15 +117,15 @@ class _PurchaseGameList extends HookWidget {
       children: isStoreAvailable
           ? MultiplayerGamePurchases.values
               .map(
-                (e) => ListTile(
+                (item) => ListTile(
                   title: Text(
-                    e.title,
+                    item.title,
                     style: Styles.body2.copyWith(
                       letterSpacing: 0.4,
                       fontSize: 15,
                     ),
                   ),
-                  onTap: () => buyQuestsAccess(e.productId),
+                  onTap: () => buyQuestsAccess(item.productId),
                 ),
               )
               .toList()

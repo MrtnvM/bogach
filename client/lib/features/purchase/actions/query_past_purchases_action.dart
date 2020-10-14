@@ -19,9 +19,7 @@ class QueryPastPurchasesAction extends BaseAction {
   @override
   FutureOr<AppState> reduce() async {
     final purchaseService = GetIt.I.get<PurchaseService>();
-
     await purchaseService.queryPastPurchases();
-
     return null;
   }
 }

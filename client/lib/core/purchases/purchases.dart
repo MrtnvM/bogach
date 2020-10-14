@@ -46,9 +46,9 @@ extension MultiplayerGamePurchasesExtension on MultiplayerGamePurchases {
       case MultiplayerGamePurchases.oneGame:
         return 1;
       case MultiplayerGamePurchases.fiveGames:
-        return 5;
+        return 6;
       case MultiplayerGamePurchases.tenGames:
-        return 10;
+        return 12;
       default:
         return 0;
     }

@@ -15,9 +15,9 @@ export class PurchaseService {
     const profile = await this.userProvider.getUserProfile(userId);
     const isQuestsAccessBought = products.some((p) => p === Purchases.questsAccessProductId);
     const multiplayer1Bought = products.some((p) => p === Purchases.multiplayer1ProductId) ? 1 : 0;
-    const multiplayer5Bought = products.some((p) => p === Purchases.multiplayer5ProductId) ? 5 : 0;
+    const multiplayer5Bought = products.some((p) => p === Purchases.multiplayer5ProductId) ? 6 : 0;
     const multiplayer10Bought = products.some((p) => p === Purchases.multiplayer10ProductId)
-      ? 10
+      ? 12
       : 0;
 
     const multiplayerGamesCount = profile.multiplayerGamesCount ?? 0;
