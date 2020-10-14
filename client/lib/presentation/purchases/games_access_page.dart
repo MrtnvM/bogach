@@ -98,16 +98,16 @@ class _PurchaseGameList extends HookWidget {
   Widget build(BuildContext context) {
     final dispatch = useDispatcher();
 
-    Function(String) buyQuestsAccess;
-    buyQuestsAccess = (productId) async {
+    Function(MultiplayerGamePurchases) buyQuestsAccess;
+    buyQuestsAccess = (multiplayerGamePurchase) async {
       try {
-        await dispatch(BuyMultiplayerGames(productId));
+        await dispatch(BuyMultiplayerGames(multiplayerGamePurchase));
         appRouter.goBack(true);
       } catch (error) {
         handleError(
           context: context,
           exception: error,
-          onRetry: () => buyQuestsAccess(productId),
+          onRetry: () => buyQuestsAccess(multiplayerGamePurchase),
         );
       }
     };
@@ -125,7 +125,7 @@ class _PurchaseGameList extends HookWidget {
                       fontSize: 15,
                     ),
                   ),
-                  onTap: () => buyQuestsAccess(item.productId),
+                  onTap: () => buyQuestsAccess(item),
                 ),
               )
               .toList()

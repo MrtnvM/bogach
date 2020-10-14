@@ -35,8 +35,9 @@ class CreateMultiplayerGamePage extends HookWidget {
 
     final gameTemplates = useGlobalState((s) => s.newGame.gameTemplates);
     final dispatch = useDispatcher();
-    final multiplayerGamesCount =
-        useGlobalState((s) => s.profile.currentUser.multiplayerGamesCount);
+    final multiplayerGamesCount = useGlobalState(
+      (s) => s.profile.currentUser.purchaseProfile.multiplayerGamesCount,
+    );
 
     final Function(GameTemplate) onGameTempalateSelected = (template) async {
       await dispatch(SelectMultiplayerGameTemplateAction(template));

@@ -39,9 +39,14 @@ class JoinRoomAction extends BaseAction {
       s.multiplayer.userProfiles.addAll(participantProfiles);
 
       if (!isParticipantAlreadyJoined) {
-        s.profile.currentUser = s.profile.currentUser.copyWith(
-            multiplayerGamesCount:
-                s.profile.currentUser.multiplayerGamesCount - 1);
+        final multiplayerGamesCount =
+            s.profile.currentUser.purchaseProfile.multiplayerGamesCount - 1;
+
+        final updatedUser = s.profile.currentUser.copyWith.purchaseProfile(
+          multiplayerGamesCount: multiplayerGamesCount,
+        );
+
+        s.profile.currentUser = updatedUser;
       }
     });
   }

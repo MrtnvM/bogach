@@ -17,9 +17,15 @@ class CreateRoomGameAction extends BaseAction {
 
     await gameService.createRoomGame(roomId);
 
-    return state.rebuild((s) => s.profile.currentUser = s.profile.currentUser
-        .copyWith(
-            multiplayerGamesCount:
-                s.profile.currentUser.multiplayerGamesCount - 1));
+    return state.rebuild((s) {
+      final multiplayerGamesCount =
+          s.profile.currentUser.purchaseProfile.multiplayerGamesCount - 1;
+
+      final updatedUser = s.profile.currentUser.copyWith.purchaseProfile(
+        multiplayerGamesCount: multiplayerGamesCount,
+      );
+
+      s.profile.currentUser = updatedUser;
+    });
   }
 }

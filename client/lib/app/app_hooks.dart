@@ -111,7 +111,8 @@ _AppActions useAppActions() {
   final context = useContext();
   final dispatch = useDispatcher();
   final multiplayerGamesCount = useGlobalState(
-      (state) => state.profile.currentUser?.multiplayerGamesCount ?? 0);
+    (s) => s.profile.currentUser?.purchaseProfile?.multiplayerGamesCount ?? 0,
+  );
 
   return useMemoized(
     () => _AppActions(

@@ -1,6 +1,12 @@
 import 'package:in_app_purchase/in_app_purchase.dart';
 
-class NoInAppPurchaseProductsError implements Exception {
+class ProductPurchaseFailedError extends Error {
+  ProductPurchaseFailedError(this.product);
+
+  final ProductDetails product;
+}
+
+class NoInAppPurchaseProductsError extends Error {
   NoInAppPurchaseProductsError(this.notFoundIds);
 
   final List<String> notFoundIds;

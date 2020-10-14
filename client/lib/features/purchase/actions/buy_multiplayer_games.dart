@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/operation.dart';
+import 'package:cash_flow/core/purchases/purchases.dart';
 import 'package:cash_flow/services/purchase_service.dart';
 import 'package:get_it/get_it.dart';
 
 class BuyMultiplayerGames extends BaseAction {
-  BuyMultiplayerGames(this.productId);
+  BuyMultiplayerGames(this.purchase);
 
-  final String productId;
+  final MultiplayerGamePurchases purchase;
 
   @override
   Operation get operationKey => Operation.buyMultiplayerGames;
@@ -21,14 +22,16 @@ class BuyMultiplayerGames extends BaseAction {
   FutureOr<AppState> reduce() async {
     final purchaseService = GetIt.I.get<PurchaseService>();
     final userId = state.profile.currentUser.id;
-    final boughtGamesCount = await purchaseService.buyMultiplayerGames(
+
+    final purchaseProfile = await purchaseService.buyMultiplayerGames(
       userId: userId,
-      productId: productId,
+      purchase: purchase,
     );
 
-    return state.rebuild((b) => b.profile.currentUser = b.profile.currentUser
-        .copyWith(
-            multiplayerGamesCount: b.profile.currentUser.multiplayerGamesCount +
-                boughtGamesCount));
+    return state.rebuild((s) {
+      s.profile.currentUser = s.profile.currentUser.copyWith(
+        purchaseProfile: purchaseProfile,
+      );
+    });
   }
 }

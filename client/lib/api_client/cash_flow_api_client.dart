@@ -4,7 +4,9 @@ import 'package:cash_flow/api_client/headers.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/models/domain/room/room.dart';
+import 'package:cash_flow/models/domain/user/purchase_profile.dart';
 import 'package:cash_flow/models/network/request/game/create_room_request_model.dart';
+import 'package:cash_flow/models/network/request/purchases/update_purchases_request_model.dart';
 import 'package:cash_flow/models/network/responses/game_template_response_model.dart';
 import 'package:cash_flow/models/network/responses/new_game_response_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -96,10 +98,13 @@ class CashFlowApiClient extends ApiClient {
         responseMapper: rm.voidResponse,
       );
 
-  Future<void> sendPurchasedProducts(String userId, List<String> productIds) =>
+  Future<PurchaseProfile> sendPurchasedProducts(
+    String userId,
+    UpdatePurchasesRequestModel updatedPurchases,
+  ) =>
       post(
         path: 'updatePurchases',
-        body: {'userId': userId, 'productIds': productIds},
-        responseMapper: rm.voidResponse,
+        body: updatedPurchases.toJson(),
+        responseMapper: rm.standard((json) => PurchaseProfile.fromJson(json)),
       );
 }

@@ -1,6 +1,9 @@
 import 'dart:async';
 
+import 'package:cash_flow/models/domain/user/purchase_profile.dart';
 import 'package:cash_flow/models/errors/purchase_errors.dart';
+import 'package:cash_flow/models/network/request/purchases/purchase_details_request_model.dart';
+import 'package:cash_flow/models/network/request/purchases/update_purchases_request_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:cash_flow/api_client/cash_flow_api_client.dart';
@@ -18,6 +21,7 @@ class PurchaseService {
   final CashFlowApiClient _apiClient;
   final InAppPurchaseConnection _connection;
 
+  final _currentPurchasingProductIds = <String>[];
   final _pastPurchases = BehaviorSubject<List<PurchaseDetails>>.seeded([]);
   final _purchases = BehaviorSubject<Map<String, PurchaseDetails>>.seeded({});
 
@@ -30,13 +34,24 @@ class PurchaseService {
   Future<void> startListeningPurchaseUpdates() async {
     _connection.purchaseUpdatedStream.listen((purchases) {
       _updatePurchases(purchases);
-      _completePurchasesIfNeeded(purchases, withRetry: true);
+
+      /// Filter only products that not is currently buying
+      /// So we can track the status on a purchase in the method
+      /// that performing the purchase
+      final notCurrentllyPurchasingProducts = purchases //
+          .where((p) => !_currentPurchasingProductIds.contains(p.productID))
+          .toList();
+
+      _completePurchasesIfNeeded(
+        notCurrentllyPurchasingProducts,
+        withRetry: true,
+      );
     });
 
     /// Fix of async nature of subscription to Streams
-    /// If we want to get values from [purchaseUpdatedStream] immeadetely
-    /// we will fail because listening called asyncroniosly and happend on
-    /// next event loop cycles
+    /// If we want to get values from [purchaseUpdatedStream] with [purchases]
+    /// stream immeadetely we will fail because listening called
+    /// asyncroniosly and happend on next event loop cycles
     ///
     /// Needed for tests
     await Future.delayed(const Duration(milliseconds: 1));
@@ -58,8 +73,12 @@ class PurchaseService {
     return pastPurchases;
   }
 
-  Future<void> restorePastPurchases(String userId) async {
+  Future<PurchaseProfile> restorePastPurchases(String userId) async {
     final pastPurchases = await queryPastPurchases();
+
+    // TODO(Maxim): _verifyPurchase(purchase);
+
+    final purchaseProfile = await _sendPurchasesToServer(userId, pastPurchases);
 
     await _completePurchasesIfNeeded(pastPurchases);
 
@@ -67,23 +86,11 @@ class PurchaseService {
         .where((p) => p.status == PurchaseStatus.purchased)
         .toList();
 
-    await sendPurchasedProductsToServer(userId, pastPurchases);
-
-    // TODO(Artem): _verifyPurchase(purchase);
-
     if (completedPurchases.isNotEmpty) {
-      if (userId != null) {
-        sendPurchasedProductsToServer(userId, pastPurchases).then((_) {
-          Logger.i('Past purchases successfuly uploaded to server');
-        }).catchError((e) {
-          Logger.e('Past purchases uploading failed: $e');
-        });
-      }
-
       _pastPurchases.add(completedPurchases);
     }
 
-    return pastPurchases;
+    return purchaseProfile;
   }
 
   Future<bool> buyConsumable({@required ProductDetails productDetails}) {
@@ -117,122 +124,221 @@ class PurchaseService {
     return product;
   }
 
-  Future<void> buyQuestsAcceess(String userId) async {
-    final product = await getProduct(questsAccessProductId);
-
-    final pastPurchases = await queryPastPurchases();
-    final currentPurchase = pastPurchases.firstWhere(
-      (p) => p.productID == product.id,
-      orElse: () => null,
-    );
-
-    if (currentPurchase != null) {
-      if (currentPurchase.pendingCompletePurchase) {
-        await _connection.completePurchase(currentPurchase);
-      }
-
-      Logger.i('Purchase (${product.id}) already completed!');
-      // Delivering the purchase to the user
-      // By returning we indicates that purchase completed
-      return;
-    }
-
-    final purchaseRequest = _connection.purchaseUpdatedStream
-        .map(
-          (products) => products.firstWhere(
-            (p) => p.productID == product.id,
-            orElse: () => null,
-          ),
-        )
-        .where((p) => p != null)
-        .timeout(const Duration(seconds: 30))
-        .first;
-
+  Future<PurchaseProfile> buyNonConsumableProduct({
+    @required String productId,
+    @required String userId,
+  }) async {
     try {
+      _currentPurchasingProductIds.add(productId);
+
+      Logger.i('Loading product ($productId)');
+      final product = await getProduct(productId);
+      Logger.i(
+        'Product ($productId) loaded: ${product.title} - ${product.price}',
+      );
+
+      Logger.i('Buying non consumable product ($productId)');
       final result = await _connection.buyNonConsumable(
         purchaseParam: PurchaseParam(productDetails: product),
       );
 
-      Logger.i('Purchase (${product.id}) result: $result');
+      if (result) {
+        Logger.i('Non consumable product ($productId) successfully bought');
+      } else {
+        Logger.i('Non consumable product ($productId) purchase failed');
+        throw ProductPurchaseFailedError(product);
+      }
 
+      Logger.i('Waiting purchase details for product ($productId)');
+
+      final purchase = await purchases
+          .map((purchases) => purchases.firstWhere(
+                (p) => p.productID == productId,
+                orElse: () => null,
+              ))
+          .where((p) => p != null)
+          .timeout(const Duration(seconds: 60))
+          .first;
+
+      Logger.i(
+        'Purchase details for product ($productId): '
+        '  Purchase ID = ${purchase.purchaseID}\n'
+        '  Purchase Status = ${purchase.status}\n'
+        '  Pending completion = ${purchase.pendingCompletePurchase}\n'
+        '  Server verification data = '
+        '${purchase.verificationData.serverVerificationData}\n'
+        '  Local verification data = '
+        '${purchase.verificationData.localVerificationData}\n'
+        '  Source = ${purchase.verificationData.source}',
+      );
+
+      Logger.i('Sending purchase for product ($productId) to server');
+      final purchaseProfile = await _sendPurchasesToServer(userId, [purchase])
+          .timeout(const Duration(seconds: 60));
+      Logger.i('Purchase for product (${product.id}) uploaded to server');
+
+      Logger.i('Completing purchase for product $productId');
+      final completionResult = await _completePurchasesIfNeeded(
+        [purchase],
+        withRetry: true,
+      );
+
+      if (completionResult.isEmpty) {
+        Logger.i('Completion purchase for product $productId succeed');
+      } else {
+        Logger.i('Completion purchase for product $productId failed');
+      }
+
+      return purchaseProfile;
       // ignore: avoid_catches_without_on_clauses
     } catch (error) {
-      Logger.e('Error on buying product (${product.id}): $error');
+      Logger.e('Error on buying product ($productId): $error');
       rethrow;
+    } finally {
+      _currentPurchasingProductIds.remove(productId);
     }
-
-    final purchase = await purchaseRequest;
-    Logger.i('Purchasing (${product.id}): $purchase');
-
-    await sendPurchasedProductsToServer(userId, [purchase])
-        .timeout(const Duration(seconds: 30));
-
-    Logger.i('Purchase (${product.id}) uploaded to server');
-
-    final completionResult = await _connection.completePurchase(purchase);
-    Logger.i('Is purchase completed (${product.id}): $completionResult');
   }
 
-  Future<int> buyMultiplayerGames({
-    @required String userId,
+  Future<PurchaseProfile> buyConsumableProduct({
     @required String productId,
+    @required String userId,
   }) async {
-    final product = await getProduct(productId);
-
-    final purchaseRequest = _connection.purchaseUpdatedStream
-        .map(
-          (purchases) => purchases.firstWhere(
-            (p) => p.productID == product.id,
-            orElse: () => null,
-          ),
-        )
-        .where((p) => p != null)
-        .timeout(const Duration(seconds: 30))
-        .first;
-
     try {
+      _currentPurchasingProductIds.add(productId);
+
+      Logger.i('Loading product ($productId)');
+      final product = await getProduct(productId);
+      Logger.i(
+        'Product ($productId) loaded: ${product.title} - ${product.price}',
+      );
+
+      Logger.i('Buying consumable product ($productId)');
       final result = await _connection.buyConsumable(
         purchaseParam: PurchaseParam(productDetails: product),
       );
 
-      Logger.i('Purchase (${product.id}) result: $result');
+      if (result) {
+        Logger.i('Consumable product ($productId) successfully bought');
+      } else {
+        Logger.i('Consumable product ($productId) purchase failed');
+        throw ProductPurchaseFailedError(product);
+      }
 
+      Logger.i('Waiting purchase details for product ($productId)');
+
+      final purchase = await purchases
+          .map((purchases) => purchases.firstWhere(
+                (p) => p.productID == productId,
+                orElse: () => null,
+              ))
+          .where((p) => p != null)
+          .timeout(const Duration(seconds: 60))
+          .first;
+
+      Logger.i(
+        'Purchase details for product ($productId): '
+        '  Purchase ID = ${purchase.purchaseID}\n'
+        '  Purchase Status = ${purchase.status}\n'
+        '  Pending completion = ${purchase.pendingCompletePurchase}\n'
+        '  Server verification data = '
+        '${purchase.verificationData.serverVerificationData}\n'
+        '  Local verification data = '
+        '${purchase.verificationData.localVerificationData}\n'
+        '  Source = ${purchase.verificationData.source}',
+      );
+
+      Logger.i('Sending purchase for product ($productId) to server');
+      final purchaseProfile = await _sendPurchasesToServer(userId, [purchase])
+          .timeout(const Duration(seconds: 60));
+      Logger.i('Purchase for product (${product.id}) uploaded to server');
+
+      Logger.i('Completing purchase for product $productId');
+      final completionResult = await _completePurchasesIfNeeded(
+        [purchase],
+        withRetry: true,
+      );
+
+      if (completionResult.isEmpty) {
+        Logger.i('Completion purchase for product $productId succeed');
+      } else {
+        Logger.i('Completion purchase for product $productId failed');
+      }
+
+      return purchaseProfile;
       // ignore: avoid_catches_without_on_clauses
     } catch (error) {
-      Logger.e('Error on buying product (${product.id}): $error');
+      Logger.e('Error on buying product ($productId): $error');
       rethrow;
+    } finally {
+      _currentPurchasingProductIds.remove(productId);
     }
-
-    final purchase = await purchaseRequest;
-    Logger.i('Purchasing (${product.id}): $purchase');
-
-    await sendPurchasedProductsToServer(userId, [purchase])
-        .timeout(const Duration(seconds: 30));
-    Logger.i('Purchase (${product.id}) uploaded to server');
-
-    final completionResult = await _connection.completePurchase(purchase);
-    Logger.i('Is purchase completed (${product.id}): $completionResult');
-
-    return getMultiplayerGamePurchaseFromId(purchase.productID).gamesCount;
   }
 
-  Future<void> sendPurchasedProductsToServer(
+  Future<PurchaseProfile> buyQuestsAcceess(String userId) async {
+    final purchaseProfile = await restorePastPurchases(userId);
+
+    if (purchaseProfile.isQuestsAvailable) {
+      return purchaseProfile;
+    }
+
+    final updatedPurchaseProfile = await buyNonConsumableProduct(
+      productId: questsAccessProductId,
+      userId: userId,
+    );
+
+    return updatedPurchaseProfile;
+  }
+
+  Future<PurchaseProfile> buyMultiplayerGames({
+    @required MultiplayerGamePurchases purchase,
+    @required String userId,
+  }) {
+    final productId = purchase.productId;
+
+    return buyConsumableProduct(
+      productId: productId,
+      userId: userId,
+    );
+  }
+
+  Future<PurchaseProfile> _sendPurchasesToServer(
     String userId,
     List<PurchaseDetails> purchases,
-  ) {
-    final productIds = purchases //
-        .map((p) => hashProductId(p.productID))
+  ) async {
+    final completedPurchases = purchases //
+        .where((p) => p.status == PurchaseStatus.purchased)
+        .map(
+          (p) => PurchaseDetailsRequestModel(
+            productId: p.productID,
+            purchaseId: p.purchaseID,
+            verificationData: p.verificationData?.serverVerificationData,
+            source: p.verificationData.source.toString(),
+          ),
+        )
         .toList();
 
-    return _apiClient.sendPurchasedProducts(userId, productIds);
+    if (completedPurchases.isEmpty) {
+      return null;
+    }
+
+    final purchaseProfile = await _apiClient.sendPurchasedProducts(
+      userId,
+      UpdatePurchasesRequestModel(
+        userId: userId,
+        purchases: completedPurchases,
+      ),
+    );
+
+    return purchaseProfile;
   }
 
   Future<List<PurchaseDetails>> _completePurchasesIfNeeded(
     List<PurchaseDetails> purchases, {
     bool withRetry = false,
   }) async {
-    final notCompletedPurchases =
-        purchases.where((p) => p.pendingCompletePurchase).toList();
+    final notCompletedPurchases = purchases //
+        .where((p) => p.pendingCompletePurchase)
+        .toList();
 
     if (notCompletedPurchases.isEmpty) {
       return [];
