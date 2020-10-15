@@ -1,14 +1,14 @@
 /// <reference types="@types/jest"/>
 
-import produce from 'immer';
+import { produce } from 'immer';
 import { mock, instance, when, capture, reset } from 'ts-mockito';
-import { GameProvider } from '../providers/game_provider';
+import { GameProvider } from '../../providers/game_provider';
 import { RoomService } from './room_service';
-import { TestData } from './game_service.multiplayer.spec.utils';
-import { UserProvider } from '../providers/user_provider';
-import { TimerProvider } from '../providers/timer_provider';
-import { FirebaseMessaging } from '../core/firebase/firebase_messaging';
-import { Room } from '../models/domain/room';
+import { TestData } from '../game/game_service.multiplayer.spec.utils';
+import { UserProvider } from '../../providers/user_provider';
+import { TimerProvider } from '../../providers/timer_provider';
+import { FirebaseMessaging } from '../../core/firebase/firebase_messaging';
+import { Room } from '../../models/domain/room';
 
 describe('Room Service', () => {
   const mockGameProvider = mock(GameProvider);

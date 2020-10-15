@@ -59,6 +59,17 @@ export class Firestore {
     return newItem;
   }
 
+  async addItem(selector: CollectionReference, item: any, options?: FirestoreWriteOptions) {
+    const newItem = item && {
+      ...item,
+      ...(options?.createdAt !== false ? { createdAt: nowInUtc() } : {}),
+      ...(options?.updatedAt !== false ? { updatedAt: nowInUtc() } : {}),
+    };
+
+    await selector.add(newItem);
+    return newItem;
+  }
+
   async updateItem(selector: DocumentReference, item: any, options?: FirestoreWriteOptions) {
     const updatedItem = item && {
       ...item,

@@ -1,12 +1,12 @@
-import { FirebaseMessaging } from '../core/firebase/firebase_messaging';
-import { GameProvider } from '../providers/game_provider';
-import { UserProvider } from '../providers/user_provider';
-import { RoomEntity, Room } from '../models/domain/room';
-import { UserEntity } from '../models/domain/user';
-import { checkIds } from '../core/validation/type_checks';
-import { Strings } from '../resources/strings';
-import { GameTemplateEntity } from '../models/domain/game/game_template';
-import { TimerProvider } from '../providers/timer_provider';
+import { FirebaseMessaging } from '../../core/firebase/firebase_messaging';
+import { GameProvider } from '../../providers/game_provider';
+import { UserProvider } from '../../providers/user_provider';
+import { RoomEntity, Room } from '../../models/domain/room';
+import { UserEntity } from '../../models/domain/user';
+import { checkIds } from '../../core/validation/type_checks';
+import { Strings } from '../../resources/strings';
+import { GameTemplateEntity } from '../../models/domain/game/game_template';
+import { TimerProvider } from '../../providers/timer_provider';
 
 export class RoomService {
   constructor(
@@ -24,7 +24,7 @@ export class RoomService {
     return room;
   }
 
-  /// Owner of the created room can add participants that will recieve invite by push notification
+  /// Owner of the created room can add participants that will receive invite by push notification
   async addParticipantToRoom(participantId: UserEntity.Id, roomId: RoomEntity.Id) {
     const room = await this.gameProvider.getRoom(roomId);
 

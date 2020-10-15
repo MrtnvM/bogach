@@ -2,13 +2,13 @@
 
 import produce from 'immer';
 import { mock, instance, when, capture, verify, anything } from 'ts-mockito';
-import { GameProvider } from '../providers/game_provider';
+import { GameProvider } from '../../providers/game_provider';
 import { GameService } from './game_service';
-import { GameContext } from '../models/domain/game/game_context';
+import { GameContext } from '../../models/domain/game/game_context';
 import { TestData } from './game_service.spec.utils';
-import { GameLevelsProvider } from '../providers/game_levels_provider';
-import { UserProvider } from '../providers/user_provider';
-import { TimerProvider } from '../providers/timer_provider';
+import { GameLevelsProvider } from '../../providers/game_levels_provider';
+import { UserProvider } from '../../providers/user_provider';
+import { TimerProvider } from '../../providers/timer_provider';
 
 describe('Game Service - Singleplayer game', () => {
   test('Successfully handle not last game event', async () => {

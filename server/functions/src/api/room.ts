@@ -2,16 +2,16 @@ import * as functions from 'firebase-functions';
 import * as config from '../config';
 
 import { GameProvider } from '../providers/game_provider';
-import { RoomService } from '../services/room_service';
+import { RoomService } from '../services/room/room_service';
 import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from '../providers/firestore_selector';
 import { FirebaseMessaging } from '../core/firebase/firebase_messaging';
 import { UserProvider } from '../providers/user_provider';
-import { GameService } from '../services/game_service';
+import { GameService } from '../services/game/game_service';
 import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { TimerProvider } from '../providers/timer_provider';
-import { PurchaseService } from '../services/purchase_service';
+import { PurchaseService } from '../services/purchase/purchase_service';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
@@ -57,7 +57,9 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const createRoomRequest = async () => {
       const { room } = await roomService.createRoomGame(roomId);
-      await purchaseService.reduceMultiplayerGames(room.participants.map((participant) => participant.id));
+      await purchaseService.reduceMultiplayerGames(
+        room.participants.map((participant) => participant.id)
+      );
       return room;
     };
 
