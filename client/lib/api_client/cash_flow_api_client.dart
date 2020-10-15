@@ -99,7 +99,6 @@ class CashFlowApiClient extends ApiClient {
       );
 
   Future<PurchaseProfile> sendPurchasedProducts(
-    String userId,
     UpdatePurchasesRequestModel updatedPurchases,
   ) =>
       post(

@@ -1,8 +1,14 @@
+import 'dart:async';
+
+import 'package:cash_flow/models/domain/user/purchase_profile.dart';
 import 'package:cash_flow/models/errors/purchase_errors.dart';
+import 'package:cash_flow/models/network/request/purchases/purchase_details_request_model.dart';
+import 'package:cash_flow/models/network/request/purchases/update_purchases_request_model.dart';
 import 'package:cash_flow/services/purchase_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:mockito/mockito.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../mocks/mock_api_client.dart';
 import '../mocks/mock_in_app_purchase_connection.dart';
@@ -145,5 +151,212 @@ void main() {
       () => purchaseService.queryPastPurchases(),
       throwsA(isInstanceOf<QueryPastPurchasesRequestError>()),
     );
+  });
+
+  test('Successful restoring past purchases', () async {
+    const userId = 'user1';
+    final purchase1 = createPurchase(1, PurchaseStatus.purchased);
+    final purchase2 = createPurchase(
+      2,
+      PurchaseStatus.purchased,
+      pendingComplete: true,
+    );
+
+    when(mockConnection.purchaseUpdatedStream).thenAnswer((_) {
+      return Stream.value([]);
+    });
+
+    when(mockConnection.queryPastPurchases()).thenAnswer((_) async {
+      return QueryPurchaseDetailsResponse(
+        pastPurchases: [purchase1, purchase2],
+      );
+    });
+
+    when(mockConnection.completePurchase(purchase2)).thenAnswer((_) async {
+      return BillingResultWrapper(responseCode: BillingResponse.ok);
+    });
+
+    final purchaseProfile = PurchaseProfile(
+      isQuestsAvailable: true,
+      multiplayerGamesCount: 3,
+    );
+
+    final updatePurchaseRequestModel = UpdatePurchasesRequestModel(
+      userId: userId,
+      purchases: [
+        PurchaseDetailsRequestModel.fromPurchase(purchase1),
+        PurchaseDetailsRequestModel.fromPurchase(purchase2),
+      ],
+    );
+
+    when(mockApiClient.sendPurchasedProducts(updatePurchaseRequestModel))
+        .thenAnswer((_) async => purchaseProfile);
+
+    await purchaseService.startListeningPurchaseUpdates();
+
+    final profile = await purchaseService.restorePastPurchases(userId);
+
+    expect(profile, purchaseProfile);
+
+    verifyInOrder([
+      mockConnection.purchaseUpdatedStream,
+      mockConnection.queryPastPurchases(),
+      mockApiClient.sendPurchasedProducts(updatePurchaseRequestModel),
+      mockConnection.completePurchase(purchase2),
+    ]);
+
+    verifyNoMoreInteractions(mockConnection);
+    verifyNoMoreInteractions(mockApiClient);
+  });
+
+  test('Successful buying of non consumable product', () async {
+    const userId = 'user1';
+    final product1 = createProduct(1);
+    final purchase1 = createPurchase(
+      1,
+      PurchaseStatus.purchased,
+      pendingComplete: true,
+    );
+
+    final purchases = BehaviorSubject<List<PurchaseDetails>>.seeded([]);
+
+    when(mockConnection.purchaseUpdatedStream).thenAnswer((_) {
+      return purchases;
+    });
+
+    when(mockConnection.queryPastPurchases()).thenAnswer((_) async {
+      return QueryPurchaseDetailsResponse(pastPurchases: []);
+    });
+
+    when(mockConnection.queryProductDetails({product1.id})).thenAnswer(
+      (_) async => ProductDetailsResponse(
+        productDetails: [product1],
+        notFoundIDs: [],
+      ),
+    );
+
+    final purchaseProfile = PurchaseProfile(
+      isQuestsAvailable: true,
+      multiplayerGamesCount: 3,
+    );
+
+    final updatePurchaseRequestModel = UpdatePurchasesRequestModel(
+      userId: userId,
+      purchases: [
+        PurchaseDetailsRequestModel.fromPurchase(purchase1),
+      ],
+    );
+
+    when(
+      mockConnection.buyNonConsumable(purchaseParam: anyNamed('purchaseParam')),
+    ).thenAnswer((_) {
+      purchases.value = [purchase1];
+      return Future.value(true);
+    });
+
+    when(mockApiClient.sendPurchasedProducts(updatePurchaseRequestModel))
+        .thenAnswer((_) async => purchaseProfile);
+
+    when(mockConnection.completePurchase(purchase1)).thenAnswer((_) async {
+      return BillingResultWrapper(responseCode: BillingResponse.ok);
+    });
+
+    await purchaseService.startListeningPurchaseUpdates();
+
+    when(mockConnection.purchaseUpdatedStream).thenAnswer((_) {
+      return Stream.value([purchase1]);
+    });
+
+    final profile = await purchaseService.buyNonConsumableProduct(
+      productId: product1.id,
+      userId: userId,
+    );
+
+    expect(profile, purchaseProfile);
+
+    verifyInOrder([
+      mockConnection.purchaseUpdatedStream,
+      mockConnection.queryProductDetails({product1.id}),
+      mockConnection.buyNonConsumable(
+        purchaseParam: anyNamed('purchaseParam'),
+      ),
+      mockApiClient.sendPurchasedProducts(updatePurchaseRequestModel),
+      mockConnection.completePurchase(purchase1),
+    ]);
+
+    verifyNoMoreInteractions(mockConnection);
+    verifyNoMoreInteractions(mockApiClient);
+  });
+
+  test('Successful buying of consumable product', () async {
+    const userId = 'user1';
+    final product1 = createProduct(1);
+    final purchase1 = createPurchase(
+      1,
+      PurchaseStatus.purchased,
+      pendingComplete: true,
+    );
+    final purchases = BehaviorSubject<List<PurchaseDetails>>.seeded([]);
+
+    when(mockConnection.purchaseUpdatedStream).thenAnswer((_) {
+      return purchases;
+    });
+
+    when(mockConnection.queryProductDetails({product1.id})).thenAnswer(
+      (_) async => ProductDetailsResponse(
+        productDetails: [product1],
+        notFoundIDs: [],
+      ),
+    );
+
+    when(
+      mockConnection.buyConsumable(purchaseParam: anyNamed('purchaseParam')),
+    ).thenAnswer((_) {
+      purchases.value = [purchase1];
+      return Future.value(true);
+    });
+
+    final purchaseProfile = PurchaseProfile(
+      isQuestsAvailable: true,
+      multiplayerGamesCount: 3,
+    );
+
+    final updatePurchaseRequestModel = UpdatePurchasesRequestModel(
+      userId: userId,
+      purchases: [
+        PurchaseDetailsRequestModel.fromPurchase(purchase1),
+      ],
+    );
+
+    when(mockApiClient.sendPurchasedProducts(updatePurchaseRequestModel))
+        .thenAnswer((_) async => purchaseProfile);
+
+    when(mockConnection.completePurchase(purchase1)).thenAnswer((_) async {
+      return BillingResultWrapper(responseCode: BillingResponse.ok);
+    });
+
+    await purchaseService.startListeningPurchaseUpdates();
+
+    when(mockConnection.purchaseUpdatedStream).thenAnswer((_) {
+      return Stream.value([purchase1]);
+    });
+
+    final profile = await purchaseService.buyConsumableProduct(
+      productId: product1.id,
+      userId: userId,
+    );
+
+    expect(profile, purchaseProfile);
+
+    verifyInOrder([
+      mockConnection.purchaseUpdatedStream,
+      mockConnection.queryProductDetails({product1.id}),
+      mockConnection.buyConsumable(purchaseParam: anyNamed('purchaseParam')),
+      mockApiClient.sendPurchasedProducts(updatePurchaseRequestModel),
+      mockConnection.completePurchase(purchase1),
+    ]);
+
+    verifyNoMoreInteractions(mockConnection);
+    verifyNoMoreInteractions(mockApiClient);
   });
 }

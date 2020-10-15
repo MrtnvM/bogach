@@ -74,11 +74,16 @@ class PurchaseService {
   }
 
   Future<PurchaseProfile> restorePastPurchases(String userId) async {
+    Logger.i('Restoring past purchases started for user ($userId)');
     final pastPurchases = await queryPastPurchases();
+    Logger.i('Restored purchases:');
+    pastPurchases.forEach(_logPurchase);
 
     // TODO(Maxim): _verifyPurchase(purchase);
 
+    Logger.i('Sending purchases to server...');
     final purchaseProfile = await _sendPurchasesToServer(userId, pastPurchases);
+    Logger.i('Purchase Profile:\n$purchaseProfile');
 
     await _completePurchasesIfNeeded(pastPurchases);
 
@@ -150,32 +155,13 @@ class PurchaseService {
       }
 
       Logger.i('Waiting purchase details for product ($productId)');
-
-      final purchase = await purchases
-          .map((purchases) => purchases.firstWhere(
-                (p) => p.productID == productId,
-                orElse: () => null,
-              ))
-          .where((p) => p != null)
-          .timeout(const Duration(seconds: 60))
-          .first;
-
-      Logger.i(
-        'Purchase details for product ($productId): '
-        '  Purchase ID = ${purchase.purchaseID}\n'
-        '  Purchase Status = ${purchase.status}\n'
-        '  Pending completion = ${purchase.pendingCompletePurchase}\n'
-        '  Server verification data = '
-        '${purchase.verificationData.serverVerificationData}\n'
-        '  Local verification data = '
-        '${purchase.verificationData.localVerificationData}\n'
-        '  Source = ${purchase.verificationData.source}',
-      );
+      final purchase = await _getPurchase(productId: productId);
+      _logPurchase(purchase);
 
       Logger.i('Sending purchase for product ($productId) to server');
       final purchaseProfile = await _sendPurchasesToServer(userId, [purchase])
           .timeout(const Duration(seconds: 60));
-      Logger.i('Purchase for product (${product.id}) uploaded to server');
+      Logger.i('Purchase for product ($productId) uploaded to server');
 
       Logger.i('Completing purchase for product $productId');
       final completionResult = await _completePurchasesIfNeeded(
@@ -225,32 +211,13 @@ class PurchaseService {
       }
 
       Logger.i('Waiting purchase details for product ($productId)');
-
-      final purchase = await purchases
-          .map((purchases) => purchases.firstWhere(
-                (p) => p.productID == productId,
-                orElse: () => null,
-              ))
-          .where((p) => p != null)
-          .timeout(const Duration(seconds: 60))
-          .first;
-
-      Logger.i(
-        'Purchase details for product ($productId): '
-        '  Purchase ID = ${purchase.purchaseID}\n'
-        '  Purchase Status = ${purchase.status}\n'
-        '  Pending completion = ${purchase.pendingCompletePurchase}\n'
-        '  Server verification data = '
-        '${purchase.verificationData.serverVerificationData}\n'
-        '  Local verification data = '
-        '${purchase.verificationData.localVerificationData}\n'
-        '  Source = ${purchase.verificationData.source}',
-      );
+      final purchase = await _getPurchase(productId: productId);
+      _logPurchase(purchase);
 
       Logger.i('Sending purchase for product ($productId) to server');
       final purchaseProfile = await _sendPurchasesToServer(userId, [purchase])
           .timeout(const Duration(seconds: 60));
-      Logger.i('Purchase for product (${product.id}) uploaded to server');
+      Logger.i('Purchase for product ($productId) uploaded to server');
 
       Logger.i('Completing purchase for product $productId');
       final completionResult = await _completePurchasesIfNeeded(
@@ -312,7 +279,7 @@ class PurchaseService {
             productId: p.productID,
             purchaseId: p.purchaseID,
             verificationData: p.verificationData?.serverVerificationData,
-            source: p.verificationData.source.toString(),
+            source: p.verificationData?.source?.toString(),
           ),
         )
         .toList();
@@ -322,7 +289,6 @@ class PurchaseService {
     }
 
     final purchaseProfile = await _apiClient.sendPurchasedProducts(
-      userId,
       UpdatePurchasesRequestModel(
         userId: userId,
         purchases: completedPurchases,
@@ -336,13 +302,21 @@ class PurchaseService {
     List<PurchaseDetails> purchases, {
     bool withRetry = false,
   }) async {
+    Logger.i('Started completion of purchases...');
+
     final notCompletedPurchases = purchases //
         .where((p) => p.pendingCompletePurchase)
         .toList();
 
     if (notCompletedPurchases.isEmpty) {
+      Logger.i('Purchases already completed');
       return [];
     }
+
+    final notCompletedPurchasesIds = notCompletedPurchases //
+        .map((p) => p.purchaseID)
+        .toList();
+    Logger.i('Completing purchases: $notCompletedPurchasesIds');
 
     final results = await Future.wait([
       for (final purchase in notCompletedPurchases)
@@ -370,9 +344,25 @@ class PurchaseService {
 
     if (withRetry) {
       Future.delayed(const Duration(minutes: 1)).then((_) {
+        final failedToCompletePurchasesIds = failedToCompletePurchases //
+            .map((p) => p.purchaseID)
+            .toList();
+
+        Logger.i(
+          'Retrying to complete purchases: $failedToCompletePurchasesIds',
+        );
+
         _completePurchasesIfNeeded(failedToCompletePurchases);
       });
     }
+
+    final failedToCompletePurchasesIds = failedToCompletePurchases //
+        .map((p) => p.purchaseID)
+        .toList();
+
+    Logger.i(
+      'Failed to complete purchases: $failedToCompletePurchasesIds',
+    );
 
     return failedToCompletePurchases;
   }
@@ -386,5 +376,29 @@ class PurchaseService {
     }
 
     _purchases.value = updatedPurchases;
+  }
+
+  Future<PurchaseDetails> _getPurchase({@required String productId}) {
+    return purchases
+        .map((purchases) => purchases.firstWhere(
+              (p) => p.productID == productId,
+              orElse: () => null,
+            ))
+        .where((p) => p != null)
+        .first;
+  }
+
+  void _logPurchase(PurchaseDetails purchase) {
+    Logger.i(
+      'Purchase details for product (${purchase.productID}): '
+      '  Purchase ID = ${purchase.purchaseID}\n'
+      '  Purchase Status = ${purchase.status}\n'
+      '  Pending completion = ${purchase.pendingCompletePurchase}\n'
+      '  Server verification data = '
+      '${purchase.verificationData?.serverVerificationData}\n'
+      '  Local verification data = '
+      '${purchase.verificationData?.localVerificationData}\n'
+      '  Source = ${purchase.verificationData?.source}',
+    );
   }
 }
