@@ -68,7 +68,8 @@ class CreateMultiplayerGamePage extends HookWidget {
       backgroundColor: ColorRes.black80,
       child: CashFlowScaffold(
         title: Strings.chooseQuest,
-        showUser: true,
+        showUser: false,
+        customSubtitleWidget: MultiplayerGameCountBadge(),
         horizontalPadding: 10,
         showBackArrow: true,
         child: Stack(

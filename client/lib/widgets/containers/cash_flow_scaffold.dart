@@ -7,8 +7,8 @@ import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/widgets/avatar/user_widget.dart';
 import 'package:cash_flow/widgets/inputs/drop_focus.dart';
 import 'package:cash_flow/widgets/texts/title_test.dart';
-import 'package:flutter/material.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CashFlowScaffold extends StatelessWidget {
@@ -17,6 +17,7 @@ class CashFlowScaffold extends StatelessWidget {
     @required this.title,
     Key key,
     this.showUser = false,
+    this.customSubtitleWidget,
     this.footerImage,
     this.horizontalPadding = 32,
     this.showBackArrow = false,
@@ -24,6 +25,7 @@ class CashFlowScaffold extends StatelessWidget {
 
   final Widget child;
   final bool showUser;
+  final Widget customSubtitleWidget;
   final String title;
   final String footerImage;
   final double horizontalPadding;
@@ -90,7 +92,9 @@ class CashFlowScaffold extends StatelessWidget {
                 )
               else
                 Container(),
-              showUser ? UserWidget() : Container(),
+              if (showUser) UserWidget(),
+              if (!showUser && customSubtitleWidget != null)
+                customSubtitleWidget,
               if (showBackArrow) const SizedBox(width: 56) else Container(),
             ],
           ),

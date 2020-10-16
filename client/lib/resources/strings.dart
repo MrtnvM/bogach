@@ -345,7 +345,7 @@ class Strings {
       'Необходимо выбрать бизнес для продажи';
 
   // Multiplayer
-  static String get selectPlayers => 'Выбeрете игроков';
+  static String get selectPlayers => 'Выберите игроков';
   static String get waitingPlayers => 'Ожидание игроков';
   static String get selectedPlayers => 'Выбранные игроки';
   static String get allPlayers => 'Все игроки';
@@ -360,6 +360,7 @@ class Strings {
       'приглашает Вас сразиться в поединке капиталистов!';
   static String get joinRoomError =>
       'Не удалось подключиться к комнате игроков';
+  static String get multiplayerGamesAvailable => 'Доступно игр:';
 
   // Onboarding
   static String get onboardingTitle1 => 'Финансовая грамотность';
