@@ -180,7 +180,7 @@ void main() {
 
     final purchaseProfile = PurchaseProfile(
       isQuestsAvailable: true,
-      multiplayerGamesCount: 3,
+      boughtMultiplayerGamesCount: 3,
     );
 
     final updatePurchaseRequestModel = UpdatePurchasesRequestModel(
@@ -239,7 +239,7 @@ void main() {
 
     final purchaseProfile = PurchaseProfile(
       isQuestsAvailable: true,
-      multiplayerGamesCount: 3,
+      boughtMultiplayerGamesCount: 3,
     );
 
     final updatePurchaseRequestModel = UpdatePurchasesRequestModel(
@@ -316,7 +316,7 @@ void main() {
 
     final purchaseProfile = PurchaseProfile(
       isQuestsAvailable: true,
-      multiplayerGamesCount: 3,
+      boughtMultiplayerGamesCount: 3,
     );
 
     final updatePurchaseRequestModel = UpdatePurchasesRequestModel(
@@ -374,7 +374,7 @@ void main() {
 
     final purchaseProfile = PurchaseProfile(
       isQuestsAvailable: true,
-      multiplayerGamesCount: 3,
+      boughtMultiplayerGamesCount: 3,
     );
 
     final updatePurchaseRequestModel = UpdatePurchasesRequestModel(

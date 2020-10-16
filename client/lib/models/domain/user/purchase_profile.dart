@@ -7,7 +7,7 @@ part 'purchase_profile.g.dart';
 abstract class PurchaseProfile with _$PurchaseProfile {
   factory PurchaseProfile({
     @JsonKey(defaultValue: false) bool isQuestsAvailable,
-    @JsonKey(defaultValue: 0) int multiplayerGamesCount,
+    @JsonKey(defaultValue: 0) int boughtMultiplayerGamesCount,
   }) = _PurchaseProfile;
 
   factory PurchaseProfile.fromJson(Map<String, dynamic> json) =>

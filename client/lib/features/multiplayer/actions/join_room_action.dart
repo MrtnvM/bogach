@@ -39,11 +39,11 @@ class JoinRoomAction extends BaseAction {
       s.multiplayer.userProfiles.addAll(participantProfiles);
 
       if (!isParticipantAlreadyJoined) {
-        final multiplayerGamesCount =
-            s.profile.currentUser.purchaseProfile.multiplayerGamesCount - 1;
+        final currentUser = s.profile.currentUser;
+        final playedGamesCount = currentUser.multiplayerGamePlayed ?? 0;
 
-        final updatedUser = s.profile.currentUser.copyWith.purchaseProfile(
-          multiplayerGamesCount: multiplayerGamesCount,
+        final updatedUser = s.profile.currentUser.copyWith(
+          multiplayerGamePlayed: playedGamesCount,
         );
 
         s.profile.currentUser = updatedUser;

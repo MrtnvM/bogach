@@ -20,4 +20,9 @@ class SetCurrentUserAction extends BaseAction {
       s.purchase.hasQuestsAccess = hasQuestsAccess;
     });
   }
+
+  @override
+  String toString() {
+    return  '${super.toString()} (${user.userId}';
+  }
 }

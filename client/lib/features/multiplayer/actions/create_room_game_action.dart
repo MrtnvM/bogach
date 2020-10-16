@@ -11,6 +11,9 @@ class CreateRoomGameAction extends BaseAction {
   Operation get operationKey => Operation.createRoomGame;
 
   @override
+  bool abortDispatch() => state.profile.currentUser == null;
+
+  @override
   FutureOr<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
     final roomId = state.multiplayer.currentRoom.id;
@@ -18,11 +21,11 @@ class CreateRoomGameAction extends BaseAction {
     await gameService.createRoomGame(roomId);
 
     return state.rebuild((s) {
-      final multiplayerGamesCount =
-          s.profile.currentUser.purchaseProfile.multiplayerGamesCount - 1;
+      final currentUser = s.profile.currentUser;
+      final multiplayerGamePlayed = currentUser.multiplayerGamePlayed ?? 0;
 
-      final updatedUser = s.profile.currentUser.copyWith.purchaseProfile(
-        multiplayerGamesCount: multiplayerGamesCount,
+      final updatedUser = currentUser.copyWith(
+        multiplayerGamePlayed: multiplayerGamePlayed + 1,
       );
 
       s.profile.currentUser = updatedUser;

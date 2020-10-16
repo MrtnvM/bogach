@@ -1,9 +1,9 @@
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/dynamic_link_hooks.dart';
-import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/hooks/push_notification_hooks.dart';
 import 'package:cash_flow/features/multiplayer/actions/join_room_action.dart';
+import 'package:cash_flow/features/multiplayer/multiplayer_hooks.dart';
 import 'package:cash_flow/features/profile/actions/send_device_push_token_action.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
@@ -11,9 +11,9 @@ import 'package:cash_flow/presentation/multiplayer/room_page.dart';
 import 'package:cash_flow/presentation/purchases/games_access_page.dart';
 import 'package:cash_flow/resources/dynamic_links.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:uni_links/uni_links.dart';
 
 void useUserPushTokenUploader() {
@@ -31,7 +31,7 @@ void useUserPushTokenUploader() {
 }
 
 void usePushNotificationsHandler() {
-  final appAcitons = useAppActions();
+  final appActions = useAppActions();
 
   usePushMessageSubscription((data) {
     final type = data['type'];
@@ -39,7 +39,7 @@ void usePushNotificationsHandler() {
     switch (type) {
       case 'go_to_room':
         final roomId = data['roomId'];
-        appAcitons.joinRoom(roomId);
+        appActions.joinRoom(roomId);
         break;
     }
   });
@@ -110,9 +110,7 @@ void useDeepLinkHandler() {
 _AppActions useAppActions() {
   final context = useContext();
   final dispatch = useDispatcher();
-  final multiplayerGamesCount = useGlobalState(
-    (s) => s.profile.currentUser?.purchaseProfile?.multiplayerGamesCount ?? 0,
-  );
+  final multiplayerGamesCount = useAvailableMultiplayerGamesCount();
 
   return useMemoized(
     () => _AppActions(
