@@ -11,16 +11,16 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
   const gameProvider = new GameProvider(firestore, selector);
 
-  const initialiseTestData = https.onRequest(async (request, response) => {
+  const initializeTestData = https.onRequest(async (request, response) => {
     try {
       const template1 = GameTemplateFixture.createGameTemplate({
         id: 'template1',
       });
 
       const gameTemplates = await gameProvider.getAllGameTemplates();
-      const gameTempalateIds = gameTemplates.map((t) => t.id);
+      const gameTemplateIds = gameTemplates.map((t) => t.id);
 
-      if (gameTempalateIds.indexOf(template1.id) < 0) {
+      if (gameTemplateIds.indexOf(template1.id) < 0) {
         await gameProvider.createGameTemplate(template1);
       }
 
@@ -31,9 +31,9 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     }
   });
 
-  const isLocalEnvironment = config.currentEnvironment === 'local';
+  const isLocalEnvironment = config.getCurrentEnvironment() === 'local';
 
   return {
-    initialiseTestData: isLocalEnvironment ? initialiseTestData : undefined,
+    initializeTestData: isLocalEnvironment ? initializeTestData : undefined,
   };
 };

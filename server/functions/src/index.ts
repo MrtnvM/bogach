@@ -8,10 +8,11 @@ import * as userAPI from './api/user';
 
 import { FirestoreSelector } from './providers/firestore_selector';
 import { Firestore } from './core/firebase/firestore';
+import { getDatabaseURL, getStorageBucket } from './config';
 
 admin.initializeApp({
-  databaseURL: 'https://cash-flow-staging.firebaseio.com',
-  storageBucket: 'cash-flow-staging.appspot.com',
+  databaseURL: getDatabaseURL(),
+  storageBucket: getStorageBucket(),
 });
 
 const selector = new FirestoreSelector(admin.firestore());
@@ -43,4 +44,4 @@ export const updatePurchases = PurchaseAPI.updatePurchases;
 export const getUserProfile = UserAPI.getUserProfile;
 
 /// TEST API: Should be disabled when deploying to prod
-export const initialiseTestData = DebugAPI.initialiseTestData;
+export const initializeTestData = DebugAPI.initializeTestData;
