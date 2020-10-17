@@ -1,0 +1,36 @@
+import { GameTemplate } from '../models/game_template';
+
+export const courierTemplate: GameTemplate = {
+  id: 'courier_template',
+  name: 'Курьер, который хочет свободы',
+  icon:
+    'https://cdn2.iconfinder.com/data/icons/e-commerce-filled-outline-5/128/Courier-128.png',
+  possessions: {
+    incomes: [
+      {
+        id: 'income1',
+        name: 'Зарплата',
+        value: 15_000,
+        type: 'salary',
+      },
+    ],
+    expenses: [
+      {
+        id: 'expense1',
+        name: 'Общее',
+        value: 11_000,
+      },
+    ],
+    assets: [],
+    liabilities: [],
+  },
+  accountState: {
+    cash: 5_000,
+    credit: 0,
+    cashFlow: 4_000,
+  },
+  target: {
+    type: 'passive_income',
+    value: 15_000,
+  },
+};

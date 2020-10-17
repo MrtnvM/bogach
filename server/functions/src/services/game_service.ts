@@ -25,7 +25,7 @@ import { MonthlyExpenseEventHandler } from '../events/monthly_expense/monthly_ex
 import { InsuranceHandler } from '../events/insurance/insurance_handler';
 import { SalaryChangeEventHandler } from '../events/salary_change/salary_change_event_handler';
 import { UserEntity } from '../models/domain/user';
-import { GameTemplateEntity } from '../models/domain/game/game_template';
+import { GameTemplateEntity } from '../game_templates/models/game_template';
 import { InsuranceTransformer } from '../transformers/game/insurance_transformer';
 import { ResetEventIndexTransformer } from '../transformers/game/reset_event_index_transformer';
 import { RealEstateBuyEventHandler } from '../events/estate/buy/real_estate_buy_event_handler';
