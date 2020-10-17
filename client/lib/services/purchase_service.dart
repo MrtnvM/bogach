@@ -1,15 +1,15 @@
 import 'dart:async';
 
+import 'package:cash_flow/api_client/cash_flow_api_client.dart';
+import 'package:cash_flow/core/purchases/purchases.dart';
 import 'package:cash_flow/models/domain/user/purchase_profile.dart';
 import 'package:cash_flow/models/errors/purchase_errors.dart';
 import 'package:cash_flow/models/network/request/purchases/purchase_details_request_model.dart';
 import 'package:cash_flow/models/network/request/purchases/update_purchases_request_model.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:cash_flow/api_client/cash_flow_api_client.dart';
-import 'package:cash_flow/core/purchases/purchases.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 
 class PurchaseService {
   PurchaseService({
@@ -38,14 +38,16 @@ class PurchaseService {
       /// Filter only products that not is currently buying
       /// So we can track the status on a purchase in the method
       /// that performing the purchase
-      final notCurrentllyPurchasingProducts = purchases //
+      final notCurrentlyPurchasingProducts = purchases //
           .where((p) => !_currentPurchasingProductIds.contains(p.productID))
           .toList();
 
-      _completePurchasesIfNeeded(
-        notCurrentllyPurchasingProducts,
-        withRetry: true,
-      );
+      if (notCurrentlyPurchasingProducts.isNotEmpty) {
+        _completePurchasesIfNeeded(
+          notCurrentlyPurchasingProducts,
+          withRetry: true,
+        );
+      }
     });
 
     /// Fix of async nature of subscription to Streams
@@ -302,14 +304,15 @@ class PurchaseService {
     List<PurchaseDetails> purchases, {
     bool withRetry = false,
   }) async {
-    Logger.i('Started completion of purchases...');
+    final purchasesIds = purchases.map((p) => p.productID).toList();
+    Logger.i('Started completion of purchases ($purchasesIds)...');
 
     final notCompletedPurchases = purchases //
         .where((p) => p.pendingCompletePurchase)
         .toList();
 
     if (notCompletedPurchases.isEmpty) {
-      Logger.i('Purchases already completed');
+      Logger.i('No purchases to complete');
       return [];
     }
 
@@ -342,7 +345,7 @@ class PurchaseService {
       }
     }
 
-    if (withRetry) {
+    if (withRetry && failedToCompletePurchases.isNotEmpty) {
       Future.delayed(const Duration(minutes: 1)).then((_) {
         final failedToCompletePurchasesIds = failedToCompletePurchases //
             .map((p) => p.purchaseID)
@@ -381,7 +384,9 @@ class PurchaseService {
   Future<PurchaseDetails> _getPurchase({@required String productId}) {
     return purchases
         .map((purchases) => purchases.firstWhere(
-              (p) => p.productID == productId,
+              (p) =>
+                  p.productID == productId &&
+                  p.status == PurchaseStatus.purchased,
               orElse: () => null,
             ))
         .where((p) => p != null)
