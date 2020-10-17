@@ -12,20 +12,7 @@ export class UserProvider {
     const selector = this.selector.user(userId);
     const profile = (await this.firestore.getItemData(selector)) as User;
 
-    let updatedProfile = profile;
-
-    if (!profile.purchaseProfile) {
-      updatedProfile = produce(updatedProfile, (draft) => {
-        draft.purchaseProfile = PurchaseProfileEntity.initialPurchaseProfile;
-        draft.purchaseProfile.isQuestsAvailable = updatedProfile.boughtQuestsAccess || false;
-      });
-    }
-
-    if (!profile.multiplayerGamePlayed) {
-      updatedProfile = produce(updatedProfile, (draft) => {
-        draft.multiplayerGamePlayed = 0;
-      });
-    }
+    const updatedProfile = this.migrateProfileToVersion2(profile);
 
     if (JSON.stringify(profile) !== JSON.stringify(updatedProfile)) {
       await this.updateUserProfile(updatedProfile);
@@ -68,5 +55,30 @@ export class UserProvider {
     });
 
     await this.firestore.updateItem(selector, updatedUser);
+  }
+
+  private migrateProfileToVersion2(profile: User): User {
+    let updatedProfile = profile;
+
+    if (!profile.purchaseProfile) {
+      updatedProfile = produce(updatedProfile, (draft) => {
+        draft.purchaseProfile = PurchaseProfileEntity.initialPurchaseProfile;
+        draft.purchaseProfile.isQuestsAvailable = updatedProfile.boughtQuestsAccess || false;
+      });
+    }
+
+    if (!profile.multiplayerGamePlayed) {
+      updatedProfile = produce(updatedProfile, (draft) => {
+        draft.multiplayerGamePlayed = 0;
+      });
+    }
+
+    if (!profile.profileVersion) {
+      updatedProfile = produce(updatedProfile, (draft) => {
+        draft.profileVersion = 2;
+      });
+    }
+
+    return updatedProfile;
   }
 }

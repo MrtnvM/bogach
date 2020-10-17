@@ -36,6 +36,7 @@ describe('User Provider - ', () => {
         isQuestsAvailable: false,
         boughtMultiplayerGamesCount: 3,
       },
+      profileVersion: 2,
     };
 
     when(mockSelector.user(userId)).thenReturn(mockRef);
@@ -67,6 +68,7 @@ describe('User Provider - ', () => {
         isQuestsAvailable: false,
         boughtMultiplayerGamesCount: PurchaseProfileEntity.initialMultiplayerGamesCount,
       };
+      draft.profileVersion = 2;
     });
 
     expect(receivedProfile).toEqual(expectedProfile);

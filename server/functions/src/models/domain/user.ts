@@ -10,6 +10,8 @@ export interface User {
   readonly multiplayerGamePlayed?: number;
   readonly purchaseProfile?: PurchaseProfile;
 
+  readonly profileVersion?: number;
+
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }
