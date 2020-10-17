@@ -5,7 +5,7 @@ import { RoomEntity, Room } from '../models/domain/room';
 import { UserEntity } from '../models/domain/user';
 import { checkIds } from '../core/validation/type_checks';
 import { Strings } from '../resources/strings';
-import { GameTemplateEntity } from '../models/domain/game/game_template';
+import { GameTemplateEntity } from '../game_templates/models/game_template';
 import { TimerProvider } from '../providers/timer_provider';
 
 export class RoomService {

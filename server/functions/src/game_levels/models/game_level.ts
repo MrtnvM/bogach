@@ -1,5 +1,5 @@
 import { Entity } from '../../core/domain/entity';
-import { GameTemplate, GameTemplateEntity } from '../../models/domain/game/game_template';
+import { GameTemplate, GameTemplateEntity } from '../../game_templates/models/game_template';
 import { GameLevelEventConfig } from './event_config';
 
 export interface GameLevel {

@@ -1,7 +1,7 @@
-import { Possessions, PossessionsEntity } from '../possessions';
-import { Entity } from '../../../core/domain/entity';
-import { Account, AccountEntity } from '../account';
-import { GameTarget, GameTargetEntity } from './game_target';
+import { Possessions, PossessionsEntity } from '../../models/domain/possessions';
+import { Entity } from '../../core/domain/entity';
+import { Account, AccountEntity } from '../../models/domain/account';
+import { GameTarget, GameTargetEntity } from '../../models/domain/game/game_target';
 
 export interface GameTemplate {
   readonly id: GameTemplateEntity.Id;

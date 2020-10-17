@@ -1,4 +1,4 @@
-import { GameTemplate } from '../../../models/domain/game/game_template';
+import { GameTemplate } from '../../../game_templates/models/game_template';
 
 export const template: GameTemplate = {
   id: 'waiter',

@@ -11,11 +11,13 @@ import { UserProvider } from '../providers/user_provider';
 import { GameService } from '../services/game_service';
 import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { TimerProvider } from '../providers/timer_provider';
+import { GameTemplatesProvider } from '../providers/game_templates_provider';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
-  const gameProvider = new GameProvider(firestore, selector);
+  const templatesProvider = new GameTemplatesProvider();
+  const gameProvider = new GameProvider(firestore, selector, templatesProvider);
   const gameLevelProvider = new GameLevelsProvider();
   const userProvider = new UserProvider(firestore, selector);
   const timerProvider = new TimerProvider();
@@ -58,7 +60,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
       return room;
     };
 
-    return send(createRoomRequest(), response);
+    await send(createRoomRequest(), response);
   });
 
   const completeMonth = https.onRequest(async (request, response) => {
@@ -69,7 +71,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const monthNumber = apiRequest.jsonField('month_number');
 
     const completeMonthRequest = gameService.completeMonth(gameId, monthNumber);
-    return send(completeMonthRequest, response);
+    await send(completeMonthRequest, response);
   });
 
   const send = <T>(data: Promise<T>, response: functions.Response) => {
