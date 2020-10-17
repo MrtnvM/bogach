@@ -23,6 +23,6 @@ class SetCurrentUserAction extends BaseAction {
 
   @override
   String toString() {
-    return '${super.toString()} (${user.userId})';
+    return '${super.toString()} (${user?.userId})';
   }
 }

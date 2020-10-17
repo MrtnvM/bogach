@@ -1,17 +1,17 @@
 import 'dart:convert';
 
 import 'package:cash_flow/models/domain/user/user_profile.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class UserCache {
-  const UserCache(this._preferences);
+  const UserCache(this._secureStorage);
 
   static const _userProfileKey = 'current_user_profile';
 
-  final SharedPreferences _preferences;
+  final FlutterSecureStorage _secureStorage;
 
-  UserProfile getUserProfile() {
-    final jsonString = _preferences.getString(_userProfileKey);
+  Future<UserProfile> getUserProfile() async {
+    final jsonString = await _secureStorage.read(key: _userProfileKey);
     if (jsonString == null) {
       return null;
     }
@@ -21,13 +21,13 @@ class UserCache {
     return profile;
   }
 
-  void setUserProfile(UserProfile profile) {
+  Future<void> setUserProfile(UserProfile profile) async {
     final jsonData = profile.toJson();
     final jsonString = json.encode(jsonData);
-    _preferences.setString(_userProfileKey, jsonString);
+    await _secureStorage.write(key: _userProfileKey, value: jsonString);
   }
 
-  void deleteUserProfile() {
-    _preferences.remove(_userProfileKey);
+  Future<void> deleteUserProfile() async {
+    await _secureStorage.delete(key: _userProfileKey);
   }
 }

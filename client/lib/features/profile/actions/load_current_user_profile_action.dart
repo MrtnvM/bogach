@@ -20,7 +20,7 @@ class LoadCurrentUserProfileAction extends BaseAction {
 
     final userService = GetIt.I.get<UserService>();
 
-    final currentUser = await userService.loadProfile(userId);
+    final currentUser = await userService.loadCurrentProfile(userId);
     dispatch(SetCurrentUserAction(currentUser));
 
     return null;

@@ -4,6 +4,7 @@ import * as gameAPI from './api/game';
 import * as roomAPI from './api/room';
 import * as debugAPI from './api/debug';
 import * as purchaseAPI from './api/purchase';
+import * as userAPI from './api/user';
 
 import { FirestoreSelector } from './providers/firestore_selector';
 import { Firestore } from './core/firebase/firestore';
@@ -20,6 +21,7 @@ const GameAPI = gameAPI.create(firestore, selector);
 const RoomAPI = roomAPI.create(firestore, selector);
 const DebugAPI = debugAPI.create(firestore, selector);
 const PurchaseAPI = purchaseAPI.create(firestore, selector);
+const UserAPI = userAPI.create(firestore, selector);
 
 export const createGame = GameAPI.create;
 export const getGame = GameAPI.getGame;
@@ -37,6 +39,8 @@ export const createRoomGame = RoomAPI.createRoomGame;
 export const completeMonth = RoomAPI.completeMonth;
 
 export const updatePurchases = PurchaseAPI.updatePurchases;
+
+export const getUserProfile = UserAPI.getUserProfile;
 
 /// TEST API: Should be disabled when deploying to prod
 export const initialiseTestData = DebugAPI.initialiseTestData;
