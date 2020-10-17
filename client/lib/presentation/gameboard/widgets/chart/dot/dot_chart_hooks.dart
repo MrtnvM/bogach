@@ -139,7 +139,7 @@ String _getUserName(String userId) {
     );
 
     if (user == null) {
-      return 'TODO';
+      return 'Игрок';
     } else {
       return user.fullName;
     }

@@ -23,26 +23,26 @@ class GameBoard extends HookWidget {
       (g) => g?.type == GameType.multiplayer(),
     );
 
+    final financesTab = BottomBarItem(
+      title: Strings.financesTabTitle,
+      image: Images.financesBarIcon,
+      onPressed: () => selectedIndex.value = 0,
+    );
+
     final tabItems = useMemoized(() {
       final actionsTab = BottomBarItem(
         title: Strings.actionsTabTitle,
         image: Images.gameBoardBarIcon,
-        onPressed: () => selectedIndex.value = 0,
-      );
-
-      final financesTab = BottomBarItem(
-        title: Strings.financesTabTitle,
-        image: Images.financesBarIcon,
         onPressed: () => selectedIndex.value = 1,
       );
 
       if (!isMultiplayer) {
-        return [actionsTab, financesTab];
+        return [financesTab, actionsTab];
       }
 
       final progressTab = BottomBarItem(
         title: Strings.progressTabTitle,
-        image: Images.financesBarIcon,
+        image: Images.progressBarIcon,
         onPressed: () => selectedIndex.value = 2,
       );
 
@@ -62,10 +62,10 @@ class GameBoard extends HookWidget {
 
     switch (selectedIndex.value) {
       case 0:
-        activeTab = ActionsTab();
+        activeTab = FinancesTab();
         break;
       case 1:
-        activeTab = FinancesTab();
+        activeTab = ActionsTab();
         break;
       case 2:
         activeTab = ProgressTab();
