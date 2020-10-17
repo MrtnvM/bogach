@@ -1,3 +1,5 @@
+import { PurchaseProfile } from '../purchases/purchase_profile';
+
 export interface User {
   readonly userId: UserEntity.Id;
   readonly userName: string;
@@ -10,20 +12,6 @@ export interface User {
 
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
-}
-
-export interface PurchaseProfile {
-  readonly isQuestsAvailable: boolean;
-  readonly boughtMultiplayerGamesCount: number;
-}
-
-export namespace PurchaseProfileEntity {
-  export const initialMultiplayerGamesCount = 3;
-
-  export const initialPurchaseProfile: PurchaseProfile = {
-    isQuestsAvailable: false,
-    boughtMultiplayerGamesCount: initialMultiplayerGamesCount,
-  };
 }
 
 export interface UserDevice {

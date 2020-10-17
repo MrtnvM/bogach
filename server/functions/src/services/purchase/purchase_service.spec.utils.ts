@@ -1,5 +1,6 @@
-import { PurchaseProfile, PurchaseProfileEntity, User } from '../../models/domain/user';
+import { User } from '../../models/domain/user';
 import { PurchaseDetails } from '../../models/purchases/purchase_details';
+import { PurchaseProfile, PurchaseProfileEntity } from '../../models/purchases/purchase_profile';
 
 const userId = 'user1';
 

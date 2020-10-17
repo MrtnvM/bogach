@@ -1,9 +1,10 @@
 import { produce } from 'immer';
 
 import { UserProvider } from '../../providers/user_provider';
-import { PurchaseProfile, PurchaseProfileEntity, UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user';
 import { Purchases } from '../../core/purchases/purchases';
 import { PurchaseDetails } from '../../models/purchases/purchase_details';
+import { PurchaseProfile, PurchaseProfileEntity } from '../../models/purchases/purchase_profile';
 
 export class PurchaseService {
   constructor(private userProvider: UserProvider) {}

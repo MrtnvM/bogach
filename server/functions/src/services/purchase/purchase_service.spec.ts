@@ -5,9 +5,10 @@ import { mock, instance, when, capture, anything, verify, reset } from 'ts-mocki
 
 import { UserProvider } from '../../providers/user_provider';
 import { PurchaseService } from './purchase_service';
-import { PurchaseProfileEntity, User } from '../../models/domain/user';
+import { User } from '../../models/domain/user';
 import { Purchases } from '../../core/purchases/purchases';
 import { TestData } from './purchase_service.spec.utils';
+import { PurchaseProfileEntity } from '../../models/purchases/purchase_profile';
 
 describe('Purchase Service', () => {
   const mockUserProvider = mock(UserProvider);
