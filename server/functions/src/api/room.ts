@@ -55,7 +55,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const roomId = apiRequest.jsonField('roomId');
 
-    const createRoomRequest = async () => {
+    const createRoomGameRequest = async () => {
       const { room } = await roomService.createRoomGame(roomId);
       await purchaseService.reduceMultiplayerGames(
         room.participants.map((participant) => participant.id)
@@ -63,7 +63,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
       return room;
     };
 
-    await send(createRoomRequest(), response);
+    await send(createRoomGameRequest(), response);
   });
 
   const completeMonth = https.onRequest(async (request, response) => {
