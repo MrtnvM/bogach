@@ -1,0 +1,123 @@
+{
+  "project_info": {
+    "project_number": "911577434143",
+    "firebase_url": "https://cash-flow-staging.firebaseio.com",
+    "project_id": "cash-flow-staging",
+    "storage_bucket": "cash-flow-staging.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911577434143:android:32cfd34490c5784c0dad2a",
+        "android_client_info": {
+          "package_name": "io.mobile.bogach"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911577434143-brb7qtirn8f8up0e7med6998925aiach.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp0pF4Qn4p3C9HX2V8SJNiD7Nc2ckX5CY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911577434143-brb7qtirn8f8up0e7med6998925aiach.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911577434143-qus6j1a5o4s0cmqlpkogi6b9lb8am9ve.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.mobile.bogach.uat"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911577434143:android:f9234bf3fe5846260dad2a",
+        "android_client_info": {
+          "package_name": "io.mobile.bogach.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911577434143-rdmaom44pm9rfb6q9q1929uq5uu1bpqo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.bogach.staging",
+            "certificate_hash": "4f299763be9fcacd21ebb298d484bb4c2b93dbcc"
+          }
+        },
+        {
+          "client_id": "911577434143-h7t402gd5achckmf0k8v9fqnhvg8p551.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.bogach.staging",
+            "certificate_hash": "386fe3c6aaa64274200b1f0e6ff06873faa19d47"
+          }
+        },
+        {
+          "client_id": "911577434143-qljss0qqhdbv4391v7va0cpmc3k5tr9t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.bogach.staging",
+            "certificate_hash": "c36bbeda85ea1749e3ef9292b8a13989cb4a7ada"
+          }
+        },
+        {
+          "client_id": "911577434143-sqrjcrdc25dqnsu9gd538h60fecp8mg9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.bogach.staging",
+            "certificate_hash": "72c3c39a9b9b08c46e916592f949602f079bb15b"
+          }
+        },
+        {
+          "client_id": "911577434143-5sgevcnv70ohv5gusput3peaio66fqb9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.bogach.staging",
+            "certificate_hash": "7bb7eaaa42a5de3b380244e6f2e3b320300d726f"
+          }
+        },
+        {
+          "client_id": "911577434143-brb7qtirn8f8up0e7med6998925aiach.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp0pF4Qn4p3C9HX2V8SJNiD7Nc2ckX5CY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911577434143-brb7qtirn8f8up0e7med6998925aiach.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911577434143-qus6j1a5o4s0cmqlpkogi6b9lb8am9ve.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.mobile.bogach.uat"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

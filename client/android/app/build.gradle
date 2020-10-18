@@ -47,9 +47,9 @@ android {
     defaultConfig {
         applicationId "io.mobile.bogach"
         minSdkVersion 23
-        targetSdkVersion 29
-        versionCode 14
-        versionName "1.0.0"
+        targetSdkVersion 30
+        versionCode 16
+        versionName "1.1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -90,6 +90,10 @@ android {
         }
 
         production {
+            dimension "app"
+        }
+
+        purchases_test {
             dimension "app"
         }
     }
