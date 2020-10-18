@@ -9,6 +9,8 @@ class Strings {
       'При подключении к магазину возникла проблема.\n'
       'Повторите попытку позднее';
 
+  static String get purchaseError => 'При совершении покупки возникла ошибка';
+
   // Common
   static String get submit => 'Отправить';
 

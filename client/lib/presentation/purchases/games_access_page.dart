@@ -10,11 +10,11 @@ import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/containers/fullscreen_popup_container.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
 
 class GamesAccessPage extends HookWidget {
   const GamesAccessPage();
@@ -107,6 +107,7 @@ class _PurchaseGameList extends HookWidget {
         handleError(
           context: context,
           exception: error,
+          errorMessage: Strings.purchaseError,
           onRetry: () => buyQuestsAccess(multiplayerGamePurchase),
         );
       }
