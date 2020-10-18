@@ -400,4 +400,112 @@ void main() {
     verifyNoMoreInteractions(mockConnection);
     verifyNoMoreInteractions(mockApiClient);
   });
+
+  test('Successful canceling or handling failed purchase on Android', () async {
+    const userId = 'user1';
+    final product1 = createProduct(1);
+    final purchase1 = FakePurchaseDetails(
+      productId: null,
+      purchaseId: null,
+      status: null,
+      pendingComplete: null,
+    );
+    final purchases = BehaviorSubject<List<PurchaseDetails>>.seeded([]);
+
+    when(mockConnection.purchaseUpdatedStream).thenAnswer((_) {
+      return purchases;
+    });
+
+    when(mockConnection.queryProductDetails({product1.id})).thenAnswer(
+      (_) async => ProductDetailsResponse(
+        productDetails: [product1],
+        notFoundIDs: [],
+      ),
+    );
+
+    when(
+      mockConnection.buyConsumable(purchaseParam: anyNamed('purchaseParam')),
+    ).thenAnswer((_) {
+      purchases.value = [purchase1];
+      return Future.value(true);
+    });
+
+    await purchaseService.startListeningPurchaseUpdates();
+
+    try {
+      await purchaseService.buyConsumableProduct(
+        productId: product1.id,
+        userId: userId,
+      );
+
+      throw Exception('Should fail at previous line');
+    } catch (error) {
+      expect(error, isInstanceOf<ProductPurchaseFailedError>());
+    }
+
+    verifyInOrder([
+      mockConnection.purchaseUpdatedStream,
+      mockConnection.queryProductDetails({product1.id}),
+      mockConnection.buyConsumable(purchaseParam: anyNamed('purchaseParam')),
+    ]);
+
+    verifyNoMoreInteractions(mockConnection);
+    verifyNoMoreInteractions(mockApiClient);
+  });
+
+  test('Successful canceling purchase on iOS', () async {
+    const userId = 'user1';
+    final product1 = createProduct(1);
+    final purchase1 = createPurchase(
+      1,
+      PurchaseStatus.error,
+      pendingComplete: true,
+    );
+    final purchases = BehaviorSubject<List<PurchaseDetails>>.seeded([]);
+
+    when(mockConnection.purchaseUpdatedStream).thenAnswer((_) {
+      return purchases;
+    });
+
+    when(mockConnection.queryProductDetails({product1.id})).thenAnswer(
+      (_) async => ProductDetailsResponse(
+        productDetails: [product1],
+        notFoundIDs: [],
+      ),
+    );
+
+    when(
+      mockConnection.buyConsumable(purchaseParam: anyNamed('purchaseParam')),
+    ).thenAnswer((_) {
+      purchases.value = [purchase1];
+      return Future.value(true);
+    });
+
+    when(mockConnection.completePurchase(purchase1)).thenAnswer((_) async {
+      return BillingResultWrapper(responseCode: BillingResponse.ok);
+    });
+
+    await purchaseService.startListeningPurchaseUpdates();
+
+    try {
+      await purchaseService.buyConsumableProduct(
+        productId: product1.id,
+        userId: userId,
+      );
+
+      throw Exception('Should fail at previous line');
+    } catch (error) {
+      expect(error, isInstanceOf<ProductPurchaseFailedError>());
+    }
+
+    verifyInOrder([
+      mockConnection.purchaseUpdatedStream,
+      mockConnection.queryProductDetails({product1.id}),
+      mockConnection.buyConsumable(purchaseParam: anyNamed('purchaseParam')),
+      mockConnection.completePurchase(purchase1),
+    ]);
+
+    verifyNoMoreInteractions(mockConnection);
+    verifyNoMoreInteractions(mockApiClient);
+  });
 }

@@ -21,7 +21,7 @@ class PurchaseService {
   final CashFlowApiClient _apiClient;
   final InAppPurchaseConnection _connection;
 
-  final _currentPurchasingProductIds = <String>[];
+  String _currentPurchasingProduct;
   final _pastPurchases = BehaviorSubject<List<PurchaseDetails>>.seeded([]);
   final _purchases = BehaviorSubject<Map<String, PurchaseDetails>>.seeded({});
 
@@ -39,7 +39,7 @@ class PurchaseService {
       /// So we can track the status on a purchase in the method
       /// that performing the purchase
       final notCurrentlyPurchasingProducts = purchases //
-          .where((p) => !_currentPurchasingProductIds.contains(p.productID))
+          .where((p) => _currentPurchasingProduct != p.productID)
           .toList();
 
       if (notCurrentlyPurchasingProducts.isNotEmpty) {
@@ -136,7 +136,7 @@ class PurchaseService {
     @required String userId,
   }) async {
     try {
-      _currentPurchasingProductIds.add(productId);
+      _currentPurchasingProduct = productId;
 
       Logger.i('Loading product ($productId)');
       final product = await getProduct(productId);
@@ -186,7 +186,7 @@ class PurchaseService {
       Logger.e('Error on buying product ($productId): $error');
       rethrow;
     } finally {
-      _currentPurchasingProductIds.remove(productId);
+      _currentPurchasingProduct = null;
     }
   }
 
@@ -195,7 +195,7 @@ class PurchaseService {
     @required String userId,
   }) async {
     try {
-      _currentPurchasingProductIds.add(productId);
+      _currentPurchasingProduct = productId;
 
       Logger.i('Loading product ($productId)');
       final product = await getProduct(productId);
@@ -240,7 +240,7 @@ class PurchaseService {
       Logger.e('Error on buying product ($productId): $error');
       rethrow;
     } finally {
-      _currentPurchasingProductIds.remove(productId);
+      _currentPurchasingProduct = null;
     }
   }
 
@@ -309,7 +309,7 @@ class PurchaseService {
     Logger.i('Started completion of purchases ($purchasesIds)...');
 
     final notCompletedPurchases = purchases //
-        .where((p) => p.pendingCompletePurchase)
+        .where((p) => p.pendingCompletePurchase == true)
         .toList();
 
     if (notCompletedPurchases.isEmpty) {
@@ -375,7 +375,21 @@ class PurchaseService {
     final currentPurchases = _purchases.value;
     final updatedPurchases = {...currentPurchases};
 
-    for (final purchase in purchases) {
+    for (final p in purchases) {
+      var purchase = p;
+
+      /// On Android if purchase was canceled purchase has
+      /// empty info fields even the product ID, so we are using saved
+      /// product ID of the current purchase to fix the problem
+      if (purchase.productID == null) {
+        purchase = PurchaseDetails(
+          purchaseID: null,
+          productID: _currentPurchasingProduct,
+          verificationData: null,
+          transactionDate: null,
+        )..status = PurchaseStatus.error;
+      }
+
       updatedPurchases[purchase.productID] = purchase;
     }
 
