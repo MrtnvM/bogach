@@ -49,18 +49,21 @@ void useDynamicLinkHandler() {
   useDynamicLinkSubscription((dynamicLink) {
     final link = dynamicLink.link;
 
-    Logger.i('APP CAPTURE DYNAMIC LINK:\n$link');
+    Logger.i('APP CAPTURE DYNAMIC LINK:\n$link\n'
+        'APP CAPTURE DYNAMIC LINK QUERY:\n${link.query}');
 
     if (link == null) {
       return;
     }
 
     final isLinkTo = (path) {
-      return link.path.contains(path) ?? false;
+      return link.query.contains(path) ?? false;
     };
 
     if (isLinkTo(DynamicLinks.roomInvite)) {
-      final roomId = link.queryParameters['room_id'];
+      final roomId = link.queryParameters[DynamicLinks.roomInvite];
+
+      Logger.i('ROOM ID:\n$roomId');
       appActions.joinRoom(roomId);
     }
   });
@@ -79,13 +82,14 @@ void useDeepLinkHandler() {
       }
 
       final uri = Uri.parse(deepLink);
+      Logger.e('PARSED URI:\n${uri.toString()}');
 
       final isLinkTo = (path) {
         return uri.path.contains(path) ?? false;
       };
 
-      if (isLinkTo(DynamicLinks.roomInvite)) {
-        final roomId = uri.queryParameters['room_id'];
+      if (isLinkTo(DynamicLinks.join)) {
+        final roomId = uri.queryParameters[DynamicLinks.roomInvite];
         appActions.joinRoom(roomId);
       }
     };
