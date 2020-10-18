@@ -9,9 +9,12 @@ import { PurchaseProfile, PurchaseProfileEntity } from '../../models/purchases/p
 export class PurchaseService {
   constructor(private userProvider: UserProvider) {}
 
-  async updatePurchases(userId: UserEntity.Id, purchases: PurchaseDetails[]) {
+  async updatePurchases(
+    userId: UserEntity.Id,
+    purchases: PurchaseDetails[]
+  ): Promise<PurchaseProfile> {
     if (!userId || !purchases || !Array.isArray(purchases) || purchases?.length === 0) {
-      return;
+      throw new Error('Purchase list has incorrect format');
     }
 
     const userProfile = await this.userProvider.getUserProfile(userId);
@@ -38,6 +41,8 @@ export class PurchaseService {
 
     const newPurchases = purchases.filter((p) => pastPurchasesMap[p.purchaseId] === undefined);
     await this.userProvider.addUserPurchases(userId, newPurchases);
+
+    return purchaseProfile;
   }
 
   recalculatePurchaseProfile(allPurchases: PurchaseDetails[]): PurchaseProfile {

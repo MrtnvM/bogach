@@ -387,7 +387,7 @@ void main() {
 
     await purchaseService.startListeningPurchaseUpdates();
 
-    final profile = await purchaseService.buyQuestsAcceess(userId);
+    final profile = await purchaseService.buyQuestsAccess(userId);
 
     expect(profile, purchaseProfile);
 

@@ -52,8 +52,8 @@ class PurchaseService {
 
     /// Fix of async nature of subscription to Streams
     /// If we want to get values from [purchaseUpdatedStream] with [purchases]
-    /// stream immeadetely we will fail because listening called
-    /// asyncroniosly and happend on next event loop cycles
+    /// stream immediately we will fail because listening called
+    /// asynchronously and happened on next event loop cycles
     ///
     /// Needed for tests
     await Future.delayed(const Duration(milliseconds: 1));
@@ -145,36 +145,39 @@ class PurchaseService {
       );
 
       Logger.i('Buying non consumable product ($productId)');
-      final result = await _connection.buyNonConsumable(
+      await _connection.buyNonConsumable(
         purchaseParam: PurchaseParam(productDetails: product),
       );
-
-      if (result) {
-        Logger.i('Non consumable product ($productId) successfully bought');
-      } else {
-        Logger.i('Non consumable product ($productId) purchase failed');
-        throw ProductPurchaseFailedError(product);
-      }
 
       Logger.i('Waiting purchase details for product ($productId)');
       final purchase = await _getPurchase(productId: productId);
       _logPurchase(purchase);
+
+      if (purchase.status == PurchaseStatus.error) {
+        _completePurchasesIfNeeded([purchase], withRetry: true);
+        throw ProductPurchaseFailedError(product);
+      }
 
       Logger.i('Sending purchase for product ($productId) to server');
       final purchaseProfile = await _sendPurchasesToServer(userId, [purchase])
           .timeout(const Duration(seconds: 60));
       Logger.i('Purchase for product ($productId) uploaded to server');
 
-      Logger.i('Completing purchase for product $productId');
-      final completionResult = await _completePurchasesIfNeeded(
-        [purchase],
-        withRetry: true,
-      );
+      try {
+        Logger.i('Completing purchase for product $productId');
 
-      if (completionResult.isEmpty) {
-        Logger.i('Completion purchase for product $productId succeed');
-      } else {
-        Logger.i('Completion purchase for product $productId failed');
+        final completionResult = await _completePurchasesIfNeeded(
+          [purchase],
+          withRetry: true,
+        );
+
+        if (completionResult.isEmpty) {
+          Logger.i('Completion purchase for product $productId succeed');
+        } else {
+          Logger.i('Completion purchase for product $productId failed');
+        }
+      } catch (error) {
+        Logger.e('Failed to complete purchase for product $productId: $error');
       }
 
       return purchaseProfile;
@@ -201,20 +204,18 @@ class PurchaseService {
       );
 
       Logger.i('Buying consumable product ($productId)');
-      final result = await _connection.buyConsumable(
+      await _connection.buyConsumable(
         purchaseParam: PurchaseParam(productDetails: product),
       );
-
-      if (result) {
-        Logger.i('Consumable product ($productId) successfully bought');
-      } else {
-        Logger.i('Consumable product ($productId) purchase failed');
-        throw ProductPurchaseFailedError(product);
-      }
 
       Logger.i('Waiting purchase details for product ($productId)');
       final purchase = await _getPurchase(productId: productId);
       _logPurchase(purchase);
+
+      if (purchase.status == PurchaseStatus.error) {
+        _completePurchasesIfNeeded([purchase], withRetry: true);
+        throw ProductPurchaseFailedError(product);
+      }
 
       Logger.i('Sending purchase for product ($productId) to server');
       final purchaseProfile = await _sendPurchasesToServer(userId, [purchase])
@@ -243,7 +244,7 @@ class PurchaseService {
     }
   }
 
-  Future<PurchaseProfile> buyQuestsAcceess(String userId) async {
+  Future<PurchaseProfile> buyQuestsAccess(String userId) async {
     final purchaseProfile = await restorePastPurchases(userId);
 
     if (purchaseProfile.isQuestsAvailable) {
@@ -317,7 +318,7 @@ class PurchaseService {
     }
 
     final notCompletedPurchasesIds = notCompletedPurchases //
-        .map((p) => p.purchaseID)
+        .map((p) => p.productID)
         .toList();
     Logger.i('Completing purchases: $notCompletedPurchasesIds');
 
@@ -348,7 +349,7 @@ class PurchaseService {
     if (withRetry && failedToCompletePurchases.isNotEmpty) {
       Future.delayed(const Duration(minutes: 1)).then((_) {
         final failedToCompletePurchasesIds = failedToCompletePurchases //
-            .map((p) => p.purchaseID)
+            .map((p) => p.productID)
             .toList();
 
         Logger.i(
@@ -360,7 +361,7 @@ class PurchaseService {
     }
 
     final failedToCompletePurchasesIds = failedToCompletePurchases //
-        .map((p) => p.purchaseID)
+        .map((p) => p.productID)
         .toList();
 
     Logger.i(
@@ -375,27 +376,36 @@ class PurchaseService {
     final updatedPurchases = {...currentPurchases};
 
     for (final purchase in purchases) {
-      updatedPurchases[purchase.purchaseID] = purchase;
+      updatedPurchases[purchase.productID] = purchase;
     }
 
     _purchases.value = updatedPurchases;
   }
 
-  Future<PurchaseDetails> _getPurchase({@required String productId}) {
-    return purchases
+  Future<PurchaseDetails> _getPurchase({@required String productId}) async {
+    final purchase = await purchases
         .map((purchases) => purchases.firstWhere(
               (p) =>
                   p.productID == productId &&
-                  p.status == PurchaseStatus.purchased,
+                  [
+                    PurchaseStatus.purchased,
+                    PurchaseStatus.error,
+                  ].contains(p.status),
               orElse: () => null,
             ))
         .where((p) => p != null)
         .first;
+
+    final newPurchases = _purchases.value;
+    newPurchases.remove(productId);
+    _purchases.value = newPurchases;
+
+    return purchase;
   }
 
   void _logPurchase(PurchaseDetails purchase) {
     Logger.i(
-      'Purchase details for product (${purchase.productID}): '
+      'Purchase details for product (${purchase.productID}):\n'
       '  Purchase ID = ${purchase.purchaseID}\n'
       '  Purchase Status = ${purchase.status}\n'
       '  Pending completion = ${purchase.pendingCompletePurchase}\n'

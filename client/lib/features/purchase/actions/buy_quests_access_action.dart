@@ -18,7 +18,7 @@ class BuyQuestsAccessAction extends BaseAction {
     final userId = state.profile.currentUser.id;
 
     final purchaseService = GetIt.I.get<PurchaseService>();
-    await purchaseService.buyQuestsAcceess(userId);
+    await purchaseService.buyQuestsAccess(userId);
 
     return null;
   }
