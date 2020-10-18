@@ -5,6 +5,7 @@ import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/purchases/purchases.dart';
 import 'package:cash_flow/services/purchase_service.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:get_it/get_it.dart';
 
 class BuyMultiplayerGames extends BaseAction {
@@ -27,6 +28,12 @@ class BuyMultiplayerGames extends BaseAction {
       userId: userId,
       purchase: purchase,
     );
+
+    if (purchaseProfile == null) {
+      return null;
+    }
+
+    Logger.i('New purchase profile:\n$purchaseProfile');
 
     return state.rebuild((s) {
       s.profile.currentUser = s.profile.currentUser.copyWith(
