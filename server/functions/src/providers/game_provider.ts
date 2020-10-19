@@ -3,7 +3,7 @@ import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from './firestore_selector';
 import { Game, GameEntity } from '../models/domain/game/game';
 import { RoomEntity, Room } from '../models/domain/room';
-import { GameTemplate, GameTemplateEntity } from '../models/domain/game/game_template';
+import { GameTemplate, GameTemplateEntity } from '../game_templates/models/game_template';
 import { UserEntity, User } from '../models/domain/user';
 import { PossessionStateEntity } from '../models/domain/possession_state';
 import { assertExists } from '../utils/asserts';
@@ -20,9 +20,14 @@ import {
 } from '../transformers/game_transformers';
 import { GameLevel, GameLevelEntity } from '../game_levels/models/game_level';
 import { firestore as FirestoreAdmin } from 'firebase-admin';
+import { GameTemplatesProvider } from './game_templates_provider';
 
 export class GameProvider {
-  constructor(private firestore: Firestore, private selector: FirestoreSelector) {}
+  constructor(
+    private firestore: Firestore,
+    private selector: FirestoreSelector,
+    private gameTemplateProvider: GameTemplatesProvider
+  ) {}
 
   async createGame(
     templateId: GameTemplateEntity.Id,
@@ -30,12 +35,7 @@ export class GameProvider {
   ): Promise<Game> {
     this.checkParticipantsIds(participantsIds);
 
-    const template = await this.getGameTemplate(templateId);
-
-    if (!template) {
-      throw new Error('ERROR: No template on game creation');
-    }
-
+    const template = this.getGameTemplate(templateId);
     return this.createGameByTemplate(template, participantsIds);
   }
 
@@ -189,31 +189,20 @@ export class GameProvider {
   }
 
   async getAllGameTemplates(): Promise<GameTemplate[]> {
-    const selector = this.selector.gameTemplates();
-    const templates = (await this.firestore.getItems(selector)) || [];
-
+    const templates = this.gameTemplateProvider.getGameTemplates();
     templates.forEach(GameTemplateEntity.validate);
-    return templates as GameTemplate[];
+    return templates;
   }
 
-  async createGameTemplate(template: GameTemplate): Promise<GameTemplate> {
-    const selector = this.selector.gameTemplate(template.id);
-    const createdTemplate = await this.firestore.createItem(selector, template);
+  getGameTemplate(templateId: GameTemplateEntity.Id): GameTemplate {
+    const template = this.gameTemplateProvider.getGameTemplate(templateId);
 
-    GameTemplateEntity.validate(createdTemplate);
-    return createdTemplate as GameTemplate;
-  }
-
-  async getGameTemplate(templateId: GameTemplateEntity.Id): Promise<GameTemplate> {
-    const selector = this.selector.gameTemplate(templateId);
-    const template = await this.firestore.getItemData(selector);
-
-    if (!template) {
+    if (template?.id === undefined) {
       throw new Error('ERROR: No template with id: ' + templateId);
     }
 
     GameTemplateEntity.validate(template);
-    return template as GameTemplate;
+    return template;
   }
 
   async getRoom(roomId: RoomEntity.Id): Promise<Room> {

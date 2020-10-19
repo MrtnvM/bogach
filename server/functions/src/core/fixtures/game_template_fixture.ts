@@ -1,4 +1,4 @@
-import { GameTemplate } from '../../models/domain/game/game_template';
+import { GameTemplate } from '../../game_templates/models/game_template';
 import { Possessions } from '../../models/domain/possessions';
 import { InsuranceAsset } from '../../models/domain/assets/insurance_asset';
 import { DebentureAsset } from '../../models/domain/assets/debenture_asset';

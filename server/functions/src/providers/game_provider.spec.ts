@@ -1,6 +1,5 @@
 /// <reference types="@types/jest"/>
 
-import * as admin from 'firebase-admin';
 import { mock, when, instance, anything } from 'ts-mockito';
 
 import { Firestore } from '../core/firebase/firestore';
@@ -8,12 +7,14 @@ import { FirestoreSelector } from './firestore_selector';
 import { GameProvider } from './game_provider';
 import { GameEntity } from '../models/domain/game/game';
 import { GameTemplateFixture } from '../core/fixtures/game_template_fixture';
+import { GameTemplatesProvider } from './game_templates_provider';
 
 describe('Game Provider', () => {
   test('Could not create game without participants IDs array', async () => {
     const mockFirestore: Firestore = mock(Firestore);
     const mockSelector: FirestoreSelector = mock(FirestoreSelector);
-    const gameProvider = new GameProvider(mockFirestore, mockSelector);
+    const mockGameTemplatesProvider: GameTemplatesProvider = mock(GameTemplatesProvider);
+    const gameProvider = new GameProvider(mockFirestore, mockSelector, mockGameTemplatesProvider);
 
     const templateId = 'template1';
 
@@ -35,19 +36,14 @@ describe('Game Provider', () => {
   });
 
   test('Could not create game without template', async () => {
-    const mockFirestore = mock(Firestore);
-    const mockSelector = mock(FirestoreSelector);
-    const mockTemplateRef = mock(admin.firestore.DocumentReference);
-
     const templateId = 'template1';
     const participantsIds = ['user1'];
 
-    when(mockSelector.gameTemplate(templateId)).thenReturn(mockTemplateRef);
-    when(mockFirestore.getItemData(mockTemplateRef)).thenReturn(Promise.resolve(undefined));
+    const mockFirestore = mock(Firestore);
+    const mockSelector = mock(FirestoreSelector);
+    const mockGameTemplatesProvider = mock(GameTemplatesProvider);
 
-    const firestore = instance(mockFirestore);
-    const selector = instance(mockSelector);
-    const gameProvider = new GameProvider(firestore, selector);
+    const gameProvider = new GameProvider(mockFirestore, mockSelector, mockGameTemplatesProvider);
 
     const createGame = async () => {
       await gameProvider.createGame(templateId, participantsIds);
@@ -61,22 +57,22 @@ describe('Game Provider', () => {
   test('Created game contains initial month result', async () => {
     const mockFirestore = mock(Firestore);
     const mockSelector = mock(FirestoreSelector);
-    const mockTemplateRef = mock(admin.firestore.DocumentReference);
+    const mockGameTemplatesProvider = mock(GameTemplatesProvider);
 
-    const templateId = 'template1';
+    const templateId = 'template12';
     const userId = 'user1';
 
     const gameTemplate = GameTemplateFixture.createGameTemplate({ id: templateId });
 
-    when(mockSelector.gameTemplate(templateId)).thenReturn(mockTemplateRef);
-    when(mockFirestore.getItemData(mockTemplateRef)).thenReturn(Promise.resolve(gameTemplate));
+    when(mockGameTemplatesProvider.getGameTemplate(templateId)).thenReturn(gameTemplate);
     when(mockFirestore.createItem(anything(), anything())).thenCall((_, game) => {
       return game;
     });
 
     const firestore = instance(mockFirestore);
     const selector = instance(mockSelector);
-    const gameProvider = new GameProvider(firestore, selector);
+    const templateProvider = instance(mockGameTemplatesProvider)
+    const gameProvider = new GameProvider(firestore, selector, templateProvider);
 
     const createdGame = await gameProvider.createGame(templateId, [userId]);
     const monthResults = createdGame.state.participantsProgress[userId].monthResults;

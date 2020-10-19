@@ -8,15 +8,17 @@ import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from '../providers/firestore_selector';
 import { UserEntity } from '../models/domain/user';
-import { GameTemplateEntity } from '../models/domain/game/game_template';
+import { GameTemplateEntity } from '../game_templates/models/game_template';
 import { GameEntity } from '../models/domain/game/game';
 import { UserProvider } from '../providers/user_provider';
 import { TimerProvider } from '../providers/timer_provider';
+import { GameTemplatesProvider } from '../providers/game_templates_provider';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
-  const gameProvider = new GameProvider(firestore, selector);
+  const gameTemplatesProvider = new GameTemplatesProvider();
+  const gameProvider = new GameProvider(firestore, selector, gameTemplatesProvider);
   const gameLevelsProvider = new GameLevelsProvider();
   const userProvider = new UserProvider(firestore, selector);
   const timerProvider = new TimerProvider();
@@ -63,8 +65,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const apiRequest = APIRequest.from(request, response);
     apiRequest.checkMethod('GET');
 
-    const gameTemplates = gameProvider.getAllGameTemplates();
-    await send(gameTemplates, response);
+    const gameTemplates = gameTemplatesProvider.getGameTemplates();
+    await send(Promise.resolve(gameTemplates), response);
   });
 
   const getGameTemplate = https.onRequest(async (request, response) => {
@@ -73,8 +75,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const templateId = apiRequest.queryParameter('template_id');
 
-    const gameTemplate = gameProvider.getGameTemplate(templateId as GameTemplateEntity.Id);
-    await send(gameTemplate, response);
+    const gameTemplate = gameTemplatesProvider.getGameTemplate(templateId as GameTemplateEntity.Id);
+    await send(Promise.resolve(gameTemplate), response);
   });
 
   const handleGameEvent = https.onRequest(async (request, response) => {

@@ -1,6 +1,6 @@
 import { Entity } from '../../core/domain/entity';
 import { UserEntity, User } from './user';
-import { GameTemplateEntity } from './game/game_template';
+import { GameTemplateEntity } from '../../game_templates/models/game_template';
 import { GameEntity } from './game/game';
 
 export interface Room {

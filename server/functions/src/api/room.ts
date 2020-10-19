@@ -12,11 +12,13 @@ import { GameService } from '../services/game/game_service';
 import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { TimerProvider } from '../providers/timer_provider';
 import { PurchaseService } from '../services/purchase/purchase_service';
+import { GameTemplatesProvider } from '../providers/game_templates_provider';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
-  const gameProvider = new GameProvider(firestore, selector);
+  const templatesProvider = new GameTemplatesProvider();
+  const gameProvider = new GameProvider(firestore, selector, templatesProvider);
   const gameLevelProvider = new GameLevelsProvider();
   const userProvider = new UserProvider(firestore, selector);
   const timerProvider = new TimerProvider();
