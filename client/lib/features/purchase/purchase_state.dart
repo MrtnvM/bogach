@@ -16,11 +16,9 @@ abstract class PurchaseState
   BuiltList<PurchaseDetails> get pastPurchases;
   BuiltList<ProductDetails> get productsForSale;
 
-  bool get hasQuestsAccess;
   bool get isPurchasesAvailable;
 
   static PurchaseState initial() => PurchaseState((b) => b
-    ..hasQuestsAccess = false
     ..isPurchasesAvailable = true
     ..productsForSale = ListBuilder());
 }

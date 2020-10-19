@@ -16,9 +16,9 @@ import 'package:cash_flow/widgets/common/common_error_widget.dart';
 import 'package:cash_flow/widgets/common/empty_widget.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
+import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 
 class QuestList extends HookWidget {
   @override
@@ -143,9 +143,10 @@ class _QuestItemWidget extends HookWidget {
   Function(Quest, QuestAction) _getOnQuestSelectedFn() {
     final context = useContext();
     final user = useCurrentUser();
-    final currentQuestIndex = user.currentQuestIndex ?? 0;
 
-    final hasQuestsAccess = useGlobalState((s) => s.purchase.hasQuestsAccess);
+    final currentQuestIndex = user.currentQuestIndex ?? 0;
+    final hasQuestsAccess = user.purchaseProfile?.isQuestsAvailable ?? false;
+
     final isQuestPurchased =
         index < 1 || hasQuestsAccess || user.boughtQuestsAccess;
     final isQuestOpenedByUser = index <= currentQuestIndex;

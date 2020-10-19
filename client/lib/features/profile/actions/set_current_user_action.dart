@@ -11,13 +11,8 @@ class SetCurrentUserAction extends BaseAction {
 
   @override
   FutureOr<AppState> reduce() {
-    final boughtQuestsAccess = user?.boughtQuestsAccess == true;
-    final hasQuestsAccess =
-        state.purchase.hasQuestsAccess || boughtQuestsAccess;
-
     return state.rebuild((s) {
       s.profile.currentUser = user;
-      s.purchase.hasQuestsAccess = hasQuestsAccess;
     });
   }
 
