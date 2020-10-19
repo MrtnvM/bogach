@@ -26,34 +26,7 @@ enum MultiplayerGamePurchases {
   tenGames,
 }
 
-MultiplayerGamePurchases getMultiplayerGamePurchaseFromId(String id) {
-  if (id == multiplayer1ProductId) {
-    return MultiplayerGamePurchases.oneGame;
-  }
-  if (id == multiplayer5ProductId) {
-    return MultiplayerGamePurchases.fiveGames;
-  }
-  if (id == multiplayer10ProductId) {
-    return MultiplayerGamePurchases.tenGames;
-  }
-
-  throw Exception('Unknown MultiplayerGamePurchases value $id');
-}
-
 extension MultiplayerGamePurchasesExtension on MultiplayerGamePurchases {
-  int get gamesCount {
-    switch (this) {
-      case MultiplayerGamePurchases.oneGame:
-        return 1;
-      case MultiplayerGamePurchases.fiveGames:
-        return 6;
-      case MultiplayerGamePurchases.tenGames:
-        return 12;
-      default:
-        return 0;
-    }
-  }
-
   String get title {
     switch (this) {
       case MultiplayerGamePurchases.oneGame:
