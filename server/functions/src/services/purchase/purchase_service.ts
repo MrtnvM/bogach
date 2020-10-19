@@ -12,9 +12,13 @@ export class PurchaseService {
   async updatePurchases(
     userId: UserEntity.Id,
     purchases: PurchaseDetails[]
-  ): Promise<PurchaseProfile> {
-    if (!userId || !purchases || !Array.isArray(purchases) || purchases?.length === 0) {
+  ): Promise<PurchaseProfile | undefined> {
+    if (!userId || !purchases || !Array.isArray(purchases)) {
       throw new Error('Purchase list has incorrect format');
+    }
+
+    if (purchases.length === 0) {
+      return undefined;
     }
 
     const userProfile = await this.userProvider.getUserProfile(userId);
