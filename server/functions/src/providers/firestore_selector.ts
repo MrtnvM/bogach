@@ -25,4 +25,5 @@ export class FirestoreSelector {
 
   users = (): CollectionReference => this.firestore.collection('users');
   user = (userId: UserEntity.Id) => this.users().doc(userId);
+  userPurchases = (userId: UserEntity.Id) => this.user(userId).collection('purchases');
 }

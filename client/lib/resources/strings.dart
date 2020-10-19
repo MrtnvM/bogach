@@ -9,6 +9,8 @@ class Strings {
       'При подключении к магазину возникла проблема.\n'
       'Повторите попытку позднее';
 
+  static String get purchaseError => 'При совершении покупки возникла ошибка';
+
   // Common
   static String get submit => 'Отправить';
 
@@ -345,7 +347,7 @@ class Strings {
       'Необходимо выбрать бизнес для продажи';
 
   // Multiplayer
-  static String get selectPlayers => 'Выбeрете игроков';
+  static String get selectPlayers => 'Выберите игроков';
   static String get waitingPlayers => 'Ожидание игроков';
   static String get selectedPlayers => 'Выбранные игроки';
   static String get allPlayers => 'Все игроки';
@@ -360,6 +362,7 @@ class Strings {
       'приглашает Вас сразиться в поединке капиталистов!';
   static String get joinRoomError =>
       'Не удалось подключиться к комнате игроков';
+  static String get multiplayerGamesAvailable => 'Доступно игр:';
 
   // Onboarding
   static String get onboardingTitle1 => 'Финансовая грамотность';
@@ -393,6 +396,9 @@ class Strings {
   static String get and => ' и ';
   static String get privacyPolicy => 'политику приватности';
   static String get canNotOpenLink => 'Произошла ошибка при открытии ссылки';
+  static String get purchase1Game => '1 игра';
+  static String get purchase5Game => '5 игр + 1 в подарок';
+  static String get purchase10Game => '10 игр + 2 в подарок';
 
   static String get optimalPath => 'Оптимальный путь';
 }

@@ -197,7 +197,7 @@ export class GameProvider {
   getGameTemplate(templateId: GameTemplateEntity.Id): GameTemplate {
     const template = this.gameTemplateProvider.getGameTemplate(templateId);
 
-    if (template.id === undefined) {
+    if (template?.id === undefined) {
       throw new Error('ERROR: No template with id: ' + templateId);
     }
 

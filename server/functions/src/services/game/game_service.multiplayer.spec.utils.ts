@@ -1,8 +1,8 @@
-import { GameEntity, Game } from '../models/domain/game/game';
-import { UserEntity } from '../models/domain/user';
-import { DebentureEvent } from '../events/debenture/debenture_event';
-import { GameEventEntity } from '../models/domain/game/game_event';
-import { GameFixture } from '../core/fixtures/game_fixture';
+import { GameEntity, Game } from '../../models/domain/game/game';
+import { UserEntity } from '../../models/domain/user';
+import { DebentureEvent } from '../../events/debenture/debenture_event';
+import { GameEventEntity } from '../../models/domain/game/game_event';
+import { GameFixture } from '../../core/fixtures/game_fixture';
 import produce from 'immer';
 
 export const gameId: GameEntity.Id = 'game1';

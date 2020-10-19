@@ -12,10 +12,10 @@ class UpdateCurrentQuestIndexAction extends BaseAction {
   final int newQuestIndex;
 
   @override
-  FutureOr<AppState> reduce() {
+  FutureOr<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
 
-    final updatedProfile = userService.updateCurrentQuestIndex(
+    final updatedProfile = await userService.updateCurrentQuestIndex(
       newQuestIndex,
     );
 

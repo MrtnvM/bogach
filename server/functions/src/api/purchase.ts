@@ -3,24 +3,31 @@ import * as config from '../config';
 
 import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
+import { PurchaseDetailsEntity } from '../models/purchases/purchase_details';
 import { FirestoreSelector } from '../providers/firestore_selector';
 import { UserProvider } from '../providers/user_provider';
-import { PurchaseService } from '../services/purchase_service';
+import { PurchaseService } from '../services/purchase/purchase_service';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
   const userProvider = new UserProvider(firestore, selector);
-  const userService = new PurchaseService(userProvider);
+  const purchaseService = new PurchaseService(userProvider);
 
   const updatePurchases = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request, response);
     apiRequest.checkMethod('POST');
 
     const userId = apiRequest.jsonField('userId');
-    const productIds = apiRequest.jsonField('productIds');
+    const purchases = apiRequest.jsonField('purchases');
 
-    const updatePurchasesOperation = userService.updatePurchases(userId, productIds);
+    if (!Array.isArray(purchases)) {
+      throw new Error('Purchases should be an array');
+    }
+
+    purchases.forEach(PurchaseDetailsEntity.validate);
+
+    const updatePurchasesOperation = purchaseService.updatePurchases(userId, purchases);
     await send(updatePurchasesOperation, response);
   });
 

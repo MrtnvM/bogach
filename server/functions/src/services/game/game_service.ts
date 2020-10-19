@@ -1,11 +1,11 @@
-import { GameProvider } from '../providers/game_provider';
-import { GameLevelsProvider } from '../providers/game_levels_provider';
-import { GameEventEntity } from '../models/domain/game/game_event';
-import { GameContext } from '../models/domain/game/game_context';
-import { PlayerActionHandler } from '../core/domain/player_action_handler';
-import { DebentureEventHandler } from '../events/debenture/debenture_event_handler';
-import { StockEventHandler } from '../events/stock/stock_event_handler';
-import { BusinessBuyEventHandler } from '../events/business/buy/business_buy_event_handler';
+import { GameProvider } from '../../providers/game_provider';
+import { GameLevelsProvider } from '../../providers/game_levels_provider';
+import { GameEventEntity } from '../../models/domain/game/game_event';
+import { GameContext } from '../../models/domain/game/game_context';
+import { PlayerActionHandler } from '../../core/domain/player_action_handler';
+import { DebentureEventHandler } from '../../events/debenture/debenture_event_handler';
+import { StockEventHandler } from '../../events/stock/stock_event_handler';
+import { BusinessBuyEventHandler } from '../../events/business/buy/business_buy_event_handler';
 import {
   ParticipantAccountsTransformer,
   WinnersTransformer,
@@ -17,22 +17,22 @@ import {
   applyGameTransformers,
   HistoryGameTransformer,
   UpdateMoveStartDateTransformer,
-} from '../transformers/game_transformers';
-import { IncomeHandler } from '../events/income/income_handler';
-import { ExpenseHandler } from '../events/expense/expense_handler';
-import { BusinessSellEventHandler } from '../events/business/sell/business_sell_event_handler';
-import { MonthlyExpenseEventHandler } from '../events/monthly_expense/monthly_expense_event_handler';
-import { InsuranceHandler } from '../events/insurance/insurance_handler';
-import { SalaryChangeEventHandler } from '../events/salary_change/salary_change_event_handler';
-import { UserEntity } from '../models/domain/user';
-import { GameTemplateEntity } from '../game_templates/models/game_template';
-import { InsuranceTransformer } from '../transformers/game/insurance_transformer';
-import { ResetEventIndexTransformer } from '../transformers/game/reset_event_index_transformer';
-import { RealEstateBuyEventHandler } from '../events/estate/buy/real_estate_buy_event_handler';
-import { GameLevelEntity } from '../game_levels/models/game_level';
-import { UserProvider } from '../providers/user_provider';
-import { TimerProvider } from '../providers/timer_provider';
-import { Game, GameEntity } from '../models/domain/game/game';
+} from '../../transformers/game_transformers';
+import { IncomeHandler } from '../../events/income/income_handler';
+import { ExpenseHandler } from '../../events/expense/expense_handler';
+import { BusinessSellEventHandler } from '../../events/business/sell/business_sell_event_handler';
+import { MonthlyExpenseEventHandler } from '../../events/monthly_expense/monthly_expense_event_handler';
+import { InsuranceHandler } from '../../events/insurance/insurance_handler';
+import { SalaryChangeEventHandler } from '../../events/salary_change/salary_change_event_handler';
+import { UserEntity } from '../../models/domain/user';
+import { GameTemplateEntity } from '../../models/domain/game/game_template';
+import { InsuranceTransformer } from '../../transformers/game/insurance_transformer';
+import { ResetEventIndexTransformer } from '../../transformers/game/reset_event_index_transformer';
+import { RealEstateBuyEventHandler } from '../../events/estate/buy/real_estate_buy_event_handler';
+import { GameLevelEntity } from '../../game_levels/models/game_level';
+import { UserProvider } from '../../providers/user_provider';
+import { TimerProvider } from '../../providers/timer_provider';
+import { Game, GameEntity } from '../../models/domain/game/game';
 
 export class GameService {
   constructor(

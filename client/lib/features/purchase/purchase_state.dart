@@ -13,17 +13,12 @@ abstract class PurchaseState
 
   PurchaseState._();
 
-  BuiltList<PurchaseDetails> get updatedPurchases;
   BuiltList<PurchaseDetails> get pastPurchases;
   BuiltList<ProductDetails> get productsForSale;
 
-  bool get hasQuestsAccess;
   bool get isPurchasesAvailable;
 
   static PurchaseState initial() => PurchaseState((b) => b
-    ..hasQuestsAccess = false
     ..isPurchasesAvailable = true
-    ..updatedPurchases = ListBuilder()
-    ..pastPurchases = ListBuilder()
     ..productsForSale = ListBuilder());
 }

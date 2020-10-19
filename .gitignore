@@ -14,3 +14,4 @@ client/android/app/production/
 client/ios/Flutter/.last_build_id
 
 client/android/key.properties
+client/android/app/purchases_test/

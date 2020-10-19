@@ -2,7 +2,7 @@ import * as functions from 'firebase-functions';
 import * as config from '../config';
 
 import { GameProvider } from '../providers/game_provider';
-import { GameService } from '../services/game_service';
+import { GameService } from '../services/game/game_service';
 import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
@@ -38,6 +38,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const userId = apiRequest.optionalJsonField('userId');
 
     const game = gameService.createNewGame(templateId, participantsIds || [userId]);
+
     await send(game, response);
   });
 

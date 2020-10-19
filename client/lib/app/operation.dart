@@ -29,4 +29,5 @@ enum Operation {
   queryProductDetails,
   queryPastPurchases,
   buyQuestsAcceess,
+  buyMultiplayerGames,
 }

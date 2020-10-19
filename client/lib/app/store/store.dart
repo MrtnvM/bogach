@@ -7,12 +7,13 @@ import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/purchase_service.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
+import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
-import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:get_it/get_it.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Store<AppState> configureStore() {
@@ -51,10 +52,12 @@ void configureDependencyInjection(
     firestore: firestore,
     firebaseMessaging: firebaseMessaging,
     userCache: userCache,
+    apiClient: apiClient,
   );
 
   final purchaseService = PurchaseService(
     apiClient: apiClient,
+    connection: InAppPurchaseConnection.instance,
   );
 
   GetIt.I.registerSingleton<GameService>(gameService);

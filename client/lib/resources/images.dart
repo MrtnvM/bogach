@@ -28,6 +28,8 @@ class Images {
   static const complexityLightingEmptyIcon =
       'assets/images/svg/ic_complexity_lighting_empty.svg';
 
+  static const multiplayerBadge = 'assets/images/png/multiplayer_badge.png';
+
   static const fail = 'assets/images/png/fail.png';
   static const win = 'assets/images/png/win.png';
 
