@@ -1,4 +1,5 @@
 import 'package:cash_flow/api_client/cash_flow_api_client.dart';
+import 'package:cash_flow/app_configuration.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
@@ -150,12 +151,12 @@ class GameService {
     final packageInfo = await PackageInfo.fromPlatform();
     final packageName = packageInfo.packageName;
 
-    final deepLink = '${DynamicLinks.baseUrl}'
-        '${DynamicLinks.roomInvite}?'
-        'room_id=$roomId';
+    final deepLink = '${AppConfiguration.environment.dynamicLink.baseUrl}'
+        '?${DynamicLinks.roomInvite}=$roomId';
 
     final parameters = DynamicLinkParameters(
-      uriPrefix: '${DynamicLinks.baseUrl}join',
+      uriPrefix: '${AppConfiguration.environment.dynamicLink.baseUrl}'
+          '${DynamicLinks.join}',
       link: Uri.parse(deepLink),
       androidParameters: AndroidParameters(
         packageName: packageName,
@@ -163,11 +164,13 @@ class GameService {
       ),
       iosParameters: IosParameters(
         bundleId: packageName,
-        minimumVersion: '1.0.0',
-        appStoreId: null, // TODO(Maxim): Add AppStore ID
+        customScheme: AppConfiguration.environment.dynamicLink.customScheme,
+        appStoreId: '1531498628',
       ),
-      googleAnalyticsParameters: null, // TODO(Maxim): Add info
-      itunesConnectAnalyticsParameters: null, // TODO(Maxim): Add info
+      googleAnalyticsParameters: null,
+      // TODO(Maxim): Add info
+      itunesConnectAnalyticsParameters: null,
+      // TODO(Maxim): Add info
       socialMetaTagParameters: SocialMetaTagParameters(
         title: Strings.battleInvitationTitle,
         description:
@@ -175,14 +178,14 @@ class GameService {
       ),
     );
 
-    Logger.d(parameters);
+    Logger.i(parameters);
 
-    // final shortLink = await parameters.buildShortLink();
-    // final dynamicLink = shortLink.shortUrl.toString();
-    // logger.d('ROOM INVITE DYNAMIC LINK: $dynamicLink');
-    // logger.d('ROOM INVITE DYNAMIC LINK WARNINGS:');
-    // logger.d(shortLink.warnings.toList());
+    final shortLink = await parameters.buildShortLink();
+    final dynamicLink = shortLink.shortUrl.toString();
+    Logger.i('ROOM INVITE DYNAMIC LINK: $dynamicLink');
+    Logger.i('ROOM INVITE DYNAMIC LINK WARNINGS:');
+    Logger.i(shortLink.warnings.toList());
 
-    Share.share(deepLink);
+    Share.share(dynamicLink);
   }
 }
