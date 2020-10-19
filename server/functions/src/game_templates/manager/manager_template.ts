@@ -1,16 +1,16 @@
 import { GameTemplate } from '../models/game_template';
 
-export const courierTemplate: GameTemplate = {
-  id: 'courier_template',
-  name: 'Курьер, который хочет свободы',
+export const managerTemplate: GameTemplate = {
+  id: 'manager_template',
+  name: 'Независимый менеджер',
   icon:
-    'https://www.flaticon.com/svg/static/icons/svg/869/869034.svg',
+    'https://www.flaticon.com/svg/static/icons/svg/2674/2674984.svg',
   possessions: {
     incomes: [
       {
         id: 'income1',
         name: 'Зарплата',
-        value: 15_000,
+        value: 90_000,
         type: 'salary',
       },
     ],
@@ -18,19 +18,19 @@ export const courierTemplate: GameTemplate = {
       {
         id: 'expense1',
         name: 'Общее',
-        value: 11_000,
+        value: 40_000,
       },
     ],
     assets: [],
     liabilities: [],
   },
   accountState: {
-    cash: 5_000,
+    cash: 100_000,
     credit: 0,
-    cashFlow: 4_000,
+    cashFlow: 50_000,
   },
   target: {
     type: 'passive_income',
-    value: 15_000,
+    value: 30_000,
   },
 };

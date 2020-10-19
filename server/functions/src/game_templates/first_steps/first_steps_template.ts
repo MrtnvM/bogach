@@ -1,10 +1,10 @@
 import { GameTemplate } from '../models/game_template';
 
-export const courierTemplate: GameTemplate = {
-  id: 'courier_template',
-  name: 'Курьер, который хочет свободы',
+export const firstStepsTemplate: GameTemplate = {
+  id: 'first_steps_template',
+  name: 'Первые шаги',
   icon:
-    'https://www.flaticon.com/svg/static/icons/svg/869/869034.svg',
+    'https://www.flaticon.com/svg/static/icons/svg/1056/1056227.svg',
   possessions: {
     incomes: [
       {
@@ -18,19 +18,19 @@ export const courierTemplate: GameTemplate = {
       {
         id: 'expense1',
         name: 'Общее',
-        value: 11_000,
+        value: 10_000,
       },
     ],
     assets: [],
     liabilities: [],
   },
   accountState: {
-    cash: 5_000,
+    cash: 2_000,
     credit: 0,
-    cashFlow: 4_000,
+    cashFlow: 5_000,
   },
   target: {
-    type: 'passive_income',
-    value: 15_000,
+    type: 'cash',
+    value: 45_000,
   },
 };

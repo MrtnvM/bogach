@@ -4,7 +4,7 @@ export const blackBmwTemplate: GameTemplate = {
   id: 'black_bmw_template',
   name: 'Чёрный бумер',
   icon:
-    'https://cdn.iconscout.com/icon/free/png-256/bmw-5-202750.png',
+    'https://www.flaticon.com/svg/static/icons/svg/805/805871.svg',
   possessions: {
     incomes: [
       {
