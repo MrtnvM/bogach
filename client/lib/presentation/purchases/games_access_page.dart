@@ -35,15 +35,16 @@ class GamesAccessPage extends HookWidget {
       backgroundColor: Colors.black.withAlpha(100),
       child: FullscreenPopupContainer(
         backgroundColor: ColorRes.questAccessPageBackgound,
-        content: ListView(
+        content: Column(
           children: <Widget>[
             const _HeadlineImage(),
             const SizedBox(height: 16),
             const _QuestsAccessDescription(),
-            const SizedBox(height: 32),
+            const Spacer(),
             _PurchaseGameList(
               isStoreAvailable: isStoreAvailable.data,
             ),
+            const SizedBox(height: 24),
           ],
         ),
       ),
@@ -76,7 +77,8 @@ class _QuestsAccessDescription extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 36),
       child: Text(
-        'У вас кончились игры, хотите купить ещё?',
+        'У вас кончились игры,\nхотите купить ещё?',
+        textAlign: TextAlign.center,
         style: Styles.body2.copyWith(
           letterSpacing: 0.4,
           fontSize: 15,
@@ -98,8 +100,8 @@ class _PurchaseGameList extends HookWidget {
   Widget build(BuildContext context) {
     final dispatch = useDispatcher();
 
-    Function(MultiplayerGamePurchases) buyQuestsAccess;
-    buyQuestsAccess = (multiplayerGamePurchase) async {
+    Function(MultiplayerGamePurchases) buyMultiplayerGame;
+    buyMultiplayerGame = (multiplayerGamePurchase) async {
       try {
         await dispatch(BuyMultiplayerGames(multiplayerGamePurchase));
         appRouter.goBack(true);
@@ -108,39 +110,116 @@ class _PurchaseGameList extends HookWidget {
           context: context,
           exception: error,
           errorMessage: Strings.purchaseError,
-          onRetry: () => buyQuestsAccess(multiplayerGamePurchase),
+          onRetry: () => buyMultiplayerGame(multiplayerGamePurchase),
         );
       }
     };
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: isStoreAvailable
-          ? MultiplayerGamePurchases.values
-              .map(
-                (item) => ListTile(
-                  title: Text(
-                    item.title,
-                    style: Styles.body2.copyWith(
-                      letterSpacing: 0.4,
-                      fontSize: 15,
-                    ),
-                  ),
-                  onTap: () => buyQuestsAccess(item),
-                ),
-              )
-              .toList()
-          : [
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Text(
-                  Strings.storeConnectionError,
-                  style: Styles.body1,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
+    if (!isStoreAvailable) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Text(
+              Strings.storeConnectionError,
+              style: Styles.body1,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _buildPurchase(
+            purchase: MultiplayerGamePurchases.oneGame,
+            title: '1 игра',
+            price: '15 ₽',
+            buy: buyMultiplayerGame,
+          ),
+          _buildPurchase(
+            purchase: MultiplayerGamePurchases.fiveGames,
+            title: '5 игр',
+            price: '75 ₽',
+            gift: '+1',
+            buy: buyMultiplayerGame,
+          ),
+          _buildPurchase(
+            purchase: MultiplayerGamePurchases.tenGames,
+            title: '10 игр',
+            price: '149 ₽',
+            gift: '+2',
+            buy: buyMultiplayerGame,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPurchase({
+    MultiplayerGamePurchases purchase,
+    String title,
+    String price,
+    String gift,
+    void Function(MultiplayerGamePurchases) buy,
+  }) {
+    return Container(
+      height: 200,
+      width: 110,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+      decoration: BoxDecoration(
+        color: ColorRes.white.withAlpha(50),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      alignment: Alignment.topCenter,
+      child: Column(
+        children: [
+          Text(
+            title,
+            style: Styles.bodyWhiteBold.copyWith(
+              fontSize: 15,
+              color: Colors.white.withAlpha(240),
+            ),
+          ),
+          const Divider(),
+          const SizedBox(height: 8),
+          Text(
+            price ?? '',
+            style: Styles.bodyWhiteBold.copyWith(
+              fontSize: 17,
+            ),
+          ),
+          if (gift != null) ...[
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(Images.gift, height: 26, width: 26),
+
+                // Text(gift ?? '', style: Styles.body1.copyWith(fontSize: 13)),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              '$gift в подарок',
+              style: Styles.body1.copyWith(fontSize: 12.5),
+            ),
+          ],
+          const Spacer(),
+          RaisedButton(
+            onPressed: () => buy(purchase),
+            color: ColorRes.mainGreen,
+            child: const Text('Выбрать', style: Styles.bodyWhiteBold),
+          ),
+        ],
+      ),
     );
   }
 }
