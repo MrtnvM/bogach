@@ -3,6 +3,7 @@ import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/purchases/purchases.dart';
 import 'package:cash_flow/features/purchase/actions/buy_multiplayer_games.dart';
+import 'package:cash_flow/models/errors/purchase_errors.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -10,6 +11,7 @@ import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/containers/fullscreen_popup_container.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
@@ -143,6 +145,8 @@ class _PurchaseGameList extends HookWidget {
       try {
         await dispatch(BuyMultiplayerGames(multiplayerGamePurchase));
         appRouter.goBack(true);
+      } on ProductPurchaseCanceledException catch (error) {
+        Logger.i('Purchase canceled: ${error.product?.id}');
       } catch (error) {
         handleError(
           context: context,
