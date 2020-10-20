@@ -117,7 +117,7 @@ class _QuestsAccessDescription extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 36),
       child: Text(
-        'У вас кончились игры.\nХотите купить ещё?',
+        Strings.multiplayerAdvertisingMessage,
         textAlign: TextAlign.center,
         style: Styles.body2.copyWith(
           letterSpacing: 0.4,
@@ -182,20 +182,20 @@ class _PurchaseGameList extends HookWidget {
         children: [
           _buildPurchase(
             purchase: MultiplayerGamePurchases.oneGame,
-            title: '1 игра',
+            title: '1 ${Strings.games(1)}',
             price: '15 ₽',
             buy: buyMultiplayerGame,
           ),
           _buildPurchase(
             purchase: MultiplayerGamePurchases.fiveGames,
-            title: '5 игр',
+            title: '5 ${Strings.games(1)}',
             price: '75 ₽',
             gift: '+1',
             buy: buyMultiplayerGame,
           ),
           _buildPurchase(
             purchase: MultiplayerGamePurchases.tenGames,
-            title: '10 игр',
+            title: '10 ${Strings.games(1)}',
             price: '149 ₽',
             gift: '+2',
             buy: buyMultiplayerGame,
@@ -244,13 +244,11 @@ class _PurchaseGameList extends HookWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(Images.gift, height: 26, width: 26),
-
-                // Text(gift ?? '', style: Styles.body1.copyWith(fontSize: 13)),
               ],
             ),
             const SizedBox(height: 4),
             Text(
-              '$gift в подарок',
+              '$gift ${Strings.asGift}',
               style: Styles.body1.copyWith(fontSize: 12.5),
             ),
           ],
@@ -258,7 +256,7 @@ class _PurchaseGameList extends HookWidget {
           RaisedButton(
             onPressed: () => buy(purchase),
             color: ColorRes.mainGreen,
-            child: const Text('Выбрать', style: Styles.bodyWhiteBold),
+            child: Text(Strings.select, style: Styles.bodyWhiteBold),
           ),
         ],
       ),
