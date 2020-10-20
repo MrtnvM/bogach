@@ -21,8 +21,8 @@ class AppRouter {
     );
   }
 
-  Future<Widget> goTo(Widget route) {
-    return navigatorKey.currentState.push<Widget>(
+  Future<T> goTo<T>(Widget route) {
+    return navigatorKey.currentState.push<T>(
       MaterialPageRoute(
         builder: (context) => route,
         settings: RouteSettings(
@@ -44,9 +44,9 @@ class AppRouter {
     );
   }
 
-  void goBack() {
+  void goBack([dynamic value]) {
     if (navigatorKey.currentState.canPop()) {
-      navigatorKey.currentState.pop();
+      navigatorKey.currentState.pop(value);
     }
   }
 }

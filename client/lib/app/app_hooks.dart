@@ -3,15 +3,17 @@ import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/dynamic_link_hooks.dart';
 import 'package:cash_flow/core/hooks/push_notification_hooks.dart';
 import 'package:cash_flow/features/multiplayer/actions/join_room_action.dart';
+import 'package:cash_flow/features/multiplayer/multiplayer_hooks.dart';
 import 'package:cash_flow/features/profile/actions/send_device_push_token_action.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/multiplayer/room_page.dart';
+import 'package:cash_flow/presentation/purchases/games_access_page.dart';
 import 'package:cash_flow/resources/dynamic_links.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:uni_links/uni_links.dart';
 
 void useUserPushTokenUploader() {
@@ -29,7 +31,7 @@ void useUserPushTokenUploader() {
 }
 
 void usePushNotificationsHandler() {
-  final appAcitons = useAppActions();
+  final appActions = useAppActions();
 
   usePushMessageSubscription((data) {
     final type = data['type'];
@@ -37,7 +39,7 @@ void usePushNotificationsHandler() {
     switch (type) {
       case 'go_to_room':
         final roomId = data['roomId'];
-        appAcitons.joinRoom(roomId);
+        appActions.joinRoom(roomId);
         break;
     }
   });
@@ -49,18 +51,21 @@ void useDynamicLinkHandler() {
   useDynamicLinkSubscription((dynamicLink) {
     final link = dynamicLink.link;
 
-    Logger.i('APP CAPTURE DYNAMIC LINK:\n$link');
+    Logger.i('APP CAPTURE DYNAMIC LINK:\n$link\n'
+        'APP CAPTURE DYNAMIC LINK QUERY:\n${link.query}');
 
     if (link == null) {
       return;
     }
 
     final isLinkTo = (path) {
-      return link.path.contains(path) ?? false;
+      return link.query.contains(path) ?? false;
     };
 
     if (isLinkTo(DynamicLinks.roomInvite)) {
-      final roomId = link.queryParameters['room_id'];
+      final roomId = link.queryParameters[DynamicLinks.roomInvite];
+
+      Logger.i('ROOM ID:\n$roomId');
       appActions.joinRoom(roomId);
     }
   });
@@ -79,13 +84,14 @@ void useDeepLinkHandler() {
       }
 
       final uri = Uri.parse(deepLink);
+      Logger.e('PARSED URI:\n${uri.toString()}');
 
       final isLinkTo = (path) {
         return uri.path.contains(path) ?? false;
       };
 
-      if (isLinkTo(DynamicLinks.roomInvite)) {
-        final roomId = uri.queryParameters['room_id'];
+      if (isLinkTo(DynamicLinks.join)) {
+        final roomId = uri.queryParameters[DynamicLinks.roomInvite];
         appActions.joinRoom(roomId);
       }
     };
@@ -108,13 +114,21 @@ void useDeepLinkHandler() {
 _AppActions useAppActions() {
   final context = useContext();
   final dispatch = useDispatcher();
+  final multiplayerGamesCount = useAvailableMultiplayerGamesCount();
 
   return useMemoized(
     () => _AppActions(
       joinRoom: (roomId) {
         VoidCallback joinRoom;
 
-        joinRoom = () {
+        joinRoom = () async {
+          if (multiplayerGamesCount <= 0) {
+            final response = await appRouter.goTo(const GamesAccessPage());
+            if (response == null) {
+              return;
+            }
+          }
+
           dispatch(JoinRoomAction(roomId)).then((_) async {
             await Future.delayed(const Duration(milliseconds: 50));
 

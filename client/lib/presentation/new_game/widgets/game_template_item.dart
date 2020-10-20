@@ -4,6 +4,7 @@ import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
+import 'package:flutter_svg/svg.dart';
 
 class GameTemplateItem extends StatelessWidget {
   const GameTemplateItem({
@@ -64,7 +65,7 @@ class GameTemplateItem extends StatelessWidget {
   }
 
   Widget getTemplateIcon() {
-    return Image.network(
+    return SvgPicture.network(
       gameTemplate.icon,
       height: 38,
       width: 38,

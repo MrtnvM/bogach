@@ -15,6 +15,46 @@
       },
       "oauth_client": [
         {
+          "client_id": "751206071255-8paprelmpqe76f04n3ro2197j4058het.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.bogach",
+            "certificate_hash": "f1c9de57781ad6a75ac5393f26e164012e77b737"
+          }
+        },
+        {
+          "client_id": "751206071255-9dpfgnjffhc45b81j678q22gv3s54b8n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.bogach",
+            "certificate_hash": "386fe3c6aaa64274200b1f0e6ff06873faa19d47"
+          }
+        },
+        {
+          "client_id": "751206071255-gs9sd2mbkr2j8c7hovtk706549n2v9lh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.bogach",
+            "certificate_hash": "0ccb0b747b69a31f6ef3ebc7e6b45b368f50b820"
+          }
+        },
+        {
+          "client_id": "751206071255-bm1k1b3aebuvc01hpm8uq1hs9dcmqr0a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.bogach",
+            "certificate_hash": "4f299763be9fcacd21ebb298d484bb4c2b93dbcc"
+          }
+        },
+        {
+          "client_id": "751206071255-92q0vkgviv7khuvedsm5jgms8csmj2tu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.bogach",
+            "certificate_hash": "7bb7eaaa42a5de3b380244e6f2e3b320300d726f"
+          }
+        },
+        {
           "client_id": "751206071255-hapmvuboo8k8gkv0jaa18ok5pc7is0j6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -36,8 +76,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "751206071255-n6m6pvn7ccq1s88u5av3qegnbhc2521m.apps.googleusercontent.com",
+              "client_id": "751206071255-sb72fcehmbl7ql40qpe3pcd14kgsrch2.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "751206071255-ju0cekkpeko7rhc5t4itpt0v6vv29r80.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.mobile.bogach.production"
+              }
             }
           ]
         }

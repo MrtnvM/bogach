@@ -11,12 +11,24 @@ class CreateRoomGameAction extends BaseAction {
   Operation get operationKey => Operation.createRoomGame;
 
   @override
+  bool abortDispatch() => state.profile.currentUser == null;
+
+  @override
   FutureOr<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
     final roomId = state.multiplayer.currentRoom.id;
 
     await gameService.createRoomGame(roomId);
 
-    return null;
+    return state.rebuild((s) {
+      final currentUser = s.profile.currentUser;
+      final multiplayerGamePlayed = currentUser.multiplayerGamePlayed ?? 0;
+
+      final updatedUser = currentUser.copyWith(
+        multiplayerGamePlayed: multiplayerGamePlayed + 1,
+      );
+
+      s.profile.currentUser = updatedUser;
+    });
   }
 }

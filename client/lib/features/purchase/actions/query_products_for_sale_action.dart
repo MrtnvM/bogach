@@ -6,6 +6,7 @@ import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/services/purchase_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
+import 'package:built_collection/built_collection.dart';
 
 class QueryProductsForSaleAction extends BaseAction {
   QueryProductsForSaleAction({@required this.ids})
@@ -23,7 +24,7 @@ class QueryProductsForSaleAction extends BaseAction {
     final productsForSale = await purchaseService.queryProductDetails(ids: ids);
 
     return state.rebuild((s) {
-      s.purchase.productsForSale = productsForSale.toBuilder();
+      s.purchase.productsForSale = productsForSale.toBuiltList().toBuilder();
     });
   }
 }

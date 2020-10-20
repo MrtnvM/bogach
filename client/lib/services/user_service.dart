@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/cache/user_cache.dart';
 import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
@@ -7,9 +8,9 @@ import 'package:cash_flow/models/network/core/search_query_result.dart';
 import 'package:cash_flow/models/network/request/register_request_model.dart';
 import 'package:cash_flow/utils/error_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:meta/meta.dart';
 
 class UserService {
@@ -18,6 +19,7 @@ class UserService {
     @required this.firestore,
     @required this.firebaseMessaging,
     @required this.userCache,
+    @required this.apiClient,
   })  : assert(firebaseAuth != null),
         assert(firestore != null);
 
@@ -25,6 +27,7 @@ class UserService {
   final FirebaseFirestore firestore;
   final FirebaseMessaging firebaseMessaging;
   final UserCache userCache;
+  final CashFlowApiClient apiClient;
 
   Future<UserProfile> login({
     @required String email,
@@ -40,7 +43,7 @@ class UserService {
   }
 
   Future<void> logout() async {
-    userCache.deleteUserProfile();
+    await userCache.deleteUserProfile();
     await firebaseAuth.signOut();
   }
 
@@ -132,19 +135,30 @@ class UserService {
     );
   }
 
-  Future<UserProfile> loadProfile(String userId) async {
-    final snapshot = await firestore.collection('users').doc(userId).get();
-    if (snapshot?.data == null) {
-      return null;
+  Future<UserProfile> loadCurrentProfile(String userId) async {
+    final currentUserProfile = await userCache.getUserProfile();
+
+    const requiredVersionOfProfile = 2;
+    final currentVersionOfProfile = currentUserProfile?.profileVersion ?? 1;
+
+    UserProfile updatedUserProfile;
+
+    if (requiredVersionOfProfile > currentVersionOfProfile) {
+      /// Requesting user profile through the server request will
+      /// auto-migrate it to the newer version
+      updatedUserProfile = await apiClient.getUserProfile(userId);
+    } else {
+      final snapshot = await firestore.collection('users').doc(userId).get();
+      if (snapshot?.data() == null) {
+        return null;
+      }
+
+      updatedUserProfile = UserProfile.fromJson(snapshot.data());
     }
 
-    final profile = UserProfile.fromJson(snapshot.data());
-    final currentUserProfile = userCache.getUserProfile();
-    if (currentUserProfile?.id == profile.id) {
-      userCache.setUserProfile(profile);
-    }
+    await userCache.setUserProfile(updatedUserProfile);
 
-    return profile;
+    return updatedUserProfile;
   }
 
   Future<List<UserProfile>> loadProfiles(List<String> profileIds) async {
@@ -156,7 +170,9 @@ class UserService {
         .where((p) => p.data == null)
         .map((p) => p.id);
 
-    Logger.d('WARNING: not found profiles with IDs: $emptyProfiles');
+    if (emptyProfiles.isNotEmpty) {
+      Logger.d('WARNING: not found profiles with IDs: $emptyProfiles');
+    }
 
     return profiles
         .where((p) => p.data != null)
@@ -174,8 +190,8 @@ class UserService {
         .set({'token': pushToken, 'device': Platform.operatingSystem});
   }
 
-  UserProfile updateCurrentQuestIndex(int newQuestIndex) {
-    final userProfile = userCache.getUserProfile();
+  Future<UserProfile> updateCurrentQuestIndex(int newQuestIndex) async {
+    final userProfile = await userCache.getUserProfile();
     if (userProfile == null) {
       return null;
     }
@@ -184,14 +200,14 @@ class UserService {
       currentQuestIndex: newQuestIndex,
     );
 
-    userCache.setUserProfile(updatedProfile);
+    await userCache.setUserProfile(updatedProfile);
     return updatedProfile;
   }
 
   Future<UserProfile> _getUpdatedUser(User user) async {
     final userId = user.uid;
-    final cachedUserProfile = userCache.getUserProfile();
-    final firestoreUser = await loadProfile(userId);
+    final cachedUserProfile = await userCache.getUserProfile();
+    final firestoreUser = await loadCurrentProfile(userId);
     var updatedUser = firestoreUser;
 
     if (firestoreUser != null) {
@@ -208,7 +224,7 @@ class UserService {
     if (cachedUserProfile != updatedUser) {
       final userData = updatedUser.toJson();
       await firestore.collection('users').doc(userId).set(userData);
-      userCache.setUserProfile(updatedUser);
+      await userCache.setUserProfile(updatedUser);
     }
 
     firebaseMessaging.getToken().then((token) {

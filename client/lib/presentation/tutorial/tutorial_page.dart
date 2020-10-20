@@ -4,6 +4,7 @@ import 'package:cash_flow/models/domain/game/account/account.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
+import 'package:cash_flow/models/domain/game/game/type/game_type.dart';
 import 'package:cash_flow/models/domain/game/game_config/game_config.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event_type.dart';
@@ -53,7 +54,7 @@ class _TutorialPageState extends State<TutorialPage> {
         s.game.currentGame = Game(
           id: 'game1',
           name: 'Черный бумер',
-          type: GameType.singleplayer,
+          type: GameType.singleplayer(),
           state: CurrentGameState(
             gameStatus: GameStatus.playersMove,
             moveStartDateInUTC: DateTime.now(),

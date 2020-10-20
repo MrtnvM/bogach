@@ -2,14 +2,35 @@ import { produce } from 'immer';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from './firestore_selector';
 import { UserEntity, UserDevice, User } from '../models/domain/user';
+import { PurchaseDetails, PurchaseDetailsEntity } from '../models/purchases/purchase_details';
+import { PurchaseProfileEntity } from '../models/purchases/purchase_profile';
 
 export class UserProvider {
   constructor(private firestore: Firestore, private selector: FirestoreSelector) {}
 
   async getUserProfile(userId: UserEntity.Id): Promise<User> {
     const selector = this.selector.user(userId);
-    const profile = await this.firestore.getItemData(selector);
-    return profile as User;
+    const profile = (await this.firestore.getItemData(selector)) as User;
+
+    const updatedProfile = this.migrateProfileToVersion2(profile);
+
+    if (JSON.stringify(profile) !== JSON.stringify(updatedProfile)) {
+      await this.updateUserProfile(updatedProfile);
+    }
+
+    return updatedProfile;
+  }
+
+  async getUserPurchases(userId: UserEntity.Id): Promise<PurchaseDetails[]> {
+    const selector = this.selector.userPurchases(userId);
+    const purchases = (await this.firestore.getItems(selector)) || [];
+    purchases.forEach(PurchaseDetailsEntity.validate);
+    return purchases as PurchaseDetails[];
+  }
+
+  async addUserPurchases(userId: UserEntity.Id, purchases: PurchaseDetails[]): Promise<void> {
+    const selector = this.selector.userPurchases(userId);
+    await Promise.all(purchases.map((p) => this.firestore.addItem(selector, p)));
   }
 
   async updateUserProfile(user: User): Promise<User> {
@@ -34,5 +55,30 @@ export class UserProvider {
     });
 
     await this.firestore.updateItem(selector, updatedUser);
+  }
+
+  private migrateProfileToVersion2(profile: User): User {
+    let updatedProfile = profile;
+
+    if (!profile.purchaseProfile) {
+      updatedProfile = produce(updatedProfile, (draft) => {
+        draft.purchaseProfile = PurchaseProfileEntity.initialPurchaseProfile;
+        draft.purchaseProfile.isQuestsAvailable = updatedProfile.boughtQuestsAccess || false;
+      });
+    }
+
+    if (!profile.multiplayerGamePlayed) {
+      updatedProfile = produce(updatedProfile, (draft) => {
+        draft.multiplayerGamePlayed = 0;
+      });
+    }
+
+    if (!profile.profileVersion) {
+      updatedProfile = produce(updatedProfile, (draft) => {
+        draft.profileVersion = 2;
+      });
+    }
+
+    return updatedProfile;
   }
 }

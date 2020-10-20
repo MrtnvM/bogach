@@ -21,6 +21,7 @@ class Styles {
     fontWeight: FontWeight.normal,
     fontStyle: FontStyle.normal,
     color: _defaultTextColor,
+    fontFamily: _defaultFontFamily,
   );
 
   static const body1 = TextStyle(
@@ -43,6 +44,7 @@ class Styles {
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
     color: _defaultTextColor,
+    fontFamily: _defaultFontFamily,
   );
 
   static const bodyBlack = TextStyle(
@@ -81,6 +83,7 @@ class Styles {
     fontWeight: FontWeight.w600,
     fontSize: 10,
     color: _defaultTextColor,
+    fontFamily: _defaultFontFamily,
   );
 
   static const error = TextStyle(
@@ -89,6 +92,7 @@ class Styles {
     fontSize: 10,
     height: 1.6,
     color: ColorRes.red,
+    fontFamily: _defaultFontFamily,
   );
 
   static const navBarTitle = TextStyle(

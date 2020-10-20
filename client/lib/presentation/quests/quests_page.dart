@@ -10,7 +10,7 @@ class QuestsPage extends StatelessWidget {
     return CashFlowScaffold(
       title: Strings.chooseQuest,
       showUser: true,
-      horizontalPadding: 10,
+      horizontalPadding: 0,
       showBackArrow: true,
       child: _buildBody(),
     );

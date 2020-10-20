@@ -37,10 +37,20 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
+			<string>Firebase Dynamic Links Staging</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>io.mobile.bogach.staging</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
 			<string>Firebase Dynamic Links</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>io.mobile.cashflow</string>
+				<string>io.mobile.bogach</string>
 			</array>
 		</dict>
 	</array>
@@ -52,8 +62,10 @@
 	<string>Капиталист</string>
 	<key>FirebaseDynamicLinksCustomDomains</key>
 	<array>
-		<string>https://capitalist-game.ru/join</string>
-		<string>https://www.capitalist-game.ru/join</string>
+		<string>https://staging.bogach-game.ru/join</string>
+		<string>https://staging.bogach-game.ru</string>
+		<string>https://bogach-game.ru</string>
+		<string>https://bogach-game.ru/join</string>
 	</array>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>

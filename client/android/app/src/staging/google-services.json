@@ -8,12 +8,56 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:911577434143:android:32cfd34490c5784c0dad2a",
+        "android_client_info": {
+          "package_name": "io.mobile.bogach"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911577434143-brb7qtirn8f8up0e7med6998925aiach.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp0pF4Qn4p3C9HX2V8SJNiD7Nc2ckX5CY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911577434143-brb7qtirn8f8up0e7med6998925aiach.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911577434143-qus6j1a5o4s0cmqlpkogi6b9lb8am9ve.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.mobile.bogach.uat"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:911577434143:android:f9234bf3fe5846260dad2a",
         "android_client_info": {
           "package_name": "io.mobile.bogach.staging"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "911577434143-6vjgbqtrqmf3dutabal183kv6pnv0lot.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.bogach.staging",
+            "certificate_hash": "f1c9de57781ad6a75ac5393f26e164012e77b737"
+          }
+        },
         {
           "client_id": "911577434143-rdmaom44pm9rfb6q9q1929uq5uu1bpqo.apps.googleusercontent.com",
           "client_type": 1,

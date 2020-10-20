@@ -1,6 +1,7 @@
+import 'package:cash_flow/models/domain/user/purchase_profile.dart';
 import 'package:cash_flow/resources/strings.dart';
-import 'package:flutter/foundation.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_profile.freezed.dart';
@@ -14,6 +15,9 @@ abstract class UserProfile with _$UserProfile implements StoreListItem {
     String avatarUrl,
     int currentQuestIndex,
     @JsonKey(defaultValue: false) bool boughtQuestsAccess,
+    @JsonKey(defaultValue: 0) int multiplayerGamePlayed,
+    PurchaseProfile purchaseProfile,
+    @JsonKey(defaultValue: 1) int profileVersion,
   }) = _UserProfile;
 
   factory UserProfile.fromJson(Map<String, dynamic> json) =>

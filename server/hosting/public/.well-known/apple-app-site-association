@@ -1,11 +1,28 @@
 {
-    "applinks": {
-        "apps" :[],
-        "details": [
-           {
-             "appID": "Q55XU7GJUK.io.mobile.cashflow",
-             "paths": [ "*" ]
-           }
-       ]
-    }
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "Q55XU7GJUK.io.mobile.cashflow",
+        "paths": [
+          "NOT /_/*",
+          "/*"
+        ]
+      },
+      {
+        "appID": "6A9RHKGZJT.io.mobile.bogach.staging",
+        "paths": [
+          "NOT /_/*",
+          "/*"
+        ]
+      },
+      {
+        "appID": "6A9RHKGZJT.io.mobile.bogach",
+        "paths": [
+          "NOT /_/*",
+          "/*"
+        ]
+      }
+    ]
+  }
 }

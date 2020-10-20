@@ -2,20 +2,23 @@ import * as functions from 'firebase-functions';
 import * as config from '../config';
 
 import { GameProvider } from '../providers/game_provider';
-import { RoomService } from '../services/room_service';
+import { RoomService } from '../services/room/room_service';
 import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from '../providers/firestore_selector';
 import { FirebaseMessaging } from '../core/firebase/firebase_messaging';
 import { UserProvider } from '../providers/user_provider';
-import { GameService } from '../services/game_service';
+import { GameService } from '../services/game/game_service';
 import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { TimerProvider } from '../providers/timer_provider';
+import { PurchaseService } from '../services/purchase/purchase_service';
+import { GameTemplatesProvider } from '../providers/game_templates_provider';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
-  const gameProvider = new GameProvider(firestore, selector);
+  const templatesProvider = new GameTemplatesProvider();
+  const gameProvider = new GameProvider(firestore, selector, templatesProvider);
   const gameLevelProvider = new GameLevelsProvider();
   const userProvider = new UserProvider(firestore, selector);
   const timerProvider = new TimerProvider();
@@ -23,6 +26,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
   const roomService = new RoomService(gameProvider, userProvider, timerProvider, firebaseMessaging);
   const gameService = new GameService(gameProvider, gameLevelProvider, userProvider, timerProvider);
+  const purchaseService = new PurchaseService(userProvider);
 
   const createRoom = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request, response);
@@ -53,12 +57,15 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const roomId = apiRequest.jsonField('roomId');
 
-    const createRoomRequest = async () => {
+    const createRoomGameRequest = async () => {
       const { room } = await roomService.createRoomGame(roomId);
+      await purchaseService.reduceMultiplayerGames(
+        room.participants.map((participant) => participant.id)
+      );
       return room;
     };
 
-    return send(createRoomRequest(), response);
+    await send(createRoomGameRequest(), response);
   });
 
   const completeMonth = https.onRequest(async (request, response) => {
@@ -69,7 +76,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const monthNumber = apiRequest.jsonField('month_number');
 
     const completeMonthRequest = gameService.completeMonth(gameId, monthNumber);
-    return send(completeMonthRequest, response);
+    await send(completeMonthRequest, response);
   });
 
   const send = <T>(data: Promise<T>, response: functions.Response) => {
