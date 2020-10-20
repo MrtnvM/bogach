@@ -25,7 +25,6 @@ import { MonthlyExpenseEventHandler } from '../../events/monthly_expense/monthly
 import { InsuranceHandler } from '../../events/insurance/insurance_handler';
 import { SalaryChangeEventHandler } from '../../events/salary_change/salary_change_event_handler';
 import { UserEntity } from '../../models/domain/user';
-import { GameTemplateEntity } from '../../models/domain/game/game_template';
 import { InsuranceTransformer } from '../../transformers/game/insurance_transformer';
 import { ResetEventIndexTransformer } from '../../transformers/game/reset_event_index_transformer';
 import { RealEstateBuyEventHandler } from '../../events/estate/buy/real_estate_buy_event_handler';
@@ -33,6 +32,7 @@ import { GameLevelEntity } from '../../game_levels/models/game_level';
 import { UserProvider } from '../../providers/user_provider';
 import { TimerProvider } from '../../providers/timer_provider';
 import { Game, GameEntity } from '../../models/domain/game/game';
+import { GameTemplateEntity } from '../../game_templates/models/game_template';
 
 export class GameService {
   constructor(

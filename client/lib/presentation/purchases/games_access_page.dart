@@ -34,13 +34,13 @@ class GamesAccessPage extends HookWidget {
       isLoading: isOperationInProgress,
       backgroundColor: Colors.black.withAlpha(100),
       child: FullscreenPopupContainer(
-        backgroundColor: ColorRes.questAccessPageBackgound,
+        backgroundColor: ColorRes.buyMultiplayerGamesPageBackground,
         content: Column(
           children: <Widget>[
             const _HeadlineImage(),
-            const SizedBox(height: 16),
+            const Spacer(flex: 1),
             const _QuestsAccessDescription(),
-            const Spacer(),
+            const Spacer(flex: 3),
             _PurchaseGameList(
               isStoreAvailable: isStoreAvailable.data,
             ),
@@ -52,7 +52,7 @@ class GamesAccessPage extends HookWidget {
   }
 }
 
-class _HeadlineImage extends StatelessWidget {
+class _HeadlineImage extends HookWidget {
   const _HeadlineImage({Key key}) : super(key: key);
 
   @override
@@ -60,11 +60,49 @@ class _HeadlineImage extends StatelessWidget {
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
     final imageSize = screenWidth * 0.75;
+    final cupSize = imageSize * 0.2;
+    final defaultCupTopOffset = imageSize * 0.15;
 
-    return SizedBox(
-      height: imageSize,
-      width: imageSize,
-      child: Image.asset(Images.questsAccess),
+    final cupAnimationController = useAnimationController(
+      duration: const Duration(seconds: 2),
+      initialValue: defaultCupTopOffset,
+      lowerBound: defaultCupTopOffset - 6,
+      upperBound: defaultCupTopOffset + 4,
+    );
+
+    useEffect(() {
+      cupAnimationController.repeat(reverse: true);
+      return null;
+    }, []);
+
+    return Padding(
+      padding: EdgeInsets.only(top: mediaQuery.padding.top),
+      child: SizedBox(
+        height: imageSize,
+        width: imageSize,
+        child: Stack(
+          children: [
+            Center(child: Image.asset(Images.multiplayerHeaderImage)),
+            AnimatedBuilder(
+              animation: cupAnimationController,
+              builder: (context, child) {
+                return Padding(
+                  padding: EdgeInsets.only(top: cupAnimationController.value),
+                  child: child,
+                );
+              },
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  height: cupSize,
+                  width: cupSize,
+                  child: Image.asset(Images.cup),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -77,7 +115,7 @@ class _QuestsAccessDescription extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 36),
       child: Text(
-        'У вас кончились игры,\nхотите купить ещё?',
+        'У вас кончились игры.\nХотите купить ещё?',
         textAlign: TextAlign.center,
         style: Styles.body2.copyWith(
           letterSpacing: 0.4,
