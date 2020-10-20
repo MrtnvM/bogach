@@ -188,14 +188,14 @@ class _PurchaseGameList extends HookWidget {
           ),
           _buildPurchase(
             purchase: MultiplayerGamePurchases.fiveGames,
-            title: '5 ${Strings.games(1)}',
+            title: '5 ${Strings.games(5)}',
             price: '75 ₽',
             gift: '+1',
             buy: buyMultiplayerGame,
           ),
           _buildPurchase(
             purchase: MultiplayerGamePurchases.tenGames,
-            title: '10 ${Strings.games(1)}',
+            title: '10 ${Strings.games(10)}',
             price: '149 ₽',
             gift: '+2',
             buy: buyMultiplayerGame,

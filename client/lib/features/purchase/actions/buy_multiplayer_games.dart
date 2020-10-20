@@ -4,7 +4,6 @@ import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/purchases/purchases.dart';
-import 'package:cash_flow/models/domain/user/purchase_profile.dart';
 import 'package:cash_flow/services/purchase_service.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:get_it/get_it.dart';
@@ -25,16 +24,10 @@ class BuyMultiplayerGames extends BaseAction {
     final purchaseService = GetIt.I.get<PurchaseService>();
     final userId = state.profile.currentUser.id;
 
-    PurchaseProfile purchaseProfile;
-
-    try {
-      purchaseProfile = await purchaseService.buyMultiplayerGames(
-        userId: userId,
-        purchase: purchase,
-      );
-    } catch (error) {
-      rethrow;
-    }
+    final purchaseProfile = await purchaseService.buyMultiplayerGames(
+      userId: userId,
+      purchase: purchase,
+    );
 
     if (purchaseProfile == null) {
       return null;
