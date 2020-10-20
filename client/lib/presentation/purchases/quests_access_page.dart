@@ -61,7 +61,7 @@ class QuestsAccessPage extends HookWidget {
       isLoading: isOperationInProgress,
       backgroundColor: Colors.black.withAlpha(100),
       child: FullscreenPopupContainer(
-        backgroundColor: ColorRes.questAccessPageBackgound,
+        backgroundColor: ColorRes.questAccessPageBackground,
         topRightActionWidget: const _RestorePurchasesButton(),
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

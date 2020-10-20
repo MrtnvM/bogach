@@ -125,7 +125,7 @@ void main() {
 
     expect(
       () => purchaseService.getProduct(product.id),
-      throwsA(isInstanceOf<NoInAppPurchaseProductsError>()),
+      throwsA(isInstanceOf<NoInAppPurchaseProductsException>()),
     );
   });
 
@@ -151,7 +151,7 @@ void main() {
 
     expect(
       () => purchaseService.queryPastPurchases(),
-      throwsA(isInstanceOf<QueryPastPurchasesRequestError>()),
+      throwsA(isInstanceOf<QueryPastPurchasesRequestException>()),
     );
   });
 
@@ -440,7 +440,7 @@ void main() {
 
       throw Exception('Should fail at previous line');
     } catch (error) {
-      expect(error, isInstanceOf<ProductPurchaseFailedError>());
+      expect(error, isInstanceOf<ProductPurchaseFailedException>());
     }
 
     verifyInOrder([
@@ -495,7 +495,7 @@ void main() {
 
       throw Exception('Should fail at previous line');
     } catch (error) {
-      expect(error, isInstanceOf<ProductPurchaseFailedError>());
+      expect(error, isInstanceOf<ProductPurchaseFailedException>());
     }
 
     verifyInOrder([

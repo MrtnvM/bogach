@@ -68,7 +68,7 @@ class PurchaseService {
 
     if (response.error != null) {
       Logger.e('Query of Past Purchases failed: ${response.error}');
-      throw QueryPastPurchasesRequestError(response.error);
+      throw QueryPastPurchasesRequestException(response.error);
     }
 
     final pastPurchases = response.pastPurchases;
@@ -113,7 +113,7 @@ class PurchaseService {
   Future<List<ProductDetails>> queryProductDetails({Set<String> ids}) {
     return _connection.queryProductDetails(ids).then((response) {
       if (response.notFoundIDs.isNotEmpty) {
-        throw NoInAppPurchaseProductsError(response.notFoundIDs);
+        throw NoInAppPurchaseProductsException(response.notFoundIDs);
       }
 
       return response.productDetails;
@@ -124,7 +124,7 @@ class PurchaseService {
     final response = await _connection.queryProductDetails({productId});
 
     if (response.notFoundIDs.isNotEmpty) {
-      throw NoInAppPurchaseProductsError(response.notFoundIDs);
+      throw NoInAppPurchaseProductsException(response.notFoundIDs);
     }
 
     final product = response.productDetails.first;
@@ -155,7 +155,12 @@ class PurchaseService {
 
       if (purchase.status == PurchaseStatus.error) {
         _completePurchasesIfNeeded([purchase], withRetry: true);
-        throw ProductPurchaseFailedError(product);
+
+        if (purchase.purchaseID == null) {
+          throw ProductPurchaseCanceledException(product);
+        } else {
+          throw ProductPurchaseFailedException(product);
+        }
       }
 
       Logger.i('Sending purchase for product ($productId) to server');
@@ -214,7 +219,12 @@ class PurchaseService {
 
       if (purchase.status == PurchaseStatus.error) {
         _completePurchasesIfNeeded([purchase], withRetry: true);
-        throw ProductPurchaseFailedError(product);
+
+        if (purchase.purchaseID == null) {
+          throw ProductPurchaseCanceledException(product);
+        } else {
+          throw ProductPurchaseFailedException(product);
+        }
       }
 
       Logger.i('Sending purchase for product ($productId) to server');
