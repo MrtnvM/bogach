@@ -13,6 +13,7 @@ class Strings {
 
   // Common
   static String get submit => 'Отправить';
+  static String get select => 'Выбрать';
 
   static String get email => 'Email';
 
@@ -341,6 +342,17 @@ class Strings {
         many: 'месяцев',
         other: 'месяцев',
       );
+
+  static String games(int number) => Intl.plural(
+        number,
+        zero: 'игр',
+        one: 'игра',
+        two: 'игры',
+        few: 'игры',
+        many: 'игр',
+        other: 'игр',
+      );
+
   static String get goToMainMenu => 'В главное меню';
 
   static String get sellBusinessNoChecked =>
@@ -363,6 +375,9 @@ class Strings {
   static String get joinRoomError =>
       'Не удалось подключиться к комнате игроков';
   static String get multiplayerGamesAvailable => 'Доступно игр:';
+  static String get multiplayerAdvertisingMessage =>
+      'У вас кончились игры.\nХотите купить ещё?';
+  static String get asGift => 'в подарок';
 
   // Onboarding
   static String get onboardingTitle1 => 'Финансовая грамотность';

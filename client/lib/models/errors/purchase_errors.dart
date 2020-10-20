@@ -1,13 +1,19 @@
 import 'package:in_app_purchase/in_app_purchase.dart';
 
-class ProductPurchaseFailedError extends Error {
-  ProductPurchaseFailedError(this.product);
+class ProductPurchaseFailedException implements Exception {
+  ProductPurchaseFailedException(this.product);
 
   final ProductDetails product;
 }
 
-class NoInAppPurchaseProductsError extends Error {
-  NoInAppPurchaseProductsError(this.notFoundIds);
+class ProductPurchaseCanceledException implements Exception {
+  const ProductPurchaseCanceledException(this.product);
+
+  final ProductDetails product;
+}
+
+class NoInAppPurchaseProductsException implements Exception {
+  NoInAppPurchaseProductsException(this.notFoundIds);
 
   final List<String> notFoundIds;
 
@@ -17,8 +23,8 @@ class NoInAppPurchaseProductsError extends Error {
   }
 }
 
-class QueryPastPurchasesRequestError extends Error {
-  QueryPastPurchasesRequestError(this.error);
+class QueryPastPurchasesRequestException implements Exception {
+  QueryPastPurchasesRequestException(this.error);
 
   final IAPError error;
 }
