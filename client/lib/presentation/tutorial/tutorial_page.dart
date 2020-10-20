@@ -13,6 +13,8 @@ import 'package:cash_flow/models/domain/game/target/target.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/debenture_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard.dart';
+import 'package:cash_flow/resources/images.dart';
+import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/tutorial/gameboard_tutorial_widget.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/material.dart';
@@ -34,16 +36,13 @@ class _TutorialPageState extends State<TutorialPage> {
     super.initState();
 
     const userId = 'user1';
-    const boagachAvatarUrl = 'https://firebasestorage.googleapis.com/v0/b/'
-        'bogach-production.appspot.com/o/avatar%2Fbogach128.png?'
-        'alt=media&token=5ff3572d-352c-46f7-b09b-871b6086a11b';
 
     store = Store(
       initialState: AppState.initial().rebuild((s) {
         s.profile.currentUser = UserProfile(
           userId: userId,
-          fullName: 'Богач Бородач',
-          avatarUrl: boagachAvatarUrl,
+          fullName: Strings.mascotName,
+          avatarUrl: Images.bogachAvatarUrl,
         );
 
         s.game.activeGameState = ActiveGameState.gameEvent(
@@ -53,7 +52,7 @@ class _TutorialPageState extends State<TutorialPage> {
 
         s.game.currentGame = Game(
           id: 'game1',
-          name: 'Черный бумер',
+          name: Strings.tutorialQuestName,
           type: GameType.singleplayer(),
           state: CurrentGameState(
             gameStatus: GameStatus.playersMove,
@@ -86,7 +85,7 @@ class _TutorialPageState extends State<TutorialPage> {
           currentEvents: [
             GameEvent(
               id: 'event1',
-              name: 'ОФЗ 29006',
+              name: Strings.tutorialDebentureExample,
               description: '',
               type: GameEventType.debenture(),
               data: DebentureEventData(

@@ -2,6 +2,8 @@ import 'package:intl/intl.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class Strings {
+  static String get mascotName => 'Богач Бородач';
+
   static String get unknownErrorTitle => 'Произошла ошибка 😒';
   static String get unknownError =>
       'Давай проверим соединенение с интернетом и попробуем ещё раз';
@@ -449,4 +451,8 @@ class Strings {
   static String get purchase10Game => '10 игр + 2 в подарок';
 
   static String get optimalPath => 'Оптимальный путь';
+
+  // Tutorial
+  static String get tutorialQuestName => 'Черный бумер';
+  static String get tutorialDebentureExample => 'ОФЗ 29006';
 }
