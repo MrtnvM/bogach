@@ -83,6 +83,7 @@ export class GameProvider {
         stocks: [],
         debentures: [],
         initialCash: template.accountState.cash,
+        gameTemplateId: template.id,
       },
     };
 
