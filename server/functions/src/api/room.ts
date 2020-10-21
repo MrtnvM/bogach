@@ -13,13 +13,20 @@ import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { TimerProvider } from '../providers/timer_provider';
 import { PurchaseService } from '../services/purchase/purchase_service';
 import { GameTemplatesProvider } from '../providers/game_templates_provider';
+import { FirestoreGameDAO } from '../dao/firestore/firestore_game_dao';
+import { FirestoreRoomDAO } from '../dao/firestore/firestore_room_dao';
+import { FirestoreUserDAO } from '../dao/firestore/firestore_user_dao';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
-  const templatesProvider = new GameTemplatesProvider();
-  const gameProvider = new GameProvider(firestore, selector, templatesProvider);
+  const gameDao = new FirestoreGameDAO(selector, firestore);
+  const roomDao = new FirestoreRoomDAO(selector, firestore);
+  const userDao = new FirestoreUserDAO(selector, firestore);
+
+  const gameTemplatesProvider = new GameTemplatesProvider();
   const gameLevelProvider = new GameLevelsProvider();
+  const gameProvider = new GameProvider(gameDao, roomDao, userDao, gameTemplatesProvider);
   const userProvider = new UserProvider(firestore, selector);
   const timerProvider = new TimerProvider();
   const firebaseMessaging = new FirebaseMessaging();

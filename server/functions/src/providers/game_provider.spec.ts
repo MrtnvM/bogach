@@ -8,13 +8,21 @@ import { GameProvider } from './game_provider';
 import { GameEntity } from '../models/domain/game/game';
 import { GameTemplateFixture } from '../core/fixtures/game_template_fixture';
 import { GameTemplatesProvider } from './game_templates_provider';
+import { FirestoreGameDAO } from '../dao/firestore/firestore_game_dao';
+import { FirestoreRoomDAO } from '../dao/firestore/firestore_room_dao';
+import { FirestoreUserDAO } from '../dao/firestore/firestore_user_dao';
 
 describe('Game Provider', () => {
   test('Could not create game without participants IDs array', async () => {
     const mockFirestore: Firestore = mock(Firestore);
     const mockSelector: FirestoreSelector = mock(FirestoreSelector);
     const mockGameTemplatesProvider: GameTemplatesProvider = mock(GameTemplatesProvider);
-    const gameProvider = new GameProvider(mockFirestore, mockSelector, mockGameTemplatesProvider);
+
+    const gameDao = new FirestoreGameDAO(mockSelector, mockFirestore);
+    const roomDao = new FirestoreRoomDAO(mockSelector, mockFirestore);
+    const userDao = new FirestoreUserDAO(mockSelector, mockFirestore);
+
+    const gameProvider = new GameProvider(gameDao, roomDao, userDao, mockGameTemplatesProvider);
 
     const templateId = 'template1';
 
@@ -43,7 +51,11 @@ describe('Game Provider', () => {
     const mockSelector = mock(FirestoreSelector);
     const mockGameTemplatesProvider = mock(GameTemplatesProvider);
 
-    const gameProvider = new GameProvider(mockFirestore, mockSelector, mockGameTemplatesProvider);
+    const gameDao = new FirestoreGameDAO(mockSelector, mockFirestore);
+    const roomDao = new FirestoreRoomDAO(mockSelector, mockFirestore);
+    const userDao = new FirestoreUserDAO(mockSelector, mockFirestore);
+
+    const gameProvider = new GameProvider(gameDao, roomDao, userDao, mockGameTemplatesProvider);
 
     const createGame = async () => {
       await gameProvider.createGame(templateId, participantsIds);
@@ -71,8 +83,13 @@ describe('Game Provider', () => {
 
     const firestore = instance(mockFirestore);
     const selector = instance(mockSelector);
-    const templateProvider = instance(mockGameTemplatesProvider)
-    const gameProvider = new GameProvider(firestore, selector, templateProvider);
+    const templateProvider = instance(mockGameTemplatesProvider);
+
+    const gameDao = new FirestoreGameDAO(selector, firestore);
+    const roomDao = new FirestoreRoomDAO(selector, firestore);
+    const userDao = new FirestoreUserDAO(selector, firestore);
+
+    const gameProvider = new GameProvider(gameDao, roomDao, userDao, templateProvider);
 
     const createdGame = await gameProvider.createGame(templateId, [userId]);
     const monthResults = createdGame.state.participantsProgress[userId].monthResults;
