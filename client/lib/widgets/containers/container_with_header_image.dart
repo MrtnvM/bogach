@@ -10,10 +10,11 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:cash_flow/widgets/tutorial/gameboard_tutorial_widget.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ContainerWithHeaderImage extends StatefulWidget {
   const ContainerWithHeaderImage({
@@ -57,8 +58,8 @@ class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final nocthHeight = mediaQuery.padding.top;
-    final imageHeight = _getBackgroundImageSize(nocthHeight);
+    final notchHeight = mediaQuery.padding.top;
+    final imageHeight = _getBackgroundImageSize(notchHeight);
     final contentOffset = imageHeight - 24;
 
     return Stack(
@@ -66,12 +67,13 @@ class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
         _buildHeader(
           imageHeight: imageHeight,
           topAlign: topAlign,
-          topPadding: nocthHeight,
+          topPadding: notchHeight,
         ),
         ListView(
           physics: const ClampingScrollPhysics(),
           controller: scrollController,
           padding: EdgeInsets.only(top: contentOffset, bottom: 16),
+          cacheExtent: 50,
           children: widget.children,
         ),
         AppStateConnector(
@@ -181,6 +183,10 @@ class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
   }
 
   Widget _buildHeaderContent() {
+    final gameTutorial = GameboardTutorialWidget.of(context);
+    final appState = StoreProvider.state<AppState>(context);
+    final isQuestGame = appState.game.currentGame.config.level != null;
+
     return Column(
       children: <Widget>[
         const SizedBox(height: 16),
@@ -194,6 +200,7 @@ class _ContainerWithHeaderImageState extends State<ContainerWithHeaderImage> {
         if (widget.subTitle != null)
           Text(
             widget.subTitle,
+            key: isQuestGame ? gameTutorial?.monthKey : null,
             style: Styles.bodyBlack.copyWith(
               color: ColorRes.white,
               fontSize: 15,

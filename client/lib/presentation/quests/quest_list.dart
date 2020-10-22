@@ -2,6 +2,7 @@ import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/features/config/config_hooks.dart';
 import 'package:cash_flow/features/new_game/actions/get_quests_action.dart';
 import 'package:cash_flow/features/new_game/actions/start_quest_game_action.dart';
 import 'package:cash_flow/features/profile/actions/load_current_user_profile_action.dart';
@@ -11,6 +12,7 @@ import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard.dart';
 import 'package:cash_flow/presentation/purchases/quests_access_page.dart';
 import 'package:cash_flow/presentation/quests/quest_item_widget.dart';
+import 'package:cash_flow/presentation/tutorial/tutorial_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/common/common_error_widget.dart';
 import 'package:cash_flow/widgets/common/empty_widget.dart';
@@ -130,13 +132,13 @@ class _QuestItemWidget extends HookWidget {
       (s) => s.newGame.currentGameForQuests,
     );
 
-    final onLevelSelected = _getOnQuestSelectedFn();
+    final onQuestSelected = _getOnQuestSelectedFn();
 
     return QuestItemWidget(
       quest: quests,
       currentGameId: currentGameForQuests[quests.id],
-      isLocked: onLevelSelected == null,
-      onQuestSelected: onLevelSelected ?? (l, a) => defaultAction(),
+      isLocked: onQuestSelected == null,
+      onQuestSelected: onQuestSelected ?? (l, a) => defaultAction(),
     );
   }
 
@@ -154,11 +156,14 @@ class _QuestItemWidget extends HookWidget {
         (isQuestPurchased && isQuestOpenedByUser) || DemoMode.isEnabled;
 
     final dispatch = useDispatcher();
+    final isTutorialPassed = useConfig((c) => c.isGameboardTutorialPassed);
 
     if (isQuestAvailable) {
       return (quest, action) {
         return dispatch(StartQuestGameAction(quest.id, action))
-            .then((_) => appRouter.goTo(GameBoard()))
+            .then((_) => isTutorialPassed
+                ? appRouter.goTo(const GameBoard())
+                : appRouter.goTo(const TutorialPage()))
             .catchError((e) => handleError(context: context, exception: e));
       };
     }

@@ -2,6 +2,7 @@ import 'package:cash_flow/presentation/gameboard/widgets/table/table_divider.dar
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/containers/card_container.dart';
+import 'package:cash_flow/widgets/tutorial/gameboard_tutorial_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -31,19 +32,25 @@ class InfoTable extends StatelessWidget {
   Widget build(BuildContext context) {
     if (withShadow) {
       return CardContainer(
-        padding:
-            const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 20),
-        child: _buildBody(),
+        padding: const EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 20,
+          bottom: 20,
+        ),
+        child: _buildBody(context),
       );
     }
+
     return Container(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 20),
-      child: _buildBody(),
+      child: _buildBody(context),
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(BuildContext context) {
     return Column(
+      key: GameboardTutorialWidget.of(context)?.gameEventKey,
       children: <Widget>[
         ..._buildHeader(),
         const TableDivider(),

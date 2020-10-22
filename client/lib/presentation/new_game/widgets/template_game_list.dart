@@ -2,6 +2,7 @@ import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/features/config/config_hooks.dart';
 import 'package:cash_flow/features/new_game/actions/get_game_templates_action.dart';
 import 'package:cash_flow/features/new_game/actions/start_singleplayer_game_action.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
@@ -9,6 +10,7 @@ import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard.dart';
 import 'package:cash_flow/presentation/new_game/widgets/game_template_item.dart';
+import 'package:cash_flow/presentation/tutorial/tutorial_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/common/common_error_widget.dart';
 import 'package:cash_flow/widgets/common/empty_widget.dart';
@@ -29,19 +31,22 @@ class TemplateGameList extends HookWidget {
     );
 
     final gameTemplates = useGlobalState((s) => s.newGame.gameTemplates);
+    final isTutorialPassed = useConfig((c) => c.isGameboardTutorialPassed);
     final dispatch = useDispatcher();
 
     void Function(GameTemplate) createNewGame;
     createNewGame = (template) {
-      dispatch(StartSinglePlayerGameAction(templateId: template.id)).then((_) {
-        appRouter.goTo(GameBoard());
-      }).catchError(
-        (e) => handleError(
-          context: context,
-          exception: e,
-          onRetry: () => createNewGame(template),
-        ),
-      );
+      dispatch(StartSinglePlayerGameAction(templateId: template.id))
+          .then((_) => isTutorialPassed
+              ? appRouter.goTo(const GameBoard())
+              : appRouter.goTo(const TutorialPage()))
+          .catchError(
+            (e) => handleError(
+              context: context,
+              exception: e,
+              onRetry: () => createNewGame(template),
+            ),
+          );
     };
 
     final isLoading = templatesRequestState.isInProgress ||

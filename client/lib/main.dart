@@ -14,6 +14,7 @@ import 'package:cash_flow/configuration/control_panel.dart';
 import 'package:cash_flow/configuration/error_reporting.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/configuration/ui_kit.dart';
+import 'package:cash_flow/features/config/actions/load_config_action.dart';
 import 'package:cash_flow/features/profile/actions/set_current_user_action.dart';
 import 'package:cash_flow/features/purchase/actions/listening_purchases_actions.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -75,6 +76,7 @@ Future<void> main({
   final isAuthorized = currentUser != null;
   store.dispatch(SetCurrentUserAction(currentUser));
   store.dispatch(StartListeningPurchasesAction());
+  store.dispatch(LoadConfigAction());
 
   final isFirstLaunch = launchCounter.isFirstLaunch();
   if (isFirstLaunch) {
