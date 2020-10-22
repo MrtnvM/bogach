@@ -21,8 +21,6 @@ class ConfigService {
       final jsonData = json.decode(jsonString);
       final config = ConfigState.fromJson(jsonData);
       return config;
-
-      // ignore: avoid_catches_without_on_clauses
     } catch (error) {
       return ConfigState.initial();
     }
