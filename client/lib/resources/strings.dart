@@ -455,4 +455,12 @@ class Strings {
   // Tutorial
   static String get tutorialQuestName => 'Черный бумер';
   static String get tutorialDebentureExample => 'ОФЗ 29006';
+  static String get tutorialGoNext1 => 'Ок';
+  static String get tutorialGoNext2 => 'Понятно';
+  static String get tutorialGoNext3 => 'Ага';
+  static String get tutorialGoNext4 => 'Дальше';
+  static String get tutorialGoNext5 => 'Ясно';
+  static String get tutorialGoNext6 => 'Хорошо';
+  static String get tutorialGoNext7 => 'Ок';
+  static String get tutorialFinish => 'Погнали!';
 }
