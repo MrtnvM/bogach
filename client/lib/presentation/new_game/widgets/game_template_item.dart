@@ -85,11 +85,13 @@ class GameTemplateItem extends HookWidget {
                   children: <Widget>[
                     ActionButton(
                       text: Strings.startAgain,
+                      textStyle: Styles.bodyBlack.copyWith(fontSize: 12.5),
                       color: ColorRes.grey2,
                       onPressed: () => onStartNewGamePressed(gameTemplate),
                     ),
                     ActionButton(
                       text: Strings.continueAction,
+                      textStyle: Styles.bodyBlack.copyWith(fontSize: 12.5),
                       color: ColorRes.yellow,
                       onPressed: () => onContinueGamePressed(gameTemplate),
                     ),
