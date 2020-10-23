@@ -1,6 +1,7 @@
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/possession_state/incomes/income.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'target.freezed.dart';
@@ -53,5 +54,20 @@ double mapGameToCurrentTargetValue(Game game, String userId) {
 
     default:
       return 0;
+  }
+}
+
+String mapGameToCurrentTargetStringValue(Game game, String userId) {
+  final targetValue = mapGameToCurrentTargetValue(game, userId);
+
+  switch (game.target.type) {
+    case TargetType.cash:
+      return targetValue.toPrice();
+
+    case TargetType.passiveIncome:
+      return targetValue.toPrice();
+
+    default:
+      return 0.toPrice();
   }
 }
