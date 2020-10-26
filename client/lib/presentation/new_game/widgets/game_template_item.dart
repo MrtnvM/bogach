@@ -3,9 +3,9 @@ import 'package:cash_flow/models/domain/game/target/target.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
+import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:cash_flow/widgets/buttons/action_button.dart';
 import 'package:flutter/material.dart';
-import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

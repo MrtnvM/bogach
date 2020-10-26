@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -129,8 +130,8 @@ class QuestItemWidget extends HookWidget {
   }
 
   Widget getTemplateIcon() {
-    return Image.network(
-      quest.icon,
+    return Image(
+      image: CachedNetworkImageProvider(quest.icon),
       height: 38,
       width: 38,
     );

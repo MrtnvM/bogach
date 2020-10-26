@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
@@ -47,9 +48,13 @@ class Badge extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (imageAsset != null)
-              Image.asset(imageAsset, height: 24, width: 24),
-            if (imageUrl != null && imageAsset == null)
-              Image.network(imageUrl, height: 24, width: 24),
+              Image.asset(imageAsset, height: 24, width: 24)
+            else if (imageUrl != null)
+              Image(
+                image: CachedNetworkImageProvider(imageUrl),
+                height: 24,
+                width: 24,
+              ),
             const SizedBox(width: 8),
             if (title != null)
               Text(
