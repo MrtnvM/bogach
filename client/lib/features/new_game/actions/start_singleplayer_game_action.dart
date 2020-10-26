@@ -14,9 +14,19 @@ class StartSinglePlayerGameAction extends BaseAction {
       : assert(templateId != null);
 
   final String templateId;
+  String _initialNewGameId;
 
   @override
   Operation get operationKey => Operation.createGame;
+
+  @override
+  bool abortDispatch() => state.profile.currentUser == null;
+
+  @override
+  FutureOr<void> before() {
+    super.before();
+    _initialNewGameId = state.newGame.newGameId;
+  }
 
   @override
   FutureOr<AppState> reduce() async {
@@ -28,11 +38,21 @@ class StartSinglePlayerGameAction extends BaseAction {
       userId: userId,
     );
 
-    final gameContext = GameContext(gameId: newGameId, userId: userId);
-    dispatch(StartGameAction(gameContext));
-
     return state.rebuild((s) {
       s.newGame.newGameId = newGameId;
     });
+  }
+
+  @override
+  void after() {
+    super.after();
+
+    final userId = state.profile.currentUser?.id;
+    final newGameId = state.newGame.newGameId;
+
+    if (userId != null && newGameId != null && _initialNewGameId != newGameId) {
+      final gameContext = GameContext(gameId: newGameId, userId: userId);
+      dispatch(StartGameAction(gameContext));
+    }
   }
 }
