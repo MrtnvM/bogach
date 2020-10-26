@@ -20,8 +20,8 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/utils/core/tuple.dart';
-import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';
+import 'package:cash_flow/widgets/containers/note.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
@@ -46,16 +46,7 @@ class RoomPage extends HookWidget {
             .where((p) => p.id == userId)
             .any((p) => p.status == RoomParticipantStatus.ready);
 
-    final canStartGame = room != null ? room.participants.length >= 2 : false;
-
     _useAutoTransitionToCreatedGame();
-
-    final dispatch = useDispatcher();
-
-    final inviteByLink = () {
-      dispatch(ShareRoomInviteLinkAction(room.id))
-          .catchError((e) => handleError(context: context, exception: e));
-    };
 
     return LoadableView(
       backgroundColor: ColorRes.black80,
@@ -70,67 +61,154 @@ class RoomPage extends HookWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              const Divider(height: 1),
               Expanded(child: _ParticipantListWidget()),
-              const SizedBox(height: 36),
-              if (isCurrentUserRoomOwner) ...[
-                _buildInviteByLinkButton(inviteByLink),
-                const SizedBox(height: 16),
-                _buildStartGameButton(
-                  startGame: () => dispatch(CreateRoomGameAction()),
-                  canStartGame: canStartGame,
-                ),
-              ],
-              if (!isCurrentUserRoomOwner && !isParticipantAlreadyJoined)
-                _buildReadyButton(
-                  join: () => dispatch(SetRoomParticipantReadyAction(userId)),
-                ),
+              const Divider(height: 1),
               const SizedBox(height: 16),
+              if (isCurrentUserRoomOwner)
+                _InviteFriendsNote()
+              else
+                _JoinToRoomNote(),
+              const SizedBox(height: 24),
+              if (isCurrentUserRoomOwner) ...[
+                Row(
+                  children: const [
+                    Expanded(child: _InviteButton()),
+                    SizedBox(height: 16, width: 16),
+                    Expanded(child: _StartGameButton()),
+                  ],
+                ),
+                const SizedBox(height: 24),
+              ] else if (!isParticipantAlreadyJoined) ...[
+                const _JoinRoomButton(),
+                const SizedBox(height: 24),
+              ],
             ],
           ),
         ),
       ),
     );
   }
+}
 
-  Widget _buildStartGameButton({
-    @required VoidCallback startGame,
-    @required bool canStartGame,
-  }) {
-    return SizedBox(
-      height: 50,
-      width: 200,
-      child: ColorButton(
-        text: Strings.startGame,
-        onPressed: canStartGame ? startGame : null,
-        color: ColorRes.white,
+class _JoinRoomButton extends HookWidget {
+  const _JoinRoomButton({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final userId = useUserId();
+    final dispatch = useDispatcher();
+    final join = () => dispatch(SetRoomParticipantReadyAction(userId));
+
+    return _Button(
+      title: Strings.join,
+      icon: Icons.check,
+      onTap: join,
+      color: ColorRes.white,
+    );
+  }
+}
+
+class _StartGameButton extends HookWidget {
+  const _StartGameButton({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final room = useGlobalState((s) => s.multiplayer.currentRoom);
+    final canStartGame = room != null ? room.participants.length >= 2 : false;
+
+    final dispatch = useDispatcher();
+    final startGame = () => dispatch(CreateRoomGameAction());
+
+    return _Button(
+      title: Strings.startGame,
+      icon: Icons.check,
+      onTap: canStartGame ? startGame : null,
+      color: ColorRes.white,
+    );
+  }
+}
+
+class _InviteButton extends HookWidget {
+  const _InviteButton({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final roomId = useGlobalState((s) => s.multiplayer.currentRoom?.id);
+    final dispatch = useDispatcher();
+
+    final inviteByLink = () {
+      dispatch(ShareRoomInviteLinkAction(roomId))
+          .catchError((e) => handleError(context: context, exception: e));
+    };
+
+    return _Button(
+      title: Strings.invite,
+      icon: Icons.add,
+      color: ColorRes.yellow,
+      onTap: inviteByLink,
+    );
+  }
+}
+
+class _Button extends StatelessWidget {
+  const _Button({
+    @required this.title,
+    @required this.icon,
+    @required this.color,
+    @required this.onTap,
+    Key key,
+  }) : super(key: key);
+
+  final String title;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Opacity(
+      opacity: onTap == null ? 0.6 : 1,
+      child: Container(
+        constraints: const BoxConstraints(minWidth: 120, maxWidth: 200),
+        height: 50,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(25),
+          boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 4)],
+        ),
+        alignment: Alignment.center,
+        child: InkWell(
+          onTap: onTap,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 20, color: Colors.black),
+              const SizedBox(width: 6),
+              Text(
+                title,
+                style: Styles.bodyBlack.copyWith(fontSize: 15),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
+}
 
-  Widget _buildReadyButton({
-    VoidCallback join,
-  }) {
-    return SizedBox(
-      height: 50,
-      width: 200,
-      child: ColorButton(
-        text: Strings.join,
-        onPressed: join,
-        color: ColorRes.white,
-      ),
-    );
+class _InviteFriendsNote extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Note(title: Strings.inviteFriendsToStart);
   }
+}
 
-  Widget _buildInviteByLinkButton(VoidCallback inviteByLink) {
-    return SizedBox(
-      height: 50,
-      width: 280,
-      child: ColorButton(
-        text: Strings.inviteByLink,
-        onPressed: inviteByLink,
-        color: ColorRes.white,
-      ),
-    );
+class _JoinToRoomNote extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Note(title: Strings.joinToRoom);
   }
 }
 
@@ -179,19 +257,25 @@ class _ParticipantListWidget extends HookWidget {
         .toList();
 
     return SingleChildScrollView(
-      child: Wrap(
-        direction: Axis.horizontal,
-        alignment: WrapAlignment.center,
-        children: <Widget>[
-          for (final participant in participantsList)
-            _buildParticipantWidget(
-              participant: participant.item1,
-              profile: participant.item2 ??
-                  UserProfile.unknownUser(
-                    participant.item1.id,
-                  ),
-            )
-        ],
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minWidth: double.infinity,
+          maxWidth: double.infinity,
+        ),
+        child: Wrap(
+          direction: Axis.horizontal,
+          alignment: WrapAlignment.center,
+          children: <Widget>[
+            for (final participant in participantsList)
+              _buildParticipantWidget(
+                participant: participant.item1,
+                profile: participant.item2 ??
+                    UserProfile.unknownUser(
+                      participant.item1.id,
+                    ),
+              )
+          ],
+        ),
       ),
     );
   }
