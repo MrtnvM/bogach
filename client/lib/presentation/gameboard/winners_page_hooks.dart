@@ -25,7 +25,7 @@ VoidCallback useGameRestarter() {
     );
 
     dispatch(action).then((_) {
-      appRouter.goTo(GameBoard());
+      appRouter.goTo(const GameBoard());
     }).catchError(
       (error) => handleError(
         context: context,

@@ -4,6 +4,7 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
+import 'package:cash_flow/widgets/tutorial/gameboard_tutorial_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -15,6 +16,7 @@ class AccountBar extends HookWidget {
   Widget build(BuildContext context) {
     final userId = useUserId();
     final account = useCurrentGame((g) => g.accounts[userId]);
+    final gameboardTutorial = useGameboardTutorial();
 
     return Container(
       width: double.infinity,
@@ -24,6 +26,7 @@ class AccountBar extends HookWidget {
       child: Row(
         children: [
           Expanded(
+            key: gameboardTutorial?.cashFlowKey,
             child: _buildItem(
               title: '${Strings.cashFlowShort}',
               value: account.cashFlow,
@@ -31,6 +34,7 @@ class AccountBar extends HookWidget {
           ),
           _buildDivider(),
           Expanded(
+            key: gameboardTutorial?.cashKey,
             child: _buildItem(
               title: '${Strings.cash}',
               value: account.cash,
@@ -38,6 +42,7 @@ class AccountBar extends HookWidget {
           ),
           _buildDivider(),
           Expanded(
+            key: gameboardTutorial?.creditKey,
             child: _buildItem(
               title: '${Strings.credit}',
               value: account.credit,

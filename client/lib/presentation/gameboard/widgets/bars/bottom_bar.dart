@@ -7,11 +7,13 @@ class BottomBarItem {
   const BottomBarItem({
     @required this.title,
     @required this.image,
+    this.key,
     this.onPressed,
   });
 
   final String title;
   final String image;
+  final GlobalKey key;
   final VoidCallback onPressed;
 }
 
@@ -59,6 +61,7 @@ class BottomBar extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       child: SafeArea(
         child: SizedBox(
+          key: item.key,
           height: 56,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -67,9 +70,8 @@ class BottomBar extends StatelessWidget {
                 item.image,
                 width: 24,
                 height: 24,
-                color: isSelected
-                    ? ColorRes.mainGreen
-                    : ColorRes.primaryGreyColor,
+                color:
+                    isSelected ? ColorRes.mainGreen : ColorRes.primaryGreyColor,
               ),
               Text(
                 item.title,

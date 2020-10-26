@@ -46,6 +46,7 @@ class GamesAccessPage extends HookWidget {
             _PurchaseGameList(
               isStoreAvailable: isStoreAvailable.data,
             ),
+            const Spacer(flex: 1),
             const SizedBox(height: 24),
           ],
         ),
@@ -114,6 +115,10 @@ class _QuestsAccessDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final screenWidth = mediaQuery.size.width;
+    final isSmallScreen = screenWidth < 350;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 36),
       child: Text(
@@ -121,7 +126,7 @@ class _QuestsAccessDescription extends StatelessWidget {
         textAlign: TextAlign.center,
         style: Styles.body2.copyWith(
           letterSpacing: 0.4,
-          fontSize: 15,
+          fontSize: isSmallScreen ? 13.5 : 15,
         ),
       ),
     );
@@ -174,33 +179,46 @@ class _PurchaseGameList extends HookWidget {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _buildPurchase(
-            purchase: MultiplayerGamePurchases.oneGame,
-            title: '1 ${Strings.games(1)}',
-            price: '15 ₽',
-            buy: buyMultiplayerGame,
-          ),
-          _buildPurchase(
-            purchase: MultiplayerGamePurchases.fiveGames,
-            title: '5 ${Strings.games(5)}',
-            price: '75 ₽',
-            gift: '+1',
-            buy: buyMultiplayerGame,
-          ),
-          _buildPurchase(
-            purchase: MultiplayerGamePurchases.tenGames,
-            title: '10 ${Strings.games(10)}',
-            price: '149 ₽',
-            gift: '+2',
-            buy: buyMultiplayerGame,
-          ),
-        ],
+    final mediaQuery = MediaQuery.of(context);
+    final screenWidth = mediaQuery.size.width;
+    final isSmallScreen = screenWidth < 350;
+
+    return MediaQuery(
+      data: mediaQuery.copyWith(
+        textScaleFactor: isSmallScreen ? 0.8 : 1,
+      ),
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 400),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildPurchase(
+              purchase: MultiplayerGamePurchases.oneGame,
+              title: '1 ${Strings.games(1)}',
+              price: '15 ₽',
+              buy: buyMultiplayerGame,
+              isCompactVersion: isSmallScreen,
+            ),
+            _buildPurchase(
+              purchase: MultiplayerGamePurchases.fiveGames,
+              title: '5 ${Strings.games(5)}',
+              price: '75 ₽',
+              gift: '+1',
+              buy: buyMultiplayerGame,
+              isCompactVersion: isSmallScreen,
+            ),
+            _buildPurchase(
+              purchase: MultiplayerGamePurchases.tenGames,
+              title: '10 ${Strings.games(10)}',
+              price: '149 ₽',
+              gift: '+2',
+              buy: buyMultiplayerGame,
+              isCompactVersion: isSmallScreen,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -211,10 +229,11 @@ class _PurchaseGameList extends HookWidget {
     String price,
     String gift,
     void Function(MultiplayerGamePurchases) buy,
+    bool isCompactVersion = false,
   }) {
     return Container(
-      height: 200,
-      width: 110,
+      height: isCompactVersion ? 184 : 200,
+      width: isCompactVersion ? 94 : 110,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
       decoration: BoxDecoration(
         color: ColorRes.white.withAlpha(50),

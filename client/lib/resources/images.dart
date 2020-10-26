@@ -44,6 +44,10 @@ class Images {
 
   static const questsAccess = 'assets/images/png/quests_access.png';
 
+  static const bogachAvatarUrl = 'https://firebasestorage.googleapis.com/v0/b/'
+      'bogach-production.appspot.com/o/avatar%2Fbogach128.png?'
+      'alt=media&token=5ff3572d-352c-46f7-b09b-871b6086a11b';
+
   // Bottom bar icons
   static const financesBarIcon = 'assets/images/svg/footer_financal.svg';
   static const progressBarIcon = 'assets/images/svg/footer_progress.svg';

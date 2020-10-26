@@ -149,7 +149,7 @@ _AppActions useAppActions() {
         joinRoom();
       },
     ),
-    [],
+    [multiplayerGamesCount],
   );
 }
 
