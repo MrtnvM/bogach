@@ -19,10 +19,10 @@ import 'package:cash_flow/presentation/new_game/widgets/game_template_item.dart'
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/common/common_error_widget.dart';
 import 'package:cash_flow/widgets/common/empty_widget.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
+import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:dash_kit_loadable/dash_kit_loadable.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
 
 class TemplateGameList extends HookWidget {
   @override
@@ -62,10 +62,12 @@ class TemplateGameList extends HookWidget {
 
     final userId = useUserId();
     final userGames = useGlobalState((s) {
-      final games = s.newGame.userGames.items.where((game) =>
-          game.type == GameType.singleplayer() &&
-          game?.config?.gameTemplateId != null &&
-          game.state.gameStatus != GameStatus.gameOver).toList();
+      final games = s.newGame.userGames.items
+          .where((game) =>
+              game.type == GameType.singleplayer() &&
+              game?.config?.gameTemplateId != null &&
+              game.state.gameStatus != GameStatus.gameOver)
+          .toList();
 
       games.sort((game1, game2) => game2.id.compareTo(game1.id));
 
@@ -84,8 +86,6 @@ class TemplateGameList extends HookWidget {
       final gameId = userGames[template.id].id;
       final gameContext = GameContext(gameId: gameId, userId: userId);
       dispatch(StartGameAction(gameContext));
-
-      appRouter.goToRoot();
       appRouter.goTo(GameBoard());
     };
 
