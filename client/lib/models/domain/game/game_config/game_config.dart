@@ -9,6 +9,7 @@ abstract class GameConfig with _$GameConfig {
     String level,
     int monthLimit,
     int initialCash,
+    String gameTemplateId,
   }) = _GameConfig;
 
   factory GameConfig.fromJson(Map<String, dynamic> json) =>
