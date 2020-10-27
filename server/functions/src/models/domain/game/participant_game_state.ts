@@ -1,4 +1,4 @@
-import { UserEntity } from '../user';
+import { UserEntity } from '../user/user';
 
 export type ParticipantGameState<T> = {
   [userId: string]: T;

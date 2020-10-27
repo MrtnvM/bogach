@@ -1,5 +1,5 @@
 import { Game, GameEntity } from '../../models/domain/game/game';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user/user';
 import { Possessions } from '../../models/domain/possessions';
 import { InsuranceEvent } from './insurance_event';
 import { GameFixture } from '../../core/fixtures/game_fixture';

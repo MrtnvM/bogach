@@ -2,7 +2,7 @@ import { InsuranceEvent } from './insurance_event';
 import { Game } from '../../models/domain/game/game';
 import { InsuranceAssetEntity, InsuranceAsset } from '../../models/domain/assets/insurance_asset';
 import { Account } from '../../models/domain/account';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user/user';
 import { Asset } from '../../models/domain/asset';
 import produce from 'immer';
 import { DomainErrors } from '../../core/exceptions/domain/domain_errors';

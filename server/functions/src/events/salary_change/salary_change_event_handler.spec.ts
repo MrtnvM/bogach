@@ -4,7 +4,7 @@ import produce from 'immer';
 import { SalaryChangeEventHandler } from './salary_change_event_handler';
 import { SalaryChangeEvent } from './salary_change_event';
 import { GameFixture } from '../../core/fixtures/game_fixture';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user/user';
 
 describe('Salary change event handler', () => {
   test('Successfully change salary', async () => {

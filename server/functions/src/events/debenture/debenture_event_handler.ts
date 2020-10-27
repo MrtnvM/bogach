@@ -6,7 +6,7 @@ import { BuySellAction } from '../../models/domain/actions/buy_sell_action';
 import { Game } from '../../models/domain/game/game';
 import { Account } from '../../models/domain/account';
 import produce from 'immer';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user/user';
 import { DomainErrors } from '../../core/exceptions/domain/domain_errors';
 
 type Event = DebentureEvent.Event;

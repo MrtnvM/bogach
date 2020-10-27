@@ -5,6 +5,7 @@ import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from '../providers/firestore_selector';
 import { UserProvider } from '../providers/user_provider';
+import { UserEntity } from '../models/domain/user/user';
 
 export const create = (firestore: Firestore, selector: FirestoreSelector) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
@@ -16,7 +17,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     apiRequest.checkMethod('GET');
 
     const userId = apiRequest.queryParameter('userId');
-    const userProfile = userProvider.getUserProfile(userId);
+    const userProfile = userProvider.getUserProfile(userId as UserEntity.Id);
 
     await send(userProfile, response);
   });

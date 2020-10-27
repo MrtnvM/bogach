@@ -1,5 +1,5 @@
 import { Entity } from '../../core/domain/entity';
-import { UserEntity, User } from './user';
+import { UserEntity, User } from './user/user';
 import { GameTemplateEntity } from '../../game_templates/models/game_template';
 import { GameEntity } from './game/game';
 

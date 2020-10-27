@@ -6,7 +6,7 @@ import { PlayerActionHandler } from '../../../core/domain/player_action_handler'
 import { Game } from '../../../models/domain/game/game';
 import { Account } from '../../../models/domain/account';
 import { BusinessAsset } from '../../../models/domain/assets/business_asset';
-import { UserEntity } from '../../../models/domain/user';
+import { UserEntity } from '../../../models/domain/user/user';
 import { DomainErrors } from '../../../core/exceptions/domain/domain_errors';
 
 type Event = BusinessBuyEvent.Event;

@@ -6,7 +6,7 @@ import produce from 'immer';
 import { StockEvent } from './stock_event';
 import { StockAsset } from '../../models/domain/assets/stock_asset';
 import { Account } from '../../models/domain/account';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user/user';
 import { DomainErrors } from '../../core/exceptions/domain/domain_errors';
 
 type Event = StockEvent.Event;

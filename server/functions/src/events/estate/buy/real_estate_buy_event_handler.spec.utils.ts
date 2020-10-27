@@ -1,6 +1,6 @@
 import { Game, GameEntity } from '../../../models/domain/game/game';
 import { RealtyAsset } from '../../../models/domain/assets/realty_asset';
-import { UserEntity } from '../../../models/domain/user';
+import { UserEntity } from '../../../models/domain/user/user';
 import { Possessions } from '../../../models/domain/possessions';
 import { GameEventEntity } from '../../../models/domain/game/game_event';
 import { GameFixture } from '../../../core/fixtures/game_fixture';

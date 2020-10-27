@@ -1,4 +1,4 @@
-import { User } from '../../models/domain/user';
+import { User } from '../../models/domain/user/user';
 import { PurchaseDetails } from '../../models/purchases/purchase_details';
 import { PurchaseProfile, PurchaseProfileEntity } from '../../models/purchases/purchase_profile';
 
@@ -14,6 +14,10 @@ const getInitialProfile = (profile?: Partial<User>): User => {
 
     multiplayerGamePlayed: profile?.multiplayerGamePlayed || 0,
     purchaseProfile: profile?.purchaseProfile,
+
+    playedGames: profile?.playedGames || {
+      multiplayerGames: [],
+    },
   };
 };
 
