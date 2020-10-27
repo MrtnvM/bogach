@@ -400,6 +400,7 @@ class Strings {
   static String get allPlayers => 'Все игроки';
   static String get createRoom => 'Создать комнату';
   static String get inviteByLink => 'Пригласить по ссылке';
+  static String get invite => 'Пригласить';
   static String get startGame => 'Начать игру';
   static String get roomCreationFailed =>
       'При создании комнаты возникла ошибка';
@@ -413,6 +414,10 @@ class Strings {
   static String get multiplayerAdvertisingMessage =>
       'У вас кончились игры.\nХотите купить ещё?';
   static String get asGift => 'в подарок';
+  static String get inviteFriendsToStart =>
+      'Пригласите друзей, чтобы начать игру';
+  static String get joinToRoom => 'Игра начнётся автоматически, '
+      'как только участники присоединятся и лидер начнёт игру';
 
   // Onboarding
   static String get onboardingTitle1 => 'Финансовая грамотность';
