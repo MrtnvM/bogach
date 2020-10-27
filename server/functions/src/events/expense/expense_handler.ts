@@ -2,7 +2,7 @@ import { PlayerActionHandler } from '../../core/domain/player_action_handler';
 import { Game } from '../../models/domain/game/game';
 import { Account } from '../../models/domain/account';
 import produce from 'immer';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user/user';
 import { ExpenseEvent } from './expense_event';
 import { InsuranceAsset } from '../../models/domain/assets/insurance_asset';
 

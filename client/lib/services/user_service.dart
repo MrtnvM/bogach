@@ -138,7 +138,7 @@ class UserService {
   Future<UserProfile> loadCurrentProfile(String userId) async {
     final currentUserProfile = await userCache.getUserProfile();
 
-    const requiredVersionOfProfile = 2;
+    const requiredVersionOfProfile = 3;
     final currentVersionOfProfile = currentUserProfile?.profileVersion ?? 1;
 
     UserProfile updatedUserProfile;

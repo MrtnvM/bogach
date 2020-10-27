@@ -1,4 +1,4 @@
-import { UserEntity } from '../user';
+import { UserEntity } from '../user/user';
 import { GameEntity } from './game';
 import { Entity } from '../../../core/domain/entity';
 

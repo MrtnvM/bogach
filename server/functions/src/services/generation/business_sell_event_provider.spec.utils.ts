@@ -1,6 +1,6 @@
 import { BusinessAsset } from '../../models/domain/assets/business_asset';
 import { GameEntity, Game } from '../../models/domain/game/game';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user/user';
 import { InsuranceAsset } from '../../models/domain/assets/insurance_asset';
 import { Possessions } from '../../models/domain/possessions';
 import { BusinessSellEvent } from '../../events/business/sell/business_sell_event';

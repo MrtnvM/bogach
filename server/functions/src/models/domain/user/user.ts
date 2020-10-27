@@ -1,4 +1,5 @@
-import { PurchaseProfile } from '../purchases/purchase_profile';
+import { PurchaseProfile } from '../../purchases/purchase_profile';
+import { PlayedGames } from './played_games';
 
 export interface User {
   readonly userId: UserEntity.Id;
@@ -14,6 +15,8 @@ export interface User {
 
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
+
+  readonly playedGames?: PlayedGames;
 }
 
 export interface UserDevice {

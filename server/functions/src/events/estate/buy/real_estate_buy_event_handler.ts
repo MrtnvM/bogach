@@ -4,7 +4,7 @@ import { Liability, LiabilityEntity } from '../../../models/domain/liability';
 import { PlayerActionHandler } from '../../../core/domain/player_action_handler';
 import { Game } from '../../../models/domain/game/game';
 import { Account } from '../../../models/domain/account';
-import { UserEntity } from '../../../models/domain/user';
+import { UserEntity } from '../../../models/domain/user/user';
 import { RealEstateBuyEvent } from './real_estate_buy_event';
 import { RealtyAsset } from '../../../models/domain/assets/realty_asset';
 import { DomainErrors } from '../../../core/exceptions/domain/domain_errors';

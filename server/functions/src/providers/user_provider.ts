@@ -1,9 +1,13 @@
 import { produce } from 'immer';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from './firestore_selector';
-import { UserEntity, UserDevice, User } from '../models/domain/user';
+import { UserEntity, UserDevice, User } from '../models/domain/user/user';
 import { PurchaseDetails, PurchaseDetailsEntity } from '../models/purchases/purchase_details';
 import { PurchaseProfileEntity } from '../models/purchases/purchase_profile';
+import { PlayedGames } from '../models/domain/user/played_games';
+import { PlayedGameInfo } from '../models/domain/user/player_game_info';
+import uuid = require('uuid');
+import { nowInUtc } from '../utils/datetime';
 
 export class UserProvider {
   constructor(private firestore: Firestore, private selector: FirestoreSelector) {}
@@ -11,8 +15,7 @@ export class UserProvider {
   async getUserProfile(userId: UserEntity.Id): Promise<User> {
     const selector = this.selector.user(userId);
     const profile = (await this.firestore.getItemData(selector)) as User;
-
-    const updatedProfile = this.migrateProfileToVersion2(profile);
+    const updatedProfile = this.migrateProfileToVersion3(profile);
 
     if (JSON.stringify(profile) !== JSON.stringify(updatedProfile)) {
       await this.updateUserProfile(updatedProfile);
@@ -57,7 +60,7 @@ export class UserProvider {
     await this.firestore.updateItem(selector, updatedUser);
   }
 
-  private migrateProfileToVersion2(profile: User): User {
+  private migrateProfileToVersion3(profile: User): User {
     let updatedProfile = profile;
 
     if (!profile.purchaseProfile) {
@@ -75,7 +78,29 @@ export class UserProvider {
 
     if (!profile.profileVersion) {
       updatedProfile = produce(updatedProfile, (draft) => {
-        draft.profileVersion = 2;
+        draft.profileVersion = 3;
+      });
+    }
+
+    if (!profile.playedGames) {
+      updatedProfile = produce(updatedProfile, (draft) => {
+        const multiplayerGamePlayed = updatedProfile.multiplayerGamePlayed || 0;
+        const multiplayerGames: PlayedGameInfo[] = [];
+
+        for (let gameIndex = 0; gameIndex < multiplayerGamePlayed; gameIndex++) {
+          const playedMultiplayerGame: PlayedGameInfo = {
+            gameId: uuid.v4(),
+            createdAt: nowInUtc(),
+          };
+
+          multiplayerGames.push(playedMultiplayerGame);
+        }
+
+        const playedGameInfo: PlayedGames = {
+          multiplayerGames: multiplayerGames,
+        };
+
+        draft.playedGames = playedGameInfo;
       });
     }
 

@@ -4,7 +4,7 @@ import { PossessionState } from '../../models/domain/possession_state';
 import { Possessions } from '../../models/domain/possessions';
 import { ParticipantAccountsTransformer } from './participant_accounts_transformer';
 import { Game } from '../../models/domain/game/game';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user/user';
 import { GameFixture } from '../../core/fixtures/game_fixture';
 
 const userId: UserEntity.Id = 'user1';

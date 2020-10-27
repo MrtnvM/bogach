@@ -2,7 +2,7 @@ import { FirebaseMessaging } from '../../core/firebase/firebase_messaging';
 import { GameProvider } from '../../providers/game_provider';
 import { UserProvider } from '../../providers/user_provider';
 import { RoomEntity, Room } from '../../models/domain/room';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user/user';
 import { checkIds } from '../../core/validation/type_checks';
 import { Strings } from '../../resources/strings';
 import { TimerProvider } from '../../providers/timer_provider';

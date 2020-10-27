@@ -1,7 +1,7 @@
 import { Game, GameEntity } from '../../../models/domain/game/game';
 import { BusinessAsset } from '../../../models/domain/assets/business_asset';
 import { BusinessCreditLiability } from '../../../models/domain/liabilities/business_credit';
-import { UserEntity } from '../../../models/domain/user';
+import { UserEntity } from '../../../models/domain/user/user';
 import { Possessions } from '../../../models/domain/possessions';
 import { GameContext } from '../../../models/domain/game/game_context';
 import { GameEventEntity } from '../../../models/domain/game/game_event';

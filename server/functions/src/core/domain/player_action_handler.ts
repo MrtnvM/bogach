@@ -1,6 +1,6 @@
 import { GameEventEntity } from '../../models/domain/game/game_event';
 import { Game } from '../../models/domain/game/game';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user/user';
 
 export abstract class PlayerActionHandler {
   abstract get gameEventType(): GameEventEntity.Type;

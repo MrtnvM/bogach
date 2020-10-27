@@ -6,7 +6,7 @@ import { Game } from '../../../models/domain/game/game';
 import { Account } from '../../../models/domain/account';
 import { Liability } from '../../../models/domain/liability';
 import { BusinessSellEvent } from './business_sell_event';
-import { UserEntity } from '../../../models/domain/user';
+import { UserEntity } from '../../../models/domain/user/user';
 
 type Event = BusinessSellEvent.Event;
 type Action = BusinessSellEvent.PlayerAction;

@@ -1,5 +1,5 @@
 import { Entity } from '../../../core/domain/entity';
-import { UserEntity } from '../user';
+import { UserEntity } from '../user/user';
 import { Game } from './game';
 
 export interface GameTarget {
