@@ -440,7 +440,7 @@ void main() {
 
       throw Exception('Should fail at previous line');
     } catch (error) {
-      expect(error, isInstanceOf<ProductPurchaseFailedException>());
+      expect(error, isInstanceOf<ProductPurchaseCanceledException>());
     }
 
     verifyInOrder([

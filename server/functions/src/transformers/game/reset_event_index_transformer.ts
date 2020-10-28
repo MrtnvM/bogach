@@ -1,7 +1,7 @@
 import { GameTransformer } from './game_transformer';
 import { Game } from '../../models/domain/game/game';
 import produce from 'immer';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user/user';
 
 export class ResetEventIndexTransformer extends GameTransformer {
   constructor(private userId: UserEntity.Id) {

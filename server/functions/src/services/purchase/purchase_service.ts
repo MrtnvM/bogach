@@ -1,10 +1,12 @@
-import { produce } from 'immer';
+import { produce, Draft } from 'immer';
 
 import { UserProvider } from '../../providers/user_provider';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity, User } from '../../models/domain/user/user';
 import { Purchases } from '../../core/purchases/purchases';
 import { PurchaseDetails } from '../../models/purchases/purchase_details';
 import { PurchaseProfile, PurchaseProfileEntity } from '../../models/purchases/purchase_profile';
+import { GameEntity } from '../../models/domain/game/game';
+import { PlayedGameInfo } from '../../models/domain/user/player_game_info';
 
 export class PurchaseService {
   constructor(private userProvider: UserProvider) {}
@@ -72,7 +74,11 @@ export class PurchaseService {
     };
   }
 
-  async reduceMultiplayerGames(participantsIds: UserEntity.Id[]) {
+  async reduceMultiplayerGames(
+    participantsIds: UserEntity.Id[],
+    gameId: GameEntity.Id,
+    gameCreationDate?: Date
+  ) {
     if (!Array.isArray(participantsIds) || participantsIds?.length === 0) {
       throw new Error("ParticipantIds can't be empty");
     }
@@ -81,10 +87,21 @@ export class PurchaseService {
       participantsIds.map((userId) => this.userProvider.getUserProfile(userId))
     );
 
+    const updatedParticipants = this.updateProfileStates(participants, gameId, gameCreationDate);
+
+    await Promise.all(updatedParticipants);
+  }
+
+  updateProfileStates(
+    participants: User[],
+    gameId: string,
+    gameCreationDate?: Date
+  ): Promise<User>[] {
     const updatedParticipants = participants.map((profile) => {
       const updatedProfile = produce(profile, (draft) => {
-        const multiplayerGamePlayed = (draft.multiplayerGamePlayed || 0) + 1;
-        draft.multiplayerGamePlayed = multiplayerGamePlayed;
+        this.addMultiplayerGame(draft, gameId, gameCreationDate);
+
+        const multiplayerGamePlayed = draft.playedGames?.multiplayerGames?.length || 0;
 
         const boughtMultiplayerGamesCount =
           draft.purchaseProfile?.boughtMultiplayerGamesCount !== undefined
@@ -97,10 +114,23 @@ export class PurchaseService {
           throw new Error("multiplayerGamesCount can't be less then zero");
         }
       });
-
       return this.userProvider.updateUserProfile(updatedProfile);
     });
 
-    await Promise.all(updatedParticipants);
+    return updatedParticipants;
+  }
+
+  addMultiplayerGame(draft: Draft<User>, gameId: string, gameCreationDate?: Date) {
+    const multiplayerGameInfo: PlayedGameInfo = {
+      gameId: gameId,
+      createdAt: gameCreationDate,
+    };
+
+    if (!draft.playedGames) {
+      draft.playedGames = {
+        multiplayerGames: [],
+      };
+    }
+    draft.playedGames.multiplayerGames.push(multiplayerGameInfo);
   }
 }

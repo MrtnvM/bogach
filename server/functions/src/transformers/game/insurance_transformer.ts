@@ -1,6 +1,6 @@
 import { GameTransformer } from './game_transformer';
 import { Game } from '../../models/domain/game/game';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user/user';
 import { InsuranceAsset } from '../../models/domain/assets/insurance_asset';
 import produce from 'immer';
 

@@ -1,6 +1,7 @@
 library app_state;
 
 import 'package:built_value/built_value.dart';
+import 'package:cash_flow/features/config/config_state.dart';
 import 'package:cash_flow/features/game/game_state.dart';
 import 'package:cash_flow/features/multiplayer/multiplayer_state.dart';
 import 'package:cash_flow/features/profile/profile_state.dart';
@@ -22,6 +23,8 @@ abstract class AppState
   GameState get game;
   NewGameState get newGame;
   MultiplayerState get multiplayer;
+
+  ConfigState get config;
 
   @override
   BuiltMap<Object, OperationState> get operationsState;
@@ -49,7 +52,8 @@ abstract class AppState
         ..purchase = PurchaseState.initial().toBuilder()
         ..game = GameState.initial().toBuilder()
         ..newGame = NewGameState.initial().toBuilder()
-        ..multiplayer = MultiplayerState.initial().toBuilder(),
+        ..multiplayer = MultiplayerState.initial().toBuilder()
+        ..config = ConfigState.initial(),
     );
   }
 }

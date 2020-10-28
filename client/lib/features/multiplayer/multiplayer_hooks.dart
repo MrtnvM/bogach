@@ -10,7 +10,7 @@ int useAvailableMultiplayerGamesCount() {
 
   final gamesPlayed = useGlobalState((s) {
     final currentUser = s.profile.currentUser;
-    return currentUser?.multiplayerGamePlayed ?? 0;
+    return currentUser?.playedGames?.multiplayerGames?.length ?? 0;
   });
 
   final availableGamesCount = max(boughtGamesCount - gamesPlayed, 0);

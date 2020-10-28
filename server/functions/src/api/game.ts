@@ -7,7 +7,7 @@ import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { APIRequest } from '../core/api/request_data';
 import { Firestore } from '../core/firebase/firestore';
 import { FirestoreSelector } from '../providers/firestore_selector';
-import { UserEntity } from '../models/domain/user';
+import { UserEntity } from '../models/domain/user/user';
 import { GameTemplateEntity } from '../game_templates/models/game_template';
 import { GameEntity } from '../models/domain/game/game';
 import { UserProvider } from '../providers/user_provider';

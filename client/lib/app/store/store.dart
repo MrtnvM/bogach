@@ -3,6 +3,7 @@ import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/store/redux_action_logger.dart';
 import 'package:cash_flow/app/store/redux_action_observer.dart';
 import 'package:cash_flow/cache/user_cache.dart';
+import 'package:cash_flow/services/config_service.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/purchase_service.dart';
 import 'package:cash_flow/services/user_service.dart';
@@ -60,7 +61,12 @@ void configureDependencyInjection(
     connection: InAppPurchaseConnection.instance,
   );
 
+  final configService = ConfigService(
+    preferences: sharedPreferences,
+  );
+
   GetIt.I.registerSingleton<GameService>(gameService);
   GetIt.I.registerSingleton<UserService>(userService);
   GetIt.I.registerSingleton<PurchaseService>(purchaseService);
+  GetIt.I.registerSingleton<ConfigService>(configService);
 }

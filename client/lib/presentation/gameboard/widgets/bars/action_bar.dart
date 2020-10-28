@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
+import 'package:cash_flow/widgets/tutorial/gameboard_tutorial_widget.dart';
 import 'package:flutter/material.dart';
 
 class PlayerActionBar extends StatelessWidget {
@@ -18,7 +19,10 @@ class PlayerActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gameTutorial = GameboardTutorialWidget.of(context);
+
     return Container(
+      key: gameTutorial?.gameEventActionsKey,
       height: 49,
       decoration: BoxDecoration(
         boxShadow: [

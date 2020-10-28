@@ -65,6 +65,12 @@ class OnGameStateChangedAction extends BaseAction {
       if (isGameCompleted && isQuestGame) {
         s.newGame.currentGameForQuests[game.config.level] = null;
       }
+
+      if (s.newGame.userGames.itemsMap.containsKey(game.id)) {
+        s.newGame.userGames.updateItem(game.id, game);
+      } else {
+        s.newGame.userGames.addItem(game.id, game);
+      }
     });
   }
 }

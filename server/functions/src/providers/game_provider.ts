@@ -2,6 +2,7 @@ import * as uuid from 'uuid';
 import { Game, GameEntity } from '../models/domain/game/game';
 import { RoomEntity, Room } from '../models/domain/room';
 import { GameTemplate, GameTemplateEntity } from '../game_templates/models/game_template';
+import { UserEntity, User } from '../models/domain/user/user';
 import { UserEntity } from '../models/domain/user';
 import { PossessionStateEntity } from '../models/domain/possession_state';
 import { assertExists } from '../utils/asserts';
@@ -84,6 +85,7 @@ export class GameProvider {
         stocks: [],
         debentures: [],
         initialCash: template.accountState.cash,
+        gameTemplateId: template.id,
       },
     };
 

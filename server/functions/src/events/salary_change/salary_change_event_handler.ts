@@ -1,6 +1,6 @@
 import produce from 'immer';
 import { Game } from '../../models/domain/game/game';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user/user';
 import { SalaryChangeEvent } from './salary_change_event';
 import { PlayerActionHandler } from '../../core/domain/player_action_handler';
 

@@ -105,7 +105,7 @@ class CreateMultiplayerGamePage extends HookWidget {
         items: gameTemplates,
         itemBuilder: (i) => GameTemplateItem(
           gameTemplate: gameTemplates.items[i],
-          onTemplateSelected: (template) {
+          onStartNewGamePressed: (template) {
             onGameTemplateSelected(template);
             AnalyticsSender.templateSelected(template.name);
           },

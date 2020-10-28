@@ -3,7 +3,7 @@ import produce from 'immer';
 import { GameTransformer } from './game_transformer';
 import { Game, GameEntity } from '../../models/domain/game/game';
 import { GameEventEntity } from '../../models/domain/game/game_event';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user/user';
 import { GameTargetEntity } from '../../models/domain/game/game_target';
 
 export class UserProgressTransformer extends GameTransformer {

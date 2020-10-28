@@ -2,7 +2,7 @@ import * as functions from 'firebase-functions';
 import * as apiUtils from '../../utils/api';
 import { GameContextEntity, GameContext } from '../../models/domain/game/game_context';
 import { GameEntity } from '../../models/domain/game/game';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user/user';
 
 export namespace APIRequest {
   export const from = (request: functions.https.Request, response: functions.Response) => {

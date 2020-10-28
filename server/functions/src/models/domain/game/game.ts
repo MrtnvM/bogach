@@ -1,6 +1,5 @@
 import { GameEvent } from './game_event';
 import { Account } from '../account';
-import { UserEntity } from '../user';
 import { Possessions } from '../possessions';
 import { PossessionState } from '../possession_state';
 import { Entity } from '../../../core/domain/entity';
@@ -8,6 +7,7 @@ import { GameTarget, GameTargetEntity } from './game_target';
 import { ParticipantGameState } from './participant_game_state';
 import { GameLevelEntity } from '../../../game_levels/models/game_level';
 import { DebentureEvent } from '../../../events/debenture/debenture_event';
+import { UserEntity } from '../user/user';
 
 export interface Game {
   readonly id: GameEntity.Id;
@@ -69,6 +69,7 @@ export namespace GameEntity {
     readonly stocks: string[];
     readonly debentures: DebentureEvent.Info[];
     readonly initialCash: number;
+    readonly gameTemplateId: string;
   };
 
   export const validate = (game: any) => {

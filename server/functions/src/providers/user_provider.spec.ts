@@ -5,10 +5,11 @@ import produce from 'immer';
 import { mock, when, instance, anything, verify, reset } from 'ts-mockito';
 
 import { Firestore } from '../core/firebase/firestore';
-import { User } from '../models/domain/user';
+import { User } from '../models/domain/user/user';
 import { PurchaseProfileEntity } from '../models/purchases/purchase_profile';
 import { FirestoreSelector } from './firestore_selector';
 import { UserProvider } from './user_provider';
+import { PlayedGames } from '../models/domain/user/played_games';
 
 describe('User Provider - ', () => {
   const mockFirestore = mock(Firestore);
@@ -27,6 +28,9 @@ describe('User Provider - ', () => {
 
   test('No updates for actual version of profile', async () => {
     const userId = 'user1';
+    const playedGameInfo: PlayedGames = {
+      multiplayerGames: [],
+    };
     const userProfile: User = {
       userId,
       userName: 'User Name',
@@ -36,7 +40,8 @@ describe('User Provider - ', () => {
         isQuestsAvailable: false,
         boughtMultiplayerGamesCount: 3,
       },
-      profileVersion: 2,
+      profileVersion: 3,
+      playedGames: playedGameInfo,
     };
 
     when(mockSelector.user(userId)).thenReturn(mockRef);
@@ -50,11 +55,15 @@ describe('User Provider - ', () => {
   });
 
   test('Successful migration to actual version of profile', async () => {
+    const playedGameInfo: PlayedGames = {
+      multiplayerGames: [],
+    };
     const userId = 'user1';
     const userProfile: User = {
       userId,
       userName: 'User Name',
       currentQuestIndex: 1,
+      playedGames: playedGameInfo,
     };
 
     when(mockSelector.user(userId)).thenReturn(mockRef);
@@ -68,7 +77,7 @@ describe('User Provider - ', () => {
         isQuestsAvailable: false,
         boughtMultiplayerGamesCount: PurchaseProfileEntity.initialMultiplayerGamesCount,
       };
-      draft.profileVersion = 2;
+      draft.profileVersion = 3;
     });
 
     expect(receivedProfile).toEqual(expectedProfile);

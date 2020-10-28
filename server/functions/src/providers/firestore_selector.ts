@@ -2,7 +2,7 @@ import * as admin from 'firebase-admin';
 
 import { GameEntity } from '../models/domain/game/game';
 import { RoomEntity } from '../models/domain/room';
-import { UserEntity } from '../models/domain/user';
+import { UserEntity } from '../models/domain/user/user';
 
 export type DocumentReference = FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>;
 export type CollectionReference = FirebaseFirestore.CollectionReference<

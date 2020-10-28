@@ -1,7 +1,7 @@
 import { Game, GameEntity } from '../models/domain/game/game';
 import { GameFixture } from '../core/fixtures/game_fixture';
 import { GameContext } from '../models/domain/game/game_context';
-import { UserEntity } from '../models/domain/user';
+import { UserEntity } from '../models/domain/user/user';
 import { GameEventEntity } from '../models/domain/game/game_event';
 import { Possessions } from '../models/domain/possessions';
 import { instance, when, mock, anything } from 'ts-mockito';

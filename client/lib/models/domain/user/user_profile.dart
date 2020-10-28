@@ -1,3 +1,4 @@
+import 'package:cash_flow/models/domain/user/played_games/played_games.dart';
 import 'package:cash_flow/models/domain/user/purchase_profile.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
@@ -18,6 +19,7 @@ abstract class UserProfile with _$UserProfile implements StoreListItem {
     @JsonKey(defaultValue: 0) int multiplayerGamePlayed,
     PurchaseProfile purchaseProfile,
     @JsonKey(defaultValue: 1) int profileVersion,
+    PlayedGames playedGames,
   }) = _UserProfile;
 
   factory UserProfile.fromJson(Map<String, dynamic> json) =>

@@ -19,12 +19,13 @@ class OnboardingScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
+    final screenHeight = mediaQuery.size.height;
     final imageSize = screenWidth * 0.75;
 
     return Column(
       children: <Widget>[
         Flexible(
-          flex: 6,
+          flex: screenHeight < 600 ? 3 : 6,
           child: Container(
             padding: const EdgeInsets.only(top: 32),
             alignment: Alignment.center,

@@ -1,7 +1,7 @@
 import { MonthlyExpenseEvent } from './monthly_expense_event';
 import { Expense } from '../../models/domain/expense';
 import { PlayerActionHandler } from '../../core/domain/player_action_handler';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user/user';
 import { Game } from '../../models/domain/game/game';
 import produce from 'immer';
 
