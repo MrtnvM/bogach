@@ -1,4 +1,3 @@
-import 'package:cash_flow/models/domain/user/played_games/played_game_info.dart';
 import 'package:cash_flow/models/domain/user/played_games/played_games.dart';
 import 'package:cash_flow/models/domain/user/purchase_profile.dart';
 import 'package:cash_flow/resources/strings.dart';
