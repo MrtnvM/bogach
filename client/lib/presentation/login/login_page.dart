@@ -1,8 +1,10 @@
 import 'package:apple_sign_in/apple_sign_in.dart';
+import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/features/profile/actions/login_via_apple_action.dart';
 import 'package:cash_flow/features/profile/actions/login_via_facebook_action.dart';
 import 'package:cash_flow/features/profile/actions/login_via_google_action.dart';
+import 'package:cash_flow/features/profile/actions/start_listening_profile_updates_action.dart';
 import 'package:cash_flow/models/errors/unknown_error.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
@@ -186,6 +188,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onLoggedIn() {
+    final appState = StoreProvider.state<AppState>(context);
+    final userId = appState.profile.currentUser.id;
+    context.dispatch(StartListeningProfileUpdatesAction(userId));
+
     setState(() => _isAuthorising = false);
     appRouter.startWith(const MainPage());
   }

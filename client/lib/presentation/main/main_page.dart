@@ -2,6 +2,7 @@ import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/features/profile/actions/load_current_user_profile_action.dart';
+import 'package:cash_flow/features/profile/hook/profile_hooks.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/presentation/multiplayer/create_multiplayer_game_page.dart';
@@ -23,12 +24,10 @@ class MainPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final user = useCurrentUser();
-    final dispatch = useDispatcher();
 
-    useEffect(() {
-      dispatch(LoadCurrentUserProfileAction());
-      return null;
-    }, []);
+    final needAuthorization = user == null;
+
+    useStartListenToProfileUpdates(needAuthorization, user?.userId);
 
     return CashFlowScaffold(
       title: Strings.chooseGame,
@@ -37,7 +36,7 @@ class MainPage extends HookWidget {
       child: Column(
         children: <Widget>[
           _buildGameActions(context, user),
-          _buildAuthButton(user),
+          _buildAuthButton(needAuthorization),
         ],
       ),
     );
@@ -71,8 +70,8 @@ class MainPage extends HookWidget {
     );
   }
 
-  Widget _buildAuthButton(UserProfile user) {
-    if (user == null) {
+  Widget _buildAuthButton(bool needAuthorization) {
+    if (needAuthorization) {
       return TextButton(
         onPressed: _goToLogin,
         text: Strings.doYouWantToLogin,

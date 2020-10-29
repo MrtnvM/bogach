@@ -7,6 +7,7 @@ import 'package:cash_flow/features/profile/actions/set_current_user_action.dart'
 import 'package:cash_flow/services/user_service.dart';
 import 'package:get_it/get_it.dart';
 
+// TODO удалить?
 class LoadCurrentUserProfileAction extends BaseAction {
   @override
   Operation get operationKey => Operation.loadCurrentUserProfile;

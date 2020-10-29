@@ -190,20 +190,6 @@ class UserService {
         .set({'token': pushToken, 'device': Platform.operatingSystem});
   }
 
-  Future<UserProfile> updateCurrentQuestIndex(int newQuestIndex) async {
-    final userProfile = await userCache.getUserProfile();
-    if (userProfile == null) {
-      return null;
-    }
-
-    final updatedProfile = userProfile.copyWith(
-      currentQuestIndex: newQuestIndex,
-    );
-
-    await userCache.setUserProfile(updatedProfile);
-    return updatedProfile;
-  }
-
   Future<UserProfile> _getUpdatedUser(User user) async {
     final userId = user.uid;
     final cachedUserProfile = await userCache.getUserProfile();
@@ -232,5 +218,13 @@ class UserService {
     });
 
     return updatedUser;
+  }
+
+  Stream<UserProfile> subscribeOnUser(String userId) {
+    return firestore
+        .collection('users')
+        .doc(userId)
+        .snapshots()
+        .map((snapshot) => UserProfile.fromJson(snapshot.data()));
   }
 }
