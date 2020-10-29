@@ -5,7 +5,6 @@ import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/config/config_hooks.dart';
 import 'package:cash_flow/features/new_game/actions/get_quests_action.dart';
 import 'package:cash_flow/features/new_game/actions/start_quest_game_action.dart';
-import 'package:cash_flow/features/profile/actions/load_current_user_profile_action.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
@@ -66,7 +65,6 @@ class QuestList extends HookWidget {
           color: ColorRes.mainGreen,
           onRefresh: () => Future.wait([
             dispatch(GetQuestsAction(userId: userId, isRefreshing: true)),
-            dispatch(LoadCurrentUserProfileAction())
           ]),
           child: LoadableListView<Quest>(
             viewModel: LoadableListViewModel(
@@ -100,7 +98,6 @@ class QuestList extends HookWidget {
               loadListRequestState: getQuestsRequestState,
               loadList: () {
                 dispatch(GetQuestsAction(userId: userId));
-                dispatch(LoadCurrentUserProfileAction());
               },
               padding: const EdgeInsets.all(16),
               emptyStateWidget: EmptyWidget(),
