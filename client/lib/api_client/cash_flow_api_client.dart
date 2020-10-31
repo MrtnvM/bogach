@@ -68,7 +68,8 @@ class CashFlowApiClient extends ApiClient {
         path: 'handleGameEvent',
         body: playerAction.toJson(),
         validate: false,
-        responseMapper: rm.voidResponse,
+        headers: [contentJson],
+        responseMapper: rm.standard((json) => null),
       );
 
   Future<void> startNewMonth(GameContext gameContext) => post(

@@ -60,7 +60,7 @@ dependencies:
 
   # Dash Kit
   dash_kit_core: ^2.0.2
-  dash_kit_network: ^2.0.0
+  dash_kit_network: ^2.0.4
   dash_kit_control_panel: ^1.0.0
   dash_kit_loadable: ^2.0.0
   dash_kit_uikit: ^1.0.0

@@ -9,19 +9,21 @@ T Function(Response) standard<T>(T Function(Map<String, dynamic>) mapper) {
     final statusCode = response.statusCode;
     final isRequestSuccessful = statusCode >= 200 && statusCode < 300;
     final data = response.data;
-    final isEmptyString = data is String && data.isEmpty;
     final isJsonResponse = data is Map<String, dynamic>;
 
     if (isRequestSuccessful) {
       if (isJsonResponse) {
         return mapper(data);
-      } else if (isEmptyString) {
+      } else {
         return mapper({});
       }
     }
 
-    if (isJsonResponse && data['type'] == 'domain') {
-      throw DomainGameError.fromJson(data);
+    final errorResponseData = json.decode(data);
+    final isErrorResponseDataJson = errorResponseData is Map<String, dynamic>;
+
+    if (isErrorResponseDataJson && errorResponseData['type'] == 'domain') {
+      throw DomainGameError.fromJson(errorResponseData);
     }
 
     throw ResponseErrorModel(response);
