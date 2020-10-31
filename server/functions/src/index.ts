@@ -40,3 +40,5 @@ export const completeMonth = RoomAPI.completeMonth;
 export const updatePurchases = PurchaseAPI.updatePurchases;
 
 export const getUserProfile = UserAPI.getUserProfile;
+
+Debug.initializeTestDataIfEmulator();
