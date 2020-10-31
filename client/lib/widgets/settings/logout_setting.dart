@@ -1,4 +1,5 @@
 import 'package:cash_flow/features/profile/actions/logout_action.dart';
+import 'package:cash_flow/features/profile/actions/start_listening_profile_updates_action.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
@@ -42,12 +43,13 @@ class _LogoutSettingState extends State<LogoutSetting> {
 
   void _logout() {
     context
-        .dispatch(LogoutAction())
+        .dispatch(StopListeningProfileUpdatesAction())
+        .then((value) => context.dispatch(LogoutAction()))
         .then((_) => _onLogoutFinished())
         .catchError((_) => _onLogoutFinished());
   }
 
   void _onLogoutFinished() {
-    appRouter.startWith(const LoginPage());
+    appRouter.startWith(LoginPage());
   }
 }

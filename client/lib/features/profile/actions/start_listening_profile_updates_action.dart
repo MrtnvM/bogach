@@ -14,34 +14,45 @@ class StartListeningProfileUpdatesAction extends BaseAction {
   final String userId;
 
   @override
-  FutureOr<AppState> reduce() {
+  FutureOr<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
     final action$ = GetIt.I.get<ReduxActionObserver>().onAction;
 
+    /// Requesting user profile through the server request will
+    /// auto-migrate it to the newer version
+    try {
+      await userService.loadUserFromServer(userId); 
+    } catch (err) {
+      final error = err;
+      _executeDelayed(() {
+        dispatch(StartListeningProfileUpdatesAction(userId));
+      });
+      return null;
+    }
+
     userService
         .subscribeOnUser(userId)
-        .takeUntil(action$
-            .whereType<StopListeningProfileUpdatesAction>()
-            .where((action) => action.userId == userId))
+        .takeUntil(action$.whereType<StopListeningProfileUpdatesAction>())
         .map<BaseAction>((profile) => OnCurrentProfileUpdatedAction(profile))
         // TODO check error handling
-        .onErrorReturnWith(
-            (error) => StartListeningProfileUpdatesAction(userId))
+        .onErrorResumeNext(
+            Stream.value(StartListeningProfileUpdatesAction(userId))
+                .delay(const Duration(milliseconds: 500)))
         .listen(dispatch);
 
     return null;
   }
+
+  void _executeDelayed(Function lambda) {
+    Future.delayed(const Duration(milliseconds: 500)).then((_) => lambda());
+  }
 }
 
 class StopListeningProfileUpdatesAction extends BaseAction {
-  StopListeningProfileUpdatesAction(this.userId) : assert(userId != null);
-
-  final String userId;
+  StopListeningProfileUpdatesAction();
 
   @override
   FutureOr<AppState> reduce() {
-    return state.rebuild((s) {
-      s.profile.currentUser = null;
-    });
+    return null;
   }
 }

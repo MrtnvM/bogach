@@ -87,6 +87,6 @@ class CashFlowApp extends HookWidget {
       return const OnBoardingPage();
     }
 
-    return isAuthorised ? const MainPage() : const LoginPage();
+    return isAuthorised ? const MainPage() : LoginPage();
   }
 }

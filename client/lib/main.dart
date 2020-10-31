@@ -30,6 +30,8 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'features/profile/actions/start_listening_profile_updates_action.dart';
+
 Future<void> main({
   @required CashApiEnvironment environment,
 }) async {
@@ -75,6 +77,9 @@ Future<void> main({
 
   final isAuthorized = currentUser != null;
   store.dispatch(SetCurrentUserAction(currentUser));
+  if (isAuthorized) {
+    store.dispatch(StartListeningProfileUpdatesAction(currentUser.id));
+  }
   store.dispatch(StartListeningPurchasesAction());
   store.dispatch(LoadConfigAction());
 

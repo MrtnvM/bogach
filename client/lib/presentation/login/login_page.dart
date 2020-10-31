@@ -1,10 +1,11 @@
 import 'package:apple_sign_in/apple_sign_in.dart';
-import 'package:cash_flow/app/app_state.dart';
+import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
+import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/profile/actions/login_via_apple_action.dart';
 import 'package:cash_flow/features/profile/actions/login_via_facebook_action.dart';
 import 'package:cash_flow/features/profile/actions/login_via_google_action.dart';
-import 'package:cash_flow/features/profile/actions/start_listening_profile_updates_action.dart';
 import 'package:cash_flow/models/errors/unknown_error.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
@@ -17,45 +18,39 @@ import 'package:cash_flow/resources/urls.dart';
 import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage();
-
-  @override
-  State<StatefulWidget> createState() {
-    return _LoginPageState();
-  }
-}
-
-class _LoginPageState extends State<LoginPage> {
-  bool _isAuthorising = false;
-
-  @override
-  void initState() {
-    super.initState();
-    setOrientationPortrait();
-  }
-
+class LoginPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    final isAuthorising = useState(false);
+
+    final dispatch = useDispatcher();
+    _useAutoTransitionWhenLogged();
+
+    setOrientationPortrait();
+
     return LoadableView(
-      isLoading: _isAuthorising,
+      isLoading: isAuthorising.value,
       backgroundColor: Colors.black.withAlpha(150),
       child: CashFlowScaffold(
         title: Strings.loginTitle,
         footerImage: Images.authImage,
         child: Column(
           children: <Widget>[
-            _buildLoginForm(),
+            _buildLoginForm(
+              context,
+              dispatch,
+              isAuthorising,
+            ),
             // _buildLaterButton(context),
           ],
         ),
@@ -63,7 +58,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildLoginForm() {
+  Widget _buildLoginForm(
+    BuildContext context,
+    Future<void> dispatch(BaseAction action),
+    ValueNotifier<bool> isAuthorising,
+  ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -71,12 +70,18 @@ class _LoginPageState extends State<LoginPage> {
           icon: Images.icFacebook,
           title: Strings.facebook,
           type: _SocialButtonType.fb,
+          context: context,
+          dispatch: dispatch,
+          isAuthorising: isAuthorising,
         ),
         const SizedBox(height: 16),
         _buildSocialMedias(
           icon: Images.icGoogle,
           title: Strings.google,
           type: _SocialButtonType.google,
+          context: context,
+          dispatch: dispatch,
+          isAuthorising: isAuthorising,
         ),
         const SizedBox(height: 16),
         // TODO(Maxim): Implement authorisation through VK
@@ -87,9 +92,12 @@ class _LoginPageState extends State<LoginPage> {
         //   type: _SocialButtonType.vk,
         // ),
         // const SizedBox(height: 16),
-        _buildAppleSignInButton(),
+        _buildAppleSignInButton(
+          dispatch,
+          isAuthorising,
+        ),
         const SizedBox(height: 32),
-        buildPrivacyPolicy(),
+        buildPrivacyPolicy(context),
       ],
     );
   }
@@ -98,10 +106,18 @@ class _LoginPageState extends State<LoginPage> {
     @required String icon,
     @required String title,
     @required _SocialButtonType type,
+    @required BuildContext context,
+    @required ValueNotifier<bool> isAuthorising,
+    @required Future<void> dispatch(BaseAction action),
   }) {
     return FlatButton(
       color: Colors.white,
-      onPressed: () => loginViaSocial(type),
+      onPressed: () => loginViaSocial(
+        type,
+        context,
+        dispatch,
+        isAuthorising,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4.0),
       ),
@@ -130,7 +146,10 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildAppleSignInButton() {
+  Widget _buildAppleSignInButton(
+    Future<void> dispatch(BaseAction action),
+    ValueNotifier<bool> isAuthorising,
+  ) {
     return FutureBuilder(
       future: AppleSignIn.isAvailable(),
       builder: (context, snapShoot) =>
@@ -139,12 +158,15 @@ class _LoginPageState extends State<LoginPage> {
                   icon: Images.icApple,
                   title: Strings.apple,
                   type: _SocialButtonType.apple,
+                  context: context,
+                  dispatch: dispatch,
+                  isAuthorising: isAuthorising,
                 )
               : Container(),
     );
   }
 
-  Widget buildPrivacyPolicy() {
+  Widget buildPrivacyPolicy(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final fontSize = screenHeight < 580 ? 15.0 : 18.0;
 
@@ -160,14 +182,14 @@ class _LoginPageState extends State<LoginPage> {
             text: Strings.termsOfUse,
             style: linkStyle,
             recognizer: TapGestureRecognizer()
-              ..onTap = () => _launchURL(Urls.termsOfUseUrl),
+              ..onTap = () => _launchURL(context, Urls.termsOfUseUrl),
           ),
           TextSpan(text: Strings.and, style: style),
           TextSpan(
             text: Strings.privacyPolicy,
             style: linkStyle,
             recognizer: TapGestureRecognizer()
-              ..onTap = () => _launchURL(Urls.policyUrl),
+              ..onTap = () => _launchURL(context, Urls.policyUrl),
           ),
         ],
       ),
@@ -187,27 +209,35 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _onLoggedIn() {
-    final appState = StoreProvider.state<AppState>(context);
-    final userId = appState.profile.currentUser.id;
-    context.dispatch(StartListeningProfileUpdatesAction(userId));
-
-    setState(() => _isAuthorising = false);
-    appRouter.startWith(const MainPage());
-  }
-
-  void loginViaSocial(_SocialButtonType type) {
+  void loginViaSocial(
+    _SocialButtonType type,
+    BuildContext context,
+    Future<void> dispatch(BaseAction action),
+    ValueNotifier<bool> isAuthorising,
+  ) {
     switch (type) {
       case _SocialButtonType.fb:
-        _onLoginViaFacebookPressed();
+        _onLoginViaFacebookPressed(
+          context,
+          dispatch,
+          isAuthorising,
+        );
         break;
 
       case _SocialButtonType.google:
-        _onLoginViaGoogleClicked();
+        _onLoginViaGoogleClicked(
+          context,
+          dispatch,
+          isAuthorising,
+        );
         break;
 
       case _SocialButtonType.apple:
-        _onLoginViaAppleClicked();
+        _onLoginViaAppleClicked(
+          context,
+          dispatch,
+          isAuthorising,
+        );
         break;
 
       case _SocialButtonType.vk:
@@ -217,77 +247,110 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<void> _onLoginViaFacebookPressed() async {
-    setState(() => _isAuthorising = true);
+  Future<void> _onLoginViaFacebookPressed(
+    BuildContext context,
+    Future<void> dispatch(BaseAction action),
+    ValueNotifier<bool> isAuthorising,
+  ) async {
+    isAuthorising.value = true;
 
     final facebookLogin = FacebookLogin();
     final result = await facebookLogin.logIn(['email']);
 
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
-        _loginViaFacebook(result.accessToken.token);
+        _loginViaFacebook(
+          context,
+          dispatch,
+          isAuthorising,
+          result.accessToken.token,
+        );
         break;
 
       case FacebookLoginStatus.error:
-        setState(() => _isAuthorising = false);
+        isAuthorising.value = false;
         handleError(context: context, exception: UnknownErrorException());
         break;
 
       default:
-        setState(() => _isAuthorising = false);
+        isAuthorising.value = false;
         break;
     }
   }
 
-  void _loginViaFacebook(String token) {
+  void _loginViaFacebook(
+    BuildContext context,
+    Future<void> dispatch(BaseAction action),
+    ValueNotifier<bool> isAuthorising,
+    String token,
+  ) {
     final action = LoginViaFacebookAction(token: token);
 
-    context
-        .dispatch(action)
-        .then((_) => _onLoggedIn())
-        .catchError(_onLoginError);
+    dispatch(action)
+        .whenComplete(() => isAuthorising.value = false)
+        .catchError((error) => _onLoginError(context, error, isAuthorising));
   }
 
-  void _onLoginError(error) {
+  void _onLoginError(
+    BuildContext context,
+    error,
+    ValueNotifier<bool> isAuthorising,
+  ) {
     Logger.e(error);
-    setState(() => _isAuthorising = false);
     handleError(context: context, exception: error);
+    isAuthorising.value = false;
   }
 
-  Future<void> _onLoginViaGoogleClicked() async {
+  Future<void> _onLoginViaGoogleClicked(
+    BuildContext context,
+    Future<void> dispatch(BaseAction action),
+    ValueNotifier<bool> isAuthorising,
+  ) async {
     final account = await GoogleSignIn().signIn().catchError((e) {
       Logger.e(e);
-      setState(() => _isAuthorising = false);
+      isAuthorising.value = false;
       showErrorDialog(context: context);
     });
 
     if (account == null) {
       // was cancelled by the user
-      setState(() => _isAuthorising = false);
+      isAuthorising.value = false;
       return;
     }
 
-    setState(() => _isAuthorising = true);
+    isAuthorising.value = true;
 
     final authentication = await account.authentication;
 
     _loginViaGoogle(
+      context: context,
+      dispatch: dispatch,
+      isAuthorising: isAuthorising,
       token: authentication.accessToken,
       idToken: authentication.idToken,
     );
   }
 
-  void _loginViaGoogle({String token, String idToken}) {
-    context
-        .dispatch(LoginViaGoogleAction(
-          accessToken: token,
-          idToken: idToken,
-        ))
-        .then((_) => _onLoggedIn())
-        .catchError(_onLoginError);
+  void _loginViaGoogle({
+    @required BuildContext context,
+    @required Future<void> dispatch(BaseAction action),
+    @required ValueNotifier<bool> isAuthorising,
+    @required String token,
+    @required String idToken,
+  }) {
+    final action = LoginViaGoogleAction(
+      accessToken: token,
+      idToken: idToken,
+    );
+    dispatch(action)
+        .catchError((error) => _onLoginError(context, error, isAuthorising));
   }
 
-  Future<void> _onLoginViaAppleClicked() async {
+  Future<void> _onLoginViaAppleClicked(
+    BuildContext context,
+    Future<void> dispatch(BaseAction action),
+    ValueNotifier<bool> isAuthorising,
+  ) async {
     final result = await AppleSignIn.performRequests([
       const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
     ]);
@@ -301,32 +364,29 @@ class _LoginPageState extends State<LoginPage> {
         final firstName = result.credential.fullName.givenName;
         final lastName = result.credential.fullName.familyName;
 
-        setState(() => _isAuthorising = true);
+        isAuthorising.value = true;
 
-        context
-            .dispatch(LoginViaAppleAction(
-              idToken: identityToken,
-              accessToken: accessToken,
-              firstName: firstName,
-              lastName: lastName,
-            ))
-            .then((_) => _onLoggedIn())
-            .catchError(_onLoginError);
+        dispatch(LoginViaAppleAction(
+          idToken: identityToken,
+          accessToken: accessToken,
+          firstName: firstName,
+          lastName: lastName,
+        )).catchError((error) => _onLoginError(context, error, isAuthorising));
 
         break;
 
       case AuthorizationStatus.error:
-        setState(() => _isAuthorising = false);
+        isAuthorising.value = false;
         handleError(context: context, exception: UnknownErrorException());
         break;
 
       case AuthorizationStatus.cancelled:
-        setState(() => _isAuthorising = false);
+        isAuthorising.value = false;
         break;
     }
   }
 
-  Future<void> _launchURL(String url) async {
+  Future<void> _launchURL(BuildContext context, String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -335,6 +395,17 @@ class _LoginPageState extends State<LoginPage> {
         title: Strings.commonError,
         message: Strings.canNotOpenLink,
       );
+    }
+  }
+
+  void _useAutoTransitionWhenLogged() {
+    final user = useGlobalState((state) => state.profile.currentUser);
+
+    if (user != null) {
+      // Flutter hook build method requred to finish work until to change widget
+      Future.delayed(const Duration(milliseconds: 16)).then((_) async {
+        appRouter.startWith(const MainPage());
+      });
     }
   }
 }

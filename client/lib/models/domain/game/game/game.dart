@@ -1,11 +1,11 @@
 import 'package:cash_flow/models/domain/game/account/account.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
+import 'package:cash_flow/models/domain/game/game/timestamp_adapter.dart';
 import 'package:cash_flow/models/domain/game/game/type/game_type.dart';
 import 'package:cash_flow/models/domain/game/game_config/game_config.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/game/possession_state/possession_state.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -26,17 +26,9 @@ abstract class Game with _$Game implements StoreListItem {
     @required Target target,
     @required List<GameEvent> currentEvents,
     @required GameConfig config,
-    @JsonKey(fromJson: _timestampToDate) DateTime createdAt,
-    @JsonKey(fromJson: _timestampToDate) DateTime updatedAt,
+    @JsonKey(fromJson: timestampToDate) DateTime createdAt,
+    @JsonKey(fromJson: timestampToDate) DateTime updatedAt,
   }) = _Game;
 
   factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
-}
-
-DateTime _timestampToDate(dynamic timestamp) {
-  final Timestamp timestampValue = timestamp;
-
-  return DateTime.fromMicrosecondsSinceEpoch(
-    timestampValue.microsecondsSinceEpoch,
-  );
 }

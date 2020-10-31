@@ -33,6 +33,6 @@ class ThirdOnBoardingPage extends StatelessWidget {
   }
 
   void _onStartPressed() {
-    appRouter.startWith(const LoginPage());
+    appRouter.startWith(LoginPage());
   }
 }

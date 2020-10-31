@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/cache/user_cache.dart';
-import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/models/network/core/search_query_result.dart';
 import 'package:cash_flow/models/network/request/register_request_model.dart';
@@ -29,7 +28,7 @@ class UserService {
   final UserCache userCache;
   final CashFlowApiClient apiClient;
 
-  Future<UserProfile> login({
+  Future<void> login({
     @required String email,
     @required String password,
   }) {
@@ -38,7 +37,6 @@ class UserService {
           email: email,
           password: password,
         )
-        .then((result) => _getUpdatedUser(result.user))
         .catchError(ErrorHandler().handleError);
   }
 
@@ -57,14 +55,14 @@ class UserService {
         .catchError(ErrorHandler().handleError);
   }
 
-  Future<UserProfile> loginViaFacebook({@required String token}) {
+  Future<String> loginViaFacebook({@required String token}) {
     return firebaseAuth
         .signInWithCredential(FacebookAuthProvider.credential(token))
-        .then((response) => _getUpdatedUser(response.user))
+        .then((response) => response.user.uid)
         .catchError(ErrorHandler().handleError);
   }
 
-  Future<UserProfile> loginViaGoogle({
+  Future<String> loginViaGoogle({
     @required String accessToken,
     @required String idToken,
   }) {
@@ -73,11 +71,11 @@ class UserService {
           accessToken: accessToken,
           idToken: idToken,
         ))
-        .then((authResponse) => _getUpdatedUser(authResponse.user))
+        .then((response) => response.user.uid)
         .catchError(ErrorHandler().handleError);
   }
 
-  Future<UserProfile> loginViaApple({
+  Future<String> loginViaApple({
     @required String accessToken,
     @required String idToken,
     @required String firstName,
@@ -101,11 +99,11 @@ class UserService {
     });
 
     return loginRequest
-        .then(_getUpdatedUser)
-        .catchError(ErrorHandler().handleError);
+        .catchError(ErrorHandler().handleError)
+        .then((user) => user.uid);
   }
 
-  Future<UserProfile> signUpUser(RegisterRequestModel model) async {
+  Future<void> signUpUser(RegisterRequestModel model) async {
     await firebaseAuth.createUserWithEmailAndPassword(
       email: model.email,
       password: model.password,
@@ -113,9 +111,8 @@ class UserService {
 
     final user = firebaseAuth.currentUser;
     await user.updateProfile(displayName: model.nickName);
-    final updatedUser = _getUpdatedUser(user);
 
-    return updatedUser;
+    return Future.value();
   }
 
   // TODO(maxim): Remove searching players
@@ -180,6 +177,10 @@ class UserService {
         .toList();
   }
 
+  Future<UserProfile> loadUserFromServer(userId) async {
+    return await apiClient.getUserProfile(userId);
+  }
+
   Future<void> sendUserPushToken({
     @required String userId,
     @required String pushToken,
@@ -190,41 +191,19 @@ class UserService {
         .set({'token': pushToken, 'device': Platform.operatingSystem});
   }
 
-  Future<UserProfile> _getUpdatedUser(User user) async {
-    final userId = user.uid;
-    final cachedUserProfile = await userCache.getUserProfile();
-    final firestoreUser = await loadCurrentProfile(userId);
-    var updatedUser = firestoreUser;
-
-    if (firestoreUser != null) {
-      updatedUser = firestoreUser.copyWith(
-        fullName: user.displayName,
-        avatarUrl: user.photoURL,
-      );
-    }
-
-    if (cachedUserProfile == null && updatedUser == null) {
-      updatedUser = mapToUserProfile(user);
-    }
-
-    if (cachedUserProfile != updatedUser) {
-      final userData = updatedUser.toJson();
-      await firestore.collection('users').doc(userId).set(userData);
-      await userCache.setUserProfile(updatedUser);
-    }
-
+  Stream<UserProfile> subscribeOnUser(String userId) {
     firebaseMessaging.getToken().then((token) {
       sendUserPushToken(userId: userId, pushToken: token);
     });
 
-    return updatedUser;
-  }
-
-  Stream<UserProfile> subscribeOnUser(String userId) {
     return firestore
         .collection('users')
         .doc(userId)
         .snapshots()
-        .map((snapshot) => UserProfile.fromJson(snapshot.data()));
+        .map((snapshot) => UserProfile.fromJson(snapshot.data()))
+        .map((userProfile) {
+      userCache.setUserProfile(userProfile);
+      return userProfile;
+    });
   }
 }
