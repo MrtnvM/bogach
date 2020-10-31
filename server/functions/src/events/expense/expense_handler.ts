@@ -40,7 +40,7 @@ export class ExpenseHandler extends PlayerActionHandler {
 
     const userAccount = game.accounts[userId];
 
-    const assets = game.possessions[userId].assets;
+    const assets = game.possessions[userId].assets || [];
 
     let insurancesValue = 0;
     if (insuranceType !== null) {

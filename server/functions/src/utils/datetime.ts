@@ -9,5 +9,5 @@ export function nowInUtc() {
     date.getUTCSeconds()
   );
 
-  return new Date(utc);
+  return new Date(utc).toISOString();
 }

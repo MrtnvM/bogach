@@ -39,7 +39,7 @@ describe('Game Service - Singleplayer game', () => {
     const expectedGameState = produce(game.state, (draft) => {
       draft.participantsProgress[userId].currentEventIndex = 1;
       draft.participantsProgress[userId].progress = 0.0189;
-      draft.winners = { 0: userId };
+      draft.winners = [{ userId, targetValue: 0.0189 }];
     });
 
     const [newGame] = capture(mockGameProvider.updateGame).last();
@@ -90,7 +90,7 @@ describe('Game Service - Singleplayer game', () => {
       };
 
       draft.monthNumber += 1;
-      draft.winners = { 0: userId };
+      draft.winners = [{ userId, targetValue: 0.0291 }];
     });
 
     const [newGame] = capture(mockGameProvider.updateGame).last();
@@ -138,7 +138,7 @@ describe('Game Service - Singleplayer game', () => {
       draft.participantsProgress[userId].progress = 1.009099;
       draft.monthNumber += 1;
       draft.gameStatus = 'game_over';
-      draft.winners = { 0: userId };
+      draft.winners = [{ userId, targetValue: 1.009099 }];
     });
 
     const [newGame] = capture(mockGameProvider.updateGame).last();

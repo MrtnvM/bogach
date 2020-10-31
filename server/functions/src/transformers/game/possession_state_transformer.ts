@@ -22,10 +22,10 @@ export class PossessionStateTransformer extends GameTransformer {
   }
 
   generatePossessionState(possessions: Possessions): PossessionState {
-    const incomes = possessions.incomes.slice();
-    const expenses = possessions.expenses.slice();
-    const assets = possessions.assets.slice();
-    const liabilities = possessions.liabilities.slice();
+    const incomes = (possessions.incomes || []).slice();
+    const expenses = (possessions.expenses || []).slice();
+    const assets = (possessions.assets || []).slice();
+    const liabilities = (possessions.liabilities || []).slice();
 
     assets.forEach((asset) => {
       const income = AssetEntity.getIncome(asset);

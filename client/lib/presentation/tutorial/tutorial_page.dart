@@ -63,11 +63,11 @@ class _TutorialPageState extends State<TutorialPage> {
                 currentEventIndex: 0,
                 currentMonthForParticipant: 1,
                 status: ParticipantProgressStatus.playerMove,
-                monthResults: {},
+                monthResults: [],
                 progress: 0.1,
               ),
             },
-            winners: {},
+            winners: [],
           ),
           participants: [userId],
           possessionState: {

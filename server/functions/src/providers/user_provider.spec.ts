@@ -1,29 +1,21 @@
 /// <reference types="@types/jest"/>
 
-import * as admin from 'firebase-admin';
 import produce from 'immer';
 import { mock, when, instance, anything, verify, reset } from 'ts-mockito';
 
-import { Firestore } from '../core/firebase/firestore';
 import { User } from '../models/domain/user/user';
 import { PurchaseProfileEntity } from '../models/purchases/purchase_profile';
-import { FirestoreSelector } from './firestore_selector';
 import { UserProvider } from './user_provider';
 import { PlayedGames } from '../models/domain/user/played_games';
+import { FirestoreUserDAO } from '../dao/firestore/firestore_user_dao';
 
 describe('User Provider - ', () => {
-  const mockFirestore = mock(Firestore);
-  const mockSelector = mock(FirestoreSelector);
-  const mockRef = mock(admin.firestore.DocumentReference);
-
-  const firestore = instance(mockFirestore);
-  const selector = instance(mockSelector);
-  const userProvider = new UserProvider(firestore, selector);
+  const mockUserDao = mock(FirestoreUserDAO);
+  const userDao = instance(mockUserDao);
+  const userProvider = new UserProvider(userDao);
 
   beforeEach(() => {
-    reset(mockFirestore);
-    reset(mockSelector);
-    reset(mockRef);
+    reset(mockUserDao);
   });
 
   test('No updates for actual version of profile', async () => {
@@ -34,6 +26,7 @@ describe('User Provider - ', () => {
     const userProfile: User = {
       userId,
       userName: 'User Name',
+      avatarUrl: '',
       currentQuestIndex: 1,
       multiplayerGamePlayed: 1,
       purchaseProfile: {
@@ -44,14 +37,13 @@ describe('User Provider - ', () => {
       playedGames: playedGameInfo,
     };
 
-    when(mockSelector.user(userId)).thenReturn(mockRef);
-    when(mockFirestore.getItemData(mockRef)).thenReturn(Promise.resolve(userProfile));
+    when(mockUserDao.getUser(userId)).thenReturn(Promise.resolve(userProfile));
 
     const receivedProfile = await userProvider.getUserProfile(userId);
 
     expect(receivedProfile).toEqual(userProfile);
-    verify(mockFirestore.getItemData(anything())).once();
-    verify(mockFirestore.updateItem(anything(), anything())).never();
+    verify(mockUserDao.getUser(userId)).once();
+    verify(mockUserDao.updateUserProfile(anything())).never();
   });
 
   test('Successful migration to actual version of profile', async () => {
@@ -62,12 +54,12 @@ describe('User Provider - ', () => {
     const userProfile: User = {
       userId,
       userName: 'User Name',
+      avatarUrl: '',
       currentQuestIndex: 1,
       playedGames: playedGameInfo,
     };
 
-    when(mockSelector.user(userId)).thenReturn(mockRef);
-    when(mockFirestore.getItemData(mockRef)).thenReturn(Promise.resolve(userProfile));
+    when(mockUserDao.getUser(userId)).thenReturn(Promise.resolve(userProfile));
 
     const receivedProfile = await userProvider.getUserProfile(userId);
 
@@ -81,7 +73,7 @@ describe('User Provider - ', () => {
     });
 
     expect(receivedProfile).toEqual(expectedProfile);
-    verify(mockFirestore.getItemData(anything())).once();
-    verify(mockFirestore.updateItem(anything(), anything())).once();
+    verify(mockUserDao.getUser(userId)).once();
+    verify(mockUserDao.updateUserProfile(anything())).once();
   });
 });

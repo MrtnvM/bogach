@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/app_configuration.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
@@ -13,10 +15,10 @@ import 'package:cash_flow/resources/dynamic_links.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/utils/mappers/new_game_mapper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:package_info/package_info.dart';
 import 'package:share/share.dart';
 
@@ -24,14 +26,15 @@ class GameService {
   GameService({
     @required this.apiClient,
     @required this.firestore,
-    @required this.firebaseDatabase,
+    @required this.realtimeDatabase,
   })  : assert(apiClient != null),
         assert(firestore != null),
-        assert(firebaseDatabase != null);
+        assert(realtimeDatabase != null),
+        assert(realtimeDatabase != null);
 
   final CashFlowApiClient apiClient;
   final FirebaseFirestore firestore;
-  final FirebaseDatabase firebaseDatabase;
+  final FirebaseDatabase realtimeDatabase;
 
   Future<List<GameTemplate>> getGameTemplates() {
     return apiClient.getGameTemplates().then(mapToGameTemplates);
@@ -60,11 +63,18 @@ class GameService {
   }
 
   Stream<Game> getGame(GameContext gameContext) {
-    return firestore
-        .collection('games')
-        .doc(gameContext.gameId)
-        .snapshots()
-        .map((snapshot) => Game.fromJson(snapshot.data()));
+    return realtimeDatabase
+        .reference()
+        .child('games')
+        .child(gameContext.gameId)
+        .onValue
+        .map((snapshot) => snapshot.snapshot.value)
+        .map((data) {
+      final jsonString = json.encode(data);
+      final jsonData = json.decode(jsonString);
+      final game = Game.fromJson(jsonData);
+      return game;
+    });
   }
 
   Future<Game> getGameByLevel(String levelId, String userId) async {
@@ -86,6 +96,8 @@ class GameService {
     return games.first;
   }
 
+  // TODO(Maxim): Re-architecture this feature
+  // With Realtime database it is not working
   Future<List<Game>> getUserGames(String userId) async {
     final gameDocs = await firestore
         .collection('games')

@@ -2,16 +2,15 @@ import * as functions from 'firebase-functions';
 import * as config from '../config';
 
 import { APIRequest } from '../core/api/request_data';
-import { Firestore } from '../core/firebase/firestore';
+import { DAOs } from '../dao/daos';
 import { PurchaseDetailsEntity } from '../models/purchases/purchase_details';
-import { FirestoreSelector } from '../providers/firestore_selector';
 import { UserProvider } from '../providers/user_provider';
 import { PurchaseService } from '../services/purchase/purchase_service';
 
-export const create = (firestore: Firestore, selector: FirestoreSelector) => {
+export const create = (daos: DAOs) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
-  const userProvider = new UserProvider(firestore, selector);
+  const userProvider = new UserProvider(daos.user);
   const purchaseService = new PurchaseService(userProvider);
 
   const updatePurchases = https.onRequest(async (request, response) => {

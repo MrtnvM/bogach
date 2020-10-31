@@ -1,6 +1,6 @@
 import { GameLevelEntity } from '../game_levels/models/game_level';
 import { Game, GameEntity } from '../models/domain/game/game';
-import { UserEntity } from '../models/domain/user';
+import { UserEntity } from '../models/domain/user/user';
 
 export interface IGameDAO {
   createGame(game: Game): Promise<Game>;

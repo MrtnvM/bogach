@@ -162,7 +162,7 @@ export class BusinessSellEventHandler extends PlayerActionHandler {
   }
 
   removeFromAssets(theSameBusinessIndex: number, assets: Asset[]): Asset[] {
-    const newAssets = assets.slice();
+    const newAssets = (assets || []).slice();
     const countItemsToRemove = 1;
     newAssets.splice(theSameBusinessIndex, countItemsToRemove);
 
@@ -170,7 +170,7 @@ export class BusinessSellEventHandler extends PlayerActionHandler {
   }
 
   removeFromLiabilties(theSameLiabilityIndex: number, liabilities: Liability[]): Liability[] {
-    const newLiabilities = liabilities.slice();
+    const newLiabilities = (liabilities || []).slice();
     const countItemsToRemove = 1;
     newLiabilities.splice(theSameLiabilityIndex, countItemsToRemove);
 

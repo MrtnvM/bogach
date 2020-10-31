@@ -186,7 +186,7 @@ export class DebentureEventHandler extends PlayerActionHandler {
       averagePrice: actionResult.newAveragePrice,
     };
 
-    let newAssets = assets.slice();
+    let newAssets = (assets || []).slice();
     const index = assets.indexOf(theSameDebenture);
 
     if (index >= 0) {
@@ -220,7 +220,7 @@ export class DebentureEventHandler extends PlayerActionHandler {
     profitabilityPercent: number,
     debentureName: string
   ): Asset[] {
-    const newAssets = assets.slice();
+    const newAssets = (assets || []).slice();
 
     const newDebenture: DebentureAsset = {
       averagePrice: actionResult.newAveragePrice,

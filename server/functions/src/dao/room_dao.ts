@@ -1,6 +1,6 @@
 import { GameTemplateEntity } from '../game_templates/models/game_template';
 import { Room, RoomEntity } from '../models/domain/room';
-import { User } from '../models/domain/user';
+import { User } from '../models/domain/user/user';
 
 export interface IRoomDAO {
   createRoom(gameTemplateId: GameTemplateEntity.Id, owner: User): Promise<Room>;

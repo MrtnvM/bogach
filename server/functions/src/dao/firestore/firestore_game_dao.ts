@@ -2,7 +2,7 @@ import { IGameDAO } from '../game_dao';
 import { Game, GameEntity } from '../../models/domain/game/game';
 import { FirestoreSelector } from '../../providers/firestore_selector';
 import { Firestore } from '../../core/firebase/firestore';
-import { UserEntity } from '../../models/domain/user';
+import { UserEntity } from '../../models/domain/user/user';
 import { GameLevelEntity } from '../../game_levels/models/game_level';
 import { firestore as FirestoreAdmin } from 'firebase-admin';
 

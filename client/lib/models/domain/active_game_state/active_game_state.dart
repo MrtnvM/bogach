@@ -1,3 +1,4 @@
+import 'package:cash_flow/models/domain/game/current_game_state/winner.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'active_game_state.freezed.dart';
@@ -20,7 +21,7 @@ abstract class ActiveGameState with _$ActiveGameState {
   factory ActiveGameState.monthResult() = ActiveGameMonthResultState;
 
   factory ActiveGameState.gameOver({
-    @required Map<int, String> winners,
+    @required List<Winner> winners,
     @required int monthNumber,
   }) = ActiveGameGameOverState;
 }

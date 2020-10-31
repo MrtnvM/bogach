@@ -50,18 +50,18 @@ void _fillDotsForPlayers({
 
     dots.add(firstDot);
 
-    progress.monthResults.forEach((month, monthResults) {
-      final intMonth = int.parse(month) + 1;
+    for (var i = 0; i < progress.monthResults.length; i++) {
+      final monthResults = progress.monthResults[i];
 
-      if (currentMonth != intMonth) {
+      if (currentMonth != i) {
         final dot = DotModel(
           userId: userId,
-          xValue: intMonth,
+          xValue: i,
           yValue: monthResults.cash.toInt(),
         );
         dots.add(dot);
       }
-    });
+    }
 
     listOfPlayerDots.add(dots);
   });

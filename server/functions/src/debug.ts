@@ -6,10 +6,10 @@ export const initializeTestDataIfEmulator = () => {
     return;
   }
 
-  initializeUsers();
+  initializeUsers().catch(console.error);
 };
 
-const initializeUsers = () => {
+const initializeUsers = async () => {
   const firestore = admin.firestore();
   const usersCollection = firestore.collection('users');
 
@@ -30,8 +30,6 @@ const initializeUsers = () => {
     updatedAt: '2020-10-30T22:37:10.000Z',
   };
 
-  usersCollection.doc(user1.userId).set(user1);
-
   const user2: User = {
     userId: 'vO4mXjQo7Ba8m5dIs5LOgAthgsJ3',
     userName: 'James Bond',
@@ -48,5 +46,8 @@ const initializeUsers = () => {
     updatedAt: '2020-10-30T22:37:10.000Z',
   };
 
-  usersCollection.doc(user2.userId).set(user2);
+  await Promise.all([
+    usersCollection.doc(user1.userId).set(user1),
+    usersCollection.doc(user2.userId).set(user2),
+  ]);
 };

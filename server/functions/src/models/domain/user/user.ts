@@ -4,6 +4,7 @@ import { PlayedGames } from './played_games';
 export interface User {
   readonly userId: UserEntity.Id;
   readonly userName: string;
+  readonly avatarUrl: string;
 
   readonly currentQuestIndex?: number;
   readonly boughtQuestsAccess?: boolean;
@@ -13,8 +14,8 @@ export interface User {
 
   readonly profileVersion?: number;
 
-  readonly createdAt?: Date;
-  readonly updatedAt?: Date;
+  readonly createdAt?: string;
+  readonly updatedAt?: string;
 
   readonly playedGames?: PlayedGames;
 }

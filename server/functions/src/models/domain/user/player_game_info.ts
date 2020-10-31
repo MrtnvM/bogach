@@ -1,4 +1,4 @@
 export interface PlayedGameInfo {
-    readonly gameId: string;
-    readonly createdAt?: Date;
-  }
+  readonly gameId: string;
+  readonly createdAt?: string;
+}

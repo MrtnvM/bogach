@@ -132,8 +132,9 @@ export class GameEventGenerator {
       return !alreadyHaveThisEvent;
     }
 
-    const monthsCount = Math.min(game.history.months.length, minDistance);
-    const monthsEventHistory = game.history.months.slice(-monthsCount);
+    const months = game.history?.months ?? [];
+    const monthsCount = Math.min(months.length, minDistance);
+    const monthsEventHistory = months.slice(-monthsCount);
 
     const isEventAlreadyHappened = monthsEventHistory.some((month) => {
       return month.events.findIndex((e) => e.type === rule.getType()) >= 0;

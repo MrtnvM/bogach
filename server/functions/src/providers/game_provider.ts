@@ -2,8 +2,7 @@ import * as uuid from 'uuid';
 import { Game, GameEntity } from '../models/domain/game/game';
 import { RoomEntity, Room } from '../models/domain/room';
 import { GameTemplate, GameTemplateEntity } from '../game_templates/models/game_template';
-import { UserEntity, User } from '../models/domain/user/user';
-import { UserEntity } from '../models/domain/user';
+import { UserEntity } from '../models/domain/user/user';
 import { PossessionStateEntity } from '../models/domain/possession_state';
 import { assertExists } from '../utils/asserts';
 import { createParticipantsGameState } from '../models/domain/game/participant_game_state';
@@ -70,7 +69,7 @@ export class GameProvider {
           monthResults: {},
           progress: 0,
         }),
-        winners: {},
+        winners: [],
       },
       participants: participantsIds,
       possessions: participantsGameState(template.possessions),

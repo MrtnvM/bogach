@@ -157,7 +157,7 @@ export class StockEventHandler extends PlayerActionHandler {
   }
 
   updateAssets(actionResult: ActionResult, theSameStock: StockAsset, assets: Asset[]): Asset[] {
-    let newAssets = assets.slice();
+    let newAssets = (assets || []).slice();
 
     const newStock = {
       ...theSameStock,
@@ -183,7 +183,7 @@ export class StockEventHandler extends PlayerActionHandler {
     fairPrice: number,
     stockName: string
   ): Asset[] {
-    const newAssets = assets.slice();
+    const newAssets = (assets || []).slice();
 
     const newStock: StockAsset = {
       fairPrice,

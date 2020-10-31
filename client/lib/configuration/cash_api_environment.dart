@@ -34,7 +34,9 @@ class CashApiEnvironment extends ApiEnvironment {
         'http://${Platform.isIOS ? 'localhost' : '10.0.2.2'}:5001/cash-flow-staging/europe-west2/',
     dynamicLink: const DynamicLinks('staging.bogach-game.ru'),
     firestoreHostUrl: Platform.isAndroid ? '10.0.2.2:8080' : 'localhost:8080',
-    realtimeDatabaseUrl: 'http://localhost:9000/?ns=cash-flow-staging',
+    realtimeDatabaseUrl:
+        'http://${Platform.isAndroid ? '10.0.2.2' : 'localhost'}:9000/'
+        '?ns=cash-flow-staging',
     validateRequestsByDefault: false,
     isRequestsAuthorisedByDefault: false,
     isAnalyticsEnabled: false,

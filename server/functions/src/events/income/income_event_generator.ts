@@ -16,19 +16,19 @@ export namespace IncomeEventGenerator {
       maxHistoryLength: 12,
     });
 
-    const alreadyHappendEvents = {};
-    pastIncomeEvents.forEach((e) => (alreadyHappendEvents[e.name + e.description] = true));
+    const alreadyHappenedEvents = {};
+    pastIncomeEvents.forEach((e) => (alreadyHappenedEvents[e.name + e.description] = true));
 
-    const filtredIncomeEvents = incomeEventInfo.filter(
-      (e) => !alreadyHappendEvents[e.name + e.description]
+    const filteredIncomeEvents = incomeEventInfo.filter(
+      (e) => !alreadyHappenedEvents[e.name + e.description]
     );
 
-    if (filtredIncomeEvents.length === 0) {
+    if (filteredIncomeEvents.length === 0) {
       return undefined;
     }
 
-    const eventIndex = random.int(0, filtredIncomeEvents.length - 1);
-    const eventInfo = filtredIncomeEvents[eventIndex];
+    const eventIndex = random.int(0, filteredIncomeEvents.length - 1);
+    const eventInfo = filteredIncomeEvents[eventIndex];
 
     return generateEvent(eventInfo);
   };

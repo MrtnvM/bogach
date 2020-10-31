@@ -2,7 +2,7 @@ import * as uuid from 'uuid';
 import { IRoomDAO } from '../room_dao';
 import { FirestoreSelector } from '../../providers/firestore_selector';
 import { Firestore } from '../../core/firebase/firestore';
-import { User } from '../../models/domain/user';
+import { User } from '../../models/domain/user/user';
 import { Room, RoomEntity } from '../../models/domain/room';
 import { GameTemplateEntity } from '../../game_templates/models/game_template';
 

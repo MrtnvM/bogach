@@ -1,7 +1,7 @@
 import { produce } from 'immer';
 
 import { GameTransformer } from './game_transformer';
-import { Game } from '../../models/domain/game/game';
+import { Game, GameEntity } from '../../models/domain/game/game';
 
 export class HistoryGameTransformer extends GameTransformer {
   constructor() {
@@ -12,14 +12,19 @@ export class HistoryGameTransformer extends GameTransformer {
     const isGameCompleted = game.state.gameStatus === 'game_over';
     const isMoveCompleted = this.isAllParticipantsCompletedMove(game);
     const historyMonthIndex = Math.max(game.state.monthNumber - 1, 0);
-    const isHistoryAlreadyUpdated = game.history?.months[historyMonthIndex]?.events !== undefined;
+
+    const months = game.history?.months || [];
+    const isHistoryAlreadyUpdated = months[historyMonthIndex]?.events !== undefined;
 
     if (isGameCompleted || !isMoveCompleted || isHistoryAlreadyUpdated) {
       return game;
     }
 
     return produce(game, (draft) => {
-      draft.history.months[historyMonthIndex] = { events: game.currentEvents };
+      const history: GameEntity.History = draft.history || { months: [] };
+      history.months[historyMonthIndex] = { events: game.currentEvents };
+
+      draft.history = history;
     });
   }
 }
