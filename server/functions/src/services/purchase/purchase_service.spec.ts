@@ -171,7 +171,7 @@ describe('Purchase Service', () => {
 
       const playedGameInfo: PlayedGameInfo = {
         gameId: 'gameId',
-        createdAt: gameCreationDate,
+        createdAtMilliseconds: gameCreationDate.getTime(),
       };
       playedGames.multiplayerGames.push(playedGameInfo);
 

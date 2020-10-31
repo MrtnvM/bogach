@@ -8,7 +8,7 @@ part 'played_game_info.g.dart';
 abstract class PlayedGameInfo with _$PlayedGameInfo {
     factory PlayedGameInfo({
     String gameId,
-    @JsonKey(fromJson: timestampToDate) DateTime createdAt,
+    int createdAtMilliseconds,
   }) = _PlayedGameInfo;
 
   factory PlayedGameInfo.fromJson(Map<String, dynamic> json) =>

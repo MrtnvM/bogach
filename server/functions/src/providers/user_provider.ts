@@ -7,7 +7,6 @@ import { PurchaseProfileEntity } from '../models/purchases/purchase_profile';
 import { PlayedGames } from '../models/domain/user/played_games';
 import { PlayedGameInfo } from '../models/domain/user/player_game_info';
 import uuid = require('uuid');
-import { nowInUtc } from '../utils/datetime';
 
 export class UserProvider {
   constructor(private firestore: Firestore, private selector: FirestoreSelector) {}
@@ -20,6 +19,11 @@ export class UserProvider {
     if (JSON.stringify(profile) !== JSON.stringify(updatedProfile)) {
       await this.updateUserProfile(updatedProfile);
     }
+
+    console.log('createdAt: ' + updatedProfile.playedGames?.multiplayerGames[0].createdAtMilliseconds);
+    console.log(
+      'createdAtJson: ' + JSON.stringify(updatedProfile.playedGames?.multiplayerGames[0].createdAtMilliseconds)
+    );
 
     return updatedProfile;
   }
@@ -76,7 +80,7 @@ export class UserProvider {
       });
     }
 
-    if (!profile.profileVersion) {
+    if (profile.profileVersion !== 3) {
       updatedProfile = produce(updatedProfile, (draft) => {
         draft.profileVersion = 3;
       });
@@ -90,7 +94,7 @@ export class UserProvider {
         for (let gameIndex = 0; gameIndex < multiplayerGamePlayed; gameIndex++) {
           const playedMultiplayerGame: PlayedGameInfo = {
             gameId: uuid.v4(),
-            createdAt: nowInUtc(),
+            createdAtMilliseconds: new Date().getTime(),
           };
 
           multiplayerGames.push(playedMultiplayerGame);

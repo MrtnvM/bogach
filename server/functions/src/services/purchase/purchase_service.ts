@@ -123,7 +123,7 @@ export class PurchaseService {
   addMultiplayerGame(draft: Draft<User>, gameId: string, gameCreationDate?: Date) {
     const multiplayerGameInfo: PlayedGameInfo = {
       gameId: gameId,
-      createdAt: gameCreationDate,
+      createdAtMilliseconds: gameCreationDate?.getTime(),
     };
 
     if (!draft.playedGames) {
