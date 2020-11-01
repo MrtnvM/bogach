@@ -1,5 +1,6 @@
 import { PurchaseProfile } from '../../purchases/purchase_profile';
 import { PlayedGames } from './played_games';
+import { LastGames } from './last_games';
 
 export interface User {
   readonly userId: UserEntity.Id;
@@ -18,6 +19,7 @@ export interface User {
   readonly updatedAt?: string;
 
   readonly playedGames?: PlayedGames;
+  readonly lastGames?: LastGames;
 }
 
 export interface UserDevice {

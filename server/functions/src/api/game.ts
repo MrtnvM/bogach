@@ -5,7 +5,6 @@ import { GameProvider } from '../providers/game_provider';
 import { GameService } from '../services/game/game_service';
 import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { APIRequest } from '../core/api/request_data';
-import { UserEntity } from '../models/domain/user/user';
 import { GameTemplateEntity } from '../game_templates/models/game_template';
 import { GameEntity } from '../models/domain/game/game';
 import { UserProvider } from '../providers/user_provider';
@@ -40,15 +39,6 @@ export const create = (daos: DAOs) => {
     const game = gameService.createNewGame(templateId, participantsIds || [userId]);
 
     await send(game, response);
-  });
-
-  const getAllGames = https.onRequest(async (request, response) => {
-    const apiRequest = APIRequest.from(request, response);
-    apiRequest.checkMethod('GET');
-
-    const games = gameProvider.getAllGames();
-
-    await send(games, response);
   });
 
   const getGame = https.onRequest(async (request, response) => {
@@ -114,27 +104,8 @@ export const create = (daos: DAOs) => {
     const apiRequest = APIRequest.from(request, response);
     apiRequest.checkMethod('GET');
 
-    const userId = apiRequest.queryParameter('user_id');
-
     const gameLevels = gameLevelsProvider.getGameLevels();
-    console.log(gameLevels.toString());
-    const levelsIds = gameLevels.map((l) => l.id);
-    const userQuestGames = await gameProvider.getUserQuestGames(userId as UserEntity.Id, levelsIds);
-
-    const levelsInfo = gameLevels.map((level) => {
-      const { id, name, description, icon } = level;
-      const questGame = userQuestGames.find((g) => g.config.level === id);
-
-      return {
-        id,
-        name,
-        description,
-        icon,
-        currentGameId: questGame?.id,
-      };
-    });
-
-    await send(Promise.resolve(levelsInfo), response);
+    await send(Promise.resolve(gameLevels), response);
   });
 
   const createGameByLevel = https.onRequest(async (request, response) => {
@@ -143,12 +114,6 @@ export const create = (daos: DAOs) => {
 
     const gameLevelId = apiRequest.jsonField('gameLevelId');
     const userId = apiRequest.jsonField('userId');
-
-    try {
-      await gameProvider.removeUserQuestGamesForLevel(userId, gameLevelId);
-    } catch (error) {
-      console.error(error);
-    }
 
     const newGame = gameService.createNewGameByLevel(gameLevelId, [userId]);
     await send(newGame, response);
@@ -174,7 +139,6 @@ export const create = (daos: DAOs) => {
 
   return {
     create: createGame,
-    getAllGames,
     getGame,
     getAllGameTemplates,
     getGameTemplate,

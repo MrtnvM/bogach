@@ -42,7 +42,6 @@ const UserAPI = userAPI.create(daos);
 
 export const createGame = GameAPI.create;
 export const getGame = GameAPI.getGame;
-export const getAllGames = GameAPI.getAllGames;
 export const getGameTemplate = GameAPI.getGameTemplate;
 export const getAllGameTemplates = GameAPI.getAllGameTemplates;
 export const handleGameEvent = GameAPI.handleGameEvent;

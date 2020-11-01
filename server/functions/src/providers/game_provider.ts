@@ -16,11 +16,12 @@ import {
   StocksInitializerGameTransformer,
   DebentureInitializerGameTransformer,
 } from '../transformers/game_transformers';
-import { GameLevel, GameLevelEntity } from '../game_levels/models/game_level';
+import { GameLevel } from '../game_levels/models/game_level';
 import { GameTemplatesProvider } from './game_templates_provider';
 import { IGameDAO } from '../dao/game_dao';
 import { IRoomDAO } from '../dao/room_dao';
 import { IUserDAO } from '../dao/user_dao';
+import { LastGameInfo, LastGamesEntity } from '../models/domain/user/last_games';
 
 export class GameProvider {
   constructor(
@@ -96,25 +97,15 @@ export class GameProvider {
       new MonthResultTransformer(0),
     ]);
 
-    const createdGame = this.gameDao.createGame(game);
-    return createdGame;
-  }
+    const createdGame = await this.gameDao.createGame(game);
+    await this.updateGameParticipantsLastGames(createdGame, template);
 
-  getAllGames(): Promise<Game[]> {
-    return this.gameDao.getGames();
+    return createdGame;
   }
 
   getGame(gameId: GameEntity.Id): Promise<Game> {
     assertExists('Game ID', gameId);
     return this.gameDao.getGame(gameId);
-  }
-
-  getUserQuestGames(userId: UserEntity.Id, levelIds: GameLevelEntity.Id[]): Promise<Game[]> {
-    return this.gameDao.getUserQuestGames(userId, levelIds);
-  }
-
-  removeUserQuestGamesForLevel(userId: UserEntity.Id, levelId: GameLevelEntity.Id): Promise<void> {
-    return this.removeUserQuestGamesForLevel(userId, levelId);
   }
 
   updateGame(game: Game): Promise<Game> {
@@ -207,6 +198,70 @@ export class GameProvider {
 
     const updatedRoom = await this.roomDao.updateRoom(room);
     return [updatedRoom, game];
+  }
+
+  async updateGameParticipantsLastGames(game: Game, template: GameTemplate): Promise<void> {
+    const updateProfileOperations = game.participants.map(async (participantId) => {
+      const user = await this.userDao.getUser(participantId);
+      if (!user) {
+        return;
+      }
+
+      let lastGames = user.lastGames || LastGamesEntity.initial();
+      let existingGame: LastGameInfo | undefined;
+
+      const newLastGame: LastGameInfo = {
+        gameId: game.id,
+        templateId: template.id,
+        createdAt: game.createdAt,
+      };
+
+      const isSingleplayerGame = game.type === 'singleplayer' && !game.config.level;
+      if (isSingleplayerGame) {
+        existingGame = lastGames.singleplayerGames.find((g) => g.templateId === template.id);
+
+        lastGames = produce(lastGames, (draft) => {
+          draft.singleplayerGames = lastGames.singleplayerGames.filter(
+            (g) => g.gameId !== existingGame?.gameId
+          );
+          draft.singleplayerGames.push(newLastGame);
+        });
+      }
+
+      const isQuestGame = game.type === 'singleplayer' && game.config.level;
+      if (isQuestGame) {
+        existingGame = lastGames.questGames.find((g) => g.templateId === template.id);
+
+        lastGames = produce(lastGames, (draft) => {
+          draft.questGames = lastGames.questGames.filter((g) => g.gameId !== existingGame?.gameId);
+          draft.questGames.push(newLastGame);
+        });
+      }
+
+      const isMultiplayerGame = game.type === 'multiplayer';
+      if (isMultiplayerGame) {
+        existingGame = lastGames.multiplayerGames.find((g) => g.templateId === template.id);
+
+        lastGames = produce(lastGames, (draft) => {
+          draft.multiplayerGames = lastGames.multiplayerGames.filter(
+            (g) => g.gameId !== existingGame?.gameId
+          );
+          draft.multiplayerGames.push(newLastGame);
+        });
+      }
+
+      if (existingGame) {
+        await this.gameDao.deleteGame(existingGame.gameId);
+      }
+
+      const updatedProfile = produce(user, (draft) => {
+        draft.lastGames = lastGames;
+      });
+
+      await this.userDao.updateUserProfile(updatedProfile);
+    });
+
+    await Promise.all(updateProfileOperations);
   }
 
   private checkParticipantsIds(participantsIds: any) {

@@ -126,6 +126,7 @@ export class GameService {
     }
 
     await this.gameProvider.updateGame(updatedGame);
+    await this.removeCompletedGameFromLastGamesIfNeeded(updatedGame);
     await this.updateCurrentUserQuestIndexIfNeeded(updatedGame, userId);
   }
 
@@ -220,6 +221,16 @@ export class GameService {
     const newQuestIndex = Math.min(questIndex + 1, gameLevels.length - 1);
 
     await this.userProvider.updateCurrentQuestIndex(userId, newQuestIndex);
+  }
+
+  async removeCompletedGameFromLastGamesIfNeeded(game: Game) {
+    if (game.state.gameStatus === 'game_over') {
+      const removeCompletedGameOperations = game.participants.map((participantId) =>
+        this.userProvider.removeGameFromLastGames(participantId, game.id)
+      );
+
+      await Promise.all(removeCompletedGameOperations);
+    }
   }
 
   private scheduleCompleteMonthTimer(updatedGame: Game) {

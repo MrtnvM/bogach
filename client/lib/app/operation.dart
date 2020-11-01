@@ -12,7 +12,6 @@ enum Operation {
   loadGameTemplates,
   createGame,
   startNewMonth,
-  getUserGames,
   getQuests,
   createQuestGame,
   sendPlayerAction,

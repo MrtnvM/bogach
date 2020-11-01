@@ -7,6 +7,8 @@ import { PlayedGames } from '../models/domain/user/played_games';
 import { PlayedGameInfo } from '../models/domain/user/player_game_info';
 import { nowInUtc } from '../utils/datetime';
 import { IUserDAO } from '../dao/user_dao';
+import { LastGamesEntity } from '../models/domain/user/last_games';
+import { GameEntity } from '../models/domain/game/game';
 
 export class UserProvider {
   constructor(private userDao: IUserDAO) {}
@@ -47,6 +49,27 @@ export class UserProvider {
     });
 
     await this.userDao.updateUserProfile(updatedUser);
+  }
+
+  async removeGameFromLastGames(userId: UserEntity.Id, gameId: GameEntity.Id) {
+    const user = await this.userDao.getUser(userId);
+    const lastGames = user.lastGames || LastGamesEntity.initial();
+
+    const updatedUser = produce(user, (draft) => {
+      const singleplayerGames = lastGames.singleplayerGames.filter((g) => g.gameId !== gameId);
+      const questGames = lastGames.questGames.filter((g) => g.gameId !== gameId);
+      const multiplayerGames = lastGames.multiplayerGames.filter((g) => g.gameId !== gameId);
+
+      draft.lastGames = {
+        singleplayerGames,
+        questGames,
+        multiplayerGames,
+      };
+    });
+
+    if (JSON.stringify(user) !== JSON.stringify(updatedUser)) {
+      await this.userDao.updateUserProfile(updatedUser);
+    }
   }
 
   private migrateProfileToVersion3(profile: User): User {
@@ -90,6 +113,12 @@ export class UserProvider {
         };
 
         draft.playedGames = playedGameInfo;
+      });
+    }
+
+    if (!profile.lastGames) {
+      updatedProfile = produce(updatedProfile, (draft) => {
+        draft.lastGames = LastGamesEntity.initial();
       });
     }
 

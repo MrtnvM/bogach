@@ -81,7 +81,7 @@ class QuestList extends HookWidget {
                         right: 10 - offsetAnimation.value,
                       ),
                       child: _QuestItemWidget(
-                        quests: quests.items[i],
+                        quest: quests.items[i],
                         index: i,
                       ),
                     ),
@@ -91,7 +91,7 @@ class QuestList extends HookWidget {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: _QuestItemWidget(
-                    quests: quests.items[i],
+                    quest: quests.items[i],
                     index: i,
                     defaultAction: animationController.forward,
                   ),
@@ -117,26 +117,27 @@ class QuestList extends HookWidget {
 
 class _QuestItemWidget extends HookWidget {
   const _QuestItemWidget({
-    @required this.quests,
+    @required this.quest,
     @required this.index,
     this.defaultAction,
   });
 
-  final Quest quests;
+  final Quest quest;
   final int index;
   final VoidCallback defaultAction;
 
   @override
   Widget build(BuildContext context) {
-    final currentGameForQuests = useGlobalState(
-      (s) => s.newGame.currentGameForQuests,
+    final onQuestSelected = _getOnQuestSelectedFn();
+    final user = useCurrentUser();
+    final lastQuestGameId = user.lastGames.questGames.firstWhere(
+      (g) => g.templateId == quest.id,
+      orElse: () => null,
     );
 
-    final onQuestSelected = _getOnQuestSelectedFn();
-
     return QuestItemWidget(
-      quest: quests,
-      currentGameId: currentGameForQuests[quests.id],
+      quest: quest,
+      currentGameId: lastQuestGameId?.gameId,
       isLocked: onQuestSelected == null,
       onQuestSelected: onQuestSelected ?? (l, a) => defaultAction(),
     );

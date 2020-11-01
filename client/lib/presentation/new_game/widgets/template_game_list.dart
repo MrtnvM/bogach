@@ -6,11 +6,7 @@ import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/config/config_hooks.dart';
 import 'package:cash_flow/features/game/actions/start_game_action.dart';
 import 'package:cash_flow/features/new_game/actions/get_game_templates_action.dart';
-import 'package:cash_flow/features/new_game/actions/get_user_games_action.dart';
 import 'package:cash_flow/features/new_game/actions/start_singleplayer_game_action.dart';
-import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
-import 'package:cash_flow/models/domain/game/game/game.dart';
-import 'package:cash_flow/models/domain/game/game/type/game_type.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -55,40 +51,29 @@ class TemplateGameList extends HookWidget {
             ),
           );
     };
-    final getUserGamesRequestState = useGlobalState(
-      (s) => s.getOperationState(Operation.getUserGames),
-    );
 
     final isLoading = templatesRequestState.isInProgress ||
-        createGameRequestState.isInProgress ||
-        getUserGamesRequestState.isInProgress;
+        createGameRequestState.isInProgress;
 
     final loadGameTemplates = () => dispatch(GetGameTemplatesAction());
 
     final userId = useUserId();
-    final userGames = useGlobalState((s) {
-      final games = s.newGame.userGames.items
-          .where((game) =>
-              game.type == GameType.singleplayer() &&
-              game?.config?.gameTemplateId != null &&
-              game.state.gameStatus != GameStatus.gameOver)
-          .toList();
+    final user = useCurrentUser();
 
-      games.sort((game1, game2) => game2.id.compareTo(game1.id));
-
-      return Map<String, Game>.fromIterable(
-        games,
-        key: (item) => item.config?.gameTemplateId,
-      );
-    });
-
-    useEffect(() {
-      dispatch(GetUserGamesAction(userId: userId));
-      return null;
-    }, []);
+    // ignore: avoid_types_on_closure_parameters
+    final getLastGameIndex = (GameTemplate template) {
+      final games = user.lastGames.singleplayerGames;
+      final index = games.indexWhere((g) => g.templateId == template.id);
+      return index;
+    };
 
     final void Function(GameTemplate) goToGame = (template) {
-      final gameId = userGames[template.id].id;
+      final index = getLastGameIndex(template);
+      if (index < 0) {
+        return;
+      }
+
+      final gameId = user.lastGames.singleplayerGames[index].gameId;
       final gameContext = GameContext(gameId: gameId, userId: userId);
       dispatch(StartGameAction(gameContext));
       appRouter.goTo(const GameBoard());
@@ -101,15 +86,14 @@ class TemplateGameList extends HookWidget {
         viewModel: LoadableListViewModel(
           items: gameTemplates,
           itemBuilder: (i) => GameTemplateItem(
-              gameTemplate: gameTemplates.items[i],
-              onStartNewGamePressed: (template) {
-                AnalyticsSender.templateSelected(template.name);
-                createNewGame(template);
-              },
-              onContinueGamePressed:
-                  userGames[gameTemplates.items[i].id] != null
-                      ? goToGame
-                      : null),
+            gameTemplate: gameTemplates.items[i],
+            onStartNewGamePressed: (template) {
+              AnalyticsSender.templateSelected(template.name);
+              createNewGame(template);
+            },
+            onContinueGamePressed:
+                getLastGameIndex(gameTemplates.items[i]) >= 0 ? goToGame : null,
+          ),
           loadListRequestState: templatesRequestState,
           loadList: loadGameTemplates,
           padding: const EdgeInsets.all(16),

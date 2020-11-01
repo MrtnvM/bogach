@@ -96,29 +96,6 @@ class GameService {
     return games.first;
   }
 
-  // TODO(Maxim): Re-architecture this feature
-  // With Realtime database it is not working
-  Future<List<Game>> getUserGames(String userId) async {
-    final gameDocs = await firestore
-        .collection('games')
-        .where('participants', arrayContains: userId)
-        .where('config.level', isNull: true)
-        .get();
-
-    final games = gameDocs.docs
-        .map((d) => Game.fromJson(d.data()))
-        .where((g) => g.state.gameStatus != GameStatus.gameOver)
-        .toList();
-
-    games.sort((g1, g2) {
-      final date1 = g1.updatedAt?.millisecondsSinceEpoch ?? 0;
-      final date2 = g2.updatedAt?.millisecondsSinceEpoch ?? 0;
-      return date2 - date1;
-    });
-
-    return games;
-  }
-
   Future<void> sendPlayerAction(PlayerActionRequestModel playerAction) {
     return apiClient.sendPlayerAction(playerAction);
   }
