@@ -57,7 +57,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const roomId = apiRequest.jsonField('roomId');
 
-    console.log("NEW LENGTH START");
     const createRoomGameRequest = async () => {
       const { room, game } = await roomService.createRoomGame(roomId);
       await purchaseService.reduceMultiplayerGames(
