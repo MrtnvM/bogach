@@ -19,12 +19,7 @@ export class UserProvider {
     if (JSON.stringify(profile) !== JSON.stringify(updatedProfile)) {
       await this.updateUserProfile(updatedProfile);
     }
-
-    console.log('createdAt: ' + updatedProfile.playedGames?.multiplayerGames[0].createdAtMilliseconds);
-    console.log(
-      'createdAtJson: ' + JSON.stringify(updatedProfile.playedGames?.multiplayerGames[0].createdAtMilliseconds)
-    );
-
+    
     return updatedProfile;
   }
 

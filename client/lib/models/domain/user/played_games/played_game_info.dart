@@ -1,4 +1,3 @@
-import 'package:cash_flow/models/domain/game/game/timestamp_adapter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'played_game_info.freezed.dart';

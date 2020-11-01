@@ -83,6 +83,7 @@ export class PurchaseService {
       throw new Error("ParticipantIds can't be empty");
     }
 
+    console.log("NEW LENGTH AFTER IS ARRAY");
     const participants = await Promise.all(
       participantsIds.map((userId) => this.userProvider.getUserProfile(userId))
     );
@@ -98,8 +99,18 @@ export class PurchaseService {
     gameCreationDate?: Date
   ): Promise<User>[] {
     const updatedParticipants = participants.map((profile) => {
+      console.log("NEW LENGTH userId " + profile.userId);
       const updatedProfile = produce(profile, (draft) => {
-        this.addMultiplayerGame(draft, gameId, gameCreationDate);
+
+        if (!draft.playedGames) {
+          draft.playedGames = {
+            multiplayerGames: [],
+          };
+        }
+
+        console.log("NEW LENGTH old length" + draft.playedGames.multiplayerGames.length);
+
+        draft.playedGames.multiplayerGames = this.addMultiplayerGame(draft, gameId, gameCreationDate);
 
         const multiplayerGamePlayed = draft.playedGames?.multiplayerGames?.length || 0;
 
@@ -110,7 +121,7 @@ export class PurchaseService {
 
         const availableGames = boughtMultiplayerGamesCount - multiplayerGamePlayed;
 
-        if (availableGames <= 0) {
+        if (availableGames < 0) {
           throw new Error("multiplayerGamesCount can't be less then zero");
         }
       });
@@ -120,17 +131,14 @@ export class PurchaseService {
     return updatedParticipants;
   }
 
-  addMultiplayerGame(draft: Draft<User>, gameId: string, gameCreationDate?: Date) {
+  addMultiplayerGame(draft: Draft<User>, gameId: string, gameCreationDate?: Date): PlayedGameInfo[] {
     const multiplayerGameInfo: PlayedGameInfo = {
       gameId: gameId,
       createdAtMilliseconds: gameCreationDate?.getTime(),
     };
 
-    if (!draft.playedGames) {
-      draft.playedGames = {
-        multiplayerGames: [],
-      };
-    }
-    draft.playedGames.multiplayerGames.push(multiplayerGameInfo);
+    console.log("NEW LENGTH!!!!!!!!" + draft.playedGames!.multiplayerGames.push(multiplayerGameInfo));
+
+    return draft.playedGames!.multiplayerGames;
   }
 }
