@@ -224,6 +224,7 @@ class _LoginPageState extends State<LoginPage> {
 
       case FacebookLoginStatus.error:
         setState(() => _isAuthorising = false);
+        Logger.e('Facebook Auth Error', result.errorMessage);
         handleError(context: context, exception: UnknownErrorException());
         break;
 
@@ -250,7 +251,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _onLoginViaGoogleClicked() async {
     final account = await GoogleSignIn().signIn().catchError((e) {
-      Logger.e(e);
+      Logger.e('Google Auth Error', e);
       setState(() => _isAuthorising = false);
       showErrorDialog(context: context);
     });
@@ -311,6 +312,7 @@ class _LoginPageState extends State<LoginPage> {
 
       case AuthorizationStatus.error:
         setState(() => _isAuthorising = false);
+        Logger.e('Facebook Auth Error', result.error);
         handleError(context: context, exception: UnknownErrorException());
         break;
 
