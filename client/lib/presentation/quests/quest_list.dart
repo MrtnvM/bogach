@@ -130,14 +130,14 @@ class _QuestItemWidget extends HookWidget {
   Widget build(BuildContext context) {
     final onQuestSelected = _getOnQuestSelectedFn();
     final user = useCurrentUser();
-    final lastQuestGameId = user.lastGames.questGames.firstWhere(
+    final lastQuestGameInfo = user.lastGames.questGames.firstWhere(
       (g) => g.templateId == quest.id,
       orElse: () => null,
     );
 
     return QuestItemWidget(
       quest: quest,
-      currentGameId: lastQuestGameId?.gameId,
+      currentGameId: lastQuestGameInfo?.gameId,
       isLocked: onQuestSelected == null,
       onQuestSelected: onQuestSelected ?? (l, a) => defaultAction(),
     );

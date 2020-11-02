@@ -50,13 +50,14 @@ void _fillDotsForPlayers({
 
     dots.add(firstDot);
 
-    for (var i = 0; i < progress.monthResults.length; i++) {
-      final monthResults = progress.monthResults[i];
+    final monthsCount = progress.monthResults.length;
+    for (var monthIndex = 0; monthIndex < monthsCount; monthIndex++) {
+      final monthResults = progress.monthResults[monthIndex];
 
-      if (currentMonth != i) {
+      if (currentMonth != monthIndex) {
         final dot = DotModel(
           userId: userId,
-          xValue: i,
+          xValue: monthIndex,
           yValue: monthResults.cash.toInt(),
         );
         dots.add(dot);
