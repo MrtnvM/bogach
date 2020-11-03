@@ -15,6 +15,10 @@ export class UserProvider {
 
   async getUserProfile(userId: UserEntity.Id): Promise<User> {
     const profile = await this.userDao.getUser(userId);
+    if (!profile) {
+      throw Error('No user with this id: ' + userId);
+    }
+
     const updatedProfile = this.migrateProfileToVersion3(profile);
 
     if (JSON.stringify(profile) !== JSON.stringify(updatedProfile)) {
