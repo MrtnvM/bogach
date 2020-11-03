@@ -44,10 +44,8 @@ class StartGameAction extends BaseAction {
 
     final gameSubscription = gameService
         .getGame(gameContext)
-        .flatMap<BaseAction>((game) {
-          return Stream<BaseAction>.fromIterable([
-            OnGameStateChangedAction(game),
-          ]);
+        .map<BaseAction>((game) {
+          return OnGameStateChangedAction(game);
         })
         .onErrorReturnWith((e) => OnGameErrorAction(e))
         .takeUntil(onStopActiveGame);

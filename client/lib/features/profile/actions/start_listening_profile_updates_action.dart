@@ -21,9 +21,9 @@ class StartListeningProfileUpdatesAction extends BaseAction {
     /// Requesting user profile through the server request will
     /// auto-migrate it to the newer version
     try {
-      await userService.loadUserFromServer(userId); 
+      final user = await userService.loadUserFromServer(userId);
+      OnCurrentProfileUpdatedAction(user);
     } catch (err) {
-      final error = err;
       _executeDelayed(() {
         dispatch(StartListeningProfileUpdatesAction(userId));
       });

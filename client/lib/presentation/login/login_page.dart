@@ -401,12 +401,13 @@ class LoginPage extends HookWidget {
   void _useAutoTransitionWhenLogged() {
     final user = useGlobalState((state) => state.profile.currentUser);
 
-    if (user != null) {
-      // Flutter hook build method requred to finish work until to change widget
-      Future.delayed(const Duration(milliseconds: 16)).then((_) async {
+    useEffect(() {
+      if (user != null) {
         appRouter.startWith(const MainPage());
-      });
-    }
+      }
+
+      return null;
+    }, [user?.userId]);
   }
 }
 
