@@ -51,6 +51,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "911577434143-bplm7hl87v3jsuap5k3lcahdq8af08gi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.bogach.staging",
+            "certificate_hash": "5cbac2cb42a50aa556e62b37ba981c8a99a258d1"
+          }
+        },
+        {
           "client_id": "911577434143-6vjgbqtrqmf3dutabal183kv6pnv0lot.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
