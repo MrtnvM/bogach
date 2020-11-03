@@ -1,4 +1,6 @@
+import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/features/game/actions/start_game_action.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
 import 'package:cash_flow/models/domain/game/game/type/game_type.dart';
@@ -26,6 +28,12 @@ class GameBoard extends HookWidget {
     final isMultiplayer = useCurrentGame(
       (g) => g?.type == GameType.multiplayer(),
     );
+    final dispatch = useDispatcher();
+
+    /// Stops active game when user exit from current screen
+    useEffect(() {
+      return () => dispatch(StopActiveGameAction());
+    }, []);
 
     if (!gameExists) {
       return LoadableView(
