@@ -146,7 +146,12 @@ class UserService {
     if (requiredVersionOfProfile > currentVersionOfProfile) {
       /// Requesting user profile through the server request will
       /// auto-migrate it to the newer version
-      updatedUserProfile = await apiClient.getUserProfile(userId);
+      try {
+        updatedUserProfile = await apiClient.getUserProfile(userId);
+      } catch (e) {
+        Logger.e('Cannot receive user profile from the server', e);
+        return null;
+      }
     } else {
       final snapshot = await firestore.collection('users').doc(userId).get();
       if (snapshot?.data() == null) {
