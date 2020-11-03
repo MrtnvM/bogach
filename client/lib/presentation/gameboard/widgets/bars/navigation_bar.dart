@@ -10,36 +10,26 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class NavigationBar extends HookWidget {
   const NavigationBar({
+    @required this.opacity,
     Key key,
     this.title,
     this.subtitle,
     this.goBack,
-    this.scrollController,
   }) : super(key: key);
 
   final String title;
   final String subtitle;
   final VoidCallback goBack;
-  final ScrollController scrollController;
+  final double opacity;
 
   @override
   Widget build(BuildContext context) {
     final notchSize = useNotchSize();
-    final opacity = useState(1.0);
-
-    useEffect(() {
-      final listener = () {
-        opacity.value = 1 - scrollController.offset / 50;
-      };
-
-      scrollController?.addListener(listener);
-      return () => scrollController?.removeListener(listener);
-    }, []);
 
     return Opacity(
-      opacity: max(min(opacity.value, 1), 0),
+      opacity: max(min(opacity, 1), 0),
       child: Container(
-        margin: EdgeInsets.only(top: notchSize.top),
+        margin: EdgeInsets.only(top: notchSize.top + 6),
         constraints: const BoxConstraints.expand(height: 50),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,

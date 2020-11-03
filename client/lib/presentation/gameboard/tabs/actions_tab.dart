@@ -1,4 +1,7 @@
+import 'package:cash_flow/app/app_state.dart';
+import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
 import 'package:cash_flow/presentation/gameboard/game_event_page.dart';
@@ -7,6 +10,7 @@ import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/containers/card_container.dart';
 import 'package:cash_flow/widgets/containers/container_with_header_image.dart';
 import 'package:cash_flow/widgets/progress/account_bar.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -23,11 +27,13 @@ class ActionsTab extends HookWidget {
 
     final targetTitle = monthPast ?? mapTargetTypeToString(target.type);
     final user = useCurrentUser();
+    final isLoading = useGlobalState(shouldDisplayLoader);
 
     return ContainerWithHeaderImage(
       navBarTitle: user.fullName,
       subTitle: targetTitle,
       imageUrl: user.avatarUrl,
+      isLoading: isLoading,
       children: [
         Container(
           padding: const EdgeInsets.only(left: 16, right: 16),
@@ -45,11 +51,25 @@ class ActionsTab extends HookWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              const GameEventPage(),
+              if (!isLoading) const GameEventPage(),
             ],
           ),
         ),
       ],
     );
+  }
+
+  bool shouldDisplayLoader(AppState s) {
+    final isStartingNewMonth =
+        s.getOperationState(Operation.startNewMonth).isInProgress;
+
+    final activeGameState = s.game.activeGameState;
+    final isSendingTurnEvent = activeGameState.maybeWhen(
+      gameEvent: (eventIndex, sendingEventIndex) =>
+          eventIndex == sendingEventIndex,
+      orElse: () => false,
+    );
+
+    return isSendingTurnEvent || isStartingNewMonth;
   }
 }
