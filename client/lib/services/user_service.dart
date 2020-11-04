@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/cache/user_cache.dart';
+import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/models/network/core/search_query_result.dart';
 import 'package:cash_flow/models/network/request/register_request_model.dart';
@@ -37,6 +38,7 @@ class UserService {
           email: email,
           password: password,
         )
+        .then((result) => _createUserIfNeed(result.user))
         .catchError(ErrorHandler().handleError);
   }
 
@@ -58,7 +60,8 @@ class UserService {
   Future<String> loginViaFacebook({@required String token}) {
     return firebaseAuth
         .signInWithCredential(FacebookAuthProvider.credential(token))
-        .then((response) => response.user.uid)
+        .then((response) => _createUserIfNeed(response.user))
+        .then((user) => user.userId)
         .catchError(ErrorHandler().handleError);
   }
 
@@ -71,7 +74,8 @@ class UserService {
           accessToken: accessToken,
           idToken: idToken,
         ))
-        .then((response) => response.user.uid)
+        .then((response) => _createUserIfNeed(response.user))
+        .then((user) => user.userId)
         .catchError(ErrorHandler().handleError);
   }
 
@@ -99,8 +103,9 @@ class UserService {
     });
 
     return loginRequest
-        .catchError(ErrorHandler().handleError)
-        .then((user) => user.uid);
+        .then(_createUserIfNeed)
+        .then((user) => user.userId)
+        .catchError(ErrorHandler().handleError);
   }
 
   Future<void> signUpUser(RegisterRequestModel model) async {
@@ -111,6 +116,7 @@ class UserService {
 
     final user = firebaseAuth.currentUser;
     await user.updateProfile(displayName: model.nickName);
+    await _createUserIfNeed(user);
 
     return Future.value();
   }
@@ -130,32 +136,6 @@ class UserService {
       searchString: searchString,
       items: users,
     );
-  }
-
-  Future<UserProfile> loadCurrentProfile(String userId) async {
-    final currentUserProfile = await userCache.getUserProfile();
-
-    const requiredVersionOfProfile = 3;
-    final currentVersionOfProfile = currentUserProfile?.profileVersion ?? 1;
-
-    UserProfile updatedUserProfile;
-
-    if (requiredVersionOfProfile > currentVersionOfProfile) {
-      /// Requesting user profile through the server request will
-      /// auto-migrate it to the newer version
-      updatedUserProfile = await apiClient.getUserProfile(userId);
-    } else {
-      final snapshot = await firestore.collection('users').doc(userId).get();
-      if (snapshot?.data() == null) {
-        return null;
-      }
-
-      updatedUserProfile = UserProfile.fromJson(snapshot.data());
-    }
-
-    await userCache.setUserProfile(updatedUserProfile);
-
-    return updatedUserProfile;
   }
 
   Future<List<UserProfile>> loadProfiles(List<String> profileIds) async {
@@ -191,6 +171,10 @@ class UserService {
         .set({'token': pushToken, 'device': Platform.operatingSystem});
   }
 
+  Future<void> saveUserProfileInCache(UserProfile userProfile) {
+    return userCache.setUserProfile(userProfile);
+  }
+
   Stream<UserProfile> subscribeOnUser(String userId) {
     firebaseMessaging.getToken().then((token) {
       sendUserPushToken(userId: userId, pushToken: token);
@@ -202,8 +186,39 @@ class UserService {
         .snapshots()
         .map((snapshot) => UserProfile.fromJson(snapshot.data()))
         .map((userProfile) {
-      userCache.setUserProfile(userProfile);
+      saveUserProfileInCache(userProfile);
       return userProfile;
     });
+  }
+
+  Future<UserProfile> _createUserIfNeed(User user) async {
+    final userId = user.uid;
+    await userCache.deleteUserProfile();
+    // Requesting user profile through the server request will
+    /// auto-migrate it to the newer version
+    final serverProfile =
+        await apiClient.getUserProfile(userId).catchError((err) {
+      return null;
+    });
+
+    var updatedUser = serverProfile;
+
+    if (serverProfile != null) {
+      updatedUser = serverProfile.copyWith(
+        fullName: user.displayName,
+        avatarUrl: user.photoURL,
+      );
+    } else {
+      updatedUser = mapToUserProfile(user);
+    }
+
+    if (serverProfile != updatedUser) {
+      final userData = updatedUser.toJson();
+      await firestore.collection('users').doc(userId).set(userData);
+      await userCache.setUserProfile(updatedUser);
+    }
+
+    userCache.setUserProfile(updatedUser);
+    return updatedUser;
   }
 }

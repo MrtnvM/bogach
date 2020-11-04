@@ -55,7 +55,7 @@ void main() {
       return migratedUserProfile;
     });
 
-    final receivedUserProfile = await userService.loadCurrentProfile(userId);
+    final receivedUserProfile = await userService.loadUserFromServer(userId);
 
     expect(receivedUserProfile, migratedUserProfile);
 
