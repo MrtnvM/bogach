@@ -106,12 +106,9 @@ class ContainerWithHeaderImage extends HookWidget {
 
     return Padding(
       padding: EdgeInsets.only(top: padding + progressBarHeight),
-      child: Container(
-        // color: Colors.red,
-        child: const Center(
-          child: CircularProgressIndicator(
-            backgroundColor: ColorRes.mainGreen,
-          ),
+      child: const Center(
+        child: CircularProgressIndicator(
+          backgroundColor: ColorRes.mainGreen,
         ),
       ),
     );
