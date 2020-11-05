@@ -1,15 +1,27 @@
 import * as uuid from 'uuid';
+import * as random from 'random';
 import { BusinessBuyEvent } from './business_buy_event';
 import { randomValueFromRange, valueRange } from '../../../core/data/value_range';
 
-// TODO добавить реальные данные
 export namespace BusinessBuyEventGenerator {
   export const generate = (): BusinessBuyEvent.Event => {
     const businessId = uuid.v4();
 
+    const businessNames = [
+      'Химчистка',
+      'Кафе',
+      'Грузоперевозки',
+      'Автомойка',
+      'Салон красоты',
+      'Кальянная',
+      'Магазин продуктов',
+    ];
+
+    const name = businessNames[random.int(0, businessNames.length - 1)];
+
     return generateEvent({
-      name: 'Название бизнеса',
-      description: 'Описание бизнеса',
+      name,
+      description: '',
       businessId,
       currentPrice: valueRange([70_000, 150_000, 1_000]),
       fairPrice: valueRange([70_000, 150_000, 1_000]),
