@@ -29,7 +29,7 @@ class UserService {
   final UserCache userCache;
   final CashFlowApiClient apiClient;
 
-  Future<void> login({
+  Future<UserProfile> login({
     @required String email,
     @required String password,
   }) {
@@ -57,15 +57,14 @@ class UserService {
         .catchError(ErrorHandler().handleError);
   }
 
-  Future<String> loginViaFacebook({@required String token}) {
+  Future<UserProfile> loginViaFacebook({@required String token}) {
     return firebaseAuth
         .signInWithCredential(FacebookAuthProvider.credential(token))
         .then((response) => _createUserIfNeed(response.user))
-        .then((user) => user.userId)
         .catchError(ErrorHandler().handleError);
   }
 
-  Future<String> loginViaGoogle({
+  Future<UserProfile> loginViaGoogle({
     @required String accessToken,
     @required String idToken,
   }) {
@@ -75,11 +74,10 @@ class UserService {
           idToken: idToken,
         ))
         .then((response) => _createUserIfNeed(response.user))
-        .then((user) => user.userId)
         .catchError(ErrorHandler().handleError);
   }
 
-  Future<String> loginViaApple({
+  Future<UserProfile> loginViaApple({
     @required String accessToken,
     @required String idToken,
     @required String firstName,
@@ -104,7 +102,6 @@ class UserService {
 
     return loginRequest
         .then(_createUserIfNeed)
-        .then((user) => user.userId)
         .catchError(ErrorHandler().handleError);
   }
 
@@ -194,12 +191,12 @@ class UserService {
   Future<UserProfile> _createUserIfNeed(User user) async {
     final userId = user.uid;
     await userCache.deleteUserProfile();
-    // Requesting user profile through the server request will
+
+    /// Requesting user profile through the server request will
     /// auto-migrate it to the newer version
-    final serverProfile =
-        await apiClient.getUserProfile(userId).catchError((err) {
-      return null;
-    });
+    final serverProfile = await apiClient //
+        .getUserProfile(userId)
+        .catchError((err) => null);
 
     var updatedUser = serverProfile;
 
@@ -215,10 +212,9 @@ class UserService {
     if (serverProfile != updatedUser) {
       final userData = updatedUser.toJson();
       await firestore.collection('users').doc(userId).set(userData);
-      await userCache.setUserProfile(updatedUser);
     }
 
-    userCache.setUserProfile(updatedUser);
+    await userCache.setUserProfile(updatedUser);
     return updatedUser;
   }
 }

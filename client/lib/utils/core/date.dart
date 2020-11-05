@@ -1,9 +1,19 @@
-DateTime fromISO8601DateJson(String date) {
+DateTime fromISO8601DateJson(dynamic date) {
   if (date == null) {
     return null;
   }
 
-  return DateTime.parse(date);
+  if (date is String) {
+    return DateTime.parse(date);
+  }
+
+  if (date is num) {
+    return DateTime.fromMillisecondsSinceEpoch(date);
+  }
+
+  throw Exception('Unknown date format');
 }
 
-String toISO8601DateJson(DateTime date) => date.toIso8601String();
+int toISO8601DateJson(DateTime date) {
+  return date.millisecondsSinceEpoch;
+}

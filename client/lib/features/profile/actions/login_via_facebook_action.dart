@@ -20,9 +20,20 @@ class LoginViaFacebookAction extends BaseAction {
   FutureOr<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
 
-    final currentUserId = await userService.loginViaFacebook(token: token);
-    dispatch(StartListeningProfileUpdatesAction(currentUserId));
+    final currentUser = await userService.loginViaFacebook(token: token);
 
-    return null;
+    return state.rebuild((s) {
+      s.profile.currentUser = currentUser;
+    });
+  }
+
+  @override
+  void after() {
+    super.after();
+
+    final userId = state.profile.currentUser?.userId;
+    if (userId != null) {
+      dispatch(StartListeningProfileUpdatesAction(userId));
+    }
   }
 }

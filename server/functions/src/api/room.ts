@@ -61,7 +61,7 @@ export const create = (daos: DAOs) => {
       await purchaseService.reduceMultiplayerGames(
         room.participants.map((participant) => participant.id),
         game.id,
-        (game.createdAt && new Date(game.createdAt).toISOString()) || undefined
+        (game.createdAt && new Date(game.createdAt).getTime()) || undefined
       );
       return room;
     };

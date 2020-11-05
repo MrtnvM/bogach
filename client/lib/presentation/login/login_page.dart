@@ -399,18 +399,18 @@ class LoginPage extends HookWidget {
       );
     }
   }
-
-  void _useAutoTransitionWhenLogged() {
-    final user = useGlobalState((state) => state.profile.currentUser);
-
-    useEffect(() {
-      if (user != null) {
-        appRouter.startWith(const MainPage());
-      }
-
-      return null;
-    }, [user?.userId]);
-  }
 }
 
 enum _SocialButtonType { fb, google, vk, apple }
+
+void _useAutoTransitionWhenLogged() {
+  final user = useGlobalState((s) => s.profile.currentUser);
+
+  useEffect(() {
+    if (user != null) {
+      appRouter.startWith(const MainPage());
+    }
+
+    return null;
+  }, [user?.userId]);
+}

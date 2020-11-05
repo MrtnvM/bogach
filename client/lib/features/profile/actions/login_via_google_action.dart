@@ -25,13 +25,23 @@ class LoginViaGoogleAction extends BaseAction {
   FutureOr<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
 
-    final currentUserId = await userService.loginViaGoogle(
+    final currentUser = await userService.loginViaGoogle(
       accessToken: accessToken,
       idToken: idToken,
     );
 
-    dispatch(StartListeningProfileUpdatesAction(currentUserId));
+    return state.rebuild((s) {
+      s.profile.currentUser = currentUser;
+    });
+  }
 
-    return null;
+  @override
+  void after() {
+    super.after();
+
+    final userId = state.profile.currentUser?.userId;
+    if (userId != null) {
+      dispatch(StartListeningProfileUpdatesAction(userId));
+    }
   }
 }

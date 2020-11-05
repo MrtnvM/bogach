@@ -24,7 +24,7 @@ export class UserProvider {
     if (JSON.stringify(profile) !== JSON.stringify(updatedProfile)) {
       await this.updateUserProfile(updatedProfile);
     }
-    
+
     return updatedProfile;
   }
 
@@ -106,7 +106,7 @@ export class UserProvider {
         for (let gameIndex = 0; gameIndex < multiplayerGamePlayed; gameIndex++) {
           const playedMultiplayerGame: PlayedGameInfo = {
             gameId: uuid.v4(),
-            createdAtMilliseconds: new Date().getTime(),
+            createdAt: nowInUtc(),
           };
 
           multiplayerGames.push(playedMultiplayerGame);

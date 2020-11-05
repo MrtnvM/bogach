@@ -1,6 +1,5 @@
 import 'package:cash_flow/models/domain/game/account/account.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
-import 'package:cash_flow/models/domain/game/game/timestamp_adapter.dart';
 import 'package:cash_flow/models/domain/game/game/type/game_type.dart';
 import 'package:cash_flow/models/domain/game/game_config/game_config.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';

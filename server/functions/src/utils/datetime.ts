@@ -1,4 +1,4 @@
-export function nowInUtc() {
+export function nowInUtc(): number {
   const date = new Date();
   const utc = Date.UTC(
     date.getUTCFullYear(),
@@ -9,5 +9,5 @@ export function nowInUtc() {
     date.getUTCSeconds()
   );
 
-  return new Date(utc).toISOString();
+  return new Date(utc).getTime();
 }

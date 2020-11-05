@@ -25,15 +25,25 @@ class LoginViaAppleAction extends BaseAction {
   FutureOr<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
 
-    final currentUserId = await userService.loginViaApple(
+    final currentUser = await userService.loginViaApple(
       accessToken: accessToken,
       idToken: idToken,
       firstName: firstName,
       lastName: lastName,
     );
 
-    dispatch(StartListeningProfileUpdatesAction(currentUserId));
+    return state.rebuild((s) {
+      s.profile.currentUser = currentUser;
+    });
+  }
 
-    return null;
+  @override
+  void after() {
+    super.after();
+
+    final userId = state.profile.currentUser?.userId;
+    if (userId != null) {
+      dispatch(StartListeningProfileUpdatesAction(userId));
+    }
   }
 }

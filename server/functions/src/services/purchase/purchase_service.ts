@@ -7,6 +7,7 @@ import { PurchaseDetails } from '../../models/purchases/purchase_details';
 import { PurchaseProfile, PurchaseProfileEntity } from '../../models/purchases/purchase_profile';
 import { GameEntity } from '../../models/domain/game/game';
 import { PlayedGameInfo } from '../../models/domain/user/player_game_info';
+import { nowInUtc } from '../../utils/datetime';
 
 export class PurchaseService {
   constructor(private userProvider: UserProvider) {}
@@ -77,7 +78,7 @@ export class PurchaseService {
   async reduceMultiplayerGames(
     participantsIds: UserEntity.Id[],
     gameId: GameEntity.Id,
-    gameCreationDate?: string
+    gameCreationDate?: number
   ) {
     if (!Array.isArray(participantsIds) || participantsIds?.length === 0) {
       throw new Error("ParticipantIds can't be empty");
@@ -95,18 +96,21 @@ export class PurchaseService {
   updateProfileStates(
     participants: User[],
     gameId: string,
-    gameCreationDate?: string
+    gameCreationDate?: number
   ): Promise<User>[] {
     const updatedParticipants = participants.map((profile) => {
       const updatedProfile = produce(profile, (draft) => {
-
         if (!draft.playedGames) {
           draft.playedGames = {
             multiplayerGames: [],
           };
         }
 
-        draft.playedGames.multiplayerGames = this.addMultiplayerGame(draft, gameId, gameCreationDate);
+        draft.playedGames.multiplayerGames = this.addMultiplayerGame(
+          draft,
+          gameId,
+          gameCreationDate
+        );
 
         const multiplayerGamePlayed = draft.playedGames?.multiplayerGames?.length || 0;
 
@@ -127,10 +131,10 @@ export class PurchaseService {
     return updatedParticipants;
   }
 
-  addMultiplayerGame(draft: Draft<User>, gameId: string, gameCreationDate?: string) {
+  addMultiplayerGame(draft: Draft<User>, gameId: string, gameCreationDate?: number) {
     const multiplayerGameInfo: PlayedGameInfo = {
       gameId: gameId,
-      createdAtMilliseconds: gameCreationDate?.getTime(),
+      createdAt: gameCreationDate || nowInUtc(),
     };
 
     draft.playedGames!.multiplayerGames.push(multiplayerGameInfo);

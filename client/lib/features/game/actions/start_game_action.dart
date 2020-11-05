@@ -9,20 +9,10 @@ import 'package:cash_flow/features/game/actions/set_game_context.dart';
 import 'package:cash_flow/features/game/actions/set_game_participants_profiles_action.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:cash_flow/app/app_state.dart';
-import 'package:cash_flow/app/base_action.dart';
-import 'package:cash_flow/app/store/redux_action_observer.dart';
-import 'package:cash_flow/features/game/actions/on_game_state_changed_action.dart';
 import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
-import 'package:cash_flow/features/profile/actions/update_current_quest_index_action.dart';
-import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
-import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
-import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/user_service.dart';
-import 'package:get_it/get_it.dart';
-import 'package:rxdart/rxdart.dart';
 
 class StartGameAction extends BaseAction {
   StartGameAction(this.gameContext) : assert(gameContext != null);

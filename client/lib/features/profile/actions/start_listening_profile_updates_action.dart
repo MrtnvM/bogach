@@ -22,7 +22,7 @@ class StartListeningProfileUpdatesAction extends BaseAction {
     /// auto-migrate it to the newer version
     try {
       final userProfile = await userService.loadUserFromServer(userId);
-      OnCurrentProfileUpdatedAction(userProfile);
+      dispatch(OnCurrentProfileUpdatedAction(userProfile));
       userService.saveUserProfileInCache(userProfile);
     } catch (err) {
       _executeDelayed(() {
@@ -35,10 +35,11 @@ class StartListeningProfileUpdatesAction extends BaseAction {
         .subscribeOnUser(userId)
         .takeUntil(action$.whereType<StopListeningProfileUpdatesAction>())
         .map<BaseAction>((profile) => OnCurrentProfileUpdatedAction(profile))
-        // TODO check error handling
+        // TODO(Maxim): check error handling
         .onErrorResumeNext(
-            Stream.value(StartListeningProfileUpdatesAction(userId))
-                .delay(const Duration(milliseconds: 500)))
+          Stream.value(StartListeningProfileUpdatesAction(userId))
+              .delay(const Duration(milliseconds: 500)),
+        )
         .listen(dispatch);
 
     return null;
