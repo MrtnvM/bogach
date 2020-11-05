@@ -37,9 +37,9 @@ class GameTemplateItem extends HookWidget {
       },
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.only(
-          top: 14,
-          bottom: 22,
+        padding: EdgeInsets.only(
+          top: 16,
+          bottom: isCollapsed.value ? 16 : 22,
           left: 16,
           right: 16,
         ),
@@ -53,22 +53,30 @@ class GameTemplateItem extends HookWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Row(
-              children: <Widget>[
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
                 Expanded(
-                  child: Text(
-                    '${gameTemplate.name}',
-                    style: Styles.bodyBlackBold,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${gameTemplate.name}',
+                        style: Styles.bodyBlackBold,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '${Strings.reach} $targetTitle '
+                        '${Strings.wordIn} $targetValue',
+                        style: Styles.bodyBlack,
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 8),
                 getTemplateIcon(),
               ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '${Strings.reach} $targetTitle '
-              '${Strings.wordIn} $targetValue',
-              style: Styles.bodyBlack,
             ),
             AnimatedContainer(
               width: double.infinity,
