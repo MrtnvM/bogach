@@ -2,7 +2,6 @@ import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
-import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/profile/actions/login_via_apple_action.dart';
 import 'package:cash_flow/features/profile/actions/login_via_facebook_action.dart';
 import 'package:cash_flow/features/profile/actions/login_via_google_action.dart';
@@ -32,9 +31,7 @@ class LoginPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isAuthorising = useState(false);
-
     final dispatch = useDispatcher();
-    _useAutoTransitionWhenLogged();
 
     setOrientationPortrait();
 
@@ -289,6 +286,7 @@ class LoginPage extends HookWidget {
 
     dispatch(action)
         .whenComplete(() => isAuthorising.value = false)
+        .then((value) => _onLoginSuccess())
         .catchError((error) => _onLoginError(context, error, isAuthorising));
   }
 
@@ -343,7 +341,9 @@ class LoginPage extends HookWidget {
       accessToken: token,
       idToken: idToken,
     );
+
     dispatch(action)
+        .then((value) => _onLoginSuccess())
         .catchError((error) => _onLoginError(context, error, isAuthorising));
   }
 
@@ -367,12 +367,16 @@ class LoginPage extends HookWidget {
 
         isAuthorising.value = true;
 
-        dispatch(LoginViaAppleAction(
+        final action = LoginViaAppleAction(
           idToken: identityToken,
           accessToken: accessToken,
           firstName: firstName,
           lastName: lastName,
-        )).catchError((error) => _onLoginError(context, error, isAuthorising));
+        );
+
+        dispatch(action) //
+            .then((value) => _onLoginSuccess())
+            .catchError((e) => _onLoginError(context, e, isAuthorising));
 
         break;
 
@@ -399,18 +403,10 @@ class LoginPage extends HookWidget {
       );
     }
   }
+
+  void _onLoginSuccess() {
+    appRouter.startWith(const MainPage());
+  }
 }
 
 enum _SocialButtonType { fb, google, vk, apple }
-
-void _useAutoTransitionWhenLogged() {
-  final user = useGlobalState((s) => s.profile.currentUser);
-
-  useEffect(() {
-    if (user != null) {
-      appRouter.startWith(const MainPage());
-    }
-
-    return null;
-  }, [user?.userId]);
-}
