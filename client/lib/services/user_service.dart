@@ -12,6 +12,7 @@ import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:meta/meta.dart';
+import 'package:rxdart/rxdart.dart';
 
 class UserService {
   UserService({
@@ -22,6 +23,8 @@ class UserService {
     @required this.apiClient,
   })  : assert(firebaseAuth != null),
         assert(firestore != null);
+
+  static int currentlyUsedProfileVersion = 3;
 
   final FirebaseAuth firebaseAuth;
   final FirebaseFirestore firestore;
@@ -154,8 +157,8 @@ class UserService {
         .toList();
   }
 
-  Future<UserProfile> loadUserFromServer(userId) async {
-    return await apiClient.getUserProfile(userId);
+  Future<UserProfile> loadUserFromServer(userId) {
+    return apiClient.getUserProfile(userId);
   }
 
   Future<void> sendUserPushToken({
@@ -185,6 +188,12 @@ class UserService {
         .map((userProfile) {
       saveUserProfileInCache(userProfile);
       return userProfile;
+    }).doOnData((profile) {
+      if (profile.profileVersion < currentlyUsedProfileVersion) {
+        /// Requesting user profile through the server request will
+        /// auto-migrate it to the newer version
+        apiClient.getUserProfile(userId).catchError((err) => null);
+      }
     });
   }
 
