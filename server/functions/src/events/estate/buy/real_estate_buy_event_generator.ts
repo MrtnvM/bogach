@@ -16,23 +16,23 @@ export namespace BuyRealEstateEventGenerator {
     const alreadyHappenedEvents = {};
     pastBuyRealEstateEvents.forEach((e) => (alreadyHappenedEvents[e.name] = true));
 
-    let filtredBuyRealEstateEvents = BuyRealEstateGeneratorConfig.allRealEstates.filter(
+    let filteredBuyRealEstateEvents = BuyRealEstateGeneratorConfig.allRealEstates.filter(
       (e) => !alreadyHappenedEvents[e.eventName]
     );
 
     const lastEvent = pastBuyRealEstateEvents[0];
     if (lastEvent) {
-      filtredBuyRealEstateEvents = filtredBuyRealEstateEvents.filter(
+      filteredBuyRealEstateEvents = filteredBuyRealEstateEvents.filter(
         (e) => e.eventName === lastEvent.name
       );
     }
 
-    if (filtredBuyRealEstateEvents.length === 0) {
+    if (filteredBuyRealEstateEvents.length === 0) {
       return undefined;
     }
 
-    const eventIndex = random.int(0, filtredBuyRealEstateEvents.length - 1);
-    const eventInfo = filtredBuyRealEstateEvents[eventIndex];
+    const eventIndex = random.int(0, filteredBuyRealEstateEvents.length - 1);
+    const eventInfo = filteredBuyRealEstateEvents[eventIndex];
 
     const currentPrice = randomValueFromRange(eventInfo.price);
     const fairPrice = randomValueFromRange(eventInfo.fairPrice);

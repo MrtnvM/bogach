@@ -43,7 +43,7 @@ Future<void> main({
     Logger.enabled = true;
   }
 
-  await initializeFirebase();
+  await initializeFirebase(environment);
   await AppConfiguration.init(environment: environment);
 
   final tokenStorage = TokenStorage();
@@ -62,6 +62,7 @@ Future<void> main({
   configureAnalytics(environment);
 
   configureDependencyInjection(
+    environment,
     apiClient,
     sharedPreferences,
     tokenStorage,
@@ -103,7 +104,7 @@ Future<void> main({
   }, FirebaseCrashlytics.instance.recordError);
 }
 
-Future<void> initializeFirebase() async {
+Future<void> initializeFirebase(CashApiEnvironment environment) async {
   await Firebase.initializeApp();
 }
 

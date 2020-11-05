@@ -16,26 +16,26 @@ export namespace ExpenseEventGenerator {
       maxHistoryLength: 12,
     });
 
-    const alreadyHappendEvents = {};
-    pastExpenseEvents.forEach((e) => (alreadyHappendEvents[e.name + e.description] = true));
+    const alreadyHappenedEvents = {};
+    pastExpenseEvents.forEach((e) => (alreadyHappenedEvents[e.name + e.description] = true));
 
-    let filtredExpenseEvents = expenseEventInfo.filter(
-      (e) => !alreadyHappendEvents[e.name + e.description]
+    let filteredExpenseEvents = expenseEventInfo.filter(
+      (e) => !alreadyHappenedEvents[e.name + e.description]
     );
 
     const lastEvent = pastExpenseEvents[0];
     if (lastEvent) {
-      filtredExpenseEvents = filtredExpenseEvents.filter(
+      filteredExpenseEvents = filteredExpenseEvents.filter(
         (e) => e.insuranceType === lastEvent.data.insuranceType
       );
     }
 
-    if (filtredExpenseEvents.length === 0) {
+    if (filteredExpenseEvents.length === 0) {
       return undefined;
     }
 
-    const eventIndex = random.int(0, filtredExpenseEvents.length - 1);
-    const eventInfo = filtredExpenseEvents[eventIndex];
+    const eventIndex = random.int(0, filteredExpenseEvents.length - 1);
+    const eventInfo = filteredExpenseEvents[eventIndex];
 
     return generateEvent(eventInfo);
   };

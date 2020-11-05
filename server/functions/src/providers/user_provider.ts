@@ -1,19 +1,24 @@
+import uuid = require('uuid');
 import { produce } from 'immer';
-import { Firestore } from '../core/firebase/firestore';
-import { FirestoreSelector } from './firestore_selector';
 import { UserEntity, UserDevice, User } from '../models/domain/user/user';
-import { PurchaseDetails, PurchaseDetailsEntity } from '../models/purchases/purchase_details';
+import { PurchaseDetails } from '../models/purchases/purchase_details';
 import { PurchaseProfileEntity } from '../models/purchases/purchase_profile';
 import { PlayedGames } from '../models/domain/user/played_games';
 import { PlayedGameInfo } from '../models/domain/user/player_game_info';
-import uuid = require('uuid');
+import { nowInUtc } from '../utils/datetime';
+import { IUserDAO } from '../dao/user_dao';
+import { LastGamesEntity } from '../models/domain/user/last_games';
+import { GameEntity } from '../models/domain/game/game';
 
 export class UserProvider {
-  constructor(private firestore: Firestore, private selector: FirestoreSelector) {}
+  constructor(private userDao: IUserDAO) {}
 
   async getUserProfile(userId: UserEntity.Id): Promise<User> {
-    const selector = this.selector.user(userId);
-    const profile = (await this.firestore.getItemData(selector)) as User;
+    const profile = await this.userDao.getUser(userId);
+    if (!profile) {
+      throw Error('No user with this id: ' + userId);
+    }
+
     const updatedProfile = this.migrateProfileToVersion3(profile);
 
     if (JSON.stringify(profile) !== JSON.stringify(updatedProfile)) {
@@ -23,40 +28,52 @@ export class UserProvider {
     return updatedProfile;
   }
 
-  async getUserPurchases(userId: UserEntity.Id): Promise<PurchaseDetails[]> {
-    const selector = this.selector.userPurchases(userId);
-    const purchases = (await this.firestore.getItems(selector)) || [];
-    purchases.forEach(PurchaseDetailsEntity.validate);
-    return purchases as PurchaseDetails[];
+  getUserPurchases(userId: UserEntity.Id): Promise<PurchaseDetails[]> {
+    return this.userDao.getUserPurchases(userId);
   }
 
-  async addUserPurchases(userId: UserEntity.Id, purchases: PurchaseDetails[]): Promise<void> {
-    const selector = this.selector.userPurchases(userId);
-    await Promise.all(purchases.map((p) => this.firestore.addItem(selector, p)));
+  addUserPurchases(userId: UserEntity.Id, purchases: PurchaseDetails[]): Promise<void> {
+    return this.userDao.addUserPurchases(userId, purchases);
   }
 
-  async updateUserProfile(user: User): Promise<User> {
-    const selector = this.selector.user(user.userId);
-    const profile = await this.firestore.updateItem(selector, user);
-    return profile as User;
+  updateUserProfile(user: User): Promise<User> {
+    return this.userDao.updateUserProfile(user);
   }
 
-  async getUserDevice(userId: UserEntity.Id): Promise<UserDevice> {
-    const deviceSelector = this.selector.device(userId);
-    const device = await this.firestore.getItemData(deviceSelector);
-    return device as UserDevice;
+  getUserDevice(userId: UserEntity.Id): Promise<UserDevice> {
+    return this.userDao.getUserDevice(userId);
   }
 
   async updateCurrentQuestIndex(userId: UserEntity.Id, index: number): Promise<void> {
-    const selector = this.selector.user(userId);
-    const user = (await this.firestore.getItemData(selector)) as User;
+    const user = await this.userDao.getUser(userId);
 
     const updatedUser = produce(user, (draft) => {
       const currentIndex = user.currentQuestIndex ?? 0;
       draft.currentQuestIndex = Math.max(currentIndex, index);
     });
 
-    await this.firestore.updateItem(selector, updatedUser);
+    await this.userDao.updateUserProfile(updatedUser);
+  }
+
+  async removeGameFromLastGames(userId: UserEntity.Id, gameId: GameEntity.Id) {
+    const user = await this.userDao.getUser(userId);
+    const lastGames = user.lastGames || LastGamesEntity.initial();
+
+    const updatedUser = produce(user, (draft) => {
+      const singleplayerGames = lastGames.singleplayerGames.filter((g) => g.gameId !== gameId);
+      const questGames = lastGames.questGames.filter((g) => g.gameId !== gameId);
+      const multiplayerGames = lastGames.multiplayerGames.filter((g) => g.gameId !== gameId);
+
+      draft.lastGames = {
+        singleplayerGames,
+        questGames,
+        multiplayerGames,
+      };
+    });
+
+    if (JSON.stringify(user) !== JSON.stringify(updatedUser)) {
+      await this.userDao.updateUserProfile(updatedUser);
+    }
   }
 
   private migrateProfileToVersion3(profile: User): User {
@@ -100,6 +117,12 @@ export class UserProvider {
         };
 
         draft.playedGames = playedGameInfo;
+      });
+    }
+
+    if (!profile.lastGames) {
+      updatedProfile = produce(updatedProfile, (draft) => {
+        draft.lastGames = LastGamesEntity.initial();
       });
     }
 

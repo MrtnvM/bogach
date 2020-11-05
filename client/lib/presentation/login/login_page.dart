@@ -269,6 +269,7 @@ class LoginPage extends HookWidget {
 
       case FacebookLoginStatus.error:
         isAuthorising.value = false;
+        Logger.e('Facebook Auth Error', result.errorMessage);
         handleError(context: context, exception: UnknownErrorException());
         break;
 
@@ -307,7 +308,7 @@ class LoginPage extends HookWidget {
     ValueNotifier<bool> isAuthorising,
   ) async {
     final account = await GoogleSignIn().signIn().catchError((e) {
-      Logger.e(e);
+      Logger.e('Google Auth Error', e);
       isAuthorising.value = false;
       showErrorDialog(context: context);
     });
@@ -377,6 +378,7 @@ class LoginPage extends HookWidget {
 
       case AuthorizationStatus.error:
         isAuthorising.value = false;
+        Logger.e('Facebook Auth Error', result.error);
         handleError(context: context, exception: UnknownErrorException());
         break;
 

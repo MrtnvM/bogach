@@ -11,10 +11,10 @@ part 'possession_state.g.dart';
 @freezed
 abstract class PossessionState with _$PossessionState {
   factory PossessionState({
-    @required List<Income> incomes,
-    @required List<Expense> expenses,
-    @required List<Asset> assets,
-    @required List<Liability> liabilities,
+    @JsonKey(defaultValue: []) List<Income> incomes,
+    @JsonKey(defaultValue: []) List<Expense> expenses,
+    @JsonKey(defaultValue: []) List<Asset> assets,
+    @JsonKey(defaultValue: []) List<Liability> liabilities,
   }) = _PossessionState;
 
   factory PossessionState.fromJson(Map<String, dynamic> json) =>

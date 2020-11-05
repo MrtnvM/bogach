@@ -7,7 +7,8 @@ import 'package:cash_flow/services/game_service.dart';
 import 'package:get_it/get_it.dart';
 
 class StartNewMonthAction extends BaseAction {
-  Operation get operaionKey => Operation.startNewMonth;
+  @override
+  Operation get operationKey => Operation.startNewMonth;
 
   @override
   FutureOr<AppState> reduce() async {

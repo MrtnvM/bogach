@@ -4,10 +4,10 @@ declare var process: {
   };
 };
 
-export const FIREBASE_APP_NAME = 'Cash Flow';
 export const CLOUD_FUNCTIONS_REGION = 'europe-west2';
 
 export type APIEnvironment = 'local' | 'staging' | 'uat' | 'production';
+
 export const getCurrentEnvironment = (): APIEnvironment => {
   const projectId = process.env.GCLOUD_PROJECT;
 
@@ -59,5 +59,23 @@ export const getStorageBucket = () => {
 
     case 'production':
       return 'bogach-production.appspot.com';
+  }
+};
+
+export const getCredentials = () => {
+  const env = getCurrentEnvironment();
+
+  switch (env) {
+    case 'local':
+      return undefined;
+
+    case 'staging':
+      return require('../environments/staging/firebase_service_account.json');
+
+    case 'uat':
+      return require('../environments/uat/firebase_service_account.json');
+
+    case 'production':
+      return require('../environments/production/firebase_service_account.json');
   }
 };

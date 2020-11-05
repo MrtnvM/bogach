@@ -10,7 +10,7 @@ abstract class ParticipantProgress with _$ParticipantProgress {
     @required ParticipantProgressStatus status,
     @required int currentEventIndex,
     @required int currentMonthForParticipant,
-    @required Map<String, MonthResult> monthResults,
+    @required List<MonthResult> monthResults,
     @required double progress,
   }) = _ParticipantProgress;
 

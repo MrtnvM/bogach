@@ -6,6 +6,7 @@ import 'package:cash_flow/models/domain/game/game_config/game_config.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/game/possession_state/possession_state.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
+import 'package:cash_flow/utils/core/date.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -18,7 +19,8 @@ abstract class Game with _$Game implements StoreListItem {
     @required String id,
     @required String name,
     @JsonKey(fromJson: GameType.fromJson, toJson: GameType.toJson)
-    @required GameType type,
+    @required
+        GameType type,
     @required CurrentGameState state,
     @required List<String> participants,
     @required Map<String, PossessionState> possessionState,
@@ -26,8 +28,8 @@ abstract class Game with _$Game implements StoreListItem {
     @required Target target,
     @required List<GameEvent> currentEvents,
     @required GameConfig config,
-    @JsonKey(fromJson: timestampToDate) DateTime createdAt,
-    @JsonKey(fromJson: timestampToDate) DateTime updatedAt,
+    @JsonKey(fromJson: fromISO8601DateJson) DateTime createdAt,
+    @JsonKey(fromJson: fromISO8601DateJson) DateTime updatedAt,
   }) = _Game;
 
   factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);

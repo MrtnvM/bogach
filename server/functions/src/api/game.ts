@@ -5,23 +5,22 @@ import { GameProvider } from '../providers/game_provider';
 import { GameService } from '../services/game/game_service';
 import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { APIRequest } from '../core/api/request_data';
-import { Firestore } from '../core/firebase/firestore';
-import { FirestoreSelector } from '../providers/firestore_selector';
-import { UserEntity } from '../models/domain/user/user';
 import { GameTemplateEntity } from '../game_templates/models/game_template';
 import { GameEntity } from '../models/domain/game/game';
 import { UserProvider } from '../providers/user_provider';
 import { TimerProvider } from '../providers/timer_provider';
 import { GameTemplatesProvider } from '../providers/game_templates_provider';
+import { DAOs } from '../dao/daos';
 
-export const create = (firestore: Firestore, selector: FirestoreSelector) => {
+export const create = (daos: DAOs) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
-  const gameTemplatesProvider = new GameTemplatesProvider();
-  const gameProvider = new GameProvider(firestore, selector, gameTemplatesProvider);
   const gameLevelsProvider = new GameLevelsProvider();
-  const userProvider = new UserProvider(firestore, selector);
+  const gameTemplatesProvider = new GameTemplatesProvider();
+  const gameProvider = new GameProvider(daos.game, daos.room, daos.user, gameTemplatesProvider);
+  const userProvider = new UserProvider(daos.user);
   const timerProvider = new TimerProvider();
+
   const gameService = new GameService(
     gameProvider,
     gameLevelsProvider,
@@ -40,15 +39,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const game = gameService.createNewGame(templateId, participantsIds || [userId]);
 
     await send(game, response);
-  });
-
-  const getAllGames = https.onRequest(async (request, response) => {
-    const apiRequest = APIRequest.from(request, response);
-    apiRequest.checkMethod('GET');
-
-    const games = gameProvider.getAllGames();
-
-    await send(games, response);
   });
 
   const getGame = https.onRequest(async (request, response) => {
@@ -114,27 +104,8 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
     const apiRequest = APIRequest.from(request, response);
     apiRequest.checkMethod('GET');
 
-    const userId = apiRequest.queryParameter('user_id');
-
     const gameLevels = gameLevelsProvider.getGameLevels();
-    console.log(gameLevels.toString());
-    const levelsIds = gameLevels.map((l) => l.id);
-    const userQuestGames = await gameProvider.getUserQuestGames(userId as UserEntity.Id, levelsIds);
-
-    const levelsInfo = gameLevels.map((level) => {
-      const { id, name, description, icon } = level;
-      const questGame = userQuestGames.find((g) => g.config.level === id);
-
-      return {
-        id,
-        name,
-        description,
-        icon,
-        currentGameId: questGame?.id,
-      };
-    });
-
-    await send(Promise.resolve(levelsInfo), response);
+    await send(Promise.resolve(gameLevels), response);
   });
 
   const createGameByLevel = https.onRequest(async (request, response) => {
@@ -143,12 +114,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
     const gameLevelId = apiRequest.jsonField('gameLevelId');
     const userId = apiRequest.jsonField('userId');
-
-    try {
-      await gameProvider.removeUserQuestGamesForLevel(userId, gameLevelId);
-    } catch (error) {
-      console.error(error);
-    }
 
     const newGame = gameService.createNewGameByLevel(gameLevelId, [userId]);
     await send(newGame, response);
@@ -174,7 +139,6 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
 
   return {
     create: createGame,
-    getAllGames,
     getGame,
     getAllGameTemplates,
     getGameTemplate,

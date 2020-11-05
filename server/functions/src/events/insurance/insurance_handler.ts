@@ -103,7 +103,7 @@ export class InsuranceHandler {
       insuranceType,
     };
 
-    const newAssets = assets.slice();
+    const newAssets = (assets || []).slice();
 
     newAssets.push(insuranceAsset);
 

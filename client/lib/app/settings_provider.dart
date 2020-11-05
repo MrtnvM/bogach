@@ -1,13 +1,13 @@
 import 'package:alice_lightweight/alice.dart';
+import 'package:cash_flow/widgets/settings/logout_setting.dart';
 import 'package:cash_flow/widgets/settings/purchases_setting.dart';
 import 'package:cash_flow/widgets/settings/reset_config_setting.dart';
-import 'package:dio/adapter.dart';
-import 'package:dio/dio.dart';
-import 'package:cash_flow/widgets/settings/logout_setting.dart';
 import 'package:cash_flow/widgets/uikit/ui_kit_setting.dart';
-import 'package:flutter/foundation.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
+import 'package:dio/adapter.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class SettingsProvider extends ControlPanelSettingsProvider {
   SettingsProvider({@required this.alice, @required this.dios}) {
@@ -48,6 +48,7 @@ class SettingsProvider extends ControlPanelSettingsProvider {
       const LicenseSetting(),
       const UiKitSetting(),
       NetworkSetting(networkProps),
+      LogConsoleButton(),
       const LogoutSetting(),
       const PurchasesSetting(),
       const ResetConfigSetting(),

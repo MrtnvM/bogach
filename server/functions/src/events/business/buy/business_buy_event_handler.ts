@@ -184,7 +184,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
       sellProbability,
     } = actionBuyParameters;
 
-    const newAssets = assets.slice();
+    const newAssets = (assets || []).slice();
 
     const newBusiness: BusinessAsset = {
       id: businessId,
@@ -206,7 +206,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
   addNewLiability(actionBuyParameters: ActionBuyParameters): Liability[] {
     const { liabilities, businessId, businessName, debt } = actionBuyParameters;
 
-    const newLiabilities = liabilities.slice();
+    const newLiabilities = (liabilities || []).slice();
 
     const newLiability: Liability = {
       id: businessId,

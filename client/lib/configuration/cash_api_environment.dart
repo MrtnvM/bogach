@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:cash_flow/resources/dynamic_links.dart';
-import 'package:flutter/foundation.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
+import 'package:flutter/foundation.dart';
 
 class CashApiEnvironment extends ApiEnvironment {
   const CashApiEnvironment({
@@ -11,6 +11,8 @@ class CashApiEnvironment extends ApiEnvironment {
     @required this.dynamicLink,
     bool validateRequestsByDefault = true,
     bool isRequestsAuthorisedByDefault = false,
+    this.realtimeDatabaseUrl,
+    this.firestoreHostUrl,
     this.isAnalyticsEnabled = false,
     this.isLoggerEnabled = false,
   }) : super(
@@ -21,6 +23,8 @@ class CashApiEnvironment extends ApiEnvironment {
 
   final String name;
   final DynamicLinks dynamicLink;
+  final String firestoreHostUrl;
+  final String realtimeDatabaseUrl;
   final bool isAnalyticsEnabled;
   final bool isLoggerEnabled;
 
@@ -29,6 +33,10 @@ class CashApiEnvironment extends ApiEnvironment {
     baseUrl:
         'http://${Platform.isIOS ? 'localhost' : '10.0.2.2'}:5001/cash-flow-staging/europe-west2/',
     dynamicLink: const DynamicLinks('staging.bogach-game.ru'),
+    firestoreHostUrl: Platform.isAndroid ? '10.0.2.2:8080' : 'localhost:8080',
+    realtimeDatabaseUrl:
+        'http://${Platform.isAndroid ? '10.0.2.2' : 'localhost'}:9000/'
+        '?ns=cash-flow-staging',
     validateRequestsByDefault: false,
     isRequestsAuthorisedByDefault: false,
     isAnalyticsEnabled: false,

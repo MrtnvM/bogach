@@ -45,6 +45,7 @@ describe('Room Service', () => {
       owner: {
         userId: 'user1',
         userName: 'User 1',
+        avatarUrl: '',
       },
       participants: [
         {

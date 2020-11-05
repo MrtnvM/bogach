@@ -8,6 +8,7 @@ const getInitialProfile = (profile?: Partial<User>): User => {
   return {
     userId: profile?.userId || userId,
     userName: profile?.userName || 'John Dow',
+    avatarUrl: profile?.avatarUrl || '',
 
     currentQuestIndex: profile?.currentQuestIndex,
     boughtQuestsAccess: profile?.boughtQuestsAccess,

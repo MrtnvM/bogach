@@ -25,10 +25,6 @@ class GetQuestsAction extends BaseAction {
 
     return state.rebuild((s) {
       s.newGame.quests.updateList(quests);
-
-      for (final quest in quests) {
-        s.newGame.currentGameForQuests[quest.id] = quest.currentGameId;
-      }
     });
   }
 }

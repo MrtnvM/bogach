@@ -19,9 +19,10 @@ export class WinnersTransformer extends GameTransformer {
       }))
       .sort((p1, p2) => p2.progress - p1.progress);
 
-    const winners = usersProgress.reduce((prev, curr, index) => {
-      return { ...prev, [index]: curr.participantId };
-    }, {});
+    const winners: GameEntity.Winner[] = usersProgress.map((p) => ({
+      userId: p.participantId,
+      targetValue: p.progress,
+    }));
 
     const isTargetArchived = usersProgress[0].progress >= 1;
     const isGameLevelMonthLimitReached = game.config.monthLimit

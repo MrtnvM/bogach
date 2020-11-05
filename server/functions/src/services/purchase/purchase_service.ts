@@ -77,7 +77,7 @@ export class PurchaseService {
   async reduceMultiplayerGames(
     participantsIds: UserEntity.Id[],
     gameId: GameEntity.Id,
-    gameCreationDate?: Date
+    gameCreationDate?: string
   ) {
     if (!Array.isArray(participantsIds) || participantsIds?.length === 0) {
       throw new Error("ParticipantIds can't be empty");
@@ -95,7 +95,7 @@ export class PurchaseService {
   updateProfileStates(
     participants: User[],
     gameId: string,
-    gameCreationDate?: Date
+    gameCreationDate?: string
   ): Promise<User>[] {
     const updatedParticipants = participants.map((profile) => {
       const updatedProfile = produce(profile, (draft) => {
@@ -127,7 +127,7 @@ export class PurchaseService {
     return updatedParticipants;
   }
 
-  addMultiplayerGame(draft: Draft<User>, gameId: string, gameCreationDate?: Date): PlayedGameInfo[] {
+  addMultiplayerGame(draft: Draft<User>, gameId: string, gameCreationDate?: string) {
     const multiplayerGameInfo: PlayedGameInfo = {
       gameId: gameId,
       createdAtMilliseconds: gameCreationDate?.getTime(),

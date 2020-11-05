@@ -1,4 +1,4 @@
-import 'package:cash_flow/models/domain/user/played_games/played_game_info.dart';
+import 'package:cash_flow/models/domain/user/last_games/last_games.dart';
 import 'package:cash_flow/models/domain/user/played_games/played_games.dart';
 import 'package:cash_flow/models/domain/user/purchase_profile.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -21,6 +21,7 @@ abstract class UserProfile with _$UserProfile implements StoreListItem {
     PurchaseProfile purchaseProfile,
     @JsonKey(defaultValue: 1) int profileVersion,
     PlayedGames playedGames,
+    @JsonKey(fromJson: _lastGamesFromJson) LastGames lastGames,
   }) = _UserProfile;
 
   factory UserProfile.fromJson(Map<String, dynamic> json) =>
@@ -37,4 +38,12 @@ abstract class UserProfile with _$UserProfile implements StoreListItem {
 
   @late
   bool get isAnonymous => fullName == null || fullName.isEmpty;
+}
+
+LastGames _lastGamesFromJson(dynamic json) {
+  if (json == null) {
+    return LastGames.empty;
+  }
+
+  return LastGames.fromJson(json);
 }

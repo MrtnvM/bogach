@@ -1,10 +1,8 @@
 import * as uuid from 'uuid';
-import { Firestore } from '../core/firebase/firestore';
-import { FirestoreSelector } from './firestore_selector';
 import { Game, GameEntity } from '../models/domain/game/game';
 import { RoomEntity, Room } from '../models/domain/room';
 import { GameTemplate, GameTemplateEntity } from '../game_templates/models/game_template';
-import { UserEntity, User } from '../models/domain/user/user';
+import { UserEntity } from '../models/domain/user/user';
 import { PossessionStateEntity } from '../models/domain/possession_state';
 import { assertExists } from '../utils/asserts';
 import { createParticipantsGameState } from '../models/domain/game/participant_game_state';
@@ -18,14 +16,18 @@ import {
   StocksInitializerGameTransformer,
   DebentureInitializerGameTransformer,
 } from '../transformers/game_transformers';
-import { GameLevel, GameLevelEntity } from '../game_levels/models/game_level';
-import { firestore as FirestoreAdmin } from 'firebase-admin';
+import { GameLevel } from '../game_levels/models/game_level';
 import { GameTemplatesProvider } from './game_templates_provider';
+import { IGameDAO } from '../dao/game_dao';
+import { IRoomDAO } from '../dao/room_dao';
+import { IUserDAO } from '../dao/user_dao';
+import { LastGameInfo, LastGamesEntity } from '../models/domain/user/last_games';
 
 export class GameProvider {
   constructor(
-    private firestore: Firestore,
-    private selector: FirestoreSelector,
+    private gameDao: IGameDAO,
+    private roomDao: IRoomDAO,
+    private userDao: IUserDAO,
     private gameTemplateProvider: GameTemplatesProvider
   ) {}
 
@@ -68,7 +70,7 @@ export class GameProvider {
           monthResults: {},
           progress: 0,
         }),
-        winners: {},
+        winners: [],
       },
       participants: participantsIds,
       possessions: participantsGameState(template.possessions),
@@ -95,98 +97,25 @@ export class GameProvider {
       new MonthResultTransformer(0),
     ]);
 
-    const selector = this.selector.game(gameId);
-    const createdGame = await this.firestore.createItem(selector, game);
+    const createdGame = await this.gameDao.createGame(game);
+    await this.updateGameParticipantsLastGames(createdGame, template);
 
-    GameEntity.validate(createdGame);
     return createdGame;
   }
 
-  async getAllGames(): Promise<Game[]> {
-    const selector = this.selector.games();
-    const games = await this.firestore.getItems(selector);
-
-    games.forEach(GameEntity.validate);
-    return games as Game[];
-  }
-
-  async getGame(gameId: GameEntity.Id): Promise<Game> {
+  getGame(gameId: GameEntity.Id): Promise<Game> {
     assertExists('Game ID', gameId);
-
-    const selector = this.selector.game(gameId);
-    const game = await this.firestore.getItemData(selector);
-
-    GameEntity.validate(game);
-    return game as Game;
+    return this.gameDao.getGame(gameId);
   }
 
-  async getUserQuestGames(userId: UserEntity.Id, levelIds: GameLevelEntity.Id[]): Promise<Game[]> {
-    const selector = this.selector.games();
-
-    const participantsKey: keyof Game = 'participants';
-    const configKey: keyof Game = 'config';
-    const levelKey: keyof GameEntity.Config = 'level';
-
-    const query = selector
-      .where(participantsKey, 'array-contains', userId)
-      .where(`${configKey}.${levelKey}`, 'in', levelIds);
-
-    const userQuestGamesQueryResult = await this.firestore.getQueryItems(query);
-    userQuestGamesQueryResult.forEach(GameEntity.validate);
-
-    const userQuestGames = userQuestGamesQueryResult as Game[];
-    const userNotCompletedQuestGames = userQuestGames
-      .filter((g) => g.state.gameStatus !== 'game_over')
-      .sort((g1, g2) => {
-        if (!g1.updatedAt || !g2.updatedAt) {
-          return 0;
-        }
-
-        const timestamp1 = (g1.updatedAt as any) as FirestoreAdmin.Timestamp;
-        const timestamp2 = (g2.updatedAt as any) as FirestoreAdmin.Timestamp;
-
-        return timestamp2.seconds - timestamp1.seconds;
-      });
-
-    return userNotCompletedQuestGames;
-  }
-
-  async removeUserQuestGamesForLevel(
-    userId: UserEntity.Id,
-    levelId: GameLevelEntity.Id
-  ): Promise<void> {
-    const selector = this.selector.games();
-
-    const participantsKey: keyof Game = 'participants';
-    const configKey: keyof Game = 'config';
-    const levelKey: keyof GameEntity.Config = 'level';
-
-    const query = selector
-      .where(participantsKey, 'array-contains', userId)
-      .where(`${configKey}.${levelKey}`, 'in', [levelId]);
-
-    const games = await query.get();
-    const deleteQuestGameOperations = games.docs.map((d) => d.ref.delete());
-
-    await Promise.all(deleteQuestGameOperations);
-  }
-
-  async updateGame(game: Game): Promise<Game> {
+  updateGame(game: Game): Promise<Game> {
     assertExists('Game and Game ID', game?.id);
-    GameEntity.validate(game);
-
-    const selector = this.selector.game(game.id);
-    const updatedGame = await this.firestore.updateItem(selector, game);
-
-    GameEntity.validate(updatedGame);
-    return updatedGame as Game;
+    return this.gameDao.updateGame(game);
   }
 
-  async deleteGame(gameId: GameEntity.Id): Promise<void> {
+  deleteGame(gameId: GameEntity.Id): Promise<void> {
     assertExists('Game ID', gameId);
-
-    const selector = this.selector.game(gameId);
-    await this.firestore.removeItem(selector);
+    return this.gameDao.deleteGame(gameId);
   }
 
   async getAllGameTemplates(): Promise<GameTemplate[]> {
@@ -206,27 +135,13 @@ export class GameProvider {
     return template;
   }
 
-  async getRoom(roomId: RoomEntity.Id): Promise<Room> {
-    const selector = this.selector.room(roomId);
-    const room = await this.firestore.getItemData(selector);
-
-    if (!room) {
-      throw new Error('ERROR: No room with id: ' + roomId);
-    }
-
-    RoomEntity.validate(room);
-    return room as Room;
+  getRoom(roomId: RoomEntity.Id): Promise<Room> {
+    return this.roomDao.getRoom(roomId);
   }
 
   async updateRoom(room: Room): Promise<Room> {
     assertExists('Room and Room ID', room?.id);
-    RoomEntity.validate(room);
-
-    const selector = this.selector.room(room.id);
-    const updatedRoom = await this.firestore.updateItem(selector, room);
-
-    RoomEntity.validate(updatedRoom);
-    return updatedRoom as Room;
+    return this.roomDao.updateRoom(room);
   }
 
   async createRoom(
@@ -235,35 +150,14 @@ export class GameProvider {
   ): Promise<Room> {
     checkIds([gameTemplateId, currentUserId]);
 
-    const ownerSelector = this.selector.user(currentUserId);
-    const owner = (await this.firestore.getItemData(ownerSelector)) as User;
+    const owner = await this.userDao.getUser(currentUserId);
+    const room = await this.roomDao.createRoom(gameTemplateId, owner);
 
-    const ownerParticipant: RoomEntity.Participant = {
-      id: currentUserId,
-      status: 'ready',
-      deviceToken: null,
-    };
-
-    const participants: RoomEntity.Participant[] = [ownerParticipant];
-
-    const roomId: RoomEntity.Id = uuid.v4();
-    const room: Room = {
-      id: roomId,
-      gameTemplateId,
-      owner,
-      participants,
-    };
-
-    const selector = this.selector.room(roomId);
-    const createdRoom = await this.firestore.createItem(selector, room);
-
-    RoomEntity.validate(createdRoom);
-    return createdRoom;
+    return room;
   }
 
   async setParticipantReady(roomId: RoomEntity.Id, participantId: UserEntity.Id): Promise<Room> {
-    const selector = this.selector.room(roomId);
-    let room = (await this.firestore.getItemData(selector)) as Room;
+    let room = await this.roomDao.getRoom(roomId);
     RoomEntity.validate(room);
 
     room = produce(room, (draft) => {
@@ -274,15 +168,14 @@ export class GameProvider {
       }
     });
 
-    const updatedRoom = await this.firestore.updateItem(selector, room);
+    const updatedRoom = await this.roomDao.updateRoom(room);
     return updatedRoom;
   }
 
   async createRoomGame(roomId: RoomEntity.Id): Promise<[Room, Game]> {
     checkId(roomId);
 
-    const selector = this.selector.room(roomId);
-    let room = (await this.firestore.getItemData(selector)) as Room;
+    let room = await this.roomDao.getRoom(roomId);
     RoomEntity.validate(room);
 
     if (room.gameId !== undefined) {
@@ -303,10 +196,72 @@ export class GameProvider {
       draft.gameId = game.id;
     });
 
-    RoomEntity.validate(room);
-    const updatedRoom = await this.firestore.updateItem(selector, room);
-
+    const updatedRoom = await this.roomDao.updateRoom(room);
     return [updatedRoom, game];
+  }
+
+  async updateGameParticipantsLastGames(game: Game, template: GameTemplate): Promise<void> {
+    const updateProfileOperations = game.participants.map(async (participantId) => {
+      const user = await this.userDao.getUser(participantId);
+      if (!user) {
+        return;
+      }
+
+      let lastGames = user.lastGames || LastGamesEntity.initial();
+      let existingGame: LastGameInfo | undefined;
+
+      const newLastGame: LastGameInfo = {
+        gameId: game.id,
+        templateId: template.id,
+        createdAt: game.createdAt,
+      };
+
+      const isSingleplayerGame = game.type === 'singleplayer' && !game.config.level;
+      if (isSingleplayerGame) {
+        existingGame = lastGames.singleplayerGames.find((g) => g.templateId === template.id);
+
+        lastGames = produce(lastGames, (draft) => {
+          draft.singleplayerGames = lastGames.singleplayerGames.filter(
+            (g) => g.gameId !== existingGame?.gameId
+          );
+          draft.singleplayerGames.push(newLastGame);
+        });
+      }
+
+      const isQuestGame = game.type === 'singleplayer' && game.config.level;
+      if (isQuestGame) {
+        existingGame = lastGames.questGames.find((g) => g.templateId === template.id);
+
+        lastGames = produce(lastGames, (draft) => {
+          draft.questGames = lastGames.questGames.filter((g) => g.gameId !== existingGame?.gameId);
+          draft.questGames.push(newLastGame);
+        });
+      }
+
+      const isMultiplayerGame = game.type === 'multiplayer';
+      if (isMultiplayerGame) {
+        existingGame = lastGames.multiplayerGames.find((g) => g.templateId === template.id);
+
+        lastGames = produce(lastGames, (draft) => {
+          draft.multiplayerGames = lastGames.multiplayerGames.filter(
+            (g) => g.gameId !== existingGame?.gameId
+          );
+          draft.multiplayerGames.push(newLastGame);
+        });
+      }
+
+      if (existingGame) {
+        await this.gameDao.deleteGame(existingGame.gameId);
+      }
+
+      const updatedProfile = produce(user, (draft) => {
+        draft.lastGames = lastGames;
+      });
+
+      await this.userDao.updateUserProfile(updatedProfile);
+    });
+
+    await Promise.all(updateProfileOperations);
   }
 
   private checkParticipantsIds(participantsIds: any) {

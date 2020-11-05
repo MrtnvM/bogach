@@ -16,11 +16,11 @@ export namespace MonthlyExpenseEventGenerator {
       maxHistoryLength: 12,
     });
 
-    const alreadyHappendEvents = {};
-    pastExpenseEvents.forEach((e) => (alreadyHappendEvents[e.name + e.description] = true));
+    const alreadyHappenedEvents = {};
+    pastExpenseEvents.forEach((e) => (alreadyHappenedEvents[e.name + e.description] = true));
 
     const filtredExpenseEvents = expenseEventInfo.filter(
-      (e) => !alreadyHappendEvents[e.name + e.description]
+      (e) => !alreadyHappenedEvents[e.name + e.description]
     );
 
     if (filtredExpenseEvents.length === 0) {

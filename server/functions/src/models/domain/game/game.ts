@@ -23,8 +23,8 @@ export interface Game {
   readonly history: GameEntity.History;
 
   readonly config: GameEntity.Config;
-  readonly createdAt?: Date;
-  readonly updatedAt?: Date;
+  readonly createdAt?: string;
+  readonly updatedAt?: string;
 }
 
 export namespace GameEntity {
@@ -56,7 +56,12 @@ export namespace GameEntity {
     readonly monthNumber: number;
     readonly moveStartDateInUTC: string;
     readonly participantsProgress: { [userId: string]: ParticipantProgress };
-    readonly winners: { [place: number]: UserEntity.Id };
+    readonly winners: Winner[];
+  };
+
+  export type Winner = {
+    readonly userId: UserEntity.Id;
+    readonly targetValue: number;
   };
 
   export type History = {
@@ -105,10 +110,12 @@ export namespace GameEntity {
     maxHistoryLength: number;
   }): T[] => {
     const { game, type, maxHistoryLength } = props;
-    const historyLength = Math.min(game.history.months.length, maxHistoryLength);
-    const history = game.history.months.slice(-historyLength);
 
-    const pastEvents = history
+    const months = game.history?.months || [];
+    const historyLength = Math.min(months.length, maxHistoryLength);
+    const monthsHistory = months.slice(-historyLength);
+
+    const pastEvents = monthsHistory
       .map((month) => month.events.filter((e) => e.type === type))
       .reduce((allEvents, monthEvents) => [...monthEvents.reverse(), ...allEvents], [])
       .map((e) => e as T);

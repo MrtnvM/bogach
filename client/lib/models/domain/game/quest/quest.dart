@@ -11,7 +11,6 @@ abstract class Quest with _$Quest implements StoreListItem {
     @required String name,
     @required String description,
     @required String icon,
-    String currentGameId,
   }) = _Quest;
 
   factory Quest.fromJson(Map<String, dynamic> json) => _$QuestFromJson(json);

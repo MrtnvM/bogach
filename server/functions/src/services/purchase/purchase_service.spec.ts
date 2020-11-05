@@ -151,7 +151,7 @@ describe('Purchase Service', () => {
       boughtQuestsAccess: false,
       multiplayerGamePlayed: 0,
     });
-    const gameCreationDate = new Date();
+    const gameCreationDate = nowInUtc();
 
     when(mockUserProvider.getUserProfile(userId)).thenResolve(initialProfile);
     when(mockUserProvider.getUserPurchases(userId)).thenResolve([]);

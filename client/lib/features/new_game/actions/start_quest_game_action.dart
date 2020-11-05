@@ -34,8 +34,9 @@ class StartQuestGameAction extends BaseAction {
           break;
 
         case QuestAction.continueGame:
-          final currentGameForLevels = state.newGame.currentGameForQuests;
-          return currentGameForLevels[questId];
+          final questGames = state.profile.currentUser.lastGames.questGames;
+          final index = questGames.indexWhere((g) => g.templateId == questId);
+          return index < 0 ? null : questGames[index].gameId;
           break;
       }
     };
@@ -44,7 +45,6 @@ class StartQuestGameAction extends BaseAction {
 
     return state.rebuild((s) {
       s.newGame.newGameId = gameId;
-      s.newGame.currentGameForQuests[questId] = gameId;
     });
   }
 

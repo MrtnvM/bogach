@@ -9,7 +9,7 @@
     "deploy-staging": "firebase deploy -P staging --only functions",
     "deploy-uat": "firebase deploy -P uat --only functions",
     "deploy-production": "firebase deploy -P production --only functions",
-    "start-emulator": "yarn build && firebase emulators:start --only functions",
+    "start-emulator": "yarn build && firebase emulators:start",
     "logs": "firebase functions:log"
   },
   "engines": {

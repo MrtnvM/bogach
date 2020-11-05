@@ -22,6 +22,10 @@ class UserCache {
   }
 
   Future<void> setUserProfile(UserProfile profile) async {
+    if (profile == null) {
+      throw Exception('Can not update user profile cache with null');
+    }
+
     final jsonData = profile.toJson();
     final jsonString = json.encode(jsonData);
     await _secureStorage.write(key: _userProfileKey, value: jsonString);

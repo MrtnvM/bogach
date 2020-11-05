@@ -65,7 +65,7 @@ export class MonthlyExpenseEventHandler extends PlayerActionHandler {
       name: expenseName,
       value: monthlyPayment,
     };
-    const newExpenses = expenses.slice();
+    const newExpenses = (expenses || []).slice();
     newExpenses.push(newExpense);
 
     const actionResult: ActionResult = {

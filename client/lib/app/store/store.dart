@@ -3,6 +3,7 @@ import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/store/redux_action_logger.dart';
 import 'package:cash_flow/app/store/redux_action_observer.dart';
 import 'package:cash_flow/cache/user_cache.dart';
+import 'package:cash_flow/configuration/cash_api_environment.dart';
 import 'package:cash_flow/services/config_service.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/purchase_service.dart';
@@ -11,6 +12,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
@@ -32,20 +34,33 @@ Store<AppState> configureStore() {
 }
 
 void configureDependencyInjection(
+  CashApiEnvironment environment,
   CashFlowApiClient apiClient,
   SharedPreferences sharedPreferences,
   TokenStorage tokenStorage,
   UserCache userCache,
 ) {
-  final firestore = FirebaseFirestore.instance;
-  final firebaseDatabase = FirebaseDatabase.instance;
   final firebaseAuth = FirebaseAuth.instance;
   final firebaseMessaging = FirebaseMessaging();
+  final firestore = FirebaseFirestore.instance;
+  var realtimeDatabase = FirebaseDatabase.instance;
+
+  if (environment == CashApiEnvironment.development) {
+    FirebaseFirestore.instance.settings = Settings(
+      host: environment.firestoreHostUrl,
+      sslEnabled: false,
+    );
+
+    realtimeDatabase = FirebaseDatabase(
+      app: Firebase.app(),
+      databaseURL: environment.realtimeDatabaseUrl,
+    );
+  }
 
   final gameService = GameService(
     apiClient: apiClient,
     firestore: firestore,
-    firebaseDatabase: firebaseDatabase,
+    realtimeDatabase: realtimeDatabase,
   );
 
   final userService = UserService(

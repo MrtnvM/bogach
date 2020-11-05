@@ -1,4 +1,5 @@
 import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
+import 'package:cash_flow/models/domain/game/current_game_state/winner.dart';
 import 'package:cash_flow/utils/core/date.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -13,7 +14,7 @@ abstract class CurrentGameState with _$CurrentGameState {
     GameStatus gameStatus,
     int monthNumber,
     Map<String, ParticipantProgress> participantsProgress,
-    Map<int, String> winners,
+    List<Winner> winners,
   }) = _CurrentGameState;
 
   factory CurrentGameState.fromJson(Map<String, dynamic> json) =>

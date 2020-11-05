@@ -4,8 +4,6 @@ import * as config from '../config';
 import { GameProvider } from '../providers/game_provider';
 import { RoomService } from '../services/room/room_service';
 import { APIRequest } from '../core/api/request_data';
-import { Firestore } from '../core/firebase/firestore';
-import { FirestoreSelector } from '../providers/firestore_selector';
 import { FirebaseMessaging } from '../core/firebase/firebase_messaging';
 import { UserProvider } from '../providers/user_provider';
 import { GameService } from '../services/game/game_service';
@@ -13,14 +11,15 @@ import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { TimerProvider } from '../providers/timer_provider';
 import { PurchaseService } from '../services/purchase/purchase_service';
 import { GameTemplatesProvider } from '../providers/game_templates_provider';
+import { DAOs } from '../dao/daos';
 
-export const create = (firestore: Firestore, selector: FirestoreSelector) => {
+export const create = (daos: DAOs) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
-  const templatesProvider = new GameTemplatesProvider();
-  const gameProvider = new GameProvider(firestore, selector, templatesProvider);
+  const gameTemplatesProvider = new GameTemplatesProvider();
   const gameLevelProvider = new GameLevelsProvider();
-  const userProvider = new UserProvider(firestore, selector);
+  const gameProvider = new GameProvider(daos.game, daos.room, daos.user, gameTemplatesProvider);
+  const userProvider = new UserProvider(daos.user);
   const timerProvider = new TimerProvider();
   const firebaseMessaging = new FirebaseMessaging();
 
@@ -62,7 +61,7 @@ export const create = (firestore: Firestore, selector: FirestoreSelector) => {
       await purchaseService.reduceMultiplayerGames(
         room.participants.map((participant) => participant.id),
         game.id,
-        game.createdAt
+        (game.createdAt && new Date(game.createdAt).toISOString()) || undefined
       );
       return room;
     };
