@@ -1,3 +1,4 @@
+import 'package:cash_flow/utils/core/date.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'last_game_info.freezed.dart';
@@ -8,7 +9,7 @@ abstract class LastGameInfo with _$LastGameInfo {
   factory LastGameInfo({
     String gameId,
     String templateId,
-    String createdAt,
+    @JsonKey(fromJson: fromISO8601DateJson) DateTime createdAt,
   }) = _LastGameInfo;
 
   factory LastGameInfo.fromJson(Map<String, dynamic> json) =>
