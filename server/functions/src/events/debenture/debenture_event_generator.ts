@@ -3,21 +3,44 @@ import * as random from 'random';
 import { Strings } from '../../resources/strings';
 import { DebentureEvent } from './debenture_event';
 import { formatPrice } from '../../utils/currency';
-import { Game } from '../../models/domain/game/game';
-import { randomValueFromRange } from '../../core/data/value_range';
+import { Game, GameEntity } from '../../models/domain/game/game';
+import { randomValueFromRange, ValueRange } from '../../core/data/value_range';
 
 export namespace DebentureEventGenerator {
   export const generate = (game: Game): DebentureEvent.Event => {
     const debentureIndex = random.int(0, game.config.debentures.length - 1);
     const debenture = game.config.debentures[debentureIndex];
-    const event = generateEvent(debenture);
+
+    const lastDebentureEvent = GameEntity.getLastEventOfType<DebentureEvent.Event>({
+      game,
+      type: DebentureEvent.Type,
+    });
+
+    const eventInfo: DebentureEvent.Info = {
+      ...debenture,
+      previousPrice: lastDebentureEvent?.data?.currentPrice,
+    };
+
+    const event = generateEvent(eventInfo);
     return event;
   };
 
   export const generateEvent = (eventInfo: DebentureEvent.Info): DebentureEvent.Event => {
-    const { name, nominal, price, profitability, availableCount } = eventInfo;
+    const { name, nominal, price, profitability, availableCount, previousPrice } = eventInfo;
 
-    const currentPrice = randomValueFromRange(price);
+    let currentPriceRange: ValueRange = price;
+
+    if (previousPrice && previousPrice >= price.min && previousPrice <= price.max) {
+      const maxPriceChangePercent = 0.04;
+
+      currentPriceRange = {
+        min: Math.max(previousPrice - previousPrice * maxPriceChangePercent, price.min),
+        max: Math.min(previousPrice + previousPrice * maxPriceChangePercent, price.max),
+        stepValue: price.stepValue,
+      };
+    }
+
+    const currentPrice = randomValueFromRange(currentPriceRange);
     const currentNominal = randomValueFromRange(nominal);
     const currentProfitability = randomValueFromRange(profitability);
     const currentAvailableCount = randomValueFromRange(availableCount);
