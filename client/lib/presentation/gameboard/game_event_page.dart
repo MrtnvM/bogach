@@ -14,6 +14,7 @@ import 'package:cash_flow/presentation/gameboard/game_events/stock/ui/stock_game
 import 'package:cash_flow/presentation/gameboard/month_result_card.dart';
 import 'package:cash_flow/presentation/gameboard/waiting_players_card.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar_button.dart';
+import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -78,7 +79,7 @@ class GameEventPage extends HookWidget {
         const SizedBox(height: 32),
         ActionBarButton(
           text: Strings.continueGame,
-          color: Colors.green,
+          color: ColorRes.mainGreen,
           onPressed: goToNewMonth,
         )
       ],
