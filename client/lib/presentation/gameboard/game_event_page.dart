@@ -12,6 +12,7 @@ import 'package:cash_flow/presentation/gameboard/game_events/real_estate/ui/real
 import 'package:cash_flow/presentation/gameboard/game_events/salary_change/ui/salary_change_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/ui/stock_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/month_result_card.dart';
+import 'package:cash_flow/presentation/gameboard/tabs/actions_tab.dart';
 import 'package:cash_flow/presentation/gameboard/waiting_players_card.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar_button.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -34,13 +35,18 @@ class GameEventPage extends HookWidget {
 
     final startNewMonth = () => dispatch(StartNewMonthAction());
 
-    return activeGameState.maybeWhen(
-      gameEvent: (eventIndex, _) => gameEvents.isEmpty
-          ? _buildNoGameEventsState()
-          : _buildEventBody(gameEvents[eventIndex]),
-      waitingPlayers: (_) => WaitingPlayersCard(),
-      monthResult: () => _buildMonthResult(startNewMonth),
-      orElse: () => Container(),
+    final isActionInProgress = useIsGameboardActionInProgress();
+
+    return Opacity(
+      opacity: isActionInProgress ? 0 : 1,
+      child: activeGameState.maybeWhen(
+        gameEvent: (eventIndex, _) => gameEvents.isEmpty
+            ? _buildNoGameEventsState()
+            : _buildEventBody(gameEvents[eventIndex]),
+        waitingPlayers: (_) => WaitingPlayersCard(),
+        monthResult: () => _buildMonthResult(startNewMonth),
+        orElse: () => Container(),
+      ),
     );
   }
 

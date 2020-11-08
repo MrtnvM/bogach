@@ -102,10 +102,8 @@ class ContainerWithHeaderImage extends HookWidget {
   }
 
   Widget _buildActivityIndicator(double padding) {
-    const progressBarHeight = 130;
-
     return Padding(
-      padding: EdgeInsets.only(top: padding + progressBarHeight),
+      padding: EdgeInsets.only(top: padding),
       child: const Center(
         child: CircularProgressIndicator(
           backgroundColor: ColorRes.mainGreen,

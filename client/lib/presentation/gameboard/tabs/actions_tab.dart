@@ -1,4 +1,3 @@
-import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
@@ -27,7 +26,7 @@ class ActionsTab extends HookWidget {
 
     final targetTitle = monthPast ?? mapTargetTypeToString(target.type);
     final user = useCurrentUser();
-    final isLoading = useGlobalState(shouldDisplayLoader);
+    final isLoading = useIsGameboardActionInProgress();
 
     return ContainerWithHeaderImage(
       navBarTitle: user.fullName,
@@ -51,15 +50,17 @@ class ActionsTab extends HookWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              if (!isLoading) const GameEventPage(),
+              const GameEventPage(),
             ],
           ),
         ),
       ],
     );
   }
+}
 
-  bool shouldDisplayLoader(AppState s) {
+bool useIsGameboardActionInProgress() {
+  final isActionInProgress = useGlobalState((s) {
     final isStartingNewMonth =
         s.getOperationState(Operation.startNewMonth).isInProgress;
 
@@ -71,5 +72,7 @@ class ActionsTab extends HookWidget {
     );
 
     return isSendingTurnEvent || isStartingNewMonth;
-  }
+  });
+
+  return isActionInProgress;
 }
