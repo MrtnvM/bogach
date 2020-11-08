@@ -106,7 +106,8 @@ void handleError({
     return;
   }
 
-  if (exception is FirebaseAuthException) {
+  if (exception is FirebaseAuthException &&
+      exception.code == 'account-exists-with-different-credential') {
     showErrorDialog(
       context: context,
       message: Strings.cannotAuthoriseThroughSocial,
