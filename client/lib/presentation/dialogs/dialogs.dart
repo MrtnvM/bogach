@@ -4,9 +4,10 @@ import 'package:cash_flow/models/errors/domain_game_error.dart';
 import 'package:cash_flow/models/errors/past_purchase_error.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:dash_kit_network/dash_kit_network.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:intl/intl.dart';
 
 void showNotImplementedDialog(BuildContext context) {
@@ -105,6 +106,17 @@ void handleError({
     return;
   }
 
+  if (exception is FirebaseAuthException) {
+    showErrorDialog(
+      context: context,
+      message: Strings.cannotAuthoriseThroughSocial,
+      onRetry: onRetry,
+      barrierDismissible: barrierDismissible,
+      displayNegative: displayNegative,
+    );
+    return;
+  }
+
   switch (exception.runtimeType) {
     case NetworkConnectionException:
       showErrorDialog(
@@ -132,10 +144,6 @@ void handleError({
       switch (exception.code) {
         case 'ERROR_NETWORK_REQUEST_FAILED':
           errorMessage = Strings.noInternetError;
-          break;
-
-        case 'ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL':
-          errorMessage = Strings.cannotAuthoriseThroughSocial;
           break;
       }
 
