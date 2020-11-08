@@ -54,7 +54,7 @@ describe('Game Service - Singleplayer game', () => {
       draft.winners = [{ userId, targetValue: 0.0189 }];
     });
 
-    const [newGame] = capture(mockGameProvider.updateGame).last();
+    const [newGame] = capture(mockGameProvider.updateGameForUser).last();
 
     expect(newGame.accounts).toStrictEqual(expectedAccounts);
     expect(newGame.state).toStrictEqual(expectedGameState);

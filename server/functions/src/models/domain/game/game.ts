@@ -134,7 +134,7 @@ export namespace GameEntity {
     let event: T | undefined = undefined;
 
     for (const month of months) {
-      for (const e of month.events) {
+      for (const e of month?.events ?? []) {
         if (e.type === type) {
           event = e as T;
           break;

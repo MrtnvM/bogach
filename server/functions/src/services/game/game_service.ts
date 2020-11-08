@@ -123,9 +123,11 @@ export class GameService {
 
     if (game.state.monthNumber < updatedGame.state.monthNumber) {
       this.scheduleCompleteMonthTimer(updatedGame);
+      await this.gameProvider.updateGame(updatedGame);
+    } else {
+      await this.gameProvider.updateGameForUser(updatedGame, userId);
     }
 
-    await this.gameProvider.updateGame(updatedGame);
     await this.removeCompletedGameFromLastGamesIfNeeded(updatedGame);
     await this.updateCurrentUserQuestIndexIfNeeded(updatedGame, userId);
   }
