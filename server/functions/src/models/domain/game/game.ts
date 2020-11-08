@@ -122,4 +122,30 @@ export namespace GameEntity {
 
     return pastEvents;
   };
+
+  export const getLastEventOfType = <T extends GameEvent>(props: {
+    game: Game;
+    type: string;
+  }): T | undefined => {
+    const { game, type } = props;
+
+    const months = game.history?.months || [];
+
+    let event: T | undefined = undefined;
+
+    for (const month of months) {
+      for (const e of month.events) {
+        if (e.type === type) {
+          event = e as T;
+          break;
+        }
+      }
+
+      if (event) {
+        break;
+      }
+    }
+
+    return event;
+  };
 }

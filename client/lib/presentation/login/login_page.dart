@@ -308,7 +308,7 @@ class LoginPage extends HookWidget {
     final account = await GoogleSignIn().signIn().catchError((e) {
       Logger.e('Google Auth Error', e);
       isAuthorising.value = false;
-      showErrorDialog(context: context);
+      handleError(context: context, exception: e);
     });
 
     if (account == null) {

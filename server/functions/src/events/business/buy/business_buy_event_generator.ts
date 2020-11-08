@@ -21,7 +21,7 @@ export namespace BusinessBuyEventGenerator {
 
     return generateEvent({
       name,
-      description: '',
+      description: name,
       businessId,
       currentPrice: valueRange([70_000, 150_000, 1_000]),
       fairPrice: valueRange([70_000, 150_000, 1_000]),
