@@ -33,11 +33,13 @@ class QuestItemWidget extends HookWidget {
       onTap: () {
         if (isLocked) {
           onQuestSelected?.call(null, QuestAction.startNewGame);
+          isCollapsed.value = true;
           return;
         }
 
         if (currentGameId == null) {
           onQuestSelected?.call(quest, QuestAction.startNewGame);
+          isCollapsed.value = true;
           return;
         }
 
