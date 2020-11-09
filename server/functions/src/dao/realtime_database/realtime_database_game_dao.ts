@@ -59,6 +59,16 @@ export class RealtimeDatabaseGameDAO implements IGameDAO {
     return updatedGame as Game;
   }
 
+  async updateGameWithoutParticipants(game: Game): Promise<void> {
+    GameEntity.validate(game);
+
+    const newGame = { ...game, participants: undefined };
+    delete newGame.participants;
+
+    const selector = this.refs.game(newGame.id);
+    await this.db.updateItem(selector, newGame);
+  }
+
   async updateParticipant(game: Game, userId: UserEntity.Id): Promise<void> {
     GameEntity.validate(game);
 

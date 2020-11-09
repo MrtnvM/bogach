@@ -19,7 +19,8 @@ export namespace ParticipantFixture {
     const possessionState = participant?.possessionState ?? PossessionStateEntity.createEmpty();
 
     // TODO: Calculate possession state before calculation of progress
-    const progress = GameEntity.initialParticipantProgress(possessionState, account);
+    const progress =
+      participant?.progress ?? GameEntity.initialParticipantProgress(possessionState, account);
 
     return {
       id,

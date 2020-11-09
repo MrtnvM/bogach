@@ -118,6 +118,11 @@ export class GameProvider {
     return this.gameDao.updateGame(game);
   }
 
+  updateGameWithoutParticipants(game: Game): Promise<void> {
+    assertExists('Game and Game ID', game?.id);
+    return this.gameDao.updateGameWithoutParticipants(game);
+  }
+
   updateGameForUser(game: Game, userId: UserEntity.Id): Promise<void> {
     assertExists('Game and Game ID', game?.id);
     return this.gameDao.updateParticipant(game, userId);

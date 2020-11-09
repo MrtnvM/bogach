@@ -153,14 +153,18 @@ export class GameService {
         new ResetEventIndexTransformer(userId),
         new InsuranceTransformer(userId),
         new PossessionStateTransformer(),
-        ...(shouldScheduleMoveTimer ? [new UpdateMoveStartDateTransformer(true)] : []),
       ]);
 
       if (shouldScheduleMoveTimer) {
+        updatedGame = applyGameTransformers(updatedGame, [
+          new UpdateMoveStartDateTransformer(true),
+        ]);
         this.scheduleCompleteMonthTimer(updatedGame);
+
+        await this.gameProvider.updateGameWithoutParticipants(updatedGame);
       }
 
-      updatedGame = await this.gameProvider.updateGame(updatedGame);
+      await this.gameProvider.updateGameForUser(updatedGame, userId);
       return updatedGame;
     }
 

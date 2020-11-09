@@ -163,7 +163,7 @@ describe('Game Service - Multiplayer game', () => {
     const gameContext: GameContext = { userId: user1, gameId };
     await gameService.startNewMonth(gameContext);
 
-    const [newGame] = capture(mockGameProvider.updateGame).last();
+    const [newGame] = capture(mockGameProvider.updateGameWithoutParticipants).last();
     const [timerParams] = capture(mockTimerProvider.scheduleTimer).last();
 
     expect(newGame.state.monthNumber).toEqual(2);
