@@ -70,7 +70,7 @@ describe('Stock event handler', () => {
 
     const expectedGame = produce(game, (draft) => {
       const participant = draft.participants[userId];
-      const index = participant.possessionState.assets.findIndex((d) => d.id === newStockAsset.id);
+      const index = participant.possessions.assets.findIndex((d) => d.id === newStockAsset.id);
 
       participant.possessions.assets[index] = newStockAsset;
       participant.account.cash = initialCash - 650;

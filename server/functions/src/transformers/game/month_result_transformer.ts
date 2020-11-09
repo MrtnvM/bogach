@@ -15,7 +15,7 @@ export class MonthResultTransformer extends GameTransformer {
 
     return produce(game, (draft) => {
       draft.participantsIds.forEach((participantId) => {
-        const participant = game.participants[participantId];
+        const participant = draft.participants[participantId];
 
         const participantProgress = participant.progress;
         const isMonthResult = participantProgress.status === 'month_result';

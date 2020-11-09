@@ -11,7 +11,7 @@ export class InsuranceTransformer extends GameTransformer {
 
   apply(game: Game): Game {
     const participant = game.participants[this.userId];
-    const userPossessions = participant.possessions[this.userId];
+    const userPossessions = participant.possessions;
     const insurances = userPossessions.assets
       .filter((asset) => asset.type === 'insurance')
       .map((asset) => asset as InsuranceAsset);
