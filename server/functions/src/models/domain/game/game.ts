@@ -8,7 +8,6 @@ import { GameLevelEntity } from '../../../game_levels/models/game_level';
 import { DebentureEvent } from '../../../events/debenture/debenture_event';
 import { UserEntity } from '../user/user';
 import { AssetEntity } from '../asset';
-import { participantIds } from '../../../services/game/game_service.multiplayer.spec.utils';
 
 export interface Game {
   readonly id: GameEntity.Id;
@@ -37,14 +36,6 @@ export namespace GameEntity {
   export type ParticipantProgressStatus = 'player_move' | 'month_result';
   const ParticipantProgressStatusValues = ['player_move', 'month_result'];
 
-  export type Participant = {
-    readonly id: string;
-    readonly progress: ParticipantProgress;
-    readonly possessions: Possessions;
-    readonly possessionState: PossessionState;
-    readonly account: Account;
-  };
-
   export type MonthResult = {
     readonly cash: number;
     readonly totalIncome: number;
@@ -59,6 +50,14 @@ export namespace GameEntity {
     readonly status: ParticipantProgressStatus;
     readonly monthResults: { [month: number]: MonthResult };
     readonly progress: number;
+  };
+
+  export type Participant = {
+    readonly id: string;
+    readonly progress: ParticipantProgress;
+    readonly possessions: Possessions;
+    readonly possessionState: PossessionState;
+    readonly account: Account;
   };
 
   export const initialParticipantProgress = (
@@ -141,10 +140,10 @@ export namespace GameEntity {
     stateEntity.hasValue('winners');
 
     const participantsIds = Object.keys(gameEntity.participants);
-    participantIds.sort();
+    participantsIds.sort();
     gameEntity.participantsIds.sort();
 
-    if (JSON.stringify(participantIds) !== JSON.stringify(gameEntity.participantsIds)) {
+    if (JSON.stringify(participantsIds) !== JSON.stringify(gameEntity.participantsIds)) {
       throw Error(
         'Participants ids is not the same as in the participantIds\n' +
           `[participantIds] = ${JSON.stringify(gameEntity.participantsIds)}\n` +
