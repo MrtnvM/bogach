@@ -37,7 +37,8 @@ describe('Expense event handler', () => {
       value: 250,
     };
     const expectedGame = produce(game, (draft) => {
-      draft.possessions[userId].expenses.push(newExpense);
+      const participant = draft.participants[userId];
+      participant.possessions.expenses.push(newExpense);
     });
 
     expect(newGame).toStrictEqual(expectedGame);
@@ -62,7 +63,8 @@ describe('Expense event handler', () => {
     };
 
     const gameWithChild = produce(game, (draft) => {
-      draft.possessions[userId].expenses.push(firstChild);
+      const participant = draft.participants[userId];
+      participant.possessions.expenses.push(firstChild);
     });
 
     const newGame = await handler.handle(gameWithChild, event, action, userId);
@@ -73,7 +75,8 @@ describe('Expense event handler', () => {
       value: 250,
     };
     const expectedGame = produce(gameWithChild, (draft) => {
-      draft.possessions[userId].expenses.push(secondChild);
+      const participant = draft.participants[userId];
+      participant.possessions.expenses.push(secondChild);
     });
 
     expect(newGame).toStrictEqual(expectedGame);

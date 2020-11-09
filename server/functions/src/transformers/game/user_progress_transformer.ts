@@ -20,8 +20,8 @@ export class UserProgressTransformer extends GameTransformer {
       ? game.currentEvents.length - 1
       : game.currentEvents.findIndex((e) => e.id === this.eventId);
 
-    const currentParticipantProgress = game.state.participantsProgress[this.userId];
-    const { monthResults, currentMonthForParticipant } = currentParticipantProgress;
+    const participant = game.participants[this.userId];
+    const { monthResults, currentMonthForParticipant } = participant.progress;
 
     const shouldCompleteMonth =
       this.completeMonth || currentEventIndex >= game.currentEvents.length - 1;
@@ -41,7 +41,7 @@ export class UserProgressTransformer extends GameTransformer {
     };
 
     return produce(game, (draft) => {
-      draft.state.participantsProgress[this.userId] = newParticipantProgress;
+      draft.participants[this.userId].progress = newParticipantProgress;
     });
   }
 }

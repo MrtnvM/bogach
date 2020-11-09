@@ -138,7 +138,7 @@ export class GameService {
     const game = await this.gameProvider.getGame(gameId);
     if (!game) throw new Error('No game with ID: ' + gameId);
 
-    const participantProgress = game.state.participantsProgress[userId];
+    const participantProgress = game.participants[userId].progress;
 
     let updatedGame: Game | undefined;
 
@@ -174,8 +174,8 @@ export class GameService {
     const isGameCompleted = game.state.gameStatus === 'game_over';
 
     const isTheSameMonth = game.state.monthNumber === monthNumber;
-    const atLeastOneParticipantStartedNewMonth = game.participants.some((id) => {
-      return game.state.participantsProgress[id].currentMonthForParticipant === monthNumber;
+    const atLeastOneParticipantStartedNewMonth = game.participantsIds.some((id) => {
+      return game.participants[id].progress.currentMonthForParticipant === monthNumber;
     });
     const canCompleteMonth = isTheSameMonth && atLeastOneParticipantStartedNewMonth;
 
@@ -184,7 +184,7 @@ export class GameService {
     }
 
     const updatedGame = applyGameTransformers(game, [
-      ...game.participants.map((participantId) => {
+      ...game.participantsIds.map((participantId) => {
         const eventId = undefined;
         const shouldCompleteMonth = true;
 
@@ -212,7 +212,7 @@ export class GameService {
     const shouldOpenNewQuestForUser =
       game.state.gameStatus === 'game_over' &&
       game.config.level !== null &&
-      game.state.participantsProgress[userId].progress >= 1;
+      game.participants[userId].progress.progress >= 1;
 
     if (!shouldOpenNewQuestForUser) {
       return;
@@ -227,7 +227,7 @@ export class GameService {
 
   async removeCompletedGameFromLastGamesIfNeeded(game: Game) {
     if (game.state.gameStatus === 'game_over') {
-      const removeCompletedGameOperations = game.participants.map((participantId) =>
+      const removeCompletedGameOperations = game.participantsIds.map((participantId) =>
         this.userProvider.removeGameFromLastGames(participantId, game.id)
       );
 

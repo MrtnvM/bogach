@@ -111,7 +111,7 @@ namespace ExpenseFactory {
     });
 }
 
-namespace InsuraceFactory {
+namespace InsuranceFactory {
   export const healthInsurance = (cost: number, value: number) =>
     EventFactory.insuranceEvent({
       insuranceType: 'health',
@@ -146,7 +146,7 @@ namespace DebentureFactory {
       availableCount: valueRange(availableCount),
     });
 
-  export const alphabetTase = (price: number, availableCount: number) =>
+  export const alphabetTaste = (price: number, availableCount: number) =>
     EventFactory.debentureEvent({
       name: '"Вкусные Продукты" выпуск 1',
       profitability: valueRange(17),
@@ -201,7 +201,7 @@ namespace StockFactory {
 export namespace ProgrammerEventFactory {
   export const Income = IncomeFactory;
   export const Expense = ExpenseFactory;
-  export const Insurace = InsuraceFactory;
+  export const Insurance = InsuranceFactory;
   export const Debenture = DebentureFactory;
   export const Stock = StockFactory;
 }

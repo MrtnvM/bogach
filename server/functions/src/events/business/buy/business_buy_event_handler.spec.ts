@@ -58,9 +58,11 @@ describe('Business buy event event handler', () => {
     };
 
     const expectedGame = produce(game, (draft) => {
-      draft.possessions[userId].assets.push(newBusinessAsset);
-      draft.accounts[userId].cash = initialCash - 15_000;
-      draft.possessions[userId].liabilities.push(newLiability);
+      const participant = draft.participants[userId];
+
+      participant.possessions.assets.push(newBusinessAsset);
+      participant.account.cash = initialCash - 15_000;
+      participant.possessions.liabilities.push(newLiability);
     });
 
     expect(newGame).toStrictEqual(expectedGame);
@@ -79,7 +81,7 @@ describe('Business buy event event handler', () => {
 
     try {
       await handler.handle(game, event, action, userId);
-      throw new Error('Shoud fail on previous line');
+      throw new Error('Should fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(new Error('Cant buy two the same businesses'));
     }
@@ -113,7 +115,7 @@ describe('Business buy event event handler', () => {
 
     try {
       await handler.handle(game, event, action, userId);
-      throw new Error('Shoud fail on previous line');
+      throw new Error('Should fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(new Error('Cant buy business with two the same liabilities'));
     }
@@ -132,7 +134,7 @@ describe('Business buy event event handler', () => {
 
     try {
       await handler.handle(game, event, action, userId);
-      throw new Error('Shoud fail on previous line');
+      throw new Error('Should fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(
         new Error(
@@ -163,7 +165,7 @@ describe('Business buy event event handler', () => {
 
     try {
       await handler.handle(game, event, action, userId);
-      throw new Error('Shoud fail on previous line');
+      throw new Error('Should fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(DomainErrors.notEnoughCash);
     }

@@ -49,19 +49,19 @@ export class DebentureEventHandler extends PlayerActionHandler {
     const { currentPrice, nominal, profitabilityPercent, availableCount } = event.data;
     const { count: actionCount, action: debentureAction } = action;
 
-    const assets = game.possessions[userId].assets;
-    const debetureAssets = AssetEntity.getDebentures(assets);
+    const assets = game.participants[userId].possessions.assets;
+    const debentureAssets = AssetEntity.getDebentures(assets);
 
     const debentureName = event.name;
 
-    const theSameDebenture = debetureAssets.find((debenture) => {
+    const theSameDebenture = debentureAssets.find((debenture) => {
       return this.isDebentureTheSame(debenture, debentureName, nominal, profitabilityPercent);
     });
 
     const countInPortfolio = theSameDebenture?.count || 0;
     const currentAveragePrice = theSameDebenture?.averagePrice || 0;
 
-    const userAccount = game.accounts[userId];
+    const userAccount = game.participants[userId].account;
     const totalPrice = currentPrice * actionCount;
 
     const actionParameters: ActionParameters = {
@@ -90,8 +90,10 @@ export class DebentureEventHandler extends PlayerActionHandler {
     }
 
     const updatedGame: Game = produce(game, (draft) => {
-      draft.accounts[userId].cash = actionResult.newAccountBalance;
-      draft.possessions[userId].assets = newAssets;
+      const participant = draft.participants[userId];
+
+      participant.account.cash = actionResult.newAccountBalance;
+      participant.possessions.assets = newAssets;
     });
 
     return updatedGame;

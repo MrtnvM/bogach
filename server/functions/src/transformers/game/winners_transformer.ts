@@ -12,7 +12,7 @@ export class WinnersTransformer extends GameTransformer {
 
     const isMoveCompleted = this.isAllParticipantsCompletedMove(game);
 
-    const usersProgress = game.participants
+    const usersProgress = game.participantsIds
       .map((participantId) => ({
         participantId,
         progress: GameTargetEntity.calculateProgress(game, participantId),
@@ -38,8 +38,8 @@ export class WinnersTransformer extends GameTransformer {
       draft.state.gameStatus = gameStatus;
       draft.state.winners = winners;
 
-      draft.participants.forEach((participantId) => {
-        const participantProgress = draft.state.participantsProgress[participantId];
+      draft.participantsIds.forEach((participantId) => {
+        const participantProgress = draft.participants[participantId].progress;
         participantProgress.progress = GameTargetEntity.calculateProgress(game, participantId);
       });
     });

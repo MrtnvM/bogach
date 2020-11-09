@@ -31,7 +31,7 @@ export class FirestoreGameDAO implements IGameDAO {
     return updatedGame as Game;
   }
 
-  updateGameForUser(game: Game, userId: string): Promise<void> {
+  updateParticipant(game: Game, userId: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
 

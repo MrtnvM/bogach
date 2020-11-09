@@ -7,7 +7,7 @@ const month = (...events: GameEvent[]) => events;
 const month1 = month(
   HookahManEventFactory.Income.tip(1000),
   HookahManEventFactory.Debenture.ofz1(1100, 20),
-  HookahManEventFactory.Insurace.healthInsurance(1000, 3000),
+  HookahManEventFactory.Insurance.healthInsurance(1000, 3000),
   HookahManEventFactory.Stock.nickTeslaAuto(324, 80),
   HookahManEventFactory.Expense.unexpectedRestDay(1200)
 );
@@ -35,7 +35,7 @@ const month4 = month(
   HookahManEventFactory.Stock.sberInvestBank(245, 25),
   HookahManEventFactory.Debenture.search(900, 8),
   HookahManEventFactory.Expense.canceledWorkBonus(500),
-  HookahManEventFactory.Insurace.propertyInsurance(2000, 5000)
+  HookahManEventFactory.Insurance.propertyInsurance(2000, 5000)
 );
 
 const month5 = month(
@@ -46,7 +46,7 @@ const month5 = month(
 );
 
 const month6 = month(
-  HookahManEventFactory.Insurace.healthInsurance(2000, 3000),
+  HookahManEventFactory.Insurance.healthInsurance(2000, 3000),
   HookahManEventFactory.Stock.sberInvestBank(308, 20),
   HookahManEventFactory.Debenture.search(1050, 20),
   HookahManEventFactory.Expense.fine3(1000),

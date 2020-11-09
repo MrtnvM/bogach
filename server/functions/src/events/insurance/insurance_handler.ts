@@ -46,10 +46,10 @@ export class InsuranceHandler {
   async handle(game: Game, event: Event, action: Action, userId: UserEntity.Id): Promise<Game> {
     const { cost, value, duration, insuranceType } = event.data;
 
-    const userAccount = game.accounts[userId];
+    const userAccount = game.participants[userId].account;
     const currentMonth = game.state.monthNumber;
 
-    const assets = game.possessions[userId].assets;
+    const assets = game.participants[userId].possessions.assets;
 
     const actionParameters: ActionParameters = {
       cost,
@@ -65,8 +65,9 @@ export class InsuranceHandler {
     const actionResult = this.applyAction(actionParameters);
 
     const updatedGame: Game = produce(game, (draft) => {
-      draft.accounts[userId].cash = actionResult.newAccountBalance;
-      draft.possessions[userId].assets = actionResult.newAssets;
+      const participant = draft.participants[userId];
+      participant.account.cash = actionResult.newAccountBalance;
+      participant.possessions.assets = actionResult.newAssets;
     });
 
     return updatedGame;

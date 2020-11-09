@@ -39,7 +39,7 @@ export class MonthlyExpenseEventHandler extends PlayerActionHandler {
   async handle(game: Game, event: Event, action: Action, userId: UserEntity.Id): Promise<Game> {
     const { monthlyPayment, expenseName } = event.data;
 
-    const expenses = game.possessions[userId].expenses;
+    const expenses = game.participants[userId].possessions.expenses;
 
     const actionChildBornParameters: ActionParameters = {
       expenses,
@@ -51,7 +51,8 @@ export class MonthlyExpenseEventHandler extends PlayerActionHandler {
     const actionResult = await this.applyAction(actionChildBornParameters);
 
     const updatedGame: Game = produce(game, (draft) => {
-      draft.possessions[userId].expenses = actionResult.newExpenses;
+      const participant = draft.participants[userId];
+      participant.possessions.expenses = actionResult.newExpenses;
     });
 
     return updatedGame;

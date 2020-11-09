@@ -31,7 +31,7 @@ const month3 = month(
 
 const month4 = month(
   WaiterEventFactory.Debenture.ofz1(1100, 20),
-  WaiterEventFactory.Insurace.healthInsurance(800, 3500),
+  WaiterEventFactory.Insurance.healthInsurance(800, 3500),
   WaiterEventFactory.Income.workBonus(1500),
   WaiterEventFactory.Debenture.ofz2(1300, 20),
   WaiterEventFactory.Debenture.ofz1(800, 20),
@@ -42,14 +42,14 @@ const month5 = month(
   WaiterEventFactory.Expense.computerRepair(3500),
   WaiterEventFactory.Expense.cafe(500),
   WaiterEventFactory.Debenture.search(900, 20),
-  WaiterEventFactory.Insurace.propertyInsurance(2000, 5000)
+  WaiterEventFactory.Insurance.propertyInsurance(2000, 5000)
 );
 
 const month6 = month(
   WaiterEventFactory.MonthlyExpense.fitness(),
   WaiterEventFactory.Income.workBonus(1800),
   WaiterEventFactory.Expense.cafe(700),
-  WaiterEventFactory.Insurace.healthInsurance(1500, 3000),
+  WaiterEventFactory.Insurance.healthInsurance(1500, 3000),
   WaiterEventFactory.Stock.sberInvestBank(308, 20),
   WaiterEventFactory.Stock.gasPromGroup(410, 30)
 );

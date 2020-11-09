@@ -80,10 +80,10 @@ describe('Game Provider', () => {
     when(mockGameDao.createGame(anything())).thenCall((game) => Promise.resolve(game));
 
     const createdGame = await gameProvider.createGame(templateId, [userId]);
-    const monthResults = createdGame.state.participantsProgress[userId].monthResults;
+    const monthResults = createdGame.participants[userId].progress.monthResults;
 
     const expectedMonthResult: GameEntity.MonthResult = {
-      cash: createdGame.accounts[userId].cash,
+      cash: createdGame.participants[userId].account.cash,
       totalIncome: 109_026.66666666667,
       totalExpense: 45_500,
       totalAssets: 2_295_000,

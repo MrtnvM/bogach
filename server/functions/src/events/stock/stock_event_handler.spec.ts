@@ -40,8 +40,9 @@ describe('Stock event handler', () => {
     };
 
     const expectedGame = produce(game, (draft) => {
-      draft.possessions[userId].assets.push(newStockAsset);
-      draft.accounts[userId].cash = initialCash - 100;
+      const participant = draft.participants[userId];
+      participant.possessions.assets.push(newStockAsset);
+      participant.account.cash = initialCash - 100;
     });
 
     expect(newGame).toStrictEqual(expectedGame);
@@ -68,10 +69,11 @@ describe('Stock event handler', () => {
     });
 
     const expectedGame = produce(game, (draft) => {
-      const index = draft.possessions[userId].assets.findIndex((d) => d.id === newStockAsset.id);
+      const participant = draft.participants[userId];
+      const index = participant.possessionState.assets.findIndex((d) => d.id === newStockAsset.id);
 
-      draft.possessions[userId].assets[index] = newStockAsset;
-      draft.accounts[userId].cash = initialCash - 650;
+      participant.possessions.assets[index] = newStockAsset;
+      participant.account.cash = initialCash - 650;
     });
 
     expect(newGame).toStrictEqual(expectedGame);
@@ -97,10 +99,11 @@ describe('Stock event handler', () => {
     });
 
     const expectedGame = produce(game, (draft) => {
-      const index = draft.possessions[userId].assets.findIndex((d) => d.id === newStockAsset.id);
+      const participant = draft.participants[userId];
+      const index = participant.possessions.assets.findIndex((d) => d.id === newStockAsset.id);
 
-      draft.possessions[userId].assets[index] = newStockAsset;
-      draft.accounts[userId].cash = initialCash + 450;
+      participant.possessions.assets[index] = newStockAsset;
+      participant.account.cash = initialCash + 450;
     });
 
     expect(newGame).toStrictEqual(expectedGame);
@@ -122,10 +125,11 @@ describe('Stock event handler', () => {
     const newGame = await handler.handle(game, event, action, userId);
 
     const expectedGame = produce(game, (draft) => {
-      const index = draft.possessions[userId].assets.findIndex((d) => d.id === stock1.id);
+      const participant = draft.participants[userId];
+      const index = participant.possessions.assets.findIndex((d) => d.id === stock1.id);
 
-      draft.possessions[userId].assets.splice(index, 1);
-      draft.accounts[userId].cash = initialCash + 700;
+      participant.possessions.assets.splice(index, 1);
+      participant.account.cash = initialCash + 700;
     });
 
     expect(newGame).toStrictEqual(expectedGame);
@@ -146,7 +150,7 @@ describe('Stock event handler', () => {
 
     try {
       await handler.handle(game, event, action, userId);
-      throw new Error('Shoud fail on previous line');
+      throw new Error('Should fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(DomainErrors.notEnoughStocksInPortfolio);
     }
@@ -167,7 +171,7 @@ describe('Stock event handler', () => {
 
     try {
       await handler.handle(game, event, action, userId);
-      throw new Error('Shoud fail on previous line');
+      throw new Error('Should fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(DomainErrors.notEnoughStocksOnMarket);
     }

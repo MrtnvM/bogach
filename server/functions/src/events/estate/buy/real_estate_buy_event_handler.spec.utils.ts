@@ -6,6 +6,7 @@ import { GameEventEntity } from '../../../models/domain/game/game_event';
 import { GameFixture } from '../../../core/fixtures/game_fixture';
 import { RealEstateBuyEvent } from './real_estate_buy_event';
 import { Liability } from '../../../models/domain/liability';
+import { ParticipantFixture } from '../../../core/fixtures/participant_fixture';
 
 const create = <T>(obj: T) => obj;
 
@@ -14,7 +15,7 @@ const gameId: GameEntity.Id = 'game1';
 const userId: UserEntity.Id = 'user1';
 const initialCash = 100_000;
 
-const initialPossesions: Possessions = {
+const initialPossessions: Possessions = {
   assets: [
     create<RealtyAsset>({
       id: 'existingRealtyAssetId',
@@ -43,12 +44,12 @@ const initialPossesions: Possessions = {
 
 const game: Game = GameFixture.createGame({
   id: gameId,
-  participants: [userId],
-  possessions: {
-    [userId]: initialPossesions,
-  },
-  accounts: {
-    [userId]: { cashFlow: 10000, cash: initialCash, credit: 0 },
+  participants: {
+    [userId]: ParticipantFixture.createParticipant({
+      id: userId,
+      possessions: initialPossessions,
+      account: { cashFlow: 10000, cash: initialCash, credit: 0 },
+    }),
   },
 });
 

@@ -44,8 +44,9 @@ describe('Income event handler', () => {
     const newGame = await handler.handle(game, eventData, action, userId);
 
     const expectedGame = produce(game, (draft) => {
-      draft.accounts[userId].cash = initialCash - 1200;
-      draft.possessions[userId].assets.push(insuranceAsset);
+      const participant = draft.participants[userId];
+      participant.account.cash = initialCash - 1200;
+      participant.possessions.assets.push(insuranceAsset);
     });
 
     expect(newGame).toStrictEqual(expectedGame);
@@ -110,8 +111,9 @@ describe('Income event handler', () => {
     );
 
     const expectedGame = produce(game, (draft) => {
-      draft.accounts[userId].cash = initialCash - 1200 - 1400;
-      draft.possessions[userId].assets.push(insuranceAsset1, insuranceAsset2);
+      const participant = draft.participants[userId];
+      participant.account.cash = initialCash - 1200 - 1400;
+      participant.possessions.assets.push(insuranceAsset1, insuranceAsset2);
     });
 
     expect(gameWith2Insurance).toStrictEqual(expectedGame);

@@ -58,13 +58,13 @@ export class BusinessSellEventHandler extends PlayerActionHandler {
       );
     }
 
-    const assets = game.possessions[userId].assets;
+    const assets = game.participants[userId].possessions.assets;
     const theSameBusinessIndex = this.getExistingBusiness(assets, businessId);
 
-    const liabilities = game.possessions[userId].liabilities;
+    const liabilities = game.participants[userId].possessions.liabilities;
     const theSameLiabilityIndex = this.getExistingLiability(liabilities, businessId);
 
-    const userAccount = game.accounts[userId];
+    const userAccount = game.participants[userId].account;
 
     const actionSellParameters: ActionSellParameters = {
       userAccount,
@@ -78,10 +78,12 @@ export class BusinessSellEventHandler extends PlayerActionHandler {
     const actionResult = await this.applySellAction(actionSellParameters);
 
     const updatedGame: Game = produce(game, (draft) => {
-      draft.accounts[userId].credit = actionResult.newUserCreditValue;
-      draft.accounts[userId].cash = actionResult.newAccountBalance;
-      draft.possessions[userId].assets = actionResult.newAssets;
-      draft.possessions[userId].liabilities = actionResult.newLiabilities;
+      const participant = draft.participants[userId];
+
+      participant.account.credit = actionResult.newUserCreditValue;
+      participant.account.cash = actionResult.newAccountBalance;
+      participant.possessions.assets = actionResult.newAssets;
+      participant.possessions.liabilities = actionResult.newLiabilities;
     });
 
     return updatedGame;
@@ -144,12 +146,12 @@ export class BusinessSellEventHandler extends PlayerActionHandler {
       newUserCreditValue = userAccount.credit + addToCredit;
     } else {
       throw new Error(
-        'Unexpected behaviour on ' + BusinessSellEventHandler.name + 'when counting sum'
+        'Unexpected behavior on ' + BusinessSellEventHandler.name + 'when counting sum'
       );
     }
 
     const newAssets = this.removeFromAssets(theSameBusinessIndex, assets);
-    const newLiabilities = this.removeFromLiabilties(theSameLiabilityIndex, liabilities);
+    const newLiabilities = this.removeFromLiabilities(theSameLiabilityIndex, liabilities);
 
     const actionResult: ActionResult = {
       newAccountBalance,
@@ -169,7 +171,7 @@ export class BusinessSellEventHandler extends PlayerActionHandler {
     return newAssets;
   }
 
-  removeFromLiabilties(theSameLiabilityIndex: number, liabilities: Liability[]): Liability[] {
+  removeFromLiabilities(theSameLiabilityIndex: number, liabilities: Liability[]): Liability[] {
     const newLiabilities = (liabilities || []).slice();
     const countItemsToRemove = 1;
     newLiabilities.splice(theSameLiabilityIndex, countItemsToRemove);

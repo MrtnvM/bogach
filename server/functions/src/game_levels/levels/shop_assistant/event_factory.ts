@@ -73,7 +73,7 @@ namespace ExpenseFactory {
       range: valueRange(value),
     });
 
-    export const friendBirthday = (value: number) =>
+  export const friendBirthday = (value: number) =>
     EventFactory.expenseEvent({
       name: 'День Рождения друга',
       description: 'Вы купили подарок своему другу на День Рождения',
@@ -82,7 +82,7 @@ namespace ExpenseFactory {
     });
 }
 
-namespace InsuraceFactory {
+namespace InsuranceFactory {
   export const healthInsurance = (cost: number, value: number) =>
     EventFactory.insuranceEvent({
       insuranceType: 'health',
@@ -135,7 +135,7 @@ namespace DebentureFactory {
       availableCount: valueRange(availableCount),
     });
 
-    export const alphabetTaste = (price: number, availableCount: number) =>
+  export const alphabetTaste = (price: number, availableCount: number) =>
     EventFactory.debentureEvent({
       name: '"Вкусные Продукты" выпуск 1',
       profitability: valueRange(17),
@@ -178,7 +178,7 @@ namespace StockFactory {
       availableCount: valueRange(availableCount),
     });
 
-    export const intel = (price: number, availableCount: number) =>
+  export const intel = (price: number, availableCount: number) =>
     EventFactory.stockEvent({
       name: 'MicroprocessorCo',
       currentPrice: valueRange(price),
@@ -191,7 +191,7 @@ export namespace MonthlyExpenseFactory {
   export const fitness = () =>
     EventFactory.monthlyExpenseEvent({
       name: 'Занятия йогой',
-      description: 'Вы начали ходить на йогу. Eжемесячные расходы увеличены.',
+      description: 'Вы начали ходить на йогу. Ежемесячные расходы увеличены.',
       value: valueRange(1000),
       expenseName: 'Занятия йогой',
     });
@@ -200,7 +200,7 @@ export namespace MonthlyExpenseFactory {
 export namespace ShopAssistantEventFactory {
   export const Income = IncomeFactory;
   export const Expense = ExpenseFactory;
-  export const Insurace = InsuraceFactory;
+  export const Insurance = InsuranceFactory;
   export const Debenture = DebentureFactory;
   export const Stock = StockFactory;
   export const MonthlyExpense = MonthlyExpenseFactory;

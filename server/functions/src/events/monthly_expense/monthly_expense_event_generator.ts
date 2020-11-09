@@ -19,16 +19,16 @@ export namespace MonthlyExpenseEventGenerator {
     const alreadyHappenedEvents = {};
     pastExpenseEvents.forEach((e) => (alreadyHappenedEvents[e.name + e.description] = true));
 
-    const filtredExpenseEvents = expenseEventInfo.filter(
+    const filteredExpenseEvents = expenseEventInfo.filter(
       (e) => !alreadyHappenedEvents[e.name + e.description]
     );
 
-    if (filtredExpenseEvents.length === 0) {
+    if (filteredExpenseEvents.length === 0) {
       return undefined;
     }
 
-    const eventIndex = random.int(0, filtredExpenseEvents.length - 1);
-    const eventInfo = filtredExpenseEvents[eventIndex];
+    const eventIndex = random.int(0, filteredExpenseEvents.length - 1);
+    const eventInfo = filteredExpenseEvents[eventIndex];
 
     return generateEvent(eventInfo);
   };

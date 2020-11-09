@@ -3,6 +3,7 @@ import { IGameDAO } from '../game_dao';
 import { Game, GameEntity } from '../../models/domain/game/game';
 import { RealtimeDatabase } from '../../core/firebase/realtime_database';
 import { RealtimeDatabaseRefs } from './realtime_database_refs';
+import { UserEntity } from '../../models/domain/user/user';
 
 export class RealtimeDatabaseGameDAO implements IGameDAO {
   constructor(private refs: RealtimeDatabaseRefs, private db: RealtimeDatabase) {}
@@ -22,14 +23,14 @@ export class RealtimeDatabaseGameDAO implements IGameDAO {
         m.events = m.events || [];
       });
 
-      draft.participants.forEach((participantId) => {
-        const possessionState = draft.possessionState[participantId];
+      draft.participantsIds.forEach((participantId) => {
+        const possessionState = draft.participants[participantId].possessionState;
         possessionState.incomes = possessionState.incomes || [];
         possessionState.expenses = possessionState.expenses || [];
         possessionState.assets = possessionState.assets || [];
         possessionState.liabilities = possessionState.liabilities || [];
 
-        const possessions = draft.possessions[participantId];
+        const possessions = draft.participants[participantId].possessions;
         possessions.incomes = possessions.incomes || [];
         possessions.expenses = possessions.expenses || [];
         possessions.assets = possessions.assets || [];
@@ -58,31 +59,12 @@ export class RealtimeDatabaseGameDAO implements IGameDAO {
     return updatedGame as Game;
   }
 
-  async updateGameForUser(game: Game, userId: string): Promise<void> {
+  async updateParticipant(game: Game, userId: UserEntity.Id): Promise<void> {
     GameEntity.validate(game);
 
-    const progress = game.state.participantsProgress[userId];
-    const progressRef = this.refs.participantProgress(userId, game.id);
-    const updateProgressOperation = this.db.updateItem(progressRef, progress);
-
-    const possessions = game.possessions[userId];
-    const possessionsRef = this.refs.possessions(userId, game.id);
-    const updatePossessionsOperation = this.db.updateItem(possessionsRef, possessions);
-
-    const possessionState = game.possessionState[userId];
-    const possessionStateRef = this.refs.possessionState(userId, game.id);
-    const updatePossessionStateOperation = this.db.updateItem(possessionStateRef, possessionState);
-
-    const account = game.accounts[userId];
-    const accountRef = this.refs.participantAccount(userId, game.id);
-    const updateAccountOperation = this.db.updateItem(accountRef, account);
-
-    await Promise.all([
-      updateProgressOperation,
-      updatePossessionsOperation,
-      updatePossessionStateOperation,
-      updateAccountOperation,
-    ]);
+    const participant = game.participants[userId];
+    const participantRef = this.refs.gameParticipant(userId, game.id);
+    await this.db.updateItem(participantRef, participant);
   }
 
   async deleteGame(gameId: string): Promise<void> {

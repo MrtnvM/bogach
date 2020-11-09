@@ -56,9 +56,11 @@ describe('Realty buy event event handler', () => {
     };
 
     const expectedGame = produce(game, (draft) => {
-      draft.possessions[userId].assets.push(newRealEstateAsset);
-      draft.accounts[userId].cash = initialCash - 15_000;
-      draft.possessions[userId].liabilities.push(newLiability);
+      const participant = draft.participants[userId];
+
+      participant.possessions.assets.push(newRealEstateAsset);
+      participant.possessions.liabilities.push(newLiability);
+      participant.account.cash = initialCash - 15_000;
     });
 
     expect(newGame).toStrictEqual(expectedGame);

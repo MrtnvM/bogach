@@ -89,7 +89,7 @@ namespace ExpenseFactory {
     });
 }
 
-namespace InsuraceFactory {
+namespace InsuranceFactory {
   export const healthInsurance = (cost: number, value: number) =>
     EventFactory.insuranceEvent({
       insuranceType: 'health',
@@ -181,7 +181,7 @@ export namespace MonthlyExpenseFactory {
   export const fitness = () =>
     EventFactory.monthlyExpenseEvent({
       name: 'Занятия спортом',
-      description: 'Вы начали ходить в спортзал. Eжемесячные расходы увеличены.',
+      description: 'Вы начали ходить в спортзал. Ежемесячные расходы увеличены.',
       value: valueRange(1000),
       expenseName: 'Занятия спортом',
     });
@@ -190,7 +190,7 @@ export namespace MonthlyExpenseFactory {
 export namespace WaiterEventFactory {
   export const Income = IncomeFactory;
   export const Expense = ExpenseFactory;
-  export const Insurace = InsuraceFactory;
+  export const Insurance = InsuranceFactory;
   export const Debenture = DebentureFactory;
   export const Stock = StockFactory;
   export const MonthlyExpense = MonthlyExpenseFactory;

@@ -11,8 +11,7 @@ export class MonthTransformer extends GameTransformer {
     }
 
     const firstParticipant = game.participants[0];
-    const currentMonth =
-      game.state.participantsProgress[firstParticipant].currentMonthForParticipant;
+    const currentMonth = firstParticipant.progress.currentMonthForParticipant;
     const monthNumber = currentMonth + 1;
 
     return produce(game, (draft) => {

@@ -1,5 +1,5 @@
 export namespace Strings {
-  export const debetures = () => get('debetures');
+  export const debentures = () => get('debentures');
   export const realty = () => get('realty');
   export const business = () => get('business');
   export const currentPrice = () => get('currentPrice');
@@ -11,7 +11,7 @@ export namespace Strings {
 
 const strings: { [key: string]: string } = {
   currentPrice: 'Текущая цена: ',
-  debetures: 'Облигации',
+  debentures: 'Облигации',
   stocks: 'Акции',
   realty: 'Недвижимость',
   business: 'Бизнес',

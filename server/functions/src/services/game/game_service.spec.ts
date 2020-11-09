@@ -43,22 +43,28 @@ describe('Game Service - Singleplayer game', () => {
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(firstEventId, firstEventPlayerAction, gameContext);
 
-    const expectedAccounts = produce(game.accounts, (draft) => {
+    const expectedAccount = produce(game.participants[userId].account, (draft) => {
       const firstEventAssetCost = 1_100;
-      draft[userId].cash -= firstEventAssetCost;
+      draft.cash -= firstEventAssetCost;
     });
 
     const expectedGameState = produce(game.state, (draft) => {
-      draft.participantsProgress[userId].currentEventIndex = 1;
-      draft.participantsProgress[userId].progress = 0.0189;
       draft.winners = [{ userId, targetValue: 0.0189 }];
+    });
+
+    const expectedParticipantState = produce(game.participants[userId].progress, (draft) => {
+      draft.currentEventIndex = 1;
+      draft.progress = 0.0189;
     });
 
     const [newGame] = capture(mockGameProvider.updateGameForUser).last();
 
-    expect(newGame.accounts).toStrictEqual(expectedAccounts);
+    expect(newGame.participants[userId].account).toStrictEqual(expectedAccount);
+    expect(newGame.participants[userId].progress).toStrictEqual(expectedParticipantState);
+    expect(newGame.participants[userId].possessions).not.toStrictEqual(
+      game.participants[userId].possessions
+    );
     expect(newGame.state).toStrictEqual(expectedGameState);
-    expect(newGame.possessions).not.toStrictEqual(game.possessions);
   });
 
   test('Successfully handle last game event', async () => {
@@ -69,42 +75,46 @@ describe('Game Service - Singleplayer game', () => {
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
 
-    const expectedAccounts = produce(game.accounts, (draft) => {
-      const userAccount = draft[userId];
+    const expectedAccount = produce(game.participants[userId].account, (draft) => {
       const lastEventAssetCost = 900;
-      const newCash = userAccount.cash + userAccount.cashFlow - lastEventAssetCost;
-      draft[userId].cash = newCash;
+      const newCash = draft.cash + draft.cashFlow - lastEventAssetCost;
+      draft.cash = newCash;
     });
 
-    const expectedGameState = produce(game.state, (draft) => {
-      const participantProgress = draft.participantsProgress[userId];
-      participantProgress.currentEventIndex = 1;
-      participantProgress.status = 'month_result';
-      participantProgress.progress = 0.0291;
-      participantProgress.monthResults['1'] = {
+    const expectedParticipantState = produce(game.participants[userId].progress, (draft) => {
+      draft.currentEventIndex = 1;
+      draft.status = 'month_result';
+      draft.progress = 0.0291;
+      draft.monthResults['1'] = {
         cash: 29_100,
         totalIncome: 10_005,
         totalExpense: 0,
         totalAssets: 900,
         totalLiabilities: 0,
       };
+    });
 
+    const expectedGameState = produce(game.state, (draft) => {
       draft.monthNumber += 1;
       draft.winners = [{ userId, targetValue: 0.0291 }];
     });
 
     const [newGame] = capture(mockGameProvider.updateGame).last();
 
-    expect(newGame.accounts).toStrictEqual(expectedAccounts);
+    expect(newGame.participants[userId].account).toStrictEqual(expectedAccount);
+    expect(newGame.participants[userId].progress).toStrictEqual(expectedParticipantState);
+    expect(newGame.participants[userId].possessions).not.toStrictEqual(
+      game.participants[userId].possessions
+    );
     expect(newGame.state).toStrictEqual(expectedGameState);
     expect(newGame.currentEvents).not.toStrictEqual(game.currentEvents);
-    expect(newGame.possessions).not.toStrictEqual(game.possessions);
   });
 
   test('Successfully game over', async () => {
     const { gameId, userId, lastEventId, lastEventPlayerAction } = TestData;
     const game = produce(TestData.game, (draft) => {
-      draft.accounts[userId].cash = 999999;
+      const participant = draft.participants[userId];
+      participant.account.cash = 999999;
     });
 
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
@@ -112,35 +122,40 @@ describe('Game Service - Singleplayer game', () => {
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
 
-    const expectedAccounts = produce(game.accounts, (draft) => {
-      const userAccount = draft[userId];
+    const expectedAccount = produce(game.participants[userId].account, (draft) => {
       const lastEventAssetCost = 900;
-      const newCash = userAccount.cash + userAccount.cashFlow - lastEventAssetCost;
-      draft[userId].cash = newCash;
+      const newCash = draft.cash + draft.cashFlow - lastEventAssetCost;
+      draft.cash = newCash;
     });
 
     const expectedGameState = produce(game.state, (draft) => {
-      const newCurrentEventIndex = 1;
-      draft.participantsProgress[userId].currentEventIndex = newCurrentEventIndex;
-      draft.participantsProgress[userId].status = 'month_result';
-      draft.participantsProgress[userId].progress = 1.009099;
       draft.monthNumber += 1;
       draft.gameStatus = 'game_over';
       draft.winners = [{ userId, targetValue: 1.009099 }];
     });
 
+    const expectedParticipantProgress = produce(game.participants[userId].progress, (draft) => {
+      draft.currentEventIndex = 1;
+      draft.status = 'month_result';
+      draft.progress = 1.009099;
+    });
+
     const [newGame] = capture(mockGameProvider.updateGame).last();
 
-    expect(newGame.accounts).toStrictEqual(expectedAccounts);
+    expect(newGame.participants[userId].account).toStrictEqual(expectedAccount);
+    expect(newGame.participants[userId].progress).toStrictEqual(expectedParticipantProgress);
+    expect(newGame.participants[userId].possessions).not.toStrictEqual(
+      game.participants[userId].possessions
+    );
     expect(newGame.state).toStrictEqual(expectedGameState);
     expect(newGame.currentEvents).toStrictEqual(game.currentEvents);
-    expect(newGame.possessions).not.toStrictEqual(game.possessions);
   });
 
   test('Can not update completed game', async () => {
     const { gameId, userId, lastEventId, lastEventPlayerAction } = TestData;
     const game = produce(TestData.game, (draft) => {
-      draft.accounts[userId].cash = 1_000_000;
+      const participant = draft.participants[userId];
+      participant.account.cash = 1_000_000;
       draft.state.gameStatus = 'game_over';
     });
 
@@ -156,7 +171,8 @@ describe('Game Service - Singleplayer game', () => {
     const { gameId, game, userId, lastEventId, lastEventPlayerAction } = TestData;
 
     const singleplayerGame = produce(game, (draft) => {
-      draft.accounts[userId].cash = 1_100_000;
+      const participant = draft.participants[userId];
+      participant.account.cash = 1_100_000;
       draft.type = 'singleplayer';
       draft.config.level = null;
     });

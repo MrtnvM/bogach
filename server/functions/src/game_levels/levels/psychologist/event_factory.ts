@@ -9,7 +9,7 @@ namespace IncomeFactory {
       range: valueRange(value),
     });
 
-  export const instaGuiges = (value: number) =>
+  export const instaGuides = (value: number) =>
     EventFactory.incomeEvent({
       name: 'Продажа',
       description:
@@ -18,7 +18,7 @@ namespace IncomeFactory {
       range: valueRange(value),
     });
 
-  export const sienceArticle = (value: number) =>
+  export const scienceArticle = (value: number) =>
     EventFactory.incomeEvent({
       name: 'Научная статья',
       description: 'Продажа статьи в научный журнал',
@@ -110,7 +110,7 @@ namespace SalaryChangeFactory {
   export const clientGone = (value: number) =>
     EventFactory.salaryChangeEvent({
       name: 'Изменение в зарплате',
-      description: 'Клиент ушел к другому сециалисту',
+      description: 'Клиент ушел к другому специалисту',
       value: valueRange(value),
     });
 
@@ -122,7 +122,7 @@ namespace SalaryChangeFactory {
     });
 }
 
-namespace InsuraceFactory {
+namespace InsuranceFactory {
   export const healthInsurance = (cost: number, value: number) =>
     EventFactory.insuranceEvent({
       insuranceType: 'health',
@@ -205,7 +205,7 @@ export namespace PsychologistEventFactory {
   export const Income = IncomeFactory;
   export const Expense = ExpenseFactory;
   export const SalaryChange = SalaryChangeFactory;
-  export const Insurace = InsuraceFactory;
+  export const Insurance = InsuranceFactory;
   export const Debenture = DebentureFactory;
   export const Stock = StockFactory;
 }

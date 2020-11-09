@@ -36,7 +36,7 @@ export class IncomeHandler extends PlayerActionHandler {
   async handle(game: Game, event: Event, action: Action, userId: UserEntity.Id): Promise<Game> {
     const { income } = event.data;
 
-    const userAccount = game.accounts[userId];
+    const userAccount = game.participants[userId].account;
 
     const actionParameters: ActionParameters = {
       userAccount,
@@ -46,7 +46,8 @@ export class IncomeHandler extends PlayerActionHandler {
     const actionResult = this.applyAction(actionParameters);
 
     const updatedGame: Game = produce(game, (draft) => {
-      draft.accounts[userId].cash = actionResult.newAccountBalance;
+      const participant = draft.participants[userId];
+      participant.account.cash = actionResult.newAccountBalance;
     });
 
     return updatedGame;

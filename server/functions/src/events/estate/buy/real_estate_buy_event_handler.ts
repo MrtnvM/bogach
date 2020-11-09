@@ -65,13 +65,13 @@ export class RealEstateBuyEventHandler extends PlayerActionHandler {
       assetName,
     } = event.data;
 
-    const assets = game.possessions[userId].assets;
+    const assets = game.participants[userId].possessions.assets;
     this.checkExistingRealEstates(assets, realEstateId);
 
-    const liabilities = game.possessions[userId].liabilities;
+    const liabilities = game.participants[userId].possessions.liabilities;
     this.checkExistingLiability(liabilities, realEstateId);
 
-    const userAccount = game.accounts[userId];
+    const userAccount = game.participants[userId].account;
     const priceToPay = currentPrice - debt;
     const realtyName = assetName;
     const actionBuyParameters: ActionBuyParameters = {
@@ -93,10 +93,12 @@ export class RealEstateBuyEventHandler extends PlayerActionHandler {
     const actionResult = this.applyBuyAction(actionBuyParameters);
 
     const updatedGame: Game = produce(game, (draft) => {
-      draft.accounts[userId].credit = actionResult.newCreditValue;
-      draft.accounts[userId].cash = actionResult.newAccountBalance;
-      draft.possessions[userId].assets = actionResult.newAssets;
-      draft.possessions[userId].liabilities = actionResult.newLiabilities;
+      const participant = draft.participants[userId];
+
+      participant.account.credit = actionResult.newCreditValue;
+      participant.account.cash = actionResult.newAccountBalance;
+      participant.possessions.assets = actionResult.newAssets;
+      participant.possessions.liabilities = actionResult.newLiabilities;
     });
 
     return updatedGame;

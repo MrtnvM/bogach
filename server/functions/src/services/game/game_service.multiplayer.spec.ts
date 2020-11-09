@@ -73,10 +73,10 @@ describe('Game Service - Multiplayer game', () => {
     expect(newMoveStartDate.getTime()).toBeGreaterThan(now.getTime());
 
     expect(newGame.state.monthNumber).toEqual(2);
-    expect(newGame.state.participantsProgress[user1].currentEventIndex).toEqual(1);
-    expect(newGame.state.participantsProgress[user1].status).toEqual('month_result');
-    expect(newGame.state.participantsProgress[user2].currentEventIndex).toEqual(1);
-    expect(newGame.state.participantsProgress[user2].status).toEqual('month_result');
+    expect(newGame.participants[user1].progress.currentEventIndex).toEqual(1);
+    expect(newGame.participants[user1].progress.status).toEqual('month_result');
+    expect(newGame.participants[user2].progress.currentEventIndex).toEqual(1);
+    expect(newGame.participants[user2].progress.status).toEqual('month_result');
 
     expect(timerParams).toEqual({
       startDateInUTC: newMoveStartDate.toISOString(),
@@ -136,8 +136,8 @@ describe('Game Service - Multiplayer game', () => {
 
     expect(newGame.state.monthNumber).toEqual(3);
     expect(
-      newGame.participants.map(
-        (id) => newGame.state.participantsProgress[id].currentMonthForParticipant
+      newGame.participantsIds.map(
+        (id) => newGame.participants[id].progress.currentMonthForParticipant
       )
     ).toEqual([2, 2]);
 

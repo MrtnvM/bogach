@@ -6,6 +6,7 @@ import { ParticipantAccountsTransformer } from './participant_accounts_transform
 import { Game } from '../../models/domain/game/game';
 import { UserEntity } from '../../models/domain/user/user';
 import { GameFixture } from '../../core/fixtures/game_fixture';
+import { ParticipantFixture } from '../../core/fixtures/participant_fixture';
 
 const userId: UserEntity.Id = 'user1';
 
@@ -42,7 +43,7 @@ describe('Participant Accounts Transformer Tests', () => {
     const accountsStateTransformer = new ParticipantAccountsTransformer();
     const newGameState = accountsStateTransformer.apply(game);
 
-    expect(newGameState.accounts[userId].cashFlow).toStrictEqual(73000);
+    expect(newGameState.participants[userId].account.cashFlow).toStrictEqual(73000);
   });
 
   test('Negative cashflow count', async () => {
@@ -71,7 +72,7 @@ describe('Participant Accounts Transformer Tests', () => {
     const accountsStateTransformer = new ParticipantAccountsTransformer();
     const newGameState = accountsStateTransformer.apply(game);
 
-    expect(newGameState.accounts[userId].cashFlow).toStrictEqual(-19000);
+    expect(newGameState.participants[userId].account.cashFlow).toStrictEqual(-19000);
   });
 
   test('Empty cashflow count', async () => {
@@ -87,7 +88,7 @@ describe('Participant Accounts Transformer Tests', () => {
     const accountsStateTransformer = new ParticipantAccountsTransformer();
     const newGameState = accountsStateTransformer.apply(game);
 
-    expect(newGameState.accounts[userId].cashFlow).toStrictEqual(0);
+    expect(newGameState.participants[userId].account.cashFlow).toStrictEqual(0);
   });
 
   test('Int overflow cashflow count', async () => {
@@ -116,7 +117,7 @@ describe('Participant Accounts Transformer Tests', () => {
     const accountsStateTransformer = new ParticipantAccountsTransformer();
     const newGameState = accountsStateTransformer.apply(game);
 
-    expect(newGameState.accounts[userId].cashFlow).toStrictEqual(-1000000000000000);
+    expect(newGameState.participants[userId].account.cashFlow).toStrictEqual(-1000000000000000);
   });
 
   test('Empty expenses cashflow count', async () => {
@@ -139,7 +140,7 @@ describe('Participant Accounts Transformer Tests', () => {
     const accountsStateTransformer = new ParticipantAccountsTransformer();
     const newGameState = accountsStateTransformer.apply(game);
 
-    expect(newGameState.accounts[userId].cashFlow).toStrictEqual(1000);
+    expect(newGameState.participants[userId].account.cashFlow).toStrictEqual(1000);
   });
 
   test('Empty incomes cashflow count', async () => {
@@ -161,7 +162,7 @@ describe('Participant Accounts Transformer Tests', () => {
     const accountsStateTransformer = new ParticipantAccountsTransformer();
     const newGameState = accountsStateTransformer.apply(game);
 
-    expect(newGameState.accounts[userId].cashFlow).toStrictEqual(-1000);
+    expect(newGameState.participants[userId].account.cashFlow).toStrictEqual(-1000);
   });
 });
 
@@ -175,15 +176,13 @@ function buildGameEntity(possessionState: PossessionState) {
 
   const game: Game = GameFixture.createGame({
     id: 'game1',
-    participants: [userId],
-    possessions: {
-      [userId]: initialPossesssions,
-    },
-    possessionState: {
-      [userId]: possessionState,
-    },
-    accounts: {
-      [userId]: { cashFlow: 10000, cash: 10000, credit: 0 },
+    participants: {
+      [userId]: ParticipantFixture.createParticipant({
+        id: userId,
+        possessions: initialPossesssions,
+        possessionState,
+        account: { cashFlow: 10000, cash: 10000, credit: 0 },
+      }),
     },
   });
 
