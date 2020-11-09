@@ -1,6 +1,8 @@
 import 'package:cash_flow/features/game/actions/on_game_state_changed_action.dart';
+import 'package:cash_flow/models/domain/game/account/account.dart';
 import 'package:cash_flow/models/domain/game/participant/participant.dart';
 import 'package:cash_flow/models/domain/game/participant/participant_progress.dart';
+import 'package:cash_flow/models/domain/game/possession_state/possession_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -9,6 +11,19 @@ void main() {
   const anotherUser2 = 'another_user_2';
   const anotherUser3 = 'another_user_3';
   const anotherUser4 = 'another_user_4';
+
+  final emptyPossessionState = PossessionState(
+    incomes: [],
+    expenses: [],
+    assets: [],
+    liabilities: [],
+  );
+
+  final defaultAccount = Account(
+    cash: 10000,
+    cashFlow: 5000,
+    credit: 0,
+  );
 
   test('Should not wait participants that already reach month result', () {
     final participantsProgress = {
@@ -21,8 +36,8 @@ void main() {
           monthResults: [],
           progress: 0,
         ),
-        possessionState: null,
-        account: null,
+        possessionState: emptyPossessionState,
+        account: defaultAccount,
       ),
       anotherUser1: Participant(
         id: anotherUser1,
@@ -33,8 +48,8 @@ void main() {
           monthResults: [],
           progress: 0,
         ),
-        possessionState: null,
-        account: null,
+        possessionState: emptyPossessionState,
+        account: defaultAccount,
       ),
     };
 
@@ -57,8 +72,8 @@ void main() {
           monthResults: [],
           progress: 0,
         ),
-        possessionState: null,
-        account: null,
+        possessionState: emptyPossessionState,
+        account: defaultAccount,
       ),
       anotherUser1: Participant(
         id: anotherUser1,
@@ -69,8 +84,8 @@ void main() {
           monthResults: [],
           progress: 0,
         ),
-        possessionState: null,
-        account: null,
+        possessionState: emptyPossessionState,
+        account: defaultAccount,
       ),
     };
 
@@ -93,8 +108,8 @@ void main() {
           monthResults: [],
           progress: 0,
         ),
-        possessionState: null,
-        account: null,
+        possessionState: emptyPossessionState,
+        account: defaultAccount,
       ),
       anotherUser1: Participant(
         id: anotherUser1,
@@ -105,8 +120,8 @@ void main() {
           monthResults: [],
           progress: 0,
         ),
-        possessionState: null,
-        account: null,
+        possessionState: emptyPossessionState,
+        account: defaultAccount,
       ),
       anotherUser2: Participant(
         id: anotherUser2,
@@ -117,8 +132,8 @@ void main() {
           monthResults: [],
           progress: 0,
         ),
-        possessionState: null,
-        account: null,
+        possessionState: emptyPossessionState,
+        account: defaultAccount,
       ),
       anotherUser3: Participant(
         id: anotherUser3,
@@ -129,8 +144,8 @@ void main() {
           monthResults: [],
           progress: 0,
         ),
-        possessionState: null,
-        account: null,
+        possessionState: emptyPossessionState,
+        account: defaultAccount,
       ),
       anotherUser4: Participant(
         id: anotherUser4,
@@ -141,8 +156,8 @@ void main() {
           monthResults: [],
           progress: 0,
         ),
-        possessionState: null,
-        account: null,
+        possessionState: emptyPossessionState,
+        account: defaultAccount,
       ),
     };
 
@@ -165,8 +180,8 @@ void main() {
           monthResults: [],
           progress: 0,
         ),
-        possessionState: null,
-        account: null,
+        possessionState: emptyPossessionState,
+        account: defaultAccount,
       ),
       anotherUser1: Participant(
         id: anotherUser1,
@@ -177,8 +192,8 @@ void main() {
           monthResults: [],
           progress: 0,
         ),
-        possessionState: null,
-        account: null,
+        possessionState: emptyPossessionState,
+        account: defaultAccount,
       ),
       anotherUser2: Participant(
         id: anotherUser2,
@@ -189,8 +204,8 @@ void main() {
           monthResults: [],
           progress: 0,
         ),
-        possessionState: null,
-        account: null,
+        possessionState: emptyPossessionState,
+        account: defaultAccount,
       ),
     };
 
