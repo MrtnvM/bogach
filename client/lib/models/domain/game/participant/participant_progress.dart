@@ -1,4 +1,4 @@
-import 'package:cash_flow/models/domain/game/current_game_state/month_result.dart';
+import 'package:cash_flow/models/domain/game/participant/month_result.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'participant_progress.freezed.dart';

@@ -7,12 +7,12 @@ import 'package:cash_flow/features/game/actions/on_game_error.dart';
 import 'package:cash_flow/features/game/actions/on_game_state_changed_action.dart';
 import 'package:cash_flow/features/game/actions/set_game_context.dart';
 import 'package:cash_flow/features/game/actions/set_game_participants_profiles_action.dart';
-import 'package:get_it/get_it.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/user_service.dart';
+import 'package:get_it/get_it.dart';
+import 'package:rxdart/rxdart.dart';
 
 class StartGameAction extends BaseAction {
   StartGameAction(this.gameContext) : assert(gameContext != null);
@@ -36,7 +36,7 @@ class StartGameAction extends BaseAction {
     final userProfiles = gameService
         .getGame(gameContext)
         .take(1)
-        .asyncMap((game) => userService.loadProfiles(game.participants))
+        .asyncMap((game) => userService.loadProfiles(game.participantsIds))
         .map<BaseAction>(
           (profiles) => SetGameParticipantsProfilesAction(profiles),
         )

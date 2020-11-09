@@ -39,13 +39,13 @@ String mapTargetTypeToString(TargetType type) {
 double mapGameToCurrentTargetValue(Game game, String userId) {
   switch (game.target.type) {
     case TargetType.cash:
-      return game.accounts[userId].cash;
+      return game.participants[userId].account.cash;
 
     case TargetType.passiveIncome:
-      final totalIncome = game.possessionState[userId].incomes
+      final totalIncome = game.participants[userId].possessionState.incomes
           .fold<double>(0.0, (sum, i) => sum + i.value);
 
-      final salary = game.possessionState[userId].incomes
+      final salary = game.participants[userId].possessionState.incomes
           .where((i) => i.type == IncomeType.salary)
           .fold<double>(0.0, (sum, i) => sum + i.value);
 

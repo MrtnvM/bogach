@@ -1,5 +1,6 @@
 import 'package:cash_flow/features/game/actions/on_game_state_changed_action.dart';
-import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
+import 'package:cash_flow/models/domain/game/participant/participant.dart';
+import 'package:cash_flow/models/domain/game/participant/participant_progress.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -11,19 +12,29 @@ void main() {
 
   test('Should not wait participants that already reach month result', () {
     final participantsProgress = {
-      currentUser: ParticipantProgress(
-        currentEventIndex: 0,
-        status: ParticipantProgressStatus.playerMove,
-        currentMonthForParticipant: 1,
-        monthResults: [],
-        progress: 0,
+      currentUser: Participant(
+        id: currentUser,
+        progress: ParticipantProgress(
+          currentEventIndex: 0,
+          status: ParticipantProgressStatus.playerMove,
+          currentMonthForParticipant: 1,
+          monthResults: [],
+          progress: 0,
+        ),
+        possessionState: null,
+        account: null,
       ),
-      anotherUser1: ParticipantProgress(
-        currentEventIndex: 5,
-        status: ParticipantProgressStatus.monthResult,
-        currentMonthForParticipant: 1,
-        monthResults: [],
-        progress: 0,
+      anotherUser1: Participant(
+        id: anotherUser1,
+        progress: ParticipantProgress(
+          currentEventIndex: 5,
+          status: ParticipantProgressStatus.monthResult,
+          currentMonthForParticipant: 1,
+          monthResults: [],
+          progress: 0,
+        ),
+        possessionState: null,
+        account: null,
       ),
     };
 
@@ -36,26 +47,36 @@ void main() {
   });
 
   test('Should wait participants that does not reach month result', () {
-    final participantsProgress = {
-      currentUser: ParticipantProgress(
-        currentEventIndex: 5,
-        status: ParticipantProgressStatus.monthResult,
-        currentMonthForParticipant: 1,
-        monthResults: [],
-        progress: 0,
+    final participants = {
+      currentUser: Participant(
+        id: currentUser,
+        progress: ParticipantProgress(
+          currentEventIndex: 5,
+          status: ParticipantProgressStatus.monthResult,
+          currentMonthForParticipant: 1,
+          monthResults: [],
+          progress: 0,
+        ),
+        possessionState: null,
+        account: null,
       ),
-      anotherUser1: ParticipantProgress(
-        currentEventIndex: 4,
-        status: ParticipantProgressStatus.playerMove,
-        currentMonthForParticipant: 1,
-        monthResults: [],
-        progress: 0,
+      anotherUser1: Participant(
+        id: anotherUser1,
+        progress: ParticipantProgress(
+          currentEventIndex: 4,
+          status: ParticipantProgressStatus.playerMove,
+          currentMonthForParticipant: 1,
+          monthResults: [],
+          progress: 0,
+        ),
+        possessionState: null,
+        account: null,
       ),
     };
 
     final participantsForWaiting = getParticipantIdsForWaiting(
       currentUser,
-      participantsProgress,
+      participants,
     );
 
     expect(participantsForWaiting, [anotherUser1]);
@@ -63,40 +84,65 @@ void main() {
 
   test('Should also wait participants that does not reach new month', () {
     final participantsProgress = {
-      currentUser: ParticipantProgress(
-        currentEventIndex: 5,
-        status: ParticipantProgressStatus.monthResult,
-        currentMonthForParticipant: 2,
-        monthResults: [],
-        progress: 0,
+      currentUser: Participant(
+        id: currentUser,
+        progress: ParticipantProgress(
+          currentEventIndex: 5,
+          status: ParticipantProgressStatus.monthResult,
+          currentMonthForParticipant: 2,
+          monthResults: [],
+          progress: 0,
+        ),
+        possessionState: null,
+        account: null,
       ),
-      anotherUser1: ParticipantProgress(
-        currentEventIndex: 4,
-        status: ParticipantProgressStatus.playerMove,
-        currentMonthForParticipant: 1,
-        monthResults: [],
-        progress: 0,
+      anotherUser1: Participant(
+        id: anotherUser1,
+        progress: ParticipantProgress(
+          currentEventIndex: 4,
+          status: ParticipantProgressStatus.playerMove,
+          currentMonthForParticipant: 1,
+          monthResults: [],
+          progress: 0,
+        ),
+        possessionState: null,
+        account: null,
       ),
-      anotherUser2: ParticipantProgress(
-        currentEventIndex: 5,
-        status: ParticipantProgressStatus.monthResult,
-        currentMonthForParticipant: 1,
-        monthResults: [],
-        progress: 0,
+      anotherUser2: Participant(
+        id: anotherUser2,
+        progress: ParticipantProgress(
+          currentEventIndex: 5,
+          status: ParticipantProgressStatus.monthResult,
+          currentMonthForParticipant: 1,
+          monthResults: [],
+          progress: 0,
+        ),
+        possessionState: null,
+        account: null,
       ),
-      anotherUser3: ParticipantProgress(
-        currentEventIndex: 2,
-        status: ParticipantProgressStatus.playerMove,
-        currentMonthForParticipant: 2,
-        monthResults: [],
-        progress: 0,
+      anotherUser3: Participant(
+        id: anotherUser3,
+        progress: ParticipantProgress(
+          currentEventIndex: 2,
+          status: ParticipantProgressStatus.playerMove,
+          currentMonthForParticipant: 2,
+          monthResults: [],
+          progress: 0,
+        ),
+        possessionState: null,
+        account: null,
       ),
-      anotherUser4: ParticipantProgress(
-        currentEventIndex: 5,
-        status: ParticipantProgressStatus.monthResult,
-        currentMonthForParticipant: 2,
-        monthResults: [],
-        progress: 0,
+      anotherUser4: Participant(
+        id: anotherUser4,
+        progress: ParticipantProgress(
+          currentEventIndex: 5,
+          status: ParticipantProgressStatus.monthResult,
+          currentMonthForParticipant: 2,
+          monthResults: [],
+          progress: 0,
+        ),
+        possessionState: null,
+        account: null,
       ),
     };
 
@@ -110,26 +156,41 @@ void main() {
 
   test('Should not wait participants that already reach new month', () {
     final participantsProgress = {
-      currentUser: ParticipantProgress(
-        currentEventIndex: 5,
-        status: ParticipantProgressStatus.monthResult,
-        currentMonthForParticipant: 1,
-        monthResults: [],
-        progress: 0,
+      currentUser: Participant(
+        id: currentUser,
+        progress: ParticipantProgress(
+          currentEventIndex: 5,
+          status: ParticipantProgressStatus.monthResult,
+          currentMonthForParticipant: 1,
+          monthResults: [],
+          progress: 0,
+        ),
+        possessionState: null,
+        account: null,
       ),
-      anotherUser1: ParticipantProgress(
-        currentEventIndex: 4,
-        status: ParticipantProgressStatus.playerMove,
-        currentMonthForParticipant: 2,
-        monthResults: [],
-        progress: 0,
+      anotherUser1: Participant(
+        id: anotherUser1,
+        progress: ParticipantProgress(
+          currentEventIndex: 4,
+          status: ParticipantProgressStatus.playerMove,
+          currentMonthForParticipant: 2,
+          monthResults: [],
+          progress: 0,
+        ),
+        possessionState: null,
+        account: null,
       ),
-      anotherUser2: ParticipantProgress(
-        currentEventIndex: 5,
-        status: ParticipantProgressStatus.monthResult,
-        currentMonthForParticipant: 1,
-        monthResults: [],
-        progress: 0,
+      anotherUser2: Participant(
+        id: anotherUser2,
+        progress: ParticipantProgress(
+          currentEventIndex: 5,
+          status: ParticipantProgressStatus.monthResult,
+          currentMonthForParticipant: 1,
+          monthResults: [],
+          progress: 0,
+        ),
+        possessionState: null,
+        account: null,
       ),
     };
 

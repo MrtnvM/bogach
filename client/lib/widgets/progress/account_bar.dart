@@ -15,7 +15,7 @@ class AccountBar extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final userId = useUserId();
-    final account = useCurrentGame((g) => g.accounts[userId]);
+    final account = useCurrentGame((g) => g.participants[userId].account);
     final gameboardTutorial = useGameboardTutorial();
 
     return Container(

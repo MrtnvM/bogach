@@ -1,6 +1,6 @@
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
-import 'package:cash_flow/models/domain/game/current_game_state/month_result.dart';
+import 'package:cash_flow/models/domain/game/participant/month_result.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/table_divider.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -19,7 +19,7 @@ class MonthResultCard extends HookWidget {
     final userId = useUserId();
     final month = useCurrentGame((g) => g.state.monthNumber);
     final monthResults = useCurrentGame(
-      (g) => g.state.participantsProgress[userId].monthResults,
+      (g) => g.participants[userId].progress.monthResults,
     );
     final calculateChange = useMonthChangeCalculator();
 
@@ -189,7 +189,7 @@ double Function(double Function(MonthResult)) useMonthChangeCalculator() {
   final userId = useUserId();
   final month = useCurrentGame((g) => g.state.monthNumber);
   final monthResults = useCurrentGame(
-    (g) => g.state.participantsProgress[userId].monthResults,
+    (g) => g.participants[userId].progress.monthResults,
   );
 
   final previousResults = monthResults[month - 2];

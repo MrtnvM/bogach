@@ -22,7 +22,7 @@ class WinnersPage extends HookWidget {
   Widget build(BuildContext context) {
     final userId = useUserId();
     final isWin = useCurrentGame((g) {
-      final participantProgress = g.state.participantsProgress[userId];
+      final participantProgress = g.participants[userId].progress;
       return participantProgress.progress >= 1;
     });
     final isMultiplayer = useCurrentGame(
@@ -176,7 +176,7 @@ class _PlayerResultTable extends HookWidget {
     final participants = useGlobalState((g) {
       final game = g.game.currentGame;
       final userProfiles = g.multiplayer.userProfiles;
-      final participants = game.participants //
+      final participants = game.participantsIds //
           .map((id) => userProfiles.itemsMap[id])
           .toList();
 
