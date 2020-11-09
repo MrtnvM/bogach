@@ -16,9 +16,10 @@ export namespace ExpenseEntity {
     entity.hasValue('value');
 
     entity.check((e) => {
-      if (e.value <= 0) {
-        return 'Expense cannot be equal or lower than 0';
-      }
+      // TODO: Restore when will be implemented decreasing liability for business
+      // if (e.value <= 0) {
+      //   return 'Expense cannot be equal or lower than 0';
+      // }
 
       return undefined;
     });
