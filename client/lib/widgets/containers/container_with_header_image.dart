@@ -98,7 +98,10 @@ class ContainerWithHeaderImage extends HookWidget {
         ),
         if (isLoading == true) _buildActivityIndicator(contentOffset),
         NavigationBar(opacity: opacity.value),
-        const StatusBarBackground(),
+        StatusBarBackground(
+          scrollOffset:
+              scrollController.hasClients ? scrollController.offset : 0,
+        ),
       ],
     );
   }
