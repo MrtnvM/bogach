@@ -38,9 +38,9 @@ export class ExpenseHandler extends PlayerActionHandler {
   async handle(game: Game, event: Event, action: Action, userId: UserEntity.Id): Promise<Game> {
     const { expense, insuranceType } = event.data;
 
-    const userAccount = game.accounts[userId];
+    const userAccount = game.participants[userId].account;
 
-    const assets = game.possessions[userId].assets || [];
+    const assets = game.participants[userId].possessions.assets || [];
 
     let insurancesValue = 0;
     if (insuranceType !== null) {
@@ -64,7 +64,8 @@ export class ExpenseHandler extends PlayerActionHandler {
     const actionResult = this.applyAction(actionParameters);
 
     const updatedGame: Game = produce(game, (draft) => {
-      draft.accounts[userId].cash = actionResult.newAccountBalance;
+      const participant = draft.participants[userId];
+      participant.account.cash = actionResult.newAccountBalance;
     });
 
     return updatedGame;

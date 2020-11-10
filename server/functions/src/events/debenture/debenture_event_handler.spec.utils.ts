@@ -5,6 +5,7 @@ import { Possessions } from '../../models/domain/possessions';
 import { GameEventEntity } from '../../models/domain/game/game_event';
 import { DebentureEvent } from './debenture_event';
 import { GameFixture } from '../../core/fixtures/game_fixture';
+import { ParticipantFixture } from '../../core/fixtures/participant_fixture';
 
 const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
@@ -23,7 +24,7 @@ const debenture1 = create<DebentureAsset>({
   nominal: 1000,
 });
 
-const initialPossesssions: Possessions = {
+const initialPossessions: Possessions = {
   incomes: [],
   expenses: [],
   assets: [debenture1],
@@ -32,12 +33,12 @@ const initialPossesssions: Possessions = {
 
 const game: Game = GameFixture.createGame({
   id: gameId,
-  participants: [userId],
-  possessions: {
-    [userId]: initialPossesssions,
-  },
-  accounts: {
-    [userId]: { cashFlow: 10000, cash: initialCash, credit: 0 },
+  participants: {
+    [userId]: ParticipantFixture.createParticipant({
+      id: userId,
+      possessions: initialPossessions,
+      account: { cashFlow: 10000, cash: initialCash, credit: 0 },
+    }),
   },
 });
 

@@ -4,8 +4,9 @@ import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
-import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
+import 'package:cash_flow/models/domain/game/participant/participant.dart';
+import 'package:cash_flow/models/domain/game/participant/participant_progress.dart';
 
 class OnGameStateChangedAction extends BaseAction {
   OnGameStateChangedAction(this.game);
@@ -19,12 +20,12 @@ class OnGameStateChangedAction extends BaseAction {
 
       if (game.state.gameStatus == GameStatus.playersMove) {
         final userId = s.game.currentGameContext.userId;
-        final progress = game.state.participantsProgress[userId];
+        final progress = game.participants[userId].progress;
 
         if (progress.status == ParticipantProgressStatus.monthResult) {
           final waitingPlayerList = getParticipantIdsForWaiting(
             userId,
-            game.state.participantsProgress,
+            game.participants,
           );
 
           newActiveGameState = waitingPlayerList.isEmpty
@@ -64,15 +65,15 @@ class OnGameStateChangedAction extends BaseAction {
 
 List<String> getParticipantIdsForWaiting(
   String myUserId,
-  Map<String, ParticipantProgress> participantsProgress,
+  Map<String, Participant> participants,
 ) {
-  final progress = participantsProgress[myUserId];
+  final progress = participants[myUserId].progress;
   final myCurrentMonth = progress.currentMonthForParticipant;
 
-  final waitingPlayerList = participantsProgress.entries
-      .where((entry) => entry.key != myUserId)
+  final waitingPlayerList = participants.entries
+      .where((entry) => entry.value.id != myUserId)
       .where((entry) {
-        final progress = entry.value;
+        final progress = entry.value.progress;
         final participantMonth = progress.currentMonthForParticipant;
 
         final isMoving = participantMonth == myCurrentMonth &&

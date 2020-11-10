@@ -26,7 +26,8 @@ describe('Income event handler', () => {
     const newGame = await handler.handle(game, event, action, userId);
 
     const expectedGame = produce(game, (draft) => {
-      draft.accounts[userId].cash = initialCash + 1100;
+      const participant = draft.participants[userId];
+      participant.account.cash = initialCash + 1100;
     });
 
     expect(newGame).toStrictEqual(expectedGame);

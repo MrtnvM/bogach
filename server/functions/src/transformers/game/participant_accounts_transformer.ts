@@ -10,37 +10,37 @@ export class ParticipantAccountsTransformer extends GameTransformer {
 
     const isMoveCompleted = this.isAllParticipantsCompletedMove(game);
 
-    const updatedCashFlowAccounts = produce(game.accounts, (draft) => {
-      game.participants.forEach((participantId) => {
-        const participantAccount = draft[participantId];
+    const updatedCashFlowAccountsParticipants = produce(game.participants, (draft) => {
+      game.participantsIds.forEach((participantId) => {
+        const { account, possessionState } = draft[participantId];
 
-        const incomes = game.possessionState[participantId].incomes
+        const incomes = possessionState.incomes
           .map((item) => item.value)
           .reduce((previous, current) => previous + current, 0);
 
-        const expenses = game.possessionState[participantId].expenses
+        const expenses = possessionState.expenses
           .map((item) => item.value)
           .reduce((previous, current) => previous + current, 0);
 
-        participantAccount.cashFlow = incomes - expenses;
+        account.cashFlow = incomes - expenses;
       });
     });
 
     if (!isMoveCompleted) {
       return produce(game, (draft) => {
-        draft.accounts = updatedCashFlowAccounts;
+        draft.participants = updatedCashFlowAccountsParticipants;
       });
     }
 
-    const accounts = produce(updatedCashFlowAccounts, (draft) => {
-      game.participants.forEach((participantId) => {
-        const participantAccount = draft[participantId];
+    const participants = produce(updatedCashFlowAccountsParticipants, (draft) => {
+      game.participantsIds.forEach((participantId) => {
+        const participantAccount = draft[participantId].account;
         participantAccount.cash += participantAccount.cashFlow;
       });
     });
 
     return produce(game, (draft) => {
-      draft.accounts = accounts;
+      draft.participants = participants;
     });
   }
 }

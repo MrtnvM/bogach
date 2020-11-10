@@ -28,7 +28,8 @@ export class SalaryChangeEventHandler extends PlayerActionHandler {
     const { value } = event.data;
 
     const updatedGame: Game = produce(game, (draft) => {
-      const incomes = draft.possessions[userId].incomes;
+      const participant = draft.participants[userId];
+      const incomes = participant.possessions.incomes;
       const salaryIncomeIndex = incomes.findIndex((i) => i.type === 'salary');
 
       if (salaryIncomeIndex < 0) {

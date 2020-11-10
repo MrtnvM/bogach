@@ -2,12 +2,13 @@ import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
 import 'package:cash_flow/models/domain/game/account/account.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
-import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game/type/game_type.dart';
 import 'package:cash_flow/models/domain/game/game_config/game_config.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event_type.dart';
+import 'package:cash_flow/models/domain/game/participant/participant.dart';
+import 'package:cash_flow/models/domain/game/participant/participant_progress.dart';
 import 'package:cash_flow/models/domain/game/possession_state/possession_state.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
@@ -58,28 +59,27 @@ class _TutorialPageState extends State<TutorialPage> {
             gameStatus: GameStatus.playersMove,
             moveStartDateInUTC: DateTime.now(),
             monthNumber: 1,
-            participantsProgress: {
-              userId: ParticipantProgress(
+            winners: [],
+          ),
+          participantsIds: [userId],
+          participants: {
+            userId: Participant(
+              id: userId,
+              progress: ParticipantProgress(
                 currentEventIndex: 0,
                 currentMonthForParticipant: 1,
                 status: ParticipantProgressStatus.playerMove,
                 monthResults: [],
                 progress: 0.1,
               ),
-            },
-            winners: [],
-          ),
-          participants: [userId],
-          possessionState: {
-            userId: PossessionState(
-              incomes: [],
-              expenses: [],
-              assets: [],
-              liabilities: [],
-            ),
-          },
-          accounts: {
-            userId: Account(cashFlow: 10000, cash: 20000, credit: 5000)
+              possessionState: PossessionState(
+                incomes: [],
+                expenses: [],
+                assets: [],
+                liabilities: [],
+              ),
+              account: Account(cashFlow: 10000, cash: 20000, credit: 5000),
+            )
           },
           target: Target(type: TargetType.cash, value: 1000000),
           currentEvents: [

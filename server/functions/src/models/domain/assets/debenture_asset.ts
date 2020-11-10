@@ -36,7 +36,7 @@ export namespace DebentureAssetEntity {
 
     return {
       id: asset.id || null,
-      name: Strings.debetures(),
+      name: Strings.debentures(),
       value: getIncomeValue(asset),
       type: 'investment',
     };

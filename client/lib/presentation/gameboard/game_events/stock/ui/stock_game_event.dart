@@ -37,7 +37,7 @@ class StockGameEvent extends HookWidget {
     );
 
     final userId = useUserId();
-    final cash = useCurrentGame((g) => g.accounts[userId].cash);
+    final cash = useCurrentGame((g) => g.participants[userId].account.cash);
     final alreadyHaveCount = useCurrentStock(event)?.countInPortfolio ?? 0;
 
     final stockDialogInfoModel = useStockInfoDialogModel();

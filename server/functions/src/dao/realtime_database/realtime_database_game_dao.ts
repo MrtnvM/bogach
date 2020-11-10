@@ -3,6 +3,7 @@ import { IGameDAO } from '../game_dao';
 import { Game, GameEntity } from '../../models/domain/game/game';
 import { RealtimeDatabase } from '../../core/firebase/realtime_database';
 import { RealtimeDatabaseRefs } from './realtime_database_refs';
+import { UserEntity } from '../../models/domain/user/user';
 
 export class RealtimeDatabaseGameDAO implements IGameDAO {
   constructor(private refs: RealtimeDatabaseRefs, private db: RealtimeDatabase) {}
@@ -22,14 +23,14 @@ export class RealtimeDatabaseGameDAO implements IGameDAO {
         m.events = m.events || [];
       });
 
-      draft.participants.forEach((participantId) => {
-        const possessionState = draft.possessionState[participantId];
+      draft.participantsIds.forEach((participantId) => {
+        const possessionState = draft.participants[participantId].possessionState;
         possessionState.incomes = possessionState.incomes || [];
         possessionState.expenses = possessionState.expenses || [];
         possessionState.assets = possessionState.assets || [];
         possessionState.liabilities = possessionState.liabilities || [];
 
-        const possessions = draft.possessions[participantId];
+        const possessions = draft.participants[participantId].possessions;
         possessions.incomes = possessions.incomes || [];
         possessions.expenses = possessions.expenses || [];
         possessions.assets = possessions.assets || [];
@@ -56,6 +57,24 @@ export class RealtimeDatabaseGameDAO implements IGameDAO {
 
     GameEntity.validate(updatedGame);
     return updatedGame as Game;
+  }
+
+  async updateGameWithoutParticipants(game: Game): Promise<void> {
+    GameEntity.validate(game);
+
+    const newGame = { ...game, participants: undefined };
+    delete newGame.participants;
+
+    const selector = this.refs.game(newGame.id);
+    await this.db.updateItem(selector, newGame);
+  }
+
+  async updateParticipant(game: Game, userId: UserEntity.Id): Promise<void> {
+    GameEntity.validate(game);
+
+    const participant = game.participants[userId];
+    const participantRef = this.refs.gameParticipant(userId, game.id);
+    await this.db.updateItem(participantRef, participant);
   }
 
   async deleteGame(gameId: string): Promise<void> {

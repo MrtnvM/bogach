@@ -31,6 +31,14 @@ export class FirestoreGameDAO implements IGameDAO {
     return updatedGame as Game;
   }
 
+  updateGameWithoutParticipants(game: Game): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  updateParticipant(game: Game, userId: string): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
   async deleteGame(gameId: string): Promise<void> {
     const selector = this.selector.game(gameId);
     await this.firestore.removeItem(selector);

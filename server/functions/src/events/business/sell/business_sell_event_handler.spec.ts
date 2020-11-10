@@ -27,18 +27,16 @@ describe('Business sell event handler', () => {
     const newGame = await handler.handle(game, event, action, userId);
 
     const expectedGame = produce(game, (draft) => {
-      const businessAssetIndex = draft.possessions[userId].assets.findIndex(
-        (business) => business.id === event.data.businessId
-      );
+      const participant = draft.participants[userId];
+      const { assets, liabilities } = participant.possessions;
 
-      draft.possessions[userId].assets.splice(businessAssetIndex, 1);
+      const businessAssetIndex = assets.findIndex((a) => a.id === event.data.businessId);
+      assets.splice(businessAssetIndex, 1);
 
-      const liabilityIndex = draft.possessions[userId].liabilities.findIndex(
-        (liability) => liability.id === event.data.businessId
-      );
-      draft.possessions[userId].liabilities.splice(liabilityIndex, 1);
+      const liabilityIndex = liabilities.findIndex((l) => l.id === event.data.businessId);
+      liabilities.splice(liabilityIndex, 1);
 
-      draft.accounts[userId].cash = initialCash + 41_000;
+      participant.account.cash = initialCash + 41_000;
     });
 
     expect(newGame).toStrictEqual(expectedGame);
@@ -58,18 +56,16 @@ describe('Business sell event handler', () => {
     const newGame = await handler.handle(game, event, action, userId);
 
     const expectedGame = produce(game, (draft) => {
-      const businessAssetIndex = draft.possessions[userId].assets.findIndex(
-        (b) => b.id === event.data.businessId
-      );
+      const participant = draft.participants[userId];
+      const { assets, liabilities } = participant.possessions;
 
-      draft.possessions[userId].assets.splice(businessAssetIndex, 1);
+      const businessAssetIndex = assets.findIndex((a) => a.id === event.data.businessId);
+      assets.splice(businessAssetIndex, 1);
 
-      const businessLiabilityIndex = draft.possessions[userId].liabilities.findIndex(
-        (b) => b.id === event.data.businessId
-      );
-      draft.possessions[userId].liabilities.splice(businessLiabilityIndex, 1);
+      const businessLiabilityIndex = liabilities.findIndex((l) => l.id === event.data.businessId);
+      liabilities.splice(businessLiabilityIndex, 1);
 
-      draft.accounts[userId].cash = initialCash - 10_000;
+      participant.account.cash = initialCash - 10_000;
     });
 
     expect(newGame).toStrictEqual(expectedGame);
@@ -90,7 +86,7 @@ describe('Business sell event handler', () => {
 
     try {
       await handler.handle(game, event, action, userId);
-      throw new Error('Shoud fail on previous line');
+      throw new Error('Should fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(new Error('Can not find business with id random id'));
     }
@@ -111,7 +107,7 @@ describe('Business sell event handler', () => {
 
     try {
       await handler.handle(game, event, action, userId);
-      throw new Error('Shoud fail on previous line');
+      throw new Error('Should fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(new Error('Can not find liability with id id3'));
     }
@@ -132,7 +128,7 @@ describe('Business sell event handler', () => {
 
     try {
       await handler.handle(game, event, action, userId);
-      throw new Error('Shoud fail on previous line');
+      throw new Error('Should fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(
         new Error('Error action type when dispatching buy in ' + BusinessSellEventHandler.name)

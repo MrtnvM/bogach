@@ -5,6 +5,7 @@ import { InsuranceAsset } from '../../models/domain/assets/insurance_asset';
 import { Possessions } from '../../models/domain/possessions';
 import { BusinessSellEvent } from '../../events/business/sell/business_sell_event';
 import { GameFixture } from '../../core/fixtures/game_fixture';
+import { ParticipantFixture } from '../../core/fixtures/participant_fixture';
 
 const gameId: GameEntity.Id = 'game1';
 const userId: UserEntity.Id = 'user1';
@@ -14,7 +15,7 @@ const create = <T>(obj: T) => obj;
 
 const businessSellEvent = create<BusinessSellEvent.Event>({
   id: 'id1',
-  name: 'Предожение продать химчистку',
+  name: 'Предложение продать химчистку',
   type: 'business-sell-event',
   description: 'description',
   data: {
@@ -59,7 +60,7 @@ const business3 = create<BusinessAsset>({
   sellProbability: 100,
 });
 
-const initialPossesssions: Possessions = {
+const initialPossessions: Possessions = {
   incomes: [],
   expenses: [],
   assets: [
@@ -82,12 +83,12 @@ const initialPossesssions: Possessions = {
 
 const game: Game = GameFixture.createGame({
   id: gameId,
-  participants: [userId],
-  possessions: {
-    [userId]: initialPossesssions,
-  },
-  accounts: {
-    [userId]: { cashFlow: 10_000, cash: initialCash, credit: 0 },
+  participants: {
+    [userId]: ParticipantFixture.createParticipant({
+      id: userId,
+      possessions: initialPossessions,
+      account: { cashFlow: 10_000, cash: initialCash, credit: 0 },
+    }),
   },
 });
 

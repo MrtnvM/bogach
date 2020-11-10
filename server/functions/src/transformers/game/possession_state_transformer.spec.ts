@@ -18,7 +18,7 @@ describe('Possession Service Tests', () => {
   const create = <T>(obj: T) => obj;
 
   test('Generation of possession state', async () => {
-    const initialPossesssions: Possessions = {
+    const initialPossessions: Possessions = {
       incomes: [
         {
           id: 'income1',
@@ -113,7 +113,7 @@ describe('Possession Service Tests', () => {
           monthlyPayment: 20000,
         }),
         create<OtherLiability>({
-          id: 'other_libility1',
+          id: 'other_liability1',
           name: 'Долг другу',
           type: 'other',
           value: 5000,
@@ -131,7 +131,7 @@ describe('Possession Service Tests', () => {
 
     const possessionStateTransformer = new PossessionStateTransformer();
     const newPossessionState = possessionStateTransformer.generatePossessionState(
-      initialPossesssions
+      initialPossessions
     );
 
     const expectedPossessionState: PossessionState = {
@@ -179,7 +179,7 @@ describe('Possession Service Tests', () => {
           value: 20_000,
         },
         {
-          id: 'other_libility1',
+          id: 'other_liability1',
           name: 'Долг другу',
           value: 500,
         },
@@ -262,7 +262,7 @@ describe('Possession Service Tests', () => {
           monthlyPayment: 20_000,
         }),
         create<OtherLiability>({
-          id: 'other_libility1',
+          id: 'other_liability1',
           name: 'Долг другу',
           type: 'other',
           value: 5_000,

@@ -33,7 +33,7 @@ export namespace ExpenseGeneratorConfig {
     },
     {
       name: 'Проблемы с имуществом',
-      description: 'Срочно нужны деньги на ремонт комьютера',
+      description: 'Срочно нужны деньги на ремонт компьютера',
       insuranceType: 'property',
       range: { min: 1000, max: 4000, stepValue: 500 },
     },

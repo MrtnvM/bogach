@@ -8,10 +8,10 @@ import { Possessions } from '../../models/domain/possessions';
 export class BusinessSellEventProvider {
   generateBusinessSellEvent(game: Game): BusinessSellEvent.Event[] {
     let businessSellEvents: BusinessSellEvent.Event[] = [];
-    const participants = game.participants;
+    const participants = game.participantsIds;
 
-    participants.forEach((participant) => {
-      const possessions = game.possessions[participant];
+    participants.forEach((participantId) => {
+      const possessions = game.participants[participantId].possessions;
       const businessSellEventForUser = this.generateEventsForUserPossessions(possessions);
       businessSellEvents = businessSellEvents.concat(businessSellEventForUser);
     });

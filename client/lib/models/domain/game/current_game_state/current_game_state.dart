@@ -1,4 +1,3 @@
-import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/winner.dart';
 import 'package:cash_flow/utils/core/date.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -13,7 +12,6 @@ abstract class CurrentGameState with _$CurrentGameState {
         DateTime moveStartDateInUTC,
     GameStatus gameStatus,
     int monthNumber,
-    Map<String, ParticipantProgress> participantsProgress,
     List<Winner> winners,
   }) = _CurrentGameState;
 

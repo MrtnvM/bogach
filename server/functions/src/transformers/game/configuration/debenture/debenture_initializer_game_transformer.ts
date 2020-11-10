@@ -19,7 +19,7 @@ export class DebentureInitializerGameTransformer extends GameTransformer {
     }
 
     const debentures = [
-      ...DebentureGeneratorConfig.govermentDebenture.nameOptions,
+      ...DebentureGeneratorConfig.governmentDebenture.nameOptions,
       ...DebentureGeneratorConfig.regionalDebenture.nameOptions,
       ...DebentureGeneratorConfig.corporateDebenture.nameOptions,
     ];

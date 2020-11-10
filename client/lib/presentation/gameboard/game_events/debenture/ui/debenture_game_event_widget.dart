@@ -38,7 +38,7 @@ class DebentureGameEventWidget extends HookWidget {
     );
 
     final userId = useUserId();
-    final cash = useCurrentGame((g) => g.accounts[userId].cash);
+    final cash = useCurrentGame((g) => g.participants[userId].account.cash);
 
     final alreadyHave = useCurrentDebenture(event)?.count ?? 0;
     final passiveIncomePerMonth =

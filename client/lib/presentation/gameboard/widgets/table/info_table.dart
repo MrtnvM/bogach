@@ -88,12 +88,12 @@ class InfoTable extends StatelessWidget {
     ];
   }
 
-  SizedBox _buildInfoIcon() {
+  Widget _buildInfoIcon() {
     return SizedBox(
-      width: 16,
-      height: 16,
+      width: 32,
+      height: 32,
       child: IconButton(
-        padding: const EdgeInsets.all(0),
+        padding: const EdgeInsets.all(8),
         iconSize: 16,
         icon: SvgPicture.asset(
           Images.infoIcon,

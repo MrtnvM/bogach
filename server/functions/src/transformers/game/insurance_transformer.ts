@@ -10,13 +10,14 @@ export class InsuranceTransformer extends GameTransformer {
   }
 
   apply(game: Game): Game {
-    const userPossessions = game.possessions[this.userId];
+    const participant = game.participants[this.userId];
+    const userPossessions = participant.possessions;
     const insurances = userPossessions.assets
       .filter((asset) => asset.type === 'insurance')
       .map((asset) => asset as InsuranceAsset);
 
     const expiredInsurances = insurances.filter((insurance) => {
-      const currentMonth = game.state.participantsProgress[this.userId].currentMonthForParticipant;
+      const currentMonth = participant.progress.currentMonthForParticipant;
       return currentMonth - insurance.fromMonth > insurance.duration;
     });
 
@@ -27,7 +28,8 @@ export class InsuranceTransformer extends GameTransformer {
     const newGame = produce(game, (draft) => {
       expiredInsurances.map((expiredInsurance) => {
         console.log('expiredInsurance: ' + expiredInsurance);
-        const assets = draft.possessions[this.userId].assets;
+
+        const assets = draft.participants[this.userId].possessions.assets;
         const index = assets.findIndex((asset) => asset.id === expiredInsurance.id);
 
         if (index !== -1) {
@@ -35,6 +37,7 @@ export class InsuranceTransformer extends GameTransformer {
         }
       });
     });
+
     return newGame;
   }
 }

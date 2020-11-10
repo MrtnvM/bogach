@@ -1,11 +1,10 @@
 import produce from 'immer';
 
 import { GameTransformer } from './game_transformer';
-import { Game } from '../../models/domain/game/game';
+import { Game, GameEntity } from '../../models/domain/game/game';
 import { LiabilityEntity } from '../../models/domain/liability';
 import { AssetEntity } from '../../models/domain/asset';
 import { PossessionState } from '../../models/domain/possession_state';
-import { ParticipantGameState } from '../../models/domain/game/participant_game_state';
 import { Possessions } from '../../models/domain/possessions';
 
 export class PossessionStateTransformer extends GameTransformer {
@@ -14,10 +13,10 @@ export class PossessionStateTransformer extends GameTransformer {
       return game;
     }
 
-    const possessionState = this.generateParticipantsPossessionState(game);
+    const participants = this.generatePossessionStateForParticipants(game);
 
     return produce(game, (draft) => {
-      draft.possessionState = possessionState;
+      draft.participants = participants;
     });
   }
 
@@ -44,14 +43,19 @@ export class PossessionStateTransformer extends GameTransformer {
     return newPossessionState;
   }
 
-  generateParticipantsPossessionState(game: Game): ParticipantGameState<Possessions> {
-    const newPossessionState: ParticipantGameState<Possessions> = {};
+  generatePossessionStateForParticipants(game: Game): { [userId: string]: GameEntity.Participant } {
+    const newParticipants: { [userId: string]: GameEntity.Participant } = {};
 
-    game.participants.forEach((participantId) => {
-      const possessionState = this.generatePossessionState(game.possessions[participantId]);
-      newPossessionState[participantId] = possessionState;
+    game.participantsIds.forEach((participantId) => {
+      const participant = game.participants[participantId];
+      const possessionState = this.generatePossessionState(participant.possessions);
+      const newParticipant = produce(participant, (draft) => {
+        draft.possessionState = possessionState;
+      });
+
+      newParticipants[participantId] = newParticipant;
     });
 
-    return newPossessionState;
+    return newParticipants;
   }
 }

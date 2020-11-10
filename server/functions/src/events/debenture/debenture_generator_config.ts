@@ -8,7 +8,7 @@ export namespace DebentureGeneratorConfig {
     readonly profitability: ValueRange;
   };
 
-  export const govermentDebenture: Config = {
+  export const governmentDebenture: Config = {
     nameOptions: ['ОФЗ 29006', 'ОФЗ 29007', 'ОФЗ 29009', 'ОФЗ 26233', 'ОФЗ 26227'],
     nominal: { min: 1000, max: 1000, stepValue: 0 },
     price: { min: 850, max: 1300, stepValue: 10 },
@@ -49,8 +49,8 @@ export namespace DebentureGeneratorConfig {
   };
 
   export const getConfig = (debentureName: string): Config => {
-    if (govermentDebenture.nameOptions.indexOf(debentureName) >= 0) {
-      return govermentDebenture;
+    if (governmentDebenture.nameOptions.indexOf(debentureName) >= 0) {
+      return governmentDebenture;
     }
 
     if (regionalDebenture.nameOptions.indexOf(debentureName) >= 0) {

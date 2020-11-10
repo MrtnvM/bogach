@@ -7,6 +7,7 @@ import { checkIds } from '../../core/validation/type_checks';
 import { Strings } from '../../resources/strings';
 import { TimerProvider } from '../../providers/timer_provider';
 import { GameTemplateEntity } from '../../game_templates/models/game_template';
+import { DomainErrors } from '../../core/exceptions/domain/domain_errors';
 
 export class RoomService {
   constructor(
@@ -73,6 +74,10 @@ export class RoomService {
     if (isParticipantAlreadyAdded) {
       await this.gameProvider.setParticipantReady(roomId, participantId);
       return;
+    }
+
+    if (room.participants.length >= 6) {
+      throw DomainErrors.participantsLimit;
     }
 
     const participantDevice = await this.userProvider.getUserDevice(participantId);

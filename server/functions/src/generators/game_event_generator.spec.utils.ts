@@ -9,6 +9,7 @@ import { DebentureEvent } from '../events/debenture/debenture_event';
 import { DebentureGenerateRule } from './rules/debenture_generate_rule';
 import { StockEvent } from '../events/stock/stock_event';
 import { StockGenerateRule } from './rules/stock_generate_rule';
+import { ParticipantFixture } from '../core/fixtures/participant_fixture';
 
 const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
@@ -16,7 +17,7 @@ const userId: UserEntity.Id = 'user1';
 const context: GameContext = { gameId, userId };
 const initialCash = 10000;
 
-const initialPossesssions: Possessions = {
+const initialPossessions: Possessions = {
   incomes: [],
   expenses: [],
   assets: [],
@@ -25,12 +26,12 @@ const initialPossesssions: Possessions = {
 
 const game: Game = GameFixture.createGame({
   id: gameId,
-  participants: [userId],
-  possessions: {
-    [userId]: initialPossesssions,
-  },
-  accounts: {
-    [userId]: { cashFlow: 10000, cash: initialCash, credit: 0 },
+  participants: {
+    [userId]: ParticipantFixture.createParticipant({
+      id: userId,
+      possessions: initialPossessions,
+      account: { cashFlow: 10000, cash: initialCash, credit: 0 },
+    }),
   },
 });
 

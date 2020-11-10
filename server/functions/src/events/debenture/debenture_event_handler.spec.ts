@@ -42,8 +42,10 @@ describe('Debenture price changed event handler', () => {
     };
 
     const expectedGame = produce(game, (draft) => {
-      draft.possessions[userId].assets.push(newDebentureAsset);
-      draft.accounts[userId].cash = initialCash - 1100;
+      const participant = draft.participants[userId];
+
+      participant.possessions.assets.push(newDebentureAsset);
+      participant.account.cash = initialCash - 1100;
     });
 
     expect(newGame).toStrictEqual(expectedGame);
@@ -70,12 +72,11 @@ describe('Debenture price changed event handler', () => {
     });
 
     const expectedGame = produce(game, (draft) => {
-      const index = draft.possessions[userId].assets.findIndex(
-        (d) => d.id === newDebentureAsset.id
-      );
+      const participant = draft.participants[userId];
 
-      draft.possessions[userId].assets[index] = newDebentureAsset;
-      draft.accounts[userId].cash = initialCash - 7200;
+      const index = participant.possessions.assets.findIndex((d) => d.id === newDebentureAsset.id);
+      participant.possessions.assets[index] = newDebentureAsset;
+      participant.account.cash = initialCash - 7200;
     });
 
     expect(newGame).toStrictEqual(expectedGame);
@@ -101,12 +102,11 @@ describe('Debenture price changed event handler', () => {
     });
 
     const expectedGame = produce(game, (draft) => {
-      const index = draft.possessions[userId].assets.findIndex(
-        (d) => d.id === newDebentureAsset.id
-      );
+      const participant = draft.participants[userId];
 
-      draft.possessions[userId].assets[index] = newDebentureAsset;
-      draft.accounts[userId].cash = initialCash + 3300;
+      const index = participant.possessions.assets.findIndex((d) => d.id === newDebentureAsset.id);
+      participant.possessions.assets[index] = newDebentureAsset;
+      participant.account.cash = initialCash + 3300;
     });
 
     expect(newGame).toStrictEqual(expectedGame);
@@ -128,10 +128,11 @@ describe('Debenture price changed event handler', () => {
     const newGame = await handler.handle(game, event, action, userId);
 
     const expectedGame = produce(game, (draft) => {
-      const index = draft.possessions[userId].assets.findIndex((d) => d.id === debenture1.id);
+      const participant = draft.participants[userId];
+      const index = participant.possessions.assets.findIndex((d) => d.id === debenture1.id);
 
-      draft.possessions[userId].assets.splice(index, 1);
-      draft.accounts[userId].cash = initialCash + 4400;
+      participant.possessions.assets.splice(index, 1);
+      participant.account.cash = initialCash + 4400;
     });
 
     expect(newGame).toStrictEqual(expectedGame);
@@ -155,7 +156,7 @@ describe('Debenture price changed event handler', () => {
 
     try {
       await handler.handle(game, event, action, userId);
-      throw new Error('Shoud fail on previous line');
+      throw new Error('Should fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(DomainErrors.notEnoughDebenturesInPortfolio);
     }
@@ -179,7 +180,7 @@ describe('Debenture price changed event handler', () => {
 
     try {
       await handler.handle(game, event, action, userId);
-      throw new Error('Shoud fail on previous line');
+      throw new Error('Should fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(DomainErrors.notEnoughDebenturesOnMarket);
     }

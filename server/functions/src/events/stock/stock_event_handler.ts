@@ -49,7 +49,7 @@ export class StockEventHandler extends PlayerActionHandler {
     const { currentPrice, fairPrice, availableCount } = event.data;
     const { count: actionCount, action: stockAction } = action;
 
-    const assets = game.possessions[userId].assets;
+    const assets = game.participants[userId].possessions.assets;
     const stockAssets = AssetEntity.getStocks(assets);
     const stockName = event.name;
 
@@ -60,7 +60,7 @@ export class StockEventHandler extends PlayerActionHandler {
     const countInPortfolio = theSameStock?.countInPortfolio || 0;
     const currentAveragePrice = theSameStock?.averagePrice || 0;
 
-    const userAccount = game.accounts[userId];
+    const userAccount = game.participants[userId].account;
     const totalPrice = currentPrice * actionCount;
 
     const actionParameters: ActionParameters = {
@@ -79,8 +79,9 @@ export class StockEventHandler extends PlayerActionHandler {
       : this.addNewItemToAssets(actionResult, assets, fairPrice, stockName);
 
     const updatedGame: Game = produce(game, (draft) => {
-      draft.accounts[userId].cash = actionResult.newAccountBalance;
-      draft.possessions[userId].assets = newAssets;
+      const participant = draft.participants[userId];
+      participant.possessions.assets = newAssets;
+      participant.account.cash = actionResult.newAccountBalance;
     });
 
     return updatedGame;

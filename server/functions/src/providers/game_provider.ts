@@ -5,7 +5,6 @@ import { GameTemplate, GameTemplateEntity } from '../game_templates/models/game_
 import { UserEntity } from '../models/domain/user/user';
 import { PossessionStateEntity } from '../models/domain/possession_state';
 import { assertExists } from '../utils/asserts';
-import { createParticipantsGameState } from '../models/domain/game/participant_game_state';
 import { produce } from 'immer';
 import { checkIds, checkId } from '../core/validation/type_checks';
 import {
@@ -48,34 +47,40 @@ export class GameProvider {
   ): Promise<Game> {
     this.checkParticipantsIds(participantsIds);
 
-    const participantsGameState = <T>(value: T) => {
-      return createParticipantsGameState(participantsIds, value);
-    };
-
     const gameId: GameEntity.Id = uuid.v4();
     const gameType: GameEntity.Type = participantsIds.length > 1 ? 'multiplayer' : 'singleplayer';
 
-    let game: Game = {
-      id: gameId,
-      name: template.name,
-      type: gameType,
-      state: {
-        moveStartDateInUTC: new Date().toISOString(),
-        gameStatus: 'players_move',
-        monthNumber: 1,
-        participantsProgress: participantsGameState({
+    const participants: { [userId: string]: GameEntity.Participant } = {};
+    participantsIds.forEach((id) => {
+      const participant: GameEntity.Participant = {
+        id,
+        possessions: template.possessions,
+        possessionState: PossessionStateEntity.createEmpty(),
+        account: template.accountState,
+        progress: {
           status: 'player_move',
           currentEventIndex: 0,
           currentMonthForParticipant: 1,
           monthResults: {},
           progress: 0,
-        }),
+        },
+      };
+
+      participants[id] = participant;
+    });
+
+    let game: Game = {
+      id: gameId,
+      name: template.name,
+      type: gameType,
+      participantsIds,
+      participants,
+      state: {
+        moveStartDateInUTC: new Date().toISOString(),
+        gameStatus: 'players_move',
+        monthNumber: 1,
         winners: [],
       },
-      participants: participantsIds,
-      possessions: participantsGameState(template.possessions),
-      possessionState: participantsGameState(PossessionStateEntity.createEmpty()),
-      accounts: participantsGameState(template.accountState),
       target: template.target,
       currentEvents: [],
       history: { months: [] },
@@ -111,6 +116,16 @@ export class GameProvider {
   updateGame(game: Game): Promise<Game> {
     assertExists('Game and Game ID', game?.id);
     return this.gameDao.updateGame(game);
+  }
+
+  updateGameWithoutParticipants(game: Game): Promise<void> {
+    assertExists('Game and Game ID', game?.id);
+    return this.gameDao.updateGameWithoutParticipants(game);
+  }
+
+  updateGameForUser(game: Game, userId: UserEntity.Id): Promise<void> {
+    assertExists('Game and Game ID', game?.id);
+    return this.gameDao.updateParticipant(game, userId);
   }
 
   deleteGame(gameId: GameEntity.Id): Promise<void> {
@@ -201,7 +216,7 @@ export class GameProvider {
   }
 
   async updateGameParticipantsLastGames(game: Game, template: GameTemplate): Promise<void> {
-    const updateProfileOperations = game.participants.map(async (participantId) => {
+    const updateProfileOperations = game.participantsIds.map(async (participantId) => {
       const user = await this.userDao.getUser(participantId);
       if (!user) {
         return;

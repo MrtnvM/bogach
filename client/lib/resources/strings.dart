@@ -389,6 +389,7 @@ class Strings {
       );
 
   static String get goToMainMenu => 'В главное меню';
+  static String get goToQuests => 'Перейти к квестам';
 
   static String get sellBusinessNoChecked =>
       'Необходимо выбрать бизнес для продажи';

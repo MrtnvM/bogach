@@ -14,8 +14,10 @@ export class MonthResultTransformer extends GameTransformer {
     }
 
     return produce(game, (draft) => {
-      draft.participants.forEach((participantId) => {
-        const participantProgress = game.state.participantsProgress[participantId];
+      draft.participantsIds.forEach((participantId) => {
+        const participant = draft.participants[participantId];
+
+        const participantProgress = participant.progress;
         const isMonthResult = participantProgress.status === 'month_result';
 
         if (!isMonthResult && this.month === undefined) {
@@ -30,7 +32,7 @@ export class MonthResultTransformer extends GameTransformer {
           return;
         }
 
-        const possessionState = game.possessionState[participantId];
+        const possessionState = participant.possessionState;
         const { incomes, expenses, assets, liabilities } = possessionState;
 
         const totalIncome = incomes.reduce((total, income) => total + income.value, 0);
@@ -45,8 +47,8 @@ export class MonthResultTransformer extends GameTransformer {
           0
         );
 
-        draft.state.participantsProgress[participantId].monthResults[resultMonth] = {
-          cash: game.accounts[participantId].cash,
+        participant.progress.monthResults[resultMonth] = {
+          cash: game.participants[participantId].account.cash,
           totalIncome,
           totalExpense,
           totalAssets,

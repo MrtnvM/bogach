@@ -1,6 +1,6 @@
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
-import 'package:cash_flow/models/domain/game/current_game_state/participant_progress.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
+import 'package:cash_flow/models/domain/game/participant/participant.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:charts_flutter/flutter.dart';
 
@@ -24,7 +24,7 @@ List<List<DotModel>> useDotModels(Game game) {
   }
 
   _fillDotsForPlayers(
-    participantsProgress: game.state.participantsProgress,
+    participants: game.participants,
     initialCash: initialCash,
     currentMonth: currentMonth,
     listOfPlayerDots: listOfPlayerDots,
@@ -34,12 +34,12 @@ List<List<DotModel>> useDotModels(Game game) {
 }
 
 void _fillDotsForPlayers({
-  Map<String, ParticipantProgress> participantsProgress,
+  Map<String, Participant> participants,
   int initialCash,
   int currentMonth,
   List<List<DotModel>> listOfPlayerDots,
 }) {
-  participantsProgress.forEach((userId, progress) {
+  participants.forEach((userId, participant) {
     final dots = <DotModel>[];
 
     final firstDot = DotModel(
@@ -50,6 +50,7 @@ void _fillDotsForPlayers({
 
     dots.add(firstDot);
 
+    final progress = participant.progress;
     final monthsCount = progress.monthResults.length;
     for (var monthIndex = 0; monthIndex < monthsCount; monthIndex++) {
       final monthResults = progress.monthResults[monthIndex];

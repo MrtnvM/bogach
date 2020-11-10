@@ -14,6 +14,7 @@ import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/buttons/color_button.dart';
+import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -22,12 +23,23 @@ class WinnersPage extends HookWidget {
   Widget build(BuildContext context) {
     final userId = useUserId();
     final isWin = useCurrentGame((g) {
-      final participantProgress = g.state.participantsProgress[userId];
-      return participantProgress.progress >= 1;
+      final participantProgress = g?.participants[userId].progress;
+      return (participantProgress?.progress ?? 0) >= 1;
     });
     final isMultiplayer = useCurrentGame(
-      (g) => g.type == GameType.multiplayer(),
+      (g) => g?.type == GameType.multiplayer(),
     );
+    final isQuest = useCurrentGame((g) => g?.config?.level != null);
+    final gameExists = useCurrentGame((g) => g != null);
+
+    if (!gameExists) {
+      return LoadableView(
+        isLoading: !gameExists,
+        backgroundColor: ColorRes.white,
+        indicatorColor: const AlwaysStoppedAnimation<Color>(ColorRes.mainGreen),
+        child: Container(),
+      );
+    }
 
     return Container(
       color: ColorRes.mainGreen,
@@ -48,6 +60,10 @@ class WinnersPage extends HookWidget {
             ],
             const SizedBox(height: 54),
             if (isWin) ...[
+              if (isQuest) ...[
+                _GoToQuestsButton(),
+                const SizedBox(height: 16),
+              ],
               _GoToMainMenuButton(),
             ] else ...[
               if (!isMultiplayer) ...[
@@ -58,6 +74,20 @@ class WinnersPage extends HookWidget {
             ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _GoToQuestsButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 200),
+      child: ColorButton(
+        color: ColorRes.yellow,
+        text: Strings.goToQuests,
+        onPressed: appRouter.goBack,
       ),
     );
   }
@@ -176,7 +206,7 @@ class _PlayerResultTable extends HookWidget {
     final participants = useGlobalState((g) {
       final game = g.game.currentGame;
       final userProfiles = g.multiplayer.userProfiles;
-      final participants = game.participants //
+      final participants = game.participantsIds //
           .map((id) => userProfiles.itemsMap[id])
           .toList();
 

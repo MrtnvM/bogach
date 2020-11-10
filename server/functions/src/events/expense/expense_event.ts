@@ -32,7 +32,8 @@ export namespace ExpenseEvent {
     entity.hasNumberValue('expense');
     entity.checkNullableUnion('insuranceType', InsuranceAssetEntity.TypeValues);
 
-    entity.checkWithRules([[(a) => a.expense <= 0, "Expense can't be <= 0"]]);
+    // TODO: Restore when will be implemented decreasing liability for business
+    // entity.checkWithRules([[(a) => a.expense <= 0, "Expense can't be <= 0"]]);
   };
 
   export const validateAction = (action: any) => undefined;

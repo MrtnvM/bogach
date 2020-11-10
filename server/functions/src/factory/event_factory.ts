@@ -23,7 +23,7 @@ export namespace EventFactory {
   export const debentureEvent = DebentureEventGenerator.generateEvent;
   export const stockEvent = StockEventGenerator.generateEvent;
 
-  export const buyBussinessEvent = BusinessBuyEventGenerator.generateEvent;
+  export const buyBusinessEvent = BusinessBuyEventGenerator.generateEvent;
   export const sellBusinessEvent = BusinessSellEventGenerator.generateEvent;
 
   export const insuranceEvent = (props: {

@@ -11,6 +11,7 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
+import 'package:cash_flow/widgets/backgrounds/status_bar_background.dart';
 import 'package:cash_flow/widgets/tutorial/gameboard_tutorial_widget.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/material.dart';
@@ -97,6 +98,10 @@ class ContainerWithHeaderImage extends HookWidget {
         ),
         if (isLoading == true) _buildActivityIndicator(contentOffset),
         NavigationBar(opacity: opacity.value),
+        StatusBarBackground(
+          scrollOffset:
+              scrollController.hasClients ? scrollController.offset : 0,
+        ),
       ],
     );
   }

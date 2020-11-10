@@ -7,7 +7,7 @@ const month = (...events: GameEvent[]) => events;
 const month1 = month(
   ProgrammerEventFactory.Stock.tesla(325, 100),
   ProgrammerEventFactory.Debenture.ofz1(1050, 20),
-  ProgrammerEventFactory.Insurace.healthInsurance(700, 4000)
+  ProgrammerEventFactory.Insurance.healthInsurance(700, 4000)
 );
 
 const month2 = month(
@@ -20,15 +20,15 @@ const month2 = month(
 
 const month3 = month(
   ProgrammerEventFactory.Expense.carBroken(3000),
-  ProgrammerEventFactory.Insurace.propertyInsurance(1000, 5000),
+  ProgrammerEventFactory.Insurance.propertyInsurance(1000, 5000),
   ProgrammerEventFactory.Stock.intel(3200, 10)
 );
 
 const month4 = month(
   ProgrammerEventFactory.Income.birthday(4000),
   ProgrammerEventFactory.Stock.tesla(365, 30),
-  ProgrammerEventFactory.Debenture.alphabetTase(950, 30),
-  ProgrammerEventFactory.Insurace.propertyInsurance(500, 5000)
+  ProgrammerEventFactory.Debenture.alphabetTaste(950, 30),
+  ProgrammerEventFactory.Insurance.propertyInsurance(500, 5000)
 );
 
 const month5 = month(
@@ -55,7 +55,7 @@ const month8 = month(
   ProgrammerEventFactory.Expense.cafe(2000),
   ProgrammerEventFactory.Stock.intel(3100, 20),
   ProgrammerEventFactory.Debenture.pik(900, 30),
-  ProgrammerEventFactory.Insurace.healthInsurance(600, 4000)
+  ProgrammerEventFactory.Insurance.healthInsurance(600, 4000)
 );
 
 const month9 = month(
@@ -81,7 +81,7 @@ const month11 = month(
 
 const month12 = month(
   ProgrammerEventFactory.Stock.tesla(460, 40),
-  ProgrammerEventFactory.Debenture.alphabetTase(1050, 40),
+  ProgrammerEventFactory.Debenture.alphabetTaste(1050, 40),
   ProgrammerEventFactory.Debenture.ofz1(1150, 30)
 );
 

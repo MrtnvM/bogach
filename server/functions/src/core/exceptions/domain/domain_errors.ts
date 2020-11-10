@@ -58,4 +58,12 @@ export namespace DomainErrors {
       ru: 'В вашем портфеле недостаточно облигаций для совершения операции',
     },
   };
+
+  export const participantsLimit: DomainError = {
+    type: 'domain',
+    code: 'participants-limit',
+    message: {
+      ru: 'Достигнут предел в количестве участников игры',
+    },
+  };
 }

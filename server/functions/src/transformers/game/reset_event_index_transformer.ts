@@ -10,11 +10,11 @@ export class ResetEventIndexTransformer extends GameTransformer {
 
   apply(game: Game): Game {
     const updatedGame = produce(game, (draft) => {
-      const progress = draft.state.participantsProgress[this.userId];
+      const participant = draft.participants[this.userId];
 
-      progress.currentEventIndex = 0;
-      progress.currentMonthForParticipant = draft.state.monthNumber;
-      progress.status = 'player_move';
+      participant.progress.currentEventIndex = 0;
+      participant.progress.currentMonthForParticipant = draft.state.monthNumber;
+      participant.progress.status = 'player_move';
     });
 
     return updatedGame;

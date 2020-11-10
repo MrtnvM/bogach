@@ -7,6 +7,7 @@ import { GameContext } from '../../../models/domain/game/game_context';
 import { GameEventEntity } from '../../../models/domain/game/game_event';
 import { BusinessSellEvent } from './business_sell_event';
 import { GameFixture } from '../../../core/fixtures/game_fixture';
+import { ParticipantFixture } from '../../../core/fixtures/participant_fixture';
 
 const eventId: GameEventEntity.Id = 'event1';
 const gameId: GameEntity.Id = 'game1';
@@ -52,7 +53,7 @@ const business3 = create<BusinessAsset>({
   sellProbability: 7,
 });
 
-const initialPossesssions: Possessions = {
+const initialPossessions: Possessions = {
   incomes: [],
   expenses: [],
   assets: [business1, business2, business3],
@@ -76,12 +77,12 @@ const initialPossesssions: Possessions = {
 
 const game: Game = GameFixture.createGame({
   id: gameId,
-  participants: [userId],
-  possessions: {
-    [userId]: initialPossesssions,
-  },
-  accounts: {
-    [userId]: { cashFlow: 10_000, cash: initialCash, credit: 0 },
+  participants: {
+    [userId]: ParticipantFixture.createParticipant({
+      id: userId,
+      possessions: initialPossessions,
+      account: { cashFlow: 10_000, cash: initialCash, credit: 0 },
+    }),
   },
 });
 

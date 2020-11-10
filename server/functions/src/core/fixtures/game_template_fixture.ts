@@ -17,7 +17,7 @@ export namespace GameTemplateFixture {
   export const createGameTemplate = (
     template: Partial<GameTemplate> | undefined = undefined
   ): GameTemplate => {
-    const initialPossesssions: Possessions = {
+    const initialPossessions: Possessions = {
       incomes: [
         {
           id: 'income1',
@@ -132,7 +132,7 @@ export namespace GameTemplateFixture {
       id: template?.id || 'template1',
       name: template?.name || 'Game 1',
       icon: 'https://image.flaticon.com/icons/png/128/1907/1907938.png',
-      possessions: template?.possessions || initialPossesssions,
+      possessions: template?.possessions || initialPossessions,
       accountState: template?.accountState || {
         cashFlow: 10_000,
         cash: 20_000,

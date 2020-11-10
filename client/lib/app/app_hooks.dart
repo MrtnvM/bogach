@@ -116,40 +116,37 @@ _AppActions useAppActions() {
   final dispatch = useDispatcher();
   final multiplayerGamesCount = useAvailableMultiplayerGamesCount();
 
-  return useMemoized(
-    () => _AppActions(
-      joinRoom: (roomId) {
-        VoidCallback joinRoom;
+  return _AppActions(
+    joinRoom: (roomId) {
+      VoidCallback joinRoom;
 
-        joinRoom = () async {
-          if (multiplayerGamesCount <= 0) {
-            final response = await appRouter.goTo(const GamesAccessPage());
-            if (response == null) {
-              return;
-            }
+      joinRoom = () async {
+        if (multiplayerGamesCount <= 0) {
+          final response = await appRouter.goTo(const GamesAccessPage());
+          if (response == null) {
+            return;
           }
+        }
 
-          dispatch(JoinRoomAction(roomId)).then((_) async {
-            await Future.delayed(const Duration(milliseconds: 50));
+        dispatch(JoinRoomAction(roomId)).then((_) async {
+          await Future.delayed(const Duration(milliseconds: 50));
 
-            appRouter.goToRoot();
-            appRouter.goTo(RoomPage());
-          }).catchError((error) {
-            handleError(
-              context: context,
-              exception: error,
-              onRetry: joinRoom,
-              errorMessage: Strings.joinRoomError,
-            );
+          appRouter.goToRoot();
+          appRouter.goTo(RoomPage());
+        }).catchError((error) {
+          handleError(
+            context: context,
+            exception: error,
+            onRetry: joinRoom,
+            errorMessage: Strings.joinRoomError,
+          );
 
-            Logger.e('ERROR ON JOINING TO ROOM ($roomId):\n$error');
-          });
-        };
+          Logger.e('ERROR ON JOINING TO ROOM ($roomId):\n$error');
+        });
+      };
 
-        joinRoom();
-      },
-    ),
-    [multiplayerGamesCount],
+      joinRoom();
+    },
   );
 }
 

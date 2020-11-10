@@ -28,7 +28,8 @@ describe('Expense event handler', () => {
     const newGame = await handler.handle(game, event, action, userId);
 
     const expectedGame = produce(game, (draft) => {
-      draft.accounts[userId].cash = initialCash - 1100;
+      const participant = draft.participants[userId];
+      participant.account.cash = initialCash - 1100;
     });
 
     expect(newGame).toStrictEqual(expectedGame);
@@ -49,7 +50,8 @@ describe('Expense event handler', () => {
     const newGame = await handler.handle(game, event, action, userId);
 
     const expectedGame = produce(game, (draft) => {
-      draft.accounts[userId].cash = initialCash - 1100;
+      const participant = draft.participants[userId];
+      participant.account.cash = initialCash - 1100;
     });
 
     expect(newGame).toStrictEqual(expectedGame);
@@ -70,7 +72,8 @@ describe('Expense event handler', () => {
     const newGame = await handler.handle(game, event, action, userId);
 
     const expectedGame = produce(game, (draft) => {
-      draft.accounts[userId].cash = initialCash - 0;
+      const participant = draft.participants[userId];
+      participant.account.cash = initialCash - 0;
     });
 
     expect(newGame).toStrictEqual(expectedGame);
@@ -91,7 +94,8 @@ describe('Expense event handler', () => {
     const newGame = await handler.handle(game, event, action, userId);
 
     const expectedGame = produce(game, (draft) => {
-      draft.accounts[userId].cash = initialCash - 1100;
+      const participant = draft.participants[userId];
+      participant.account.cash = initialCash - 1100;
     });
 
     expect(newGame).toStrictEqual(expectedGame);
@@ -121,13 +125,15 @@ describe('Expense event handler', () => {
     };
 
     const gameWithTwoInsurances = produce(game, (draft) => {
-      draft.possessions[userId].assets.push(secondPropertyInsurance);
+      const participant = draft.participants[userId];
+      participant.possessions.assets.push(secondPropertyInsurance);
     });
 
     const newGame = await handler.handle(gameWithTwoInsurances, event, action, userId);
 
     const expectedGame = produce(gameWithTwoInsurances, (draft) => {
-      draft.accounts[userId].cash = initialCash - 1200;
+      const participant = draft.participants[userId];
+      participant.account.cash = initialCash - 1200;
     });
 
     expect(newGame).toStrictEqual(expectedGame);

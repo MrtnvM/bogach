@@ -4,6 +4,7 @@ import { DebentureEvent } from '../../events/debenture/debenture_event';
 import { GameEventEntity } from '../../models/domain/game/game_event';
 import { GameFixture } from '../../core/fixtures/game_fixture';
 import produce from 'immer';
+import { ParticipantFixture } from '../../core/fixtures/participant_fixture';
 
 export const gameId: GameEntity.Id = 'game1';
 export const user1: UserEntity.Id = 'user1';
@@ -30,76 +31,78 @@ const create = <T>(obj: T) => obj;
 export const game: Game = GameFixture.createGame({
   id: gameId,
   type: 'multiplayer',
-  participants: participantIds,
-  possessions: {
-    [user1]: {
-      incomes: [
-        {
-          id: 'income1',
-          value: 10_000,
-          name: 'Зарплата',
-          type: 'salary',
-        },
-      ],
-      expenses: [],
-      assets: [],
-      liabilities: [],
-    },
+  participantsIds: participantIds,
+  participants: {
+    [user1]: ParticipantFixture.createParticipant({
+      id: user1,
+      possessions: {
+        incomes: [
+          {
+            id: 'income1',
+            value: 10_000,
+            name: 'Зарплата',
+            type: 'salary',
+          },
+        ],
+        expenses: [],
+        assets: [],
+        liabilities: [],
+      },
+      possessionState: {
+        incomes: [
+          {
+            id: 'income1',
+            value: 10_000,
+            name: 'Зарплата',
+            type: 'salary',
+          },
+        ],
+        expenses: [],
+        assets: [],
+        liabilities: [],
+      },
+      account: {
+        cash: 20_000,
+        cashFlow: 10_000,
+        credit: 0,
+      },
+    }),
 
-    [user2]: {
-      incomes: [
-        {
-          id: 'income2',
-          value: 20_000,
-          name: 'Зарплата',
-          type: 'salary',
-        },
-      ],
-      expenses: [],
-      assets: [],
-      liabilities: [],
-    },
+    [user2]: ParticipantFixture.createParticipant({
+      possessions: {
+        incomes: [
+          {
+            id: 'income2',
+            value: 20_000,
+            name: 'Зарплата',
+            type: 'salary',
+          },
+        ],
+        expenses: [],
+        assets: [],
+        liabilities: [],
+      },
+      possessionState: {
+        incomes: [
+          {
+            id: 'income2',
+            value: 20_000,
+            name: 'Зарплата',
+            type: 'salary',
+          },
+        ],
+        expenses: [],
+        assets: [],
+        liabilities: [],
+      },
+      account: {
+        cash: 20_000,
+        cashFlow: 10_000,
+        credit: 0,
+      },
+    }),
   },
-  possessionState: {
-    [user1]: {
-      incomes: [
-        {
-          id: 'income1',
-          value: 10_000,
-          name: 'Зарплата',
-          type: 'salary',
-        },
-      ],
-      expenses: [],
-      assets: [],
-      liabilities: [],
-    },
-    [user2]: {
-      incomes: [
-        {
-          id: 'income2',
-          value: 20_000,
-          name: 'Зарплата',
-          type: 'salary',
-        },
-      ],
-      expenses: [],
-      assets: [],
-      liabilities: [],
-    },
-  },
-  accounts: {
-    [user1]: {
-      cash: 20_000,
-      cashFlow: 10_000,
-      credit: 0,
-    },
-    [user2]: {
-      cash: 20_000,
-      cashFlow: 10_000,
-      credit: 0,
-    },
-  },
+
   currentEvents: [
     create<DebentureEvent.Event>({
       id: firstEventId,
@@ -129,50 +132,53 @@ export const game: Game = GameFixture.createGame({
 });
 
 const gameWithNotCompletedMonthForFirstPlayer = produce(game, (draft) => {
-  draft.state.participantsProgress = {
-    [user1]: produce(game.state.participantsProgress[user1], (draft1) => {
-      draft1.currentEventIndex = 0;
-      draft1.status = 'player_move';
-    }),
-    [user2]: produce(game.state.participantsProgress[user2], (draft2) => {
-      draft2.currentEventIndex = 1;
-      draft2.status = 'month_result';
-    }),
-  };
+  const participant1 = draft.participants[user1];
+  participant1.progress = produce(game.participants[user1].progress, (draft1) => {
+    draft1.currentEventIndex = 0;
+    draft1.status = 'player_move';
+  });
+
+  const participant2 = draft.participants[user2];
+  participant2.progress = produce(game.participants[user2].progress, (draft2) => {
+    draft2.currentEventIndex = 1;
+    draft2.status = 'month_result';
+  });
 });
 
 const gameWhenOnlyFirstPlayerStartedNewMonth = produce(game, (draft) => {
   draft.state.monthNumber = 2;
 
-  draft.state.participantsProgress = {
-    [user1]: produce(game.state.participantsProgress[user1], (draft1) => {
-      draft1.currentEventIndex = 0;
-      draft1.currentMonthForParticipant = 2;
-      draft1.status = 'player_move';
-    }),
-    [user2]: produce(game.state.participantsProgress[user2], (draft2) => {
-      draft2.currentMonthForParticipant = 1;
-      draft2.currentEventIndex = 1;
-      draft2.status = 'month_result';
-    }),
-  };
+  const participant1 = draft.participants[user1];
+  participant1.progress = produce(game.participants[user1].progress, (draft1) => {
+    draft1.currentEventIndex = 0;
+    draft1.currentMonthForParticipant = 2;
+    draft1.status = 'player_move';
+  });
+
+  const participant2 = draft.participants[user2];
+  participant2.progress = produce(game.participants[user2].progress, (draft2) => {
+    draft2.currentMonthForParticipant = 1;
+    draft2.currentEventIndex = 1;
+    draft2.status = 'month_result';
+  });
 });
 
 const gameWithNotStartedMonthByParticipants = produce(game, (draft) => {
   draft.state.monthNumber = 2;
 
-  draft.state.participantsProgress = {
-    [user1]: produce(game.state.participantsProgress[user1], (draft1) => {
-      draft1.currentEventIndex = 1;
-      draft1.currentMonthForParticipant = 1;
-      draft1.status = 'month_result';
-    }),
-    [user2]: produce(game.state.participantsProgress[user2], (draft2) => {
-      draft2.currentMonthForParticipant = 1;
-      draft2.currentEventIndex = 1;
-      draft2.status = 'month_result';
-    }),
-  };
+  const participant1 = draft.participants[user1];
+  participant1.progress = produce(game.participants[user1].progress, (draft1) => {
+    draft1.currentEventIndex = 1;
+    draft1.currentMonthForParticipant = 1;
+    draft1.status = 'month_result';
+  });
+
+  const participant2 = draft.participants[user2];
+  participant2.progress = produce(game.participants[user2].progress, (draft2) => {
+    draft2.currentMonthForParticipant = 1;
+    draft2.currentEventIndex = 1;
+    draft2.status = 'month_result';
+  });
 });
 
 export const TestData = {

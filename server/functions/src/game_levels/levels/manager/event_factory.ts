@@ -64,7 +64,7 @@ namespace ExpenseFactory {
   export const washingMachine = (value: number) =>
     EventFactory.expenseEvent({
       name: 'Непредвиденные траты на вызов мастера',
-      description: 'Сломалася холодильник',
+      description: 'Сломался холодильник',
       insuranceType: null,
       range: valueRange(value),
     });
@@ -134,7 +134,7 @@ namespace ExpenseFactory {
     });
 }
 
-namespace InsuraceFactory {
+namespace InsuranceFactory {
   export const healthInsurance = (cost: number, value: number) =>
     EventFactory.insuranceEvent({
       insuranceType: 'health',
@@ -241,7 +241,7 @@ namespace StockFactory {
 export namespace ProgrammerEventFactory {
   export const Income = IncomeFactory;
   export const Expense = ExpenseFactory;
-  export const Insurace = InsuraceFactory;
+  export const Insurance = InsuranceFactory;
   export const Debenture = DebentureFactory;
   export const Stock = StockFactory;
 }
