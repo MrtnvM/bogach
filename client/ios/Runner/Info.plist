@@ -59,7 +59,7 @@
 	<key>FacebookAppID</key>
 	<string>210237670277363</string>
 	<key>FacebookDisplayName</key>
-	<string>Капиталист</string>
+	<string>Богач</string>
 	<key>FirebaseDynamicLinksCustomDomains</key>
 	<array>
 		<string>https://staging.bogach-game.ru/join</string>
