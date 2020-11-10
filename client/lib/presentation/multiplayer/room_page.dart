@@ -98,7 +98,11 @@ class _JoinRoomButton extends HookWidget {
   Widget build(BuildContext context) {
     final userId = useUserId();
     final dispatch = useDispatcher();
-    final join = () => dispatch(SetRoomParticipantReadyAction(userId));
+    final join = () {
+      return dispatch(SetRoomParticipantReadyAction(userId)).catchError(
+        (e) => handleError(context: context, exception: e),
+      );
+    };
 
     return _Button(
       title: Strings.join,
