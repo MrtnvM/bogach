@@ -201,7 +201,7 @@ export namespace GameEntity {
   }): T | undefined => {
     const { game, type } = props;
 
-    const months = game.history?.months || [];
+    const months = (game.history?.months || []).reverse();
 
     let event: T | undefined = undefined;
 
