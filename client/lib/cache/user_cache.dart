@@ -17,6 +17,11 @@ class UserCache {
     }
 
     final jsonData = json.decode(jsonString);
+
+    if (jsonData['userId'] == null) {
+      return null;
+    }
+
     final profile = UserProfile.fromJson(jsonData);
     return profile;
   }

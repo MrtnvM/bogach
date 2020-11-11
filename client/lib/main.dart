@@ -75,7 +75,7 @@ Future<void> main({
 
   final currentUser = await userCache.getUserProfile();
 
-  final isAuthorized = currentUser != null;
+  final isAuthorized = currentUser?.userId != null;
   store.dispatch(SetCurrentUserAction(currentUser));
   if (isAuthorized) {
     store.dispatch(StartListeningProfileUpdatesAction(currentUser.id));
