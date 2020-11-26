@@ -1,3 +1,4 @@
+import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/dynamic_link_hooks.dart';
@@ -12,6 +13,7 @@ import 'package:cash_flow/presentation/purchases/games_access_page.dart';
 import 'package:cash_flow/resources/dynamic_links.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:uni_links/uni_links.dart';
@@ -114,11 +116,13 @@ void useDeepLinkHandler() {
 _AppActions useAppActions() {
   final context = useContext();
   final dispatch = useDispatcher();
-  final multiplayerGamesCount = useAvailableMultiplayerGamesCount();
 
   return _AppActions(
     joinRoom: (roomId) {
       VoidCallback joinRoom;
+
+      final user = StoreProvider.state<AppState>(context).profile.currentUser;
+      final multiplayerGamesCount = getAvailableMultiplayerGamesCount(user);
 
       joinRoom = () async {
         if (multiplayerGamesCount <= 0) {
