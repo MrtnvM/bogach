@@ -1,4 +1,4 @@
-package io.mobile.cashflow
+package io.mobile.bogach
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.mobile.cashflow">
+    package="io.mobile.bogach">
 
     <uses-permission android:name="android.permission.INTERNET" />
 

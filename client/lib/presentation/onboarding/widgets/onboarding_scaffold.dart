@@ -25,7 +25,7 @@ class OnboardingScaffold extends StatelessWidget {
     return Column(
       children: <Widget>[
         Flexible(
-          flex: screenHeight < 600 ? 3 : 6,
+          flex: screenHeight < 700 ? 3 : 5,
           child: Container(
             padding: const EdgeInsets.only(top: 32),
             alignment: Alignment.center,
