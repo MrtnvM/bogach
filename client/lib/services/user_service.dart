@@ -42,7 +42,7 @@ class UserService {
           password: password,
         )
         .then((result) => _createUserIfNeed(result.user))
-        .catchError(ErrorHandler().handleError);
+        .catchError(recordError);
   }
 
   Future<void> logout() async {
@@ -51,20 +51,20 @@ class UserService {
   }
 
   Future<UserProfile> register({@required RegisterRequestModel model}) {
-    return signUpUser(model).catchError(ErrorHandler().handleError);
+    return signUpUser(model).catchError(recordError);
   }
 
   Future<void> resetPassword({@required String email}) {
     return firebaseAuth
         .sendPasswordResetEmail(email: email)
-        .catchError(ErrorHandler().handleError);
+        .catchError(recordError);
   }
 
   Future<UserProfile> loginViaFacebook({@required String token}) {
     return firebaseAuth
         .signInWithCredential(FacebookAuthProvider.credential(token))
         .then((response) => _createUserIfNeed(response.user))
-        .catchError(ErrorHandler().handleError);
+        .catchError(recordError);
   }
 
   Future<UserProfile> loginViaGoogle({
@@ -77,7 +77,7 @@ class UserService {
           idToken: idToken,
         ))
         .then((response) => _createUserIfNeed(response.user))
-        .catchError(ErrorHandler().handleError);
+        .catchError(recordError);
   }
 
   Future<UserProfile> loginViaApple({
@@ -103,9 +103,7 @@ class UserService {
       return firebaseAuth.currentUser;
     });
 
-    return loginRequest
-        .then(_createUserIfNeed)
-        .catchError(ErrorHandler().handleError);
+    return loginRequest.then(_createUserIfNeed).catchError(recordError);
   }
 
   Future<void> signUpUser(RegisterRequestModel model) async {
@@ -130,7 +128,8 @@ class UserService {
         .where('userName', isGreaterThanOrEqualTo: searchString)
         .get()
         .then((snapshot) =>
-            snapshot.docs.map((d) => UserProfile.fromJson(d.data())).toList());
+            snapshot.docs.map((d) => UserProfile.fromJson(d.data())).toList())
+        .catchError(recordError);
 
     return SearchQueryResult(
       searchString: searchString,
@@ -141,7 +140,7 @@ class UserService {
   Future<List<UserProfile>> loadProfiles(List<String> profileIds) async {
     final profiles = await Future.wait(
       profileIds.map((id) => firestore.collection('users').doc(id).get()),
-    );
+    ).catchError(recordError);
 
     final emptyProfiles = profiles //
         .where((p) => p.data == null)
@@ -158,17 +157,17 @@ class UserService {
   }
 
   Future<UserProfile> loadUserFromServer(userId) {
-    return apiClient.getUserProfile(userId);
+    return apiClient.getUserProfile(userId).catchError(recordError);
   }
 
   Future<void> sendUserPushToken({
     @required String userId,
     @required String pushToken,
   }) async {
-    await firestore
-        .collection('devices')
-        .doc(userId)
-        .set({'token': pushToken, 'device': Platform.operatingSystem});
+    await firestore.collection('devices').doc(userId).set({
+      'token': pushToken,
+      'device': Platform.operatingSystem
+    }).catchError(recordError);
   }
 
   Future<void> saveUserProfileInCache(UserProfile userProfile) {
@@ -194,7 +193,7 @@ class UserService {
         /// auto-migrate it to the newer version
         apiClient.getUserProfile(userId).catchError((err) => null);
       }
-    });
+    }).handleError(recordError, test: (e) => true);
   }
 
   Future<UserProfile> _createUserIfNeed(User user) async {

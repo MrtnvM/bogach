@@ -1,5 +1,6 @@
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class AnalyticsSender {
   AnalyticsSender._();
@@ -192,6 +193,11 @@ class AnalyticsSender {
     };
 
     _sendEvent('template_selected_event', params);
+  }
+
+  static void setUserId(String userId) {
+    firebaseAnalytics.setUserId(userId);
+    FirebaseCrashlytics.instance.setUserIdentifier(userId);
   }
 
   static void _sendEvent(String eventName, Map<String, dynamic> parameters) {

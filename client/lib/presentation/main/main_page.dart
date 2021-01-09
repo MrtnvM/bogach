@@ -31,6 +31,8 @@ class MainPage extends HookWidget {
       return null;
     }, []);
 
+    AnalyticsSender.setUserId(user.userId);
+
     return CashFlowScaffold(
       title: Strings.chooseGame,
       footerImage: Images.homeImage,
