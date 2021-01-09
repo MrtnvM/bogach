@@ -14,6 +14,7 @@ import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/resources/urls.dart';
+import 'package:cash_flow/utils/error_handler.dart';
 import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
@@ -252,7 +253,7 @@ class LoginPage extends HookWidget {
     isAuthorising.value = true;
 
     final facebookLogin = FacebookLogin();
-    final result = await facebookLogin.logIn(['email']);
+    final result = await facebookLogin.logIn(['email']).catchError(recordError);
 
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
@@ -309,6 +310,7 @@ class LoginPage extends HookWidget {
       Logger.e('Google Auth Error', e);
       isAuthorising.value = false;
       handleError(context: context, exception: e);
+      recordError(e);
     });
 
     if (account == null) {
@@ -354,7 +356,7 @@ class LoginPage extends HookWidget {
   ) async {
     final result = await AppleSignIn.performRequests([
       const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
-    ]);
+    ]).catchError(recordError);
 
     switch (result.status) {
       case AuthorizationStatus.authorized:

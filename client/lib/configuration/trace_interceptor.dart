@@ -1,6 +1,6 @@
+import 'package:cash_flow/utils/performace_utils.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:firebase_performance/firebase_performance.dart';
-import 'package:cash_flow/utils/performace_utils.dart';
 import 'package:flutter/foundation.dart';
 
 class TraceInterceptor extends Interceptor {
@@ -32,6 +32,10 @@ class TraceInterceptor extends Interceptor {
     final path = request.fullUrl;
     final metric = traces[path];
 
+    if (metric == null) {
+      return;
+    }
+
     metric
       ..responseContentType = response.headers.value('Content-Type')
       ..httpResponseCode = response.statusCode;
@@ -41,13 +45,15 @@ class TraceInterceptor extends Interceptor {
   }
 
   void _startTracing(RequestOptions options) {
+    final url = options.fullUrl;
+
     final metric = FirebasePerformance.instance.newHttpMetric(
-      options.fullUrl,
+      url,
       getHttpMethodFromString(options.method),
     );
 
     metric.start();
-    traces[options.fullUrl] = metric;
+    traces[url] = metric;
   }
 }
 

@@ -6,6 +6,7 @@ import 'package:cash_flow/models/domain/user/purchase_profile.dart';
 import 'package:cash_flow/models/errors/purchase_errors.dart';
 import 'package:cash_flow/models/network/request/purchases/purchase_details_request_model.dart';
 import 'package:cash_flow/models/network/request/purchases/update_purchases_request_model.dart';
+import 'package:cash_flow/utils/error_handler.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -60,11 +61,12 @@ class PurchaseService {
   }
 
   Future<bool> isAvailable() {
-    return _connection.isAvailable();
+    return _connection.isAvailable().catchError(recordError);
   }
 
   Future<List<PurchaseDetails>> queryPastPurchases() async {
-    final response = await _connection.queryPastPurchases();
+    final response =
+        await _connection.queryPastPurchases().catchError(recordError);
 
     if (response.error != null) {
       Logger.e('Query of Past Purchases failed: ${response.error}');
@@ -102,12 +104,16 @@ class PurchaseService {
 
   Future<bool> buyConsumable({@required ProductDetails productDetails}) {
     final purchaseParams = PurchaseParam(productDetails: productDetails);
-    return _connection.buyConsumable(purchaseParam: purchaseParams);
+    return _connection
+        .buyConsumable(purchaseParam: purchaseParams)
+        .catchError(recordError);
   }
 
   Future<bool> buyNonConsumable({@required ProductDetails productDetails}) {
     final purchaseParams = PurchaseParam(productDetails: productDetails);
-    return _connection.buyNonConsumable(purchaseParam: purchaseParams);
+    return _connection
+        .buyNonConsumable(purchaseParam: purchaseParams)
+        .catchError(recordError);
   }
 
   Future<List<ProductDetails>> queryProductDetails({Set<String> ids}) {
@@ -117,11 +123,12 @@ class PurchaseService {
       }
 
       return response.productDetails;
-    });
+    }).catchError(recordError);
   }
 
   Future<ProductDetails> getProduct(String productId) async {
-    final response = await _connection.queryProductDetails({productId});
+    final response = await _connection
+        .queryProductDetails({productId}).catchError(recordError);
 
     if (response.notFoundIDs.isNotEmpty) {
       throw NoInAppPurchaseProductsException(response.notFoundIDs);
@@ -145,9 +152,11 @@ class PurchaseService {
       );
 
       Logger.i('Buying non consumable product ($productId)');
-      await _connection.buyNonConsumable(
-        purchaseParam: PurchaseParam(productDetails: product),
-      );
+      await _connection
+          .buyNonConsumable(
+            purchaseParam: PurchaseParam(productDetails: product),
+          )
+          .catchError(recordError);
 
       Logger.i('Waiting purchase details for product ($productId)');
       final purchase = await _getPurchase(productId: productId);
@@ -209,9 +218,11 @@ class PurchaseService {
       );
 
       Logger.i('Buying consumable product ($productId)');
-      await _connection.buyConsumable(
-        purchaseParam: PurchaseParam(productDetails: product),
-      );
+      await _connection
+          .buyConsumable(
+            purchaseParam: PurchaseParam(productDetails: product),
+          )
+          .catchError(recordError);
 
       Logger.i('Waiting purchase details for product ($productId)');
       final purchase = await _getPurchase(productId: productId);
@@ -301,12 +312,14 @@ class PurchaseService {
       return null;
     }
 
-    final purchaseProfile = await _apiClient.sendPurchasedProducts(
-      UpdatePurchasesRequestModel(
-        userId: userId,
-        purchases: completedPurchases,
-      ),
-    );
+    final purchaseProfile = await _apiClient
+        .sendPurchasedProducts(
+          UpdatePurchasesRequestModel(
+            userId: userId,
+            purchases: completedPurchases,
+          ),
+        )
+        .catchError(recordError);
 
     return purchaseProfile;
   }
@@ -334,7 +347,7 @@ class PurchaseService {
 
     final results = await Future.wait([
       for (final purchase in notCompletedPurchases)
-        _connection.completePurchase(purchase),
+        _connection.completePurchase(purchase).catchError(recordError),
     ]);
 
     final retryStatuses = [
@@ -418,7 +431,8 @@ class PurchaseService {
               orElse: () => null,
             ))
         .where((p) => p != null)
-        .first;
+        .first
+        .catchError(recordError);
 
     final newPurchases = _purchases.value;
     newPurchases.remove(productId);
