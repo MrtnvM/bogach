@@ -26,9 +26,7 @@ class GameBoard extends HookWidget {
     final selectedIndex = useState(1);
     final activeGameState = useGlobalState((s) => s.game.activeGameState);
     final gameExists = useCurrentGame((g) => g != null);
-    final isMultiplayer = useCurrentGame(
-      (g) => g?.type == GameType.multiplayer(),
-    );
+    final isMultiplayer = useIsMultiplayerGame();
     final dispatch = useDispatcher();
 
     /// Stops active game when user exit from current screen

@@ -23,8 +23,11 @@ bool useIsGameOver() {
 bool useIsCurrentParticipantWinGame() {
   final userId = useUserId();
   final isWin = useCurrentGame((g) {
-    final participantProgress = g?.participants[userId].progress;
-    return (participantProgress?.progress ?? 0) >= 1;
+    final participantProgress = g != null //
+        ? g.participants[userId].progress.progress
+        : 0;
+
+    return participantProgress >= 1;
   });
 
   return isWin;
