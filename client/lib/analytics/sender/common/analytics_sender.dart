@@ -221,13 +221,23 @@ class AnalyticsSender {
   /// Quests events
   /// ----------------------------------------------------------------
 
-  static void questStarted() => _send('quest_started');
-  static void questCompleted() => _send('quest_completed');
+  static void questStart(String quest) =>
+      _send('quest_start', {'quest': quest});
+
+  static void questContinue(String quest) =>
+      _send('quest_continue', {'quest': quest});
+
+  static void questCompleted(String quest) =>
+      _send('quest_completed', {'quest': quest});
+
+  static void questFailed(String quest) =>
+      _send('quest_failed', {'quest': quest});
 
   static void questsFirstOpen() => _send('quests_first_open');
   static void questsPageOpen() => _send('quests_page_open');
 
   static void questsPurchasePageOpen() => _send('quests_purchase_page_open');
+  static void questsPurchaseStarted() => _send('quests_purchase_started');
   static void questsPurhased() => _send('quests_purhased');
 
   static void questSelected() => _send('quests_quest_selected');

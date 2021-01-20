@@ -6,7 +6,9 @@ void useGameboardAnalytics() {
   final gameExists = useCurrentGame((g) => g != null);
   final isMultiplayer = useIsMultiplayerGame();
   final isQuest = useIsQuestGame();
+  final quest = useCurrentGame((g) => g?.config?.level);
   final isGameOver = useIsGameOver();
+  final isWin = useIsCurrentParticipantWinGame();
 
   useEffect(() {
     AnalyticsSender.gameStart();
@@ -29,7 +31,7 @@ void useGameboardAnalytics() {
     if (isMultiplayer) {
       AnalyticsSender.multiplayerGameStart();
     } else if (isQuest) {
-      AnalyticsSender.questStarted();
+      AnalyticsSender.questStart(quest);
     } else {
       AnalyticsSender.singleplayerGameStart();
     }
@@ -38,7 +40,6 @@ void useGameboardAnalytics() {
   }, [gameExists, isMultiplayer, isQuest]);
 
   final isGameEndEventsSent = useState(false);
-  final isWin = useIsCurrentParticipantWinGame();
   useEffect(() {
     if (!gameExists || !isGameOver || isGameEndEventsSent.value) {
       return null;
@@ -59,4 +60,15 @@ void useGameboardAnalytics() {
 
     return null;
   }, [gameExists, isGameOver, isWin, isMultiplayer]);
+
+  useEffect(() {
+    if (gameExists && isQuest && isGameOver) {
+      if (isWin) {
+        AnalyticsSender.questCompleted(quest);
+      } else {
+        AnalyticsSender.questFailed(quest);
+      }
+    }
+    return null;
+  }, [gameExists, isQuest, isGameOver]);
 }

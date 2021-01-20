@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
@@ -158,6 +159,20 @@ class _QuestItemWidget extends HookWidget {
 
     if (isQuestAvailable) {
       return (quest, action) {
+        AnalyticsSender.questSelected();
+
+        if (index == 0) {
+          AnalyticsSender.questsFirstQuestSelected();
+        } else if (index == 1) {
+          AnalyticsSender.questsSecondQuestSelected();
+        }
+
+        if (action == QuestAction.startNewGame) {
+          AnalyticsSender.questStart(quest.id);
+        } else if (action == QuestAction.continueGame) {
+          AnalyticsSender.questContinue(quest.id);
+        }
+
         return dispatch(StartQuestGameAction(quest.id, action))
             .then((_) => isTutorialPassed
                 ? appRouter.goTo(const GameBoard())
@@ -167,7 +182,13 @@ class _QuestItemWidget extends HookWidget {
     }
 
     if (isQuestOpenedByUser && !isQuestPurchased) {
-      return (level, _) => appRouter.goTo(QuestsAccessPage(quest: level));
+      return (level, _) {
+        if (index == 1) {
+          AnalyticsSender.questsSecondQuestSelected();
+        }
+
+        appRouter.goTo(QuestsAccessPage(quest: level));
+      };
     }
 
     return null;
