@@ -8,6 +8,10 @@ export class HistoryGameTransformer extends GameTransformer {
     super();
   }
 
+  transformerContext() {
+    return { name: 'HistoryGameTransformer' };
+  }
+
   apply(game: Game): Game {
     const isGameCompleted = game.state.gameStatus === 'game_over';
     const isMoveCompleted = this.isAllParticipantsCompletedMove(game);

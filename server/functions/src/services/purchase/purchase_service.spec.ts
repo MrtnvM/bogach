@@ -196,7 +196,7 @@ describe('Purchase Service', () => {
 
     await expect(
       purchaseService.reduceMultiplayerGames([initialProfile.userId], 'gameId', nowInUtc())
-    ).rejects.toThrow(new Error("multiplayerGamesCount can't be less then zero"));
+    ).rejects.toThrow(/.*multiplayerGamesCount can't be less then zero.*/);
   });
 
   test('Calculation of purchase profile', () => {

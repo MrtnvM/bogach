@@ -34,7 +34,7 @@ export class GameEventGenerator {
 
       if (level < 0 || level > 10) {
         throw new Error(
-          'ERROR: Incorrect value for probalility level. It should be in interval 0...10 ' +
+          'ERROR: Incorrect value for probability level. It should be in interval 0...10 ' +
             'and it should be integer number'
         );
       }
@@ -58,7 +58,7 @@ export class GameEventGenerator {
 
     // For event generation used game updated with generated game events.
     // It's required for concrete game event generator have an ability
-    // to modify event content according to already exisiting events in the current month
+    // to modify event content according to already existing events in the current month
     let updatedGame = produce(game, (draft) => {
       draft.currentEvents = [];
     });
@@ -87,7 +87,19 @@ export class GameEventGenerator {
         continue;
       }
 
-      const gameEvent = rule.generate(updatedGame);
+      let gameEvent: GameEvent<any> | undefined;
+
+      try {
+        gameEvent = rule.generate(updatedGame);
+      } catch (e) {
+        const errorMessage =
+          `GENERATION OF GAME EVENT BY RULE: ${rule.getType()}` +
+          `ERROR MESSAGE: ${e && e['message']}`;
+
+        const error = new Error(errorMessage);
+        console.error(error);
+        throw error;
+      }
 
       if (gameEvent) {
         gameEvents = [...gameEvents, gameEvent];

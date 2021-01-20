@@ -3,6 +3,10 @@ import { Game } from '../../models/domain/game/game';
 import { GameTransformer } from './game_transformer';
 
 export class MonthTransformer extends GameTransformer {
+  transformerContext() {
+    return { name: 'MonthTransformer' };
+  }
+
   apply(game: Game): Game {
     const isMoveCompleted = this.isAllParticipantsCompletedMove(game);
 

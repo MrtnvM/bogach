@@ -8,6 +8,10 @@ import { PossessionState } from '../../models/domain/possession_state';
 import { Possessions } from '../../models/domain/possessions';
 
 export class PossessionStateTransformer extends GameTransformer {
+  transformerContext() {
+    return { name: 'PossessionStateTransformer' };
+  }
+
   apply(game: Game): Game {
     if (game.state.gameStatus === 'game_over') {
       return game;

@@ -5,6 +5,10 @@ import { Game, GameEntity } from '../../models/domain/game/game';
 import { GameTargetEntity } from '../../models/domain/game/game_target';
 
 export class WinnersTransformer extends GameTransformer {
+  transformerContext() {
+    return { name: 'WinnersTransformer' };
+  }
+
   apply(game: Game): Game {
     if (game.state.gameStatus === 'game_over') {
       return game;

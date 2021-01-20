@@ -8,6 +8,10 @@ export class MonthResultTransformer extends GameTransformer {
     super();
   }
 
+  transformerContext() {
+    return { name: 'MonthResultTransformer', month: this.month };
+  }
+
   apply(game: Game): Game {
     if (game.state.gameStatus === 'game_over') {
       return game;
