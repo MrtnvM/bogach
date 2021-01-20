@@ -176,6 +176,7 @@ class AnalyticsSender {
 
   static void gameStart() => _send('game_start');
   static void gameEnd() => _send('game_end');
+  static void gameExit() => _send('game_exit');
   static void gameWin() => _send('game_win');
   static void gameLoss() => _send('game_loss');
 
@@ -183,6 +184,7 @@ class AnalyticsSender {
   /// Singleplayer events
   /// ----------------------------------------------------------------
 
+  static void singleplayerGameStart() => _send('singleplayer_game_start');
   static void singleplayerPageOpen() => _send('singleplayer_page_open');
   static void singleplayerContinueGame() => _send('singleplayer_game_continue');
   static void singleplayerTemplateSelected(String templateName) =>

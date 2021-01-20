@@ -4,6 +4,7 @@ import 'package:cash_flow/features/game/actions/start_game_action.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
 import 'package:cash_flow/models/domain/game/game/type/game_type.dart';
+import 'package:cash_flow/presentation/gameboard/gameboard_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/tabs/actions_tab.dart';
 import 'package:cash_flow/presentation/gameboard/tabs/finances_tab.dart';
 import 'package:cash_flow/presentation/gameboard/tabs/progress_tab.dart';
@@ -34,6 +35,8 @@ class GameBoard extends HookWidget {
     useEffect(() {
       return () => dispatch(StopActiveGameAction());
     }, []);
+
+    useGameboardAnalytics();
 
     if (!gameExists) {
       return LoadableView(

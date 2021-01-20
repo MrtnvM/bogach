@@ -89,6 +89,8 @@ Future<void> main({
 
   launchCounter.incrementLaunchCount();
 
+  AnalyticsSender.appLaunched();
+
   runZonedGuarded<Future<void>>(() async {
     runApp(
       StoreProvider<AppState>(

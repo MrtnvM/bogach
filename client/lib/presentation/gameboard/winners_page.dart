@@ -1,10 +1,8 @@
 import 'dart:math';
 
-import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
-import 'package:cash_flow/models/domain/game/game/type/game_type.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -21,15 +19,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class WinnersPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final userId = useUserId();
-    final isWin = useCurrentGame((g) {
-      final participantProgress = g?.participants[userId].progress;
-      return (participantProgress?.progress ?? 0) >= 1;
-    });
-    final isMultiplayer = useCurrentGame(
-      (g) => g?.type == GameType.multiplayer(),
-    );
-    final isQuest = useCurrentGame((g) => g?.config?.level != null);
+    final isWin = useIsCurrentParticipantWinGame();
+    final isMultiplayer = useIsMultiplayerGame();
+    final isQuest = useIsQuestGame();
     final gameExists = useCurrentGame((g) => g != null);
 
     if (!gameExists) {
