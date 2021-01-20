@@ -13,5 +13,17 @@ export { HistoryGameTransformer } from './game/history_game_transformer';
 export { UpdateMoveStartDateTransformer } from './game/update_move_start_date_transformer';
 
 export const applyGameTransformers = (game: Game, transformers: GameTransformer[]) => {
-  return (transformers || []).reduce((prev, transformer) => transformer.apply(prev), game);
+  return (transformers || []).reduce((prev, transformer) => {
+    try {
+      return transformer.apply(prev);
+    } catch (err) {
+      const context = transformer.transformerContext();
+      const errorMessage =
+        'GAME TRANSFORMER ERROR\n' +
+        `CONTEXT: ${JSON.stringify(context, null, 2)}\n` +
+        `ERROR MESSAGE: ${err && err['message']}`;
+
+      throw new Error(errorMessage);
+    }
+  }, game);
 };

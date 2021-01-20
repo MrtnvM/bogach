@@ -9,6 +9,10 @@ export class InsuranceTransformer extends GameTransformer {
     super();
   }
 
+  transformerContext() {
+    return { name: 'InsuranceTransformer', userId: this.userId };
+  }
+
   apply(game: Game): Game {
     const participant = game.participants[this.userId];
     const userPossessions = participant.possessions;

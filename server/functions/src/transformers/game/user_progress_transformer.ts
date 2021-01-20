@@ -15,6 +15,15 @@ export class UserProgressTransformer extends GameTransformer {
     super();
   }
 
+  transformerContext() {
+    return {
+      name: 'UserProgressTransformer',
+      eventId: this.eventId,
+      userId: this.userId,
+      completeMonth: this.completeMonth,
+    };
+  }
+
   apply(game: Game): Game {
     const currentEventIndex = this.completeMonth
       ? game.currentEvents.length - 1

@@ -4,7 +4,21 @@ declare var process: {
   };
 };
 
+import * as Rollbar from 'rollbar';
+
+/// Rollbar
+
+export const rollbar = new Rollbar({
+  accessToken: '30d4dbdf62264a4cb93cda53ea80bebe',
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+});
+
+/// Cloud
+
 export const CLOUD_FUNCTIONS_REGION = 'europe-west2';
+
+/// Environment
 
 export type APIEnvironment = 'local' | 'staging' | 'uat' | 'production';
 

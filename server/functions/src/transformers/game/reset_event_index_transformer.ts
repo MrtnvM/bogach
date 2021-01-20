@@ -8,6 +8,10 @@ export class ResetEventIndexTransformer extends GameTransformer {
     super();
   }
 
+  transformerContext() {
+    return { name: 'ResetEventIndexTransformer', userId: this.userId };
+  }
+
   apply(game: Game): Game {
     const updatedGame = produce(game, (draft) => {
       const participant = draft.participants[this.userId];

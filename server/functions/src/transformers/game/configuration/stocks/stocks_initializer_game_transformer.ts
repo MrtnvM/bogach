@@ -8,6 +8,10 @@ import * as random from 'random';
 import { produce } from 'immer';
 
 export class StocksInitializerGameTransformer extends GameTransformer {
+  transformerContext() {
+    return { name: 'StocksInitializerGameTransformer' };
+  }
+
   apply(game: Game): Game {
     const isGameCompleted = game.state.gameStatus === 'game_over';
     const isStocksConfigured = game.config.stocks.length !== 0;

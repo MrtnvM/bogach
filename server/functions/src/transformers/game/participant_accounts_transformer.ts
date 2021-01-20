@@ -3,6 +3,10 @@ import { GameTransformer } from './game_transformer';
 import { Game } from '../../models/domain/game/game';
 
 export class ParticipantAccountsTransformer extends GameTransformer {
+  transformerContext() {
+    return { name: 'ParticipantAccountsTransformer' };
+  }
+
   apply(game: Game): Game {
     if (game.state.gameStatus === 'game_over') {
       return game;

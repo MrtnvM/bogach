@@ -10,6 +10,10 @@ import { valueRange, randomValueFromRange } from '../../../../core/data/value_ra
 import { DebentureEvent } from '../../../../events/debenture/debenture_event';
 
 export class DebentureInitializerGameTransformer extends GameTransformer {
+  transformerContext() {
+    return { name: 'DebentureInitializerGameTransformer' };
+  }
+
   apply(game: Game): Game {
     const isGameCompleted = game.state.gameStatus === 'game_over';
     const isDebenturesConfigured = game.config.debentures.length !== 0;

@@ -33,6 +33,7 @@ import { UserProvider } from '../../providers/user_provider';
 import { TimerProvider } from '../../providers/timer_provider';
 import { Game, GameEntity } from '../../models/domain/game/game';
 import { GameTemplateEntity } from '../../game_templates/models/game_template';
+import { getCurrentEnvironment, rollbar } from '../../config';
 
 export class GameService {
   constructor(
@@ -62,157 +63,189 @@ export class GameService {
   private handlerMap: { [type: string]: PlayerActionHandler } = {};
 
   async createNewGame(templateId: GameTemplateEntity.Id, participantsIds: UserEntity.Id[]) {
-    const createdGame = await this.gameProvider.createGame(templateId, participantsIds);
+    return this.executeWithErrorReporting({ templateId, participantsIds }, async () => {
+      const createdGame = await this.gameProvider.createGame(templateId, participantsIds);
 
-    if (createdGame.type === 'multiplayer') {
-      this.timerProvider.scheduleTimer({
-        startDateInUTC: createdGame.state.moveStartDateInUTC,
-        gameId: createdGame.id,
-        monthNumber: 1,
-      });
-    }
+      if (createdGame.type === 'multiplayer') {
+        this.timerProvider.scheduleTimer({
+          startDateInUTC: createdGame.state.moveStartDateInUTC,
+          gameId: createdGame.id,
+          monthNumber: 1,
+        });
+      }
 
-    return createdGame;
+      return createdGame;
+    });
   }
 
   async createNewGameByLevel(levelId: GameLevelEntity.Id, participantsIds: UserEntity.Id[]) {
-    const gameLevel = this.gameLevelsProvider.getGameLevel(levelId);
-    const { template } = gameLevel;
+    return this.executeWithErrorReporting({ levelId, participantsIds }, async () => {
+      const gameLevel = this.gameLevelsProvider.getGameLevel(levelId);
+      const { template } = gameLevel;
 
-    const createdGame = await this.gameProvider.createGameByTemplate(
-      template,
-      participantsIds,
-      gameLevel
-    );
+      const createdGame = await this.gameProvider.createGameByTemplate(
+        template,
+        participantsIds,
+        gameLevel
+      );
 
-    return createdGame;
+      return createdGame;
+    });
   }
 
   async handlePlayerAction(eventId: GameEventEntity.Id, action: any, context: GameContext) {
-    const { gameId, userId } = context;
+    return this.executeWithErrorReporting({ eventId, action, context }, async () => {
+      const { gameId, userId } = context;
 
-    let game = await this.gameProvider.getGame(gameId);
-    if (!game) throw new Error('No game with ID: ' + gameId);
+      let game = await this.gameProvider.getGame(gameId);
+      if (!game) throw new Error('No game with ID: ' + gameId);
 
-    const event = game.currentEvents.find((e) => e.id === eventId);
-    if (!event) throw new Error('No game event with ID: ' + eventId);
+      const event = game.currentEvents.find((e) => e.id === eventId);
+      if (!event) throw new Error('No game event with ID: ' + eventId);
 
-    const handler = this.handlerMap[event.type];
-    if (!handler) throw new Error('Event handler not found for event with ID: ' + eventId);
+      const handler = this.handlerMap[event.type];
+      if (!handler) throw new Error('Event handler not found for event with ID: ' + eventId);
 
-    if (game.state.gameStatus === 'game_over') {
-      return;
-    }
+      if (game.state.gameStatus === 'game_over') {
+        return;
+      }
 
-    if (action) {
-      await handler.validate(event, action);
-      game = await handler.handle(game, event, action, userId);
-    }
+      if (action) {
+        await handler.validate(event, action);
+        game = await handler.handle(game, event, action, userId);
+      }
 
-    const updatedGame = applyGameTransformers(game, [
-      new UserProgressTransformer(eventId, userId),
-      new ParticipantAccountsTransformer(),
-      new PossessionStateTransformer(),
-      new WinnersTransformer(),
-      new HistoryGameTransformer(),
-      new GameEventsTransformer(),
-      new MonthResultTransformer(),
-      new UpdateMoveStartDateTransformer(),
-      new MonthTransformer(),
-    ]);
+      let updatedGame: Game;
 
-    if (game.state.monthNumber < updatedGame.state.monthNumber) {
-      this.scheduleCompleteMonthTimer(updatedGame);
-      await this.gameProvider.updateGame(updatedGame);
-    } else {
-      await this.gameProvider.updateGameForUser(updatedGame, userId);
-    }
+      try {
+        updatedGame = applyGameTransformers(game, [
+          new UserProgressTransformer(eventId, userId),
+          new ParticipantAccountsTransformer(),
+          new PossessionStateTransformer(),
+          new WinnersTransformer(),
+          new HistoryGameTransformer(),
+          new GameEventsTransformer(),
+          new MonthResultTransformer(),
+          new UpdateMoveStartDateTransformer(),
+          new MonthTransformer(),
+        ]);
+      } catch (error) {
+        const errorMessage =
+          'HANDLE PLAYER ACTION ERROR ON GAME CHANGING:\n' + //
+          `ERROR MESSAGE: ${error['message'] ?? ''}\n` +
+          `GAME: ${JSON.stringify(game, null, 2)}`;
 
-    await this.removeCompletedGameFromLastGamesIfNeeded(updatedGame);
-    await this.updateCurrentUserQuestIndexIfNeeded(updatedGame, userId);
+        throw new Error(errorMessage);
+      }
+
+      if (game.state.monthNumber < updatedGame.state.monthNumber) {
+        this.scheduleCompleteMonthTimer(updatedGame);
+        await this.gameProvider.updateGame(updatedGame);
+      } else {
+        await this.gameProvider.updateGameForUser(updatedGame, userId);
+      }
+
+      await this.removeCompletedGameFromLastGamesIfNeeded(updatedGame);
+      await this.updateCurrentUserQuestIndexIfNeeded(updatedGame, userId);
+    });
   }
 
   async startNewMonth(context: GameContext) {
-    const { gameId, userId } = context;
+    return this.executeWithErrorReporting(context, async () => {
+      const { gameId, userId } = context;
 
-    const game = await this.gameProvider.getGame(gameId);
-    if (!game) throw new Error('No game with ID: ' + gameId);
+      const game = await this.gameProvider.getGame(gameId);
+      if (!game) throw new Error('No game with ID: ' + gameId);
 
-    const participantProgress = game.participants[userId].progress;
+      const participantProgress = game.participants[userId].progress;
 
-    let updatedGame: Game | undefined;
+      let updatedGame: Game | undefined;
 
-    if (participantProgress.status === 'month_result') {
-      const now = new Date();
-      const moveStartDate = new Date(game.state.moveStartDateInUTC);
-      const diff = now.getTime() - moveStartDate.getTime();
-      const diffInMinutes = diff / 1000 / 60;
-      const shouldScheduleMoveTimer = diffInMinutes > 1.0;
+      if (participantProgress.status === 'month_result') {
+        const now = new Date();
+        const moveStartDate = new Date(game.state.moveStartDateInUTC);
+        const diff = now.getTime() - moveStartDate.getTime();
+        const diffInMinutes = diff / 1000 / 60;
+        const shouldScheduleMoveTimer = diffInMinutes > 1.0;
 
-      updatedGame = applyGameTransformers(game, [
-        new ResetEventIndexTransformer(userId),
-        new InsuranceTransformer(userId),
-        new PossessionStateTransformer(),
-      ]);
-
-      if (shouldScheduleMoveTimer) {
-        updatedGame = applyGameTransformers(updatedGame, [
-          new UpdateMoveStartDateTransformer(true),
+        updatedGame = applyGameTransformers(game, [
+          new ResetEventIndexTransformer(userId),
+          new InsuranceTransformer(userId),
+          new PossessionStateTransformer(),
         ]);
-        this.scheduleCompleteMonthTimer(updatedGame);
 
-        await this.gameProvider.updateGameWithoutParticipants(updatedGame);
+        if (shouldScheduleMoveTimer) {
+          updatedGame = applyGameTransformers(updatedGame, [
+            new UpdateMoveStartDateTransformer(true),
+          ]);
+          this.scheduleCompleteMonthTimer(updatedGame);
+
+          await this.gameProvider.updateGameWithoutParticipants(updatedGame);
+        }
+
+        await this.gameProvider.updateGameForUser(updatedGame, userId);
+        return updatedGame;
       }
 
-      await this.gameProvider.updateGameForUser(updatedGame, userId);
-      return updatedGame;
-    }
-
-    return undefined;
+      return undefined;
+    });
   }
 
   async completeMonth(gameId: GameEntity.Id, monthNumber: number) {
-    const game = await this.gameProvider.getGame(gameId);
-    if (!game) throw new Error('No game with ID: ' + gameId);
+    return this.executeWithErrorReporting({ gameId, monthNumber }, async () => {
+      const game = await this.gameProvider.getGame(gameId);
+      if (!game) throw new Error('No game with ID: ' + gameId);
 
-    const isGameCompleted = game.state.gameStatus === 'game_over';
+      const isGameCompleted = game.state.gameStatus === 'game_over';
 
-    const isTheSameMonth = game.state.monthNumber === monthNumber;
-    const atLeastOneParticipantStartedNewMonth = game.participantsIds.some((id) => {
-      return game.participants[id].progress.currentMonthForParticipant === monthNumber;
+      const isTheSameMonth = game.state.monthNumber === monthNumber;
+      const atLeastOneParticipantStartedNewMonth = game.participantsIds.some((id) => {
+        return game.participants[id].progress.currentMonthForParticipant === monthNumber;
+      });
+      const canCompleteMonth = isTheSameMonth && atLeastOneParticipantStartedNewMonth;
+
+      if (isGameCompleted || !canCompleteMonth) {
+        return;
+      }
+
+      let updatedGame: Game;
+
+      try {
+        updatedGame = applyGameTransformers(game, [
+          ...game.participantsIds.map((participantId) => {
+            const eventId = undefined;
+            const shouldCompleteMonth = true;
+
+            return new UserProgressTransformer(eventId, participantId, shouldCompleteMonth);
+          }),
+
+          new ParticipantAccountsTransformer(),
+          new PossessionStateTransformer(),
+          new WinnersTransformer(),
+          new HistoryGameTransformer(),
+          new GameEventsTransformer(),
+          new MonthResultTransformer(),
+          new UpdateMoveStartDateTransformer(),
+          new MonthTransformer(),
+        ]);
+      } catch (error) {
+        const errorMessage =
+          'COMPLETE MONTH ERROR ON GAME CHANGING:\n' + //
+          `ERROR MESSAGE: ${error && error['message']}\n` +
+          `GAME: ${JSON.stringify(game, null, 2)}`;
+
+        throw new Error(errorMessage);
+      }
+
+      if (updatedGame.state.monthNumber > monthNumber) {
+        this.scheduleCompleteMonthTimer(updatedGame);
+      }
+
+      await this.gameProvider.updateGame(updatedGame);
     });
-    const canCompleteMonth = isTheSameMonth && atLeastOneParticipantStartedNewMonth;
-
-    if (isGameCompleted || !canCompleteMonth) {
-      return;
-    }
-
-    const updatedGame = applyGameTransformers(game, [
-      ...game.participantsIds.map((participantId) => {
-        const eventId = undefined;
-        const shouldCompleteMonth = true;
-
-        return new UserProgressTransformer(eventId, participantId, shouldCompleteMonth);
-      }),
-
-      new ParticipantAccountsTransformer(),
-      new PossessionStateTransformer(),
-      new WinnersTransformer(),
-      new HistoryGameTransformer(),
-      new GameEventsTransformer(),
-      new MonthResultTransformer(),
-      new UpdateMoveStartDateTransformer(),
-      new MonthTransformer(),
-    ]);
-
-    if (updatedGame.state.monthNumber > monthNumber) {
-      this.scheduleCompleteMonthTimer(updatedGame);
-    }
-
-    await this.gameProvider.updateGame(updatedGame);
   }
 
-  async updateCurrentUserQuestIndexIfNeeded(game: Game, userId: UserEntity.Id) {
+  private async updateCurrentUserQuestIndexIfNeeded(game: Game, userId: UserEntity.Id) {
     const shouldOpenNewQuestForUser =
       game.state.gameStatus === 'game_over' &&
       game.config.level !== null &&
@@ -229,7 +262,7 @@ export class GameService {
     await this.userProvider.updateCurrentQuestIndex(userId, newQuestIndex);
   }
 
-  async removeCompletedGameFromLastGamesIfNeeded(game: Game) {
+  private async removeCompletedGameFromLastGamesIfNeeded(game: Game) {
     if (game.state.gameStatus === 'game_over') {
       const removeCompletedGameOperations = game.participantsIds.map((participantId) =>
         this.userProvider.removeGameFromLastGames(participantId, game.id)
@@ -250,5 +283,25 @@ export class GameService {
       gameId: updatedGame.id,
       monthNumber: updatedGame.state.monthNumber,
     });
+  }
+
+  private async executeWithErrorReporting<T>(context: any, callback: () => Promise<T>): Promise<T> {
+    const component = 'Game Service';
+    const environment = getCurrentEnvironment();
+
+    try {
+      return await callback();
+    } catch (err) {
+      const errorMessage =
+        'PURCHASE SERVICE\n' +
+        `ENVIRONMENT: ${environment}\n` +
+        `ERROR MESSAGE: ${err && err['message']}\n` +
+        `CONTEXT: ${JSON.stringify(context, null, 2)}`;
+
+      const error = new Error(errorMessage);
+
+      rollbar.error(error, `COMPONENT: ${component}, ` + `ENVIRONMENT: ${environment}`);
+      throw error;
+    }
   }
 }

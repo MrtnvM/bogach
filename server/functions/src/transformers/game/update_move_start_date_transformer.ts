@@ -7,6 +7,10 @@ export class UpdateMoveStartDateTransformer extends GameTransformer {
     super();
   }
 
+  transformerContext() {
+    return { name: 'UpdateMoveStartDateTransformer', force: this.force };
+  }
+
   apply(game: Game): Game {
     const isMoveCompleted = this.isAllParticipantsCompletedMove(game);
     const isSingleplayerGame = game.type === 'singleplayer';

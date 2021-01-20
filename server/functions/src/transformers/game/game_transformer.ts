@@ -1,6 +1,7 @@
 import { Game } from '../../models/domain/game/game';
 
 export abstract class GameTransformer {
+  abstract transformerContext(): any;
   abstract apply(game: Game): Game;
 
   isAllParticipantsCompletedMove(game: Game): boolean {
