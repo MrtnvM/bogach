@@ -25,7 +25,6 @@ void useGameboardAnalytics() {
     }
 
     isGameStartEventsSent.value = true;
-    AnalyticsSender.gameStart();
 
     if (isMultiplayer) {
       AnalyticsSender.multiplayerGameStart();
