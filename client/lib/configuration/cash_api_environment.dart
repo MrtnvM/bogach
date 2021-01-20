@@ -39,7 +39,7 @@ class CashApiEnvironment extends ApiEnvironment {
         '?ns=cash-flow-staging',
     validateRequestsByDefault: false,
     isRequestsAuthorisedByDefault: false,
-    isAnalyticsEnabled: false,
+    isAnalyticsEnabled: true,
     isLoggerEnabled: true,
   );
 
@@ -49,7 +49,7 @@ class CashApiEnvironment extends ApiEnvironment {
     dynamicLink: DynamicLinks('staging.bogach-game.ru'),
     validateRequestsByDefault: false,
     isRequestsAuthorisedByDefault: false,
-    isAnalyticsEnabled: false,
+    isAnalyticsEnabled: true,
     isLoggerEnabled: true,
   );
 

@@ -290,6 +290,11 @@ class AnalyticsSender {
       return;
     }
 
+    print(
+      'ANALYTICS EVENT: $eventName'
+      '${parameters.isNotEmpty ? '\nPARAMS: $parameters' : ''}',
+    );
+
     if (_userId != null) {
       parameters['user_id'] = _userId;
     }
