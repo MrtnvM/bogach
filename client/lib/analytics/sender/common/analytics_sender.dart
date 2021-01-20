@@ -297,7 +297,7 @@ class AnalyticsSender {
     );
 
     if (_userId != null) {
-      parameters['user_id'] = _userId;
+      parameters = {...parameters, 'userId': _userId};
     }
 
     firebaseAnalytics.logEvent(
