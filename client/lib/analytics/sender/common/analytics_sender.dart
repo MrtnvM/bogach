@@ -269,7 +269,8 @@ class AnalyticsSender {
   /// ----------------------------------------------------------------
 
   static void appLaunched() => _send('app_open');
-  static void signUp() => _send('sign_up');
+  static void signIn() => _send('sign_in');
+  static void singInFailed() => _send('sing_in_failed');
 
   /// ----------------------------------------------------------------
   /// Common methods
