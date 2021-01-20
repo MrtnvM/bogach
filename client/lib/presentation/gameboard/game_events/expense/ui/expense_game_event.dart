@@ -36,7 +36,7 @@ class ExpenseGameEvent extends HookWidget {
         PlayerActionBar(
           confirm: () {
             sendPlayerAction();
-            AnalyticsSender.sendExpenseEvent(event.name, eventData.expense);
+            AnalyticsSender.expenseEvent(event.name, eventData.expense);
           },
         ),
       ],

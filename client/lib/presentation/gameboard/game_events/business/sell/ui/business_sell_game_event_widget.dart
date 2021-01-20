@@ -80,7 +80,7 @@ class BusinessSellGameEventWidget extends HookWidget {
               sendPlayerAction();
             }
 
-            AnalyticsSender.sendSellBusinessEvent(
+            AnalyticsSender.sellBusiness(
               event.name,
               eventData.currentPrice,
             );
@@ -88,7 +88,7 @@ class BusinessSellGameEventWidget extends HookWidget {
           skip: () {
             dispatch(SendPlayerMoveAction(eventId: event.id));
 
-            AnalyticsSender.sendSkipSellBusinessEvent(
+            AnalyticsSender.skipSellBusiness(
               event.name,
               eventData.currentPrice,
             );

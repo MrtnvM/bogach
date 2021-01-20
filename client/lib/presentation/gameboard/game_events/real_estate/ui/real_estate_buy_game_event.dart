@@ -59,7 +59,7 @@ class RealEstateBuyGameEvent extends HookWidget {
         PlayerActionBar(
           confirm: () {
             sendPlayerAction();
-            AnalyticsSender.sendBuyRealEstateEvent(
+            AnalyticsSender.buyRealEstate(
               event.name,
               eventData.currentPrice,
             );
@@ -67,7 +67,7 @@ class RealEstateBuyGameEvent extends HookWidget {
           skip: () {
             dispatch(SendPlayerMoveAction(eventId: event.id));
 
-            AnalyticsSender.sendSkipBuyRealEstateEvent(
+            AnalyticsSender.skipBuyRealEstate(
               event.name,
               eventData.currentPrice,
             );

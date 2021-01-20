@@ -2,7 +2,6 @@ import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/features/config/actions/load_config_action.dart';
-import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/presentation/multiplayer/create_multiplayer_game_page.dart';
@@ -31,7 +30,10 @@ class MainPage extends HookWidget {
       return null;
     }, []);
 
-    AnalyticsSender.setUserId(user.userId);
+    useEffect(() {
+      AnalyticsSender.setUserId(user.userId);
+      return null;
+    }, [user]);
 
     return CashFlowScaffold(
       title: Strings.chooseGame,
@@ -39,20 +41,20 @@ class MainPage extends HookWidget {
       showUser: true,
       child: Column(
         children: <Widget>[
-          _buildGameActions(context, user),
+          _buildGameActions(context),
           _buildAuthButton(needAuthorization),
         ],
       ),
     );
   }
 
-  Widget _buildGameActions(BuildContext context, UserProfile userProfile) {
+  Widget _buildGameActions(BuildContext context) {
     return Column(
       children: <Widget>[
         ColorButton(
           onPressed: () {
             appRouter.goTo(SingleGamePage());
-            AnalyticsSender.sendNewGame(userProfile.userId);
+            AnalyticsSender.singleplayerPageOpen();
           },
           text: Strings.singleGame,
         ),
@@ -65,7 +67,7 @@ class MainPage extends HookWidget {
         ColorButton(
           onPressed: () {
             appRouter.goTo(CreateMultiplayerGamePage());
-            AnalyticsSender.sendMultiplayerGame(userProfile.userId);
+            AnalyticsSender.multiplayerLevelsPageOpen();
           },
           text: Strings.multiPlayerGame,
         ),

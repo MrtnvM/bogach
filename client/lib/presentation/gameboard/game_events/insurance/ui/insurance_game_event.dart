@@ -59,7 +59,7 @@ class InsuranceGameEvent extends HookWidget {
         PlayerActionBar(
           confirm: () {
             sendPlayerAction();
-            AnalyticsSender.sendBuyInsuranceEvent(
+            AnalyticsSender.buyInsurance(
               event.name,
               eventData.cost,
             );
@@ -67,7 +67,7 @@ class InsuranceGameEvent extends HookWidget {
           skip: () {
             dispatch(SendPlayerMoveAction(eventId: event.id));
 
-            AnalyticsSender.sendSkipBuyInsuranceEvent(
+            AnalyticsSender.skipBuyInsurance(
               event.name,
               eventData.cost,
             );

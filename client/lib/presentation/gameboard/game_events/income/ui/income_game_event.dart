@@ -38,7 +38,7 @@ class IncomeGameEvent extends HookWidget {
         const SizedBox(height: 28),
         PlayerActionBar(confirm: () {
           sendPlayerAction();
-          AnalyticsSender.sendIncomeEvent(event.name, eventData.income);
+          AnalyticsSender.incomeEvent(event.name, eventData.income);
         }),
       ],
     );

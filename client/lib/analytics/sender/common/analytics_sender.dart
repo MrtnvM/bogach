@@ -5,11 +5,22 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 class AnalyticsSender {
   AnalyticsSender._();
 
-  static final FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics();
+  static final firebaseAnalytics = FirebaseAnalytics();
 
   static bool isEnabled = false;
+  static String _userId;
 
-  static void sendBuySellStockEvent(
+  /// ----------------------------------------------------------------
+  /// Gameboard events
+  /// ----------------------------------------------------------------
+
+  static void gameboardFinancesTabOpen() =>
+      _send('gameboard_finances_tab_open');
+
+  static void gameboardProgressTabOpen() =>
+      _send('gameboard_progress_tab_open');
+
+  static void buySellStock(
     BuySellAction action,
     int count,
     String stockName,
@@ -21,54 +32,50 @@ class AnalyticsSender {
       'stock_price': price
     };
 
-    final eventName = action.map<String>(
+    final eventName = action.map(
       buy: (_) => 'stock_buy_event',
       sell: (_) => 'stock_sell_event',
     );
 
-    _sendEvent(eventName, params);
+    _send(eventName, params);
   }
 
-  static void sendSkipBuySellStockEvent(
+  static void skipBuySellStock(
     BuySellAction action,
     String stockName,
     double price,
   ) {
     final params = {'stock_name': stockName, 'stock_price': price};
 
-    final eventName = action.map<String>(
+    final eventName = action.map(
       buy: (_) => 'stock_skip_buy_event',
       sell: (_) => 'stock_skip_sell_event',
     );
 
-    _sendEvent(eventName, params);
+    _send(eventName, params);
   }
 
-  static void sendBuyBusinessEvent(String businessName, int price) {
+  static void buyBusiness(String businessName, int price) {
     final params = {'business_name': businessName, 'business_price': price};
-
-    _sendEvent('business_buy_event', params);
+    _send('business_buy_event', params);
   }
 
-  static void sendSkipBuyBusinessEvent(String businessName, int price) {
+  static void skipBuyBusiness(String businessName, int price) {
     final params = {'business_name': businessName, 'business_price': price};
-
-    _sendEvent('business_skip_buy_event', params);
+    _send('business_skip_buy_event', params);
   }
 
-  static void sendSellBusinessEvent(String businessName, int price) {
+  static void sellBusiness(String businessName, int price) {
     final params = {'business_name': businessName, 'business_price': price};
-
-    _sendEvent('business_sell_event', params);
+    _send('business_sell_event', params);
   }
 
-  static void sendSkipSellBusinessEvent(String businessName, int price) {
+  static void skipSellBusiness(String businessName, int price) {
     final params = {'business_name': businessName, 'business_price': price};
-
-    _sendEvent('business_skip_sell_event', params);
+    _send('business_skip_sell_event', params);
   }
 
-  static void sendBuySellDebentureEvent(
+  static void buySellDebenture(
     BuySellAction action,
     int count,
     String debentureName,
@@ -85,10 +92,10 @@ class AnalyticsSender {
       sell: (_) => 'debenture_sell_event',
     );
 
-    _sendEvent(eventName, params);
+    _send(eventName, params);
   }
 
-  static void sendSkipBuySellDebentureEvent(
+  static void skipBuySellDebenture(
     BuySellAction action,
     String debentureName,
     double price,
@@ -103,106 +110,186 @@ class AnalyticsSender {
       sell: (_) => 'debenture_skip_sell_event',
     );
 
-    _sendEvent(eventName, params);
+    _send(eventName, params);
   }
 
-  static void sendExpenseEvent(String expenseName, int value) {
+  static void expenseEvent(String expenseName, int value) {
     final params = {
       'expense_name': expenseName,
       'expense_value': value,
     };
 
-    _sendEvent('expense_event', params);
+    _send('expense_event', params);
   }
 
-  static void sendIncomeEvent(String incomeName, int value) {
+  static void incomeEvent(String incomeName, int value) {
     final params = {
       'income_name': incomeName,
       'income_value': value,
     };
 
-    _sendEvent('income_event', params);
+    _send('income_event', params);
   }
 
-  static void sendBuyInsuranceEvent(String insuranceEvent, int price) {
+  static void buyInsurance(String insuranceEvent, int price) {
     final params = {'insurance_name': insuranceEvent, 'business_price': price};
 
-    _sendEvent('business_buy_event', params);
+    _send('business_buy_event', params);
   }
 
-  static void sendSkipBuyInsuranceEvent(String insuranceEvent, int price) {
+  static void skipBuyInsurance(String insuranceEvent, int price) {
     final params = {'insurance_name': insuranceEvent, 'business_price': price};
 
-    _sendEvent('business_skip_buy_event', params);
+    _send('business_skip_buy_event', params);
   }
 
-  static void sendMonthlyExpenseEvent(String expenseName, int value) {
+  static void monthlyExpense(String expenseName, int value) {
     final params = {
       'monthly_expense_name': expenseName,
       'monthly_expense_value': value,
     };
 
-    _sendEvent('monthly_expense_event', params);
+    _send('monthly_expense_event', params);
   }
 
-  static void sendBuyRealEstateEvent(String realEstateName, int price) {
+  static void buyRealEstate(String realEstateName, int price) {
     final params = {
       'real_estate_name': realEstateName,
       'real_estate_price': price,
     };
 
-    _sendEvent('real_estate_buy_event', params);
+    _send('real_estate_buy_event', params);
   }
 
-  static void sendSkipBuyRealEstateEvent(String realEstateName, int price) {
+  static void skipBuyRealEstate(String realEstateName, int price) {
     final params = {
       'real_estate_name': realEstateName,
       'real_estate_price': price,
     };
 
-    _sendEvent('real_estate_skip_buy_event', params);
+    _send('real_estate_skip_buy_event', params);
   }
 
-  static void sendContinueGame(String userId) {
-    final params = {
-      'userId': userId,
-    };
+  /// ----------------------------------------------------------------
+  /// Game events
+  /// ----------------------------------------------------------------
 
-    _sendEvent('continue_game_event', params);
-  }
+  static void gameStart() => _send('game_start');
+  static void gameEnd() => _send('game_end');
+  static void gameWin() => _send('game_win');
+  static void gameLoss() => _send('game_loss');
 
-  static void sendMultiplayerGame(String userId) {
-    final params = {
-      'userId': userId,
-    };
+  /// ----------------------------------------------------------------
+  /// Singleplayer events
+  /// ----------------------------------------------------------------
 
-    _sendEvent('multiplayer_game_event', params);
-  }
+  static void singleplayerPageOpen() => _send('singleplayer_page_open');
+  static void singleplayerContinueGame() => _send('singleplayer_game_continue');
+  static void singleplayerTemplateSelected(String templateName) =>
+      _send('singleplayer_template_selected', {'template_name': templateName});
 
-  static void sendNewGame(String userId) {
-    final params = {
-      'userId': userId,
-    };
+  /// ----------------------------------------------------------------
+  /// Multiplayer events
+  /// ----------------------------------------------------------------
 
-    _sendEvent('new_game_event', params);
-  }
+  static void multiplayerGameStart() => _send('multiplayer_game_start');
+  static void multiplayerGameEnd() => _send('multiplayer_game_end');
 
-  static void templateSelected(String templateName) {
-    final params = {
-      'template_name': templateName,
-    };
+  static void multiplayerLevelsPageOpen() =>
+      _send('multiplayer_levels_page_open');
 
-    _sendEvent('template_selected_event', params);
-  }
+  static void multiplayerInviteLinkCreated() =>
+      _send('multiplayer_invite_link_created');
+
+  static void multiplayerPurchasePageOpen() =>
+      _send('multiplayer_purchase_page_open');
+
+  static void multiplayerGamesPurchased() =>
+      _send('multiplayer_games_purchased');
+
+  static void multiplayerTemplateSelected(String templateName) =>
+      _send('multiplayer_template_selected', {'template_name': templateName});
+
+  static void multiplayer1GameBought() => _send('multiplayer_1_game_bought');
+  static void multiplayer5GamesBought() => _send('multiplayer_5_games_bought');
+  static void multiplayer10GamesBought() =>
+      _send('multiplayer_10_games_bought');
+
+  /// ----------------------------------------------------------------
+  /// Quests events
+  /// ----------------------------------------------------------------
+
+  static void questStarted() => _send('quest_started');
+  static void questCompleted() => _send('quest_completed');
+
+  static void questsFirstOpen() => _send('quests_first_open');
+  static void questsPageOpen() => _send('quests_page_open');
+
+  static void questsPurchasePageOpen() => _send('quests_purchase_page_open');
+  static void questsPurhased() => _send('quests_purhased');
+
+  static void questSelected() => _send('quests_quest_selected');
+  static void questsFirstQuestSelected() =>
+      _send('quests_first_quest_selected');
+  static void questsSecondQuestSelected() =>
+      _send('quests_second_quest_selected');
+
+  /// ----------------------------------------------------------------
+  /// Onboarding
+  /// ----------------------------------------------------------------
+
+  static void onboardingFirstPageOpen() => _send(
+        'onboarding_first_page_open',
+      );
+
+  static void onboardingSecondPageOpen() => _send(
+        'onboarding_second_page_open',
+      );
+
+  static void onboardingThirdPageOpen() => _send(
+        'onboarding_third_page_open',
+      );
+
+  static void onboardingCompleted() => _send('onboarding_completed');
+
+  /// ----------------------------------------------------------------
+  /// Tutorial
+  /// ----------------------------------------------------------------
+
+  static void tutorialStarted() => _send('tutorial_started');
+  static void tutorialCompleted() => _send('tutorial_ completed');
+  static void tutorialSkip() => _send('tutorial_ skip');
+
+  // TODO(Maxim): Added steps for tutorial
+
+  /// ----------------------------------------------------------------
+  /// App events
+  /// ----------------------------------------------------------------
+
+  static void appLaunched() => _send('app_open');
+  static void signUp() => _send('sign_up');
+
+  /// ----------------------------------------------------------------
+  /// Common methods
+  /// ----------------------------------------------------------------
 
   static void setUserId(String userId) {
+    _userId = userId;
+
     firebaseAnalytics.setUserId(userId);
     FirebaseCrashlytics.instance.setUserIdentifier(userId);
   }
 
-  static void _sendEvent(String eventName, Map<String, dynamic> parameters) {
+  static void _send(
+    String eventName, [
+    Map<String, dynamic> parameters = const {},
+  ]) {
     if (!isEnabled) {
       return;
+    }
+
+    if (_userId != null) {
+      parameters['user_id'] = _userId;
     }
 
     firebaseAnalytics.logEvent(

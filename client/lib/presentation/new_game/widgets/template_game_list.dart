@@ -88,7 +88,7 @@ class TemplateGameList extends HookWidget {
           itemBuilder: (i) => GameTemplateItem(
             gameTemplate: gameTemplates.items[i],
             onStartNewGamePressed: (template) {
-              AnalyticsSender.templateSelected(template.name);
+              AnalyticsSender.singleplayerTemplateSelected(template.name);
               createNewGame(template);
             },
             onContinueGamePressed:

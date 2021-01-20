@@ -96,7 +96,7 @@ class DebentureGameEventWidget extends HookWidget {
         PlayerActionBar(
           confirm: () {
             sendPlayerAction();
-            AnalyticsSender.sendBuySellDebentureEvent(
+            AnalyticsSender.buySellDebenture(
               buySellAction.value,
               selectedCount.value,
               event.name,
@@ -106,7 +106,7 @@ class DebentureGameEventWidget extends HookWidget {
           skip: () {
             dispatch(SendPlayerMoveAction(eventId: event.id));
 
-            AnalyticsSender.sendSkipBuySellDebentureEvent(
+            AnalyticsSender.skipBuySellDebenture(
               buySellAction.value,
               event.name,
               eventData.currentPrice,

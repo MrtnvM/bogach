@@ -91,7 +91,7 @@ class StockGameEvent extends HookWidget {
         PlayerActionBar(
           confirm: () {
             sendPlayerAction();
-            AnalyticsSender.sendBuySellStockEvent(
+            AnalyticsSender.buySellStock(
               buySellAction.value,
               selectedCount.value,
               event.name,
@@ -101,7 +101,7 @@ class StockGameEvent extends HookWidget {
           skip: () {
             dispatch(SendPlayerMoveAction(eventId: event.id));
 
-            AnalyticsSender.sendSkipBuySellStockEvent(
+            AnalyticsSender.skipBuySellStock(
               buySellAction.value,
               event.name,
               eventData.currentPrice,

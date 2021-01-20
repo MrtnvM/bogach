@@ -39,7 +39,7 @@ class MonthlyExpenseEvent extends HookWidget {
         const SizedBox(height: 28),
         PlayerActionBar(confirm: () {
           sendPlayerAction();
-          AnalyticsSender.sendMonthlyExpenseEvent(
+          AnalyticsSender.monthlyExpense(
             event.name,
             eventData.monthlyPayment,
           );
