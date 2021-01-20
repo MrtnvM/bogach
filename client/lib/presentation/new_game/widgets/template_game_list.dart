@@ -39,6 +39,8 @@ class TemplateGameList extends HookWidget {
 
     void Function(GameTemplate) createNewGame;
     createNewGame = (template) {
+      AnalyticsSender.singleplayerTemplateSelected(template.name);
+
       dispatch(StartSinglePlayerGameAction(templateId: template.id))
           .then((_) => isTutorialPassed
               ? appRouter.goTo(const GameBoard())
@@ -73,6 +75,9 @@ class TemplateGameList extends HookWidget {
         return;
       }
 
+      AnalyticsSender.singleplayerTemplateSelected(template.name);
+      AnalyticsSender.singleplayerContinueGame();
+
       final gameId = user.lastGames.singleplayerGames[index].gameId;
       final gameContext = GameContext(gameId: gameId, userId: userId);
       dispatch(StartGameAction(gameContext));
@@ -87,10 +92,7 @@ class TemplateGameList extends HookWidget {
           items: gameTemplates,
           itemBuilder: (i) => GameTemplateItem(
             gameTemplate: gameTemplates.items[i],
-            onStartNewGamePressed: (template) {
-              AnalyticsSender.singleplayerTemplateSelected(template.name);
-              createNewGame(template);
-            },
+            onStartNewGamePressed: createNewGame,
             onContinueGamePressed:
                 getLastGameIndex(gameTemplates.items[i]) >= 0 ? goToGame : null,
           ),
