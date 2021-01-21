@@ -63,6 +63,11 @@ class CreateMultiplayerGamePage extends HookWidget {
       onGameTemplateSelected(template);
     };
 
+    useEffect(() {
+      AnalyticsSender.multiplayerLevelsPageOpen();
+      return null;
+    }, []);
+
     return LoadableView(
       isLoading: createRoomRequestState.isInProgress,
       backgroundColor: ColorRes.black80,

@@ -185,6 +185,7 @@ class AnalyticsSender {
   /// ----------------------------------------------------------------
 
   static void singleplayerGameStart() => _send('singleplayer_game_start');
+  static void singleplayerGameEnd() => _send('singleplayer_game_end');
   static void singleplayerPageOpen() => _send('singleplayer_page_open');
   static void singleplayerContinueGame() => _send('singleplayer_game_continue');
   static void singleplayerTemplateSelected(String templateName) =>
@@ -206,8 +207,17 @@ class AnalyticsSender {
   static void multiplayerPurchasePageOpen() =>
       _send('multiplayer_purchase_page_open');
 
-  static void multiplayerGamesPurchased() =>
-      _send('multiplayer_games_purchased');
+  static void multiplayerPurchaseStarted(String purhase) =>
+      _send('multiplayer_purchase_started', {'purhase': purhase});
+
+  static void multiplayerGamesPurchased(String purhase) =>
+      _send('multiplayer_games_purchased', {'purhase': purhase});
+
+  static void multiplayerPurchaseCanceled() =>
+      _send('multiplayer_purchase_canceled');
+
+  static void multiplayerPurchaseFailed(String error) =>
+      _send('multiplayer_purchase_failed', {'error': error});
 
   static void multiplayerTemplateSelected(String templateName) =>
       _send('multiplayer_template_selected', {'template_name': templateName});

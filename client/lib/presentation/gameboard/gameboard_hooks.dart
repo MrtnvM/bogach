@@ -49,7 +49,12 @@ void useGameboardAnalytics() {
     AnalyticsSender.gameEnd();
 
     if (isMultiplayer) {
+      AnalyticsSender.multiplayerGameEnd();
       return;
+    }
+
+    if (!isQuest) {
+      AnalyticsSender.singleplayerGameEnd();
     }
 
     if (isWin) {
@@ -59,7 +64,7 @@ void useGameboardAnalytics() {
     }
 
     return null;
-  }, [gameExists, isGameOver, isWin, isMultiplayer]);
+  }, [gameExists, isGameOver, isQuest, isWin, isMultiplayer]);
 
   useEffect(() {
     if (gameExists && isQuest && isGameOver) {

@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
@@ -14,6 +15,7 @@ import 'package:cash_flow/widgets/containers/fullscreen_popup_container.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -31,6 +33,11 @@ class GamesAccessPage extends HookWidget {
     final isOperationInProgress = useGlobalState(
       (s) => s.getOperationState(Operation.buyMultiplayerGames).isInProgress,
     );
+
+    useEffect(() {
+      AnalyticsSender.multiplayerPurchasePageOpen();
+      return null;
+    }, []);
 
     return LoadableView(
       isLoading: isOperationInProgress,
@@ -148,11 +155,19 @@ class _PurchaseGameList extends HookWidget {
     Function(MultiplayerGamePurchases) buyMultiplayerGame;
     buyMultiplayerGame = (multiplayerGamePurchase) async {
       try {
+        final purchaseName = describeEnum(multiplayerGamePurchase);
+        AnalyticsSender.multiplayerPurchaseStarted(purchaseName);
+
         await dispatch(BuyMultiplayerGames(multiplayerGamePurchase));
+        AnalyticsSender.multiplayerGamesPurchased(purchaseName);
+
         appRouter.goBack(true);
       } on ProductPurchaseCanceledException catch (error) {
+        AnalyticsSender.multiplayerPurchaseCanceled();
         Logger.i('Purchase canceled: ${error.product?.id}');
       } catch (error) {
+        AnalyticsSender.multiplayerPurchaseFailed(error.toString());
+
         handleError(
           context: context,
           exception: error,
