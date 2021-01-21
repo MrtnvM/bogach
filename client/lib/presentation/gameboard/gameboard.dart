@@ -1,9 +1,9 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/actions/start_game_action.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
-import 'package:cash_flow/models/domain/game/game/type/game_type.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/tabs/actions_tab.dart';
 import 'package:cash_flow/presentation/gameboard/tabs/finances_tab.dart';
@@ -49,12 +49,14 @@ class GameBoard extends HookWidget {
 
     switch (selectedIndex.value) {
       case 0:
+        AnalyticsSender.gameboardFinancesTabOpen();
         activeTab = FinancesTab();
         break;
       case 1:
         activeTab = ActionsTab();
         break;
       case 2:
+        AnalyticsSender.gameboardProgressTabOpen();
         activeTab = ProgressTab();
         break;
     }

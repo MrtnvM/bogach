@@ -6,7 +6,6 @@ import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/features/profile/actions/login_via_apple_action.dart';
 import 'package:cash_flow/features/profile/actions/login_via_facebook_action.dart';
 import 'package:cash_flow/features/profile/actions/login_via_google_action.dart';
-import 'package:cash_flow/models/errors/unknown_error.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/main/main_page.dart';
