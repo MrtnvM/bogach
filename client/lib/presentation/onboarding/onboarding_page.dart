@@ -1,4 +1,5 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
 import 'package:cash_flow/presentation/onboarding/widgets/first_onboarding_page.dart';
 import 'package:cash_flow/presentation/onboarding/widgets/second_onboarding_page.dart';
 import 'package:cash_flow/presentation/onboarding/widgets/third_onboarding_page.dart';
@@ -24,6 +25,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     super.initState();
 
     AnalyticsSender.onboardingFirstPageOpen();
+    SessionTracker.onboarding.start();
 
     _controller.addListener(() {
       final page = _controller.page.round();

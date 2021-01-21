@@ -1,9 +1,11 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 void useGameboardAnalytics() {
   final gameExists = useCurrentGame((g) => g != null);
+  final templateId = useCurrentGame((g) => g?.config?.gameTemplateId);
   final isMultiplayer = useIsMultiplayerGame();
   final isQuest = useIsQuestGame();
   final quest = useCurrentGame((g) => g?.config?.level);
@@ -30,14 +32,23 @@ void useGameboardAnalytics() {
 
     if (isMultiplayer) {
       AnalyticsSender.multiplayerGameStart();
+
+      SessionTracker.multiplayerGame.start();
+      SessionTracker.multiplayerGame.setAttribute('template_id', templateId);
     } else if (isQuest) {
       AnalyticsSender.questStart(quest);
+
+      SessionTracker.quest.start();
+      SessionTracker.quest.setAttribute('quest_id', quest);
     } else {
       AnalyticsSender.singleplayerGameStart();
+
+      SessionTracker.singleplayerGame.start();
+      SessionTracker.singleplayerGame.setAttribute('template_id', templateId);
     }
 
     return null;
-  }, [gameExists, isMultiplayer, isQuest]);
+  }, [gameExists]);
 
   final isGameEndEventsSent = useState(false);
   useEffect(() {
@@ -50,11 +61,13 @@ void useGameboardAnalytics() {
 
     if (isMultiplayer) {
       AnalyticsSender.multiplayerGameEnd();
+      SessionTracker.multiplayerGame.stop();
       return;
     }
 
     if (!isQuest) {
       AnalyticsSender.singleplayerGameEnd();
+      SessionTracker.singleplayerGame.stop();
     }
 
     if (isWin) {
@@ -64,10 +77,12 @@ void useGameboardAnalytics() {
     }
 
     return null;
-  }, [gameExists, isGameOver, isQuest, isWin, isMultiplayer]);
+  }, [gameExists, isGameOver, isWin]);
 
   useEffect(() {
     if (gameExists && isQuest && isGameOver) {
+      SessionTracker.quest.stop();
+
       if (isWin) {
         AnalyticsSender.questCompleted(quest);
       } else {
@@ -75,5 +90,5 @@ void useGameboardAnalytics() {
       }
     }
     return null;
-  }, [gameExists, isQuest, isGameOver]);
+  }, [gameExists, isGameOver]);
 }
