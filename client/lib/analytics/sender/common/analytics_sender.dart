@@ -272,6 +272,9 @@ class AnalyticsSender {
   static void tutorialCompleted() => _send('tutorial_ completed');
   static void tutorialSkip() => _send('tutorial_ skip');
 
+  static void tutorialEvent(String event) =>
+      _send('tutorial_event', {'event': event});
+
   // TODO(Maxim): Added steps for tutorial
 
   /// ----------------------------------------------------------------
