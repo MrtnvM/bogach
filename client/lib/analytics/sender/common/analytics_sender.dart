@@ -211,7 +211,7 @@ class AnalyticsSender {
       _send('multiplayer_purchase_page_open');
 
   static void multiplayerPurchaseStarted(String purhase) =>
-      _send('multiplayer_purchase_started', {'purhase': purhase});
+      _send('multiplayer_purchase_started', {'purchase': purchase});
 
   static void multiplayerGamesPurchased(String purhase) =>
       _send('multiplayer_games_purchased', {'purhase': purhase});
