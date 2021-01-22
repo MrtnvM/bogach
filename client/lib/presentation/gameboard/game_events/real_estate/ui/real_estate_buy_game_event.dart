@@ -37,6 +37,8 @@ class RealEstateBuyGameEvent extends HookWidget {
               TitleRow(title: item.key, value: item.value)
           ],
           onInfoClick: () {
+            AnalyticsSender.infoButtonClick(realEstateDialogInfoModel.title);
+
             showDialog(
               context: context,
               builder: (context) {

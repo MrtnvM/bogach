@@ -37,6 +37,8 @@ class InsuranceGameEvent extends HookWidget {
               TitleRow(title: item.key, value: item.value)
           ],
           onInfoClick: () {
+            AnalyticsSender.infoButtonClick(insuranceInfoDialogModel.title);
+
             showDialog(
               context: context,
               builder: (context) {

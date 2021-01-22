@@ -42,6 +42,8 @@ class BusinessBuyGameEventWidget extends HookWidget {
               TitleRow(title: item.key, value: item.value)
           ],
           onInfoClick: () {
+            AnalyticsSender.infoButtonClick(businessDialogInfoModel.title);
+
             showDialog(
               context: context,
               builder: (context) {

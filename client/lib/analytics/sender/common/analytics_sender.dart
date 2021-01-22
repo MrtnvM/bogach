@@ -20,6 +20,9 @@ class AnalyticsSender {
   static void gameboardProgressTabOpen() =>
       _send('gameboard_progress_tab_open');
 
+  static void infoButtonClick(String event) =>
+      _send('info_button_click', {'event': event});
+
   static void buySellStock(
     BuySellAction action,
     int count,

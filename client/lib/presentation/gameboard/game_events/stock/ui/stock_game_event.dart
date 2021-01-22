@@ -62,6 +62,8 @@ class StockGameEvent extends HookWidget {
               TitleRow(title: item.key, value: item.value)
           ],
           onInfoClick: () {
+            AnalyticsSender.infoButtonClick(stockDialogInfoModel.title);
+
             showDialog(
               context: context,
               builder: (context) {

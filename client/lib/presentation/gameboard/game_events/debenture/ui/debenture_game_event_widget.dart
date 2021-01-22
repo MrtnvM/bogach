@@ -67,6 +67,8 @@ class DebentureGameEventWidget extends HookWidget {
               TitleRow(title: item.key, value: item.value)
           ],
           onInfoClick: () {
+            AnalyticsSender.infoButtonClick(debentureDialogInfoModel.title);
+
             showDialog(
               context: context,
               builder: (context) {
