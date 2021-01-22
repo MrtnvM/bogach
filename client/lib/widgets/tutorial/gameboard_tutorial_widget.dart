@@ -1,4 +1,5 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/features/config/actions/mark_gameboard_tutorial_as_passed_action.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -50,6 +51,7 @@ class GameboardTutorialWidget extends InheritedWidget {
 
   void showTutorial(BuildContext context) {
     AnalyticsSender.tutorialStarted();
+    SessionTracker.tutorial.start();
 
     _currentTutorial = TutorialCoachMark(
       context,
@@ -70,10 +72,14 @@ class GameboardTutorialWidget extends InheritedWidget {
       },
       onClickSkip: () {
         AnalyticsSender.tutorialSkip();
+        SessionTracker.tutorial.stop();
+
         _onTutorialPassed(context);
       },
       onFinish: () {
         AnalyticsSender.tutorialCompleted();
+        SessionTracker.tutorial.stop();
+
         _onTutorialPassed(context);
       },
     );

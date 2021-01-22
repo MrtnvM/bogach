@@ -6,6 +6,7 @@ class SessionTracker {
   static bool isLoggingEnabled = !kReleaseMode;
 
   static final onboarding = _TraceHolder('onboarding');
+  static final tutorial = _TraceHolder('tutorial');
   static final gameLaunched = _TraceHolder('game_launched');
 
   static final quest = _TraceHolder('quest');
