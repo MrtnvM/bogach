@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:alice_lightweight/alice.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/store/store.dart';
 import 'package:cash_flow/app_configuration.dart';
@@ -90,6 +91,7 @@ Future<void> main({
   launchCounter.incrementLaunchCount();
 
   AnalyticsSender.appLaunched();
+  SessionTracker.gameLaunched.start();
 
   runZonedGuarded<Future<void>>(() async {
     runApp(

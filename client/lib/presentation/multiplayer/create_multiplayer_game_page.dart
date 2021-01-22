@@ -1,4 +1,5 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
@@ -65,6 +66,7 @@ class CreateMultiplayerGamePage extends HookWidget {
 
     useEffect(() {
       AnalyticsSender.multiplayerLevelsPageOpen();
+      SessionTracker.multiplayerGameCreated.start();
       return null;
     }, []);
 

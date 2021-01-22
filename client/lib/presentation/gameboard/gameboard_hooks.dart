@@ -14,6 +14,7 @@ void useGameboardAnalytics() {
 
   useEffect(() {
     AnalyticsSender.gameStart();
+    SessionTracker.gameLaunched.stop();
 
     return () {
       if (gameExists && isGameOver) {

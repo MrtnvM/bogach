@@ -1,10 +1,12 @@
 import 'package:firebase_performance/firebase_performance.dart';
+import 'package:flutter/foundation.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class SessionTracker {
+  static bool isLoggingEnabled = !kReleaseMode;
+
   static final onboarding = _TraceHolder('onboarding');
-  static final questLaunched = _TraceHolder('quest_launched');
-  static final gameLaunced = _TraceHolder('game_launched');
+  static final gameLaunched = _TraceHolder('game_launched');
 
   static final quest = _TraceHolder('quest');
   static final singleplayerGame = _TraceHolder('singleplayer_game');
@@ -12,7 +14,6 @@ class SessionTracker {
 
   static final multiplayerGameCreated =
       _TraceHolder('multiplayer_game_created');
-
   static final multiplayerGameJoined = //
       _TraceHolder('multiplayer_game_joined');
 }
@@ -25,12 +26,20 @@ class _TraceHolder {
   Trace _trace;
 
   void start() {
+    if (SessionTracker.isLoggingEnabled) {
+      print('TRACKING (start): $key');
+    }
+
     FirebasePerformance.startTrace(key).then((trace) {
       _trace = trace;
     });
   }
 
   void stop() {
+    if (SessionTracker.isLoggingEnabled) {
+      print('TRACKING (end): $key');
+    }
+
     _trace?.stop();
   }
 

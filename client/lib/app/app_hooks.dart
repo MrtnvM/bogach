@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
@@ -65,6 +66,7 @@ void useDynamicLinkHandler() {
     };
 
     if (isLinkTo(DynamicLinks.roomInvite)) {
+      SessionTracker.multiplayerGameJoined.start();
       final roomId = link.queryParameters[DynamicLinks.roomInvite];
 
       Logger.i('ROOM ID:\n$roomId');
