@@ -225,7 +225,7 @@ class _BuyButton extends HookWidget {
       try {
         AnalyticsSender.questsPurchaseStarted();
         await dispatch(BuyQuestsAccessAction());
-        AnalyticsSender.questsPurhased();
+        AnalyticsSender.questsPurchased();
         await dispatch(
           StartQuestGameAction(quest.id, QuestAction.startNewGame),
         );

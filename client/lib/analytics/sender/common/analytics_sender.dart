@@ -210,11 +210,11 @@ class AnalyticsSender {
   static void multiplayerPurchasePageOpen() =>
       _send('multiplayer_purchase_page_open');
 
-  static void multiplayerPurchaseStarted(String purhase) =>
-      _send('multiplayer_purchase_started', {'purhase': purhase});
+  static void multiplayerPurchaseStarted(String purchase) =>
+      _send('multiplayer_purchase_started', {'purchase': purchase});
 
-  static void multiplayerGamesPurchased(String purhase) =>
-      _send('multiplayer_games_purchased', {'purhase': purhase});
+  static void multiplayerGamesPurchased(String purchase) =>
+      _send('multiplayer_games_purchased', {'purchase': purchase});
 
   static void multiplayerPurchaseCanceled() =>
       _send('multiplayer_purchase_canceled');
@@ -251,7 +251,7 @@ class AnalyticsSender {
 
   static void questsPurchasePageOpen() => _send('quests_purchase_page_open');
   static void questsPurchaseStarted() => _send('quests_purchase_started');
-  static void questsPurhased() => _send('quests_purhased');
+  static void questsPurchased() => _send('quests_purchased');
 
   static void questSelected() => _send('quests_quest_selected');
   static void questsFirstQuestSelected() =>
@@ -282,8 +282,8 @@ class AnalyticsSender {
   /// ----------------------------------------------------------------
 
   static void tutorialStarted() => _send('tutorial_started');
-  static void tutorialCompleted() => _send('tutorial_ completed');
-  static void tutorialSkip() => _send('tutorial_ skip');
+  static void tutorialCompleted() => _send('tutorial_completed');
+  static void tutorialSkip() => _send('tutorial_skip');
 
   static void tutorialEvent(String event) =>
       _send('tutorial_event', {'event': event});
