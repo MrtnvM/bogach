@@ -1,3 +1,5 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/features/config/actions/mark_gameboard_tutorial_as_passed_action.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -48,11 +50,16 @@ class GameboardTutorialWidget extends InheritedWidget {
   }
 
   void showTutorial(BuildContext context) {
+    AnalyticsSender.tutorialStarted();
+    SessionTracker.tutorial.start();
+
     _currentTutorial = TutorialCoachMark(
       context,
       targets: getTargets(context),
       textSkip: Strings.skip,
       onClickTarget: (target) async {
+        AnalyticsSender.tutorialEvent(target.identify);
+
         if (target.keyTarget == gameEventKey) {
           await Future.delayed(const Duration(milliseconds: 50));
           Scrollable.ensureVisible(gameEventKey.currentContext);
@@ -63,8 +70,18 @@ class GameboardTutorialWidget extends InheritedWidget {
           Scrollable.ensureVisible(gameEventActionsKey.currentContext);
         }
       },
-      onClickSkip: () => _onTutorialPassed(context),
-      onFinish: () => _onTutorialPassed(context),
+      onClickSkip: () {
+        AnalyticsSender.tutorialSkip();
+        SessionTracker.tutorial.stop();
+
+        _onTutorialPassed(context);
+      },
+      onFinish: () {
+        AnalyticsSender.tutorialCompleted();
+        SessionTracker.tutorial.stop();
+
+        _onTutorialPassed(context);
+      },
     );
 
     _currentTutorial.show();

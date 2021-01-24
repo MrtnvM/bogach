@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
@@ -56,6 +57,11 @@ class QuestsAccessPage extends HookWidget {
 
       return null;
     }, [hasQuestsAccess]);
+
+    useEffect(() {
+      AnalyticsSender.questsPurchasePageOpen();
+      return null;
+    }, []);
 
     return LoadableView(
       isLoading: isOperationInProgress,
@@ -217,7 +223,9 @@ class _BuyButton extends HookWidget {
     VoidCallback buyQuestsAccess;
     buyQuestsAccess = () async {
       try {
+        AnalyticsSender.questsPurchaseStarted();
         await dispatch(BuyQuestsAccessAction());
+        AnalyticsSender.questsPurchased();
         await dispatch(
           StartQuestGameAction(quest.id, QuestAction.startNewGame),
         );

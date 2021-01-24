@@ -1,3 +1,5 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/presentation/onboarding/widgets/onboarding_scaffold.dart';
@@ -33,6 +35,9 @@ class ThirdOnBoardingPage extends StatelessWidget {
   }
 
   void _onStartPressed() {
+    AnalyticsSender.onboardingCompleted();
+    SessionTracker.onboarding.stop();
+
     appRouter.startWith(LoginPage());
   }
 }

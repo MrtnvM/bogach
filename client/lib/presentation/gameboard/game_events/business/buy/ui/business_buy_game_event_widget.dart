@@ -42,6 +42,8 @@ class BusinessBuyGameEventWidget extends HookWidget {
               TitleRow(title: item.key, value: item.value)
           ],
           onInfoClick: () {
+            AnalyticsSender.infoButtonClick(businessDialogInfoModel.title);
+
             showDialog(
               context: context,
               builder: (context) {
@@ -64,7 +66,7 @@ class BusinessBuyGameEventWidget extends HookWidget {
         PlayerActionBar(
           confirm: () {
             sendPlayerAction();
-            AnalyticsSender.sendBuyBusinessEvent(
+            AnalyticsSender.buyBusiness(
               event.name,
               eventData.currentPrice,
             );
@@ -72,7 +74,7 @@ class BusinessBuyGameEventWidget extends HookWidget {
           skip: () {
             dispatch(SendPlayerMoveAction(eventId: event.id));
 
-            AnalyticsSender.sendSkipBuyBusinessEvent(
+            AnalyticsSender.skipBuyBusiness(
               event.name,
               eventData.currentPrice,
             );

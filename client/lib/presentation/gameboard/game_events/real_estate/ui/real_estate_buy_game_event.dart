@@ -37,6 +37,8 @@ class RealEstateBuyGameEvent extends HookWidget {
               TitleRow(title: item.key, value: item.value)
           ],
           onInfoClick: () {
+            AnalyticsSender.infoButtonClick(realEstateDialogInfoModel.title);
+
             showDialog(
               context: context,
               builder: (context) {
@@ -59,7 +61,7 @@ class RealEstateBuyGameEvent extends HookWidget {
         PlayerActionBar(
           confirm: () {
             sendPlayerAction();
-            AnalyticsSender.sendBuyRealEstateEvent(
+            AnalyticsSender.buyRealEstate(
               event.name,
               eventData.currentPrice,
             );
@@ -67,7 +69,7 @@ class RealEstateBuyGameEvent extends HookWidget {
           skip: () {
             dispatch(SendPlayerMoveAction(eventId: event.id));
 
-            AnalyticsSender.sendSkipBuyRealEstateEvent(
+            AnalyticsSender.skipBuyRealEstate(
               event.name,
               eventData.currentPrice,
             );

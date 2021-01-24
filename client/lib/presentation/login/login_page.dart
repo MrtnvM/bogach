@@ -1,11 +1,11 @@
 import 'package:apple_sign_in/apple_sign_in.dart';
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/features/profile/actions/login_via_apple_action.dart';
 import 'package:cash_flow/features/profile/actions/login_via_facebook_action.dart';
 import 'package:cash_flow/features/profile/actions/login_via_google_action.dart';
-import 'package:cash_flow/models/errors/unknown_error.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/main/main_page.dart';
@@ -266,9 +266,8 @@ class LoginPage extends HookWidget {
         break;
 
       case FacebookLoginStatus.error:
-        isAuthorising.value = false;
         Logger.e('Facebook Auth Error', result.errorMessage);
-        handleError(context: context, exception: UnknownErrorException());
+        _onLoginError(context, Exception(result.errorMessage), isAuthorising);
         break;
 
       default:
@@ -299,6 +298,8 @@ class LoginPage extends HookWidget {
     Logger.e(error);
     handleError(context: context, exception: error);
     isAuthorising.value = false;
+
+    AnalyticsSender.singInFailed();
   }
 
   Future<void> _onLoginViaGoogleClicked(
@@ -308,8 +309,7 @@ class LoginPage extends HookWidget {
   ) async {
     final account = await GoogleSignIn().signIn().catchError((e) {
       Logger.e('Google Auth Error', e);
-      isAuthorising.value = false;
-      handleError(context: context, exception: e);
+      _onLoginError(context, e, isAuthorising);
       recordError(e);
     });
 
@@ -383,9 +383,8 @@ class LoginPage extends HookWidget {
         break;
 
       case AuthorizationStatus.error:
-        isAuthorising.value = false;
-        Logger.e('Facebook Auth Error', result.error);
-        handleError(context: context, exception: UnknownErrorException());
+        Logger.e('Apple Auth Error', result.error);
+        _onLoginError(context, result.error, isAuthorising);
         break;
 
       case AuthorizationStatus.cancelled:
@@ -407,6 +406,7 @@ class LoginPage extends HookWidget {
   }
 
   void _onLoginSuccess() {
+    AnalyticsSender.signIn();
     appRouter.startWith(const MainPage());
   }
 }

@@ -1,3 +1,5 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
 import 'package:cash_flow/presentation/onboarding/widgets/first_onboarding_page.dart';
 import 'package:cash_flow/presentation/onboarding/widgets/second_onboarding_page.dart';
 import 'package:cash_flow/presentation/onboarding/widgets/third_onboarding_page.dart';
@@ -14,6 +16,37 @@ class OnBoardingPage extends StatefulWidget {
 
 class _OnBoardingPageState extends State<OnBoardingPage> {
   final _controller = PageController();
+
+  bool isSecondPageEventSent = false;
+  bool isThirdPageEventSent = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    AnalyticsSender.onboardingFirstPageOpen();
+    SessionTracker.onboarding.start();
+
+    _controller.addListener(() {
+      final page = _controller.page.round();
+
+      if (page == 1 && !isSecondPageEventSent) {
+        isSecondPageEventSent = true;
+        AnalyticsSender.onboardingSecondPageOpen();
+      }
+
+      if (page == 2 && !isThirdPageEventSent) {
+        isThirdPageEventSent = true;
+        AnalyticsSender.onboardingThirdPageOpen();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +80,6 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                       dotWidth: 8,
                       spacing: 24,
                     ),
-                    // your preferred effect
                     onDotClicked: _controller.jumpToPage,
                   ),
                 ],

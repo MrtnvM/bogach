@@ -1,3 +1,5 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
@@ -142,6 +144,8 @@ class _InviteButton extends HookWidget {
     final dispatch = useDispatcher();
 
     final inviteByLink = () {
+      AnalyticsSender.multiplayerInviteLinkCreated();
+
       dispatch(ShareRoomInviteLinkAction(roomId))
           .catchError((e) => handleError(context: context, exception: e));
     };
@@ -229,6 +233,9 @@ void _useAutoTransitionToCreatedGame() {
 
       Future.delayed(const Duration(milliseconds: 100)).then((_) async {
         appRouter.goToRoot();
+
+        SessionTracker.multiplayerGameCreated.stop();
+        SessionTracker.multiplayerGameJoined.stop();
 
         if (isTutorialPassed) {
           appRouter.goTo(const GameBoard());

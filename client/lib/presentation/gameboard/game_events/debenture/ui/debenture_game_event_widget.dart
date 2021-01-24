@@ -67,6 +67,8 @@ class DebentureGameEventWidget extends HookWidget {
               TitleRow(title: item.key, value: item.value)
           ],
           onInfoClick: () {
+            AnalyticsSender.infoButtonClick(debentureDialogInfoModel.title);
+
             showDialog(
               context: context,
               builder: (context) {
@@ -96,7 +98,7 @@ class DebentureGameEventWidget extends HookWidget {
         PlayerActionBar(
           confirm: () {
             sendPlayerAction();
-            AnalyticsSender.sendBuySellDebentureEvent(
+            AnalyticsSender.buySellDebenture(
               buySellAction.value,
               selectedCount.value,
               event.name,
@@ -106,7 +108,7 @@ class DebentureGameEventWidget extends HookWidget {
           skip: () {
             dispatch(SendPlayerMoveAction(eventId: event.id));
 
-            AnalyticsSender.sendSkipBuySellDebentureEvent(
+            AnalyticsSender.skipBuySellDebenture(
               buySellAction.value,
               event.name,
               eventData.currentPrice,
