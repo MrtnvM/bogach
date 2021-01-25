@@ -44,8 +44,7 @@ class WinnersPage extends HookWidget {
             const SizedBox(height: 40),
             _HeadlineTitle(isWin: isWin),
             const SizedBox(height: 24),
-            _HeadlineDescription(isWin: isWin),
-            if (isWin && !isMultiplayer) _MonthCountDescription(),
+            _HeadlineDescription(isWin: isWin, isMultiplayer: isMultiplayer),
             if (isMultiplayer) ...[
               const SizedBox(height: 24),
               _PlayerResultTable(),
@@ -139,18 +138,31 @@ class _MonthCountDescription extends HookWidget {
 }
 
 class _HeadlineDescription extends StatelessWidget {
-  const _HeadlineDescription({@required this.isWin, Key key}) : super(key: key);
+  const _HeadlineDescription({
+    @required this.isWin,
+    @required this.isMultiplayer,
+    Key key,
+  }) : super(key: key);
 
   final bool isWin;
+  final bool isMultiplayer;
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      isWin
-          ? Strings.winnersPageDescription
-          : Strings.gameFailedPageDescription,
-      style: const TextStyle(fontSize: 17, color: Colors.white),
-      textAlign: TextAlign.center,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          isWin
+              ? isMultiplayer
+                  ? Strings.winnersMultiplayerPageDescription
+                  : Strings.winnersPageDescription
+              : Strings.gameFailedPageDescription,
+          style: const TextStyle(fontSize: 17, color: Colors.white),
+          textAlign: TextAlign.center,
+        ),
+        if (isWin && !isMultiplayer) _MonthCountDescription(),
+      ],
     );
   }
 }

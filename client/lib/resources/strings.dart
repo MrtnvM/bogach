@@ -361,6 +361,8 @@ class Strings {
   // Winners Page
   static String get winnersPageTitle => 'Поздравляем!';
   static String get winnersPageDescription => 'Ты достиг своей цели всего за';
+  static String get winnersMultiplayerPageDescription =>
+      'Ты достиг своей цели!';
 
   static String get gameFailedPageTitle => 'Цель не достигнута!';
   static String get gameFailedPageDescription =>
