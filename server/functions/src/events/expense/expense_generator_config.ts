@@ -43,7 +43,7 @@ export namespace ExpenseGeneratorConfig {
     {
       name: 'Встреча с друзьями',
       description: 'Вы хорошо провели время в компании близких друзей',
-      insuranceType: 'property',
+      insuranceType: null,
       range: { min: 1000, max: 5000, stepValue: 500 },
     },
   ];
