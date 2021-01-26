@@ -75,16 +75,14 @@ class CreateMultiplayerGamePage extends HookWidget {
       backgroundColor: ColorRes.black80,
       child: CashFlowScaffold(
         title: Strings.chooseQuest,
-        showUser: false,
-        customSubtitleWidget: MultiplayerGameCountBadge(),
-        horizontalPadding: 10,
+        horizontalPadding: 0,
         showBackArrow: true,
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
             Container(
               color: ColorRes.mainGreen,
-              child: _buildGameTemplateList(
+              child: _TemplateList(
                 gameTemplates: gameTemplates,
                 onGameTemplateSelected: availableMultiplayerGamesCount <= 0
                     ? buyGames
@@ -95,18 +93,36 @@ class CreateMultiplayerGamePage extends HookWidget {
                 },
               ),
             ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: MultiplayerGameCountBadge(),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildGameTemplateList({
-    @required StoreList<GameTemplate> gameTemplates,
-    @required void onGameTemplateSelected(GameTemplate template),
-    @required OperationState loadGameTemplatesRequestState,
-    @required VoidCallback loadGameTemplates,
-  }) {
+class _TemplateList extends StatelessWidget {
+  const _TemplateList({
+    @required this.gameTemplates,
+    @required this.onGameTemplateSelected,
+    @required this.loadGameTemplatesRequestState,
+    @required this.loadGameTemplates,
+    Key key,
+  }) : super(key: key);
+
+  final StoreList<GameTemplate> gameTemplates;
+  final void Function(GameTemplate template) onGameTemplateSelected;
+  final OperationState loadGameTemplatesRequestState;
+  final VoidCallback loadGameTemplates;
+
+  @override
+  Widget build(BuildContext context) {
     return LoadableListView<GameTemplate>(
       viewModel: LoadableListViewModel(
         items: gameTemplates,
@@ -119,7 +135,7 @@ class CreateMultiplayerGamePage extends HookWidget {
         ),
         loadListRequestState: loadGameTemplatesRequestState,
         loadList: loadGameTemplates,
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 16, 24, 64),
         emptyStateWidget: EmptyWidget(),
         errorWidget: CommonErrorWidget(loadGameTemplates),
       ),

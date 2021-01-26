@@ -18,6 +18,7 @@ class Strings {
   // Common
   static String get submit => 'Отправить';
   static String get select => 'Выбрать';
+  static String get logout => 'Выйти из аккаунта';
 
   static String get email => 'Email';
 

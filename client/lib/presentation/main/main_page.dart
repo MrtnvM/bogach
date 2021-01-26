@@ -4,6 +4,7 @@ import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/features/config/actions/load_config_action.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
+import 'package:cash_flow/presentation/main/profile_badge.dart';
 import 'package:cash_flow/presentation/multiplayer/create_multiplayer_game_page.dart';
 import 'package:cash_flow/presentation/new_game/single_game_page.dart';
 import 'package:cash_flow/presentation/quests/quests_page.dart';
@@ -36,13 +37,15 @@ class MainPage extends HookWidget {
     }, [user]);
 
     return CashFlowScaffold(
-      title: Strings.chooseGame,
       footerImage: Images.homeImage,
-      showUser: true,
       child: Column(
         children: <Widget>[
+          const Spacer(),
+          const ProfileBadge(),
+          const Spacer(),
           _buildGameActions(context),
           _buildAuthButton(needAuthorization),
+          const Spacer(),
         ],
       ),
     );

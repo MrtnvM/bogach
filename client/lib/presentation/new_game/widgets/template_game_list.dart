@@ -98,7 +98,7 @@ class TemplateGameList extends HookWidget {
           ),
           loadListRequestState: templatesRequestState,
           loadList: loadGameTemplates,
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           emptyStateWidget: EmptyWidget(),
           errorWidget: CommonErrorWidget(loadGameTemplates),
         ),

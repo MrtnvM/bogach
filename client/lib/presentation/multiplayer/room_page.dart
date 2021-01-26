@@ -55,7 +55,6 @@ class RoomPage extends HookWidget {
       isLoading: isActionInProgress,
       child: CashFlowScaffold(
         title: Strings.waitingPlayers,
-        showUser: true,
         showBackArrow: true,
         horizontalPadding: 16,
         child: SizedBox(
@@ -63,7 +62,6 @@ class RoomPage extends HookWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              const Divider(height: 1),
               Expanded(child: _ParticipantListWidget()),
               const Divider(height: 1),
               const SizedBox(height: 16),
@@ -268,6 +266,7 @@ class _ParticipantListWidget extends HookWidget {
         .toList();
 
     return SingleChildScrollView(
+      padding: const EdgeInsets.only(top: 8),
       child: ConstrainedBox(
         constraints: const BoxConstraints(
           minWidth: double.infinity,

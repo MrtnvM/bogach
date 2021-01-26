@@ -11,7 +11,7 @@ class TitleText extends StatelessWidget {
       textAlign: TextAlign.center,
       style: const TextStyle(
         fontFamily: 'Montserrat',
-        fontSize: 24,
+        fontSize: 19,
         color: Colors.white,
         fontWeight: FontWeight.bold,
       ),
