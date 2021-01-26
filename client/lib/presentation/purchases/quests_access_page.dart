@@ -9,6 +9,7 @@ import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/models/errors/purchase_errors.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/quests/quest_item_widget.dart';
+import 'package:cash_flow/presentation/quests/quests_hooks.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -221,6 +222,7 @@ class _BuyButton extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final dispatch = useDispatcher();
+    final startQuest = useQuestStarter();
 
     VoidCallback buyQuestsAccess;
     buyQuestsAccess = () async {
@@ -228,9 +230,8 @@ class _BuyButton extends HookWidget {
         AnalyticsSender.questsPurchaseStarted();
         await dispatch(BuyQuestsAccessAction());
         AnalyticsSender.questsPurchased();
-        await dispatch(
-          StartQuestGameAction(quest.id, QuestAction.startNewGame),
-        );
+
+        await startQuest(quest.id, QuestAction.startNewGame);
       } on ProductPurchaseCanceledException catch (error) {
         AnalyticsSender.questsPurchaseCanceled();
         Logger.i('Purchase canceled: ${error.product?.id}');
