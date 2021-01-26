@@ -14,6 +14,7 @@ class GameEventValueSelector extends StatelessWidget {
   const GameEventValueSelector({
     @required this.action,
     @required this.selectedCount,
+    @required this.currentPrice,
     @required this.availableCount,
     @required this.maxCount,
     @required this.minCount,
@@ -32,6 +33,7 @@ class GameEventValueSelector extends StatelessWidget {
 
   final BuySellAction action;
   final int selectedCount;
+  final double currentPrice;
   final int availableCount;
   final int maxCount;
   final int minCount;
@@ -45,6 +47,7 @@ class GameEventValueSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ValueSlider(
+          currentPrice: currentPrice,
           currentAction: action,
           selectedCount: selectedCount,
           maxCount: maxCount,
