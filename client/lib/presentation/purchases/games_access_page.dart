@@ -3,6 +3,7 @@ import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/purchases/purchases.dart';
+import 'package:cash_flow/features/multiplayer/multiplayer_hooks.dart';
 import 'package:cash_flow/features/purchase/actions/buy_multiplayer_games.dart';
 import 'package:cash_flow/models/errors/purchase_errors.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -48,7 +49,7 @@ class GamesAccessPage extends HookWidget {
           children: <Widget>[
             const _HeadlineImage(),
             const Spacer(flex: 1),
-            const _QuestsAccessDescription(),
+            const _MultiplayerAccessDescription(),
             const Spacer(flex: 3),
             _PurchaseGameList(
               isStoreAvailable: isStoreAvailable.data,
@@ -117,19 +118,22 @@ class _HeadlineImage extends HookWidget {
   }
 }
 
-class _QuestsAccessDescription extends StatelessWidget {
-  const _QuestsAccessDescription({Key key}) : super(key: key);
+class _MultiplayerAccessDescription extends HookWidget {
+  const _MultiplayerAccessDescription({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
     final isSmallScreen = screenWidth < 350;
+    final availableGamesCount = useAvailableMultiplayerGamesCount();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 36),
       child: Text(
-        Strings.multiplayerAdvertisingMessage,
+        availableGamesCount == 0
+            ? Strings.multiplayerAdvertisingMessage
+            : Strings.multiplayerAdvertisingMessageWhenHaveGames,
         textAlign: TextAlign.center,
         style: Styles.body2.copyWith(
           letterSpacing: 0.4,

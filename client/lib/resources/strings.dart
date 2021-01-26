@@ -416,6 +416,8 @@ class Strings {
   static String get multiplayerGamesAvailable => 'Доступно игр:';
   static String get multiplayerAdvertisingMessage =>
       'У вас кончились игры.\nХотите купить ещё?';
+  static String get multiplayerAdvertisingMessageWhenHaveGames =>
+      'Хотите купить ещё игр?';
   static String get asGift => 'в подарок';
   static String get inviteFriendsToStart =>
       'Пригласите друзей, чтобы начать игру';
