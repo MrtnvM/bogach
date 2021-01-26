@@ -2,6 +2,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'buy_sell_action.freezed.dart';
 
+bool isBuyAction(BuySellAction action) => action == const BuySellAction.buy();
+bool isSellAction(BuySellAction action) => action == const BuySellAction.sell();
+
 @freezed
 abstract class BuySellAction with _$BuySellAction {
   const factory BuySellAction.buy() = BuyAction;

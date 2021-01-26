@@ -4,6 +4,7 @@ import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/insurance/models/insurance_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/insurance/models/insurance_player_action.dart';
+import 'package:cash_flow/presentation/gameboard/gameboard_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_model.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
@@ -24,14 +25,22 @@ Map<String, String> useInsuranceInfoTableData(GameEvent event) {
   }, [event]);
 }
 
-VoidCallback useInsurancePlayerActionHandler(String eventId) {
+VoidCallback useInsurancePlayerActionHandler(GameEvent event) {
   final context = useContext();
   final dispatch = useDispatcher();
+  final isEnoughCash = useIsEnoughCashValidator();
 
   return () {
-    final action = InsurancePlayerAction(eventId);
+    final InsuranceEventData eventData = event.data;
+    final price = eventData.cost;
 
-    dispatch(SendPlayerMoveAction(eventId: eventId, playerAction: action))
+    if (!isEnoughCash(price.toDouble())) {
+      return;
+    }
+
+    final action = InsurancePlayerAction(event.id);
+
+    dispatch(SendPlayerMoveAction(eventId: event.id, playerAction: action))
         .catchError((e) => handleError(context: context, exception: e));
   };
 }

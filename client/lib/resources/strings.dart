@@ -13,6 +13,8 @@ class Strings {
 
   static String get purchaseError => 'При совершении покупки возникла ошибка';
 
+  static String get notEnoughCashError => 'Недостаточно наличных для операции';
+
   // Common
   static String get submit => 'Отправить';
   static String get select => 'Выбрать';

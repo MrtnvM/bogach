@@ -21,7 +21,7 @@ class InsuranceGameEvent extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sendPlayerAction = useInsurancePlayerActionHandler(event.id);
+    final sendPlayerAction = useInsurancePlayerActionHandler(event);
     final infoTableData = useInsuranceInfoTableData(event);
     final insuranceInfoDialogModel = useInsuranceInfoDialogModel();
     final dispatch = useDispatcher();
