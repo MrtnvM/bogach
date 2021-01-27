@@ -140,12 +140,18 @@ class _InviteButton extends HookWidget {
   Widget build(BuildContext context) {
     final roomId = useGlobalState((s) => s.multiplayer.currentRoom?.id);
     final dispatch = useDispatcher();
+    final isLoading = useState(false);
 
     final inviteByLink = () {
       AnalyticsSender.multiplayerInviteLinkCreated();
+      isLoading.value = true;
 
       dispatch(ShareRoomInviteLinkAction(roomId))
-          .catchError((e) => handleError(context: context, exception: e));
+          .then((_) => isLoading.value = false)
+          .catchError((e) {
+        isLoading.value = false;
+        handleError(context: context, exception: e);
+      });
     };
 
     return _Button(
@@ -153,6 +159,7 @@ class _InviteButton extends HookWidget {
       icon: Icons.add,
       color: ColorRes.yellow,
       onTap: inviteByLink,
+      isLoading: isLoading.value,
     );
   }
 }
@@ -163,6 +170,7 @@ class _Button extends StatelessWidget {
     @required this.icon,
     @required this.color,
     @required this.onTap,
+    this.isLoading = false,
     Key key,
   }) : super(key: key);
 
@@ -170,9 +178,13 @@ class _Button extends StatelessWidget {
   final IconData icon;
   final Color color;
   final VoidCallback onTap;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final screenWidth = mediaQuery.size.width;
+
     return Opacity(
       opacity: onTap == null ? 0.6 : 1,
       child: Container(
@@ -185,20 +197,30 @@ class _Button extends StatelessWidget {
           boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 4)],
         ),
         alignment: Alignment.center,
-        child: InkWell(
-          onTap: onTap,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, size: 20, color: Colors.black),
-              const SizedBox(width: 6),
-              Text(
-                title,
-                style: Styles.bodyBlack.copyWith(fontSize: 15),
+        child: isLoading
+            ? const Center(
+                child: SizedBox(
+                  width: 28,
+                  height: 28,
+                  child: CircularProgressIndicator(strokeWidth: 3),
+                ),
+              )
+            : InkWell(
+                onTap: onTap,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(icon, size: 20, color: Colors.black),
+                    const SizedBox(width: 6),
+                    Text(
+                      title,
+                      style: Styles.bodyBlack.copyWith(
+                        fontSize: screenWidth >= 370 ? 15 : 11.5,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
       ),
     );
   }
