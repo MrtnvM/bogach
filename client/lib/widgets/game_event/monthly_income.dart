@@ -19,6 +19,8 @@ class MonthlyIncomeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
     final color = action.map(
       buy: (_) => ColorRes.mainGreen,
       sell: (_) => ColorRes.red,
@@ -30,6 +32,7 @@ class MonthlyIncomeWidget extends StatelessWidget {
     );
 
     return RichText(
+      textScaleFactor: mediaQuery.textScaleFactor,
       text: TextSpan(
         children: [
           const TextSpan(text: Strings.incomePerMonth, style: Styles.bodyBlack),

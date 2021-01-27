@@ -3,6 +3,7 @@ import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/new_game/actions/get_quests_action.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -35,9 +36,7 @@ class QuestList extends HookWidget {
 
     final dispatch = useDispatcher();
 
-    final mediaQuery = MediaQuery.of(context);
-    final screenWidth = mediaQuery.size.width;
-    final textScaleFactor = screenWidth <= 350 ? 0.8 : 1.0;
+    final mediaQueryData = useAdaptiveMediaQueryData();
 
     final animationController = useAnimationController(
       duration: const Duration(milliseconds: 300),
@@ -53,7 +52,7 @@ class QuestList extends HookWidget {
           });
 
     return MediaQuery(
-      data: mediaQuery.copyWith(textScaleFactor: textScaleFactor),
+      data: mediaQueryData,
       child: LoadableView(
         isLoading: getQuestsRequestState.isInProgress ||
             createQuestGameRequestState.isInProgress,

@@ -4,6 +4,7 @@ import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/config/config_hooks.dart';
 import 'package:cash_flow/features/game/actions/start_game_action.dart';
 import 'package:cash_flow/features/multiplayer/actions/create_room_game_action.dart';
@@ -50,6 +51,8 @@ class RoomPage extends HookWidget {
 
     _useAutoTransitionToCreatedGame();
 
+    final mediaQueryData = useAdaptiveMediaQueryData();
+
     return LoadableView(
       backgroundColor: ColorRes.black80,
       isLoading: isActionInProgress,
@@ -57,33 +60,36 @@ class RoomPage extends HookWidget {
         title: Strings.waitingPlayers,
         showBackArrow: true,
         horizontalPadding: 16,
-        child: SizedBox(
-          height: 300,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Expanded(child: _ParticipantListWidget()),
-              const Divider(height: 1),
-              const SizedBox(height: 16),
-              if (isCurrentUserRoomOwner)
-                _InviteFriendsNote()
-              else
-                _JoinToRoomNote(),
-              const SizedBox(height: 24),
-              if (isCurrentUserRoomOwner) ...[
-                Row(
-                  children: const [
-                    Expanded(child: _InviteButton()),
-                    SizedBox(height: 16, width: 16),
-                    Expanded(child: _StartGameButton()),
-                  ],
-                ),
+        child: MediaQuery(
+          data: mediaQueryData,
+          child: SizedBox(
+            height: 300,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(child: _ParticipantListWidget()),
+                const Divider(height: 1),
+                const SizedBox(height: 16),
+                if (isCurrentUserRoomOwner)
+                  _InviteFriendsNote()
+                else
+                  _JoinToRoomNote(),
                 const SizedBox(height: 24),
-              ] else if (!isParticipantAlreadyJoined) ...[
-                const _JoinRoomButton(),
-                const SizedBox(height: 24),
+                if (isCurrentUserRoomOwner) ...[
+                  Row(
+                    children: const [
+                      Expanded(child: _InviteButton()),
+                      SizedBox(height: 16, width: 16),
+                      Expanded(child: _StartGameButton()),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                ] else if (!isParticipantAlreadyJoined) ...[
+                  const _JoinRoomButton(),
+                  const SizedBox(height: 24),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
@@ -182,9 +188,6 @@ class _Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    final screenWidth = mediaQuery.size.width;
-
     return Opacity(
       opacity: onTap == null ? 0.6 : 1,
       child: Container(
@@ -215,7 +218,7 @@ class _Button extends StatelessWidget {
                     Text(
                       title,
                       style: Styles.bodyBlack.copyWith(
-                        fontSize: screenWidth >= 370 ? 15 : 11.5,
+                        fontSize: 14.5,
                       ),
                     ),
                   ],

@@ -62,21 +62,23 @@ class GameEventValueSelector extends StatelessWidget {
           ),
         const SizedBox(height: 10),
         const Divider(),
-        _buildBuySellButtons(),
+        _buildBuySellButtons(context),
       ],
     );
   }
 
-  Widget _buildBuySellButtons() {
+  Widget _buildBuySellButtons(BuildContext context) {
     return Row(
       children: <Widget>[
-        Expanded(child: _buildAvailableButton()),
-        Expanded(child: _buildSelectAllButton()),
+        Expanded(child: _buildAvailableButton(context)),
+        Expanded(child: _buildSelectAllButton(context)),
       ],
     );
   }
 
-  Widget _buildSelectAllButton() {
+  Widget _buildSelectAllButton(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
     final title = action.map(
       buy: (_) => Strings.buyAllAvailable,
       sell: (_) => Strings.sellAllAvailable,
@@ -97,6 +99,7 @@ class GameEventValueSelector extends StatelessWidget {
         alignment: Alignment.center,
         padding: const EdgeInsets.all(8),
         child: RichText(
+          textScaleFactor: mediaQuery.textScaleFactor,
           text: TextSpan(
             children: [
               TextSpan(
@@ -113,11 +116,14 @@ class GameEventValueSelector extends StatelessWidget {
     );
   }
 
-  Widget _buildAvailableButton() {
+  Widget _buildAvailableButton(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
     return Container(
       padding: const EdgeInsets.all(8),
       alignment: Alignment.center,
       child: RichText(
+        textScaleFactor: mediaQuery.textScaleFactor,
         text: TextSpan(
           children: [
             TextSpan(

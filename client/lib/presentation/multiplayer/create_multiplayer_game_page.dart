@@ -3,6 +3,7 @@ import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/multiplayer/actions/create_room_action.dart';
 import 'package:cash_flow/features/multiplayer/actions/select_multiplayer_game_template_action.dart';
 import 'package:cash_flow/features/multiplayer/multiplayer_hooks.dart';
@@ -107,7 +108,7 @@ class CreateMultiplayerGamePage extends HookWidget {
   }
 }
 
-class _TemplateList extends StatelessWidget {
+class _TemplateList extends HookWidget {
   const _TemplateList({
     @required this.gameTemplates,
     @required this.onGameTemplateSelected,
@@ -123,21 +124,26 @@ class _TemplateList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LoadableListView<GameTemplate>(
-      viewModel: LoadableListViewModel(
-        items: gameTemplates,
-        itemBuilder: (i) => GameTemplateItem(
-          gameTemplate: gameTemplates.items[i],
-          onStartNewGamePressed: (template) {
-            onGameTemplateSelected(template);
-            AnalyticsSender.multiplayerTemplateSelected(template.name);
-          },
+    final mediaQueryData = useAdaptiveMediaQueryData();
+
+    return MediaQuery(
+      data: mediaQueryData,
+      child: LoadableListView<GameTemplate>(
+        viewModel: LoadableListViewModel(
+          items: gameTemplates,
+          itemBuilder: (i) => GameTemplateItem(
+            gameTemplate: gameTemplates.items[i],
+            onStartNewGamePressed: (template) {
+              onGameTemplateSelected(template);
+              AnalyticsSender.multiplayerTemplateSelected(template.name);
+            },
+          ),
+          loadListRequestState: loadGameTemplatesRequestState,
+          loadList: loadGameTemplates,
+          padding: const EdgeInsets.fromLTRB(16, 16, 24, 64),
+          emptyStateWidget: EmptyWidget(),
+          errorWidget: CommonErrorWidget(loadGameTemplates),
         ),
-        loadListRequestState: loadGameTemplatesRequestState,
-        loadList: loadGameTemplates,
-        padding: const EdgeInsets.fromLTRB(16, 16, 24, 64),
-        emptyStateWidget: EmptyWidget(),
-        errorWidget: CommonErrorWidget(loadGameTemplates),
       ),
     );
   }

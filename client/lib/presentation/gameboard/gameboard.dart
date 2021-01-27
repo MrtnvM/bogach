@@ -1,6 +1,7 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/game/actions/start_game_action.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
@@ -36,6 +37,8 @@ class GameBoard extends HookWidget {
 
     useGameboardAnalytics();
 
+    final mediaQueryData = useAdaptiveMediaQueryData();
+
     if (!gameExists) {
       return LoadableView(
         isLoading: !gameExists,
@@ -67,14 +70,17 @@ class GameBoard extends HookWidget {
       orElse: () => activeTab,
     );
 
-    return Scaffold(
-      backgroundColor: ColorRes.primaryWhiteColor,
-      body: content,
-      bottomNavigationBar: _buildBottomBar(
-        context: context,
-        isMultiplayer: isMultiplayer,
-        activeGameState: activeGameState,
-        selectedIndex: selectedIndex,
+    return MediaQuery(
+      data: mediaQueryData,
+      child: Scaffold(
+        backgroundColor: ColorRes.primaryWhiteColor,
+        body: content,
+        bottomNavigationBar: _buildBottomBar(
+          context: context,
+          isMultiplayer: isMultiplayer,
+          activeGameState: activeGameState,
+          selectedIndex: selectedIndex,
+        ),
       ),
     );
   }

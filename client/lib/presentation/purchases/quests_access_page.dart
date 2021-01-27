@@ -2,6 +2,7 @@ import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/new_game/actions/start_quest_game_action.dart';
 import 'package:cash_flow/features/purchase/actions/buy_quests_access_action.dart';
 import 'package:cash_flow/features/purchase/actions/query_past_purchases_action.dart';
@@ -66,30 +67,36 @@ class QuestsAccessPage extends HookWidget {
       return null;
     }, []);
 
+    final mediaQueryData = useAdaptiveMediaQueryData();
+    final offsetScaleFactor = mediaQueryData.textScaleFactor;
+
     return LoadableView(
       isLoading: isOperationInProgress,
       backgroundColor: Colors.black.withAlpha(100),
-      child: FullscreenPopupContainer(
-        backgroundColor: ColorRes.questAccessPageBackground,
-        topRightActionWidget: const _RestorePurchasesButton(),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const _HeadlineImage(),
-            const SizedBox(height: 16),
-            const _QuestsAccessDescription(),
-            const SizedBox(height: 32),
-            const _AdvantagesWidget(),
-            const SizedBox(height: 48),
-            if (hasQuestsAccess)
-              _StartQuestButton(onPressed: startGame)
-            else
-              _BuyButton(
-                quest: quest,
-                isStoreAvailable: isStoreAvailable.data,
-              ),
-          ],
+      child: MediaQuery(
+        data: mediaQueryData,
+        child: FullscreenPopupContainer(
+          backgroundColor: ColorRes.questAccessPageBackground,
+          topRightActionWidget: const _RestorePurchasesButton(),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const _HeadlineImage(),
+              SizedBox(height: 16 * offsetScaleFactor),
+              const _QuestsAccessDescription(),
+              SizedBox(height: 32 * offsetScaleFactor),
+              const _AdvantagesWidget(),
+              SizedBox(height: 48 * offsetScaleFactor),
+              if (hasQuestsAccess)
+                _StartQuestButton(onPressed: startGame)
+              else
+                _BuyButton(
+                  quest: quest,
+                  isStoreAvailable: isStoreAvailable.data,
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -130,7 +137,7 @@ class _HeadlineImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
-    final imageSize = screenWidth * 0.75;
+    final imageSize = screenWidth * (screenWidth >= 350 ? 0.75 : 0.65);
 
     return SizedBox(
       height: imageSize,
@@ -145,9 +152,12 @@ class _QuestsAccessDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 36),
       child: RichText(
+        textScaleFactor: mediaQuery.textScaleFactor,
         textAlign: TextAlign.center,
         text: TextSpan(children: [
           TextSpan(

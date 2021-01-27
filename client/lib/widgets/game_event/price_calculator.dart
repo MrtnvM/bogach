@@ -22,12 +22,15 @@ class PriceCalculator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
     return Row(
       children: <Widget>[
         const Text(Strings.inputCount, style: Styles.bodyBlack),
         const SizedBox(width: 12),
         Expanded(child: Text('$count', style: Styles.bodyBlack)),
         RichText(
+          textScaleFactor: mediaQuery.textScaleFactor,
           text: TextSpan(
             children: [
               const TextSpan(text: ' = ', style: Styles.bodyBlack),

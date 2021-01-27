@@ -1,10 +1,10 @@
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
+import 'package:cash_flow/presentation/new_game/widgets/game_template_action_button.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
-import 'package:cash_flow/widgets/buttons/action_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -78,34 +78,36 @@ class GameTemplateItem extends HookWidget {
                 getTemplateIcon(),
               ],
             ),
-            AnimatedContainer(
-              width: double.infinity,
-              curve: Curves.easeInOut,
-              margin: EdgeInsets.only(top: isCollapsed.value ? 0 : 16),
-              height: isCollapsed.value ? 0 : 40,
-              duration: const Duration(milliseconds: 300),
-              child: AnimatedOpacity(
-                curve: Curves.easeIn,
-                duration: const Duration(milliseconds: 200),
-                opacity: isCollapsed.value ? 0 : 1,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    ActionButton(
-                      text: Strings.startAgain,
-                      textStyle: Styles.bodyBlack.copyWith(fontSize: 12.5),
-                      color: ColorRes.grey2,
-                      onPressed: () => onStartNewGamePressed(gameTemplate),
-                    ),
-                    ActionButton(
-                      text: Strings.continueAction,
-                      textStyle: Styles.bodyBlack.copyWith(fontSize: 12.5),
-                      color: ColorRes.yellow,
-                      onPressed: () => onContinueGamePressed(gameTemplate),
-                    ),
-                  ],
-                ),
-              ),
+            _buildActionButtons(isCollapsed: isCollapsed.value),
+          ],
+        ),
+      ),
+    );
+  }
+
+  AnimatedContainer _buildActionButtons({bool isCollapsed}) {
+    return AnimatedContainer(
+      width: double.infinity,
+      curve: Curves.easeInOut,
+      margin: EdgeInsets.only(top: isCollapsed ? 0 : 16),
+      height: isCollapsed ? 0 : 40,
+      duration: const Duration(milliseconds: 300),
+      child: AnimatedOpacity(
+        curve: Curves.easeIn,
+        duration: const Duration(milliseconds: 200),
+        opacity: isCollapsed ? 0 : 1,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            GameTemplateActionButton(
+              title: Strings.startAgain,
+              color: ColorRes.grey2,
+              action: () => onStartNewGamePressed(gameTemplate),
+            ),
+            GameTemplateActionButton(
+              title: Strings.continueAction,
+              color: ColorRes.yellow,
+              action: () => onContinueGamePressed(gameTemplate),
             ),
           ],
         ),
