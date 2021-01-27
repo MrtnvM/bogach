@@ -37,7 +37,7 @@ class CashFlowScaffold extends StatelessWidget {
                   Expanded(child: child)
                 else ...[
                   Expanded(child: child),
-                  _buildFooterImage(),
+                  _buildFooterImage(context),
                 ]
               ],
             ),
@@ -56,9 +56,14 @@ class CashFlowScaffold extends StatelessWidget {
         : null;
   }
 
-  Widget _buildFooterImage() {
+  Widget _buildFooterImage(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final screenHeight = mediaQuery.size.height;
+
     return Container(
-      constraints: const BoxConstraints(maxHeight: 200),
+      constraints: BoxConstraints(
+        maxHeight: screenHeight >= 600 ? 200 : 170,
+      ),
       margin: const EdgeInsets.only(bottom: 8),
       alignment: Alignment.bottomCenter,
       child: ControlPanelGate(
