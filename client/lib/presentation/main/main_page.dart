@@ -1,6 +1,7 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
+import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/config/actions/load_config_action.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
@@ -13,6 +14,7 @@ import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:cash_flow/widgets/buttons/text_button.dart';
 import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';
+import 'package:cash_flow/widgets/texts/title_test.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide TextButton;
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -36,16 +38,23 @@ class MainPage extends HookWidget {
       return null;
     }, [user]);
 
+    final screenSize = useScreenSize();
+
     return CashFlowScaffold(
       footerImage: Images.homeImage,
       child: Column(
         children: <Widget>[
-          const Spacer(),
+          const Spacer(flex: 3),
           const ProfileBadge(),
-          const Spacer(),
+          const Spacer(flex: 2),
+          TitleText(
+            Strings.chooseGame,
+            fontSize: screenSize.height >= 700 ? 23 : 20,
+          ),
+          const Spacer(flex: 2),
           _buildGameActions(context),
           _buildAuthButton(needAuthorization),
-          const Spacer(),
+          Spacer(flex: screenSize.height >= 700 ? 8 : 2),
         ],
       ),
     );

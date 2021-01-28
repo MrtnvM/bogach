@@ -7,13 +7,14 @@ import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/presentation/main/main_page.dart';
 import 'package:cash_flow/presentation/onboarding/onboarding_page.dart';
 import 'package:cash_flow/resources/colors.dart';
-import 'package:cash_flow/utils/core/device_preview.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
+// ignore: implementation_imports
+import 'package:dash_kit_control_panel/src/services/device_preview_mode.dart';
 
 class CashFlowApp extends HookWidget {
   CashFlowApp({
@@ -48,25 +49,19 @@ class CashFlowApp extends HookWidget {
       ),
     );
 
-    return StreamBuilder(
-      stream: DevicePreviewMode.onModeChanged,
-      builder: (context, snapShoot) => DevicePreview(
-        enabled: snapShoot.hasData && snapShoot.data,
-        builder: (context) => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          builder: (context, widget) => LoadableView(
-            backgroundColor: ColorRes.black80,
-            isLoading: isJoiningToRoom,
-            child: DevicePreview.appBuilder(context, widget),
-          ),
-          navigatorKey: appRouter.navigatorKey,
-          navigatorObservers: [
-            ...getAnalyticsObservers(),
-          ],
-          home: _getHomePage(),
-          theme: theme,
-        ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      builder: (context, widget) => LoadableView(
+        backgroundColor: ColorRes.black80,
+        isLoading: isJoiningToRoom,
+        child: DevicePreviewWrapper(child: widget),
       ),
+      navigatorKey: appRouter.navigatorKey,
+      navigatorObservers: [
+        ...getAnalyticsObservers(),
+      ],
+      home: _getHomePage(),
+      theme: theme,
     );
   }
 
@@ -88,5 +83,26 @@ class CashFlowApp extends HookWidget {
     }
 
     return isAuthorised ? const MainPage() : LoginPage();
+  }
+}
+
+class DevicePreviewWrapper extends StatelessWidget {
+  const DevicePreviewWrapper({@required this.child}) : assert(child != null);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: DevicePreviewMode.onModeChanged,
+      builder: (context, snapShoot) => DevicePreview(
+        enabled: false,
+        builder: (context) => child,
+      ),
+    );
+  }
+
+  static Widget appBuilder(BuildContext context, Widget widget) {
+    return DevicePreview.appBuilder(context, widget);
   }
 }
