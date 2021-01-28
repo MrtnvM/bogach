@@ -1,6 +1,9 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
+import 'package:cash_flow/models/errors/domain_game_error.dart';
+import 'package:cash_flow/presentation/dialogs/dialogs.dart';
+import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 void useGameboardAnalytics() {
@@ -92,4 +95,25 @@ void useGameboardAnalytics() {
     }
     return null;
   }, [gameExists, isGameOver]);
+}
+
+bool Function(double price) useIsEnoughCashValidator() {
+  final account = useAccount();
+  final context = useContext();
+
+  return (price) {
+    final isEnoughCash = price <= account.cash;
+
+    if (!isEnoughCash) {
+      final error = DomainGameError(
+        type: 'domain',
+        code: 'not_enough_cash',
+        message: {'ru': Strings.notEnoughCashError},
+      );
+
+      handleError(context: context, exception: error);
+    }
+
+    return isEnoughCash;
+  };
 }

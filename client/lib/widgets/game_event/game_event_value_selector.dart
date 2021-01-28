@@ -14,6 +14,7 @@ class GameEventValueSelector extends StatelessWidget {
   const GameEventValueSelector({
     @required this.action,
     @required this.selectedCount,
+    @required this.currentPrice,
     @required this.availableCount,
     @required this.maxCount,
     @required this.minCount,
@@ -32,6 +33,7 @@ class GameEventValueSelector extends StatelessWidget {
 
   final BuySellAction action;
   final int selectedCount;
+  final double currentPrice;
   final int availableCount;
   final int maxCount;
   final int minCount;
@@ -45,6 +47,7 @@ class GameEventValueSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ValueSlider(
+          currentPrice: currentPrice,
           currentAction: action,
           selectedCount: selectedCount,
           maxCount: maxCount,
@@ -59,21 +62,23 @@ class GameEventValueSelector extends StatelessWidget {
           ),
         const SizedBox(height: 10),
         const Divider(),
-        _buildBuySellButtons(),
+        _buildBuySellButtons(context),
       ],
     );
   }
 
-  Widget _buildBuySellButtons() {
+  Widget _buildBuySellButtons(BuildContext context) {
     return Row(
       children: <Widget>[
-        Expanded(child: _buildAvailableButton()),
-        Expanded(child: _buildSelectAllButton()),
+        Expanded(child: _buildAvailableButton(context)),
+        Expanded(child: _buildSelectAllButton(context)),
       ],
     );
   }
 
-  Widget _buildSelectAllButton() {
+  Widget _buildSelectAllButton(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
     final title = action.map(
       buy: (_) => Strings.buyAllAvailable,
       sell: (_) => Strings.sellAllAvailable,
@@ -94,6 +99,7 @@ class GameEventValueSelector extends StatelessWidget {
         alignment: Alignment.center,
         padding: const EdgeInsets.all(8),
         child: RichText(
+          textScaleFactor: mediaQuery.textScaleFactor,
           text: TextSpan(
             children: [
               TextSpan(
@@ -110,11 +116,14 @@ class GameEventValueSelector extends StatelessWidget {
     );
   }
 
-  Widget _buildAvailableButton() {
+  Widget _buildAvailableButton(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
     return Container(
       padding: const EdgeInsets.all(8),
       alignment: Alignment.center,
       child: RichText(
+        textScaleFactor: mediaQuery.textScaleFactor,
         text: TextSpan(
           children: [
             TextSpan(

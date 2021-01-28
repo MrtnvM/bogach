@@ -29,7 +29,6 @@ class QuestsPage extends HookWidget {
 
     return CashFlowScaffold(
       title: Strings.chooseQuest,
-      showUser: true,
       horizontalPadding: 0,
       showBackArrow: true,
       child: _buildBody(),

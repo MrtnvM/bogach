@@ -7,15 +7,17 @@ class Badge extends StatelessWidget {
   const Badge({
     this.title,
     this.titleWidget,
+    this.imageWidget,
     this.imageUrl,
     this.imageAsset,
     this.onTap,
     Key key,
-  })  : assert(imageUrl != null || imageAsset != null),
+  })  : assert(imageUrl != null || imageAsset != null || imageWidget != null),
         super(key: key);
 
   final String imageAsset;
   final String imageUrl;
+  final Widget imageWidget;
   final String title;
   final Widget titleWidget;
   final VoidCallback onTap;
@@ -47,7 +49,9 @@ class Badge extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (imageAsset != null)
+            if (imageWidget != null)
+              imageWidget
+            else if (imageAsset != null)
               Image.asset(imageAsset, height: 24, width: 24)
             else if (imageUrl != null)
               Image(

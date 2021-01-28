@@ -39,6 +39,13 @@ class Styles {
     fontSize: 12,
   );
 
+  static const bodyWhiteBold14 = TextStyle(
+    color: ColorRes.primaryWhiteColor,
+    fontFamily: _defaultFontFamily,
+    fontWeight: FontWeight.w700,
+    fontSize: 14,
+  );
+
   static const body2 = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w500,

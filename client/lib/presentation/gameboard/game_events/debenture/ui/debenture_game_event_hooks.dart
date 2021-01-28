@@ -9,6 +9,7 @@ import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/debenture_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/debenture_player_action.dart';
+import 'package:cash_flow/presentation/gameboard/gameboard_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_model.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
@@ -55,8 +56,16 @@ VoidCallback useDebenturePlayerActionHandler({
 }) {
   final context = useContext();
   final dispatch = useDispatcher();
+  final isEnoughCash = useIsEnoughCashValidator();
 
   return () {
+    final DebentureEventData eventData = event.data;
+    final price = eventData.currentPrice * selectedCount;
+
+    if (isBuyAction(action) && !isEnoughCash(price)) {
+      return;
+    }
+
     final playerAction = DebenturePlayerAction(
       action,
       selectedCount,

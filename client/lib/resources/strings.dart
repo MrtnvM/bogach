@@ -13,9 +13,12 @@ class Strings {
 
   static String get purchaseError => 'При совершении покупки возникла ошибка';
 
+  static String get notEnoughCashError => 'Недостаточно наличных для операции';
+
   // Common
   static String get submit => 'Отправить';
   static String get select => 'Выбрать';
+  static String get logout => 'Выйти из аккаунта';
 
   static String get email => 'Email';
 
@@ -361,6 +364,8 @@ class Strings {
   // Winners Page
   static String get winnersPageTitle => 'Поздравляем!';
   static String get winnersPageDescription => 'Ты достиг своей цели всего за';
+  static String get winnersMultiplayerPageDescription =>
+      'Ты достиг своей цели!';
 
   static String get gameFailedPageTitle => 'Цель не достигнута!';
   static String get gameFailedPageDescription =>
@@ -414,6 +419,8 @@ class Strings {
   static String get multiplayerGamesAvailable => 'Доступно игр:';
   static String get multiplayerAdvertisingMessage =>
       'У вас кончились игры.\nХотите купить ещё?';
+  static String get multiplayerAdvertisingMessageWhenHaveGames =>
+      'Хотите купить ещё игр?';
   static String get asGift => 'в подарок';
   static String get inviteFriendsToStart =>
       'Пригласите друзей, чтобы начать игру';

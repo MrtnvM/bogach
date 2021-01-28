@@ -4,6 +4,7 @@ import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/config/config_hooks.dart';
 import 'package:cash_flow/features/game/actions/start_game_action.dart';
 import 'package:cash_flow/features/multiplayer/actions/create_room_game_action.dart';
@@ -50,42 +51,45 @@ class RoomPage extends HookWidget {
 
     _useAutoTransitionToCreatedGame();
 
+    final mediaQueryData = useAdaptiveMediaQueryData();
+
     return LoadableView(
       backgroundColor: ColorRes.black80,
       isLoading: isActionInProgress,
       child: CashFlowScaffold(
         title: Strings.waitingPlayers,
-        showUser: true,
         showBackArrow: true,
         horizontalPadding: 16,
-        child: SizedBox(
-          height: 300,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const Divider(height: 1),
-              Expanded(child: _ParticipantListWidget()),
-              const Divider(height: 1),
-              const SizedBox(height: 16),
-              if (isCurrentUserRoomOwner)
-                _InviteFriendsNote()
-              else
-                _JoinToRoomNote(),
-              const SizedBox(height: 24),
-              if (isCurrentUserRoomOwner) ...[
-                Row(
-                  children: const [
-                    Expanded(child: _InviteButton()),
-                    SizedBox(height: 16, width: 16),
-                    Expanded(child: _StartGameButton()),
-                  ],
-                ),
+        child: MediaQuery(
+          data: mediaQueryData,
+          child: SizedBox(
+            height: 300,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(child: _ParticipantListWidget()),
+                const Divider(height: 1),
+                const SizedBox(height: 16),
+                if (isCurrentUserRoomOwner)
+                  _InviteFriendsNote()
+                else
+                  _JoinToRoomNote(),
                 const SizedBox(height: 24),
-              ] else if (!isParticipantAlreadyJoined) ...[
-                const _JoinRoomButton(),
-                const SizedBox(height: 24),
+                if (isCurrentUserRoomOwner) ...[
+                  Row(
+                    children: const [
+                      Expanded(child: _InviteButton()),
+                      SizedBox(height: 16, width: 16),
+                      Expanded(child: _StartGameButton()),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                ] else if (!isParticipantAlreadyJoined) ...[
+                  const _JoinRoomButton(),
+                  const SizedBox(height: 24),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
@@ -142,12 +146,18 @@ class _InviteButton extends HookWidget {
   Widget build(BuildContext context) {
     final roomId = useGlobalState((s) => s.multiplayer.currentRoom?.id);
     final dispatch = useDispatcher();
+    final isLoading = useState(false);
 
     final inviteByLink = () {
       AnalyticsSender.multiplayerInviteLinkCreated();
+      isLoading.value = true;
 
       dispatch(ShareRoomInviteLinkAction(roomId))
-          .catchError((e) => handleError(context: context, exception: e));
+          .then((_) => isLoading.value = false)
+          .catchError((e) {
+        isLoading.value = false;
+        handleError(context: context, exception: e);
+      });
     };
 
     return _Button(
@@ -155,6 +165,7 @@ class _InviteButton extends HookWidget {
       icon: Icons.add,
       color: ColorRes.yellow,
       onTap: inviteByLink,
+      isLoading: isLoading.value,
     );
   }
 }
@@ -165,6 +176,7 @@ class _Button extends StatelessWidget {
     @required this.icon,
     @required this.color,
     @required this.onTap,
+    this.isLoading = false,
     Key key,
   }) : super(key: key);
 
@@ -172,6 +184,7 @@ class _Button extends StatelessWidget {
   final IconData icon;
   final Color color;
   final VoidCallback onTap;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -187,20 +200,30 @@ class _Button extends StatelessWidget {
           boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 4)],
         ),
         alignment: Alignment.center,
-        child: InkWell(
-          onTap: onTap,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, size: 20, color: Colors.black),
-              const SizedBox(width: 6),
-              Text(
-                title,
-                style: Styles.bodyBlack.copyWith(fontSize: 15),
+        child: isLoading
+            ? const Center(
+                child: SizedBox(
+                  width: 28,
+                  height: 28,
+                  child: CircularProgressIndicator(strokeWidth: 3),
+                ),
+              )
+            : InkWell(
+                onTap: onTap,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(icon, size: 20, color: Colors.black),
+                    const SizedBox(width: 6),
+                    Text(
+                      title,
+                      style: Styles.bodyBlack.copyWith(
+                        fontSize: 14.5,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -268,6 +291,7 @@ class _ParticipantListWidget extends HookWidget {
         .toList();
 
     return SingleChildScrollView(
+      padding: const EdgeInsets.only(top: 8),
       child: ConstrainedBox(
         constraints: const BoxConstraints(
           minWidth: double.infinity,

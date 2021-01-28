@@ -53,10 +53,12 @@ class InfoTable extends StatelessWidget {
       key: GameboardTutorialWidget.of(context)?.gameEventKey,
       children: <Widget>[
         ..._buildHeader(),
-        const TableDivider(),
-        for (var i = 0; i < rows.length; i++) ...[
-          rows[i],
-          if (i != rows.length - 1) const TableDivider(),
+        if (rows.isNotEmpty) ...[
+          const TableDivider(),
+          for (var i = 0; i < rows.length; i++) ...[
+            rows[i],
+            if (i != rows.length - 1) const TableDivider(),
+          ]
         ]
       ],
     );

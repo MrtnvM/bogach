@@ -251,6 +251,7 @@ class AnalyticsSender {
 
   static void questsPurchasePageOpen() => _send('quests_purchase_page_open');
   static void questsPurchaseStarted() => _send('quests_purchase_started');
+  static void questsPurchaseCanceled() => _send('quests_purchase_canceled');
   static void questsPurchased() => _send('quests_purchased');
 
   static void questSelected() => _send('quests_quest_selected');

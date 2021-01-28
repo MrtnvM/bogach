@@ -3,16 +3,13 @@ import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
-import 'package:cash_flow/features/config/config_hooks.dart';
+import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/new_game/actions/get_quests_action.dart';
-import 'package:cash_flow/features/new_game/actions/start_quest_game_action.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/navigation/app_router.dart';
-import 'package:cash_flow/presentation/dialogs/dialogs.dart';
-import 'package:cash_flow/presentation/gameboard/gameboard.dart';
 import 'package:cash_flow/presentation/purchases/quests_access_page.dart';
 import 'package:cash_flow/presentation/quests/quest_item_widget.dart';
-import 'package:cash_flow/presentation/tutorial/tutorial_page.dart';
+import 'package:cash_flow/presentation/quests/quests_hooks.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/common/common_error_widget.dart';
 import 'package:cash_flow/widgets/common/empty_widget.dart';
@@ -39,9 +36,7 @@ class QuestList extends HookWidget {
 
     final dispatch = useDispatcher();
 
-    final mediaQuery = MediaQuery.of(context);
-    final screenWidth = mediaQuery.size.width;
-    final textScaleFactor = screenWidth <= 350 ? 0.8 : 1.0;
+    final mediaQueryData = useAdaptiveMediaQueryData();
 
     final animationController = useAnimationController(
       duration: const Duration(milliseconds: 300),
@@ -57,7 +52,7 @@ class QuestList extends HookWidget {
           });
 
     return MediaQuery(
-      data: mediaQuery.copyWith(textScaleFactor: textScaleFactor),
+      data: mediaQueryData,
       child: LoadableView(
         isLoading: getQuestsRequestState.isInProgress ||
             createQuestGameRequestState.isInProgress,
@@ -142,8 +137,8 @@ class _QuestItemWidget extends HookWidget {
   }
 
   Function(Quest, QuestAction) _getOnQuestSelectedFn() {
-    final context = useContext();
     final user = useCurrentUser();
+    final startQuest = useQuestStarter();
 
     final currentQuestIndex = user.currentQuestIndex ?? 0;
     final hasQuestsAccess = user.purchaseProfile?.isQuestsAvailable ?? false;
@@ -153,9 +148,6 @@ class _QuestItemWidget extends HookWidget {
     final isQuestOpenedByUser = index <= currentQuestIndex;
     final isQuestAvailable =
         (isQuestPurchased && isQuestOpenedByUser) || DemoMode.isEnabled;
-
-    final dispatch = useDispatcher();
-    final isTutorialPassed = useConfig((c) => c.isGameboardTutorialPassed);
 
     if (isQuestAvailable) {
       return (quest, action) {
@@ -167,17 +159,7 @@ class _QuestItemWidget extends HookWidget {
           AnalyticsSender.questsSecondQuestSelected();
         }
 
-        if (action == QuestAction.startNewGame) {
-          AnalyticsSender.questStart(quest.id);
-        } else if (action == QuestAction.continueGame) {
-          AnalyticsSender.questContinue(quest.id);
-        }
-
-        return dispatch(StartQuestGameAction(quest.id, action))
-            .then((_) => isTutorialPassed
-                ? appRouter.goTo(const GameBoard())
-                : appRouter.goTo(const TutorialPage()))
-            .catchError((e) => handleError(context: context, exception: e));
+        return startQuest(quest.id, action);
       };
     }
 

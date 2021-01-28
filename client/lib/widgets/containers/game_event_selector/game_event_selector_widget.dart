@@ -70,6 +70,7 @@ class GameEventSelectorWidget extends HookWidget {
                 GameEventValueSelector(
                   action: _buySellAction.value,
                   selectedCount: selectorStateModel.selectedCount,
+                  currentPrice: viewModel.currentPrice.toDouble(),
                   availableCount: selectorStateModel.availableCount,
                   maxCount: selectorStateModel.maxCount,
                   minCount: selectorStateModel.minCount,

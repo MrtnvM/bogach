@@ -18,3 +18,13 @@ Size useScreenSize() {
   final screenSize = mediaQuery.size;
   return screenSize;
 }
+
+MediaQueryData useAdaptiveMediaQueryData() {
+  final mediaQuery = useMediaQuery();
+  final screenWidth = mediaQuery.size.width;
+  final textScaleFactor = screenWidth <= 350 ? 0.8 : 1.0;
+
+  return mediaQuery.copyWith(
+    textScaleFactor: textScaleFactor,
+  );
+}

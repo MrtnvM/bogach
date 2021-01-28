@@ -44,11 +44,13 @@ class LoginPage extends HookWidget {
         footerImage: Images.authImage,
         child: Column(
           children: <Widget>[
+            const Spacer(flex: 5),
             _buildLoginForm(
               context,
               dispatch,
               isAuthorising,
             ),
+            const Spacer(flex: 4),
             // _buildLaterButton(context),
           ],
         ),
@@ -166,7 +168,7 @@ class LoginPage extends HookWidget {
 
   Widget buildPrivacyPolicy(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final fontSize = screenHeight < 580 ? 15.0 : 18.0;
+    final fontSize = screenHeight < 580 ? 14.0 : 15.0;
 
     final style = Styles.onboardingSubtitle.copyWith(fontSize: fontSize);
     final linkStyle = style.copyWith(decoration: TextDecoration.underline);

@@ -22,6 +22,7 @@ class _ValueSliderExample extends HookWidget {
     final count = useState(0);
 
     return ValueSlider(
+      currentPrice: 100,
       currentAction: const BuySellAction.sell(),
       selectedCount: count.value,
       maxCount: 100,
