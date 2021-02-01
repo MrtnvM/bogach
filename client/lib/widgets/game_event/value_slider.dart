@@ -29,7 +29,8 @@ class ValueSlider extends HookWidget {
   Widget build(BuildContext context) {
     final account = useAccount();
     final totalPrice = currentPrice * selectedCount;
-    final isEnoughCash = totalPrice <= account.cash;
+    final isEnoughCash = isSellAction(currentAction) ||
+        isBuyAction(currentAction) && totalPrice <= account.cash;
 
     final sliderActiveColor = isEnoughCash
         ? ColorRes.mainGreen //
