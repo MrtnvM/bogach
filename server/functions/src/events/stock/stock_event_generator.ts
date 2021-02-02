@@ -61,7 +61,11 @@ export namespace StockEventGenerator {
 
     const month = game.state.monthNumber;
     const monthCountInYear = 12;
-    const startIndex = month % stockCandles.length;
+    let startIndex = month % stockCandles.length;
+
+    if (startIndex + monthCountInYear >= stockCandles.length) {
+      startIndex = 0;
+    }
 
     const yearAverageStockPrice =
       stockCandles
