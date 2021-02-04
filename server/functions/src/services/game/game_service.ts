@@ -293,7 +293,7 @@ export class GameService {
       return await callback();
     } catch (err) {
       const errorMessage =
-        'PURCHASE SERVICE\n' +
+        'GAME SERVICE\n' +
         `ENVIRONMENT: ${environment}\n` +
         `ERROR MESSAGE: ${err && err['message']}\n` +
         `CONTEXT: ${JSON.stringify(context, null, 2)}`;
