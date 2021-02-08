@@ -8,16 +8,18 @@ import { PurchaseProfile, PurchaseProfileEntity } from '../../models/purchases/p
 import { GameEntity } from '../../models/domain/game/game';
 import { PlayedGameInfo } from '../../models/domain/user/player_game_info';
 import { nowInUtc } from '../../utils/datetime';
-import { getCurrentEnvironment, rollbar } from '../../config';
+import { ErrorRecorder } from '../../config';
 
 export class PurchaseService {
   constructor(private userProvider: UserProvider) {}
+
+  private errorRecorder = new ErrorRecorder('Purchase Service');
 
   async updatePurchases(
     userId: UserEntity.Id,
     purchases: PurchaseDetails[]
   ): Promise<PurchaseProfile | undefined> {
-    return this.executeWithErrorReporting({ userId, purchases }, async () => {
+    return this.errorRecorder.executeWithErrorRecording({ userId, purchases }, async () => {
       if (!userId || !purchases || !Array.isArray(purchases)) {
         throw new Error('Purchase list has incorrect format');
       }
@@ -85,7 +87,7 @@ export class PurchaseService {
   ) {
     const context = { participantsIds, gameId, gameCreationDate };
 
-    return this.executeWithErrorReporting(context, async () => {
+    return this.errorRecorder.executeWithErrorRecording(context, async () => {
       if (!Array.isArray(participantsIds) || participantsIds?.length === 0) {
         throw new Error("ParticipantIds can't be empty");
       }
@@ -147,24 +149,5 @@ export class PurchaseService {
     draft.playedGames!.multiplayerGames.push(multiplayerGameInfo);
 
     return draft.playedGames!.multiplayerGames;
-  }
-
-  private async executeWithErrorReporting<T>(context: any, callback: () => Promise<T>): Promise<T> {
-    const component = 'Purchase Service';
-    const environment = getCurrentEnvironment();
-
-    try {
-      return await callback();
-    } catch (err) {
-      const errorMessage =
-        'PURCHASE SERVICE\n' +
-        `ENVIRONMENT: ${environment}\n` +
-        `ERROR MESSAGE: ${err && err['message']}\n` +
-        `CONTEXT: ${JSON.stringify(context, null, 2)}`;
-
-      const error = new Error(errorMessage);
-      rollbar.error(error, `COMPONENT: ${component}, ` + `ENVIRONMENT: ${environment}`);
-      throw error;
-    }
   }
 }

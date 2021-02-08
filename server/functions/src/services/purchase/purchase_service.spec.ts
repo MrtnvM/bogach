@@ -11,6 +11,7 @@ import { TestData } from './purchase_service.spec.utils';
 import { PurchaseProfileEntity } from '../../models/purchases/purchase_profile';
 import { PlayedGameInfo } from '../../models/domain/user/player_game_info';
 import { nowInUtc } from '../../utils/datetime';
+import { ErrorRecorder } from '../../config';
 
 describe('Purchase Service', () => {
   const mockUserProvider = mock(UserProvider);
@@ -194,9 +195,13 @@ describe('Purchase Service', () => {
     when(mockUserProvider.getUserProfile(userId)).thenResolve(initialProfile);
     when(mockUserProvider.getUserPurchases(userId)).thenResolve([]);
 
+    ErrorRecorder.isEnabled = false;
+
     await expect(
       purchaseService.reduceMultiplayerGames([initialProfile.userId], 'gameId', nowInUtc())
     ).rejects.toThrow(/.*multiplayerGamesCount can't be less then zero.*/);
+
+    ErrorRecorder.isEnabled = true;
   });
 
   test('Calculation of purchase profile', () => {
