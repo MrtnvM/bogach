@@ -8,7 +8,7 @@ import { Strings } from '../../resources/strings';
 import { TimerProvider } from '../../providers/timer_provider';
 import { GameTemplateEntity } from '../../game_templates/models/game_template';
 import { DomainErrors } from '../../core/exceptions/domain/domain_errors';
-import { getCurrentEnvironment, rollbar } from '../../config';
+import { ErrorRecorder } from '../../config';
 
 export class RoomService {
   constructor(
@@ -18,19 +18,24 @@ export class RoomService {
     private firebaseMessaging: FirebaseMessaging
   ) {}
 
+  private errorRecorder = new ErrorRecorder('Room Service');
+
   async createRoom(
     gameTemplateId: GameTemplateEntity.Id,
     currentUserId: UserEntity.Id
   ): Promise<Room> {
-    return this.executeWithErrorReporting({ gameTemplateId, currentUserId }, async () => {
-      const room = await this.gameProvider.createRoom(gameTemplateId, currentUserId);
-      return room;
-    });
+    return this.errorRecorder.executeWithErrorRecording(
+      { gameTemplateId, currentUserId },
+      async () => {
+        const room = await this.gameProvider.createRoom(gameTemplateId, currentUserId);
+        return room;
+      }
+    );
   }
 
   /// Owner of the created room can add participants that will receive invite by push notification
   async addParticipantToRoom(participantId: UserEntity.Id, roomId: RoomEntity.Id) {
-    return this.executeWithErrorReporting({ roomId, participantId }, async () => {
+    return this.errorRecorder.executeWithErrorRecording({ roomId, participantId }, async () => {
       const room = await this.gameProvider.getRoom(roomId);
 
       const participantIndex = room.participants.findIndex((p) => p.id === participantId);
@@ -70,7 +75,7 @@ export class RoomService {
 
   /// Join to Game by setting status to 'ready'
   async onParticipantReady(roomId: RoomEntity.Id, participantId: UserEntity.Id) {
-    return this.executeWithErrorReporting({ roomId, participantId }, async () => {
+    return this.errorRecorder.executeWithErrorRecording({ roomId, participantId }, async () => {
       checkIds([roomId, participantId]);
 
       const room = await this.gameProvider.getRoom(roomId);
@@ -100,7 +105,7 @@ export class RoomService {
   }
 
   async createRoomGame(roomId: RoomEntity.Id) {
-    return this.executeWithErrorReporting({ roomId }, async () => {
+    return this.errorRecorder.executeWithErrorRecording({ roomId }, async () => {
       const [room, game] = await this.gameProvider.createRoomGame(roomId);
 
       if (room.participants.length < 2) {
@@ -115,24 +120,5 @@ export class RoomService {
 
       return { room, game };
     });
-  }
-
-  private async executeWithErrorReporting<T>(context: any, callback: () => Promise<T>): Promise<T> {
-    const component = 'Room Service';
-    const environment = getCurrentEnvironment();
-
-    try {
-      return await callback();
-    } catch (err) {
-      const errorMessage =
-        'ROOM SERVICE\n' +
-        `ENVIRONMENT: ${environment}\n` +
-        `ERROR MESSAGE: ${err && err['message']}\n` +
-        `CONTEXT: ${JSON.stringify(context, null, 2)}`;
-
-      const error = new Error(errorMessage);
-      rollbar.error(error, `COMPONENT: ${component}, ` + `ENVIRONMENT: ${environment}`);
-      throw error;
-    }
   }
 }
