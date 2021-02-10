@@ -134,6 +134,10 @@ class AnalyticsSender {
     _send('income_event', params);
   }
 
+  static void newsEvent() {
+    _send('news_event');
+  }
+
   static void buyInsurance(String insuranceEvent, int price) {
     final params = {'insurance_name': insuranceEvent, 'business_price': price};
 
