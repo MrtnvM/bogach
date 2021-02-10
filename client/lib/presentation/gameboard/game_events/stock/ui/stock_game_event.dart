@@ -8,9 +8,11 @@ import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/model/stock_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/ui/stock_game_event_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/chart/stock/chart/chart_widget.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_content.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
+import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/containers/game_event_selector/game_event_selector_widget.dart';
@@ -54,6 +56,12 @@ class StockGameEvent extends HookWidget {
 
     return Column(
       children: <Widget>[
+        const ChartWidget(
+          height: 250,
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          backgroundColor: ColorRes.transparent,
+        ),
+        const SizedBox(height: 24),
         InfoTable(
           title: Strings.stock,
           withShadow: false,

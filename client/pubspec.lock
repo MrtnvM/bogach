@@ -674,6 +674,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.5.0"
+  k_chart:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: b729ad82c716073c759f56029b3ea1431605df0b
+      url: "https://github.com/robertBadamshin/k_chart"
+    source: git
+    version: "0.1.2"
   logger:
     dependency: transitive
     description:
