@@ -21,6 +21,7 @@ describe('Stock event handler', () => {
       currentPrice: 100,
       fairPrice: 120,
       availableCount: 10,
+      candles: [],
     });
 
     const action = utils.stockPriceChangedPlayerAction({
