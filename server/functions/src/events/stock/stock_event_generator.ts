@@ -4,43 +4,22 @@ import * as uuid from 'uuid';
 import * as random from 'random';
 import { StockEvent } from './stock_event';
 import { Game } from '../../models/domain/game/game';
-import * as fs from 'fs';
-import * as path from 'path';
 import { randomValueFromRange, valueRange } from '../../core/data/value_range';
+import { StockEventCandlesDataSource } from './stock_event_candles_data_source';
 
-type Candle = {
-  High: number;
-  Low: number;
-  Open: number;
-  Close: number;
-};
+const stockCandlesCache: { [stock: string]: StockEvent.Candle[] } = {};
 
-const stockCandlesCache: { [stock: string]: Candle[] } = {};
-
-const getStockCandles = (stockName: string): Candle[] => {
+const getStockCandles = (stockName: string): StockEvent.Candle[] => {
   const cachedStockCandles = stockCandlesCache[stockName];
   if (cachedStockCandles !== undefined) {
     return cachedStockCandles;
   }
 
-  const stockDataFile = stockName + '.json';
-  const stockDataPath = path.join(
-    __dirname,
-    '..',
-    '..',
-    '..',
-    'data',
-    'stocks_history',
-    stockDataFile
-  );
-
-  const rawData = fs.readFileSync(stockDataPath, 'utf8');
-  const stockCandles = JSON.parse(rawData) as Candle[];
+  const stockCandles = StockEventCandlesDataSource.getStockCandles(stockName);
   stockCandlesCache[stockName] = stockCandles;
 
   return stockCandles;
 };
-
 export namespace StockEventGenerator {
   export const generate = (game: Game): StockEvent.Event | undefined => {
     const alreadyUsedStocks = game.currentEvents
@@ -58,23 +37,24 @@ export namespace StockEventGenerator {
     const stockIndex = random.int(0, availableStocks.length - 1);
     const stockName = availableStocks[stockIndex];
     const stockCandles = getStockCandles(stockName);
+    // TODO remove
+    console.log(JSON.stringify(stockCandles));
 
     const month = game.state.monthNumber;
-    const monthCountInYear = 12;
-    let startIndex = month % stockCandles.length;
+    const startCandleIndex = month % stockCandles.length;
 
-    if (startIndex + monthCountInYear >= stockCandles.length) {
-      startIndex = 0;
-    }
+    const monthCountInYear = 12;
+    const currentCandleIndex = startCandleIndex + monthCountInYear;
+
+    // to avoid array exceed
+    const stockCandlesProlonged = stockCandles.concat(stockCandles);
+
+    const stockEventCandles = stockCandlesProlonged.slice(startCandleIndex, currentCandleIndex);
+    const currentCandle = stockCandlesProlonged[currentCandleIndex];
 
     const yearAverageStockPrice =
-      stockCandles
-        .slice(startIndex, startIndex + monthCountInYear)
-        .reduce((acc, c) => c.Close + acc, 0) / monthCountInYear;
-
-    const currentCandleIndex = startIndex + monthCountInYear;
-    const candle = stockCandles[currentCandleIndex];
-    const currentPrice = random.float(candle.Low, candle.High);
+      stockEventCandles.reduce((acc, c) => c.close + acc, 0) / monthCountInYear;
+    const currentPrice = random.float(currentCandle.low, currentCandle.high);
 
     const maxCount = random.int(9, 14) * 10;
 
@@ -83,13 +63,16 @@ export namespace StockEventGenerator {
       currentPrice: valueRange([currentPrice, currentPrice, 0]),
       fairPrice: valueRange([yearAverageStockPrice, yearAverageStockPrice, 0]),
       availableCount: valueRange([maxCount, maxCount, 0]),
+      candles: stockEventCandles,
     });
   };
 
   export const generateEvent = (eventInfo: StockEvent.Info): StockEvent.Event => {
-    const { name, description, currentPrice, fairPrice, availableCount } = eventInfo;
+    const { name, description, currentPrice, fairPrice, availableCount, candles } = eventInfo;
 
     const defaultAvailableCount = random.int(9, 14) * 10;
+    const eventRandomAvailableCount = availableCount && randomValueFromRange(availableCount);
+    const eventAvailableCount = eventRandomAvailableCount || defaultAvailableCount;
 
     return {
       id: uuid.v4(),
@@ -99,8 +82,8 @@ export namespace StockEventGenerator {
       data: {
         currentPrice: randomValueFromRange(currentPrice),
         fairPrice: randomValueFromRange(fairPrice),
-        availableCount:
-          (availableCount && randomValueFromRange(availableCount)) || defaultAvailableCount,
+        availableCount: eventAvailableCount,
+        candles: candles,
       },
     };
   };

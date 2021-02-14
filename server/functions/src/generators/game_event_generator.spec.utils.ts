@@ -113,6 +113,7 @@ export const createMockedStockRule = (config: {
       currentPrice: 3100,
       fairPrice: 2900,
       availableCount: 100,
+      candles: [],
     },
   };
 
