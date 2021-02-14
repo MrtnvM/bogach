@@ -37,8 +37,6 @@ export namespace StockEventGenerator {
     const stockIndex = random.int(0, availableStocks.length - 1);
     const stockName = availableStocks[stockIndex];
     const stockCandles = getStockCandles(stockName);
-    // TODO remove
-    console.log(JSON.stringify(stockCandles));
 
     const month = game.state.monthNumber;
     const startCandleIndex = month % stockCandles.length;
