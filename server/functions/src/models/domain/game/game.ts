@@ -106,9 +106,8 @@ export namespace GameEntity {
     readonly targetValue: number;
   };
 
-  export type History = {
-    months: { events: GameEvent[] }[];
-  };
+  export type History = { months: HistoryMonth[] };
+  export type HistoryMonth = { events: GameEvent[] };
 
   export type Config = {
     readonly level?: GameLevelEntity.Id | null;

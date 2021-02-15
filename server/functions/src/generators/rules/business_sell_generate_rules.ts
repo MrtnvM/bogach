@@ -1,4 +1,4 @@
-import { Rule } from '../generator_rule';
+import { Rule, RuleConfig } from '../generator_rule';
 import { GameEvent } from '../../models/domain/game/game_event';
 import { BusinessSellEvent } from '../../events/business/sell/business_sell_event';
 import { BusinessSellEventGenerator } from '../../events/business/sell/business_sell_event_generator';
@@ -7,8 +7,12 @@ import { BusinessAsset } from '../../models/domain/assets/business_asset';
 import { Game } from '../../models/domain/game/game';
 
 export class BusinessSellGenerateRule extends Rule<BusinessSellEvent.Event> {
-  getProbabilityLevel(): number {
-    return 4;
+  constructor(private config: RuleConfig) {
+    super();
+  }
+
+  getProbabilityLevel() {
+    return this.config.probabilityLevel;
   }
 
   generate(game: Game) {
@@ -22,12 +26,20 @@ export class BusinessSellGenerateRule extends Rule<BusinessSellEvent.Event> {
     return event;
   }
 
-  getMinDistanceBetweenEvents(): number {
-    return 10;
+  getMinDistanceBetweenEvents() {
+    return this.config.minDistanceBetweenEvents;
   }
 
-  getType(): string {
+  getMaxHistoryLength() {
+    return this.config.maxHistoryLength;
+  }
+
+  getType() {
     return BusinessSellEvent.Type;
+  }
+
+  getMaxCountOfEventInMonth() {
+    return this.config.maxCountOfEventInMonth;
   }
 
   //TODO: fix issue with 2 buy events without sell events

@@ -8,12 +8,12 @@ export class IncomeGenerateRule extends Rule<IncomeEvent.Event> {
     super();
   }
 
-  getProbabilityLevel(): number {
+  getProbabilityLevel() {
     return this.config.probabilityLevel;
   }
 
   generate(game: Game) {
-    return IncomeEventGenerator.generate(game, this.incomeEvents);
+    return IncomeEventGenerator.generate(game, this.incomeEvents, this.getMaxHistoryLength());
   }
 
   getMinDistanceBetweenEvents(): number {
@@ -21,7 +21,11 @@ export class IncomeGenerateRule extends Rule<IncomeEvent.Event> {
   }
 
   getMaxCountOfEventInMonth() {
-    return this.config.maxCountOfEventInMonth ?? 0;
+    return this.config.maxCountOfEventInMonth;
+  }
+
+  getMaxHistoryLength() {
+    return this.config.maxHistoryLength;
   }
 
   getType(): string {

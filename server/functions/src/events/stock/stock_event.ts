@@ -15,6 +15,7 @@ export namespace StockEvent {
     close: number;
     time: Date;
   };
+
   export interface Data {
     readonly currentPrice: number;
     readonly fairPrice: number;

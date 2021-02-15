@@ -6,12 +6,13 @@ import { Game, GameEntity } from '../../models/domain/game/game';
 export namespace InsuranceEventGenerator {
   export const generate = (
     game: Game,
-    insuranceInfo: InsuranceEvent.Info
+    insuranceInfo: InsuranceEvent.Info,
+    maxHistoryLength: number
   ): InsuranceEvent.Event | undefined => {
     const pastInsuranceEvents = GameEntity.getPastEventsOfType<InsuranceEvent.Event>({
       game,
       type: InsuranceEvent.Type,
-      maxHistoryLength: Math.max(insuranceInfo.duration - 4, 4),
+      maxHistoryLength,
     });
 
     const theSameInsuranceTypeEventIndex = pastInsuranceEvents.findIndex(
@@ -36,6 +37,15 @@ export namespace InsuranceEventGenerator {
         duration: insuranceInfo.duration,
         value: randomValueFromRange(insuranceInfo.value),
         cost: randomValueFromRange(insuranceInfo.cost),
+      },
+    };
+  };
+
+  export const archiveEvent = (event: InsuranceEvent.Event) => {
+    return {
+      type: event.type,
+      data: {
+        insuranceType: event.data.insuranceType,
       },
     };
   };

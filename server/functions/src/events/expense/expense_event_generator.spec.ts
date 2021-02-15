@@ -27,7 +27,7 @@ describe('Income Event Generator', () => {
 
     for (let i = 0; i < 100; i++) {
       const eventInfo = ExpenseGeneratorConfig.allExpenses;
-      const event = ExpenseEventGenerator.generate(game, eventInfo);
+      const event = ExpenseEventGenerator.generate(game, eventInfo, 12);
       expect(event?.description).not.toEqual(expenseEvent.description);
     }
   });

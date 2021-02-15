@@ -65,7 +65,7 @@ export class GameService {
   private errorRecorder = new ErrorRecorder('Game Service');
 
   async createNewGame(templateId: GameTemplateEntity.Id, participantsIds: UserEntity.Id[]) {
-    const context = { templateId, participantsIds };
+    const context = { templateId, participantsIds, function: 'createNewGame' };
 
     return this.errorRecorder.executeWithErrorRecording(context, async () => {
       const createdGame = await this.gameProvider.createGame(templateId, participantsIds);
@@ -83,7 +83,7 @@ export class GameService {
   }
 
   async createNewGameByLevel(levelId: GameLevelEntity.Id, participantsIds: UserEntity.Id[]) {
-    const context = { levelId, participantsIds };
+    const context = { levelId, participantsIds, function: 'createNewGameByLevel' };
 
     return this.errorRecorder.executeWithErrorRecording(context, async () => {
       const gameLevel = this.gameLevelsProvider.getGameLevel(levelId);
@@ -99,15 +99,25 @@ export class GameService {
     });
   }
 
-  async handlePlayerAction(eventId: GameEventEntity.Id, action: any, context: GameContext) {
-    return this.errorRecorder.executeWithErrorRecording({ eventId, action, context }, async () => {
-      const { gameId, userId } = context;
+  async handlePlayerAction(eventId: GameEventEntity.Id, action: any, gameContext: GameContext) {
+    const context = { eventId, action, context: gameContext, function: 'handlePlayerAction' };
+
+    return this.errorRecorder.executeWithErrorRecording(context, async () => {
+      const { gameId, userId } = gameContext;
 
       let game = await this.gameProvider.getGame(gameId);
-      if (!game) throw new Error('No game with ID: ' + gameId);
+      if (!game) {
+        throw new Error(`No game with ID: ${gameId} \nGAME: ${JSON.stringify(game, null, 2)}`);
+      }
 
       const event = game.currentEvents.find((e) => e.id === eventId);
-      if (!event) throw new Error('No game event with ID: ' + eventId);
+      if (!event) {
+        const errorMessage =
+          `No game event with ID: ${eventId} \n` + //
+          `GAME: ${JSON.stringify(game, null, 2)}`;
+
+        throw new Error(errorMessage);
+      }
 
       const handler = this.handlerMap[event.type];
       if (!handler) throw new Error('Event handler not found for event with ID: ' + eventId);
@@ -156,9 +166,11 @@ export class GameService {
     });
   }
 
-  async startNewMonth(context: GameContext) {
+  async startNewMonth(gameContext: GameContext) {
+    const context = { gameContext, function: 'startNewMonth' };
+
     return this.errorRecorder.executeWithErrorRecording(context, async () => {
-      const { gameId, userId } = context;
+      const { gameId, userId } = gameContext;
 
       const game = await this.gameProvider.getGame(gameId);
       if (!game) throw new Error('No game with ID: ' + gameId);
@@ -178,6 +190,7 @@ export class GameService {
           new ResetEventIndexTransformer(userId),
           new InsuranceTransformer(userId),
           new PossessionStateTransformer(),
+          new HistoryGameTransformer(),
         ]);
 
         if (shouldScheduleMoveTimer) {
@@ -198,7 +211,9 @@ export class GameService {
   }
 
   async completeMonth(gameId: GameEntity.Id, monthNumber: number) {
-    return this.errorRecorder.executeWithErrorRecording({ gameId, monthNumber }, async () => {
+    const context = { gameId, monthNumber, function: 'completeMonth' };
+
+    return this.errorRecorder.executeWithErrorRecording(context, async () => {
       const game = await this.gameProvider.getGame(gameId);
       if (!game) throw new Error('No game with ID: ' + gameId);
 

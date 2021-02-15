@@ -8,12 +8,13 @@ import { randomValueFromRange } from '../../core/data/value_range';
 export namespace IncomeEventGenerator {
   export const generate = (
     game: Game,
-    incomeEventInfo: IncomeEvent.Info[]
+    incomeEventInfo: IncomeEvent.Info[],
+    maxHistoryLength: number
   ): IncomeEvent.Event | undefined => {
     const pastIncomeEvents = GameEntity.getPastEventsOfType<IncomeEvent.Event>({
       game,
       type: IncomeEvent.Type,
-      maxHistoryLength: 12,
+      maxHistoryLength,
     });
 
     const alreadyHappenedEvents = {};
@@ -31,6 +32,14 @@ export namespace IncomeEventGenerator {
     const eventInfo = filteredIncomeEvents[eventIndex];
 
     return generateEvent(eventInfo);
+  };
+
+  export const archiveEvent = (event: IncomeEvent.Event) => {
+    return {
+      type: event.type,
+      name: event.name,
+      description: event.description,
+    };
   };
 
   export const generateEvent = (eventInfo: IncomeEvent.Info): IncomeEvent.Event => {
