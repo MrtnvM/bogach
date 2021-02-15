@@ -26,7 +26,7 @@ describe('Income Event Generator', () => {
 
     for (let i = 0; i < 100; i++) {
       const incomeEvents = IncomeGeneratorConfig.allIncomes;
-      const event = IncomeEventGenerator.generate(game, incomeEvents);
+      const event = IncomeEventGenerator.generate(game, incomeEvents, 12);
       expect(event?.description).not.toEqual(incomeEvent.description);
     }
   });

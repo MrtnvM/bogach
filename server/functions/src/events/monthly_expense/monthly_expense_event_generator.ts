@@ -8,12 +8,13 @@ import { randomValueFromRange } from '../../core/data/value_range';
 export namespace MonthlyExpenseEventGenerator {
   export const generate = (
     game: Game,
-    expenseEventInfo: MonthlyExpenseEvent.Info[]
+    expenseEventInfo: MonthlyExpenseEvent.Info[],
+    maxHistoryLength: number
   ): MonthlyExpenseEvent.Event | undefined => {
     const pastExpenseEvents = GameEntity.getPastEventsOfType<MonthlyExpenseEvent.Event>({
       game,
       type: MonthlyExpenseEvent.Type,
-      maxHistoryLength: 12,
+      maxHistoryLength,
     });
 
     const alreadyHappenedEvents = {};

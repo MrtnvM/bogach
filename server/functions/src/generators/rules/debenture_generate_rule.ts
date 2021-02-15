@@ -1,26 +1,34 @@
-import { Rule } from '../generator_rule';
+import { Rule, RuleConfig } from '../generator_rule';
 import { DebentureEvent } from '../../events/debenture/debenture_event';
 import { DebentureEventGenerator } from '../../events/debenture/debenture_event_generator';
 import { Game } from '../../models/domain/game/game';
 
 export class DebentureGenerateRule extends Rule<DebentureEvent.Event> {
-  getProbabilityLevel(): number {
-    return 10;
+  constructor(private config: RuleConfig) {
+    super();
+  }
+
+  getProbabilityLevel() {
+    return this.config.probabilityLevel;
   }
 
   generate(game: Game) {
     return DebentureEventGenerator.generate(game);
   }
 
-  getMinDistanceBetweenEvents(): number {
-    return 0;
+  getMinDistanceBetweenEvents() {
+    return this.config.minDistanceBetweenEvents;
   }
 
-  getType(): string {
+  getMaxHistoryLength() {
+    return this.config.maxHistoryLength;
+  }
+
+  getType() {
     return DebentureEvent.Type;
   }
 
   getMaxCountOfEventInMonth() {
-    return 1;
+    return this.config.maxCountOfEventInMonth;
   }
 }

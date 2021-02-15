@@ -13,7 +13,7 @@ export class ExpenseGenerateRule extends Rule<ExpenseEvent.Event> {
   }
 
   generate(game: Game) {
-    return ExpenseEventGenerator.generate(game, this.expenseEvents);
+    return ExpenseEventGenerator.generate(game, this.expenseEvents, this.getMaxHistoryLength());
   }
 
   getMinDistanceBetweenEvents(): number {
@@ -21,7 +21,11 @@ export class ExpenseGenerateRule extends Rule<ExpenseEvent.Event> {
   }
 
   getMaxCountOfEventInMonth() {
-    return this.config.maxCountOfEventInMonth ?? 0;
+    return this.config.maxCountOfEventInMonth;
+  }
+
+  getMaxHistoryLength() {
+    return this.config.maxHistoryLength;
   }
 
   getType(): string {

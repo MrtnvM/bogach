@@ -66,7 +66,7 @@ export namespace StockEventGenerator {
   };
 
   export const generateEvent = (eventInfo: StockEvent.Info): StockEvent.Event => {
-    const { name, description, currentPrice, fairPrice, availableCount, candles } = eventInfo;
+    const { name, currentPrice, fairPrice, availableCount, candles } = eventInfo;
 
     const defaultAvailableCount = random.int(9, 14) * 10;
     const eventRandomAvailableCount = availableCount && randomValueFromRange(availableCount);
@@ -75,7 +75,7 @@ export namespace StockEventGenerator {
     return {
       id: uuid.v4(),
       name: name,
-      description: description || '',
+      description: '',
       type: StockEvent.Type,
       data: {
         currentPrice: randomValueFromRange(currentPrice),

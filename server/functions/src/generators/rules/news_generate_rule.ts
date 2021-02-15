@@ -8,7 +8,7 @@ export class NewsGenerateRule extends Rule<NewsEvent.Event> {
     super();
   }
 
-  getProbabilityLevel(): number {
+  getProbabilityLevel() {
     return this.config.probabilityLevel;
   }
 
@@ -16,15 +16,20 @@ export class NewsGenerateRule extends Rule<NewsEvent.Event> {
     return NewsEventGenerator.generate(game, this.newsInfo);
   }
 
-  getMinDistanceBetweenEvents(): number {
+  getMinDistanceBetweenEvents() {
     return this.config.minDistanceBetweenEvents;
   }
 
-  getMaxCountOfEventInMonth(): number {
-    return this.config.maxCountOfEventInMonth ?? 0;
+  getMaxCountOfEventInMonth() {
+    return this.config.maxCountOfEventInMonth;
   }
 
-  getType(): string {
+  getMaxHistoryLength(): number {
+    // For news generation another algorithm will be used
+    throw new Error('Method not implemented.');
+  }
+
+  getType() {
     return NewsEvent.Type;
   }
 }

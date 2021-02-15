@@ -19,9 +19,14 @@ export class RealtimeDatabaseGameDAO implements IGameDAO {
 
       const initialHistory: GameEntity.History = { months: [] };
       draft.history = draft.history || initialHistory;
-      draft.history.months.forEach((m) => {
-        m.events = m.events || [];
-      });
+
+      const months: GameEntity.HistoryMonth[] = [];
+      for (let i = 0; i < draft.state.monthNumber; i++) {
+        const month = draft.history.months[i] ?? { events: [] };
+        months.push(month);
+      }
+
+      draft.history.months = months;
 
       draft.participantsIds.forEach((participantId) => {
         const possessionState = draft.participants[participantId].possessionState;
