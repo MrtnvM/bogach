@@ -61,6 +61,7 @@ const stockSberbankPriceChangedEvent = (currentPrice: number, maxCount: number) 
     currentPrice,
     fairPrice: 100,
     availableCount: maxCount,
+    candles: [],
   };
 
   const event: StockEvent.Event = {

@@ -8,10 +8,19 @@ export namespace StockEvent {
 
   export type Event = GameEvent<Data>;
 
+  export type Candle = {
+    high: number;
+    low: number;
+    open: number;
+    close: number;
+    time: Date;
+  };
+
   export interface Data {
     readonly currentPrice: number;
     readonly fairPrice: number;
     readonly availableCount: number;
+    readonly candles: Candle[];
   }
 
   export interface PlayerAction {
@@ -26,6 +35,7 @@ export namespace StockEvent {
     readonly currentPrice: ValueRange;
     readonly fairPrice: ValueRange;
     readonly availableCount?: ValueRange;
+    readonly candles: Candle[];
   };
 
   export const validate = (event: any) => {

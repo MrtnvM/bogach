@@ -174,6 +174,7 @@ namespace StockFactory {
       currentPrice: valueRange(price),
       fairPrice: valueRange(1250),
       availableCount: valueRange(availableCount),
+      candles: [],
     });
 
   export const gasPromGroup = (price: number, availableCount: number) =>
@@ -182,6 +183,7 @@ namespace StockFactory {
       currentPrice: valueRange(price),
       fairPrice: valueRange(350),
       availableCount: valueRange(availableCount),
+      candles: [],
     });
 
   export const sberInvestBank = (price: number, availableCount: number) =>
@@ -190,6 +192,7 @@ namespace StockFactory {
       currentPrice: valueRange(price),
       fairPrice: valueRange(240),
       availableCount: valueRange(availableCount),
+      candles: [],
     });
 
   export const vwAuto = (price: number, availableCount: number) =>
@@ -198,6 +201,7 @@ namespace StockFactory {
       currentPrice: valueRange(price),
       fairPrice: valueRange(235),
       availableCount: valueRange(availableCount),
+      candles: [],
     });
 }
 

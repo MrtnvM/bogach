@@ -1,7 +1,15 @@
 /// <reference types="@types/jest"/>
 
 import * as admin from 'firebase-admin';
+import { RealtimeDatabase } from './core/firebase/realtime_database';
+import { RealtimeDatabaseGameDAO } from './dao/realtime_database/realtime_database_game_dao';
+import { RealtimeDatabaseRefs } from './dao/realtime_database/realtime_database_refs';
 import { Game } from './models/domain/game/game';
+import {
+  applyGameTransformers,
+  GameEventsTransformer,
+  HistoryGameTransformer,
+} from './transformers/game_transformers';
 
 const stagingConfig = {
   databaseURL: 'https://cash-flow-staging.firebaseio.com',
@@ -25,9 +33,25 @@ if (!linterFix) {
   console.log([stagingConfig, productionConfig]);
 }
 
-admin.initializeApp(productionConfig);
+admin.initializeApp(stagingConfig);
 
 describe('Firebase sandbox', () => {
+  test.skip('Test game transformer with data from DB', async () => {
+    jest.setTimeout(15_000);
+
+    const realtimeDatabase = admin.database();
+    const refs = new RealtimeDatabaseRefs(realtimeDatabase);
+    const db = new RealtimeDatabase();
+
+    const gameDao = new RealtimeDatabaseGameDAO(refs, db);
+    const game = await gameDao.getGame('cadd758c-c6b9-431c-b3a0-9c12c028aa72');
+
+    const transformers = [new HistoryGameTransformer(), new GameEventsTransformer()];
+    const updatedGame = applyGameTransformers(game, transformers);
+
+    console.log(updatedGame);
+  });
+
   test.skip('Get Last Game', async () => {
     jest.setTimeout(15_000);
 

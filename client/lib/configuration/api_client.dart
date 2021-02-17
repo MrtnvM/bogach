@@ -27,7 +27,9 @@ Dio _createApiDio(Alice alice) {
   debug(() {
     apiDio.interceptors.add(LogInterceptor(
       requestBody: true,
+      requestHeader: false,
       responseBody: true,
+      responseHeader: false,
     ));
   });
 

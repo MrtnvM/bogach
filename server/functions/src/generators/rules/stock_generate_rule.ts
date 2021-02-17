@@ -1,26 +1,34 @@
-import { Rule } from '../generator_rule';
+import { Rule, RuleConfig } from '../generator_rule';
 import { StockEvent } from '../../events/stock/stock_event';
 import { StockEventGenerator } from '../../events/stock/stock_event_generator';
 import { Game } from '../../models/domain/game/game';
 
 export class StockGenerateRule extends Rule<StockEvent.Event> {
-  getProbabilityLevel(): number {
-    return 10;
+  constructor(private config: RuleConfig) {
+    super();
+  }
+
+  getProbabilityLevel() {
+    return this.config.probabilityLevel;
   }
 
   generate(game: Game) {
     return StockEventGenerator.generate(game);
   }
 
-  getMinDistanceBetweenEvents(): number {
-    return 0;
+  getMinDistanceBetweenEvents() {
+    return this.config.minDistanceBetweenEvents;
   }
 
-  getType(): string {
+  getType() {
     return StockEvent.Type;
   }
 
+  getMaxHistoryLength() {
+    return this.config.maxHistoryLength;
+  }
+
   getMaxCountOfEventInMonth() {
-    return 3;
+    return this.config.maxCountOfEventInMonth;
   }
 }

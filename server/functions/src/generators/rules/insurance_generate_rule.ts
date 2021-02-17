@@ -8,23 +8,27 @@ export class InsuranceGenerateRule extends Rule<InsuranceEvent.Event> {
     super();
   }
 
-  getProbabilityLevel(): number {
+  getProbabilityLevel() {
     return this.config.probabilityLevel;
   }
 
   generate(game: Game) {
-    return InsuranceEventGenerator.generate(game, this.insuranceInfo);
+    return InsuranceEventGenerator.generate(game, this.insuranceInfo, this.getMaxHistoryLength());
   }
 
-  getMinDistanceBetweenEvents(): number {
+  getMinDistanceBetweenEvents() {
     return this.config.minDistanceBetweenEvents;
   }
 
-  getMaxCountOfEventInMonth(): number {
-    return this.config.maxCountOfEventInMonth ?? 0;
+  getMaxCountOfEventInMonth() {
+    return this.config.maxCountOfEventInMonth;
   }
 
-  getType(): string {
+  getMaxHistoryLength() {
+    return this.config.maxHistoryLength;
+  }
+
+  getType() {
     return InsuranceEvent.Type;
   }
 }

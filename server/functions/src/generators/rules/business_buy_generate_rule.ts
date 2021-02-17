@@ -1,22 +1,34 @@
-import { Rule } from '../generator_rule';
+import { Rule, RuleConfig } from '../generator_rule';
 import { BusinessBuyEvent } from '../../events/business/buy/business_buy_event';
 import { BusinessBuyEventGenerator } from '../../events/business/buy/business_buy_event_generator';
 import { Game } from '../../models/domain/game/game';
 
 export class BusinessBuyGenerateRule extends Rule<BusinessBuyEvent.Event> {
+  constructor(private config: RuleConfig) {
+    super();
+  }
+
   getProbabilityLevel(): number {
-    return 6;
+    return this.config.probabilityLevel;
   }
 
   generate(game: Game) {
     return BusinessBuyEventGenerator.generate();
   }
 
-  getMinDistanceBetweenEvents(): number {
-    return 2;
+  getMinDistanceBetweenEvents() {
+    return this.config.minDistanceBetweenEvents;
+  }
+
+  getMaxHistoryLength() {
+    return this.config.maxHistoryLength;
   }
 
   getType(): string {
     return BusinessBuyEvent.Type;
+  }
+
+  getMaxCountOfEventInMonth() {
+    return this.config.maxCountOfEventInMonth;
   }
 }

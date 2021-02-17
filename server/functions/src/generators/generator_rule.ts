@@ -4,16 +4,20 @@ import { Game } from '../models/domain/game/game';
 export type RuleConfig = {
   readonly probabilityLevel: number;
   readonly minDistanceBetweenEvents: number;
-  readonly maxCountOfEventInMonth?: number;
+  readonly maxCountOfEventInMonth: number;
+  readonly maxHistoryLength: number;
 };
 
 export abstract class Rule<T extends GameEvent = GameEvent> {
-  abstract getProbabilityLevel(): number;
-  abstract generate(game: Game): T | undefined;
-  abstract getMinDistanceBetweenEvents(): number;
   abstract getType(): string;
 
-  getMaxCountOfEventInMonth(): number {
-    return 0;
-  }
+  abstract generate(game: Game): T | undefined;
+
+  abstract getProbabilityLevel(): number;
+  abstract getMinDistanceBetweenEvents(): number;
+  abstract getMaxCountOfEventInMonth(): number;
+
+  /// If returns positive number - it's a number of months that should be saved
+  /// If returns negative - it's a number of events that should be saved
+  abstract getMaxHistoryLength(): number;
 }

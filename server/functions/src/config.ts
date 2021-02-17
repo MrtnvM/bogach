@@ -6,14 +6,6 @@ declare var process: {
 
 import * as Rollbar from 'rollbar';
 
-/// Rollbar
-
-export const rollbar = new Rollbar({
-  accessToken: '30d4dbdf62264a4cb93cda53ea80bebe',
-  captureUncaught: true,
-  captureUnhandledRejections: true,
-});
-
 /// Cloud
 
 export const CLOUD_FUNCTIONS_REGION = 'europe-west2';
@@ -93,3 +85,52 @@ export const getCredentials = () => {
       return require('../environments/production/firebase_service_account.json');
   }
 };
+
+/// Rollbar
+
+export const rollbar = new Rollbar({
+  accessToken: '30d4dbdf62264a4cb93cda53ea80bebe',
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+  environment: getCurrentEnvironment(),
+});
+
+export class ErrorRecorder {
+  static isEnabled: boolean = true;
+
+  constructor(private component: string) {}
+
+  async executeWithErrorRecording<T>(context: any, callback: () => Promise<T>): Promise<T> {
+    const environment = getCurrentEnvironment();
+
+    try {
+      return await callback();
+    } catch (err) {
+      if (!ErrorRecorder.isEnabled) {
+        throw err;
+      }
+
+      let errorMessage = (err && err['message']) || err;
+
+      if (typeof errorMessage === 'object') {
+        errorMessage = JSON.stringify(errorMessage);
+      }
+
+      const errorInfo =
+        `${this.component.toUpperCase()}\n` +
+        `ENVIRONMENT: ${environment}\n` +
+        `ERROR MESSAGE: ${errorMessage}\n` +
+        `CONTEXT: ${JSON.stringify(context, null, 2)}`;
+
+      const error = new Error(errorInfo);
+
+      if (environment === 'local') {
+        console.error(errorInfo);
+        throw error;
+      }
+
+      rollbar.error(error, `COMPONENT: ${this.component}, ` + `ENVIRONMENT: ${environment}`);
+      throw error;
+    }
+  }
+}

@@ -124,6 +124,7 @@ class Strings {
   static String get salaryChangeTitle => 'Зарплата';
   static const property = 'Недвижимость';
   static const salaryChange = 'Изменения в зарплате';
+  static const news = 'Новости';
   static const firstPayment = 'Первый взнос';
 
   static const commonError = 'Произошла ошибка';
