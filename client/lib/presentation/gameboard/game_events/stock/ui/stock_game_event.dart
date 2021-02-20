@@ -56,16 +56,15 @@ class StockGameEvent extends HookWidget {
 
     return Column(
       children: <Widget>[
-        const ChartWidget(
-          height: 250,
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          backgroundColor: ColorRes.transparent,
-        ),
-        const SizedBox(height: 24),
         InfoTable(
-          title: Strings.stock,
+          title: '${Strings.stock} - ${event.name}',
           withShadow: false,
           rows: <Widget>[
+            ChartWidget(
+              data: eventData.candles,
+              padding: const EdgeInsets.symmetric(horizontal: 0),
+              backgroundColor: ColorRes.transparent,
+            ),
             for (final item in infoTableData.entries)
               TitleRow(title: item.key, value: item.value)
           ],

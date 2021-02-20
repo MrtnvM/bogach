@@ -28,9 +28,6 @@ Map<String, String> useStockInfoTableData(GameEvent event) {
       : ((currentPrice - previousPrice) / previousPrice) * 100;
 
   final data = {
-    Strings.investmentType: event.name,
-    Strings.currentPrice: eventData.currentPrice.toPrice(),
-    Strings.yearAvaragePrive: eventData.fairPrice.toPrice(),
     Strings.alreadyHave: alreadyHave == 0
         ? alreadyHave.toString()
         : Strings.getUserAvailableCount(

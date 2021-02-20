@@ -8,6 +8,7 @@ class ChartWidget extends HookWidget {
     @required this.data,
     this.padding,
     this.backgroundColor,
+    this.height = 250,
   });
 
   final List<CandleData> data;
@@ -52,13 +53,15 @@ class ChartWidget extends HookWidget {
         mainState: MainState.NONE,
         volHidden: true,
         secondaryState: SecondaryState.NONE,
-        fixedLength: 2,
-        timeFormat: TimeFormat.YEAR_MONTH_DAY,
-        isChinese: false,
-        selectionLineColor: Colors.black54,
-        lineChartColor: Colors.black87,
-        lineChartFillColor: Colors.black26,
-        maxMinColor: Colors.black87,
+        fixedLength: 0,
+        dateFormat: const ['dd', '/', 'mm'],
+        infoWindowDateFormat: const ['d', ' ', 'M'],
+        language: KChartLanguage.russian,
+        selectionLineColor: Colors.grey.withAlpha(40),
+        lineChartColor: Colors.green,
+        lineChartFillColor: Colors.green,
+        maxMinColor: Colors.green,
+        chartVerticalPadding: 24,
       ),
     );
   }
