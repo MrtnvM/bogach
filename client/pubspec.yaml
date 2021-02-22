@@ -60,6 +60,7 @@ dependencies:
   k_chart:
     git:
       url: https://github.com/robertBadamshin/k_chart
+      ref: chart-design-updates
 
   # Dash Kit
   dash_kit_core: ^2.0.2

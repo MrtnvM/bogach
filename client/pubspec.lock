@@ -678,8 +678,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
-      resolved-ref: b729ad82c716073c759f56029b3ea1431605df0b
+      ref: chart-design-updates
+      resolved-ref: "258dd3de38c054455458d3480f51522e1ae850a5"
       url: "https://github.com/robertBadamshin/k_chart"
     source: git
     version: "0.1.2"
