@@ -679,7 +679,7 @@ packages:
     description:
       path: "."
       ref: chart-design-updates
-      resolved-ref: "258dd3de38c054455458d3480f51522e1ae850a5"
+      resolved-ref: "1aec180a32afc012f60e5387f6f238c45f74fa97"
       url: "https://github.com/robertBadamshin/k_chart"
     source: git
     version: "0.1.2"
