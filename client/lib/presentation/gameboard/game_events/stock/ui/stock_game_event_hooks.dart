@@ -18,6 +18,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 Map<String, String> useStockInfoTableData(GameEvent event) {
   final currentStock = useCurrentStock(event);
+  final isQuest = useIsQuestGame();
   final alreadyHave = currentStock?.countInPortfolio ?? 0;
 
   final StockEventData eventData = event.data;
@@ -28,6 +29,8 @@ Map<String, String> useStockInfoTableData(GameEvent event) {
       : ((currentPrice - previousPrice) / previousPrice) * 100;
 
   final data = {
+    if (isQuest) Strings.currentPrice: eventData.currentPrice.toPrice(),
+    if (isQuest) Strings.yearAvaragePrice: eventData.fairPrice.toPrice(),
     Strings.alreadyHave: alreadyHave == 0
         ? alreadyHave.toString()
         : Strings.getUserAvailableCount(

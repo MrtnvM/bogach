@@ -32,6 +32,7 @@ class StockGameEvent extends HookWidget {
     final buySellAction = useState(const BuySellAction.buy());
     final selectedCount = useState(1);
     final infoTableData = useStockInfoTableData(event);
+    final isQuest = useIsQuestGame();
     final sendPlayerAction = useStockPlayerActionHandler(
       event: event,
       selectedCount: selectedCount.value,
@@ -60,11 +61,12 @@ class StockGameEvent extends HookWidget {
           title: '${Strings.stock} - ${event.name}',
           withShadow: false,
           rows: <Widget>[
-            ChartWidget(
-              data: eventData.candles,
-              padding: const EdgeInsets.symmetric(horizontal: 0),
-              backgroundColor: ColorRes.transparent,
-            ),
+            if (!isQuest)
+              ChartWidget(
+                data: eventData.candles,
+                padding: const EdgeInsets.symmetric(horizontal: 0),
+                backgroundColor: ColorRes.transparent,
+              ),
             for (final item in infoTableData.entries)
               TitleRow(title: item.key, value: item.value)
           ],
