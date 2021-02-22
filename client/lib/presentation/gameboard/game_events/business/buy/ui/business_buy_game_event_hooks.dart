@@ -17,7 +17,6 @@ Map<String, String> useBusinessBuyInfoTableData(GameEvent event) {
     final BusinessBuyEventData eventData = event.data;
 
     final data = {
-      Strings.description: event.description,
       Strings.offeredPrice: eventData.currentPrice.toPrice(),
       Strings.fairPrice: eventData.fairPrice.toPrice(),
       Strings.downPayment: eventData.downPayment.toPrice(),

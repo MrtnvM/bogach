@@ -43,7 +43,7 @@ class InfoTable extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 20),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
       child: _buildBody(context),
     );
   }
@@ -91,9 +91,10 @@ class InfoTable extends StatelessWidget {
   }
 
   Widget _buildInfoIcon() {
-    return SizedBox(
+    return Container(
       width: 32,
       height: 32,
+      margin: const EdgeInsets.only(left: 12),
       child: IconButton(
         padding: const EdgeInsets.all(8),
         iconSize: 16,

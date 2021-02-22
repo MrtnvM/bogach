@@ -36,7 +36,6 @@ Map<String, String> useDebentureInfoTableData(GameEvent event) {
       : ((currentPrice - previousPrice) / previousPrice) * 100;
 
   final data = {
-    Strings.investmentType: event.name,
     Strings.currentPrice: eventData.currentPrice.toPrice(),
     Strings.nominalCost: eventData.nominal.toPrice(),
     Strings.passiveIncomePerMonth:

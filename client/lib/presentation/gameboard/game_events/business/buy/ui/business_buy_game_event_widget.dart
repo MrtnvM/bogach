@@ -35,7 +35,7 @@ class BusinessBuyGameEventWidget extends HookWidget {
     return Column(
       children: <Widget>[
         InfoTable(
-          title: Strings.business,
+          title: '${Strings.business} - ${event.description}',
           withShadow: false,
           rows: <Widget>[
             for (final item in infoTableData.entries)
