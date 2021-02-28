@@ -69,20 +69,15 @@ class MultiplayerGameList extends HookWidget {
       isLoading: getGameTemplatesRequestState.isInProgress,
       backgroundColor: ColorRes.transparent,
       indicatorColor: const AlwaysStoppedAnimation<Color>(ColorRes.mainGreen),
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          _TemplateList(
-            gameTemplates: gameTemplates,
-            onGameTemplateSelected: availableMultiplayerGamesCount <= 0
-                ? buyGames
-                : onGameTemplateSelected,
-            loadGameTemplatesRequestState: getGameTemplatesRequestState,
-            loadGameTemplates: () {
-              dispatch(GetGameTemplatesAction());
-            },
-          ),
-        ],
+      child: _TemplateList(
+        gameTemplates: gameTemplates,
+        onGameTemplateSelected: availableMultiplayerGamesCount <= 0
+            ? buyGames
+            : onGameTemplateSelected,
+        loadGameTemplatesRequestState: getGameTemplatesRequestState,
+        loadGameTemplates: () {
+          dispatch(GetGameTemplatesAction());
+        },
       ),
     );
   }
@@ -120,7 +115,6 @@ class _TemplateList extends HookWidget {
           ),
           loadListRequestState: loadGameTemplatesRequestState,
           loadList: loadGameTemplates,
-          padding: const EdgeInsets.fromLTRB(16, 16, 24, 64),
           emptyStateWidget: EmptyWidget(),
           errorWidget: CommonErrorWidget(loadGameTemplates),
         ),

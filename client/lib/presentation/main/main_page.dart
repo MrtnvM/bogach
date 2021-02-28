@@ -1,7 +1,10 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/features/new_game/actions/get_game_templates_action.dart';
+import 'package:cash_flow/features/new_game/actions/get_quests_action.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/presentation/main/widgets/game_type_title.dart';
@@ -28,6 +31,7 @@ class MainPage extends HookWidget {
   Widget build(BuildContext context) {
     final user = useCurrentUser();
     final needAuthorization = user == null;
+    final dispatch = useDispatcher();
 
     useEffect(() {
       AnalyticsSender.setUserId(user.userId);
@@ -60,7 +64,18 @@ class MainPage extends HookWidget {
             children: <Widget>[
               SizedBox(height: MediaQuery.of(context).padding.top),
               const ProfileBar(),
-              _buildGameActions(context),
+              Expanded(
+                child: RefreshIndicator(
+                  color: ColorRes.mainGreen,
+                  onRefresh: () => Future.wait([
+                    dispatch(
+                      GetQuestsAction(userId: user.id, isRefreshing: true),
+                    ),
+                    dispatch(GetGameTemplatesAction()),
+                  ]),
+                  child: _buildGameActions(context),
+                ),
+              ),
               _buildAuthButton(needAuthorization),
             ],
           ),
@@ -83,31 +98,29 @@ class MainPage extends HookWidget {
   }
 
   Widget _buildGameActions(BuildContext context) {
-    return Expanded(
-      child: ListView(
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(0),
-        children: <Widget>[
-          const SizedBox(height: 24),
-          const GameTypeTitle(text: Strings.singleGame),
-          SizedBox(height: 150, child: TemplateGameList()),
-          const Divider(),
-          const SizedBox(height: 12),
-          GameTypeTitle(
-            text: Strings.gameLevels,
-            actionWidget: QuestsBadge(),
-          ),
-          SizedBox(height: 150, child: QuestList()),
-          const Divider(),
-          const SizedBox(height: 12),
-          GameTypeTitle(
-            text: Strings.multiplayer,
-            actionWidget: MultiplayerGameCountBadge(),
-          ),
-          SizedBox(height: 150, child: MultiplayerGameList()),
-          const Divider(),
-        ],
-      ),
+    return ListView(
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(0),
+      children: <Widget>[
+        const SizedBox(height: 24),
+        const GameTypeTitle(text: Strings.singleGame),
+        SizedBox(height: 150, child: TemplateGameList()),
+        const Divider(),
+        const SizedBox(height: 12),
+        GameTypeTitle(
+          text: Strings.gameLevels,
+          actionWidget: QuestsBadge(),
+        ),
+        SizedBox(height: 150, child: QuestList()),
+        const Divider(),
+        const SizedBox(height: 12),
+        GameTypeTitle(
+          text: Strings.multiplayer,
+          actionWidget: MultiplayerGameCountBadge(),
+        ),
+        SizedBox(height: 150, child: MultiplayerGameList()),
+        const Divider(),
+      ],
     );
   }
 

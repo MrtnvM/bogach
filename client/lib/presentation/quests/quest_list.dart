@@ -52,45 +52,40 @@ class QuestList extends HookWidget {
     return MediaQuery(
       data: mediaQueryData,
       child: LoadableView(
-        isLoading: getQuestsRequestState.isInProgress,
+        isLoading: getQuestsRequestState.isInProgress ||
+            getQuestsRequestState.isRefreshing,
         backgroundColor: ColorRes.transparent,
         indicatorColor: const AlwaysStoppedAnimation<Color>(ColorRes.mainGreen),
-        child: RefreshIndicator(
-          color: ColorRes.mainGreen,
-          onRefresh: () => Future.wait([
-            dispatch(GetQuestsAction(userId: userId, isRefreshing: true)),
-          ]),
-          child: GamesLoadableListView<Quest>(
-            viewModel: LoadableListViewModel(
-              items: quests,
-              itemBuilder: (i) {
-                if (i == currentQuestIndex) {
-                  return AnimatedBuilder(
-                    animation: offsetAnimation,
-                    builder: (context, child) => Transform.translate(
-                      offset: Offset(offsetAnimation.value, 0),
-                      child: _QuestItemWidget(
-                        quest: quests.items[i],
-                        index: i,
-                      ),
+        child: GamesLoadableListView<Quest>(
+          viewModel: LoadableListViewModel(
+            items: quests,
+            itemBuilder: (i) {
+              if (i == currentQuestIndex) {
+                return AnimatedBuilder(
+                  animation: offsetAnimation,
+                  builder: (context, child) => Transform.translate(
+                    offset: Offset(offsetAnimation.value, 0),
+                    child: _QuestItemWidget(
+                      quest: quests.items[i],
+                      index: i,
                     ),
-                  );
-                }
-
-                return _QuestItemWidget(
-                  quest: quests.items[i],
-                  index: i,
-                  defaultAction: animationController.forward,
+                  ),
                 );
-              },
-              loadListRequestState: getQuestsRequestState,
-              loadList: () {
-                dispatch(GetQuestsAction(userId: userId));
-              },
-              emptyStateWidget: EmptyWidget(),
-              errorWidget: CommonErrorWidget(
-                () => dispatch(GetQuestsAction(userId: userId)),
-              ),
+              }
+
+              return _QuestItemWidget(
+                quest: quests.items[i],
+                index: i,
+                defaultAction: animationController.forward,
+              );
+            },
+            loadListRequestState: getQuestsRequestState,
+            loadList: () {
+              dispatch(GetQuestsAction(userId: userId));
+            },
+            emptyStateWidget: EmptyWidget(),
+            errorWidget: CommonErrorWidget(
+              () => dispatch(GetQuestsAction(userId: userId)),
             ),
           ),
         ),
