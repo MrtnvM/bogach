@@ -22,6 +22,7 @@ class ColorRes {
 
   static const grey = Color(0xFFBDBDBD);
   static const grey2 = Color(0xFFE0E0E0);
+  static const greyCog = Color(0xFF9B9B9B);
   static const gallery = Color(0xFFEEEEEE);
   static const blue = Color(0xFF598398);
   static const darkBlue = Color(0xFF0B4F6C);
@@ -57,4 +58,9 @@ class ColorRes {
   static const questAccessPageBackground = Color.fromARGB(255, 85, 182, 250);
   static const buyMultiplayerGamesPageBackground =
       Color.fromARGB(255, 13, 58, 93);
+
+  static const onlineStatus = ColorRes.mainGreen;
+  static const offlineStatus = ColorRes.red;
+
+  static const imagePlaceholder = Color(0xFFB0B0B0);
 }

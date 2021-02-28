@@ -5,8 +5,9 @@ import { GameLevel } from '../../models/game_level';
 export const ProgrammerLevel: GameLevel = {
   id: template.id,
   name: template.name,
-  description: 'Всего 180 000 до свадьбы',
+  description: 'Когда все под контролем',
   icon: template.icon,
+  image: template.image,
   template: template,
   monthLimit: 12,
   levelEventConfig: eventConfig,

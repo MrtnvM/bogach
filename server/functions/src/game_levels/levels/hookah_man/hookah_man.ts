@@ -5,8 +5,9 @@ import { GameLevel } from '../../models/game_level';
 export const HookahManLevel: GameLevel = {
   id: template.id,
   name: template.name,
-  description: 'Накопить на PS4',
+  description: 'Для тех кто уверен в себе',
   icon: template.icon,
+  image: template.image,
   template,
   monthLimit: 7,
   levelEventConfig: eventConfig,

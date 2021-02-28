@@ -6,7 +6,11 @@ export interface GameLevel {
   readonly id: GameLevelEntity.Id;
   readonly name: string;
   readonly description: string;
+
+  /// Icon deprecated
   readonly icon: string;
+
+  readonly image: string;
   readonly template: GameTemplate;
   readonly levelEventConfig: GameLevelEventConfig;
 

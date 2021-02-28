@@ -5,6 +5,8 @@ export const guyGrewUpTemplate: GameTemplate = {
   name: 'Малый повзрослел',
   icon:
     'https://www.flaticon.com/svg/static/icons/svg/385/385350.svg',
+  image:
+    'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/game_images%2Fmillionaire.jpg?alt=media&token=a76c9fcb-3caf-4378-a11c-1828151771d9',
   possessions: {
     incomes: [
       {

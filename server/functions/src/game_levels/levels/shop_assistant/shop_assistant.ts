@@ -5,8 +5,9 @@ import { GameLevel } from '../../models/game_level';
 export const ShopAssistantLevel: GameLevel = {
   id: template.id,
   name: template.name,
-  description: 'Накопить на путешествие',
+  description: 'Разбираешься во всем, чем можешь',
   icon: template.icon,
+  image: template.image,
   template,
   monthLimit: 9,
   levelEventConfig: eventConfig,

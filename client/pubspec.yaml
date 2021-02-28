@@ -57,6 +57,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   url_launcher: ^5.4.2
   share: ^0.6.5+4
+  flutter_swiper: ^1.1.6
   k_chart:
     git:
       url: https://github.com/robertBadamshin/k_chart

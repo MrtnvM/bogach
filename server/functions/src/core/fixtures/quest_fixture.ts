@@ -8,6 +8,7 @@ export namespace QuestFixture {
       name: quest?.name || 'Quest 1',
       description: quest?.description || 'Description 1',
       icon: 'https://image.com/1',
+      image: 'https://image.com/1',
       template: quest?.template || GameTemplateFixture.createGameTemplate(),
       levelEventConfig: quest?.levelEventConfig || {
         events: [],

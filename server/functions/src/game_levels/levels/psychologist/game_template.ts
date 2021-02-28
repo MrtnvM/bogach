@@ -5,6 +5,8 @@ export const template: GameTemplate = {
   name: 'Психолог',
   icon:
     'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/quest_icons_images%2Fpsychologist.png?alt=media&token=d2722d79-e95f-41c8-a732-7179b6d27cdb',
+  image:
+    'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/game_images%2F%C2%A0psyhologist.jpg?alt=media&token=52068ed0-31c8-40f7-9a04-6332e5167148',
   possessions: {
     incomes: [
       {

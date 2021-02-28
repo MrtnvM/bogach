@@ -10,6 +10,7 @@ List<GameTemplate> mapToGameTemplates(List<GameTemplateResponseModel> games) {
           id: game.id,
           name: game.name,
           icon: game.icon,
+          image: game.image,
           accountState: Account(
             cash: game.accountState.cash,
             cashFlow: game.accountState.cashFlow,

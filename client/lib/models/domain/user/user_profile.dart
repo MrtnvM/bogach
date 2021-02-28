@@ -14,6 +14,7 @@ abstract class UserProfile with _$UserProfile implements StoreListItem {
   factory UserProfile({
     @required String userId,
     @JsonKey(name: 'userName') String fullName,
+    @JsonKey(ignore: true) String status,
     String avatarUrl,
     int currentQuestIndex,
     @JsonKey(defaultValue: false) bool boughtQuestsAccess,

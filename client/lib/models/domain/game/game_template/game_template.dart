@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
+import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../account/account.dart';
 import '../target/target.dart';
@@ -11,6 +12,7 @@ class GameTemplate implements StoreListItem {
     @required this.icon,
     @required this.accountState,
     @required this.target,
+    this.image,
   })  : assert(id != null),
         assert(name != null),
         assert(icon != null),
@@ -23,4 +25,5 @@ class GameTemplate implements StoreListItem {
   final String icon;
   final Account accountState;
   final Target target;
+  final String image;
 }

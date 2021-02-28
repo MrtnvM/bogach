@@ -5,8 +5,9 @@ import { GameLevel } from '../../models/game_level';
 export const PsychologistLevel: GameLevel = {
   id: template.id,
   name: template.name,
-  description: 'Всего 100 000 до авто мечты',
+  description: 'Холодный расчет, взвешенные решения',
   icon: template.icon,
+  image: template.image,
   template,
   monthLimit: 10,
   levelEventConfig: eventConfig,

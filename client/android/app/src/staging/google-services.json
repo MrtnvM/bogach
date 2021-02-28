@@ -28,14 +28,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "911577434143-g1re4kcjf8bqmc5dbqpb8a6pncbaav1i.apps.googleusercontent.com",
+              "client_id": "911577434143-brb7qtirn8f8up0e7med6998925aiach.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "911577434143-qus6j1a5o4s0cmqlpkogi6b9lb8am9ve.apps.googleusercontent.com",
+              "client_id": "911577434143-b61c4c096gea6n3km8qj2ciqdn274dsj.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "io.mobile.bogach.uat"
+                "bundle_id": "io.mobile.bogach.staging",
+                "app_store_id": "1531498628"
               }
             }
           ]
@@ -44,18 +45,18 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:911577434143:android:f9234bf3fe5846260dad2a",
+        "mobilesdk_app_id": "1:911577434143:android:f0736faeec29e4da0dad2a",
         "android_client_info": {
           "package_name": "io.mobile.bogach.staging"
         }
       },
       "oauth_client": [
         {
-          "client_id": "911577434143-bplm7hl87v3jsuap5k3lcahdq8af08gi.apps.googleusercontent.com",
+          "client_id": "911577434143-5sgevcnv70ohv5gusput3peaio66fqb9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "io.mobile.bogach.staging",
-            "certificate_hash": "5cbac2cb42a50aa556e62b37ba981c8a99a258d1"
+            "certificate_hash": "7bb7eaaa42a5de3b380244e6f2e3b320300d726f"
           }
         },
         {
@@ -67,11 +68,11 @@
           }
         },
         {
-          "client_id": "911577434143-rdmaom44pm9rfb6q9q1929uq5uu1bpqo.apps.googleusercontent.com",
+          "client_id": "911577434143-bplm7hl87v3jsuap5k3lcahdq8af08gi.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "io.mobile.bogach.staging",
-            "certificate_hash": "4f299763be9fcacd21ebb298d484bb4c2b93dbcc"
+            "certificate_hash": "5cbac2cb42a50aa556e62b37ba981c8a99a258d1"
           }
         },
         {
@@ -91,6 +92,14 @@
           }
         },
         {
+          "client_id": "911577434143-rdmaom44pm9rfb6q9q1929uq5uu1bpqo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.bogach.staging",
+            "certificate_hash": "4f299763be9fcacd21ebb298d484bb4c2b93dbcc"
+          }
+        },
+        {
           "client_id": "911577434143-sqrjcrdc25dqnsu9gd538h60fecp8mg9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -99,11 +108,11 @@
           }
         },
         {
-          "client_id": "911577434143-5sgevcnv70ohv5gusput3peaio66fqb9.apps.googleusercontent.com",
+          "client_id": "911577434143-v3hdhf61lf25jgic5iqqpo53pms10u29.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "io.mobile.bogach.staging",
-            "certificate_hash": "7bb7eaaa42a5de3b380244e6f2e3b320300d726f"
+            "certificate_hash": "d489625ac92a0b18e8f5dfd29864ad4591bf8ee6"
           }
         },
         {
@@ -120,14 +129,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "911577434143-g1re4kcjf8bqmc5dbqpb8a6pncbaav1i.apps.googleusercontent.com",
+              "client_id": "911577434143-brb7qtirn8f8up0e7med6998925aiach.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "911577434143-qus6j1a5o4s0cmqlpkogi6b9lb8am9ve.apps.googleusercontent.com",
+              "client_id": "911577434143-b61c4c096gea6n3km8qj2ciqdn274dsj.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "io.mobile.bogach.uat"
+                "bundle_id": "io.mobile.bogach.staging",
+                "app_store_id": "1531498628"
               }
             }
           ]

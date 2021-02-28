@@ -20,27 +20,23 @@ class Strings {
   static String get select => 'Выбрать';
   static String get logout => 'Выйти из аккаунта';
 
+  // Main Page
+  static String get gamesTabTitle => 'Игры';
+  static String get accountTabTitle => 'Аккаунт';
+
+  // Authorization
   static String get email => 'Email';
-
   static String get password => 'Пароль';
-
   static String get loginTitle => 'Авторизоваться';
-
   static String get signUpTitle => 'Зарегистрироваться';
-
   static String get registrationTitle => 'Регистрация';
-
   static String get doYouWantToLogin => 'Хотите авторизироваться?';
-
   static String get emailHasBeenTaken => 'Пользователь с таким e-mail '
       'адресом уже зарегистрирован';
 
   static String get facebook => 'Facebook';
-
   static String get google => 'Google';
-
   static String get vk => 'Vk';
-
   static String get apple => 'Apple';
 
   static String get start => 'Начать';
@@ -341,10 +337,13 @@ class Strings {
   static const singleGame = 'Одиночная игра';
   static String get gameLevels => 'Квесты';
   static const multiPlayerGame = 'Игра с друзьями';
+  static String get multiplayer => 'Мультиплеер';
   static const continueGame = 'Продолжить игру';
   static const chooseQuest = 'Выберите уровень';
   static const reach = 'Набрать';
   static const goBack = 'Вернуться назад';
+  static String get online => 'Онлайн';
+  static String get offline => 'Оффлайн';
 
   // Reset Password
   static String get forgotPasswordTitle => 'Забыли пароль?';
