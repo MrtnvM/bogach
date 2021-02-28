@@ -1,0 +1,17 @@
+image: node:12.13.0-alpine
+
+before_script:
+  - npm i -g firebase-tools
+
+deploy-functions:
+  stage: deploy
+  script:
+    - cd server/functions
+    - npm install
+    - cd ..
+    - firebase deploy --only functions --token $FIREBASE_TOKEN -P staging
+  only:
+    refs:
+      - ci-staging
+    changes:
+      - functions/**/*

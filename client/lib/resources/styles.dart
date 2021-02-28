@@ -16,6 +16,14 @@ class Styles {
     end: Alignment(2.2, 0.2),
   );
 
+  static const head = TextStyle(
+    fontSize: 23,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    color: _defaultTextColor,
+    fontFamily: _defaultFontFamily,
+  );
+
   static const subhead = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.normal,
@@ -191,5 +199,10 @@ class Styles {
     color: ColorRes.white.withAlpha(220),
     fontSize: 18,
     fontWeight: FontWeight.w400,
+  );
+
+  static final badgeContent = Styles.bodyBlack.copyWith(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
   );
 }

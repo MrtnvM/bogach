@@ -5,6 +5,8 @@ export const template: GameTemplate = {
   name: 'Официант',
   icon:
     'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/quest_icons_images%2Fwaiter.png?alt=media&token=9d628ff1-7643-4072-8c34-e47be1ef3526',
+  image:
+    'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/game_images%2Fwaiter.jpg?alt=media&token=5550ce3a-d9a3-4fb9-871f-8abcff9eec68',
   possessions: {
     incomes: [
       {

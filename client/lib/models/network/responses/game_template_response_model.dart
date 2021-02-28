@@ -10,6 +10,7 @@ class GameTemplateResponseModel {
     this.id,
     this.name,
     this.icon,
+    this.image,
     this.target,
     this.accountState,
   });
@@ -23,6 +24,8 @@ class GameTemplateResponseModel {
   final String name;
   @JsonKey(name: 'icon')
   final String icon;
+  @JsonKey(name: 'image')
+  final String image;
   @JsonKey(name: 'target')
   final Target target;
   @JsonKey(name: 'accountState')

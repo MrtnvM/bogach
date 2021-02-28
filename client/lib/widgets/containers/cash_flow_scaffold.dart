@@ -4,6 +4,7 @@ import 'package:cash_flow/widgets/inputs/drop_focus.dart';
 import 'package:cash_flow/widgets/texts/title_test.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CashFlowScaffold extends StatelessWidget {
   const CashFlowScaffold({
@@ -13,6 +14,8 @@ class CashFlowScaffold extends StatelessWidget {
     this.footerImage,
     this.horizontalPadding = 32,
     this.showBackArrow = false,
+    this.backgroundColor = ColorRes.mainGreen,
+    this.overlayStyle = SystemUiOverlayStyle.light,
   }) : super(key: key);
 
   final Widget child;
@@ -20,26 +23,31 @@ class CashFlowScaffold extends StatelessWidget {
   final String footerImage;
   final double horizontalPadding;
   final bool showBackArrow;
+  final Color backgroundColor;
+  final SystemUiOverlayStyle overlayStyle;
 
   @override
   Widget build(BuildContext context) {
-    return DropFocus(
-      child: Scaffold(
-        appBar: _buildAppBar(),
-        backgroundColor: ColorRes.mainGreen,
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                if (footerImage == null)
-                  Expanded(child: child)
-                else ...[
-                  Expanded(child: child),
-                  _buildFooterImage(context),
-                ]
-              ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: overlayStyle,
+      child: DropFocus(
+        child: Scaffold(
+          appBar: _buildAppBar(),
+          backgroundColor: backgroundColor,
+          body: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  if (footerImage == null)
+                    Expanded(child: child)
+                  else ...[
+                    Expanded(child: child),
+                    _buildFooterImage(context),
+                  ]
+                ],
+              ),
             ),
           ),
         ),
@@ -47,7 +55,7 @@ class CashFlowScaffold extends StatelessWidget {
     );
   }
 
-  AppBar _buildAppBar() {
+  PreferredSizeWidget _buildAppBar() {
     return title != null
         ? AppBar(
             title: TitleText(title),

@@ -8,7 +8,9 @@ import 'package:cash_flow/features/purchase/actions/buy_quests_access_action.dar
 import 'package:cash_flow/features/purchase/actions/query_past_purchases_action.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/models/errors/purchase_errors.dart';
+import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
+import 'package:cash_flow/presentation/main/main_page.dart';
 import 'package:cash_flow/presentation/quests/quest_item_widget.dart';
 import 'package:cash_flow/presentation/quests/quests_hooks.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -24,7 +26,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 class QuestsAccessPage extends HookWidget {
-  const QuestsAccessPage({@required this.quest});
+  const QuestsAccessPage({this.quest});
 
   final Quest quest;
 
@@ -48,6 +50,11 @@ class QuestsAccessPage extends HookWidget {
     final dispatch = useDispatcher();
 
     final startGame = () {
+      if (quest == null) {
+        appRouter.startWith(const MainPage());
+        return (_) async => null;
+      }
+
       return dispatch(StartQuestGameAction(
         quest.id,
         QuestAction.startNewGame,
@@ -240,6 +247,11 @@ class _BuyButton extends HookWidget {
         AnalyticsSender.questsPurchaseStarted();
         await dispatch(BuyQuestsAccessAction());
         AnalyticsSender.questsPurchased();
+
+        if (quest == null) {
+          appRouter.startWith(const MainPage());
+          return;
+        }
 
         await startQuest(quest.id, QuestAction.startNewGame);
       } on ProductPurchaseCanceledException catch (error) {

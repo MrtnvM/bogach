@@ -7,6 +7,7 @@ import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/new_game/actions/get_quests_action.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/navigation/app_router.dart';
+import 'package:cash_flow/presentation/main/widgets/games_loadable_list_view.dart';
 import 'package:cash_flow/presentation/purchases/quests_access_page.dart';
 import 'package:cash_flow/presentation/quests/quest_item_widget.dart';
 import 'package:cash_flow/presentation/quests/quests_hooks.dart';
@@ -25,9 +26,6 @@ class QuestList extends HookWidget {
     final userId = useUserId();
     final getQuestsRequestState = useGlobalState(
       (s) => s.getOperationState(Operation.getQuests),
-    );
-    final createQuestGameRequestState = useGlobalState(
-      (s) => s.getOperationState(Operation.createQuestGame),
     );
 
     final user = useCurrentUser();
@@ -54,26 +52,23 @@ class QuestList extends HookWidget {
     return MediaQuery(
       data: mediaQueryData,
       child: LoadableView(
-        isLoading: getQuestsRequestState.isInProgress ||
-            createQuestGameRequestState.isInProgress,
-        backgroundColor: ColorRes.mainGreen.withOpacity(0.8),
+        isLoading: getQuestsRequestState.isInProgress,
+        backgroundColor: ColorRes.transparent,
+        indicatorColor: const AlwaysStoppedAnimation<Color>(ColorRes.mainGreen),
         child: RefreshIndicator(
           color: ColorRes.mainGreen,
           onRefresh: () => Future.wait([
             dispatch(GetQuestsAction(userId: userId, isRefreshing: true)),
           ]),
-          child: LoadableListView<Quest>(
+          child: GamesLoadableListView<Quest>(
             viewModel: LoadableListViewModel(
               items: quests,
               itemBuilder: (i) {
                 if (i == currentQuestIndex) {
                   return AnimatedBuilder(
                     animation: offsetAnimation,
-                    builder: (context, child) => Padding(
-                      padding: EdgeInsets.only(
-                        left: offsetAnimation.value + 10,
-                        right: 10 - offsetAnimation.value,
-                      ),
+                    builder: (context, child) => Transform.translate(
+                      offset: Offset(offsetAnimation.value, 0),
                       child: _QuestItemWidget(
                         quest: quests.items[i],
                         index: i,
@@ -82,20 +77,16 @@ class QuestList extends HookWidget {
                   );
                 }
 
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: _QuestItemWidget(
-                    quest: quests.items[i],
-                    index: i,
-                    defaultAction: animationController.forward,
-                  ),
+                return _QuestItemWidget(
+                  quest: quests.items[i],
+                  index: i,
+                  defaultAction: animationController.forward,
                 );
               },
               loadListRequestState: getQuestsRequestState,
               loadList: () {
                 dispatch(GetQuestsAction(userId: userId));
               },
-              padding: const EdgeInsets.all(16),
               emptyStateWidget: EmptyWidget(),
               errorWidget: CommonErrorWidget(
                 () => dispatch(GetQuestsAction(userId: userId)),

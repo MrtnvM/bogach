@@ -5,6 +5,8 @@ export const template: GameTemplate = {
   name: 'Менеджер',
   icon:
     'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/quest_icons_images%2Fmanager.png?alt=media&token=7320129b-cb27-4197-9270-8a4cc7f39d9e',
+  image:
+    'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/game_images%2Fmanager.jpg?alt=media&token=59ed2818-c357-4fa7-a90f-94434434bb2d',
   possessions: {
     incomes: [
       {
