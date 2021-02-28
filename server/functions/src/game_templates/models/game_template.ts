@@ -7,6 +7,7 @@ export interface GameTemplate {
   readonly id: GameTemplateEntity.Id;
   readonly name: string;
   readonly icon: string;
+  readonly image: string;
   readonly possessions: Possessions;
   readonly accountState: Account;
   readonly target: GameTarget;

@@ -13,6 +13,7 @@ import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard.dart';
+import 'package:cash_flow/presentation/main/widgets/games_loadable_list_view.dart';
 import 'package:cash_flow/presentation/new_game/widgets/game_template_item.dart';
 import 'package:cash_flow/presentation/tutorial/tutorial_page.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -28,10 +29,6 @@ class TemplateGameList extends HookWidget {
   Widget build(BuildContext context) {
     final templatesRequestState = useGlobalState(
       (s) => s.getOperationState(Operation.loadGameTemplates),
-    );
-
-    final createGameRequestState = useGlobalState(
-      (s) => s.getOperationState(Operation.createGame),
     );
 
     final gameTemplates = useGlobalState((s) => s.newGame.gameTemplates);
@@ -55,8 +52,7 @@ class TemplateGameList extends HookWidget {
           );
     };
 
-    final isLoading = templatesRequestState.isInProgress ||
-        createGameRequestState.isInProgress;
+    final isLoading = templatesRequestState.isInProgress;
 
     final loadGameTemplates = () => dispatch(GetGameTemplatesAction());
 
@@ -91,8 +87,9 @@ class TemplateGameList extends HookWidget {
       data: mediaQueryData,
       child: LoadableView(
         isLoading: isLoading,
-        backgroundColor: ColorRes.mainGreen.withOpacity(0.8),
-        child: LoadableListView<GameTemplate>(
+        backgroundColor: ColorRes.transparent,
+        indicatorColor: const AlwaysStoppedAnimation<Color>(ColorRes.mainGreen),
+        child: GamesLoadableListView<GameTemplate>(
           viewModel: LoadableListViewModel(
             items: gameTemplates,
             itemBuilder: (i) => GameTemplateItem(
@@ -105,7 +102,6 @@ class TemplateGameList extends HookWidget {
             ),
             loadListRequestState: templatesRequestState,
             loadList: loadGameTemplates,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             emptyStateWidget: EmptyWidget(),
             errorWidget: CommonErrorWidget(loadGameTemplates),
           ),

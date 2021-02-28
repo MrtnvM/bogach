@@ -5,6 +5,8 @@ export const courierTemplate: GameTemplate = {
   name: 'Курьер, который хочет свободы',
   icon:
     'https://www.flaticon.com/svg/static/icons/svg/869/869034.svg',
+  image:
+    'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/game_images%2Fbusinessman.jpg?alt=media&token=0f5aa549-f119-46dd-abc9-bfc2670217c9',
   possessions: {
     incomes: [
       {

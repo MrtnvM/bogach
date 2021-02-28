@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +8,13 @@ class UserAvatar extends StatelessWidget {
     @required this.url,
     this.size = 40,
     this.borderWidth = 2,
+    this.borderColor = Colors.white,
   }) : avatarSize = size - borderWidth;
 
   final String url;
   final double size;
   final double borderWidth;
+  final Color borderColor;
   final double avatarSize;
 
   @override
@@ -21,7 +24,7 @@ class UserAvatar extends StatelessWidget {
         borderRadius: BorderRadius.circular(size),
         border: Border.all(
           width: borderWidth,
-          color: Colors.white,
+          color: borderColor,
         ),
       ),
       width: size,
@@ -29,7 +32,7 @@ class UserAvatar extends StatelessWidget {
       child: CircleAvatar(
         backgroundImage: url == null
             ? const AssetImage(Images.defaultAvatar)
-            : NetworkImage(url),
+            : CachedNetworkImageProvider(url),
         backgroundColor: Colors.transparent,
         radius: avatarSize,
       ),

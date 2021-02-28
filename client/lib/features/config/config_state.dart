@@ -7,6 +7,7 @@ part 'config_state.g.dart';
 abstract class ConfigState with _$ConfigState {
   factory ConfigState({
     bool isGameboardTutorialPassed,
+    bool isOnline,
   }) = _ConfigState;
 
   factory ConfigState.fromJson(Map<String, dynamic> json) =>
@@ -15,6 +16,7 @@ abstract class ConfigState with _$ConfigState {
   static ConfigState initial() {
     return ConfigState(
       isGameboardTutorialPassed: false,
+      isOnline: true,
     );
   }
 }

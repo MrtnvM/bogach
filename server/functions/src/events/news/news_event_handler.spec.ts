@@ -25,6 +25,6 @@ describe('News event handler', () => {
 
     const newGame = await handler.handle(game, event, action, userId);
 
-    expect(newGame.history.months.pop()?.events.pop()?.type == NewsEvent.Type);
+    expect(newGame.history.months.pop()?.events.pop()?.type === NewsEvent.Type);
   });
 });

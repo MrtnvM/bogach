@@ -57,6 +57,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   url_launcher: ^5.4.2
   share: ^0.6.5+4
+  flutter_swiper: ^1.1.6
 
   # Dash Kit
   dash_kit_core: ^2.0.2

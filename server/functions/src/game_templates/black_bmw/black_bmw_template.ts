@@ -5,6 +5,8 @@ export const blackBmwTemplate: GameTemplate = {
   name: 'Чёрный бумер',
   icon:
     'https://www.flaticon.com/svg/static/icons/svg/805/805871.svg',
+  image:
+    'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/game_images%2Fbogach.jpg?alt=media&token=ce61cfd1-c710-4563-b88b-9e96c4851e45',
   possessions: {
     incomes: [
       {

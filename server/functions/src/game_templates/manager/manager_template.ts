@@ -3,8 +3,9 @@ import { GameTemplate } from '../models/game_template';
 export const managerTemplate: GameTemplate = {
   id: 'manager_template',
   name: 'Независимый менеджер',
-  icon:
-    'https://www.flaticon.com/svg/static/icons/svg/2674/2674984.svg',
+  icon: 'https://www.flaticon.com/svg/static/icons/svg/2674/2674984.svg',
+  image:
+    'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/game_images%2Ftraider.jpeg?alt=media&token=1048f6cd-1364-435b-b6d7-6a267a8a5ef6',
   possessions: {
     incomes: [
       {

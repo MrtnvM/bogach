@@ -7,14 +7,14 @@ import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/presentation/main/main_page.dart';
 import 'package:cash_flow/presentation/onboarding/onboarding_page.dart';
 import 'package:cash_flow/resources/colors.dart';
+// ignore: implementation_imports
+import 'package:dash_kit_control_panel/src/services/device_preview_mode.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
+import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:dash_kit_loadable/dash_kit_loadable.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
-// ignore: implementation_imports
-import 'package:dash_kit_control_panel/src/services/device_preview_mode.dart';
 
 class CashFlowApp extends HookWidget {
   CashFlowApp({

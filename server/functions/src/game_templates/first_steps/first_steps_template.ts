@@ -4,6 +4,8 @@ export const firstStepsTemplate: GameTemplate = {
   id: 'first_steps_template',
   name: 'Первые шаги',
   icon: 'https://www.flaticon.com/svg/static/icons/svg/1056/1056227.svg',
+  image:
+    'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/game_images%2Fbeginner.jpg?alt=media&token=05d1d4d0-df0e-4dfc-b365-9de1dc947c1a',
   possessions: {
     incomes: [
       {
