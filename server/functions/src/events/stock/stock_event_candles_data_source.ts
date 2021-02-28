@@ -5,11 +5,11 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 type SerializableCandle = {
-  High: number;
-  Low: number;
-  Open: number;
-  Close: number;
-  Time: Date;
+  h: number;
+  l: number;
+  o: number;
+  c: number;
+  time: Date;
 };
 
 
@@ -38,11 +38,11 @@ export namespace StockEventCandlesDataSource {
   ): StockEvent.Candle[] => {
     return serializableCandles.map((serializableCandle) => {
       const candle: StockEvent.Candle = {
-        low: serializableCandle.Low,
-        high: serializableCandle.High,
-        open: serializableCandle.Open,
-        close: serializableCandle.Close,
-        time: serializableCandle.Time,
+        low: serializableCandle.l,
+        high: serializableCandle.h,
+        open: serializableCandle.o,
+        close: serializableCandle.c,
+        time: serializableCandle.time,
       };
   
       return candle;
