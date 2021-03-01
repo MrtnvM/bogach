@@ -9,6 +9,7 @@ import { nowInUtc } from '../utils/datetime';
 import { IUserDAO } from '../dao/user_dao';
 import { LastGamesEntity } from '../models/domain/user/last_games';
 import { GameEntity } from '../models/domain/game/game';
+import { OnlineProfile } from '../models/domain/multiplayer/online_profile';
 
 export class UserProvider {
   constructor(private userDao: IUserDAO) {}
@@ -42,6 +43,14 @@ export class UserProvider {
 
   getUserDevice(userId: UserEntity.Id): Promise<UserDevice> {
     return this.userDao.getUserDevice(userId);
+  }
+
+  setOnlineStatus(user: OnlineProfile): Promise<void> {
+    return this.userDao.setOnlineStatus(user);
+  }
+
+  getOnlineProfiles(userId: UserEntity.Id): Promise<OnlineProfile[]> {
+    return this.userDao.getOnlineProfiles(userId);
   }
 
   async updateCurrentQuestIndex(userId: UserEntity.Id, index: number): Promise<void> {

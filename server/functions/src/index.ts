@@ -2,6 +2,7 @@ import * as admin from 'firebase-admin';
 import * as Debug from './debug';
 
 import * as gameAPI from './api/game';
+import * as multiplayerAPI from './api/multiplayer';
 import * as roomAPI from './api/room';
 import * as purchaseAPI from './api/purchase';
 import * as userAPI from './api/user';
@@ -39,6 +40,7 @@ const GameAPI = gameAPI.create(daos);
 const RoomAPI = roomAPI.create(daos);
 const PurchaseAPI = purchaseAPI.create(daos);
 const UserAPI = userAPI.create(daos);
+const MultiplayerAPI = multiplayerAPI.create(daos);
 
 export const createGame = GameAPI.create;
 export const getGame = GameAPI.getGame;
@@ -57,5 +59,8 @@ export const completeMonth = RoomAPI.completeMonth;
 export const updatePurchases = PurchaseAPI.updatePurchases;
 
 export const getUserProfile = UserAPI.getUserProfile;
+
+export const setOnlineStatus = MultiplayerAPI.setOnlineStatus;
+export const getOnlineProfiles = MultiplayerAPI.getOnlineProfiles;
 
 Debug.initializeTestDataIfEmulator();

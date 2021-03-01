@@ -6,6 +6,7 @@ import 'package:cash_flow/cache/user_cache.dart';
 import 'package:cash_flow/configuration/cash_api_environment.dart';
 import 'package:cash_flow/services/config_service.dart';
 import 'package:cash_flow/services/game_service.dart';
+import 'package:cash_flow/services/multiplayer_service.dart';
 import 'package:cash_flow/services/purchase_service.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -71,6 +72,11 @@ void configureDependencyInjection(
     apiClient: apiClient,
   );
 
+  final multiplayerService = MultiplayerService(
+    firestore: firestore,
+    apiClient: apiClient,
+  );
+
   final purchaseService = PurchaseService(
     apiClient: apiClient,
     connection: InAppPurchaseConnection.instance,
@@ -84,4 +90,5 @@ void configureDependencyInjection(
   GetIt.I.registerSingleton<UserService>(userService);
   GetIt.I.registerSingleton<PurchaseService>(purchaseService);
   GetIt.I.registerSingleton<ConfigService>(configService);
+  GetIt.I.registerSingleton<MultiplayerService>(multiplayerService);
 }

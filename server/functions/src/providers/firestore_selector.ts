@@ -26,4 +26,7 @@ export class FirestoreSelector {
   users = (): CollectionReference => this.firestore.collection('users');
   user = (userId: UserEntity.Id) => this.users().doc(userId);
   userPurchases = (userId: UserEntity.Id) => this.user(userId).collection('purchases');
+
+  recentSessions = (): CollectionReference => this.firestore.collection('recent_sessions');
+  recentSession = (userId: UserEntity.Id) => this.recentSessions().doc(userId);
 }

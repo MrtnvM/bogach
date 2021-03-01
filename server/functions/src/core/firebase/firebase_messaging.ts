@@ -3,7 +3,9 @@ import * as admin from 'firebase-admin';
 export type PushNotification = {
   title?: string;
   body?: string;
-  data?: any;
+  data?: {
+    [key: string]: string;
+  };
   pushTokens?: string[];
 };
 
@@ -16,7 +18,10 @@ export class FirebaseMessaging {
           title: notification.title,
           body: notification.body,
         },
-        data: notification.data,
+        data: {
+          ...(notification.data ?? {}),
+          click_action: 'FLUTTER_NOTIFICATION_CLICK',
+        },
         tokens: notification.pushTokens || [],
       })
       .then((response) => {

@@ -5,6 +5,7 @@ import 'package:cash_flow/api_client/response_mappers.dart' as rm;
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/models/domain/room/room.dart';
+import 'package:cash_flow/models/domain/user/online/online_profile.dart';
 import 'package:cash_flow/models/domain/user/purchase_profile.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/models/network/request/game/create_room_request_model.dart';
@@ -114,4 +115,18 @@ class CashFlowApiClient extends ApiClient {
         headers: [contentJson],
         responseMapper: rm.standard((json) => UserProfile.fromJson(json)),
       );
+
+  Future<void> setOnlineStatus(OnlineProfile user) => post(
+        path: 'setOnlineStatus',
+        headers: [contentJson],
+        body: user.toJson(),
+        responseMapper: rm.voidResponse,
+      );
+
+  Future<List<OnlineProfile>> getOnlineProfiles(String id) => get(
+      path: 'getOnlineProfiles?user_id=$id',
+      headers: [contentJson],
+      responseMapper: rm.jsonArray(
+        (json) => json.map((item) => OnlineProfile.fromJson(item)).toList(),
+      ));
 }

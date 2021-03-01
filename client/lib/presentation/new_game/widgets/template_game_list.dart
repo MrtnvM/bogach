@@ -102,7 +102,7 @@ class TemplateGameList extends HookWidget {
             ),
             loadListRequestState: templatesRequestState,
             loadList: loadGameTemplates,
-            emptyStateWidget: EmptyListWidget(),
+            emptyStateWidget: const EmptyListWidget(),
             errorWidget: CommonErrorWidget(loadGameTemplates),
           ),
         ),

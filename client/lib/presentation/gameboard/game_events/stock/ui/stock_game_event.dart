@@ -63,7 +63,7 @@ class StockGameEvent extends HookWidget {
           rows: <Widget>[
             if (!isQuest)
               ChartWidget(
-                data: eventData.candles,
+                candles: eventData.candles,
                 padding: const EdgeInsets.symmetric(horizontal: 0),
                 backgroundColor: ColorRes.transparent,
               ),
