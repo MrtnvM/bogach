@@ -13,7 +13,7 @@ import 'package:cash_flow/presentation/quests/quest_item_widget.dart';
 import 'package:cash_flow/presentation/quests/quests_hooks.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/common/common_error_widget.dart';
-import 'package:cash_flow/widgets/common/empty_widget.dart';
+import 'package:cash_flow/widgets/common/empty_list_widget.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
@@ -83,7 +83,7 @@ class QuestList extends HookWidget {
             loadList: () {
               dispatch(GetQuestsAction(userId: userId));
             },
-            emptyStateWidget: EmptyWidget(),
+            emptyStateWidget: EmptyListWidget(),
             errorWidget: CommonErrorWidget(
               () => dispatch(GetQuestsAction(userId: userId)),
             ),

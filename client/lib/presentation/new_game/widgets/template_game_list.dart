@@ -18,7 +18,7 @@ import 'package:cash_flow/presentation/new_game/widgets/game_template_item.dart'
 import 'package:cash_flow/presentation/tutorial/tutorial_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/common/common_error_widget.dart';
-import 'package:cash_flow/widgets/common/empty_widget.dart';
+import 'package:cash_flow/widgets/common/empty_list_widget.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
@@ -102,7 +102,7 @@ class TemplateGameList extends HookWidget {
             ),
             loadListRequestState: templatesRequestState,
             loadList: loadGameTemplates,
-            emptyStateWidget: EmptyWidget(),
+            emptyStateWidget: EmptyListWidget(),
             errorWidget: CommonErrorWidget(loadGameTemplates),
           ),
         ),

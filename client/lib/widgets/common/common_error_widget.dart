@@ -30,7 +30,7 @@ class CommonErrorWidget extends StatelessWidget {
                 const SizedBox(height: 4),
                 _buildDescription(),
                 const SizedBox(height: 12),
-                _buildButton(),
+                _buildRetryButton(),
               ],
             ),
           ),
@@ -61,7 +61,7 @@ class CommonErrorWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildButton() {
+  Widget _buildRetryButton() {
     return SizedBox(
       height: 32,
       width: 120,
