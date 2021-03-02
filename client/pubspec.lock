@@ -688,6 +688,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.5.0"
+  k_chart:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: chart-design-updates
+      resolved-ref: "1aec180a32afc012f60e5387f6f238c45f74fa97"
+      url: "https://github.com/robertBadamshin/k_chart"
+    source: git
+    version: "0.1.2"
   logger:
     dependency: transitive
     description:

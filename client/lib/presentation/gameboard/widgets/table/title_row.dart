@@ -17,11 +17,12 @@ class TitleRow extends StatelessWidget {
             const SizedBox(width: 20),
             if (value != null)
               Expanded(
-                  child: Text(
-                value,
-                style: Styles.bodyBlack,
-                textAlign: TextAlign.end,
-              )),
+                child: Text(
+                  value,
+                  style: Styles.bodyBlack,
+                  textAlign: TextAlign.end,
+                ),
+              ),
           ],
         ),
       ],

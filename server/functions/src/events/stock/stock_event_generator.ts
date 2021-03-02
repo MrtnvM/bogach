@@ -20,7 +20,10 @@ const getStockCandles = (stockName: string): StockEvent.Candle[] => {
 
   return stockCandles;
 };
+
 export namespace StockEventGenerator {
+  const monthCountInYear = 12;
+
   export const generate = (game: Game): StockEvent.Event | undefined => {
     const alreadyUsedStocks = game.currentEvents
       .filter((e) => e.type === StockEvent.Type)
@@ -38,17 +41,10 @@ export namespace StockEventGenerator {
     const stockName = availableStocks[stockIndex];
     const stockCandles = getStockCandles(stockName);
 
-    const month = game.state.monthNumber;
-    const startCandleIndex = month % stockCandles.length;
-
-    const monthCountInYear = 12;
-    const currentCandleIndex = startCandleIndex + monthCountInYear;
-
-    // to avoid array exceed
-    const stockCandlesProlonged = stockCandles.concat(stockCandles);
-
-    const stockEventCandles = stockCandlesProlonged.slice(startCandleIndex, currentCandleIndex);
-    const currentCandle = stockCandlesProlonged[currentCandleIndex];
+    const { stockEventCandles, currentCandle } = getCandleHistory(
+      stockCandles,
+      game.state.monthNumber
+    );
 
     const yearAverageStockPrice =
       stockEventCandles.reduce((acc, c) => c.close + acc, 0) / monthCountInYear;
@@ -63,6 +59,37 @@ export namespace StockEventGenerator {
       availableCount: valueRange([maxCount, maxCount, 0]),
       candles: stockEventCandles,
     });
+  };
+
+  export const getCandleHistory = (stockCandles: StockEvent.Candle[], monthNumber: number) => {
+    /// We should remove 1 because of we start game from month number = 1
+    const month = monthNumber - 1;
+    const startCandleIndex = month % stockCandles.length;
+
+    const currentCandleIndex = startCandleIndex + monthCountInYear;
+    const historyCandlesLength = 30;
+
+    // to avoid array exceed
+    const stockCandlesProlonged = stockCandles.concat(stockCandles);
+
+    let candles = stockCandlesProlonged.slice(0, currentCandleIndex);
+    candles = candles.slice(-Math.min(historyCandlesLength, candles.length));
+
+    const candleHistoryNotFull = candles.length < historyCandlesLength;
+    const isGoingFromBeginingOfCandlesDataAgain = month >= stockCandles.length;
+
+    if (candleHistoryNotFull && isGoingFromBeginingOfCandlesDataAgain) {
+      const missingCandlesCount = historyCandlesLength - candles.length;
+      const missingCandles = stockCandles.slice(
+        -Math.min(missingCandlesCount, stockCandles.length)
+      );
+      candles = [...missingCandles, ...candles];
+    }
+
+    const stockEventCandles = candles;
+    const currentCandle = stockCandlesProlonged[currentCandleIndex];
+
+    return { stockEventCandles, currentCandle };
   };
 
   export const generateEvent = (eventInfo: StockEvent.Info): StockEvent.Event => {

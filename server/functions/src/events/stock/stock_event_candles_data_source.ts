@@ -12,7 +12,6 @@ type SerializableCandle = {
   time: Date;
 };
 
-
 export namespace StockEventCandlesDataSource {
   export const getStockCandles = (stockName: string): StockEvent.Candle[] => {
     const stockDataFile = stockName + '.json';
@@ -25,14 +24,18 @@ export namespace StockEventCandlesDataSource {
       'stocks_history',
       stockDataFile
     );
-  
+
+    return getStockCandlesFromFile(stockDataPath);
+  };
+
+  export const getStockCandlesFromFile = (stockDataPath: string): StockEvent.Candle[] => {
     const rawData = fs.readFileSync(stockDataPath, 'utf8');
     const serializableStockCandles = JSON.parse(rawData) as SerializableCandle[];
     const stockCandles = mapCandlesFromSerializable(serializableStockCandles);
-  
+
     return stockCandles;
   };
-  
+
   const mapCandlesFromSerializable = (
     serializableCandles: SerializableCandle[]
   ): StockEvent.Candle[] => {
@@ -44,7 +47,7 @@ export namespace StockEventCandlesDataSource {
         close: serializableCandle.c,
         time: serializableCandle.time,
       };
-  
+
       return candle;
     });
   };

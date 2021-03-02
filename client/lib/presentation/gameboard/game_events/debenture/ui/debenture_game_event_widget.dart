@@ -60,7 +60,7 @@ class DebentureGameEventWidget extends HookWidget {
     return Column(
       children: <Widget>[
         InfoTable(
-          title: Strings.debentures,
+          title: '${Strings.debentures} - ${event.name}',
           withShadow: false,
           rows: <Widget>[
             for (final item in infoTableData.entries)
