@@ -7,42 +7,20 @@ import 'package:k_chart/renderer/base_chart_renderer.dart';
 
 class ChartWidget extends HookWidget {
   const ChartWidget({
-    @required this.data,
+    @required this.candles,
     this.padding,
     this.backgroundColor,
     this.height = 250,
   });
 
-  final List<CandleData> data;
+  final List<CandleData> candles;
   final double height;
   final EdgeInsetsGeometry padding;
   final Color backgroundColor;
 
   @override
   Widget build(BuildContext context) {
-    final chartData = useMemoized(() {
-      final lineEntities = <KLineEntity>[];
-
-      for (var i = 0; i < data.length; i++) {
-        final candle = data[i];
-        final change = i > 0 ? data[i].close - data[i - 1].close : 0.0;
-        final changeInPercent = i > 0 ? change / data[i - 1].close * 100 : 0.0;
-
-        lineEntities.add(KLineEntity.fromCustom(
-          open: candle.open,
-          close: candle.close,
-          high: candle.high,
-          low: candle.low,
-          time: candle.time.millisecondsSinceEpoch,
-          change: change,
-          vol: 0,
-          amount: 0,
-          ratio: changeInPercent,
-        ));
-      }
-
-      return lineEntities;
-    }, [data]);
+    final chartData = useChartData(candles);
 
     return Container(
       height: height,
@@ -77,4 +55,32 @@ class ChartWidget extends HookWidget {
       ),
     );
   }
+}
+
+List<KLineEntity> useChartData(List<CandleData> candles) {
+  final chartData = useMemoized(() {
+    final lineEntities = <KLineEntity>[];
+
+    for (var i = 0; i < candles.length; i++) {
+      final candle = candles[i];
+      final change = i > 0 ? candles[i].close - candles[i - 1].close : 0.0;
+      final changeInPercent = i > 0 ? change / candles[i - 1].close * 100 : 0.0;
+
+      lineEntities.add(KLineEntity.fromCustom(
+        open: candle.open,
+        close: candle.close,
+        high: candle.high,
+        low: candle.low,
+        time: candle.time.millisecondsSinceEpoch,
+        change: change,
+        vol: 0,
+        amount: 0,
+        ratio: changeInPercent,
+      ));
+    }
+
+    return lineEntities;
+  }, [candles]);
+
+  return chartData;
 }
