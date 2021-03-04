@@ -1,9 +1,14 @@
-import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/core/hooks/analytics_hooks.dart';
+import 'package:cash_flow/widgets/common/bogach_loadable_view.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
-import 'package:cash_flow/navigation/app_router.dart';
-import 'package:cash_flow/presentation/login/login_page.dart';
+import 'package:cash_flow/features/new_game/actions/get_game_templates_action.dart';
+import 'package:cash_flow/features/new_game/actions/get_quests_action.dart';
 import 'package:cash_flow/presentation/main/widgets/game_type_title.dart';
 import 'package:cash_flow/presentation/main/widgets/profile_bar.dart';
 import 'package:cash_flow/presentation/multiplayer/multiplayer_game_list.dart';
@@ -13,12 +18,7 @@ import 'package:cash_flow/presentation/quests/quest_list.dart';
 import 'package:cash_flow/presentation/quests/quests_badge.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
-import 'package:cash_flow/widgets/buttons/text_button.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
-import 'package:dash_kit_loadable/dash_kit_loadable.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' hide TextButton;
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class MainPage extends HookWidget {
@@ -26,42 +26,49 @@ class MainPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = useCurrentUser();
-    final needAuthorization = user == null;
+    final userId = useUserId();
+    final dispatch = useDispatcher();
 
-    useEffect(() {
-      AnalyticsSender.setUserId(user.userId);
-      return null;
-    }, [user]);
+    useUserIdSender();
 
-    final createGameRequestState = useGlobalState<OperationState>(
-      (s) => s.getOperationState(Operation.createGame),
+    final isLoading = useGlobalState(
+      (s) {
+        final requests = [
+          Operation.createGame,
+          Operation.createRoom,
+          Operation.createQuestGame
+        ];
+
+        return requests
+            .map((request) => s.getOperationState(request))
+            .any((requestState) => requestState.isInProgress);
+      },
     );
 
-    final createRoomRequestState = useGlobalState((s) {
-      return s.getOperationState(Operation.createRoom);
-    });
+    final refreshData = () {
+      return Future.wait([
+        dispatch(GetQuestsAction(userId: userId, isRefreshing: true)),
+        dispatch(GetGameTemplatesAction()),
+      ]);
+    };
 
-    final createQuestGameRequestState = useGlobalState(
-      (s) => s.getOperationState(Operation.createQuestGame),
-    );
-
-    return AnnotatedRegion<SystemUiOverlayStyle>(
+    return AnnotatedRegion(
       value: SystemUiOverlayStyle.dark,
-      child: LoadableView(
-        isLoading: createRoomRequestState.isInProgress ||
-            createGameRequestState.isInProgress ||
-            createQuestGameRequestState.isInProgress,
-        backgroundColor: ColorRes.black.withAlpha(120),
-        indicatorColor: const AlwaysStoppedAnimation<Color>(ColorRes.mainGreen),
+      child: BogachLoadableView(
+        isLoading: isLoading,
         child: Scaffold(
-          backgroundColor: const Color(0xFFfcfcfc),
+          backgroundColor: ColorRes.mainPageBackground,
           body: Column(
             children: <Widget>[
               SizedBox(height: MediaQuery.of(context).padding.top),
               const ProfileBar(),
-              _buildGameActions(context),
-              _buildAuthButton(needAuthorization),
+              Expanded(
+                child: RefreshIndicator(
+                  color: ColorRes.mainGreen,
+                  onRefresh: refreshData,
+                  child: _buildGameActions(context),
+                ),
+              ),
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(
@@ -83,46 +90,29 @@ class MainPage extends HookWidget {
   }
 
   Widget _buildGameActions(BuildContext context) {
-    return Expanded(
-      child: ListView(
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(0),
-        children: <Widget>[
-          const SizedBox(height: 24),
-          const GameTypeTitle(text: Strings.singleGame),
-          SizedBox(height: 150, child: TemplateGameList()),
-          const Divider(),
-          const SizedBox(height: 12),
-          GameTypeTitle(
-            text: Strings.gameLevels,
-            actionWidget: QuestsBadge(),
-          ),
-          SizedBox(height: 150, child: QuestList()),
-          const Divider(),
-          const SizedBox(height: 12),
-          GameTypeTitle(
-            text: Strings.multiplayer,
-            actionWidget: MultiplayerGameCountBadge(),
-          ),
-          SizedBox(height: 150, child: MultiplayerGameList()),
-          const Divider(),
-        ],
-      ),
+    return ListView(
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(0),
+      children: <Widget>[
+        const SizedBox(height: 24),
+        const GameTypeTitle(text: Strings.singleGame),
+        SizedBox(height: 150, child: TemplateGameList()),
+        const Divider(),
+        const SizedBox(height: 12),
+        GameTypeTitle(
+          text: Strings.gameLevels,
+          actionWidget: QuestsBadge(),
+        ),
+        SizedBox(height: 150, child: QuestList()),
+        const Divider(),
+        const SizedBox(height: 12),
+        GameTypeTitle(
+          text: Strings.multiplayer,
+          actionWidget: MultiplayerGameCountBadge(),
+        ),
+        SizedBox(height: 150, child: MultiplayerGameList()),
+        const Divider(),
+      ],
     );
-  }
-
-  Widget _buildAuthButton(bool needAuthorization) {
-    if (needAuthorization) {
-      return TextButton(
-        onPressed: _goToLogin,
-        text: Strings.doYouWantToLogin,
-      );
-    }
-
-    return Container();
-  }
-
-  void _goToLogin() {
-    appRouter.startWith(LoginPage());
   }
 }

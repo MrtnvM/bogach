@@ -97,7 +97,7 @@ class Strings {
   static const confirm = 'Подтвердить';
   static const cancel = 'Отмена';
   static const warning = 'Внимание';
-  static const retry = 'Повторить';
+  static String get retry => 'Повторить';
   static const skip = 'Пропустить';
   static const fieldIsRequired = 'Необходимо заполнить';
   static const continueAction = 'Продолжить';

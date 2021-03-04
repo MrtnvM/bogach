@@ -49,6 +49,8 @@ class Images {
       'bogach-production.appspot.com/o/avatar%2Fbogach128.png?'
       'alt=media&token=5ff3572d-352c-46f7-b09b-871b6086a11b';
 
+  static const noInternet = 'assets/images/png/no_internet.png';
+
   // Bottom bar icons
   static const financesBarIcon = 'assets/images/svg/footer_financal.svg';
   static const progressBarIcon = 'assets/images/svg/footer_progress.svg';

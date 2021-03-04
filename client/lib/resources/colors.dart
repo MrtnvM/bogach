@@ -63,4 +63,5 @@ class ColorRes {
   static const offlineStatus = ColorRes.red;
 
   static const imagePlaceholder = Color(0xFFB0B0B0);
+  static const mainPageBackground = Color(0xFFFCFCFC);
 }

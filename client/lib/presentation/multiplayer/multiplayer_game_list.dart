@@ -17,7 +17,7 @@ import 'package:cash_flow/presentation/new_game/widgets/game_template_item.dart'
 import 'package:cash_flow/presentation/purchases/games_access_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/common/common_error_widget.dart';
-import 'package:cash_flow/widgets/common/empty_widget.dart';
+import 'package:cash_flow/widgets/common/empty_list_widget.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
@@ -69,20 +69,15 @@ class MultiplayerGameList extends HookWidget {
       isLoading: getGameTemplatesRequestState.isInProgress,
       backgroundColor: ColorRes.transparent,
       indicatorColor: const AlwaysStoppedAnimation<Color>(ColorRes.mainGreen),
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          _TemplateList(
-            gameTemplates: gameTemplates,
-            onGameTemplateSelected: availableMultiplayerGamesCount <= 0
-                ? buyGames
-                : onGameTemplateSelected,
-            loadGameTemplatesRequestState: getGameTemplatesRequestState,
-            loadGameTemplates: () {
-              dispatch(GetGameTemplatesAction());
-            },
-          ),
-        ],
+      child: _TemplateList(
+        gameTemplates: gameTemplates,
+        onGameTemplateSelected: availableMultiplayerGamesCount <= 0
+            ? buyGames
+            : onGameTemplateSelected,
+        loadGameTemplatesRequestState: getGameTemplatesRequestState,
+        loadGameTemplates: () {
+          dispatch(GetGameTemplatesAction());
+        },
       ),
     );
   }
@@ -120,8 +115,7 @@ class _TemplateList extends HookWidget {
           ),
           loadListRequestState: loadGameTemplatesRequestState,
           loadList: loadGameTemplates,
-          padding: const EdgeInsets.fromLTRB(16, 16, 24, 64),
-          emptyStateWidget: EmptyWidget(),
+          emptyStateWidget: EmptyListWidget(),
           errorWidget: CommonErrorWidget(loadGameTemplates),
         ),
       ),
