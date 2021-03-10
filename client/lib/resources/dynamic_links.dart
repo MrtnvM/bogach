@@ -6,4 +6,5 @@ class DynamicLinks {
 
   static const join = 'join';
   static const roomInvite = 'roomInvite';
+  static const addFriend = 'addFriend';
 }

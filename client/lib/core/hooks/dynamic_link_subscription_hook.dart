@@ -10,6 +10,8 @@ void useDynamicLinkSubscription(
       if (dynamicLink?.link != null) {
         handler(dynamicLink);
       }
+    }).catchError((error) {
+      errorHandler(error);
     });
 
     FirebaseDynamicLinks.instance.onLink(
@@ -18,8 +20,8 @@ void useDynamicLinkSubscription(
           handler(dynamicLink);
         }
       },
-      onError: (e) async {
-        errorHandler(e);
+      onError: (error) async {
+        errorHandler(error);
       },
     );
 

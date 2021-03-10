@@ -1,5 +1,6 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/app_hooks.dart';
+import 'package:cash_flow/app/dymanic_link/dynamic_links_hooks.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/navigation/app_router.dart';

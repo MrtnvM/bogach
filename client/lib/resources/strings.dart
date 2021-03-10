@@ -426,6 +426,10 @@ class Strings {
       'Пригласите друзей, чтобы начать игру';
   static String get joinToRoom => 'Игра начнётся автоматически, '
       'как только участники присоединятся и лидер начнёт игру';
+  // TODO Max?
+  static String get addFriendLinkTitle => 'Присоединяйся ко мне в игре!';
+  // TODO Max?
+  static String get addFriendLinkDescription => 'хочет добавить вас в друзья';
 
   // Onboarding
   static String get onboardingTitle1 => 'Финансовая грамотность';
