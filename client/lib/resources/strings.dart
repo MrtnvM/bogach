@@ -426,6 +426,7 @@ class Strings {
       'Пригласите друзей, чтобы начать игру';
   static String get joinToRoom => 'Игра начнётся автоматически, '
       'как только участники присоединятся и лидер начнёт игру';
+  static String get noPlayers => 'Сейчас нет игроков в сети';
 
   // Onboarding
   static String get onboardingTitle1 => 'Финансовая грамотность';

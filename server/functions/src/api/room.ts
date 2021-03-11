@@ -33,8 +33,9 @@ export const create = (daos: DAOs) => {
 
     const gameTemplateId = apiRequest.jsonField('gameTemplateId');
     const currentUserId = apiRequest.jsonField('currentUserId');
+    const invitedUsers = apiRequest.optionalJsonField('invitedUsers') || [];
 
-    const createRoomRequest = roomService.createRoom(gameTemplateId, currentUserId);
+    const createRoomRequest = roomService.createRoom(gameTemplateId, currentUserId, invitedUsers);
 
     await send(createRoomRequest, response);
   });

@@ -83,7 +83,7 @@ class QuestList extends HookWidget {
             loadList: () {
               dispatch(GetQuestsAction(userId: userId));
             },
-            emptyStateWidget: EmptyListWidget(),
+            emptyStateWidget: const EmptyListWidget(),
             errorWidget: CommonErrorWidget(
               () => dispatch(GetQuestsAction(userId: userId)),
             ),

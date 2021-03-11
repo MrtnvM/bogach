@@ -23,6 +23,7 @@ enum Operation {
   queryUserProfiles,
   setRoomParticipantReady,
   shareRoomInviteLink,
+  setOnline,
 
   // Purchase
   queryProductDetails,

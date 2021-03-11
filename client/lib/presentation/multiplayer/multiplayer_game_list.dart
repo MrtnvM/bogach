@@ -25,6 +25,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class MultiplayerGameList extends HookWidget {
+  const MultiplayerGameList(this.selectedProfiles);
+
+  final ValueNotifier<Set<String>> selectedProfiles;
+
   @override
   Widget build(BuildContext context) {
     final getGameTemplatesRequestState = useGlobalState((s) {
@@ -38,7 +42,7 @@ class MultiplayerGameList extends HookWidget {
     final Function(GameTemplate) onGameTemplateSelected = (template) async {
       await dispatch(SelectMultiplayerGameTemplateAction(template));
 
-      dispatch(CreateRoomAction())
+      dispatch(CreateRoomAction(selectedProfiles.value))
           .then((_) => appRouter.goTo(RoomPage()))
           .catchError((error) {
         Logger.e('ERROR: On room creation with template ID: ${template.id}');
@@ -115,7 +119,7 @@ class _TemplateList extends HookWidget {
           ),
           loadListRequestState: loadGameTemplatesRequestState,
           loadList: loadGameTemplates,
-          emptyStateWidget: EmptyListWidget(),
+          emptyStateWidget: const EmptyListWidget(),
           errorWidget: CommonErrorWidget(loadGameTemplates),
         ),
       ),
