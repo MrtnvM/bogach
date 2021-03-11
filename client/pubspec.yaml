@@ -58,6 +58,7 @@ dependencies:
   url_launcher: ^5.4.2
   share: ^0.6.5+4
   flutter_swiper: ^1.1.6
+  shimmer: ^1.1.2
   k_chart:
     git:
       url: https://github.com/robertBadamshin/k_chart
