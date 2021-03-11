@@ -213,12 +213,7 @@ class UserService {
 
     var updatedUser = serverProfile;
 
-    if (serverProfile != null) {
-      updatedUser = serverProfile.copyWith(
-        fullName: user.displayName,
-        avatarUrl: user.photoURL,
-      );
-    } else {
+    if (serverProfile == null) {
       updatedUser = mapToUserProfile(user);
     }
 
