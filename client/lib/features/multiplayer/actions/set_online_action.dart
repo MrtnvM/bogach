@@ -21,15 +21,14 @@ class SetUserOnlineAction extends BaseAction {
   FutureOr<AppState> reduce() async {
     final multiplayerService = GetIt.I.get<MultiplayerService>();
 
-    try {
-      final onlineProfiles = await multiplayerService.setUserOnline(user);
-
-      return state.rebuild((b) {
-        return b.multiplayer.onlineProfiles = onlineProfiles;
-      });
-    } catch (error) {
+    final onlineProfileRequest = multiplayerService.setUserOnline(user);
+    final onlineProfiles = await onlineProfileRequest.catchError((error) {
       Logger.e(error);
-      return null;
-    }
+      return [];
+    });
+
+    return state.rebuild((b) {
+      return b.multiplayer.onlineProfiles = onlineProfiles;
+    });
   }
 }
