@@ -29,8 +29,8 @@ Future<String> getRoomInviteLink({
   final parameters = DynamicLinkParameters(
     uriPrefix: urlPrefix,
     link: link,
-    androidParameters: getAndroidParameters(packageName),
-    iosParameters: getIosParameters(packageName),
+    androidParameters: getAndroidDynamicLinkParameters(packageName),
+    iosParameters: getIosDynamicLinkParameters(packageName),
     googleAnalyticsParameters: null,
     // TODO(Maxim): Add info
     itunesConnectAnalyticsParameters: null,

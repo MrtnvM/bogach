@@ -2,14 +2,14 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 import '../../../app_configuration.dart';
 
-AndroidParameters getAndroidParameters(String packageName) {
+AndroidParameters getAndroidDynamicLinkParameters(String packageName) {
   return AndroidParameters(
     packageName: packageName,
     minimumVersion: 1,
   );
 }
 
-IosParameters getIosParameters(String packageName) {
+IosParameters getIosDynamicLinkParameters(String packageName) {
   return IosParameters(
     bundleId: packageName,
     customScheme: AppConfiguration.environment.dynamicLink.customScheme,
