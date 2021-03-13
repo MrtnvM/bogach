@@ -9,6 +9,10 @@ import 'package:cash_flow/services/game_service.dart';
 import 'package:get_it/get_it.dart';
 
 class CreateRoomAction extends BaseAction {
+  CreateRoomAction(this.invitedUsers);
+
+  final Set<String> invitedUsers;
+
   @override
   Operation get operationKey => Operation.createRoom;
 
@@ -22,6 +26,7 @@ class CreateRoomAction extends BaseAction {
     final requestModel = CreateRoomRequestModel(
       currentUserId: userId,
       gameTemplateId: gameTemplateId,
+      invitedUsers: invitedUsers.toList(),
     );
 
     final room = await gameService.createRoom(requestModel);

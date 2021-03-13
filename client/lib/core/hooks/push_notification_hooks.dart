@@ -39,7 +39,8 @@ void usePushMessageSubscription(void onMessage(Map<String, dynamic> message)) {
   final firebaseMessaging = useFirebaseMessaging();
 
   final void Function(Map<String, dynamic>) onPushNotification = (message) {
-    final Map<String, dynamic> data = message['data'] ?? message;
+    final Map<String, dynamic> data =
+        message['data']?.cast<String, dynamic>() ?? message;
 
     if (data != null) {
       onMessage(data);

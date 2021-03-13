@@ -3,6 +3,7 @@ import 'package:cash_flow/app/app_hooks.dart';
 import 'package:cash_flow/app/dymanic_link/dynamic_links_hooks.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/core/hooks/push_notification_hooks.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/presentation/main/main_page.dart';
@@ -32,11 +33,11 @@ class CashFlowApp extends HookWidget {
       (s) => s.getOperationState(Operation.joinRoom).isInProgress,
     );
 
-    // usePushNotificationsPermissionRequest(useDelay: true);
+    usePushNotificationsPermissionRequest(useDelay: true);
     useUserPushTokenUploader();
-    // usePushNotificationsHandler();
+    usePushNotificationsHandler();
     useDynamicLinkHandler();
-    // useDeepLinkHandler();
+    useDeepLinkHandler();
 
     final theme = Theme.of(context).copyWith(
       scaffoldBackgroundColor: ColorRes.scaffoldBackground,

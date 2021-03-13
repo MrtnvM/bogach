@@ -14,6 +14,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
+const _defaultUserName = 'Anonymous';
+const _defaultAvatar = 'https://firebasestorage.googleapis.com/v0/b/'
+    'bogach-production.appspot.com/o/avatar%2Fdefault_avatar.jpeg?'
+    'alt=media&token=d8426252-e62c-4ae8-a8e0-0cfecc69dbee';
+
 class UserService {
   UserService({
     @required this.firebaseAuth,
@@ -208,13 +213,20 @@ class UserService {
 
     var updatedUser = serverProfile;
 
-    if (serverProfile != null) {
-      updatedUser = serverProfile.copyWith(
-        fullName: user.displayName,
-        avatarUrl: user.photoURL,
-      );
-    } else {
+    if (serverProfile == null) {
       updatedUser = mapToUserProfile(user);
+    }
+
+    if (updatedUser.fullName?.isEmpty ?? true) {
+      updatedUser = updatedUser.copyWith(
+        fullName: _defaultUserName,
+      );
+    }
+
+    if (updatedUser.avatarUrl?.isEmpty ?? true) {
+      updatedUser = updatedUser.copyWith(
+        avatarUrl: _defaultAvatar,
+      );
     }
 
     if (serverProfile != updatedUser) {

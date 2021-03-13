@@ -22,19 +22,22 @@ export class RoomService {
 
   async createRoom(
     gameTemplateId: GameTemplateEntity.Id,
-    currentUserId: UserEntity.Id
+    currentUserId: UserEntity.Id,
+    invitedUsers:UserEntity.Id[],
   ): Promise<Room> {
     return this.errorRecorder.executeWithErrorRecording(
       { gameTemplateId, currentUserId },
       async () => {
         const room = await this.gameProvider.createRoom(gameTemplateId, currentUserId);
+
+        await Promise.all(invitedUsers.map((user) => this.addParticipantToRoom(user, room.id)))
         return room;
       }
     );
   }
 
   /// Owner of the created room can add participants that will receive invite by push notification
-  async addParticipantToRoom(participantId: UserEntity.Id, roomId: RoomEntity.Id) {
+  async addParticipantToRoom(participantId: UserEntity.Id, roomId: RoomEntity.Id): Promise<void> {
     return this.errorRecorder.executeWithErrorRecording({ roomId, participantId }, async () => {
       const room = await this.gameProvider.getRoom(roomId);
 
@@ -56,7 +59,7 @@ export class RoomService {
       room.participants.push(newRoomParticipant);
       await this.gameProvider.updateRoom(room);
 
-      this.firebaseMessaging
+      await this.firebaseMessaging
         .sendMulticastNotification({
           title: Strings.battleInvitationNotificationTitle(),
           body: room.owner.userName + ' ' + Strings.battleInvitationNotificationBody(),
