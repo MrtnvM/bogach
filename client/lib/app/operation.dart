@@ -24,6 +24,7 @@ enum Operation {
   setRoomParticipantReady,
   shareRoomInviteLink,
   setOnline,
+  addFriend,
 
   // Purchase
   queryProductDetails,

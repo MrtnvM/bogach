@@ -39,7 +39,7 @@
     "appAssociation": "AUTO",
     "rewrites": [
       {
-        "source": "/join/**",
+        "source": "/test/**",
         "dynamicLinks": true
       }
     ]

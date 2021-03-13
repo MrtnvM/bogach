@@ -8,16 +8,15 @@ import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/app_configuration.dart';
 
 Future<String> getAddFriendLink({
-  @required String roomId,
   @required UserProfile currentUser,
 }) async {
   final packageName = await getPackageName();
 
   final linkPrefix = '${AppConfiguration.environment.dynamicLink.baseUrl}'
-      '${DynamicLinks.join}';
+      '${DynamicLinks.addFriend}';
 
   final deepLink = '${AppConfiguration.environment.dynamicLink.baseUrl}'
-      '?${DynamicLinks.addFriend}=${currentUser.id}';
+      '?${DynamicLinks.inviterId}=${currentUser.id}';
   final link = Uri.parse(deepLink);
 
   final linkDescription =
@@ -39,6 +38,12 @@ Future<String> getAddFriendLink({
     socialMetaTagParameters: socialMetaTagParameters,
   );
 
-  final shortLink = await parameters.buildShortLink();
+  var shortLink;
+  try {
+    shortLink = await parameters.buildShortLink();
+  } catch (e) {
+    print(e);
+    const a = 2;
+  }
   return shortLink.shortUrl.toString();
 }

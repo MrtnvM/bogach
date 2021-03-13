@@ -129,4 +129,13 @@ class CashFlowApiClient extends ApiClient {
       responseMapper: rm.jsonArray(
         (json) => json.map((item) => OnlineProfile.fromJson(item)).toList(),
       ));
+
+  Future<UserProfile> addFriend(String firstUserId, String secondUserId) =>
+      post(
+        path: 'addFriend',
+        body: {
+          'firstUserId': firstUserId,
+          'secondUserId': secondUserId,
+        },
+      );
 }

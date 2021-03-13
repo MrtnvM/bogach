@@ -237,4 +237,10 @@ class UserService {
     await userCache.setUserProfile(updatedUser);
     return updatedUser;
   }
+
+  Future<UserProfile> addFriend(String firstUserId, String secondUserId) {
+    return apiClient
+        .addFriend(firstUserId, secondUserId)
+        .catchError(recordError);
+  }
 }

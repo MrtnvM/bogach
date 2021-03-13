@@ -7,7 +7,7 @@ import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:uni_links/uni_links.dart';
 
-import 'app_navigation_hooks/use_join_room.dart';
+import 'app_navigation_hooks/join_room_hook.dart';
 
 void useUserPushTokenUploader() {
   final currentUser = useCurrentUser();
