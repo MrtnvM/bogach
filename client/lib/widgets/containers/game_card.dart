@@ -48,7 +48,9 @@ class GameCard extends StatelessWidget {
                 color: Colors.grey.withAlpha(150),
               )
             ],
-            image: _getGameItemDecorationImage(imageUrl),
+            image: imageUrl != null //
+                ? _getGameItemDecorationImage(imageUrl)
+                : null,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
