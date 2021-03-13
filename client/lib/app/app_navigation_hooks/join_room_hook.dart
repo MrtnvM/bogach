@@ -20,6 +20,12 @@ Function(String) useJoinRoom() {
     VoidCallback joinRoom;
 
     final user = StoreProvider.state<AppState>(context).profile.currentUser;
+    if (user == null) {
+      // TODO возникает если незалогиненный пользователь открыл линку
+      // в будущем подумать, может добавить обработку действия после логина
+      return;
+    }
+
     final multiplayerGamesCount = getAvailableMultiplayerGamesCount(user);
 
     joinRoom = () async {

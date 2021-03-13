@@ -64,4 +64,7 @@ class ColorRes {
 
   static const imagePlaceholder = Color(0xFFB0B0B0);
   static const mainPageBackground = Color(0xFFFCFCFC);
+
+  static const shimmerBaseColor = Color(0xFFDDDDDD);
+  static const shimmerHightlightColor = Color(0xFFFFFFFF);
 }
