@@ -404,6 +404,7 @@ class Strings {
   static String get waitingPlayers => 'Ожидание игроков';
   static String get selectedPlayers => 'Выбранные игроки';
   static String get allPlayers => 'Все игроки';
+  static String get players => 'Игроки';
   static String get createRoom => 'Создать комнату';
   static String get inviteByLink => 'Пригласить по ссылке';
   static String get invite => 'Пригласить';
