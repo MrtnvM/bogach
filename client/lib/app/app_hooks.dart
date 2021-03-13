@@ -1,23 +1,13 @@
-import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
-import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
-import 'package:cash_flow/core/hooks/dynamic_link_hooks.dart';
 import 'package:cash_flow/core/hooks/push_notification_hooks.dart';
-import 'package:cash_flow/features/multiplayer/actions/join_room_action.dart';
-import 'package:cash_flow/features/multiplayer/multiplayer_hooks.dart';
 import 'package:cash_flow/features/profile/actions/send_device_push_token_action.dart';
-import 'package:cash_flow/navigation/app_router.dart';
-import 'package:cash_flow/presentation/dialogs/dialogs.dart';
-import 'package:cash_flow/presentation/multiplayer/room_page.dart';
-import 'package:cash_flow/presentation/purchases/games_access_page.dart';
 import 'package:cash_flow/resources/dynamic_links.dart';
-import 'package:cash_flow/resources/strings.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:uni_links/uni_links.dart';
+
+import 'app_navigation_hooks/use_join_room.dart';
 
 void useUserPushTokenUploader() {
   final currentUser = useCurrentUser();
@@ -34,7 +24,7 @@ void useUserPushTokenUploader() {
 }
 
 void usePushNotificationsHandler() {
-  final appActions = useAppActions();
+  final joinRoom = useJoinRoom();
 
   usePushMessageSubscription((data) {
     final type = data['type'];
@@ -42,41 +32,14 @@ void usePushNotificationsHandler() {
     switch (type) {
       case 'go_to_room':
         final roomId = data['roomId'];
-        appActions.joinRoom(roomId);
+        joinRoom(roomId);
         break;
     }
   });
 }
 
-void useDynamicLinkHandler() {
-  final appActions = useAppActions();
-
-  useDynamicLinkSubscription((dynamicLink) {
-    final link = dynamicLink.link;
-
-    Logger.i('APP CAPTURE DYNAMIC LINK:\n$link\n'
-        'APP CAPTURE DYNAMIC LINK QUERY:\n${link.query}');
-
-    if (link == null) {
-      return;
-    }
-
-    final isLinkTo = (path) {
-      return link.query.contains(path) ?? false;
-    };
-
-    if (isLinkTo(DynamicLinks.roomInvite)) {
-      SessionTracker.multiplayerGameJoined.start();
-      final roomId = link.queryParameters[DynamicLinks.roomInvite];
-
-      Logger.i('ROOM ID:\n$roomId');
-      appActions.joinRoom(roomId);
-    }
-  });
-}
-
 void useDeepLinkHandler() {
-  final appActions = useAppActions();
+  final joinRoom = useJoinRoom();
 
   useEffect(() {
     // ignore: avoid_types_on_closure_parameters
@@ -90,13 +53,10 @@ void useDeepLinkHandler() {
       final uri = Uri.parse(deepLink);
       Logger.e('PARSED URI:\n${uri.toString()}');
 
-      final isLinkTo = (path) {
-        return uri.path.contains(path) ?? false;
-      };
-
-      if (isLinkTo(DynamicLinks.join)) {
+      final path = uri.path;
+      if (path.contains(DynamicLinks.join)) {
         final roomId = uri.queryParameters[DynamicLinks.roomInvite];
-        appActions.joinRoom(roomId);
+        joinRoom(roomId);
       }
     };
 
@@ -113,53 +73,4 @@ void useDeepLinkHandler() {
 
     return subscription.cancel;
   }, []);
-}
-
-_AppActions useAppActions() {
-  final context = useContext();
-  final dispatch = useDispatcher();
-
-  return _AppActions(
-    joinRoom: (roomId) {
-      VoidCallback joinRoom;
-
-      final user = StoreProvider.state<AppState>(context).profile.currentUser;
-      final multiplayerGamesCount = getAvailableMultiplayerGamesCount(user);
-
-      joinRoom = () async {
-        if (multiplayerGamesCount <= 0) {
-          final response = await appRouter.goTo(const GamesAccessPage());
-          if (response == null) {
-            return;
-          }
-        }
-
-        dispatch(JoinRoomAction(roomId)).then((_) async {
-          await Future.delayed(const Duration(milliseconds: 50));
-
-          appRouter.goToRoot();
-          appRouter.goTo(RoomPage());
-        }).catchError((error) {
-          handleError(
-            context: context,
-            exception: error,
-            onRetry: joinRoom,
-            errorMessage: Strings.joinRoomError,
-          );
-
-          Logger.e('ERROR ON JOINING TO ROOM ($roomId):\n$error');
-        });
-      };
-
-      joinRoom();
-    },
-  );
-}
-
-class _AppActions {
-  _AppActions({
-    @required this.joinRoom,
-  });
-
-  final void Function(String) joinRoom;
 }

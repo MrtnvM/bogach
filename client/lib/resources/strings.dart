@@ -412,9 +412,7 @@ class Strings {
   static String get roomCreationFailed =>
       'При создании комнаты возникла ошибка';
   static String get join => 'Присоединиться';
-  static String get battleInvitationTitle => 'Вызываю тебя на дуэль!';
-  static String get battleInvitationDescription =>
-      'приглашает Вас сразиться в поединке капиталистов!';
+
   static String get joinRoomError =>
       'Не удалось подключиться к комнате игроков';
   static String get multiplayerGamesAvailable => 'Доступно игр:';
@@ -428,6 +426,13 @@ class Strings {
   static String get joinToRoom => 'Игра начнётся автоматически, '
       'как только участники присоединятся и лидер начнёт игру';
   static String get noPlayers => 'Сейчас нет игроков в сети';
+
+  // link messages
+  static String get battleInvitationTitle => 'Вызываю тебя на дуэль!';
+  static String get battleInvitationDescription =>
+      'приглашает Вас сразиться в поединке капиталистов!';
+  static String get addFriendLinkTitle => 'Присоединяйся ко мне в игре!';
+  static String get addFriendLinkDescription => 'хочет добавить вас в друзья';
 
   // Onboarding
   static String get onboardingTitle1 => 'Финансовая грамотность';

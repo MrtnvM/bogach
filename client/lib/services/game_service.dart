@@ -1,27 +1,19 @@
 import 'dart:convert';
 
 import 'package:cash_flow/api_client/cash_flow_api_client.dart';
-import 'package:cash_flow/app_configuration.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/models/domain/room/room.dart';
-import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/models/network/request/game/create_room_request_model.dart';
 import 'package:cash_flow/models/network/request/game/player_action_request_model.dart';
-import 'package:cash_flow/resources/dynamic_links.dart';
-import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/utils/error_handler.dart';
 import 'package:cash_flow/utils/mappers/new_game_mapper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
-import 'package:package_info/package_info.dart';
-import 'package:share/share.dart';
 
 class GameService {
   GameService({
@@ -142,50 +134,5 @@ class GameService {
         .get()
         .then((snapshot) => Room.fromJson(snapshot.data()))
         .catchError(recordError);
-  }
-
-  Future<void> shareRoomInviteLink({
-    @required String roomId,
-    @required UserProfile currentUser,
-  }) async {
-    final packageInfo = await PackageInfo.fromPlatform();
-    final packageName = packageInfo.packageName;
-
-    final deepLink = '${AppConfiguration.environment.dynamicLink.baseUrl}'
-        '?${DynamicLinks.roomInvite}=$roomId';
-
-    final parameters = DynamicLinkParameters(
-      uriPrefix: '${AppConfiguration.environment.dynamicLink.baseUrl}'
-          '${DynamicLinks.join}',
-      link: Uri.parse(deepLink),
-      androidParameters: AndroidParameters(
-        packageName: packageName,
-        minimumVersion: 1,
-      ),
-      iosParameters: IosParameters(
-        bundleId: packageName,
-        customScheme: AppConfiguration.environment.dynamicLink.customScheme,
-        appStoreId: '1531498628',
-      ),
-      googleAnalyticsParameters: null,
-      // TODO(Maxim): Add info
-      itunesConnectAnalyticsParameters: null,
-      // TODO(Maxim): Add info
-      socialMetaTagParameters: SocialMetaTagParameters(
-        title: Strings.battleInvitationTitle,
-        description:
-            '${currentUser.fullName} ${Strings.battleInvitationDescription}',
-      ),
-    );
-
-    Logger.i(parameters);
-
-    final shortLink = await parameters.buildShortLink();
-    final dynamicLink = shortLink.shortUrl.toString();
-    Logger.i('ROOM INVITE DYNAMIC LINK: $dynamicLink');
-    Logger.i('ROOM INVITE DYNAMIC LINK WARNINGS:');
-    Logger.i(shortLink.warnings.toList());
-
-    Share.share(dynamicLink);
   }
 }
