@@ -1,4 +1,4 @@
-import 'package:cash_flow/app/app_action_hooks/use_join_room.dart';
+import 'package:cash_flow/app/app_navigation_hooks/use_join_room.dart';
 import 'package:cash_flow/core/hooks/dynamic_link_subscription_hook.dart';
 import 'package:cash_flow/resources/dynamic_links.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
