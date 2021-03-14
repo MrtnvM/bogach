@@ -14,7 +14,7 @@ Future<String> getRoomInviteLink({
   final packageName = await getPackageName();
 
   final urlPrefix = '${AppConfiguration.environment.dynamicLink.baseUrl}'
-      '${DynamicLinks.addFriend}';
+      '${DynamicLinks.join}';
 
   final deepLink = '${AppConfiguration.environment.dynamicLink.baseUrl}'
       '?${DynamicLinks.roomInvite}=$roomId';

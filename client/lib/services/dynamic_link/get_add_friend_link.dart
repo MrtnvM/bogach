@@ -13,7 +13,7 @@ Future<String> getAddFriendLink({
   final packageName = await getPackageName();
 
   final linkPrefix = '${AppConfiguration.environment.dynamicLink.baseUrl}'
-      '${DynamicLinks.addFriend}';
+      '${DynamicLinks.join}';
 
   final deepLink = '${AppConfiguration.environment.dynamicLink.baseUrl}'
       '?${DynamicLinks.inviterId}=${currentUser.id}';
@@ -38,12 +38,6 @@ Future<String> getAddFriendLink({
     socialMetaTagParameters: socialMetaTagParameters,
   );
 
-  var shortLink;
-  try {
-    shortLink = await parameters.buildShortLink();
-  } catch (e) {
-    print(e);
-    const a = 2;
-  }
+  final shortLink = await parameters.buildShortLink();
   return shortLink.shortUrl.toString();
 }
