@@ -66,6 +66,24 @@
       "windows": {
         "program": "${workspaceFolder}/server/functions/node_modules/jest/bin/jest"
       }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest Current File - Node 12",
+      "program": "${workspaceFolder}/server/functions/node_modules/.bin/jest",
+      "args": [
+        "${fileBasenameNoExtension}",
+        "--config",
+        "./server/functions/jest.config.js"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "runtimeVersion": "12.20.2",
+      "disableOptimisticBPs": true,
+      "windows": {
+        "program": "${workspaceFolder}/server/functions/node_modules/jest/bin/jest"
+      }
     }
   ]
 }
