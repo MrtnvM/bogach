@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:notification_permissions/notification_permissions.dart';
 
 FirebaseMessaging useFirebaseMessaging() {
   return useMemoized(() => FirebaseMessaging());
@@ -20,6 +23,15 @@ void usePushNotificationsPermissionRequest({
 
     return null;
   }, []);
+}
+
+PermissionStatus usePushNotificationsSettings() {
+// Since firebase_messaging	^8.0.0-dev.15 you can get notifications settings:
+// NEW: [Apple] Added support for getNotificationSettings().
+// But it requires for update of firebase_core to	^0.7.0
+// So right now notification_permissions lib is used.
+  return useFuture(NotificationPermissions.getNotificationPermissionStatus())
+      .data;
 }
 
 void usePushTokenSubscription(void onTokenUpdated(String token), [List keys]) {

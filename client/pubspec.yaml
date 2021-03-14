@@ -39,12 +39,20 @@ dependencies:
   firebase_database: ^4.0.0
   firebase_messaging: ^7.0.0
   firebase_performance: ^0.4.0
-  cloud_firestore: ^0.14.0+2
+  firebase_storage: ^4.0.0
+  cloud_firestore: ^0.14.2
+
+  # Notifications
+  notification_permissions: ^0.4.8
 
   # Social
   flutter_facebook_login: ^3.0.0
   google_sign_in: ^4.5.1
   apple_sign_in: ^0.1.0
+
+  # Images
+  image_picker: ^0.6.7+21
+  image_cropper: ^1.3.1
 
   # UI
   flutter_hooks: ^0.12.0

@@ -11,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -23,6 +24,7 @@ class UserService {
   UserService({
     @required this.firebaseAuth,
     @required this.firestore,
+    @required this.cloudStorage,
     @required this.firebaseMessaging,
     @required this.userCache,
     @required this.apiClient,
@@ -33,6 +35,7 @@ class UserService {
 
   final FirebaseAuth firebaseAuth;
   final FirebaseFirestore firestore;
+  final FirebaseStorage cloudStorage;
   final FirebaseMessaging firebaseMessaging;
   final UserCache userCache;
   final CashFlowApiClient apiClient;
@@ -199,6 +202,35 @@ class UserService {
         apiClient.getUserProfile(userId).catchError((err) => null);
       }
     }).handleError(recordError, test: (e) => true);
+  }
+
+  Future<void> updateUser({
+    @required String userId,
+    String newName,
+    File newAvatar,
+  }) async {
+    // Maybe it's better to move image uploading into different service entity
+    final url = newAvatar != null
+        ? await cloudStorage
+            .ref()
+            .child('avatars/$userId/${DateTime.now()}')
+            .putFile(newAvatar)
+            .onComplete
+            .then((task) => task.ref.getDownloadURL())
+            .catchError(recordError)
+        : null;
+
+    final newInfo = {'userName': newName};
+
+    if (url != null) {
+      newInfo.addAll({'avatarUrl': url});
+    }
+
+    return firestore
+        .collection('users')
+        .doc(userId)
+        .update(newInfo)
+        .catchError(recordError);
   }
 
   Future<UserProfile> _createUserIfNeed(User user) async {
