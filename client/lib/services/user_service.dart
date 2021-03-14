@@ -238,9 +238,12 @@ class UserService {
     return updatedUser;
   }
 
-  Future<UserProfile> addFriend(String firstUserId, String secondUserId) {
+  Future<void> addFriends(
+    String userId,
+    List<String> usersAddToFriends,
+  ) {
     return apiClient
-        .addFriend(firstUserId, secondUserId)
+        .addFriends(userId, usersAddToFriends)
         .catchError(recordError);
   }
 }

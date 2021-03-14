@@ -130,12 +130,16 @@ class CashFlowApiClient extends ApiClient {
         (json) => json.map((item) => OnlineProfile.fromJson(item)).toList(),
       ));
 
-  Future<UserProfile> addFriend(String firstUserId, String secondUserId) =>
+  Future<void> addFriends(
+    String userId,
+    List<String> usersAddToFriends,
+  ) =>
       post(
-        path: 'addFriend',
+        path: 'addFriends',
         body: {
-          'firstUserId': firstUserId,
-          'secondUserId': secondUserId,
+          'userId': userId,
+          'usersAddToFriends': usersAddToFriends,
         },
+        validate: true,
       );
 }

@@ -33,8 +33,7 @@ class MainPage extends HookWidget {
     final user = useCurrentUser();
     final userId = user.id;
     final dispatch = useDispatcher();
-    // TODO remove
-    //dispatch(ShareAddFriendLinkAction());
+
     final setOnline = () {
       dispatch(SetUserOnlineAction(
         user: OnlineProfile(

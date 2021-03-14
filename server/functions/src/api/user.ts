@@ -3,7 +3,7 @@ import * as config from '../config';
 
 import { APIRequest } from '../core/api/request_data';
 import { UserProvider } from '../providers/user_provider';
-import { User, UserEntity } from '../models/domain/user/user';
+import { UserEntity } from '../models/domain/user/user';
 import { DAOs } from '../dao/daos';
 import { produce } from 'immer';
 
@@ -22,32 +22,49 @@ export const create = (daos: DAOs) => {
     await send(userProfile, response);
   });
 
-  const addFriend = https.onRequest(async (request, response) => {
+  const addFriends = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request, response);
-    apiRequest.checkMethod('POST');
 
-    const firstUserId = apiRequest.jsonField('firstUserId');
-    const secondUserId = apiRequest.jsonField('secondUserId');
+    const addFriendsExecution = async () => {
+      apiRequest.checkMethod('POST');
 
-    const firstUser = await userProvider.getUserProfile(firstUserId);
-    const updatedFirstUser = _addFriendToUser(firstUser, secondUserId);
-    await userProvider.updateUserProfile(updatedFirstUser);
+      const userId = apiRequest.jsonField('userId');
+      const usersAddToFriendsKey = 'usersAddToFriends';
+      const usersAddToFriends = apiRequest.jsonField(usersAddToFriendsKey);
 
-    const secondUser = await userProvider.getUserProfile(secondUserId);
-    const updatedSecondUser = _addFriendToUser(secondUser, firstUserId);
-    await userProvider.updateUserProfile(updatedSecondUser);
+      if (!Array.isArray(usersAddToFriends)) {
+        throw new Error(usersAddToFriendsKey + ' should be array');
+      }
 
-    await send(Promise.resolve(), response);
+      await _addFriendsToUser(userId, usersAddToFriends);
+      usersAddToFriends.forEach(async (userAddToFriend) => {
+        await _addFriendsToUser(userAddToFriend, [userId]);
+      });
+
+    };
+
+    await send(addFriendsExecution(), response);
   });
 
-  const _addFriendToUser = (user: User, friendId: UserEntity.Id) => {
-    return produce(user, (draft) => {
-      if (!user.friends?.includes(friendId)) {
-        const newFriends = user.friends;
-        newFriends?.push(friendId);
-        draft.friends = newFriends;
+  const _addFriendsToUser = async (userId: UserEntity.Id, usersToAdd: string[]) => {
+    const user = await userProvider.getUserProfile(userId);
+    const updatedUser = produce(user, (draft) => {
+      draft.friends = _updateFriendsList(user.friends || [], usersToAdd);
+      return draft;
+    });
+    await userProvider.updateUserProfile(updatedUser);
+
+    return;
+  };
+
+  const _updateFriendsList = (currentFriends: string[], usersToAdd: string[]): string[] => {
+    usersToAdd.forEach((userToAdd) => {
+      if (!currentFriends.includes(userToAdd)) {
+        currentFriends.push(userToAdd);
       }
     });
+
+    return currentFriends;
   };
 
   const send = <T>(data: Promise<T>, response: functions.Response) => {
@@ -67,5 +84,5 @@ export const create = (daos: DAOs) => {
       });
   };
 
-  return { getUserProfile, addFriend };
+  return { getUserProfile, addFriends };
 };

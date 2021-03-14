@@ -15,7 +15,10 @@ Function(String) useAddFriend() {
       // TODO save in storage
     }
 
-    dispatch(AddFriendAction(user.id, inviterId));
+    dispatch(AddFriendAction(
+      userId: user.id,
+      userAddToFriendId: inviterId,
+    ));
     // TODO clear storage if success
     // TODO schedule if fail
   };
