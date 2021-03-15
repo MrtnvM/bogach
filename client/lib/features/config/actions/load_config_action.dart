@@ -7,7 +7,7 @@ import 'package:get_it/get_it.dart';
 
 class LoadConfigAction extends BaseAction {
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final configService = GetIt.I.get<ConfigService>();
 
     final config = await configService.loadConfig();

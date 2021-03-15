@@ -14,7 +14,7 @@ class OnGameStateChangedAction extends BaseAction {
   final Game game;
 
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     return state.rebuild((s) {
       var newActiveGameState = s.game.activeGameState;
 

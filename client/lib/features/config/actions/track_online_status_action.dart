@@ -7,14 +7,16 @@ import 'package:flutter/foundation.dart';
 
 class TrackOnlineStatusAction extends BaseAction {
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     FirebaseDatabase.instance
         .reference()
         .child('.info/connected')
         .onValue
         .map((event) => event?.snapshot?.value == true)
         .listen((isOnline) {
-      dispatch(SetOnlineStatusAction(isOnline: isOnline));
+      scheduleMicrotask(() {
+        dispatch(SetOnlineStatusAction(isOnline: isOnline));
+      });
     });
 
     return null;
@@ -27,7 +29,7 @@ class SetOnlineStatusAction extends BaseAction {
   final bool isOnline;
 
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     return state.rebuild((s) {
       s.config = s.config.copyWith(isOnline: isOnline);
     });

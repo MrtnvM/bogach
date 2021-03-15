@@ -14,7 +14,7 @@ class CreateRoomGameAction extends BaseAction {
   bool abortDispatch() => state.profile.currentUser == null;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
     final roomId = state.multiplayer.currentRoom.id;
 

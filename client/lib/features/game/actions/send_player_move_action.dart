@@ -39,7 +39,7 @@ class SendPlayerMoveAction extends BaseAction {
   }
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
 
     final sendingEventIndex = state.game.currentGame?.currentEvents?.indexWhere(

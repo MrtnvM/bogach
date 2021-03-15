@@ -9,7 +9,7 @@ class IsPurchasesAvailableAction extends BaseAction {
   IsPurchasesAvailableAction();
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final purchaseService = GetIt.I.get<PurchaseService>();
 
     final isAvailable = await purchaseService.isAvailable();

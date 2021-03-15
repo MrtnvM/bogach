@@ -11,7 +11,7 @@ class SelectMultiplayerGameTemplateAction extends BaseAction {
   final GameTemplate gameTemplate;
 
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     return state.rebuild((s) {
       s.multiplayer.selectedGameTemplate = gameTemplate;
       s.multiplayer.currentRoom = null;

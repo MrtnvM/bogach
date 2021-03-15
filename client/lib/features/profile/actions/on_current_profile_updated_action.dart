@@ -10,7 +10,7 @@ class OnCurrentProfileUpdatedAction extends BaseAction {
   final UserProfile userProfile;
 
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     return state.rebuild((s) {
       s.profile.currentUser = userProfile;
     });

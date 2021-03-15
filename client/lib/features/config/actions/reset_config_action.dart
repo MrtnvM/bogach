@@ -6,7 +6,7 @@ import 'package:cash_flow/features/config/config_state.dart';
 
 class ResetConfigAction extends BaseAction {
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     return state.rebuild((s) {
       s.config = ConfigState.initial();
     });

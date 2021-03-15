@@ -12,7 +12,7 @@ class StartListeningPurchasesAction extends BaseAction {
   StartListeningPurchasesAction();
 
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     final purchaseService = GetIt.I.get<PurchaseService>();
     final action$ = GetIt.I.get<ReduxActionObserver>().onAction;
 
@@ -29,7 +29,7 @@ class StartListeningPurchasesAction extends BaseAction {
 
 class StopListeningPurchasesAction extends BaseAction {
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     return null;
   }
 }

@@ -9,7 +9,7 @@ class LogoutAction extends BaseAction {
   LogoutAction();
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
 
     await userService.logout();

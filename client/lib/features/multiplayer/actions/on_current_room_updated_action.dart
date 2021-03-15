@@ -14,7 +14,7 @@ class OnCurrentRoomUpdatedAction extends BaseAction {
   final Room room;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     return state.rebuild((s) {
       s.multiplayer.currentRoom = room;
     });
@@ -58,7 +58,7 @@ class _OnProfilesLoadedAction extends BaseAction {
   final List<UserProfile> userProfiles;
 
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     return state.rebuild((s) {
       s.multiplayer.userProfiles.addAll(userProfiles);
     });
