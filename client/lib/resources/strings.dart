@@ -420,7 +420,8 @@ class Strings {
       'У вас кончились игры.\nХотите купить ещё?';
   static String get multiplayerAdvertisingMessageWhenHaveGames =>
       'Хотите купить ещё игр?';
-  static String get asGift => 'в подарок';
+  static String get discount => 'Скидка';
+
   static String get inviteFriendsToStart =>
       'Пригласите друзей, чтобы начать игру';
   static String get joinToRoom => 'Игра начнётся автоматически, '
