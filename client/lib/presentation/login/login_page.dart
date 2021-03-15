@@ -1,15 +1,12 @@
 import 'package:apple_sign_in/apple_sign_in.dart';
-import 'package:built_value/built_value.dart';
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/base_action.dart';
-import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/features/multiplayer/actions/check_add_friends_storage.dart';
 import 'package:cash_flow/features/profile/actions/login_via_apple_action.dart';
 import 'package:cash_flow/features/profile/actions/login_via_facebook_action.dart';
 import 'package:cash_flow/features/profile/actions/login_via_google_action.dart';
-import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/main/main_page.dart';
@@ -37,7 +34,6 @@ class LoginPage extends HookWidget {
   Widget build(BuildContext context) {
     final isAuthorising = useState(false);
     final dispatch = useDispatcher();
-    final currentUser = useCurrentUser();
 
     setOrientationPortrait();
 
@@ -54,7 +50,6 @@ class LoginPage extends HookWidget {
               context,
               dispatch,
               isAuthorising,
-              currentUser,
             ),
             const Spacer(flex: 4),
             // _buildLaterButton(context),
@@ -68,7 +63,6 @@ class LoginPage extends HookWidget {
     BuildContext context,
     Future<void> dispatch(BaseAction action),
     ValueNotifier<bool> isAuthorising,
-    @nullable UserProfile currentUser,
   ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -102,7 +96,6 @@ class LoginPage extends HookWidget {
         _buildAppleSignInButton(
           dispatch,
           isAuthorising,
-          currentUser,
         ),
         const SizedBox(height: 32),
         buildPrivacyPolicy(context),
@@ -157,7 +150,6 @@ class LoginPage extends HookWidget {
   Widget _buildAppleSignInButton(
     Future<void> dispatch(BaseAction action),
     ValueNotifier<bool> isAuthorising,
-    @nullable UserProfile currentUser,
   ) {
     return FutureBuilder(
       future: AppleSignIn.isAvailable(),
