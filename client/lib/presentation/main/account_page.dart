@@ -4,10 +4,12 @@ import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/core/hooks/push_notification_hooks.dart';
 import 'package:cash_flow/features/profile/actions/logout_action.dart';
 import 'package:cash_flow/features/profile/actions/start_listening_profile_updates_action.dart';
 import 'package:cash_flow/features/profile/actions/update_user_action.dart';
+import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/presentation/main/widgets/friend_item.dart';
@@ -34,13 +36,6 @@ class AccountPage extends HookWidget {
     final dispatch = useDispatcher();
     final friends = useCurrentUserFriends();
 
-    final nativePermissionStatus = usePushNotificationsSettings();
-    final tempPermissionValue = useState(true);
-
-    final areNotificationsTurnedOn =
-        nativePermissionStatus == PermissionStatus.granted &&
-            tempPermissionValue.value;
-
     final newFullName = useState(user.fullName);
     final newAvatar = useState<File>(null);
 
@@ -51,111 +46,190 @@ class AccountPage extends HookWidget {
       (s) => s.getOperationState(Operation.updateUser),
     );
 
+    final mediaQuery = useAdaptiveMediaQueryData();
+    final size = useAdaptiveSize();
+
     return LoadableView(
       isLoading: updatingState.isInProgress,
       backgroundColor: ColorRes.black.withOpacity(0.2),
       indicatorColor: const AlwaysStoppedAnimation<Color>(ColorRes.mainGreen),
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          ListView(
-            padding: const EdgeInsets.all(24.0),
-            children: [
-              const SizedBox(height: 50),
-              EditableUserAvatar(
-                url: user.avatarUrl,
-                onChanged: (file) => newAvatar.value = file,
-                size: 200,
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                initialValue: user.fullName,
-                style: Styles.accountCommon,
-                onChanged: (newValue) => newFullName.value = newValue,
-                cursorColor: ColorRes.mainGreen,
-                decoration: InputDecoration(
-                  isDense: true,
-                  labelText: Strings.yourName,
-                  labelStyle: const TextStyle(
-                    color: ColorRes.mainGreen,
+      child: MediaQuery(
+        data: mediaQuery,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            ListView(
+              padding: EdgeInsets.all(size(24)),
+              children: [
+                SizedBox(
+                  height: size(200),
+                  width: double.infinity,
+                  child: Stack(
+                    children: [
+                      _buildAvatarWidget(
+                        user: user,
+                        newAvatar: newAvatar,
+                        avatarSize: size(150),
+                      ),
+                      _buildLogoutButton(context),
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    Strings.inviteNotifications,
-                    style: Styles.accountCommon,
-                  ),
-                  Checkbox(
-                    checkColor: ColorRes.mainBlack,
-                    activeColor: ColorRes.mainGreen,
-                    value: areNotificationsTurnedOn,
-                    onChanged: (newValue) {
-                      tempPermissionValue.value = newValue;
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30),
-              Text(
-                Strings.friends,
-                textAlign: TextAlign.start,
-                style: Styles.head.copyWith(color: ColorRes.mainBlack),
-              ),
-              const SizedBox(height: 12),
-              ...friends.map((item) => FriendItem(user: item)).toList(),
-            ],
-          ),
-          if (!isInfoTheSame)
-            Positioned(
-              bottom: 24,
-              left: 24,
-              right: 24,
-              child: ActionButton(
-                color: ColorRes.mainGreen,
-                text: Strings.saveChanges,
-                onPressed: () {
-                  DropFocus.drop();
-
-                  dispatch(
-                    UpdateUserAction(
-                      userId: user.id,
-                      fullName: newFullName.value,
-                      avatar: newAvatar.value,
+                SizedBox(height: size(24)),
+                TextFormField(
+                  initialValue: user.fullName,
+                  style: Styles.bodyBlack,
+                  onChanged: (newValue) => newFullName.value = newValue,
+                  cursorColor: ColorRes.mainGreen,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    labelText: Strings.yourName,
+                    labelStyle: const TextStyle(
+                      color: ColorRes.mainGreen,
                     ),
-                  );
+                  ),
+                ),
+                SizedBox(height: size(32)),
+                Text(
+                  Strings.friends,
+                  textAlign: TextAlign.start,
+                  style: Styles.head.copyWith(color: ColorRes.mainBlack),
+                ),
+                const SizedBox(height: 4),
+                const Divider(),
+                const SizedBox(height: 4),
+                ...friends.map((item) => FriendItem(user: item)).toList(),
+              ],
+            ),
+            if (!isInfoTheSame)
+              Positioned(
+                bottom: 24,
+                left: 24,
+                right: 24,
+                child: ActionButton(
+                  color: ColorRes.mainGreen,
+                  text: Strings.saveChanges,
+                  onPressed: () {
+                    DropFocus.drop();
+                    newAvatar.value = null;
 
-                  newAvatar.value = null;
-                },
+                    dispatch(
+                      UpdateUserAction(
+                        userId: user.id,
+                        fullName: newFullName.value,
+                        avatar: newAvatar.value,
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-          Positioned(
-            top: 50,
-            right: 0,
-            child: RaisedIconButton(
-              onPressed: () => _logout(context),
-              icon: Icons.logout,
-              iconColor: ColorRes.white,
-              buttonColor: ColorRes.red,
-            ),
-          ),
-        ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Positioned _buildAvatarWidget({
+    @required UserProfile user,
+    @required ValueNotifier<File> newAvatar,
+    @required double avatarSize,
+  }) {
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: EditableUserAvatar(
+        url: user.avatarUrl,
+        onChanged: (file) => newAvatar.value = file,
+        avatarSize: avatarSize,
+      ),
+    );
+  }
+
+  Positioned _buildLogoutButton(BuildContext context) {
+    return Positioned(
+      top: 12,
+      right: 0,
+      child: RaisedIconButton(
+        onPressed: () => _logout(context),
+        icon: Icons.logout,
+        iconColor: ColorRes.red,
+        buttonColor: ColorRes.transparent,
+        size: 24,
       ),
     );
   }
 
   void _logout(BuildContext context) {
-    context
-        .dispatch(StopListeningProfileUpdatesAction())
-        .then((value) => context.dispatch(LogoutAction()))
-        .then((_) => _onLogoutFinished())
-        .catchError((_) => _onLogoutFinished());
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            Strings.sureToGoOut,
+            style: Styles.bodyBlackBold,
+          ),
+          actions: [
+            FlatButton(
+              onPressed: appRouter.goBack,
+              child: const Text(Strings.cancel),
+            ),
+            FlatButton(
+              onPressed: () {
+                context
+                    .dispatch(StopListeningProfileUpdatesAction())
+                    .then((value) => context.dispatch(LogoutAction()))
+                    .then((_) => _onLogoutFinished())
+                    .catchError((_) => _onLogoutFinished());
+              },
+              child: Text(
+                Strings.goOut,
+                style: const TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _onLogoutFinished() {
     appRouter.startWith(LoginPage());
+  }
+}
+
+class NotificationsSettingsWidget extends HookWidget {
+  const NotificationsSettingsWidget({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final nativePermissionStatus = usePushNotificationsSettings();
+    final tempPermissionValue = useState(true);
+
+    final areNotificationsTurnedOn =
+        nativePermissionStatus == PermissionStatus.granted &&
+            tempPermissionValue.value;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Text(
+            Strings.inviteNotifications,
+            style: Styles.bodyBlack.copyWith(
+              fontSize: 16,
+            ),
+          ),
+        ),
+        Checkbox(
+          checkColor: ColorRes.mainBlack,
+          activeColor: ColorRes.mainGreen,
+          value: areNotificationsTurnedOn,
+          onChanged: (newValue) {
+            tempPermissionValue.value = newValue;
+          },
+        ),
+      ],
+    );
   }
 }

@@ -1,19 +1,23 @@
+import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class FriendItem extends StatelessWidget {
+class FriendItem extends HookWidget {
   const FriendItem({@required this.user});
 
   final UserProfile user;
 
   @override
   Widget build(BuildContext context) {
+    final size = useAdaptiveSize();
+
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(vertical: 4),
+      contentPadding: const EdgeInsets.all(0),
       title: Text(
         user.fullName,
         style: Styles.friendName,
@@ -23,7 +27,7 @@ class FriendItem extends StatelessWidget {
       ),
       leading: UserAvatar(
         url: user.avatarUrl,
-        size: 55,
+        size: size(48),
         borderColor: user.isOnline ? ColorRes.mainGreen : ColorRes.transparent,
       ),
     );

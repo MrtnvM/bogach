@@ -18,15 +18,20 @@ class RaisedIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      padding: const EdgeInsets.all(6),
-      shape: const CircleBorder(),
-      onPressed: onPressed,
-      color: buttonColor,
-      child: Icon(
-        icon,
-        size: size,
-        color: iconColor,
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: BorderRadius.circular(size),
+      child: Container(
+        padding: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: buttonColor,
+          borderRadius: BorderRadius.circular(size),
+        ),
+        child: Icon(
+          icon,
+          size: size,
+          color: iconColor,
+        ),
       ),
     );
   }

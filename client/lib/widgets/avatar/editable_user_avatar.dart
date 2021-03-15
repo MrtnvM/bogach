@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/utils/image_picker.dart';
 import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
 import 'package:cash_flow/widgets/buttons/raised_icon_button.dart';
@@ -12,19 +13,20 @@ class EditableUserAvatar extends HookWidget {
   const EditableUserAvatar({
     @required this.url,
     this.onChanged,
-    this.size = 40,
+    this.avatarSize = 40,
   });
 
   final String url;
   final void Function(File imageFile) onChanged;
-  final double size;
+  final double avatarSize;
 
   @override
   Widget build(BuildContext context) {
     final pickedImage = useState<File>(null);
 
-    useMemoized(() {
+    useEffect(() {
       pickedImage.value = null;
+      return null;
     }, [url]);
 
     Future<void> pickImage() async {
@@ -42,7 +44,7 @@ class EditableUserAvatar extends HookWidget {
             shape: const CircleBorder(),
             child: UserAvatar(
               url: url,
-              size: size,
+              size: avatarSize,
               borderWidth: 0,
               pickedAvatar: pickedImage.value != null
                   ? FileImage(pickedImage.value)
@@ -50,11 +52,14 @@ class EditableUserAvatar extends HookWidget {
             ),
           ),
           Positioned(
-            top: 0,
-            right: 0,
+            top: avatarSize * 0.05,
+            right: avatarSize - avatarSize * 0.82,
             child: RaisedIconButton(
               onPressed: pickImage,
               icon: Icons.edit,
+              iconColor: Colors.white,
+              buttonColor: ColorRes.mainGreen,
+              size: avatarSize * 0.15,
             ),
           ),
         ],
