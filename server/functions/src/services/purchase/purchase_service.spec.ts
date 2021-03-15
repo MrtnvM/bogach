@@ -90,7 +90,7 @@ describe('Purchase Service', () => {
     when(mockUserProvider.getUserProfile(userId)).thenResolve(initialProfile);
     when(mockUserProvider.getUserPurchases(userId)).thenResolve([]);
 
-    const oneGamePurchase = getPurchase({ productId: Purchases.multiplayer1ProductId });
+    const oneGamePurchase = getPurchase({ productId: Purchases.depricatedMultiplayer1ProductId });
     await purchaseService.updatePurchases(userId, [oneGamePurchase]);
 
     const [newUserProfile] = capture(mockUserProvider.updateUserProfile).last();
@@ -113,7 +113,7 @@ describe('Purchase Service', () => {
     when(mockUserProvider.getUserProfile(userId)).thenResolve(initialProfile);
     when(mockUserProvider.getUserPurchases(userId)).thenResolve([]);
 
-    const fiveGamePurchase = getPurchase({ productId: Purchases.multiplayer5ProductId });
+    const fiveGamePurchase = getPurchase({ productId: Purchases.depricatedMultiplayer5ProductId });
     await purchaseService.updatePurchases(userId, [fiveGamePurchase]);
 
     const [newUserProfile] = capture(mockUserProvider.updateUserProfile).last();
@@ -136,7 +136,7 @@ describe('Purchase Service', () => {
     when(mockUserProvider.getUserProfile(userId)).thenResolve(initialProfile);
     when(mockUserProvider.getUserPurchases(userId)).thenResolve([]);
 
-    const tenGamePurchase = getPurchase({ productId: Purchases.multiplayer10ProductId });
+    const tenGamePurchase = getPurchase({ productId: Purchases.depricatedMultiplayer10ProductId });
     await purchaseService.updatePurchases(userId, [tenGamePurchase]);
 
     const [newUserProfile] = capture(mockUserProvider.updateUserProfile).last();
@@ -206,11 +206,23 @@ describe('Purchase Service', () => {
 
   test('Calculation of purchase profile', () => {
     const { getPurchase, getPurchaseProfile } = TestData;
+
     const questPurchase = getPurchase({ productId: Purchases.questsAccessProductId });
-    const oneMPGamePurchase = getPurchase({ productId: Purchases.multiplayer1ProductId });
-    const fiveMPGamePurchase = getPurchase({ productId: Purchases.multiplayer5ProductId });
-    const tenMPGamePurchase = getPurchase({ productId: Purchases.multiplayer10ProductId });
     const randomPurchase = getPurchase({ productId: 'random_purchase' });
+
+    const depricatedOneMPGamePurchase = getPurchase({
+      productId: Purchases.depricatedMultiplayer1ProductId,
+    });
+    const depricatedFiveMPGamePurchase = getPurchase({
+      productId: Purchases.depricatedMultiplayer5ProductId,
+    });
+    const depricatedTenMPGamePurchase = getPurchase({
+      productId: Purchases.depricatedMultiplayer10ProductId,
+    });
+
+    const oneMPGamePurchase = getPurchase({ productId: Purchases.multiplayerGames1 });
+    const tenMPGamePurchase = getPurchase({ productId: Purchases.multiplayerGames10 });
+    const twentyFiveMPGamePurchase = getPurchase({ productId: Purchases.multiplayerGames25 });
 
     const profile1 = purchaseService.recalculatePurchaseProfile([]);
     expect(profile1).toEqual(PurchaseProfileEntity.initialPurchaseProfile);
@@ -219,22 +231,22 @@ describe('Purchase Service', () => {
     const expectedProfile2 = getPurchaseProfile({ isQuestsAvailable: true });
     expect(profile2).toEqual(expectedProfile2);
 
-    const profile3 = purchaseService.recalculatePurchaseProfile([oneMPGamePurchase]);
+    const profile3 = purchaseService.recalculatePurchaseProfile([depricatedOneMPGamePurchase]);
     const expectedProfile3 = getPurchaseProfile({ boughtMultiplayerGamesCount: 4 });
     expect(profile3).toEqual(expectedProfile3);
 
-    const profile4 = purchaseService.recalculatePurchaseProfile([fiveMPGamePurchase]);
+    const profile4 = purchaseService.recalculatePurchaseProfile([depricatedFiveMPGamePurchase]);
     const expectedProfile4 = getPurchaseProfile({ boughtMultiplayerGamesCount: 9 });
     expect(profile4).toEqual(expectedProfile4);
 
-    const profile5 = purchaseService.recalculatePurchaseProfile([tenMPGamePurchase]);
+    const profile5 = purchaseService.recalculatePurchaseProfile([depricatedTenMPGamePurchase]);
     const expectedProfile5 = getPurchaseProfile({ boughtMultiplayerGamesCount: 15 });
     expect(profile5).toEqual(expectedProfile5);
 
     const profile6 = purchaseService.recalculatePurchaseProfile([
-      oneMPGamePurchase,
-      fiveMPGamePurchase,
-      tenMPGamePurchase,
+      depricatedOneMPGamePurchase,
+      depricatedFiveMPGamePurchase,
+      depricatedTenMPGamePurchase,
       questPurchase,
       randomPurchase,
     ]);
@@ -243,5 +255,17 @@ describe('Purchase Service', () => {
       boughtMultiplayerGamesCount: 22,
     });
     expect(profile6).toEqual(expectedProfile6);
+
+    const profile7 = purchaseService.recalculatePurchaseProfile([oneMPGamePurchase]);
+    const expectedProfile7 = getPurchaseProfile({ boughtMultiplayerGamesCount: 4 });
+    expect(profile7).toEqual(expectedProfile7);
+
+    const profile8 = purchaseService.recalculatePurchaseProfile([tenMPGamePurchase]);
+    const expectedProfile8 = getPurchaseProfile({ boughtMultiplayerGamesCount: 13 });
+    expect(profile8).toEqual(expectedProfile8);
+
+    const profile9 = purchaseService.recalculatePurchaseProfile([twentyFiveMPGamePurchase]);
+    const expectedProfile9 = getPurchaseProfile({ boughtMultiplayerGamesCount: 28 });
+    expect(profile9).toEqual(expectedProfile9);
   });
 });

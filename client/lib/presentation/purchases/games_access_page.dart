@@ -198,105 +198,152 @@ class _PurchaseGameList extends HookWidget {
       );
     }
 
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 400),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _PurchaseWidget(
+            purchase: MultiplayerGamePurchases.oneGame,
+            title: '1 ${Strings.games(1)}',
+            price: '15 ₽',
+            buy: buyMultiplayerGame,
+          ),
+          _PurchaseWidget(
+            purchase: MultiplayerGamePurchases.tenGames,
+            title: '10 ${Strings.games(10)}',
+            price: '99 ₽',
+            oldPrice: '150 ₽',
+            discont: 34,
+            buy: buyMultiplayerGame,
+            isDefaultOption: true,
+          ),
+          _PurchaseWidget(
+            purchase: MultiplayerGamePurchases.twentyFiveGames,
+            title: '25 ${Strings.games(25)}',
+            price: '179 ₽',
+            oldPrice: '375 ₽',
+            discont: 52,
+            buy: buyMultiplayerGame,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PurchaseWidget extends StatelessWidget {
+  const _PurchaseWidget({
+    Key key,
+    @required this.purchase,
+    @required this.title,
+    @required this.price,
+    @required this.buy,
+    this.oldPrice,
+    this.discont,
+    this.isDefaultOption = false,
+  }) : super(key: key);
+
+  final MultiplayerGamePurchases purchase;
+  final String title;
+  final String price;
+  final String oldPrice;
+  final int discont;
+  final void Function(MultiplayerGamePurchases) buy;
+  final bool isDefaultOption;
+
+  @override
+  Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
     final isSmallScreen = screenWidth < 350;
 
-    return MediaQuery(
-      data: mediaQuery.copyWith(
-        textScaleFactor: isSmallScreen ? 0.8 : 1,
-      ),
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 400),
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildPurchase(
-              purchase: MultiplayerGamePurchases.oneGame,
-              title: '1 ${Strings.games(1)}',
-              price: '15 ₽',
-              buy: buyMultiplayerGame,
-              isCompactVersion: isSmallScreen,
-            ),
-            _buildPurchase(
-              purchase: MultiplayerGamePurchases.fiveGames,
-              title: '5 ${Strings.games(5)}',
-              price: '75 ₽',
-              gift: '+1',
-              buy: buyMultiplayerGame,
-              isCompactVersion: isSmallScreen,
-            ),
-            _buildPurchase(
-              purchase: MultiplayerGamePurchases.tenGames,
-              title: '10 ${Strings.games(10)}',
-              price: '149 ₽',
-              gift: '+2',
-              buy: buyMultiplayerGame,
-              isCompactVersion: isSmallScreen,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+    final textScaleFactor = isSmallScreen ? 0.8 : 1.0;
+    final scale = isDefaultOption ? 1.0 : 0.9;
 
-  Widget _buildPurchase({
-    MultiplayerGamePurchases purchase,
-    String title,
-    String price,
-    String gift,
-    void Function(MultiplayerGamePurchases) buy,
-    bool isCompactVersion = false,
-  }) {
-    return Container(
-      height: isCompactVersion ? 184 : 200,
-      width: isCompactVersion ? 94 : 110,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-      decoration: BoxDecoration(
-        color: ColorRes.white.withAlpha(50),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      alignment: Alignment.topCenter,
-      child: Column(
-        children: [
-          Text(
-            title,
-            style: Styles.bodyWhiteBold.copyWith(
-              fontSize: 15,
-              color: Colors.white.withAlpha(240),
-            ),
+    return MediaQuery(
+      data: mediaQuery.copyWith(textScaleFactor: textScaleFactor),
+      child: Transform.scale(
+        scale: scale,
+        child: Container(
+          height: isSmallScreen ? 196 : 210,
+          width: isSmallScreen ? 100 : 110,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+          decoration: BoxDecoration(
+            color: ColorRes.white.withAlpha(50),
+            borderRadius: BorderRadius.circular(8),
           ),
-          const Divider(),
-          const SizedBox(height: 8),
-          Text(
-            price ?? '',
-            style: Styles.bodyWhiteBold.copyWith(
-              fontSize: 17,
-            ),
-          ),
-          if (gift != null) ...[
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(Images.gift, height: 26, width: 26),
+          alignment: Alignment.topCenter,
+          child: Column(
+            children: [
+              Text(
+                title,
+                style: Styles.bodyWhiteBold.copyWith(
+                  fontSize: 15,
+                  color: Colors.white.withAlpha(240),
+                ),
+              ),
+              const Divider(),
+              const SizedBox(height: 8),
+              Text(
+                price ?? '',
+                style: Styles.bodyWhiteBold.copyWith(
+                  fontSize: 17,
+                ),
+              ),
+              if (oldPrice != null) ...[
+                const SizedBox(height: 14),
+                Text(
+                  '$oldPrice',
+                  style: Styles.body1.copyWith(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: ColorRes.red,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+                if (discont != null) ...[
+                  const SizedBox(height: 6),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.purpleAccent,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: const EdgeInsets.fromLTRB(6, 2, 6, 4),
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Скидка ',
+                            style: Styles.body1.copyWith(
+                              fontSize: 11 * textScaleFactor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          TextSpan(
+                            text: '$discont%',
+                            style: Styles.body1.copyWith(
+                              fontSize: 11 * textScaleFactor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ],
-            ),
-            const SizedBox(height: 4),
-            Text(
-              '$gift ${Strings.asGift}',
-              style: Styles.body1.copyWith(fontSize: 12.5),
-            ),
-          ],
-          const Spacer(),
-          RaisedButton(
-            onPressed: () => buy(purchase),
-            color: ColorRes.mainGreen,
-            child: Text(Strings.select, style: Styles.bodyWhiteBold),
+              const Spacer(),
+              RaisedButton(
+                onPressed: () => buy(purchase),
+                color: ColorRes.mainGreen,
+                child: Text(Strings.select, style: Styles.bodyWhiteBold),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
