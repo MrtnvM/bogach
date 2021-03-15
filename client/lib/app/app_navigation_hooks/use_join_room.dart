@@ -21,7 +21,7 @@ Function(String) useJoinRoom() {
 
     final user = StoreProvider.state<AppState>(context).profile.currentUser;
     if (user == null) {
-      // TODO возникает если незалогиненный пользователь открыл линку
+      // TODO(someone): возникает если незалогиненный пользователь открыл линку
       // в будущем подумать, может добавить обработку действия после логина
       return;
     }

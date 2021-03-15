@@ -18,7 +18,7 @@ class JoinRoomAction extends BaseAction {
   Operation get operationKey => Operation.joinRoom;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
     final userService = GetIt.I.get<UserService>();
 

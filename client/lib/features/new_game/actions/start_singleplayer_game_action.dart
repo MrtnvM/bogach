@@ -29,7 +29,7 @@ class StartSinglePlayerGameAction extends BaseAction {
   }
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
     final userId = state.profile.currentUser.id;
 

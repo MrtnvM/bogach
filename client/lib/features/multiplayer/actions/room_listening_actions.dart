@@ -15,7 +15,7 @@ class StartListeningRoomUpdatesAction extends BaseAction {
   final String roomId;
 
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     final gameService = GetIt.I.get<GameService>();
     final action$ = GetIt.I.get<ReduxActionObserver>().onAction;
 
@@ -41,7 +41,7 @@ class StopListeningRoomUpdatesAction extends BaseAction {
   final String roomId;
 
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     return state.rebuild((s) {
       s.multiplayer.currentRoom = null;
     });

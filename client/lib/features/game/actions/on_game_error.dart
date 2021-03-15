@@ -11,7 +11,7 @@ class OnGameErrorAction extends BaseAction {
   final dynamic error;
 
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     return state.rebuild((s) {
       setErrorOperationStateIfNeeded(Operation.createGame, s);
       setErrorOperationStateIfNeeded(Operation.createQuestGame, s);

@@ -15,7 +15,7 @@ class ShareRoomInviteLinkAction extends BaseAction {
   Operation get operationKey => Operation.shareRoomInviteLink;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final link = await getRoomInviteLink(
       roomId: roomId,
       currentUser: state.profile.currentUser,

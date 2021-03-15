@@ -15,7 +15,7 @@ class BuyConsumableAction extends BaseAction {
   final ProductDetails product;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final purchaseService = GetIt.I.get<PurchaseService>();
     await purchaseService.buyConsumable(productDetails: product);
 
@@ -31,7 +31,7 @@ class BuyNonConsumableAction extends BaseAction {
   final ProductDetails product;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final purchaseService = GetIt.I.get<PurchaseService>();
     await purchaseService.buyNonConsumable(productDetails: product);
 

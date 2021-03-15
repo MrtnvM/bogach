@@ -41,11 +41,11 @@ export namespace StockEventCandlesDataSource {
   ): StockEvent.Candle[] => {
     return serializableCandles.map((serializableCandle) => {
       const candle: StockEvent.Candle = {
-        low: serializableCandle.l,
-        high: serializableCandle.h,
-        open: serializableCandle.o,
-        close: serializableCandle.c,
-        time: serializableCandle.time,
+        low: serializableCandle.l ?? serializableCandle['Low'],
+        high: serializableCandle.h ?? serializableCandle['High'],
+        open: serializableCandle.o ?? serializableCandle['Open'],
+        close: serializableCandle.c ?? serializableCandle['Close'],
+        time: serializableCandle.time ?? serializableCandle['Time'],
       };
 
       return candle;

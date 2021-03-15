@@ -65,9 +65,13 @@ export class PurchaseService {
     const isQuestsAvailable = hasPurchase(Purchases.questsAccessProductId);
 
     const multiplayerGamePurchases: { [productId: string]: number } = {
-      [Purchases.multiplayer1ProductId]: 1,
-      [Purchases.multiplayer5ProductId]: 6,
-      [Purchases.multiplayer10ProductId]: 12,
+      [Purchases.depricatedMultiplayer1ProductId]: 1,
+      [Purchases.depricatedMultiplayer5ProductId]: 6,
+      [Purchases.depricatedMultiplayer10ProductId]: 12,
+
+      [Purchases.multiplayerGames1]: 1,
+      [Purchases.multiplayerGames10]: 10,
+      [Purchases.multiplayerGames25]: 25,
     };
 
     const boughtMultiplayerGamesCount = allPurchases

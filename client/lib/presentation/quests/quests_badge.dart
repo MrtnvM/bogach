@@ -10,13 +10,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class QuestsBadge extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final questsCount = useGlobalState((s) => s.newGame.quests?.items?.length);
+    final questsCount =
+        useGlobalState((s) => s.newGame.quests?.items?.length) ?? 0;
     final user = useCurrentUser();
-    final currentIndex = user?.currentQuestIndex;
-
-    if (questsCount == null || currentIndex == null) {
-      return Container();
-    }
+    final currentIndex = user?.currentQuestIndex ?? 0;
 
     return Badge(
       title: '$currentIndex / ${questsCount == 0 ? '-' : questsCount}',

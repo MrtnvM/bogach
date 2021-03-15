@@ -6,6 +6,7 @@ import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/business/buy/model/business_buy_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/business/sell/ui/business_sell_game_event_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/business/sell/ui/business_sell_items/businesses_to_sell_widget.dart';
+import 'package:cash_flow/presentation/gameboard/gameboard_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_content.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
@@ -30,8 +31,8 @@ class BusinessSellGameEventWidget extends HookWidget {
       event: event,
       businessId: checkedBusinessId.value,
     );
+    final skipPlayerAction = useSkipAction(event.id);
     final businessDialogInfoModel = useBusinessSellInfoDialogModel();
-    final dispatch = useDispatcher();
 
     return Column(
       children: <Widget>[
@@ -88,7 +89,7 @@ class BusinessSellGameEventWidget extends HookWidget {
             );
           },
           skip: () {
-            dispatch(SendPlayerMoveAction(eventId: event.id));
+            skipPlayerAction();
 
             AnalyticsSender.skipSellBusiness(
               event.name,
