@@ -1,11 +1,15 @@
 import 'package:apple_sign_in/apple_sign_in.dart';
+import 'package:built_value/built_value.dart';
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/base_action.dart';
+import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
+import 'package:cash_flow/features/multiplayer/actions/check_add_friends_storage.dart';
 import 'package:cash_flow/features/profile/actions/login_via_apple_action.dart';
 import 'package:cash_flow/features/profile/actions/login_via_facebook_action.dart';
 import 'package:cash_flow/features/profile/actions/login_via_google_action.dart';
+import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/main/main_page.dart';
@@ -33,6 +37,7 @@ class LoginPage extends HookWidget {
   Widget build(BuildContext context) {
     final isAuthorising = useState(false);
     final dispatch = useDispatcher();
+    final currentUser = useCurrentUser();
 
     setOrientationPortrait();
 
@@ -49,6 +54,7 @@ class LoginPage extends HookWidget {
               context,
               dispatch,
               isAuthorising,
+              currentUser,
             ),
             const Spacer(flex: 4),
             // _buildLaterButton(context),
@@ -62,6 +68,7 @@ class LoginPage extends HookWidget {
     BuildContext context,
     Future<void> dispatch(BaseAction action),
     ValueNotifier<bool> isAuthorising,
+    @nullable UserProfile currentUser,
   ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -73,6 +80,7 @@ class LoginPage extends HookWidget {
           context: context,
           dispatch: dispatch,
           isAuthorising: isAuthorising,
+          currentUser: currentUser,
         ),
         const SizedBox(height: 16),
         _buildSocialMedias(
@@ -82,6 +90,7 @@ class LoginPage extends HookWidget {
           context: context,
           dispatch: dispatch,
           isAuthorising: isAuthorising,
+          currentUser: currentUser,
         ),
         const SizedBox(height: 16),
         // TODO(Maxim): Implement authorisation through VK
@@ -95,6 +104,7 @@ class LoginPage extends HookWidget {
         _buildAppleSignInButton(
           dispatch,
           isAuthorising,
+          currentUser,
         ),
         const SizedBox(height: 32),
         buildPrivacyPolicy(context),
@@ -109,6 +119,7 @@ class LoginPage extends HookWidget {
     @required BuildContext context,
     @required ValueNotifier<bool> isAuthorising,
     @required Future<void> dispatch(BaseAction action),
+    @required @nullable UserProfile currentUser,
   }) {
     return FlatButton(
       color: Colors.white,
@@ -117,6 +128,7 @@ class LoginPage extends HookWidget {
         context,
         dispatch,
         isAuthorising,
+        currentUser,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4.0),
@@ -149,6 +161,7 @@ class LoginPage extends HookWidget {
   Widget _buildAppleSignInButton(
     Future<void> dispatch(BaseAction action),
     ValueNotifier<bool> isAuthorising,
+    @nullable UserProfile currentUser,
   ) {
     return FutureBuilder(
       future: AppleSignIn.isAvailable(),
@@ -161,6 +174,7 @@ class LoginPage extends HookWidget {
                   context: context,
                   dispatch: dispatch,
                   isAuthorising: isAuthorising,
+                  currentUser: currentUser,
                 )
               : Container(),
     );
@@ -214,6 +228,7 @@ class LoginPage extends HookWidget {
     BuildContext context,
     Future<void> dispatch(BaseAction action),
     ValueNotifier<bool> isAuthorising,
+    @nullable UserProfile currentUser,
   ) {
     switch (type) {
       case _SocialButtonType.fb:
@@ -221,6 +236,7 @@ class LoginPage extends HookWidget {
           context,
           dispatch,
           isAuthorising,
+          currentUser,
         );
         break;
 
@@ -229,6 +245,7 @@ class LoginPage extends HookWidget {
           context,
           dispatch,
           isAuthorising,
+          currentUser,
         );
         break;
 
@@ -237,6 +254,7 @@ class LoginPage extends HookWidget {
           context,
           dispatch,
           isAuthorising,
+          currentUser,
         );
         break;
 
@@ -251,6 +269,7 @@ class LoginPage extends HookWidget {
     BuildContext context,
     Future<void> dispatch(BaseAction action),
     ValueNotifier<bool> isAuthorising,
+    @nullable UserProfile currentUser,
   ) async {
     isAuthorising.value = true;
 
@@ -264,6 +283,7 @@ class LoginPage extends HookWidget {
           dispatch,
           isAuthorising,
           result.accessToken.token,
+          currentUser,
         );
         break;
 
@@ -283,12 +303,13 @@ class LoginPage extends HookWidget {
     Future<void> dispatch(BaseAction action),
     ValueNotifier<bool> isAuthorising,
     String token,
+    @nullable UserProfile currentUser,
   ) {
     final action = LoginViaFacebookAction(token: token);
 
     dispatch(action)
         .whenComplete(() => isAuthorising.value = false)
-        .then((value) => _onLoginSuccess())
+        .then((value) => _onLoginSuccess(dispatch))
         .catchError((error) => _onLoginError(context, error, isAuthorising));
   }
 
@@ -308,6 +329,7 @@ class LoginPage extends HookWidget {
     BuildContext context,
     Future<void> dispatch(BaseAction action),
     ValueNotifier<bool> isAuthorising,
+    @nullable UserProfile currentUser,
   ) async {
     final account = await GoogleSignIn().signIn().catchError((e) {
       Logger.e('Google Auth Error', e);
@@ -331,6 +353,7 @@ class LoginPage extends HookWidget {
       isAuthorising: isAuthorising,
       token: authentication.accessToken,
       idToken: authentication.idToken,
+      currentUser: currentUser,
     );
   }
 
@@ -340,6 +363,7 @@ class LoginPage extends HookWidget {
     @required ValueNotifier<bool> isAuthorising,
     @required String token,
     @required String idToken,
+    @required @nullable UserProfile currentUser,
   }) {
     final action = LoginViaGoogleAction(
       accessToken: token,
@@ -347,7 +371,7 @@ class LoginPage extends HookWidget {
     );
 
     dispatch(action)
-        .then((value) => _onLoginSuccess())
+        .then((value) => _onLoginSuccess(dispatch))
         .catchError((error) => _onLoginError(context, error, isAuthorising));
   }
 
@@ -355,6 +379,7 @@ class LoginPage extends HookWidget {
     BuildContext context,
     Future<void> dispatch(BaseAction action),
     ValueNotifier<bool> isAuthorising,
+    @nullable UserProfile currentUser,
   ) async {
     final result = await AppleSignIn.performRequests([
       const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
@@ -379,7 +404,7 @@ class LoginPage extends HookWidget {
         );
 
         dispatch(action) //
-            .then((value) => _onLoginSuccess())
+            .then((value) => _onLoginSuccess(dispatch))
             .catchError((e) => _onLoginError(context, e, isAuthorising));
 
         break;
@@ -407,8 +432,11 @@ class LoginPage extends HookWidget {
     }
   }
 
-  void _onLoginSuccess() {
+  void _onLoginSuccess(
+    Future<void> dispatch(BaseAction action),
+  ) {
     AnalyticsSender.signIn();
+    dispatch(CheckAddFriendsStorage());
     appRouter.startWith(const MainPage());
   }
 }

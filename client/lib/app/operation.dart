@@ -25,6 +25,7 @@ enum Operation {
   shareRoomInviteLink,
   setOnline,
   addFriend,
+  addFriendToStorage,
 
   // Purchase
   queryProductDetails,

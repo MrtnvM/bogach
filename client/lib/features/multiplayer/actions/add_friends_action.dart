@@ -10,16 +10,17 @@ import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 
-class AddFriendAction extends BaseAction {
-  AddFriendAction({
+class AddFriendsAction extends BaseAction {
+  // TODO(Team): может не отправиться значение, если пользователь перешел
+  // по динамик линке, мы пытались отправить запрос на бек, не смогли,
+  // а затем пользователь закрыл приложение. Запрос отправится только если
+  // пользователь перейдет по динамик линке еще раз
+  AddFriendsAction({
     @required this.userId,
-    @required this.userAddToFriendId,
     this.retryCount = 0,
-  })  : assert(userId != null),
-        assert(userAddToFriendId != null);
+  }) : assert(userId != null);
 
   final String userId;
-  final String userAddToFriendId;
   final int retryCount;
 
   static const int _retryDelaySeconds = 2;
@@ -32,17 +33,18 @@ class AddFriendAction extends BaseAction {
     final userService = GetIt.I.get<UserService>();
     final usersAddToFriendsStorage = GetIt.I.get<UsersAddToFriendsStorage>();
 
-    await usersAddToFriendsStorage.addUserId(userAddToFriendId);
     final addToFriendsIds = usersAddToFriendsStorage.getUsersAddToFriends();
+    if (addToFriendsIds.isEmpty) {
+      return state;
+    }
 
     await userService.addFriends(userId, addToFriendsIds).then((result) {
       usersAddToFriendsStorage.deleteUserIds(addToFriendsIds);
     }, onError: (error) async {
       Logger.e('Sending add friends request error', error);
 
-      final action = AddFriendAction(
+      final action = AddFriendsAction(
         userId: userId,
-        userAddToFriendId: userAddToFriendId,
         retryCount: retryCount + 1,
       );
       await _resendActionWithDelay(action);
@@ -51,7 +53,7 @@ class AddFriendAction extends BaseAction {
     return state;
   }
 
-  Future<void> _resendActionWithDelay(AddFriendAction action) async {
+  Future<void> _resendActionWithDelay(AddFriendsAction action) async {
     final delayDuration = Duration(
       seconds: pow(_retryDelaySeconds, action.retryCount),
     );

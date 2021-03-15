@@ -39,4 +39,8 @@ class UsersAddToFriendsStorage {
 
     await preferences.setStringList(_usersAddToFriendsKey, newFriends);
   }
+
+  Future<void> clear() async {
+    await preferences.setStringList(_usersAddToFriendsKey, List.empty());
+  }
 }
