@@ -484,4 +484,10 @@ class Strings {
   static String get tutorialGoNext6 => 'Хорошо';
   static String get tutorialGoNext7 => 'Ок';
   static String get tutorialFinish => 'Погнали!';
+
+  // Account
+  static String get yourName => 'Ваше имя';
+  static String get inviteNotifications => 'Уведомления о приглашениях';
+  static String get friends => 'Друзья';
+  static String get saveChanges => 'Сохранить изменения';
 }

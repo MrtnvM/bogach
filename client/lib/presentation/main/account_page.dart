@@ -12,6 +12,7 @@ import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/presentation/main/widgets/friend_item.dart';
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/avatar/editable_user_avatar.dart';
 import 'package:cash_flow/widgets/buttons/action_button.dart';
@@ -70,10 +71,10 @@ class AccountPage extends HookWidget {
                 style: Styles.accountCommon,
                 onChanged: (newValue) => newFullName.value = newValue,
                 cursorColor: ColorRes.mainGreen,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   isDense: true,
-                  labelText: 'Ваше имя',
-                  labelStyle: TextStyle(
+                  labelText: Strings.yourName,
+                  labelStyle: const TextStyle(
                     color: ColorRes.mainGreen,
                   ),
                 ),
@@ -82,8 +83,8 @@ class AccountPage extends HookWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Уведомления о приглашениях',
+                  Text(
+                    Strings.inviteNotifications,
                     style: Styles.accountCommon,
                   ),
                   Checkbox(
@@ -98,7 +99,7 @@ class AccountPage extends HookWidget {
               ),
               const SizedBox(height: 30),
               Text(
-                'Друзья',
+                Strings.friends,
                 textAlign: TextAlign.start,
                 style: Styles.head.copyWith(color: ColorRes.mainBlack),
               ),
@@ -113,9 +114,10 @@ class AccountPage extends HookWidget {
               right: 24,
               child: ActionButton(
                 color: ColorRes.mainGreen,
-                text: 'Сохранить изменения',
+                text: Strings.saveChanges,
                 onPressed: () {
                   DropFocus.drop();
+
                   dispatch(
                     UpdateUserAction(
                       userId: user.id,
@@ -123,6 +125,7 @@ class AccountPage extends HookWidget {
                       avatar: newAvatar.value,
                     ),
                   );
+
                   newAvatar.value = null;
                 },
               ),
