@@ -26,6 +26,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:notification_permissions/notification_permissions.dart';
 
 class AccountPage extends HookWidget {
+  const AccountPage({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final user = useCurrentUser();

@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
+import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/new_game/actions/get_game_templates_action.dart';
 import 'package:cash_flow/features/new_game/actions/get_quests_action.dart';
 import 'package:cash_flow/presentation/main/widgets/game_type_title.dart';
@@ -32,8 +35,6 @@ class GamesPage extends HookWidget {
       ]);
     };
 
-    final selectedProfiles = useState(<String>{});
-
     return Column(
       children: <Widget>[
         SizedBox(height: MediaQuery.of(context).padding.top),
@@ -42,38 +43,49 @@ class GamesPage extends HookWidget {
           child: RefreshIndicator(
             color: ColorRes.mainGreen,
             onRefresh: refreshData,
-            child: _buildGameActions(selectedProfiles),
+            child: const _GamePageContent(),
           ),
         ),
       ],
     );
   }
+}
 
-  Widget _buildGameActions(ValueNotifier<Set<String>> selectedProfiles) {
+class _GamePageContent extends HookWidget {
+  const _GamePageContent({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedProfiles = useState(<String>{});
+    final size = useAdaptiveSize();
+
     return ListView(
       shrinkWrap: true,
       padding: const EdgeInsets.all(0),
       children: <Widget>[
-        const SizedBox(height: 24),
+        SizedBox(height: size(24)),
         const GameTypeTitle(text: Strings.singleGame),
-        SizedBox(height: 150, child: TemplateGameList()),
+        SizedBox(height: size(150), child: TemplateGameList()),
         const Divider(),
-        const SizedBox(height: 12),
+        SizedBox(height: size(12)),
         GameTypeTitle(
           text: Strings.gameLevels,
           actionWidget: QuestsBadge(),
         ),
-        SizedBox(height: 150, child: QuestList()),
+        SizedBox(height: size(150), child: QuestList()),
         const Divider(),
-        const SizedBox(height: 12),
+        SizedBox(height: size(12)),
         GameTypeTitle(
           text: Strings.multiplayer,
           actionWidget: MultiplayerGameCountBadge(),
         ),
-        const SizedBox(height: 12),
-        SizedBox(height: 60, child: OnlineProfilesList(selectedProfiles)),
-        const SizedBox(height: 12),
-        SizedBox(height: 150, child: MultiplayerGameList(selectedProfiles)),
+        SizedBox(height: size(12)),
+        SizedBox(height: size(60), child: OnlineProfilesList(selectedProfiles)),
+        SizedBox(height: size(12)),
+        SizedBox(
+          height: size(150),
+          child: MultiplayerGameList(selectedProfiles),
+        ),
         const Divider(),
       ],
     );

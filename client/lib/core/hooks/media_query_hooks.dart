@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -22,9 +24,21 @@ Size useScreenSize() {
 MediaQueryData useAdaptiveMediaQueryData() {
   final mediaQuery = useMediaQuery();
   final screenWidth = mediaQuery.size.width;
-  final textScaleFactor = screenWidth <= 350 ? 0.8 : 1.0;
+
+  const designDeviceScreenSize = 375.0;
+  final textScaleFactor = min(screenWidth / designDeviceScreenSize, 1.0);
 
   return mediaQuery.copyWith(
     textScaleFactor: textScaleFactor,
   );
+}
+
+double Function(double) useAdaptiveSize() {
+  final mediaQuery = useMediaQuery();
+  final screenWidth = mediaQuery.size.width;
+
+  const designDeviceScreenSize = 375.0;
+  final scaleFactor = min(screenWidth / designDeviceScreenSize, 1.0);
+
+  return (size) => size * scaleFactor;
 }

@@ -73,8 +73,8 @@ class MainPage extends HookWidget {
           backgroundColor: ColorRes.mainPageBackground,
           body: IndexedStack(
             index: pageIndex.value,
-            children: [
-              const GamesPage(),
+            children: const [
+              GamesPage(),
               AccountPage(),
             ],
           ),

@@ -1,3 +1,4 @@
+import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/config/config_hooks.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ class OnlineStatus extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final onlineStatus = useOnlineStatus();
+    final size = useAdaptiveSize();
 
     final animationController = useAnimationController(
       duration: const Duration(milliseconds: 1500),
@@ -35,14 +37,14 @@ class OnlineStatus extends HookWidget {
     }, []);
 
     return SizedBox(
-      height: 40,
-      width: 40,
+      height: size(40),
+      width: size(40),
       child: Center(
         child: AnimatedBuilder(
           animation: animationController,
           builder: (context, _) => Container(
-            height: 30 * animationController.value,
-            width: 30 * animationController.value,
+            height: size(30) * animationController.value,
+            width: size(30) * animationController.value,
             decoration: BoxDecoration(
               gradient: RadialGradient(
                 radius: 0.25 * animationController.value,
@@ -58,7 +60,7 @@ class OnlineStatus extends HookWidget {
                   (50 * animationController.value).toInt(),
                 ),
               ),
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(size(15)),
             ),
           ),
         ),
