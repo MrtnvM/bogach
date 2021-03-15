@@ -1,12 +1,11 @@
 import 'dart:convert';
 
-import 'package:cash_flow/resources/strings.dart';
 import 'package:crypto/crypto.dart';
 
 const questsAccessProductId = 'bogach.quests.access';
-const multiplayer1ProductId = 'bogach.multiplayer.1';
-const multiplayer5ProductId = 'bogach.multiplayer.5';
-const multiplayer10ProductId = 'bogach.multiplayer.10';
+const multiplayer1ProductId = 'bogach.multiplayer.games.1';
+const multiplayer10ProductId = 'bogach.multiplayer.games.10';
+const multiplayer25ProductId = 'bogach.multiplayer.games.25';
 
 String hashProductId(String productId) {
   const salt = '(c) Bogach Team';
@@ -22,32 +21,22 @@ String hashProductId(String productId) {
 
 enum MultiplayerGamePurchases {
   oneGame,
-  fiveGames,
   tenGames,
+  twentyFiveGames,
 }
 
 extension MultiplayerGamePurchasesExtension on MultiplayerGamePurchases {
-  String get title {
-    switch (this) {
-      case MultiplayerGamePurchases.oneGame:
-        return Strings.purchase1Game;
-      case MultiplayerGamePurchases.fiveGames:
-        return Strings.purchase5Game;
-      case MultiplayerGamePurchases.tenGames:
-        return Strings.purchase10Game;
-      default:
-        return '';
-    }
-  }
-
   String get productId {
     switch (this) {
       case MultiplayerGamePurchases.oneGame:
         return multiplayer1ProductId;
-      case MultiplayerGamePurchases.fiveGames:
-        return multiplayer5ProductId;
+
       case MultiplayerGamePurchases.tenGames:
         return multiplayer10ProductId;
+
+      case MultiplayerGamePurchases.twentyFiveGames:
+        return multiplayer25ProductId;
+
       default:
         return '';
     }
