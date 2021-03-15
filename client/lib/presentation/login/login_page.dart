@@ -80,7 +80,6 @@ class LoginPage extends HookWidget {
           context: context,
           dispatch: dispatch,
           isAuthorising: isAuthorising,
-          currentUser: currentUser,
         ),
         const SizedBox(height: 16),
         _buildSocialMedias(
@@ -90,7 +89,6 @@ class LoginPage extends HookWidget {
           context: context,
           dispatch: dispatch,
           isAuthorising: isAuthorising,
-          currentUser: currentUser,
         ),
         const SizedBox(height: 16),
         // TODO(Maxim): Implement authorisation through VK
@@ -119,7 +117,6 @@ class LoginPage extends HookWidget {
     @required BuildContext context,
     @required ValueNotifier<bool> isAuthorising,
     @required Future<void> dispatch(BaseAction action),
-    @required @nullable UserProfile currentUser,
   }) {
     return FlatButton(
       color: Colors.white,
@@ -128,7 +125,6 @@ class LoginPage extends HookWidget {
         context,
         dispatch,
         isAuthorising,
-        currentUser,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4.0),
@@ -174,7 +170,6 @@ class LoginPage extends HookWidget {
                   context: context,
                   dispatch: dispatch,
                   isAuthorising: isAuthorising,
-                  currentUser: currentUser,
                 )
               : Container(),
     );
@@ -228,7 +223,6 @@ class LoginPage extends HookWidget {
     BuildContext context,
     Future<void> dispatch(BaseAction action),
     ValueNotifier<bool> isAuthorising,
-    @nullable UserProfile currentUser,
   ) {
     switch (type) {
       case _SocialButtonType.fb:
@@ -236,7 +230,6 @@ class LoginPage extends HookWidget {
           context,
           dispatch,
           isAuthorising,
-          currentUser,
         );
         break;
 
@@ -245,7 +238,6 @@ class LoginPage extends HookWidget {
           context,
           dispatch,
           isAuthorising,
-          currentUser,
         );
         break;
 
@@ -254,7 +246,6 @@ class LoginPage extends HookWidget {
           context,
           dispatch,
           isAuthorising,
-          currentUser,
         );
         break;
 
@@ -269,7 +260,6 @@ class LoginPage extends HookWidget {
     BuildContext context,
     Future<void> dispatch(BaseAction action),
     ValueNotifier<bool> isAuthorising,
-    @nullable UserProfile currentUser,
   ) async {
     isAuthorising.value = true;
 
@@ -283,7 +273,6 @@ class LoginPage extends HookWidget {
           dispatch,
           isAuthorising,
           result.accessToken.token,
-          currentUser,
         );
         break;
 
@@ -303,7 +292,6 @@ class LoginPage extends HookWidget {
     Future<void> dispatch(BaseAction action),
     ValueNotifier<bool> isAuthorising,
     String token,
-    @nullable UserProfile currentUser,
   ) {
     final action = LoginViaFacebookAction(token: token);
 
@@ -329,7 +317,6 @@ class LoginPage extends HookWidget {
     BuildContext context,
     Future<void> dispatch(BaseAction action),
     ValueNotifier<bool> isAuthorising,
-    @nullable UserProfile currentUser,
   ) async {
     final account = await GoogleSignIn().signIn().catchError((e) {
       Logger.e('Google Auth Error', e);
@@ -353,7 +340,6 @@ class LoginPage extends HookWidget {
       isAuthorising: isAuthorising,
       token: authentication.accessToken,
       idToken: authentication.idToken,
-      currentUser: currentUser,
     );
   }
 
@@ -363,7 +349,6 @@ class LoginPage extends HookWidget {
     @required ValueNotifier<bool> isAuthorising,
     @required String token,
     @required String idToken,
-    @required @nullable UserProfile currentUser,
   }) {
     final action = LoginViaGoogleAction(
       accessToken: token,
@@ -379,7 +364,6 @@ class LoginPage extends HookWidget {
     BuildContext context,
     Future<void> dispatch(BaseAction action),
     ValueNotifier<bool> isAuthorising,
-    @nullable UserProfile currentUser,
   ) async {
     final result = await AppleSignIn.performRequests([
       const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
