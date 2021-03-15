@@ -1,6 +1,50 @@
 {
   "products" : [
-
+    {
+      "displayPrice" : "15",
+      "familyShareable" : false,
+      "internalID" : "CD0C6CD9",
+      "localizations" : [
+        {
+          "description" : "1 игра в режиме мультиплеера",
+          "displayName" : "1 игра",
+          "locale" : "ru"
+        }
+      ],
+      "productID" : "bogach.multiplayer.games.1",
+      "referenceName" : "1 игра",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "99",
+      "familyShareable" : false,
+      "internalID" : "A56D3CF1",
+      "localizations" : [
+        {
+          "description" : "10 игр в режиме мультиплеера",
+          "displayName" : "10 игр",
+          "locale" : "ru"
+        }
+      ],
+      "productID" : "bogach.multiplayer.games.10",
+      "referenceName" : "10 игр",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "179",
+      "familyShareable" : false,
+      "internalID" : "31F73582",
+      "localizations" : [
+        {
+          "description" : "25 игр в режиме мультиплеера",
+          "displayName" : "25 игр",
+          "locale" : "ru"
+        }
+      ],
+      "productID" : "bogach.multiplayer.games.25",
+      "referenceName" : "25 игр",
+      "type" : "Consumable"
+    }
   ],
   "settings" : {
 
