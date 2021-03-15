@@ -316,7 +316,7 @@ class _PurchaseWidget extends StatelessWidget {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: 'Скидка ',
+                            text: '${Strings.discount} ',
                             style: Styles.body1.copyWith(
                               fontSize: 11 * textScaleFactor,
                               fontWeight: FontWeight.w600,
