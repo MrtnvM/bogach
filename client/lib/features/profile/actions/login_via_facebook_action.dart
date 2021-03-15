@@ -17,7 +17,7 @@ class LoginViaFacebookAction extends BaseAction {
   Operation get operationKey => Operation.loginViaFacebook;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
 
     final currentUser = await userService.loginViaFacebook(token: token);

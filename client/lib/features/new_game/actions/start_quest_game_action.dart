@@ -19,7 +19,7 @@ class StartQuestGameAction extends BaseAction {
   Operation get operationKey => Operation.createQuestGame;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final userId = state.profile.currentUser.id;
 
     final getGameId = () async {

@@ -26,7 +26,7 @@ class StartGameAction extends BaseAction {
   }
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
     final userService = GetIt.I.get<UserService>();
     final action$ = GetIt.I.get<ReduxActionObserver>().onAction;

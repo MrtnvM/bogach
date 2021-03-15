@@ -15,7 +15,7 @@ class QueryUserProfilesAction extends BaseAction {
   Operation get operationKey => Operation.queryUserProfiles;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
 
     final result = await userService.searchUsers(query);

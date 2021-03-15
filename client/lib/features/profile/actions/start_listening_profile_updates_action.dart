@@ -14,7 +14,7 @@ class StartListeningProfileUpdatesAction extends BaseAction {
   final String userId;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
     final action$ = GetIt.I.get<ReduxActionObserver>().onAction;
 
@@ -32,7 +32,7 @@ class StopListeningProfileUpdatesAction extends BaseAction {
   StopListeningProfileUpdatesAction();
 
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     return null;
   }
 }

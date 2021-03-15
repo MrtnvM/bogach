@@ -22,7 +22,7 @@ class LoginViaGoogleAction extends BaseAction {
   Operation get operationKey => Operation.loginViaGoogle;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
 
     final currentUser = await userService.loginViaGoogle(

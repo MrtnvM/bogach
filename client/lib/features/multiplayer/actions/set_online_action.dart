@@ -18,7 +18,7 @@ class SetUserOnlineAction extends BaseAction {
   Operation get operationKey => Operation.setOnline;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final multiplayerService = GetIt.I.get<MultiplayerService>();
 
     final onlineProfileRequest = multiplayerService.setUserOnline(user);

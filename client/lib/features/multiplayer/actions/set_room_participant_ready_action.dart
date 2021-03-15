@@ -16,7 +16,7 @@ class SetRoomParticipantReadyAction extends BaseAction {
   Operation get operationKey => Operation.setRoomParticipantReady;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
 
     await gameService.setRoomParticipantReady(

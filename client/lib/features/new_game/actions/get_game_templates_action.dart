@@ -16,7 +16,7 @@ class GetGameTemplatesAction extends BaseAction {
   Operation get operationKey => Operation.loadGameTemplates;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
 
     final gameTemplates = await gameService.getGameTemplates();
