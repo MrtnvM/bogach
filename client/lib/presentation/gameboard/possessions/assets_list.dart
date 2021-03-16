@@ -21,6 +21,7 @@ class AssetsList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final userId = useUserId();
+    final currentMonth = useCurrentGameState().monthNumber;
     final assets = useCurrentGame(
       (g) => g.participants[userId].possessionState.assets,
     );
@@ -77,7 +78,9 @@ class AssetsList extends HookWidget {
           details: insuranses
               .map((insurance) => '${insurance.name}; '
                   '${Strings.defence} - ${insurance.value}; '
-                  '${Strings.cost} - ${insurance.cost}')
+                  '${Strings.cost} - ${insurance.cost} '
+                  '${Strings.expires(insurance.duration - currentMonth - //
+                      (insurance.fromMonth - 1))}')
               .toList(),
         ),
         DetailRow(
