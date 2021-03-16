@@ -9,6 +9,10 @@ T useCurrentGame<T>(T Function(Game) converter) {
   return useGlobalState((s) => converter(s.game.currentGame));
 }
 
+CurrentGameState useCurrentGameState() {
+  return useGlobalState((s) => s.game.currentGame.state);
+}
+
 Account useAccount() {
   final userId = useUserId();
   final account = useCurrentGame((g) => g?.participants[userId]?.account);
