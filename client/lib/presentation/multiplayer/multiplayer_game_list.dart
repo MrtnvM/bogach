@@ -11,6 +11,7 @@ import 'package:cash_flow/features/new_game/actions/get_game_templates_action.da
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
+import 'package:cash_flow/presentation/main/models/selected_item_view_model.dart';
 import 'package:cash_flow/presentation/main/widgets/games_loadable_list_view.dart';
 import 'package:cash_flow/presentation/multiplayer/room_page.dart';
 import 'package:cash_flow/presentation/new_game/widgets/game_template_item.dart';
@@ -25,9 +26,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class MultiplayerGameList extends HookWidget {
-  const MultiplayerGameList(this.selectedProfiles);
+  const MultiplayerGameList(
+    this.selectedProfiles,
+    this.selectedListsItem,
+  );
 
   final ValueNotifier<Set<String>> selectedProfiles;
+  final ValueNotifier<SelectedItemViewModel> selectedListsItem;
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +87,7 @@ class MultiplayerGameList extends HookWidget {
         loadGameTemplates: () {
           dispatch(GetGameTemplatesAction());
         },
+        selectedListsItem: selectedListsItem,
       ),
     );
   }
@@ -93,6 +99,7 @@ class _TemplateList extends HookWidget {
     @required this.onGameTemplateSelected,
     @required this.loadGameTemplatesRequestState,
     @required this.loadGameTemplates,
+    @required this.selectedListsItem,
     Key key,
   }) : super(key: key);
 
@@ -100,6 +107,7 @@ class _TemplateList extends HookWidget {
   final void Function(GameTemplate template) onGameTemplateSelected;
   final OperationState loadGameTemplatesRequestState;
   final VoidCallback loadGameTemplates;
+  final ValueNotifier<SelectedItemViewModel> selectedListsItem;
 
   @override
   Widget build(BuildContext context) {
@@ -110,12 +118,13 @@ class _TemplateList extends HookWidget {
       child: GamesLoadableListView<GameTemplate>(
         viewModel: LoadableListViewModel(
           items: gameTemplates,
-          itemBuilder: (i) => GameTemplateItem(
+          itemBuilder: (i) => GameTemplateItem.multiplayer(
             gameTemplate: gameTemplates.items[i],
             onStartNewGamePressed: (template) {
               onGameTemplateSelected(template);
               AnalyticsSender.multiplayerTemplateSelected(template.name);
             },
+            selectedListsItem: selectedListsItem,
           ),
           loadListRequestState: loadGameTemplatesRequestState,
           loadList: loadGameTemplates,

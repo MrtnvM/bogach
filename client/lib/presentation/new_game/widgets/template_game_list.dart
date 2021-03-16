@@ -13,6 +13,7 @@ import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard.dart';
+import 'package:cash_flow/presentation/main/models/selected_item_view_model.dart';
 import 'package:cash_flow/presentation/main/widgets/games_loadable_list_view.dart';
 import 'package:cash_flow/presentation/new_game/widgets/game_template_item.dart';
 import 'package:cash_flow/presentation/tutorial/tutorial_page.dart';
@@ -25,6 +26,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class TemplateGameList extends HookWidget {
+  const TemplateGameList(this.selectedListsItem);
+
+  final ValueNotifier<SelectedItemViewModel> selectedListsItem;
+
   @override
   Widget build(BuildContext context) {
     final templatesRequestState = useGlobalState(
@@ -92,13 +97,14 @@ class TemplateGameList extends HookWidget {
         child: GamesLoadableListView<GameTemplate>(
           viewModel: LoadableListViewModel(
             items: gameTemplates,
-            itemBuilder: (i) => GameTemplateItem(
+            itemBuilder: (i) => GameTemplateItem.singleplayer(
               gameTemplate: gameTemplates.items[i],
               onStartNewGamePressed: createNewGame,
               onContinueGamePressed:
                   getLastGameIndex(gameTemplates.items[i]) >= 0
                       ? goToGame
                       : null,
+              selectedListsItem: selectedListsItem,
             ),
             loadListRequestState: templatesRequestState,
             loadList: loadGameTemplates,

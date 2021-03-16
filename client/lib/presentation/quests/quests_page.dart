@@ -1,4 +1,5 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/presentation/main/models/selected_item_view_model.dart';
 import 'package:cash_flow/presentation/quests/quest_list.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -27,18 +28,16 @@ class QuestsPage extends HookWidget {
       return null;
     }, []);
 
+    final selectedListsItem = useState(SelectedItemViewModel());
+
     return CashFlowScaffold(
       title: Strings.chooseQuest,
       horizontalPadding: 0,
       showBackArrow: true,
-      child: _buildBody(),
-    );
-  }
-
-  Widget _buildBody() {
-    return Container(
-      color: ColorRes.mainGreen,
-      child: QuestList(),
+      child: Container(
+        color: ColorRes.mainGreen,
+        child: QuestList(selectedListsItem),
+      ),
     );
   }
 }

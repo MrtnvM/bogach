@@ -1,4 +1,5 @@
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
+import 'package:cash_flow/presentation/main/models/selected_item_view_model.dart';
 import 'package:cash_flow/widgets/containers/game_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -11,25 +12,25 @@ class QuestItemWidget extends HookWidget {
     @required this.currentGameId,
     @required this.onQuestSelected,
     @required this.isLocked,
+    @required this.selectedListsItem,
   });
 
   final Quest quest;
   final String currentGameId;
   final bool isLocked;
   final void Function(Quest, QuestAction) onQuestSelected;
+  final ValueNotifier<SelectedItemViewModel> selectedListsItem;
 
   @override
   Widget build(BuildContext context) {
-    final isCollapsed = useState(false);
-
     final startGame = () {
       onQuestSelected(quest, QuestAction.startNewGame);
-      isCollapsed.value = false;
+      selectedListsItem.value = SelectedItemViewModel();
     };
 
     final continueGame = () {
       onQuestSelected(quest, QuestAction.continueGame);
-      isCollapsed.value = false;
+      selectedListsItem.value = SelectedItemViewModel();
     };
 
     return GameCard(
@@ -38,21 +39,26 @@ class QuestItemWidget extends HookWidget {
       imageUrl: quest.image,
       startGame: startGame,
       continueGame: continueGame,
-      isCollapsed: isCollapsed.value,
+      isCollapsed: selectedListsItem.value.selectedQuest == quest.id,
       onTap: () {
         if (isLocked) {
           onQuestSelected?.call(null, QuestAction.startNewGame);
-          isCollapsed.value = true;
+          selectedListsItem.value = SelectedItemViewModel();
           return;
         }
 
         if (currentGameId == null) {
           onQuestSelected?.call(quest, QuestAction.startNewGame);
-          isCollapsed.value = true;
+          selectedListsItem.value = SelectedItemViewModel();
           return;
         }
 
-        isCollapsed.value = !isCollapsed.value;
+        if (selectedListsItem.value.selectedQuest == quest.id) {
+          selectedListsItem.value = SelectedItemViewModel();
+        } else {
+          selectedListsItem.value =
+              SelectedItemViewModel(selectedQuest: quest.id);
+        }
       },
     );
   }

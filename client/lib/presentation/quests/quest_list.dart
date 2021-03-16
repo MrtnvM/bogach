@@ -7,6 +7,7 @@ import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/new_game/actions/get_quests_action.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/navigation/app_router.dart';
+import 'package:cash_flow/presentation/main/models/selected_item_view_model.dart';
 import 'package:cash_flow/presentation/main/widgets/games_loadable_list_view.dart';
 import 'package:cash_flow/presentation/purchases/quests_access_page.dart';
 import 'package:cash_flow/presentation/quests/quest_item_widget.dart';
@@ -21,6 +22,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class QuestList extends HookWidget {
+  const QuestList(this.selectedListsItem);
+
+  final ValueNotifier<SelectedItemViewModel> selectedListsItem;
+
   @override
   Widget build(BuildContext context) {
     final userId = useUserId();
@@ -68,6 +73,7 @@ class QuestList extends HookWidget {
                     child: _QuestItemWidget(
                       quest: quests.items[i],
                       index: i,
+                      selectedListsItem: selectedListsItem,
                     ),
                   ),
                 );
@@ -77,6 +83,7 @@ class QuestList extends HookWidget {
                 quest: quests.items[i],
                 index: i,
                 defaultAction: animationController.forward,
+                selectedListsItem: selectedListsItem,
               );
             },
             loadListRequestState: getQuestsRequestState,
@@ -98,12 +105,14 @@ class _QuestItemWidget extends HookWidget {
   const _QuestItemWidget({
     @required this.quest,
     @required this.index,
+    @required this.selectedListsItem,
     this.defaultAction,
   });
 
   final Quest quest;
   final int index;
   final VoidCallback defaultAction;
+  final ValueNotifier<SelectedItemViewModel> selectedListsItem;
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +128,7 @@ class _QuestItemWidget extends HookWidget {
       currentGameId: lastQuestGameInfo?.gameId,
       isLocked: onQuestSelected == null,
       onQuestSelected: onQuestSelected ?? (l, a) => defaultAction(),
+      selectedListsItem: selectedListsItem,
     );
   }
 

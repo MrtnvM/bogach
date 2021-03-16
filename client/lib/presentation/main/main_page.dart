@@ -1,4 +1,5 @@
 import 'package:cash_flow/core/hooks/analytics_hooks.dart';
+import 'package:cash_flow/presentation/main/models/selected_item_view_model.dart';
 import 'package:cash_flow/widgets/common/bogach_loadable_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -80,59 +81,71 @@ class MainPage extends HookWidget {
     };
 
     final selectedProfiles = useState(<String>{});
+    final selectedListsItem = useState(SelectedItemViewModel());
 
-    return AnnotatedRegion(
-      value: SystemUiOverlayStyle.dark,
-      child: BogachLoadableView(
-        isLoading: isLoading,
-        child: Scaffold(
-          backgroundColor: ColorRes.mainPageBackground,
-          body: Column(
-            children: <Widget>[
-              SizedBox(height: MediaQuery.of(context).padding.top),
-              const ProfileBar(),
-              Expanded(
-                child: RefreshIndicator(
-                  color: ColorRes.mainGreen,
-                  onRefresh: refreshData,
-                  child: _buildGameActions(selectedProfiles),
+    return GestureDetector(
+      onTap: () {
+        selectedListsItem.value = SelectedItemViewModel();
+      },
+      child: AnnotatedRegion(
+        value: SystemUiOverlayStyle.dark,
+        child: BogachLoadableView(
+          isLoading: isLoading,
+          child: Scaffold(
+            backgroundColor: ColorRes.mainPageBackground,
+            body: Column(
+              children: <Widget>[
+                SizedBox(height: MediaQuery.of(context).padding.top),
+                const ProfileBar(),
+                Expanded(
+                  child: RefreshIndicator(
+                    color: ColorRes.mainGreen,
+                    onRefresh: refreshData,
+                    child: _buildGameActions(
+                      selectedProfiles,
+                      selectedListsItem,
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: 0,
-            items: [
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.insights),
-                label: Strings.gamesTabTitle,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.person),
-                label: Strings.accountTabTitle,
-              )
-            ],
+              ],
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: 0,
+              items: [
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.insights),
+                  label: Strings.gamesTabTitle,
+                ),
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.person),
+                  label: Strings.accountTabTitle,
+                )
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildGameActions(ValueNotifier<Set<String>> selectedProfiles) {
+  Widget _buildGameActions(
+    ValueNotifier<Set<String>> selectedProfiles,
+    ValueNotifier<SelectedItemViewModel> selectedListsItem,
+  ) {
     return ListView(
       shrinkWrap: true,
       padding: const EdgeInsets.all(0),
       children: <Widget>[
         const SizedBox(height: 24),
         const GameTypeTitle(text: Strings.singleGame),
-        SizedBox(height: 150, child: TemplateGameList()),
+        SizedBox(height: 150, child: TemplateGameList(selectedListsItem)),
         const Divider(),
         const SizedBox(height: 12),
         GameTypeTitle(
           text: Strings.gameLevels,
           actionWidget: QuestsBadge(),
         ),
-        SizedBox(height: 150, child: QuestList()),
+        SizedBox(height: 150, child: QuestList(selectedListsItem)),
         const Divider(),
         const SizedBox(height: 12),
         GameTypeTitle(
@@ -142,7 +155,12 @@ class MainPage extends HookWidget {
         const SizedBox(height: 12),
         SizedBox(height: 60, child: OnlineProfilesList(selectedProfiles)),
         const SizedBox(height: 12),
-        SizedBox(height: 150, child: MultiplayerGameList(selectedProfiles)),
+        SizedBox(
+            height: 150,
+            child: MultiplayerGameList(
+              selectedProfiles,
+              selectedListsItem,
+            )),
         const Divider(),
       ],
     );
