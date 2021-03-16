@@ -11,11 +11,11 @@ class NotificationsSettingsWidget extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final nativePermissionStatus = usePushNotificationsSettings();
+    final notificationSettings = usePushNotificationsSettings();
     final tempPermissionValue = useState(true);
 
     final areNotificationsTurnedOn =
-        nativePermissionStatus == PermissionStatus.granted &&
+        notificationSettings == PermissionStatus.granted &&
             tempPermissionValue.value;
 
     return Row(

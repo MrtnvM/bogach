@@ -6,9 +6,9 @@ import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/profile/actions/update_user_action.dart';
-import 'package:cash_flow/models/domain/user/user_profile.dart';
-import 'package:cash_flow/presentation/main/widgets/friend_item.dart';
-import 'package:cash_flow/presentation/main/widgets/logout_button.dart';
+import 'package:cash_flow/presentation/main/account/widgets/friends_list_widget.dart';
+import 'package:cash_flow/presentation/main/account/widgets/logout_button.dart';
+import 'package:cash_flow/presentation/main/account/widgets/name_input.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
@@ -55,9 +55,7 @@ class AccountPage extends HookWidget {
             backgroundColor: Colors.white,
             title: Text(
               Strings.accountTabTitle,
-              style: Styles.bodyBlackBold.copyWith(
-                fontSize: size(16),
-              ),
+              style: Styles.bodyBlackBold.copyWith(fontSize: 16),
             ),
             actions: const [LogoutButton()],
           ),
@@ -72,7 +70,7 @@ class AccountPage extends HookWidget {
                       color: Colors.grey.withAlpha(10),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: Colors.grey.withAlpha(30),
+                        color: ColorRes.lightGrey,
                       ),
                     ),
                     padding: const EdgeInsets.all(16),
@@ -82,10 +80,10 @@ class AccountPage extends HookWidget {
                         EditableUserAvatar(
                           url: user.avatarUrl,
                           onChanged: (file) => newAvatar.value = file,
-                          avatarSize: size(150),
+                          avatarSize: size(size(150)),
                         ),
                         SizedBox(height: size(24)),
-                        _NameInput(
+                        NameInput(
                           initialValue: user.fullName,
                           onChange: (name) => newFullName.value = name,
                         ),
@@ -93,12 +91,12 @@ class AccountPage extends HookWidget {
                     ),
                   ),
                   SizedBox(height: size(32)),
-                  _FriendsList(friends: friends),
+                  FriendsListWidget(friends: friends),
                 ],
               ),
               if (!isInfoTheSame)
                 Positioned(
-                  bottom: 24,
+                  bottom: 4,
                   left: 24,
                   right: 24,
                   child: ActionButton(
@@ -121,62 +119,6 @@ class AccountPage extends HookWidget {
                 ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _FriendsList extends StatelessWidget {
-  const _FriendsList({Key key, @required this.friends}) : super(key: key);
-
-  final List<UserProfile> friends;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            Strings.friends,
-            textAlign: TextAlign.start,
-            style: Styles.head.copyWith(color: ColorRes.mainBlack),
-          ),
-          const SizedBox(height: 4),
-          const Divider(),
-          const SizedBox(height: 4),
-          ...friends.map((item) => FriendItem(user: item)).toList(),
-        ],
-      ),
-    );
-  }
-}
-
-class _NameInput extends StatelessWidget {
-  const _NameInput({
-    Key key,
-    @required this.initialValue,
-    @required this.onChange,
-  }) : super(key: key);
-
-  final String initialValue;
-  final void Function(String) onChange;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      initialValue: initialValue,
-      style: Styles.bodyBlack,
-      onChanged: (value) => onChange(value.trim()),
-      cursorColor: ColorRes.mainGreen,
-      decoration: InputDecoration(
-        isDense: true,
-        labelText: Strings.yourName,
-        labelStyle: const TextStyle(
-          color: ColorRes.mainGreen,
         ),
       ),
     );

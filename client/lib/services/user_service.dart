@@ -4,7 +4,6 @@ import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/cache/user_cache.dart';
 import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
-import 'package:cash_flow/models/network/core/search_query_result.dart';
 import 'package:cash_flow/models/network/request/register_request_model.dart';
 import 'package:cash_flow/utils/error_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -127,24 +126,6 @@ class UserService {
     return Future.value();
   }
 
-  // TODO(maxim): Remove searching players
-  Future<SearchQueryResult<UserProfile>> searchUsers(
-    String searchString,
-  ) async {
-    final users = await firestore
-        .collection('users')
-        .where('userName', isGreaterThanOrEqualTo: searchString)
-        .get()
-        .then((snapshot) =>
-            snapshot.docs.map((d) => UserProfile.fromJson(d.data())).toList())
-        .catchError(recordError);
-
-    return SearchQueryResult(
-      searchString: searchString,
-      items: users,
-    );
-  }
-
   Future<List<UserProfile>> loadProfiles(List<String> profileIds) async {
     final profiles = await Future.wait(
       profileIds.map((id) => firestore.collection('users').doc(id).get()),
@@ -209,21 +190,26 @@ class UserService {
     String newName,
     File newAvatar,
   }) async {
-    // Maybe it's better to move image uploading into different service entity
-    final url = newAvatar != null
-        ? await cloudStorage
-            .ref()
-            .child('avatars/$userId/${DateTime.now()}')
-            .putFile(newAvatar)
-            .onComplete
-            .then((task) => task.ref.getDownloadURL())
-            .catchError(recordError)
-        : null;
+    final newInfo = <String, dynamic>{};
 
-    final newInfo = {'userName': newName};
+    if (newName != null) {
+      newInfo.addAll({'userName': newName});
+    }
 
-    if (url != null) {
+    if (newAvatar != null) {
+      final url = await cloudStorage
+          .ref()
+          .child('avatars/$userId/${DateTime.now()}')
+          .putFile(newAvatar)
+          .onComplete
+          .then((task) => task.ref.getDownloadURL())
+          .catchError(recordError);
+
       newInfo.addAll({'avatarUrl': url});
+    }
+
+    if (newInfo.isEmpty) {
+      return;
     }
 
     return firestore

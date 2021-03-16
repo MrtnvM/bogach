@@ -2,7 +2,7 @@ import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/app_configuration.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/config/config_hooks.dart';
-import 'package:cash_flow/presentation/main/widgets/online_status.dart';
+import 'package:cash_flow/presentation/main/games/widgets/online_status.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';

@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class FriendItem extends HookWidget {
-  const FriendItem({@required this.user});
+class FriendItemWidget extends HookWidget {
+  const FriendItemWidget({@required this.user});
 
   final UserProfile user;
 

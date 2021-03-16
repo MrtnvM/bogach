@@ -23,22 +23,24 @@ Size useScreenSize() {
 
 MediaQueryData useAdaptiveMediaQueryData() {
   final mediaQuery = useMediaQuery();
-  final screenWidth = mediaQuery.size.width;
-
-  const designDeviceScreenSize = 375.0;
-  final textScaleFactor = min(screenWidth / designDeviceScreenSize, 1.0);
+  final scaleFactor = useScaleFactor();
 
   return mediaQuery.copyWith(
-    textScaleFactor: textScaleFactor,
+    textScaleFactor: scaleFactor,
   );
 }
 
 double Function(double) useAdaptiveSize() {
+  final scaleFactor = useScaleFactor();
+  return (size) => size * scaleFactor;
+}
+
+double useScaleFactor() {
   final mediaQuery = useMediaQuery();
   final screenWidth = mediaQuery.size.width;
 
   const designDeviceScreenSize = 375.0;
   final scaleFactor = min(screenWidth / designDeviceScreenSize, 1.0);
 
-  return (size) => size * scaleFactor;
+  return scaleFactor;
 }
