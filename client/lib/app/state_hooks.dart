@@ -8,3 +8,7 @@ String useUserId() {
 UserProfile useCurrentUser() {
   return useGlobalState((s) => s.profile.currentUser);
 }
+
+List<UserProfile> useCurrentUserFriends() {
+  return [];
+}

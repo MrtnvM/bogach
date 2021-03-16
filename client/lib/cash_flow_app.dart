@@ -9,6 +9,7 @@ import 'package:cash_flow/presentation/login/login_page.dart';
 import 'package:cash_flow/presentation/main/main_page.dart';
 import 'package:cash_flow/presentation/onboarding/onboarding_page.dart';
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/widgets/inputs/drop_focus.dart';
 // ignore: implementation_imports
 import 'package:dash_kit_control_panel/src/services/device_preview_mode.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
@@ -51,19 +52,21 @@ class CashFlowApp extends HookWidget {
       ),
     );
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      builder: (context, widget) => LoadableView(
-        backgroundColor: ColorRes.black80,
-        isLoading: isJoiningToRoom,
-        child: DevicePreviewWrapper(child: widget),
+    return DropFocus(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        builder: (context, widget) => LoadableView(
+          backgroundColor: ColorRes.black80,
+          isLoading: isJoiningToRoom,
+          child: DevicePreviewWrapper(child: widget),
+        ),
+        navigatorKey: appRouter.navigatorKey,
+        navigatorObservers: [
+          ...getAnalyticsObservers(),
+        ],
+        home: _getHomePage(),
+        theme: theme,
       ),
-      navigatorKey: appRouter.navigatorKey,
-      navigatorObservers: [
-        ...getAnalyticsObservers(),
-      ],
-      home: _getHomePage(),
-      theme: theme,
     );
   }
 
