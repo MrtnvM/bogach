@@ -59,7 +59,7 @@ class ProfileBar extends HookWidget {
                       style: Styles.body1.copyWith(
                         color: Colors.black,
                         fontWeight: FontWeight.w600,
-                        fontSize: size(18),
+                        fontSize: size(16),
                       ),
                     ),
                     if (user.status != null)
@@ -68,7 +68,7 @@ class ProfileBar extends HookWidget {
                         style: Styles.body1.copyWith(
                           color: Colors.black.withAlpha(170),
                           fontWeight: FontWeight.normal,
-                          fontSize: size(15),
+                          fontSize: size(13),
                         ),
                       ),
                   ],

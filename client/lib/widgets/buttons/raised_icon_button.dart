@@ -8,6 +8,7 @@ class RaisedIconButton extends StatelessWidget {
     this.size = 28,
     this.buttonColor = ColorRes.grey,
     this.iconColor = ColorRes.mainBlack,
+    this.padding = const EdgeInsets.all(6),
   });
 
   final IconData icon;
@@ -15,6 +16,7 @@ class RaisedIconButton extends StatelessWidget {
   final double size;
   final Color buttonColor;
   final Color iconColor;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class RaisedIconButton extends StatelessWidget {
       onTap: onPressed,
       borderRadius: BorderRadius.circular(size),
       child: Container(
-        padding: const EdgeInsets.all(6),
+        padding: padding,
         decoration: BoxDecoration(
           color: buttonColor,
           borderRadius: BorderRadius.circular(size),
