@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
     <key>NSCameraUsageDescription</key>
-    <string>Allow Bogach to access a camera on your device to make an Avatar?</string>
+    <string></string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>Allow Bogach to access gallery on your device to upload an Avatar?</string>
+    <string></string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
