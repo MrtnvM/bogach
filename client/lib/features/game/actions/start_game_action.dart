@@ -20,7 +20,7 @@ class StartGameAction extends BaseAction {
   final GameContext gameContext;
 
   @override
-  FutureOr<void> before() async {
+  Future<void> before() async {
     super.before();
     await dispatchFuture(SetGameContextAction(gameContext));
   }
