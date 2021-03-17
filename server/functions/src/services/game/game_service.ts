@@ -144,6 +144,7 @@ export class GameService {
           new MonthResultTransformer(),
           new UpdateMoveStartDateTransformer(),
           new MonthTransformer(),
+          new InsuranceTransformer(userId),
         ]);
       } catch (error) {
         const errorMessage =

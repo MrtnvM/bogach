@@ -75,13 +75,15 @@ class AssetsList extends HookWidget {
         DetailRow(
           title: Strings.insuranceTitle,
           value: totalInsurance.toPrice(),
-          details: insuranses
-              .map((insurance) => '${insurance.name}; '
-                  '${Strings.defence} - ${insurance.value}; '
-                  '${Strings.cost} - ${insurance.cost} '
-                  '${Strings.expires(insurance.duration - currentMonth - //
-                      (insurance.fromMonth - 1))}')
-              .toList(),
+          details: insuranses.map((insurance) {
+            final monthsLeft =
+                insurance.duration - (currentMonth - insurance.fromMonth);
+
+            return '${insurance.name}; '
+                '${Strings.defence} - ${insurance.value}; '
+                '${Strings.cost} - ${insurance.cost}; '
+                '${Strings.expires(monthsLeft)}';
+          }).toList(),
         ),
         DetailRow(
           title: Strings.investments,
