@@ -1,10 +1,9 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
-import 'package:cash_flow/core/hooks/dispatcher.dart';
-import 'package:cash_flow/features/game/actions/send_player_move_action.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/business/buy/model/business_buy_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/business/buy/ui/business_buy_game_event_hooks.dart';
+import 'package:cash_flow/presentation/gameboard/gameboard_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_content.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
@@ -19,6 +18,7 @@ class BusinessBuyGameEventWidget extends HookWidget {
   const BusinessBuyGameEventWidget(this.event) : assert(event != null);
 
   final GameEvent event;
+
   BusinessBuyEventData get eventData => event.data;
 
   @override
@@ -29,8 +29,8 @@ class BusinessBuyGameEventWidget extends HookWidget {
       event: event,
       action: buySellAction.value,
     );
+    final skipPlayerAction = useSkipAction(event.id);
     final businessDialogInfoModel = useBusinessBuyInfoDialogModel();
-    final dispatch = useDispatcher();
 
     return Column(
       children: <Widget>[
@@ -72,7 +72,7 @@ class BusinessBuyGameEventWidget extends HookWidget {
             );
           },
           skip: () {
-            dispatch(SendPlayerMoveAction(eventId: event.id));
+            skipPlayerAction();
 
             AnalyticsSender.skipBuyBusiness(
               event.name,

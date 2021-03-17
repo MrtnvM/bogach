@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/store/redux_action_observer.dart';
@@ -12,7 +10,7 @@ class StartListeningPurchasesAction extends BaseAction {
   StartListeningPurchasesAction();
 
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     final purchaseService = GetIt.I.get<PurchaseService>();
     final action$ = GetIt.I.get<ReduxActionObserver>().onAction;
 
@@ -29,7 +27,7 @@ class StartListeningPurchasesAction extends BaseAction {
 
 class StopListeningPurchasesAction extends BaseAction {
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     return null;
   }
 }

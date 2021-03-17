@@ -1,12 +1,11 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/state_hooks.dart';
-import 'package:cash_flow/core/hooks/dispatcher.dart';
-import 'package:cash_flow/features/game/actions/send_player_move_action.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/debenture_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event_hooks.dart';
+import 'package:cash_flow/presentation/gameboard/gameboard_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_content.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
@@ -36,6 +35,7 @@ class DebentureGameEventWidget extends HookWidget {
       selectedCount: selectedCount.value,
       action: buySellAction.value,
     );
+    final skipPlayerAction = useSkipAction(event.id);
 
     final userId = useUserId();
     final cash = useCurrentGame((g) => g.participants[userId].account.cash);
@@ -45,8 +45,6 @@ class DebentureGameEventWidget extends HookWidget {
         eventData.nominal * eventData.profitabilityPercent / 100 / 12;
 
     final debentureDialogInfoModel = useDebentureInfoDialogModel();
-
-    final dispatch = useDispatcher();
 
     final selectorViewModel = SelectorViewModel(
       currentPrice: eventData.currentPrice,
@@ -98,6 +96,7 @@ class DebentureGameEventWidget extends HookWidget {
         PlayerActionBar(
           confirm: () {
             sendPlayerAction();
+
             AnalyticsSender.buySellDebenture(
               buySellAction.value,
               selectedCount.value,
@@ -106,7 +105,7 @@ class DebentureGameEventWidget extends HookWidget {
             );
           },
           skip: () {
-            dispatch(SendPlayerMoveAction(eventId: event.id));
+            skipPlayerAction();
 
             AnalyticsSender.skipBuySellDebenture(
               buySellAction.value,

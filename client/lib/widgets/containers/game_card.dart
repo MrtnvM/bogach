@@ -1,10 +1,14 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class GameCard extends StatelessWidget {
+class GameCard extends HookWidget {
   const GameCard({
     @required this.title,
     @required this.description,
@@ -25,54 +29,60 @@ class GameCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          constraints: BoxConstraints(
-            maxHeight: 115,
-            maxWidth: MediaQuery.of(context).size.width * 0.6,
-          ),
-          padding: EdgeInsets.only(
-            top: 16,
-            bottom: isCollapsed ? 16 : 22,
-            left: 16,
-            right: 16,
-          ),
-          decoration: BoxDecoration(
-            color: ColorRes.imagePlaceholder,
-            borderRadius: const BorderRadius.all(Radius.circular(20)),
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 8,
-                color: Colors.grey.withAlpha(150),
-              )
-            ],
-            image: imageUrl != null //
-                ? _getGameItemDecorationImage(imageUrl)
-                : null,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Row(
-                children: [
-                  Expanded(
-                    child: AnimatedCrossFade(
-                      duration: const Duration(milliseconds: 300),
-                      firstChild: _buildGameContent(),
-                      secondChild: _buildActionButtons(
-                        isCollapsed: isCollapsed,
+    final mediaQuery = useAdaptiveMediaQueryData();
+    final size = useAdaptiveSize();
+
+    return MediaQuery(
+      data: mediaQuery,
+      child: Center(
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            constraints: BoxConstraints(
+              maxHeight: max(size(116), 104),
+              maxWidth: MediaQuery.of(context).size.width * 0.6,
+            ),
+            padding: EdgeInsets.only(
+              top: size(16),
+              bottom: size(isCollapsed ? 16 : 20),
+              left: size(16),
+              right: size(16),
+            ),
+            decoration: BoxDecoration(
+              color: ColorRes.imagePlaceholder,
+              borderRadius: BorderRadius.all(Radius.circular(size(20))),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 8,
+                  color: Colors.grey.withAlpha(150),
+                )
+              ],
+              image: imageUrl != null //
+                  ? _getGameItemDecorationImage(imageUrl)
+                  : null,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Row(
+                  children: [
+                    Expanded(
+                      child: AnimatedCrossFade(
+                        duration: const Duration(milliseconds: 300),
+                        firstChild: _buildGameContent(),
+                        secondChild: _buildActionButtons(
+                          isCollapsed: isCollapsed,
+                        ),
+                        crossFadeState: !isCollapsed
+                            ? CrossFadeState.showFirst
+                            : CrossFadeState.showSecond,
                       ),
-                      crossFadeState: !isCollapsed
-                          ? CrossFadeState.showFirst
-                          : CrossFadeState.showSecond,
                     ),
-                  ),
-                ],
-              )
-            ],
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -133,7 +143,7 @@ DecorationImage _getGameItemDecorationImage(String url) {
   );
 }
 
-class _GameTemplateActionButton extends StatelessWidget {
+class _GameTemplateActionButton extends HookWidget {
   const _GameTemplateActionButton({
     Key key,
     this.action,
@@ -147,13 +157,13 @@ class _GameTemplateActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final size = useAdaptiveSize();
 
     return GestureDetector(
       onTap: action,
       child: Container(
-        height: 34,
-        width: screenWidth < 350 ? 100 : 130,
+        height: size(34),
+        width: size(130),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: color,

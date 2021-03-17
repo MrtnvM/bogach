@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/operation.dart';
@@ -11,7 +9,7 @@ class OnGameErrorAction extends BaseAction {
   final dynamic error;
 
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     return state.rebuild((s) {
       setErrorOperationStateIfNeeded(Operation.createGame, s);
       setErrorOperationStateIfNeeded(Operation.createQuestGame, s);

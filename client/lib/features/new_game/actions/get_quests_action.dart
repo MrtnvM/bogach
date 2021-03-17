@@ -18,7 +18,7 @@ class GetQuestsAction extends BaseAction {
   Operation get operationKey => Operation.getQuests;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
 
     final quests = await gameService.getQuests(userId);

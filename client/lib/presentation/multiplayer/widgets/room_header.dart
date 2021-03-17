@@ -20,7 +20,7 @@ class RoomHeader extends HookWidget {
     final screenSize = useScreenSize();
     final headerDesiredHeight = screenSize.height * 0.3;
     final headerHeight =
-        min(headerDesiredHeight, screenSize.height > 700 ? 300 : 200);
+        min(headerDesiredHeight, screenSize.height > 700 ? 300.0 : 200.0);
 
     final template = useGlobalState(
       (s) => s.newGame.gameTemplates.itemsMap[templateId],

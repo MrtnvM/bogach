@@ -22,7 +22,7 @@ class LoginViaAppleAction extends BaseAction {
   final String lastName;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
 
     final currentUser = await userService.loginViaApple(

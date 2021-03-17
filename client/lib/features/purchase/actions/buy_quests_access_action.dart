@@ -14,7 +14,7 @@ class BuyQuestsAccessAction extends BaseAction {
   bool abortDispatch() => state.profile.currentUser == null;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final userId = state.profile.currentUser.id;
 
     final purchaseService = GetIt.I.get<PurchaseService>();

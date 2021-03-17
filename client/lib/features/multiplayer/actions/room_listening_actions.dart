@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/store/redux_action_observer.dart';
@@ -15,7 +13,7 @@ class StartListeningRoomUpdatesAction extends BaseAction {
   final String roomId;
 
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     final gameService = GetIt.I.get<GameService>();
     final action$ = GetIt.I.get<ReduxActionObserver>().onAction;
 
@@ -41,7 +39,7 @@ class StopListeningRoomUpdatesAction extends BaseAction {
   final String roomId;
 
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     return state.rebuild((s) {
       s.multiplayer.currentRoom = null;
     });

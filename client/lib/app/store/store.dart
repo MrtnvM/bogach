@@ -17,6 +17,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,6 +45,7 @@ void configureDependencyInjection(
 ) {
   final firebaseAuth = FirebaseAuth.instance;
   final firebaseMessaging = FirebaseMessaging();
+  final cloudStorage = FirebaseStorage.instance;
   final firestore = FirebaseFirestore.instance;
   var realtimeDatabase = FirebaseDatabase.instance;
 
@@ -69,6 +71,7 @@ void configureDependencyInjection(
     firebaseAuth: firebaseAuth,
     firestore: firestore,
     firebaseMessaging: firebaseMessaging,
+    cloudStorage: cloudStorage,
     userCache: userCache,
     apiClient: apiClient,
   );

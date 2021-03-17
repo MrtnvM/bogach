@@ -7,6 +7,7 @@ enum Operation {
   // Profile
   loadCurrentUserProfile,
   sendDevicePushToken,
+  updateUser,
 
   // Game
   loadGameTemplates,

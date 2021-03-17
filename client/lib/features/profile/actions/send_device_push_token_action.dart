@@ -21,7 +21,7 @@ class SendDevicePushTokenAction extends BaseAction {
   Operation get operationKey => Operation.sendDevicePushToken;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
 
     await userService.sendUserPushToken(

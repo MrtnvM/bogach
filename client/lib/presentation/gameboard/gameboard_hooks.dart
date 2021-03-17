@@ -1,9 +1,12 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
+import 'package:cash_flow/features/game/actions/send_player_move_action.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/errors/domain_game_error.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 void useGameboardAnalytics() {
@@ -115,5 +118,15 @@ bool Function(double price) useIsEnoughCashValidator() {
     }
 
     return isEnoughCash;
+  };
+}
+
+VoidCallback useSkipAction(String eventId) {
+  final dispatch = useDispatcher();
+  final context = useContext();
+
+  return () {
+    dispatch(SendPlayerMoveAction(eventId: eventId))
+        .catchError((e) => handleError(context: context, exception: e));
   };
 }

@@ -16,7 +16,7 @@ class QueryPastPurchasesAction extends BaseAction {
   bool abortDispatch() => state.profile.currentUser == null;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final purchaseService = GetIt.I.get<PurchaseService>();
     await purchaseService.queryPastPurchases();
     return null;
@@ -32,7 +32,7 @@ class OnPastPurchasesRestoredAction extends BaseAction {
   bool abortDispatch() => state.profile.currentUser == null;
 
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     return state.rebuild((s) {
       s.purchase.pastPurchases = pastPurchases.toBuiltList().toBuilder();
     });

@@ -105,6 +105,7 @@ class Strings {
   static const price = 'Стоимость:';
   static const cost = 'Стоимость';
   static const defence = 'Защита';
+  static String expires(int count) => 'Закончится через $count мес.';
 
   static String get cash => 'Наличные';
   static String get cashDescription => 'Cумма денег, которая у тебя на руках';
@@ -420,7 +421,8 @@ class Strings {
       'У вас кончились игры.\nХотите купить ещё?';
   static String get multiplayerAdvertisingMessageWhenHaveGames =>
       'Хотите купить ещё игр?';
-  static String get asGift => 'в подарок';
+  static String get discount => 'Скидка';
+
   static String get inviteFriendsToStart =>
       'Пригласите друзей, чтобы начать игру';
   static String get joinToRoom => 'Игра начнётся автоматически, '
@@ -483,4 +485,12 @@ class Strings {
   static String get tutorialGoNext6 => 'Хорошо';
   static String get tutorialGoNext7 => 'Ок';
   static String get tutorialFinish => 'Погнали!';
+
+  // Account
+  static String get yourName => 'Ваше имя';
+  static String get inviteNotifications => 'Уведомления о приглашениях';
+  static String get friends => 'Друзья';
+  static String get saveChanges => 'Сохранить изменения';
+  static String get sureToGoOut => 'Вы действительно хотите выйти из аккаунта?';
+  static String get goOut => 'Выйти';
 }

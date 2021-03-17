@@ -18,7 +18,7 @@ class QueryProductsForSaleAction extends BaseAction {
   Operation get operationKey => Operation.queryProductDetails;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final purchaseService = GetIt.I.get<PurchaseService>();
 
     final productsForSale = await purchaseService.queryProductDetails(ids: ids);

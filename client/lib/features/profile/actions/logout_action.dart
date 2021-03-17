@@ -10,7 +10,7 @@ class LogoutAction extends BaseAction {
   LogoutAction();
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
     final usersAddToFriendsStorage = GetIt.I.get<UsersAddToFriendsStorage>();
 

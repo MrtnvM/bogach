@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
@@ -14,7 +12,7 @@ class OnGameStateChangedAction extends BaseAction {
   final Game game;
 
   @override
-  FutureOr<AppState> reduce() {
+  AppState reduce() {
     return state.rebuild((s) {
       var newActiveGameState = s.game.activeGameState;
 
