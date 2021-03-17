@@ -33,7 +33,7 @@ Future<File> chooseImage({
     return _cropImage(File(image.path), aspectRatio);
   }
 
-  return Future.value(null);
+  return null;
 }
 
 Future<ImageSourceType> _showChooseSourceTypeDialog(BuildContext context) {

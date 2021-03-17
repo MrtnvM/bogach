@@ -1,4 +1,6 @@
+import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
+import 'package:cash_flow/features/multiplayer/actions/share_add_friend_link_action.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/presentation/main/account/widgets/friend_item_widget.dart';
 import 'package:cash_flow/presentation/main/account/widgets/invite_friend_item_widget.dart';
@@ -45,7 +47,7 @@ class FriendsListWidget extends HookWidget {
   }
 }
 
-class _InviteButton extends StatelessWidget {
+class _InviteButton extends HookWidget {
   const _InviteButton({
     Key key,
     @required this.inviteButtonSize,
@@ -57,8 +59,10 @@ class _InviteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dispatch = useDispatcher();
+
     return InkWell(
-      onTap: () => print('Invite'),
+      onTap: () => dispatch(ShareAddFriendLinkAction()),
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 8,
