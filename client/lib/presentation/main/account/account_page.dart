@@ -105,7 +105,6 @@ class AccountPage extends HookWidget {
                     withRoundedBorder: true,
                     onPressed: () {
                       DropFocus.drop();
-                      newAvatar.value = null;
 
                       dispatch(
                         UpdateUserAction(
@@ -114,6 +113,8 @@ class AccountPage extends HookWidget {
                           avatar: newAvatar.value,
                         ),
                       );
+
+                      newAvatar.value = null;
                     },
                   ),
                 ),
