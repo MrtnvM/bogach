@@ -29,7 +29,7 @@ class AddFriendsAction extends BaseAction {
   Operation get operationKey => Operation.addFriend;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
     final usersAddToFriendsStorage = GetIt.I.get<UsersAddToFriendsStorage>();
 
@@ -47,10 +47,11 @@ class AddFriendsAction extends BaseAction {
         userId: userId,
         retryCount: retryCount + 1,
       );
+
       await _resendActionWithDelay(action);
     });
 
-    return state;
+    return null;
   }
 
   Future<void> _resendActionWithDelay(AddFriendsAction action) async {

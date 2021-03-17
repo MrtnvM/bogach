@@ -12,7 +12,7 @@ class CheckAddFriendsStorage extends BaseAction {
   Operation get operationKey => Operation.addFriendToStorage;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final usersAddToFriendsStorage = GetIt.I.get<UsersAddToFriendsStorage>();
     final usersToAdd = usersAddToFriendsStorage.getUsersAddToFriends();
     final userId = store.state.profile.currentUser.id;
@@ -20,6 +20,7 @@ class CheckAddFriendsStorage extends BaseAction {
     if (usersToAdd.isNotEmpty) {
       dispatch(AddFriendsAction(userId: userId));
     }
-    return state;
+
+    return null;
   }
 }

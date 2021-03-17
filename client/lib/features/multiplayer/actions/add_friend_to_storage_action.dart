@@ -8,9 +8,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 
 class AddFriendToStorageAction extends BaseAction {
-  AddFriendToStorageAction({
-    @required this.userAddToFriendId,
-  }) : assert(userAddToFriendId != null);
+  AddFriendToStorageAction({@required this.userAddToFriendId})
+      : assert(userAddToFriendId != null);
 
   final String userAddToFriendId;
 
@@ -18,9 +17,9 @@ class AddFriendToStorageAction extends BaseAction {
   Operation get operationKey => Operation.addFriendToStorage;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final usersAddToFriendsStorage = GetIt.I.get<UsersAddToFriendsStorage>();
     await usersAddToFriendsStorage.addUserId(userAddToFriendId);
-    return state;
+    return null;
   }
 }
