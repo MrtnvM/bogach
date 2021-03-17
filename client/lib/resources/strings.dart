@@ -19,6 +19,8 @@ class Strings {
   static String get submit => 'Отправить';
   static String get select => 'Выбрать';
   static String get logout => 'Выйти из аккаунта';
+  static String get gallery => 'Галерея';
+  static String get camera => 'Камера';
 
   // Main Page
   static String get gamesTabTitle => 'Игры';
