@@ -23,7 +23,7 @@ class StartSinglePlayerGameAction extends BaseAction {
   bool abortDispatch() => state.profile.currentUser == null;
 
   @override
-  FutureOr<void> before() {
+  void before() {
     super.before();
     _initialNewGameId = state.newGame.newGameId;
   }

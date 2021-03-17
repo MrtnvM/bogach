@@ -23,6 +23,7 @@ class MainPage extends HookWidget {
   Widget build(BuildContext context) {
     final user = useCurrentUser();
     final dispatch = useDispatcher();
+
     final setOnline = () {
       dispatch(SetUserOnlineAction(
         user: OnlineProfile(

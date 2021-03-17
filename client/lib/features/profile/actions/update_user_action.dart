@@ -23,7 +23,7 @@ class UpdateUserAction extends BaseAction {
   Operation get operationKey => Operation.updateUser;
 
   @override
-  FutureOr<AppState> reduce() async {
+  Future<AppState> reduce() async {
     final userService = GetIt.I.get<UserService>();
 
     await userService.updateUser(
