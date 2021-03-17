@@ -3,6 +3,7 @@ import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
+import 'package:cash_flow/features/multiplayer/actions/check_add_friends_storage.dart';
 import 'package:cash_flow/features/profile/actions/login_via_apple_action.dart';
 import 'package:cash_flow/features/profile/actions/login_via_facebook_action.dart';
 import 'package:cash_flow/features/profile/actions/login_via_google_action.dart';
@@ -288,7 +289,7 @@ class LoginPage extends HookWidget {
 
     dispatch(action)
         .whenComplete(() => isAuthorising.value = false)
-        .then((value) => _onLoginSuccess())
+        .then((value) => _onLoginSuccess(dispatch))
         .catchError((error) => _onLoginError(context, error, isAuthorising));
   }
 
@@ -347,7 +348,7 @@ class LoginPage extends HookWidget {
     );
 
     dispatch(action)
-        .then((value) => _onLoginSuccess())
+        .then((value) => _onLoginSuccess(dispatch))
         .catchError((error) => _onLoginError(context, error, isAuthorising));
   }
 
@@ -379,7 +380,7 @@ class LoginPage extends HookWidget {
         );
 
         dispatch(action) //
-            .then((value) => _onLoginSuccess())
+            .then((value) => _onLoginSuccess(dispatch))
             .catchError((e) => _onLoginError(context, e, isAuthorising));
 
         break;
@@ -407,8 +408,11 @@ class LoginPage extends HookWidget {
     }
   }
 
-  void _onLoginSuccess() {
+  void _onLoginSuccess(
+    Future<void> dispatch(BaseAction action),
+  ) {
     AnalyticsSender.signIn();
+    dispatch(CheckAddFriendsStorage());
     appRouter.startWith(const MainPage());
   }
 }

@@ -34,6 +34,7 @@ export const create = (daos: DAOs) => {
 
     const templateId = apiRequest.jsonField('templateId');
     const participantsIds = apiRequest.optionalJsonField('participantsIds');
+    
     const userId = apiRequest.optionalJsonField('userId');
 
     const game = gameService.createNewGame(templateId, participantsIds || [userId]);

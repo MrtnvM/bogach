@@ -2,6 +2,7 @@ import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/store/redux_action_logger.dart';
 import 'package:cash_flow/app/store/redux_action_observer.dart';
+import 'package:cash_flow/cache/add_friends_storage.dart';
 import 'package:cash_flow/cache/user_cache.dart';
 import 'package:cash_flow/configuration/cash_api_environment.dart';
 import 'package:cash_flow/services/config_service.dart';
@@ -89,9 +90,14 @@ void configureDependencyInjection(
     preferences: sharedPreferences,
   );
 
+  final usersAddToFriendsStorage = UsersAddToFriendsStorage(
+    preferences: sharedPreferences,
+  );
+
   GetIt.I.registerSingleton<GameService>(gameService);
   GetIt.I.registerSingleton<UserService>(userService);
   GetIt.I.registerSingleton<PurchaseService>(purchaseService);
   GetIt.I.registerSingleton<ConfigService>(configService);
   GetIt.I.registerSingleton<MultiplayerService>(multiplayerService);
+  GetIt.I.registerSingleton<UsersAddToFriendsStorage>(usersAddToFriendsStorage);
 }

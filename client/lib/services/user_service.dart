@@ -255,4 +255,13 @@ class UserService {
     await userCache.setUserProfile(updatedUser);
     return updatedUser;
   }
+
+  Future<void> addFriends(
+    String userId,
+    List<String> usersAddToFriends,
+  ) {
+    return apiClient
+        .addFriends(userId, usersAddToFriends)
+        .catchError(recordError);
+  }
 }

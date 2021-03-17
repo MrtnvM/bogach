@@ -59,6 +59,7 @@ export const completeMonth = RoomAPI.completeMonth;
 export const updatePurchases = PurchaseAPI.updatePurchases;
 
 export const getUserProfile = UserAPI.getUserProfile;
+export const addFriends = UserAPI.addFriends;
 
 export const setOnlineStatus = MultiplayerAPI.setOnlineStatus;
 export const getOnlineProfiles = MultiplayerAPI.getOnlineProfiles;
