@@ -26,6 +26,15 @@ class NameInput extends StatelessWidget {
         labelStyle: const TextStyle(
           color: ColorRes.mainGreen,
         ),
+        border: const UnderlineInputBorder(
+          borderSide: BorderSide(color: ColorRes.mainGreen),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: ColorRes.mainGreen.withAlpha(100)),
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: ColorRes.mainGreen),
+        ),
       ),
     );
   }
