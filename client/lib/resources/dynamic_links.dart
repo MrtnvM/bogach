@@ -6,8 +6,7 @@ class DynamicLinks {
 
   // route
   static const join = 'join';
-
-  static const addFriend = 'addFriend';
+  static const addFriend = 'friends/invite';
 
   // params
   static const roomInvite = 'roomInvite';
