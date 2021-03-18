@@ -43,5 +43,8 @@ List<UserProfile> useCurrentUserFriends() {
     return null;
   }, [friendsIds, profiles]);
 
-  return friendsIds.map(profiles.getItem).toList();
+  return friendsIds //
+      .map(profiles.getItem)
+      .toList()
+      .cast<UserProfile>();
 }
