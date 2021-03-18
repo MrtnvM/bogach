@@ -107,7 +107,13 @@ class Strings {
   static const price = 'Стоимость:';
   static const cost = 'Стоимость';
   static const defence = 'Защита';
-  static String expires(int count) => 'Закончится через $count мес.';
+  static String expires(int count) {
+    if (count == 0) {
+      return 'Закончится в этом месяце';
+    }
+
+    return 'Закончится через $count мес.';
+  }
 
   static String get cash => 'Наличные';
   static String get cashDescription => 'Cумма денег, которая у тебя на руках';
