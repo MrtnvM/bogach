@@ -4,7 +4,12 @@ class DynamicLinks {
   final String customScheme;
   final String baseUrl;
 
+  // route
   static const join = 'join';
-  static const roomInvite = 'roomInvite';
+
   static const addFriend = 'addFriend';
+
+  // params
+  static const roomInvite = 'roomInvite';
+  static const inviterId = 'inviterId';
 }

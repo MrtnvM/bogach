@@ -14,13 +14,14 @@ import { OnlineProfile } from '../models/domain/multiplayer/online_profile';
 export class UserProvider {
   constructor(private userDao: IUserDAO) {}
 
+  // TODO add User Model without nullable fields?
   async getUserProfile(userId: UserEntity.Id): Promise<User> {
     const profile = await this.userDao.getUser(userId);
     if (!profile) {
       throw Error('No user with this id: ' + userId);
     }
 
-    const updatedProfile = this.migrateProfileToVersion3(profile);
+    const updatedProfile = this.migrateProfileToVersion4(profile);
 
     if (JSON.stringify(profile) !== JSON.stringify(updatedProfile)) {
       await this.updateUserProfile(updatedProfile);
@@ -85,7 +86,7 @@ export class UserProvider {
     }
   }
 
-  private migrateProfileToVersion3(profile: User): User {
+  private migrateProfileToVersion4(profile: User): User {
     let updatedProfile = profile;
 
     if (!profile.purchaseProfile) {
@@ -132,6 +133,18 @@ export class UserProvider {
     if (!profile.lastGames) {
       updatedProfile = produce(updatedProfile, (draft) => {
         draft.lastGames = LastGamesEntity.initial();
+      });
+    }
+
+    if (!profile.lastGames) {
+      updatedProfile = produce(updatedProfile, (draft) => {
+        draft.lastGames = LastGamesEntity.initial();
+      });
+    }
+
+    if (!profile.friends) {
+      updatedProfile = produce(updatedProfile, (draft) => {
+        draft.friends = [];
       });
     }
 

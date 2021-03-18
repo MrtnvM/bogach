@@ -4,13 +4,13 @@ import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/cache/user_cache.dart';
 import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
-import 'package:cash_flow/models/network/core/search_query_result.dart';
 import 'package:cash_flow/models/network/request/register_request_model.dart';
 import 'package:cash_flow/utils/error_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -23,6 +23,7 @@ class UserService {
   UserService({
     @required this.firebaseAuth,
     @required this.firestore,
+    @required this.cloudStorage,
     @required this.firebaseMessaging,
     @required this.userCache,
     @required this.apiClient,
@@ -33,6 +34,7 @@ class UserService {
 
   final FirebaseAuth firebaseAuth;
   final FirebaseFirestore firestore;
+  final FirebaseStorage cloudStorage;
   final FirebaseMessaging firebaseMessaging;
   final UserCache userCache;
   final CashFlowApiClient apiClient;
@@ -124,24 +126,6 @@ class UserService {
     return Future.value();
   }
 
-  // TODO(maxim): Remove searching players
-  Future<SearchQueryResult<UserProfile>> searchUsers(
-    String searchString,
-  ) async {
-    final users = await firestore
-        .collection('users')
-        .where('userName', isGreaterThanOrEqualTo: searchString)
-        .get()
-        .then((snapshot) =>
-            snapshot.docs.map((d) => UserProfile.fromJson(d.data())).toList())
-        .catchError(recordError);
-
-    return SearchQueryResult(
-      searchString: searchString,
-      items: users,
-    );
-  }
-
   Future<List<UserProfile>> loadProfiles(List<String> profileIds) async {
     final profiles = await Future.wait(
       profileIds.map((id) => firestore.collection('users').doc(id).get()),
@@ -201,6 +185,40 @@ class UserService {
     }).handleError(recordError, test: (e) => true);
   }
 
+  Future<void> updateUser({
+    @required String userId,
+    String newName,
+    File newAvatar,
+  }) async {
+    final newInfo = <String, dynamic>{};
+
+    if (newName != null) {
+      newInfo.addAll({'userName': newName});
+    }
+
+    if (newAvatar != null) {
+      final url = await cloudStorage
+          .ref()
+          .child('avatars/$userId/${DateTime.now()}')
+          .putFile(newAvatar)
+          .onComplete
+          .then((task) => task.ref.getDownloadURL())
+          .catchError(recordError);
+
+      newInfo.addAll({'avatarUrl': url});
+    }
+
+    if (newInfo.isEmpty) {
+      return;
+    }
+
+    return firestore
+        .collection('users')
+        .doc(userId)
+        .update(newInfo)
+        .catchError(recordError);
+  }
+
   Future<UserProfile> _createUserIfNeed(User user) async {
     final userId = user.uid;
     await userCache.deleteUserProfile();
@@ -236,5 +254,14 @@ class UserService {
 
     await userCache.setUserProfile(updatedUser);
     return updatedUser;
+  }
+
+  Future<void> addFriends(
+    String userId,
+    List<String> usersAddToFriends,
+  ) {
+    return apiClient
+        .addFriends(userId, usersAddToFriends)
+        .catchError(recordError);
   }
 }

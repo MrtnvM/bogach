@@ -1,5 +1,6 @@
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/models/domain/user/online/online_profile.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -18,6 +19,7 @@ class OnlineProfilesList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = useAdaptiveSize();
     final getOnlineRequestState = useGlobalState(
       (s) => s.getOperationState(Operation.setOnline),
     );
@@ -33,7 +35,7 @@ class OnlineProfilesList extends HookWidget {
           : ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: profiles.length,
-              padding: const EdgeInsets.only(left: 20),
+              padding: EdgeInsets.only(left: size(20)),
               itemBuilder: (_, index) => _OnlineProfile(
                 profile: profiles[index],
                 onTap: (userId) {
@@ -48,13 +50,13 @@ class OnlineProfilesList extends HookWidget {
                 isSelected:
                     selectedProfiles.value.contains(profiles[index].userId),
               ),
-              separatorBuilder: (_, index) => const SizedBox(width: 16),
+              separatorBuilder: (_, index) => SizedBox(width: size(16)),
             ),
     );
   }
 }
 
-class _OnlineProfile extends StatelessWidget {
+class _OnlineProfile extends HookWidget {
   const _OnlineProfile({
     @required this.profile,
     @required this.onTap,
@@ -67,12 +69,14 @@ class _OnlineProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = useAdaptiveSize();
+
     return GestureDetector(
       onTap: () => onTap?.call(profile.userId),
       child: UserAvatar(
         url: profile.avatarUrl,
-        size: 60,
-        borderWidth: isSelected ? 3 : 0,
+        size: size(60),
+        borderWidth: isSelected ? size(2.5) : 0,
         borderColor: isSelected ? ColorRes.onlineStatus : ColorRes.transparent,
       ),
     );

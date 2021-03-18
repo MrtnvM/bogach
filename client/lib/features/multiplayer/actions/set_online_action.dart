@@ -24,7 +24,7 @@ class SetUserOnlineAction extends BaseAction {
     final onlineProfileRequest = multiplayerService.setUserOnline(user);
     final onlineProfiles = await onlineProfileRequest.catchError((error) {
       Logger.e(error);
-      return [];
+      return <OnlineProfile>[];
     });
 
     return state.rebuild((b) {

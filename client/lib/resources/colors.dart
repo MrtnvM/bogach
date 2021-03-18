@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class ColorRes {
   static const transparent = Color(0x00000000);
   static const white = Color(0xffffffff);
@@ -21,6 +22,7 @@ class ColorRes {
   static const mainBlack = Color(0xFF242424);
 
   static const grey = Color(0xFFBDBDBD);
+  static final lightGrey = Colors.grey.withAlpha(30);
   static const grey2 = Color(0xFFE0E0E0);
   static const greyCog = Color(0xFF9B9B9B);
   static const gallery = Color(0xFFEEEEEE);

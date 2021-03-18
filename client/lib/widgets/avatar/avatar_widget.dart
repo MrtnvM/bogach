@@ -9,6 +9,7 @@ class UserAvatar extends StatelessWidget {
     this.size = 40,
     this.borderWidth = 2,
     this.borderColor = Colors.white,
+    this.pickedAvatar,
   }) : avatarSize = size - borderWidth;
 
   final String url;
@@ -16,6 +17,7 @@ class UserAvatar extends StatelessWidget {
   final double borderWidth;
   final Color borderColor;
   final double avatarSize;
+  final FileImage pickedAvatar;
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +32,20 @@ class UserAvatar extends StatelessWidget {
       width: size,
       height: size,
       child: CircleAvatar(
-        backgroundImage: url == null
-            ? const AssetImage(Images.defaultAvatar)
-            : CachedNetworkImageProvider(url),
+        backgroundImage: _pickSource(),
         backgroundColor: Colors.transparent,
         radius: avatarSize,
       ),
     );
+  }
+
+  ImageProvider _pickSource() {
+    if (pickedAvatar != null) {
+      return pickedAvatar;
+    }
+    if (url != null) {
+      return CachedNetworkImageProvider(url);
+    }
+    return const AssetImage(Images.defaultAvatar);
   }
 }

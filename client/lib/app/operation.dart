@@ -7,6 +7,7 @@ enum Operation {
   // Profile
   loadCurrentUserProfile,
   sendDevicePushToken,
+  updateUser,
 
   // Game
   loadGameTemplates,
@@ -24,6 +25,8 @@ enum Operation {
   setRoomParticipantReady,
   shareRoomInviteLink,
   setOnline,
+  addFriend,
+  addFriendToStorage,
 
   // Purchase
   queryProductDetails,

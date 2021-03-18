@@ -21,8 +21,9 @@ export class InsuranceTransformer extends GameTransformer {
       .map((asset) => asset as InsuranceAsset);
 
     const expiredInsurances = insurances.filter((insurance) => {
-      const currentMonth = participant.progress.currentMonthForParticipant;
-      return currentMonth - insurance.fromMonth > insurance.duration;
+      const currentMonth = game.state.monthNumber;
+      const monthsLeft = insurance.duration - (currentMonth - insurance.fromMonth);
+      return monthsLeft < 0;
     });
 
     if (expiredInsurances.length === 0) {

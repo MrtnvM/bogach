@@ -7,13 +7,13 @@ import 'package:cash_flow/features/multiplayer/actions/create_room_game_action.d
 import 'package:cash_flow/features/multiplayer/actions/set_room_participant_ready_action.dart';
 import 'package:cash_flow/features/multiplayer/actions/share_room_invite_link_action.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
-import 'package:cash_flow/presentation/main/widgets/game_type_title.dart';
 import 'package:cash_flow/presentation/multiplayer/room_page_hooks.dart';
 import 'package:cash_flow/presentation/multiplayer/widgets/participants_list_widget.dart';
 import 'package:cash_flow/presentation/multiplayer/widgets/room_header.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
+import 'package:cash_flow/widgets/progress/section_title.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,7 +43,7 @@ class RoomPage extends HookWidget {
                 children: <Widget>[
                   RoomHeader(templateId: currentRoom.room?.gameTemplateId),
                   const SizedBox(height: 16),
-                  GameTypeTitle(text: Strings.players),
+                  SectionTitle(text: Strings.players),
                   const SizedBox(height: 16),
                   const Divider(height: 1, indent: 16, endIndent: 16),
                   Expanded(child: ParticipantListWidget()),

@@ -7,14 +7,13 @@ import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/new_game/actions/get_quests_action.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/navigation/app_router.dart';
-import 'package:cash_flow/presentation/main/models/selected_item_view_model.dart';
-import 'package:cash_flow/presentation/main/widgets/games_loadable_list_view.dart';
 import 'package:cash_flow/presentation/purchases/quests_access_page.dart';
 import 'package:cash_flow/presentation/quests/quest_item_widget.dart';
 import 'package:cash_flow/presentation/quests/quests_hooks.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/common/common_error_widget.dart';
 import 'package:cash_flow/widgets/common/empty_list_widget.dart';
+import 'package:cash_flow/widgets/progress/games_loadable_list_view.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
@@ -22,9 +21,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class QuestList extends HookWidget {
-  const QuestList(this.selectedListsItem);
+  const QuestList({
+    @required this.selectedItemId,
+    @required this.onSelectionChanged,
+  });
 
-  final ValueNotifier<SelectedItemViewModel> selectedListsItem;
+  final String selectedItemId;
+  final void Function(String) onSelectionChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +76,8 @@ class QuestList extends HookWidget {
                     child: _QuestItemWidget(
                       quest: quests.items[i],
                       index: i,
-                      selectedListsItem: selectedListsItem,
+                      selectedItemId: selectedItemId,
+                      onSelectionChanged: onSelectionChanged,
                     ),
                   ),
                 );
@@ -83,7 +87,8 @@ class QuestList extends HookWidget {
                 quest: quests.items[i],
                 index: i,
                 defaultAction: animationController.forward,
-                selectedListsItem: selectedListsItem,
+                selectedItemId: selectedItemId,
+                onSelectionChanged: onSelectionChanged,
               );
             },
             loadListRequestState: getQuestsRequestState,
@@ -105,14 +110,16 @@ class _QuestItemWidget extends HookWidget {
   const _QuestItemWidget({
     @required this.quest,
     @required this.index,
-    @required this.selectedListsItem,
+    @required this.selectedItemId,
+    @required this.onSelectionChanged,
     this.defaultAction,
   });
 
   final Quest quest;
   final int index;
   final VoidCallback defaultAction;
-  final ValueNotifier<SelectedItemViewModel> selectedListsItem;
+  final String selectedItemId;
+  final void Function(String) onSelectionChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +135,8 @@ class _QuestItemWidget extends HookWidget {
       currentGameId: lastQuestGameInfo?.gameId,
       isLocked: onQuestSelected == null,
       onQuestSelected: onQuestSelected ?? (l, a) => defaultAction(),
-      selectedListsItem: selectedListsItem,
+      selectedQuestId: selectedItemId,
+      onSelectionChanged: onSelectionChanged,
     );
   }
 

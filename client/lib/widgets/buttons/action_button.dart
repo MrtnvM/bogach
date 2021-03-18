@@ -9,12 +9,14 @@ class ActionButton extends StatelessWidget {
     this.textStyle,
     this.onPressed,
     this.color = ColorRes.grass,
+    this.withRoundedBorder = false,
   });
 
   final String text;
   final VoidCallback onPressed;
   final Color color;
   final TextStyle textStyle;
+  final bool withRoundedBorder;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,9 @@ class ActionButton extends StatelessWidget {
         );
 
     return RaisedButton(
+      shape: withRoundedBorder == true
+          ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))
+          : null,
       onPressed: onPressed,
       color: color,
       child: Text(text, style: titleStyle),

@@ -2,6 +2,7 @@ import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/store/redux_action_logger.dart';
 import 'package:cash_flow/app/store/redux_action_observer.dart';
+import 'package:cash_flow/cache/add_friends_storage.dart';
 import 'package:cash_flow/cache/user_cache.dart';
 import 'package:cash_flow/configuration/cash_api_environment.dart';
 import 'package:cash_flow/services/config_service.dart';
@@ -16,6 +17,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,6 +45,7 @@ void configureDependencyInjection(
 ) {
   final firebaseAuth = FirebaseAuth.instance;
   final firebaseMessaging = FirebaseMessaging();
+  final cloudStorage = FirebaseStorage.instance;
   final firestore = FirebaseFirestore.instance;
   var realtimeDatabase = FirebaseDatabase.instance;
 
@@ -68,6 +71,7 @@ void configureDependencyInjection(
     firebaseAuth: firebaseAuth,
     firestore: firestore,
     firebaseMessaging: firebaseMessaging,
+    cloudStorage: cloudStorage,
     userCache: userCache,
     apiClient: apiClient,
   );
@@ -86,9 +90,14 @@ void configureDependencyInjection(
     preferences: sharedPreferences,
   );
 
+  final usersAddToFriendsStorage = UsersAddToFriendsStorage(
+    preferences: sharedPreferences,
+  );
+
   GetIt.I.registerSingleton<GameService>(gameService);
   GetIt.I.registerSingleton<UserService>(userService);
   GetIt.I.registerSingleton<PurchaseService>(purchaseService);
   GetIt.I.registerSingleton<ConfigService>(configService);
   GetIt.I.registerSingleton<MultiplayerService>(multiplayerService);
+  GetIt.I.registerSingleton<UsersAddToFriendsStorage>(usersAddToFriendsStorage);
 }

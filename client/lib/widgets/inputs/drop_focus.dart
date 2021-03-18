@@ -8,10 +8,12 @@ class DropFocus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
+      onTap: drop,
       child: child,
     );
+  }
+
+  static void drop() {
+    WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
   }
 }

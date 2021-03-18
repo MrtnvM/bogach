@@ -205,4 +205,20 @@ class Styles {
     fontSize: 15,
     fontWeight: FontWeight.w600,
   );
+
+  static const accountCommon = TextStyle(
+    fontFamily: _defaultFontFamily,
+    fontSize: 19,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w500,
+    color: ColorRes.black,
+  );
+
+  static const friendName = TextStyle(
+    fontFamily: _defaultFontFamily,
+    fontSize: 12,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w500,
+    color: ColorRes.black,
+  );
 }

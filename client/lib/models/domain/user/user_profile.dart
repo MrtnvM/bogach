@@ -39,6 +39,9 @@ abstract class UserProfile with _$UserProfile implements StoreListItem {
 
   @late
   bool get isAnonymous => fullName == null || fullName.isEmpty;
+
+  @late
+  bool get isOnline => status == 'online';
 }
 
 LastGames _lastGamesFromJson(dynamic json) {

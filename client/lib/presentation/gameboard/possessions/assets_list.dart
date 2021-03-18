@@ -21,6 +21,7 @@ class AssetsList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final userId = useUserId();
+    final currentMonth = useCurrentGameState().monthNumber;
     final assets = useCurrentGame(
       (g) => g.participants[userId].possessionState.assets,
     );
@@ -28,7 +29,11 @@ class AssetsList extends HookWidget {
     final cashAssets = _getAssets<CashAsset>(assets, AssetType.cash);
     final totalCash = _calculateSum<CashAsset>(cashAssets, (a) => a.value);
 
-    final insuranses = _getAssets<InsuranceAsset>(assets, AssetType.insurance);
+    final insuranses =
+        _getAssets<InsuranceAsset>(assets, AssetType.insurance).where((i) {
+      final monthsLeft = i.duration - (currentMonth - i.fromMonth);
+      return monthsLeft >= 0;
+    }).toList();
     final totalInsurance = _calculateSumInt<InsuranceAsset>(
       insuranses,
       (a) => a.cost,
@@ -74,11 +79,15 @@ class AssetsList extends HookWidget {
         DetailRow(
           title: Strings.insuranceTitle,
           value: totalInsurance.toPrice(),
-          details: insuranses
-              .map((insurance) => '${insurance.name}; '
-                  '${Strings.defence} - ${insurance.value}; '
-                  '${Strings.cost} - ${insurance.cost}')
-              .toList(),
+          details: insuranses.map((insurance) {
+            final monthsLeft =
+                insurance.duration - (currentMonth - insurance.fromMonth);
+
+            return '${insurance.name}; '
+                '${Strings.defence} - ${insurance.value.toPrice()}; '
+                '${Strings.cost} - ${insurance.cost.toPrice()}; '
+                '${Strings.expires(monthsLeft)}';
+          }).toList(),
         ),
         DetailRow(
           title: Strings.investments,
@@ -114,24 +123,24 @@ class AssetsList extends HookWidget {
           title: Strings.property,
           value: totalRealties.toPrice(),
           details: realties
-              .map((i) => '${i.name}; ${Strings.cost} - ${i.downPayment}')
+              .map((i) => '${i.name}; '
+                  '${Strings.cost} - ${i.downPayment.toPrice()}')
               .toList(),
         ),
         DetailRow(
           title: Strings.business,
           value: totalBusinesses.toPrice(),
           details: businesses
-              .map((i) =>
-                  '${i.name}; ${Strings.firstPayment} - ${i.downPayment}')
+              .map((i) => '${i.name}; '
+                  '${Strings.firstPayment} - ${i.downPayment.toPrice()}')
               .toList(),
         ),
         DetailRow(
           title: Strings.other,
           value: totalOtherAssets.toPrice(),
           details: otherAssets
-              .map(
-                (i) => '${i.name}; ${Strings.firstPayment} - ${i.downPayment}',
-              )
+              .map((i) => '${i.name}; '
+                  '${Strings.firstPayment} - ${i.downPayment.toPrice()}')
               .toList(),
         ),
       ],

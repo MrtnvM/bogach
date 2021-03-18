@@ -105,6 +105,13 @@ class Strings {
   static const price = 'Стоимость:';
   static const cost = 'Стоимость';
   static const defence = 'Защита';
+  static String expires(int count) {
+    if (count == 0) {
+      return 'Закончится в этом месяце';
+    }
+
+    return 'Закончится через $count мес.';
+  }
 
   static String get cash => 'Наличные';
   static String get cashDescription => 'Cумма денег, которая у тебя на руках';
@@ -484,4 +491,12 @@ class Strings {
   static String get tutorialGoNext6 => 'Хорошо';
   static String get tutorialGoNext7 => 'Ок';
   static String get tutorialFinish => 'Погнали!';
+
+  // Account
+  static String get yourName => 'Ваше имя';
+  static String get inviteNotifications => 'Уведомления о приглашениях';
+  static String get friends => 'Друзья';
+  static String get saveChanges => 'Сохранить изменения';
+  static String get sureToGoOut => 'Вы действительно хотите выйти из аккаунта?';
+  static String get goOut => 'Выйти';
 }

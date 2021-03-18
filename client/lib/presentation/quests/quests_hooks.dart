@@ -1,6 +1,5 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
-import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/config/config_hooks.dart';
 import 'package:cash_flow/features/new_game/actions/start_quest_game_action.dart';
 import 'package:cash_flow/navigation/app_router.dart';

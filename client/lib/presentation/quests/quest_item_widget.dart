@@ -1,5 +1,4 @@
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
-import 'package:cash_flow/presentation/main/models/selected_item_view_model.dart';
 import 'package:cash_flow/widgets/containers/game_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -12,25 +11,27 @@ class QuestItemWidget extends HookWidget {
     @required this.currentGameId,
     @required this.onQuestSelected,
     @required this.isLocked,
-    @required this.selectedListsItem,
+    @required this.selectedQuestId,
+    @required this.onSelectionChanged,
   });
 
   final Quest quest;
   final String currentGameId;
   final bool isLocked;
   final void Function(Quest, QuestAction) onQuestSelected;
-  final ValueNotifier<SelectedItemViewModel> selectedListsItem;
+  final String selectedQuestId;
+  final void Function(String) onSelectionChanged;
 
   @override
   Widget build(BuildContext context) {
     final startGame = () {
       onQuestSelected(quest, QuestAction.startNewGame);
-      selectedListsItem.value = SelectedItemViewModel();
+      onSelectionChanged(null);
     };
 
     final continueGame = () {
       onQuestSelected(quest, QuestAction.continueGame);
-      selectedListsItem.value = SelectedItemViewModel();
+      onSelectionChanged(null);
     };
 
     return GameCard(
@@ -39,25 +40,24 @@ class QuestItemWidget extends HookWidget {
       imageUrl: quest.image,
       startGame: startGame,
       continueGame: continueGame,
-      isCollapsed: selectedListsItem.value.selectedQuest == quest.id,
+      isCollapsed: selectedQuestId == quest.id,
       onTap: () {
         if (isLocked) {
           onQuestSelected?.call(null, QuestAction.startNewGame);
-          selectedListsItem.value = SelectedItemViewModel();
+          onSelectionChanged(null);
           return;
         }
 
         if (currentGameId == null) {
           onQuestSelected?.call(quest, QuestAction.startNewGame);
-          selectedListsItem.value = SelectedItemViewModel();
+          onSelectionChanged(null);
           return;
         }
 
-        if (selectedListsItem.value.selectedQuest == quest.id) {
-          selectedListsItem.value = SelectedItemViewModel();
+        if (selectedQuestId == quest.id) {
+          onSelectionChanged(null);
         } else {
-          selectedListsItem.value =
-              SelectedItemViewModel(selectedQuest: quest.id);
+          onSelectionChanged(quest.id);
         }
       },
     );
