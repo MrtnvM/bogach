@@ -3,7 +3,7 @@ import * as config from '../config';
 
 import { APIRequest } from '../core/api/request_data';
 import { UserProvider } from '../providers/user_provider';
-import { UserEntity } from '../models/domain/user/user';
+import { User, UserEntity } from '../models/domain/user/user';
 import { DAOs } from '../dao/daos';
 import { produce } from 'immer';
 
@@ -36,11 +36,13 @@ export const create = (daos: DAOs) => {
         throw new Error(usersAddToFriendsKey + ' should be array');
       }
 
+      /// Adding friends to current user
       await _addFriendsToUser(userId, usersAddToFriends);
+
+      /// Adding current user as friend to invited users
       usersAddToFriends.forEach(async (userAddToFriend) => {
         await _addFriendsToUser(userAddToFriend, [userId]);
       });
-
     };
 
     await send(addFriendsExecution(), response);
@@ -49,7 +51,7 @@ export const create = (daos: DAOs) => {
   const _addFriendsToUser = async (userId: UserEntity.Id, usersToAdd: string[]) => {
     const user = await userProvider.getUserProfile(userId);
     const updatedUser = produce(user, (draft) => {
-      draft.friends = _updateFriendsList(user.friends || [], usersToAdd);
+      draft.friends = _updateFriendsList(user, usersToAdd);
       return draft;
     });
     await userProvider.updateUserProfile(updatedUser);
@@ -57,12 +59,16 @@ export const create = (daos: DAOs) => {
     return;
   };
 
-  const _updateFriendsList = (currentFriends: string[], usersToAdd: string[]): string[] => {
-    usersToAdd.forEach((userToAdd) => {
-      if (!currentFriends.includes(userToAdd)) {
-        currentFriends.push(userToAdd);
-      }
-    });
+  const _updateFriendsList = (user: User, usersToAdd: string[]): string[] => {
+    const currentFriends = user.friends || [];
+
+    usersToAdd
+      .filter((userId) => userId !== user.userId)
+      .forEach((userId) => {
+        if (!currentFriends.includes(userId)) {
+          currentFriends.push(userId);
+        }
+      });
 
     return currentFriends;
   };
