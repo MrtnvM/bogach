@@ -29,7 +29,11 @@ class AssetsList extends HookWidget {
     final cashAssets = _getAssets<CashAsset>(assets, AssetType.cash);
     final totalCash = _calculateSum<CashAsset>(cashAssets, (a) => a.value);
 
-    final insuranses = _getAssets<InsuranceAsset>(assets, AssetType.insurance);
+    final insuranses =
+        _getAssets<InsuranceAsset>(assets, AssetType.insurance).where((i) {
+      final monthsLeft = i.duration - (currentMonth - i.fromMonth);
+      return monthsLeft >= 0;
+    }).toList();
     final totalInsurance = _calculateSumInt<InsuranceAsset>(
       insuranses,
       (a) => a.cost,
