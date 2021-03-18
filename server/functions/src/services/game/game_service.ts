@@ -136,14 +136,15 @@ export class GameService {
       try {
         updatedGame = applyGameTransformers(game, [
           new UserProgressTransformer(eventId, userId),
-          new ParticipantAccountsTransformer(),
           new PossessionStateTransformer(),
+          new ParticipantAccountsTransformer(),
           new WinnersTransformer(),
           new HistoryGameTransformer(),
           new GameEventsTransformer(),
           new MonthResultTransformer(),
           new UpdateMoveStartDateTransformer(),
           new MonthTransformer(),
+          new InsuranceTransformer(userId),
         ]);
       } catch (error) {
         const errorMessage =
@@ -188,7 +189,6 @@ export class GameService {
 
         updatedGame = applyGameTransformers(game, [
           new ResetEventIndexTransformer(userId),
-          new InsuranceTransformer(userId),
           new PossessionStateTransformer(),
           new HistoryGameTransformer(),
         ]);
