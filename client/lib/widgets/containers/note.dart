@@ -1,10 +1,16 @@
+import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 
 class Note extends StatelessWidget {
-  const Note({@required this.title, Key key}) : super(key: key);
+  const Note({
+    Key key,
+    @required this.title,
+    this.margin,
+  }) : super(key: key);
 
   final String title;
+  final EdgeInsets margin;
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +23,9 @@ class Note extends StatelessWidget {
         horizontal: 16,
         vertical: 8,
       ),
+      margin: margin,
       decoration: BoxDecoration(
-        color: Colors.white.withAlpha(50),
+        color: ColorRes.mainGreen.withAlpha(200),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(

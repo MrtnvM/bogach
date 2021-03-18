@@ -422,6 +422,9 @@ class Strings {
   static String get roomCreationFailed =>
       'При создании комнаты возникла ошибка';
   static String get join => 'Присоединиться';
+  static String waitingWhenLeaderStartGame(String leaderName) {
+    return 'Ожидаем пока $leaderName начнет игру...';
+  }
 
   static String get joinRoomError =>
       'Не удалось подключиться к комнате игроков';
