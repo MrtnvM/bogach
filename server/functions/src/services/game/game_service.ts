@@ -189,7 +189,6 @@ export class GameService {
 
         updatedGame = applyGameTransformers(game, [
           new ResetEventIndexTransformer(userId),
-          new InsuranceTransformer(userId),
           new PossessionStateTransformer(),
           new HistoryGameTransformer(),
         ]);
