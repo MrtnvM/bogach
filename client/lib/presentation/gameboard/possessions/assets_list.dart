@@ -80,8 +80,8 @@ class AssetsList extends HookWidget {
                 insurance.duration - (currentMonth - insurance.fromMonth);
 
             return '${insurance.name}; '
-                '${Strings.defence} - ${insurance.value}; '
-                '${Strings.cost} - ${insurance.cost}; '
+                '${Strings.defence} - ${insurance.value.toPrice()}; '
+                '${Strings.cost} - ${insurance.cost.toPrice()}; '
                 '${Strings.expires(monthsLeft)}';
           }).toList(),
         ),
@@ -119,24 +119,24 @@ class AssetsList extends HookWidget {
           title: Strings.property,
           value: totalRealties.toPrice(),
           details: realties
-              .map((i) => '${i.name}; ${Strings.cost} - ${i.downPayment}')
+              .map((i) => '${i.name}; '
+                  '${Strings.cost} - ${i.downPayment.toPrice()}')
               .toList(),
         ),
         DetailRow(
           title: Strings.business,
           value: totalBusinesses.toPrice(),
           details: businesses
-              .map((i) =>
-                  '${i.name}; ${Strings.firstPayment} - ${i.downPayment}')
+              .map((i) => '${i.name}; '
+                  '${Strings.firstPayment} - ${i.downPayment.toPrice()}')
               .toList(),
         ),
         DetailRow(
           title: Strings.other,
           value: totalOtherAssets.toPrice(),
           details: otherAssets
-              .map(
-                (i) => '${i.name}; ${Strings.firstPayment} - ${i.downPayment}',
-              )
+              .map((i) => '${i.name}; '
+                  '${Strings.firstPayment} - ${i.downPayment.toPrice()}')
               .toList(),
         ),
       ],
