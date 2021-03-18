@@ -136,8 +136,8 @@ export class GameService {
       try {
         updatedGame = applyGameTransformers(game, [
           new UserProgressTransformer(eventId, userId),
-          new ParticipantAccountsTransformer(),
           new PossessionStateTransformer(),
+          new ParticipantAccountsTransformer(),
           new WinnersTransformer(),
           new HistoryGameTransformer(),
           new GameEventsTransformer(),
