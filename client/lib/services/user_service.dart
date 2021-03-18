@@ -199,7 +199,7 @@ class UserService {
     if (newAvatar != null) {
       final url = await cloudStorage
           .ref()
-          .child('avatars/$userId/${DateTime.now()}')
+          .child('users/$userId/avatar')
           .putFile(newAvatar)
           .onComplete
           .then((task) => task.ref.getDownloadURL())
