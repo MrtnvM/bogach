@@ -11,25 +11,27 @@ class QuestItemWidget extends HookWidget {
     @required this.currentGameId,
     @required this.onQuestSelected,
     @required this.isLocked,
+    @required this.selectedQuestId,
+    @required this.onSelectionChanged,
   });
 
   final Quest quest;
   final String currentGameId;
   final bool isLocked;
   final void Function(Quest, QuestAction) onQuestSelected;
+  final String selectedQuestId;
+  final void Function(String) onSelectionChanged;
 
   @override
   Widget build(BuildContext context) {
-    final isCollapsed = useState(false);
-
     final startGame = () {
       onQuestSelected(quest, QuestAction.startNewGame);
-      isCollapsed.value = false;
+      onSelectionChanged(null);
     };
 
     final continueGame = () {
       onQuestSelected(quest, QuestAction.continueGame);
-      isCollapsed.value = false;
+      onSelectionChanged(null);
     };
 
     return GameCard(
@@ -38,21 +40,25 @@ class QuestItemWidget extends HookWidget {
       imageUrl: quest.image,
       startGame: startGame,
       continueGame: continueGame,
-      isCollapsed: isCollapsed.value,
+      isCollapsed: selectedQuestId == quest.id,
       onTap: () {
         if (isLocked) {
           onQuestSelected?.call(null, QuestAction.startNewGame);
-          isCollapsed.value = true;
+          onSelectionChanged(null);
           return;
         }
 
         if (currentGameId == null) {
           onQuestSelected?.call(quest, QuestAction.startNewGame);
-          isCollapsed.value = true;
+          onSelectionChanged(null);
           return;
         }
 
-        isCollapsed.value = !isCollapsed.value;
+        if (selectedQuestId == quest.id) {
+          onSelectionChanged(null);
+        } else {
+          onSelectionChanged(quest.id);
+        }
       },
     );
   }

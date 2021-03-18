@@ -36,6 +36,7 @@ class GameCard extends HookWidget {
       data: mediaQuery,
       child: Center(
         child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
           onTap: onTap,
           child: Container(
             constraints: BoxConstraints(

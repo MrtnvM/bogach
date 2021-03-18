@@ -7,7 +7,7 @@ import 'package:cash_flow/presentation/main/games/widgets/profile_bar.dart';
 import 'package:cash_flow/presentation/multiplayer/multiplayer_game_list.dart';
 import 'package:cash_flow/presentation/multiplayer/widgets/multiplayer_game_count_badge.dart';
 import 'package:cash_flow/presentation/multiplayer/widgets/online_profiles_list.dart';
-import 'package:cash_flow/presentation/new_game/widgets/template_game_list.dart';
+import 'package:cash_flow/presentation/new_game/template_game_list.dart';
 import 'package:cash_flow/presentation/quests/quest_list.dart';
 import 'package:cash_flow/presentation/quests/quests_badge.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -53,6 +53,8 @@ class _GamePageContent extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final selectedSinglePlayerGameTemplateId = useState<String>(null);
+    final selectedQuestId = useState<String>(null);
     final selectedProfiles = useState(<String>{});
     final size = useAdaptiveSize();
 
@@ -62,14 +64,30 @@ class _GamePageContent extends HookWidget {
       children: <Widget>[
         SizedBox(height: size(24)),
         const SectionTitle(text: Strings.singleGame),
-        SizedBox(height: size(150), child: TemplateGameList()),
+        SizedBox(
+          height: size(150),
+          child: TemplateGameList(
+            selectedItemId: selectedSinglePlayerGameTemplateId.value,
+            onSelectionChanged: (templateId) {
+              selectedSinglePlayerGameTemplateId.value = templateId;
+            },
+          ),
+        ),
         const Divider(),
         SizedBox(height: size(12)),
         SectionTitle(
           text: Strings.gameLevels,
           actionWidget: QuestsBadge(),
         ),
-        SizedBox(height: size(150), child: QuestList()),
+        SizedBox(
+          height: size(150),
+          child: QuestList(
+            selectedItemId: selectedQuestId.value,
+            onSelectionChanged: (questId) {
+              selectedQuestId.value = questId;
+            },
+          ),
+        ),
         const Divider(),
         SizedBox(height: size(12)),
         SectionTitle(
@@ -81,7 +99,13 @@ class _GamePageContent extends HookWidget {
         SizedBox(height: size(12)),
         SizedBox(
           height: size(150),
-          child: MultiplayerGameList(selectedProfiles),
+          child: MultiplayerGameList(
+            selectedProfiles: selectedProfiles.value,
+            onItemSelected: () {
+              selectedSinglePlayerGameTemplateId.value = null;
+              selectedQuestId.value = null;
+            },
+          ),
         ),
         const Divider(),
       ],

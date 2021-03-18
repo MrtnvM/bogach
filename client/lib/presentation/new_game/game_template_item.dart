@@ -8,24 +8,26 @@ class GameTemplateItem extends HookWidget {
     @required this.gameTemplate,
     @required this.onStartNewGamePressed,
     this.onContinueGamePressed,
+    this.onSelectionChanged,
+    this.selectedItemId,
   });
 
+  final String selectedItemId;
   final GameTemplate gameTemplate;
   final void Function(GameTemplate) onStartNewGamePressed;
   final void Function(GameTemplate) onContinueGamePressed;
+  final void Function(String) onSelectionChanged;
 
   @override
   Widget build(BuildContext context) {
-    final isCollapsed = useState(false);
-
     final startGame = () {
       onStartNewGamePressed(gameTemplate);
-      isCollapsed.value = false;
+      onSelectionChanged?.call(null);
     };
 
     final continueGame = () {
-      onContinueGamePressed(gameTemplate);
-      isCollapsed.value = false;
+      onContinueGamePressed?.call(gameTemplate);
+      onSelectionChanged?.call(null);
     };
 
     return GameCard(
@@ -34,13 +36,19 @@ class GameTemplateItem extends HookWidget {
       imageUrl: gameTemplate.image,
       startGame: startGame,
       continueGame: continueGame,
-      isCollapsed: isCollapsed.value,
+      isCollapsed: selectedItemId == gameTemplate.id,
       onTap: () {
-        if (continueGame == null) {
+        if (onContinueGamePressed == null) {
           startGame();
-        } else {
-          isCollapsed.value = !isCollapsed.value;
+          return;
         }
+
+        if (selectedItemId == gameTemplate.id) {
+          onSelectionChanged?.call(null);
+          return;
+        }
+
+        onSelectionChanged?.call(gameTemplate.id);
       },
     );
   }

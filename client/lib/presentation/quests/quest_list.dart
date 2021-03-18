@@ -21,6 +21,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class QuestList extends HookWidget {
+  const QuestList({
+    @required this.selectedItemId,
+    @required this.onSelectionChanged,
+  });
+
+  final String selectedItemId;
+  final void Function(String) onSelectionChanged;
+
   @override
   Widget build(BuildContext context) {
     final userId = useUserId();
@@ -68,6 +76,8 @@ class QuestList extends HookWidget {
                     child: _QuestItemWidget(
                       quest: quests.items[i],
                       index: i,
+                      selectedItemId: selectedItemId,
+                      onSelectionChanged: onSelectionChanged,
                     ),
                   ),
                 );
@@ -77,6 +87,8 @@ class QuestList extends HookWidget {
                 quest: quests.items[i],
                 index: i,
                 defaultAction: animationController.forward,
+                selectedItemId: selectedItemId,
+                onSelectionChanged: onSelectionChanged,
               );
             },
             loadListRequestState: getQuestsRequestState,
@@ -98,12 +110,16 @@ class _QuestItemWidget extends HookWidget {
   const _QuestItemWidget({
     @required this.quest,
     @required this.index,
+    @required this.selectedItemId,
+    @required this.onSelectionChanged,
     this.defaultAction,
   });
 
   final Quest quest;
   final int index;
   final VoidCallback defaultAction;
+  final String selectedItemId;
+  final void Function(String) onSelectionChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +135,8 @@ class _QuestItemWidget extends HookWidget {
       currentGameId: lastQuestGameInfo?.gameId,
       isLocked: onQuestSelected == null,
       onQuestSelected: onQuestSelected ?? (l, a) => defaultAction(),
+      selectedQuestId: selectedItemId,
+      onSelectionChanged: onSelectionChanged,
     );
   }
 
