@@ -30,9 +30,10 @@ class CashFlowApp extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isJoiningToRoom = useGlobalState(
-      (s) => s.getOperationState(Operation.joinRoom).isInProgress,
-    );
+    final isAppOperationInProgress = useGlobalState((s) {
+      final operations = [Operation.joinRoom, Operation.addFriend];
+      return operations.any((o) => s.getOperationState(o).isInProgress);
+    });
 
     usePushNotificationsPermissionRequest(useDelay: true);
     useUserPushTokenUploader();
@@ -57,7 +58,7 @@ class CashFlowApp extends HookWidget {
         debugShowCheckedModeBanner: false,
         builder: (context, widget) => LoadableView(
           backgroundColor: ColorRes.black80,
-          isLoading: isJoiningToRoom,
+          isLoading: isAppOperationInProgress,
           child: DevicePreviewWrapper(child: widget),
         ),
         navigatorKey: appRouter.navigatorKey,

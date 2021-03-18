@@ -417,6 +417,7 @@ class Strings {
   static String get createRoom => 'Создать комнату';
   static String get inviteByLink => 'Пригласить по ссылке';
   static String get invite => 'Пригласить';
+  static String get inviteFriend => 'Пригласить друга';
   static String get startGame => 'Начать игру';
   static String get roomCreationFailed =>
       'При создании комнаты возникла ошибка';

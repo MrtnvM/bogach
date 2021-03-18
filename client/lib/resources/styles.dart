@@ -216,7 +216,7 @@ class Styles {
 
   static const friendName = TextStyle(
     fontFamily: _defaultFontFamily,
-    fontSize: 12,
+    fontSize: 15,
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w500,
     color: ColorRes.black,

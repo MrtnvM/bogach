@@ -6,6 +6,7 @@ import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:shimmer/shimmer.dart';
 
 class FriendItemWidget extends HookWidget {
   const FriendItemWidget({@required this.user});
@@ -18,18 +19,49 @@ class FriendItemWidget extends HookWidget {
 
     return ListTile(
       contentPadding: const EdgeInsets.all(0),
-      title: Text(
-        user.fullName,
-        style: Styles.friendName,
-        maxLines: 1,
-        softWrap: true,
-        overflow: TextOverflow.ellipsis,
-      ),
-      leading: UserAvatar(
-        url: user.avatarUrl,
-        size: size(48),
-        borderColor: user.isOnline ? ColorRes.mainGreen : ColorRes.transparent,
-      ),
+      title: _buildName(),
+      leading: _buildAvatar(size(48)),
+    );
+  }
+
+  Widget _buildName() {
+    if (user == null) {
+      return Shimmer.fromColors(
+        baseColor: ColorRes.shimmerBaseColor,
+        highlightColor: ColorRes.shimmerHightlightColor,
+        child: Container(height: 24, width: 100, color: Colors.black),
+      );
+    }
+
+    return Text(
+      user.fullName,
+      style: Styles.friendName,
+      maxLines: 1,
+      softWrap: true,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  Widget _buildAvatar(double size) {
+    if (user == null) {
+      return Shimmer.fromColors(
+        baseColor: ColorRes.shimmerBaseColor,
+        highlightColor: ColorRes.shimmerHightlightColor,
+        child: Container(
+          height: size,
+          width: size,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(size / 2),
+            color: Colors.black,
+          ),
+        ),
+      );
+    }
+
+    return UserAvatar(
+      url: user.avatarUrl,
+      size: size,
+      borderColor: user.isOnline ? ColorRes.mainGreen : ColorRes.transparent,
     );
   }
 }
