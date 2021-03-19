@@ -3,6 +3,7 @@ import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/actions/start_new_month_action.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
+import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event_widget.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/expense/ui/expense_game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/income/ui/income_game_event.dart';
@@ -34,7 +35,8 @@ class GameEventPage extends HookWidget {
     final gameEvents = useCurrentGame((g) => g.currentEvents);
     final dispatch = useDispatcher();
 
-    final startNewMonth = () => dispatch(StartNewMonthAction());
+    final startNewMonth = () => dispatch(StartNewMonthAction())
+        .catchError((e) => handleError(context: context, exception: e));
 
     final isActionInProgress = useIsGameboardActionInProgress();
 
