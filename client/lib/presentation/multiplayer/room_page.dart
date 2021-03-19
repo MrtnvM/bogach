@@ -13,6 +13,7 @@ import 'package:cash_flow/presentation/multiplayer/widgets/room_header.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
+import 'package:cash_flow/widgets/containers/note.dart';
 import 'package:cash_flow/widgets/progress/section_title.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class RoomPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQueryData = useAdaptiveMediaQueryData();
-    final currentRoom = useCurrentRoom();
+    final room = useCurrentRoom();
 
     useAutoTransitionToCreatedGame();
 
@@ -31,7 +32,7 @@ class RoomPage extends HookWidget {
       value: SystemUiOverlayStyle.light,
       child: LoadableView(
         backgroundColor: ColorRes.black80,
-        isLoading: currentRoom.isActionInProgress,
+        isLoading: room.isActionInProgress,
         child: Scaffold(
           backgroundColor: ColorRes.mainPageBackground,
           body: MediaQuery(
@@ -41,7 +42,7 @@ class RoomPage extends HookWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  RoomHeader(templateId: currentRoom.room?.gameTemplateId),
+                  RoomHeader(templateId: room.room?.gameTemplateId),
                   const SizedBox(height: 16),
                   SectionTitle(text: Strings.players),
                   const SizedBox(height: 16),
@@ -49,7 +50,7 @@ class RoomPage extends HookWidget {
                   Expanded(child: ParticipantListWidget()),
                   const Divider(height: 1, indent: 16, endIndent: 16),
                   const SizedBox(height: 24),
-                  if (currentRoom.isCurrentUserRoomOwner) ...[
+                  if (room.isCurrentUserRoomOwner) ...[
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
@@ -61,10 +62,19 @@ class RoomPage extends HookWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                  ] else if (!currentRoom.isParticipantAlreadyJoined) ...[
+                  ] else if (!room.isParticipantAlreadyJoined) ...[
                     const _JoinRoomButton(),
                     const SizedBox(height: 16),
                   ],
+                  if (!room.isCurrentUserRoomOwner &&
+                      room.isParticipantAlreadyJoined &&
+                      room.ownerName != null) ...[
+                    Note(
+                      title: Strings.waitingWhenLeaderStartGame(room.ownerName),
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                    ),
+                    const SizedBox(height: 16),
+                  ]
                 ],
               ),
             ),

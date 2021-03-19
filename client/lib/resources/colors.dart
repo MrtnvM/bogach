@@ -66,6 +66,8 @@ class ColorRes {
 
   static const imagePlaceholder = Color(0xFFB0B0B0);
   static const mainPageBackground = Color(0xFFFCFCFC);
+  static const cardBackground = Color(0xFFF3F3F3);
+  static final cardShadow = Colors.grey.withAlpha(150);
 
   static const shimmerBaseColor = Color(0xFFDDDDDD);
   static const shimmerHightlightColor = Color(0xFFFFFFFF);

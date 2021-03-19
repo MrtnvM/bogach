@@ -7,23 +7,17 @@ import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/app_configuration.dart';
 
-Future<String> getAddFriendLink({
-  @required UserProfile currentUser,
-}) async {
+Future<String> getAddFriendLink({@required UserProfile currentUser}) async {
   final packageName = await getPackageName();
+  final baseUrl = AppConfiguration.environment.dynamicLink.baseUrl;
 
-  final linkPrefix = '${AppConfiguration.environment.dynamicLink.baseUrl}'
-      '${DynamicLinks.join}';
-
-  final deepLink = '${AppConfiguration.environment.dynamicLink.baseUrl}'
-      '?${DynamicLinks.inviterId}=${currentUser.id}';
+  final linkPrefix = '$baseUrl${DynamicLinks.addFriend}';
+  final deepLink = '$linkPrefix?${DynamicLinks.inviterId}=${currentUser.id}';
   final link = Uri.parse(deepLink);
 
-  final linkDescription =
-      '${currentUser.fullName} ${Strings.addFriendLinkDescription}';
   final socialMetaTagParameters = SocialMetaTagParameters(
     title: Strings.addFriendLinkTitle,
-    description: linkDescription,
+    description: '${currentUser.fullName} ${Strings.addFriendLinkDescription}',
   );
 
   final parameters = DynamicLinkParameters(
@@ -31,10 +25,13 @@ Future<String> getAddFriendLink({
     link: link,
     androidParameters: getAndroidDynamicLinkParameters(packageName),
     iosParameters: getIosDynamicLinkParameters(packageName),
-    googleAnalyticsParameters: null,
+    googleAnalyticsParameters: GoogleAnalyticsParameters(
+      source: 'app',
+      campaign: 'friends-campaign',
+      medium: 'none',
+    ),
     // TODO(Maxim): Add info
     itunesConnectAnalyticsParameters: null,
-    // TODO(Maxim): Add info
     socialMetaTagParameters: socialMetaTagParameters,
   );
 

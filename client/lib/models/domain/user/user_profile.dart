@@ -23,6 +23,7 @@ abstract class UserProfile with _$UserProfile implements StoreListItem {
     @JsonKey(defaultValue: 1) int profileVersion,
     PlayedGames playedGames,
     @JsonKey(fromJson: _lastGamesFromJson) LastGames lastGames,
+    @JsonKey(defaultValue: <String>[]) List<String> friends,
   }) = _UserProfile;
 
   factory UserProfile.fromJson(Map<String, dynamic> json) =>

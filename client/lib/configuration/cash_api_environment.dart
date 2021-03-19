@@ -32,7 +32,7 @@ class CashApiEnvironment extends ApiEnvironment {
     name: 'development',
     baseUrl:
         'http://${Platform.isIOS ? 'localhost' : '10.0.2.2'}:5001/cash-flow-staging/europe-west2/',
-    dynamicLink: const DynamicLinks('staging.bogach-game.ru'),
+    dynamicLink: const DynamicLinks('staging.app.bogach-game.ru'),
     firestoreHostUrl: Platform.isAndroid ? '10.0.2.2:8080' : 'localhost:8080',
     realtimeDatabaseUrl:
         'http://${Platform.isAndroid ? '10.0.2.2' : 'localhost'}:9000/'
@@ -46,7 +46,7 @@ class CashApiEnvironment extends ApiEnvironment {
   static const staging = CashApiEnvironment(
     name: 'staging',
     baseUrl: 'https://europe-west2-cash-flow-staging.cloudfunctions.net/',
-    dynamicLink: DynamicLinks('staging.bogach-game.ru'),
+    dynamicLink: DynamicLinks('staging.app.bogach-game.ru'),
     validateRequestsByDefault: false,
     isRequestsAuthorisedByDefault: false,
     isAnalyticsEnabled: true,

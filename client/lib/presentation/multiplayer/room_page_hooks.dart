@@ -73,6 +73,7 @@ _CurrentRoom useCurrentRoom() {
     isActionInProgress: isActionInProgress,
     isParticipantAlreadyJoined: isParticipantAlreadyJoined,
     isCurrentUserRoomOwner: isCurrentUserRoomOwner,
+    ownerName: room?.owner?.fullName,
   );
 }
 
@@ -82,10 +83,12 @@ class _CurrentRoom {
     @required this.isActionInProgress,
     @required this.isCurrentUserRoomOwner,
     @required this.isParticipantAlreadyJoined,
+    @required this.ownerName,
   });
 
   final Room room;
   final bool isActionInProgress;
   final bool isCurrentUserRoomOwner;
   final bool isParticipantAlreadyJoined;
+  final String ownerName;
 }

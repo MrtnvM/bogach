@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -32,7 +33,7 @@ Future<File> chooseImage({
     return _cropImage(File(image.path), aspectRatio);
   }
 
-  return Future.value(null);
+  return null;
 }
 
 Future<ImageSourceType> _showChooseSourceTypeDialog(BuildContext context) {
@@ -44,9 +45,9 @@ Future<ImageSourceType> _showChooseSourceTypeDialog(BuildContext context) {
           onPressed: () {
             Navigator.of(context).pop(ImageSourceType.camera);
           },
-          child: const ListTile(
-            leading: Icon(Icons.camera_rounded),
-            title: Text('Камера'),
+          child: ListTile(
+            leading: const Icon(Icons.camera_rounded),
+            title: Text(Strings.camera),
             contentPadding: EdgeInsets.zero,
           ),
         ),
@@ -54,9 +55,9 @@ Future<ImageSourceType> _showChooseSourceTypeDialog(BuildContext context) {
           onPressed: () {
             Navigator.of(context).pop(ImageSourceType.gallery);
           },
-          child: const ListTile(
-            leading: Icon(Icons.photo_library),
-            title: Text('Галлерея'),
+          child: ListTile(
+            leading: const Icon(Icons.photo_library),
+            title: Text(Strings.gallery),
             contentPadding: EdgeInsets.zero,
           ),
         ),
@@ -67,7 +68,7 @@ Future<ImageSourceType> _showChooseSourceTypeDialog(BuildContext context) {
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: const Text(
-              'Отмена',
+              Strings.cancel,
               textAlign: TextAlign.end,
               style: TextStyle(
                 color: ColorRes.mainGreen,

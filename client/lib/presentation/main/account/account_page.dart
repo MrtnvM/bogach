@@ -67,11 +67,12 @@ class AccountPage extends HookWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.grey.withAlpha(10),
+                      color: ColorRes.cardBackground,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: ColorRes.lightGrey,
-                      ),
+                      border: Border.all(color: ColorRes.lightGrey),
+                      boxShadow: [
+                        BoxShadow(color: ColorRes.cardShadow, blurRadius: 2)
+                      ],
                     ),
                     padding: const EdgeInsets.all(16),
                     child: Column(
@@ -80,7 +81,7 @@ class AccountPage extends HookWidget {
                         EditableUserAvatar(
                           url: user.avatarUrl,
                           onChanged: (file) => newAvatar.value = file,
-                          avatarSize: size(size(150)),
+                          avatarSize: size(size(size(120))),
                         ),
                         SizedBox(height: size(24)),
                         NameInput(
@@ -105,7 +106,6 @@ class AccountPage extends HookWidget {
                     withRoundedBorder: true,
                     onPressed: () {
                       DropFocus.drop();
-                      newAvatar.value = null;
 
                       dispatch(
                         UpdateUserAction(
@@ -114,6 +114,8 @@ class AccountPage extends HookWidget {
                           avatar: newAvatar.value,
                         ),
                       );
+
+                      newAvatar.value = null;
                     },
                   ),
                 ),

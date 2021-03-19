@@ -20,7 +20,7 @@ class StartGameAction extends BaseAction {
   final GameContext gameContext;
 
   @override
-  FutureOr<void> before() async {
+  Future<void> before() async {
     super.before();
     await dispatchFuture(SetGameContextAction(gameContext));
   }
@@ -44,9 +44,7 @@ class StartGameAction extends BaseAction {
 
     final gameSubscription = gameService
         .getGame(gameContext)
-        .map<BaseAction>((game) {
-          return OnGameStateChangedAction(game);
-        })
+        .map<BaseAction>((game) => OnGameStateChangedAction(game))
         .onErrorReturnWith((e) => OnGameErrorAction(e))
         .takeUntil(onStopActiveGame);
 

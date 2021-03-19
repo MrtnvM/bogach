@@ -19,6 +19,8 @@ class Strings {
   static String get submit => 'Отправить';
   static String get select => 'Выбрать';
   static String get logout => 'Выйти из аккаунта';
+  static String get gallery => 'Галерея';
+  static String get camera => 'Камера';
 
   // Main Page
   static String get gamesTabTitle => 'Игры';
@@ -415,10 +417,14 @@ class Strings {
   static String get createRoom => 'Создать комнату';
   static String get inviteByLink => 'Пригласить по ссылке';
   static String get invite => 'Пригласить';
+  static String get inviteFriend => 'Пригласить друга';
   static String get startGame => 'Начать игру';
   static String get roomCreationFailed =>
       'При создании комнаты возникла ошибка';
   static String get join => 'Присоединиться';
+  static String waitingWhenLeaderStartGame(String leaderName) {
+    return 'Ожидаем пока $leaderName начнет игру...';
+  }
 
   static String get joinRoomError =>
       'Не удалось подключиться к комнате игроков';

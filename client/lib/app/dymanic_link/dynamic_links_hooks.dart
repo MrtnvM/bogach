@@ -11,21 +11,27 @@ void useDynamicLinkHandler() {
   useDynamicLinkSubscription((dynamicLink) {
     final link = dynamicLink.link;
 
-    Logger.i('APP CAPTURE DYNAMIC LINK:\n$link\n'
-        'APP CAPTURE DYNAMIC LINK QUERY:\n${link.query}');
-
     if (link == null) {
       return;
     }
 
     final query = link.query;
 
+    Logger.i(
+      'APP CAPTURED DYNAMIC LINK:\n$link\n'
+      '${query.isNotEmpty ? "QUERY: $query" : ""}',
+    );
+
     if (query.contains(DynamicLinks.roomInvite)) {
       final roomId = link.queryParameters[DynamicLinks.roomInvite];
       joinRoom(roomId);
-    } else if (query.contains(DynamicLinks.inviterId)) {
+      return;
+    }
+
+    if (query.contains(DynamicLinks.inviterId)) {
       final inviterId = link.queryParameters[DynamicLinks.inviterId];
       addFriend(inviterId);
+      return;
     }
   });
 }
