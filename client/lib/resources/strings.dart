@@ -21,6 +21,13 @@ class Strings {
   static String get logout => 'Выйти из аккаунта';
   static String get gallery => 'Галерея';
   static String get camera => 'Камера';
+  static String get noCameraAccessTitle => 'Нет доступа к камере';
+  static String get noCameraAccessMessage =>
+      'Разрешите доступ к камере в настройках приложения';
+  static String get noGalleryAccessTitle => 'Нет доступа к галерее';
+  static String get noGalleryAccessMessage =>
+      'Разрешите доступ к галерее в настройках приложения';
+  static String get goToSettings => 'Перейти в настройки';
 
   // Main Page
   static String get gamesTabTitle => 'Игры';
