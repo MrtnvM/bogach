@@ -4,6 +4,7 @@ import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/config/config_hooks.dart';
+import 'package:cash_flow/features/game/actions/set_game_context.dart';
 import 'package:cash_flow/features/game/actions/start_game_action.dart';
 import 'package:cash_flow/features/multiplayer/actions/room_listening_actions.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
@@ -24,10 +25,13 @@ void useAutoTransitionToCreatedGame() {
 
   useEffect(() {
     if (room?.gameId != null) {
-      final gameContext = GameContext(gameId: room.gameId, userId: userId);
-      dispatch(StartGameAction(gameContext));
+      final startGame = () async {
+        final gameContext = GameContext(gameId: room.gameId, userId: userId);
 
-      Future.delayed(const Duration(milliseconds: 100)).then((_) async {
+        await dispatch(SetGameContextAction(gameContext));
+        await dispatch(StartGameAction(gameContext));
+        await Future.delayed(const Duration(milliseconds: 100));
+
         appRouter.goToRoot();
 
         SessionTracker.multiplayerGameCreated.stop();
@@ -40,7 +44,9 @@ void useAutoTransitionToCreatedGame() {
         }
 
         dispatch(StopListeningRoomUpdatesAction(room.id));
-      });
+      };
+
+      startGame();
     }
 
     return () {
