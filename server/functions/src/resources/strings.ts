@@ -7,6 +7,9 @@ export namespace Strings {
   export const businessCredit = () => get('businessCredit');
   export const battleInvitationNotificationTitle = () => get('battleInvitationNotificationTitle');
   export const battleInvitationNotificationBody = () => get('battleInvitationNotificationBody');
+
+  export const newFriend = () => get('newFriend');
+  export const friendRequestAccepted = () => get('friendRequestAccepted');
 }
 
 const strings: { [key: string]: string } = {
@@ -19,6 +22,9 @@ const strings: { [key: string]: string } = {
   businessCredit: 'Бизнес-кредит',
   battleInvitationNotificationTitle: 'Вызываю тебя на дуэль!',
   battleInvitationNotificationBody: 'приглашает Вас сразиться в поединке капиталистов!',
+
+  newFriend: 'Новый друг: ',
+  friendRequestAccepted: 'Пользователь принял ваш запрос. Готовы вызвать его на поединок?',
 };
 
 const get = (key: string): string => strings[key];
