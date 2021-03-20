@@ -1,9 +1,9 @@
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
+import 'package:cash_flow/presentation/multiplayer/widgets/multiplayer_profile_widget.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
-import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
 import 'package:cash_flow/widgets/common/empty_list_widget.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,10 +25,11 @@ class OnlineProfilesList extends HookWidget {
 
     final profiles = useGlobalState((s) {
       final onlineProfiles = s.multiplayer.onlineProfiles.map(
-        (p) => _MultiplayerProfile(
+        (p) => MultiplayerProfile(
           userId: p.userId,
           userName: p.fullName,
           avatarUrl: p.avatarUrl,
+          isOnline: true,
         ),
       );
 
@@ -37,10 +38,11 @@ class OnlineProfilesList extends HookWidget {
           .where((id) => !onlineProfilesSet.contains(id))
           .map((id) => s.multiplayer.userProfiles.itemsMap[id])
           .where((p) => p != null)
-          .map((p) => _MultiplayerProfile(
+          .map((p) => MultiplayerProfile(
                 userId: p.userId,
                 userName: p.fullName,
                 avatarUrl: p.avatarUrl,
+                isOnline: false,
               ));
 
       return [...onlineProfiles, ...friends];
@@ -55,7 +57,7 @@ class OnlineProfilesList extends HookWidget {
               scrollDirection: Axis.horizontal,
               itemCount: profiles.length,
               padding: EdgeInsets.only(left: size(20)),
-              itemBuilder: (_, index) => _MultiplayerProfileWidget(
+              itemBuilder: (_, index) => MultiplayerProfileWidget(
                 key: ValueKey(profiles[index].userId),
                 profile: profiles[index],
                 onTap: (userId) {
@@ -72,43 +74,6 @@ class OnlineProfilesList extends HookWidget {
               ),
               separatorBuilder: (_, index) => SizedBox(width: size(16)),
             ),
-    );
-  }
-}
-
-class _MultiplayerProfile {
-  _MultiplayerProfile({this.userId, this.avatarUrl, this.userName});
-
-  final String userId;
-  final String avatarUrl;
-  final String userName;
-}
-
-class _MultiplayerProfileWidget extends HookWidget {
-  const _MultiplayerProfileWidget({
-    Key key,
-    @required this.profile,
-    @required this.onTap,
-    @required this.isSelected,
-  })  : assert(profile != null),
-        super(key: key);
-
-  final _MultiplayerProfile profile;
-  final Function(String) onTap;
-  final bool isSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    final size = useAdaptiveSize();
-
-    return GestureDetector(
-      onTap: () => onTap?.call(profile.userId),
-      child: UserAvatar(
-        url: profile.avatarUrl,
-        size: size(60),
-        borderWidth: isSelected ? size(2.5) : 0,
-        borderColor: isSelected ? ColorRes.onlineStatus : ColorRes.transparent,
-      ),
     );
   }
 }

@@ -97,8 +97,11 @@ class _GamePageContent extends HookWidget {
           actionWidget: MultiplayerGameCountBadge(),
         ),
         SizedBox(height: size(12)),
-        SizedBox(height: size(60), child: OnlineProfilesList(selectedProfiles)),
-        SizedBox(height: size(12)),
+        SizedBox(
+          height: size(100),
+          child: OnlineProfilesList(selectedProfiles),
+        ),
+        SizedBox(height: size(0)),
         SizedBox(
           height: size(150),
           child: MultiplayerGameList(
