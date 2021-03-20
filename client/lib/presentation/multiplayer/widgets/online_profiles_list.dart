@@ -1,7 +1,6 @@
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
-import 'package:cash_flow/models/domain/user/online/online_profile.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
@@ -23,9 +22,29 @@ class OnlineProfilesList extends HookWidget {
     final getOnlineRequestState = useGlobalState(
       (s) => s.getOperationState(Operation.setOnline),
     );
-    final profiles = useGlobalState(
-      (s) => s.multiplayer.onlineProfiles,
-    );
+
+    final profiles = useGlobalState((s) {
+      final onlineProfiles = s.multiplayer.onlineProfiles.map(
+        (p) => _MultiplayerProfile(
+          userId: p.userId,
+          userName: p.fullName,
+          avatarUrl: p.avatarUrl,
+        ),
+      );
+
+      final onlineProfilesSet = onlineProfiles.map((p) => p.userId).toSet();
+      final friends = (s.profile.currentUser?.friends ?? [])
+          .where((id) => !onlineProfilesSet.contains(id))
+          .map((id) => s.multiplayer.userProfiles.itemsMap[id])
+          .where((p) => p != null)
+          .map((p) => _MultiplayerProfile(
+                userId: p.userId,
+                userName: p.fullName,
+                avatarUrl: p.avatarUrl,
+              ));
+
+      return [...onlineProfiles, ...friends];
+    });
 
     return LoadableView(
       indicatorColor: const AlwaysStoppedAnimation<Color>(ColorRes.mainGreen),
@@ -36,7 +55,7 @@ class OnlineProfilesList extends HookWidget {
               scrollDirection: Axis.horizontal,
               itemCount: profiles.length,
               padding: EdgeInsets.only(left: size(20)),
-              itemBuilder: (_, index) => _OnlineProfile(
+              itemBuilder: (_, index) => _MultiplayerProfileWidget(
                 key: ValueKey(profiles[index].userId),
                 profile: profiles[index],
                 onTap: (userId) {
@@ -57,8 +76,16 @@ class OnlineProfilesList extends HookWidget {
   }
 }
 
-class _OnlineProfile extends HookWidget {
-  const _OnlineProfile({
+class _MultiplayerProfile {
+  _MultiplayerProfile({this.userId, this.avatarUrl, this.userName});
+
+  final String userId;
+  final String avatarUrl;
+  final String userName;
+}
+
+class _MultiplayerProfileWidget extends HookWidget {
+  const _MultiplayerProfileWidget({
     Key key,
     @required this.profile,
     @required this.onTap,
@@ -66,7 +93,7 @@ class _OnlineProfile extends HookWidget {
   })  : assert(profile != null),
         super(key: key);
 
-  final OnlineProfile profile;
+  final _MultiplayerProfile profile;
   final Function(String) onTap;
   final bool isSelected;
 
