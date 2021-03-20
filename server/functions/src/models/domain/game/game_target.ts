@@ -22,7 +22,7 @@ export namespace GameTargetEntity {
   export const calculateProgress = (game: Game, userId: UserEntity.Id): number => {
     switch (game.target.type) {
       case 'passive_income':
-        const incomes = game.participants[userId].possessions.incomes;
+        const incomes = game.participants[userId].possessionState.incomes;
         const passiveIncomes = incomes.filter((i) => i.type !== 'salary');
         const passiveIncomeValue = passiveIncomes.reduce((prev, curr) => prev + curr.value, 0);
         const passiveIncomeProgress = passiveIncomeValue / game.target.value;
