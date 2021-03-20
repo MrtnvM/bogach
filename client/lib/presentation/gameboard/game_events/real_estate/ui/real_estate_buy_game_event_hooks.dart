@@ -37,7 +37,7 @@ VoidCallback useRealEstateBuyPlayerActionHandler(GameEvent event) {
 
   return () {
     final RealEstateBuyEventData eventData = event.data;
-    final price = eventData.currentPrice;
+    final price = eventData.downPayment;
 
     if (!isEnoughCash(price.toDouble())) {
       return;
