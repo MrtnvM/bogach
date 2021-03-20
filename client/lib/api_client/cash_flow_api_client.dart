@@ -130,15 +130,25 @@ class CashFlowApiClient extends ApiClient {
         (json) => json.map((item) => OnlineProfile.fromJson(item)).toList(),
       ));
 
-  Future<void> addFriends(
-    String userId,
-    List<String> usersAddToFriends,
-  ) =>
+  Future<void> addFriends(String userId, List<String> usersAddToFriends) =>
       post(
         path: 'addFriends',
         body: {
           'userId': userId,
           'usersAddToFriends': usersAddToFriends,
+        },
+        validate: true,
+      );
+
+  Future<void> removeFromFriends({
+    @required String userId,
+    @required String removedFriendId,
+  }) =>
+      delete(
+        path: 'removeFromFriends',
+        body: {
+          'userId': userId,
+          'removedFriendId': removedFriendId,
         },
         validate: true,
       );

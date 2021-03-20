@@ -256,12 +256,18 @@ class UserService {
     return updatedUser;
   }
 
-  Future<void> addFriends(
-    String userId,
-    List<String> usersAddToFriends,
-  ) {
+  Future<void> addFriends(String userId, List<String> usersAddToFriends) {
     return apiClient
         .addFriends(userId, usersAddToFriends)
+        .catchError(recordError);
+  }
+
+  Future<void> removeFromFriends({
+    @required String userId,
+    @required String removedFriendId,
+  }) {
+    return apiClient
+        .removeFromFriends(userId: userId, removedFriendId: removedFriendId)
         .catchError(recordError);
   }
 }
