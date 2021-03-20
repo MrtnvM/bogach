@@ -60,6 +60,7 @@ export const updatePurchases = PurchaseAPI.updatePurchases;
 
 export const getUserProfile = UserAPI.getUserProfile;
 export const addFriends = UserAPI.addFriends;
+export const removeFromFriends = UserAPI.removeFromFriends;
 
 export const setOnlineStatus = MultiplayerAPI.setOnlineStatus;
 export const getOnlineProfiles = MultiplayerAPI.getOnlineProfiles;

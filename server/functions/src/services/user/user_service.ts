@@ -34,6 +34,20 @@ export class UserService {
     });
   }
 
+  async removeFromFriends(props: { userId: UserEntity.Id; removedFriendId: UserEntity.Id }) {
+    const { userId, removedFriendId } = props;
+
+    const user = await this.userProvider.getUserProfile(userId);
+
+    const updatedUser = produce(user, (draft) => {
+      const friends = draft.friends ?? [];
+      const updatedFriends = friends.filter((id) => id !== removedFriendId);
+      draft.friends = updatedFriends;
+    });
+
+    await this.userProvider.updateUserProfile(updatedUser);
+  }
+
   private async addFriendsToUser(userId: UserEntity.Id, usersToAdd: string[]) {
     const user = await this.userProvider.getUserProfile(userId);
 

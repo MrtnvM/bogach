@@ -45,6 +45,17 @@ export const create = (daos: DAOs) => {
     await send(addFriendsExecution(), response);
   });
 
+  const removeFromFriends = https.onRequest(async (request, response) => {
+    const apiRequest = APIRequest.from(request, response);
+    apiRequest.checkMethod('DELETE');
+
+    const userId = apiRequest.jsonField('userId');
+    const removedFriendId = apiRequest.jsonField('removedFriendId');
+
+    const result = userService.removeFromFriends({ userId, removedFriendId });
+    await send(result, response);
+  });
+
   const send = <T>(data: Promise<T>, response: functions.Response) => {
     return data
       .then((result) => response.status(200).send(result))
@@ -62,5 +73,5 @@ export const create = (daos: DAOs) => {
       });
   };
 
-  return { getUserProfile, addFriends };
+  return { getUserProfile, addFriends, removeFromFriends };
 };
