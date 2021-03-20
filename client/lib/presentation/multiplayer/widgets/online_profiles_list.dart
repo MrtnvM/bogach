@@ -37,6 +37,7 @@ class OnlineProfilesList extends HookWidget {
               itemCount: profiles.length,
               padding: EdgeInsets.only(left: size(20)),
               itemBuilder: (_, index) => _OnlineProfile(
+                key: ValueKey(profiles[index].userId),
                 profile: profiles[index],
                 onTap: (userId) {
                   final set = Set.of(selectedProfiles.value);
@@ -58,10 +59,12 @@ class OnlineProfilesList extends HookWidget {
 
 class _OnlineProfile extends HookWidget {
   const _OnlineProfile({
+    Key key,
     @required this.profile,
     @required this.onTap,
     @required this.isSelected,
-  }) : assert(profile != null);
+  })  : assert(profile != null),
+        super(key: key);
 
   final OnlineProfile profile;
   final Function(String) onTap;

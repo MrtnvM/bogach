@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/utils/dialogs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -12,11 +14,11 @@ Future<File> chooseImage({
   CropAspectRatio aspectRatio,
 }) async {
   final source = await _showChooseSourceTypeDialog(context);
-  ImageSource imageSource;
-
   if (source == null) {
-    return Future.value(null);
+    return null;
   }
+
+  ImageSource imageSource;
 
   switch (source) {
     case ImageSourceType.camera:
@@ -28,9 +30,24 @@ Future<File> chooseImage({
       break;
   }
 
-  final image = await ImagePicker().getImage(source: imageSource);
-  if (image != null) {
-    return _cropImage(File(image.path), aspectRatio);
+  try {
+    final image = await ImagePicker().getImage(source: imageSource);
+
+    if (image != null) {
+      return _cropImage(File(image.path), aspectRatio);
+    }
+  } catch (e) {
+    if (e is PlatformException) {
+      switch (e.code) {
+        case 'camera_access_denied':
+          showDialogGoToAppSettings(context, NoAccessMode.camera);
+          break;
+
+        case 'photo_access_denied':
+          showDialogGoToAppSettings(context, NoAccessMode.gallery);
+          break;
+      }
+    }
   }
 
   return null;

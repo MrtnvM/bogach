@@ -1,6 +1,5 @@
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
-import 'package:cash_flow/features/multiplayer/actions/add_friends_action.dart';
 import 'package:cash_flow/features/multiplayer/actions/share_add_friend_link_action.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';

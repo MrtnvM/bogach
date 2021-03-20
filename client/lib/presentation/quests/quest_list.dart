@@ -19,6 +19,7 @@ import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 
 class QuestList extends HookWidget {
   const QuestList({
@@ -43,7 +44,7 @@ class QuestList extends HookWidget {
     final dispatch = useDispatcher();
 
     final mediaQueryData = useAdaptiveMediaQueryData();
-
+    final swiperController = useState(SwiperController());
     final animationController = useAnimationController(
       duration: const Duration(milliseconds: 300),
     );
@@ -65,6 +66,7 @@ class QuestList extends HookWidget {
         backgroundColor: ColorRes.transparent,
         indicatorColor: const AlwaysStoppedAnimation<Color>(ColorRes.mainGreen),
         child: GamesLoadableListView<Quest>(
+          swiperController: swiperController.value,
           viewModel: LoadableListViewModel(
             items: quests,
             itemBuilder: (i) {
@@ -83,12 +85,21 @@ class QuestList extends HookWidget {
                 );
               }
 
-              return _QuestItemWidget(
-                quest: quests.items[i],
-                index: i,
-                defaultAction: animationController.forward,
-                selectedItemId: selectedItemId,
-                onSelectionChanged: onSelectionChanged,
+              return Opacity(
+                opacity: i > currentQuestIndex ? 0.7 : 1.0,
+                child: _QuestItemWidget(
+                  quest: quests.items[i],
+                  index: i,
+                  defaultAction: () async {
+                    if (i != currentQuestIndex) {
+                      await swiperController.value.move(currentQuestIndex);
+                    }
+
+                    animationController.forward();
+                  },
+                  selectedItemId: selectedItemId,
+                  onSelectionChanged: onSelectionChanged,
+                ),
               );
             },
             loadListRequestState: getQuestsRequestState,

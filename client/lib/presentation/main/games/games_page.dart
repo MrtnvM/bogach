@@ -69,6 +69,7 @@ class _GamePageContent extends HookWidget {
           child: TemplateGameList(
             selectedItemId: selectedSinglePlayerGameTemplateId.value,
             onSelectionChanged: (templateId) {
+              selectedQuestId.value = null;
               selectedSinglePlayerGameTemplateId.value = templateId;
             },
           ),
@@ -84,6 +85,7 @@ class _GamePageContent extends HookWidget {
           child: QuestList(
             selectedItemId: selectedQuestId.value,
             onSelectionChanged: (questId) {
+              selectedSinglePlayerGameTemplateId.value = null;
               selectedQuestId.value = questId;
             },
           ),

@@ -8,16 +8,25 @@ class GamesLoadableListView<T extends StoreListItem>
     extends LoadableListView<T> {
   const GamesLoadableListView({
     @required LoadableListViewModel<T> viewModel,
+    this.swiperController,
   }) : super(viewModel: viewModel);
+
+  final SwiperController swiperController;
 
   @override
   State<StatefulWidget> createState() {
-    return SnapLoadableListViewState<T>();
+    return SnapLoadableListViewState<T>(
+      swiperController: swiperController,
+    );
   }
 }
 
 class SnapLoadableListViewState<T extends StoreListItem>
     extends LoadableListViewState<T> {
+  SnapLoadableListViewState({this.swiperController});
+
+  final SwiperController swiperController;
+
   @override
   Widget build(BuildContext context) {
     final state = viewModel.getPaginationState();
@@ -36,6 +45,7 @@ class SnapLoadableListViewState<T extends StoreListItem>
     return SizedBox(
       height: 150,
       child: Swiper(
+        controller: swiperController,
         itemBuilder: (context, index) => Transform.translate(
           offset: Offset(-MediaQuery.of(context).size.width * 0.155, 0),
           child: buildListItem(context, index),
