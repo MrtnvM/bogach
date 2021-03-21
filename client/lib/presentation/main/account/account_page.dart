@@ -36,15 +36,16 @@ class AccountPage extends HookWidget {
     final isInfoTheSame =
         newFullName.value == user.fullName && newAvatar.value == null;
 
-    final updatingState = useGlobalState<OperationState>(
-      (s) => s.getOperationState(Operation.updateUser),
-    );
+    final isInProgress = useGlobalState((s) {
+      final operations = [Operation.updateUser, Operation.removeFromFriends];
+      return operations.any((o) => s.getOperationState(o).isInProgress);
+    });
 
     final mediaQuery = useAdaptiveMediaQueryData();
     final size = useAdaptiveSize();
 
     return LoadableView(
-      isLoading: updatingState.isInProgress,
+      isLoading: isInProgress,
       backgroundColor: ColorRes.black.withOpacity(0.2),
       indicatorColor: const AlwaysStoppedAnimation<Color>(ColorRes.mainGreen),
       child: MediaQuery(

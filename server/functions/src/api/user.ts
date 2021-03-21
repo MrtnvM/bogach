@@ -3,14 +3,17 @@ import * as config from '../config';
 
 import { APIRequest } from '../core/api/request_data';
 import { UserProvider } from '../providers/user_provider';
-import { User, UserEntity } from '../models/domain/user/user';
+import { UserService } from '../services/user/user_service';
+import { UserEntity } from '../models/domain/user/user';
 import { DAOs } from '../dao/daos';
-import { produce } from 'immer';
+import { FirebaseMessaging } from '../core/firebase/firebase_messaging';
 
 export const create = (daos: DAOs) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
 
   const userProvider = new UserProvider(daos.user);
+  const firebaseMessaging = new FirebaseMessaging();
+  const userService = new UserService(userProvider, firebaseMessaging);
 
   const getUserProfile = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request, response);
@@ -36,42 +39,22 @@ export const create = (daos: DAOs) => {
         throw new Error(usersAddToFriendsKey + ' should be array');
       }
 
-      /// Adding friends to current user
-      await _addFriendsToUser(userId, usersAddToFriends);
-
-      /// Adding current user as friend to invited users
-      usersAddToFriends.forEach(async (userAddToFriend) => {
-        await _addFriendsToUser(userAddToFriend, [userId]);
-      });
+      await userService.addFriends({ userId, usersAddToFriends });
     };
 
     await send(addFriendsExecution(), response);
   });
 
-  const _addFriendsToUser = async (userId: UserEntity.Id, usersToAdd: string[]) => {
-    const user = await userProvider.getUserProfile(userId);
-    const updatedUser = produce(user, (draft) => {
-      draft.friends = _updateFriendsList(user, usersToAdd);
-      return draft;
-    });
-    await userProvider.updateUserProfile(updatedUser);
+  const removeFromFriends = https.onRequest(async (request, response) => {
+    const apiRequest = APIRequest.from(request, response);
+    apiRequest.checkMethod('DELETE');
 
-    return;
-  };
+    const userId = apiRequest.jsonField('userId');
+    const removedFriendId = apiRequest.jsonField('removedFriendId');
 
-  const _updateFriendsList = (user: User, usersToAdd: string[]): string[] => {
-    const currentFriends = user.friends || [];
-
-    usersToAdd
-      .filter((userId) => userId !== user.userId)
-      .forEach((userId) => {
-        if (!currentFriends.includes(userId)) {
-          currentFriends.push(userId);
-        }
-      });
-
-    return currentFriends;
-  };
+    const result = userService.removeFromFriends({ userId, removedFriendId });
+    await send(result, response);
+  });
 
   const send = <T>(data: Promise<T>, response: functions.Response) => {
     return data
@@ -90,5 +73,5 @@ export const create = (daos: DAOs) => {
       });
   };
 
-  return { getUserProfile, addFriends };
+  return { getUserProfile, addFriends, removeFromFriends };
 };

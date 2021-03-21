@@ -1,4 +1,6 @@
 import 'package:cash_flow/core/hooks/dispatcher.dart';
+import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/features/multiplayer/actions/room_listening_actions.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/multiplayer/room_page.dart';
@@ -19,7 +21,9 @@ Function(String) useJoinRoom() {
   return (roomId) {
     VoidCallback joinRoom;
 
-    final user = StoreProvider.state<AppState>(context).profile.currentUser;
+    final state = StoreProvider.state<AppState>(context);
+    final user = state.profile.currentUser;
+
     if (user == null) {
       // TODO(Team): возникает если незалогиненный пользователь открыл линку
       // в будущем подумать, может добавить обработку действия после логина
@@ -36,7 +40,13 @@ Function(String) useJoinRoom() {
         }
       }
 
+      final currentRoom = state.multiplayer.currentRoom;
+      if (currentRoom != null) {
+        await dispatch(StopListeningRoomUpdatesAction(currentRoom.id));
+      }
+
       dispatch(JoinRoomAction(roomId)).then((_) async {
+        await dispatch(StartListeningRoomUpdatesAction(roomId));
         await Future.delayed(const Duration(milliseconds: 50));
 
         appRouter.goToRoot();

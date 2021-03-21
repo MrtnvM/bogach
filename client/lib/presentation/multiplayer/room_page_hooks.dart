@@ -24,9 +24,12 @@ void useAutoTransitionToCreatedGame() {
   final dispatch = useDispatcher();
 
   useEffect(() {
-    if (room?.gameId != null) {
+    final roomId = room?.id;
+    final gameId = room?.gameId;
+
+    if (gameId != null) {
       final startGame = () async {
-        final gameContext = GameContext(gameId: room.gameId, userId: userId);
+        final gameContext = GameContext(gameId: gameId, userId: userId);
 
         await dispatch(SetGameContextAction(gameContext));
         await dispatch(StartGameAction(gameContext));
@@ -43,17 +46,13 @@ void useAutoTransitionToCreatedGame() {
           appRouter.goTo(const TutorialPage());
         }
 
-        dispatch(StopListeningRoomUpdatesAction(room.id));
+        dispatch(StopListeningRoomUpdatesAction(roomId));
       };
 
       startGame();
     }
 
-    return () {
-      if (room?.id != null) {
-        dispatch(StopListeningRoomUpdatesAction(room.id));
-      }
-    };
+    return null;
   }, [room?.gameId]);
 }
 

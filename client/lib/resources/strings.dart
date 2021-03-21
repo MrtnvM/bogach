@@ -512,4 +512,5 @@ class Strings {
   static String get saveChanges => 'Сохранить изменения';
   static String get sureToGoOut => 'Вы действительно хотите выйти из аккаунта?';
   static String get goOut => 'Выйти';
+  static String get removeFromFriends => 'Удалить из друзей';
 }

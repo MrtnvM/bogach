@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/operation.dart';
-import 'package:cash_flow/features/multiplayer/actions/room_listening_actions.dart';
 import 'package:cash_flow/models/domain/room/room_participant.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/user_service.dart';
@@ -49,16 +48,5 @@ class JoinRoomAction extends BaseAction {
         s.profile.currentUser = updatedUser;
       }
     });
-  }
-
-  @override
-  void after() {
-    super.after();
-
-    final room = state.multiplayer.currentRoom;
-
-    if (room != null) {
-      dispatch(StartListeningRoomUpdatesAction(room.id));
-    }
   }
 }
