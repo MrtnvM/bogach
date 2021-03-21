@@ -8,21 +8,22 @@ import { rollbar } from '../../config';
 export class UserService {
   constructor(private userProvider: UserProvider, private firebaseMessaging: FirebaseMessaging) {}
 
+  /// Friend that taps on inviter link executes this function
   async addFriends(props: { userId: string; usersAddToFriends: string[] }) {
     const { userId, usersAddToFriends } = props;
 
-    /// Adding friends to current user
-    await this.addFriendsToUser(userId, usersAddToFriends);
+    /// Adding friend (inviter) to user that tap on link
+    const friendThatTapOnLink = await this.addFriendsToUser(userId, usersAddToFriends);
 
-    /// Adding current user as friend to invited users
+    /// Adding friend that tap on link to the inviter user
     usersAddToFriends.forEach(async (userAddToFriend) => {
-      const friend = await this.addFriendsToUser(userAddToFriend, [userId]);
-      const device = await this.userProvider.getUserDevice(friend.userId);
+      const inviterUser = await this.addFriendsToUser(userAddToFriend, [userId]);
+      const device = await this.userProvider.getUserDevice(inviterUser.userId);
 
       if (device) {
         await this.firebaseMessaging
           .sendMulticastNotification({
-            title: Strings.newFriend() + friend.userName,
+            title: Strings.newFriend() + friendThatTapOnLink.userName,
             body: Strings.friendRequestAccepted(),
             data: { type: 'new_friend' },
             pushTokens: [device.token],
