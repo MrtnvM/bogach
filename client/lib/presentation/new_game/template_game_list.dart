@@ -33,7 +33,7 @@ class TemplateGameList extends HookWidget {
       swiperController.value.addListener(() {
         final currentIndex = swiperController.value.index;
         final templateName = vm.gameTemplates.itemsMap[currentIndex].name;
-        AnalyticsSender.singleplayerSwipeGame(templateName);
+        AnalyticsSender.singleplayerGameSwiped(templateName);
       });
 
       return swiperController.dispose;
