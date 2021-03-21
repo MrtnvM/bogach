@@ -2,7 +2,6 @@ import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/push_notification_hooks.dart';
 import 'package:cash_flow/features/profile/actions/send_device_push_token_action.dart';
-import 'package:cash_flow/resources/dynamic_links.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:uni_links/uni_links.dart';
@@ -39,8 +38,6 @@ void usePushNotificationsHandler() {
 }
 
 void useDeepLinkHandler() {
-  final joinRoom = useJoinRoom();
-
   useEffect(() {
     // ignore: avoid_types_on_closure_parameters
     final onDeepLink = (String deepLink) {
@@ -53,11 +50,11 @@ void useDeepLinkHandler() {
       final uri = Uri.parse(deepLink);
       Logger.e('PARSED URI:\n${uri.toString()}');
 
-      final path = uri.path;
-      if (path.contains(DynamicLinks.join)) {
-        final roomId = uri.queryParameters[DynamicLinks.roomInvite];
-        joinRoom(roomId);
-      }
+      // final path = uri.path;
+      // if (path.contains(DynamicLinks.join)) {
+      //   final roomId = uri.queryParameters[DynamicLinks.roomInvite];
+      //   joinRoom(roomId);
+      // }
     };
 
     final onDeepLinkError = (error) {
