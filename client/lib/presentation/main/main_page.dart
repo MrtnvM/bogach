@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/analytics_hooks.dart';
@@ -81,7 +82,14 @@ class MainPage extends HookWidget {
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: pageIndex.value,
-            onTap: (newIndex) => pageIndex.value = newIndex,
+            onTap: (newIndex) {
+              pageIndex.value = newIndex;
+
+              const accountPageIndex = 1;
+              if (newIndex == accountPageIndex) {
+                AnalyticsSender.accountOpen();
+              }
+            },
             items: [
               BottomNavigationBarItem(
                 icon: const Icon(Icons.insights),

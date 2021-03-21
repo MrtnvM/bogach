@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
@@ -43,6 +44,28 @@ class AccountPage extends HookWidget {
 
     final mediaQuery = useAdaptiveMediaQueryData();
     final size = useAdaptiveSize();
+
+    final saveUpdatedAccount = () {
+      DropFocus.drop();
+
+      if (newAvatar.value != null) {
+        AnalyticsSender.accountChangedAvatar();
+      }
+
+      if (user.fullName != newFullName.value) {
+        AnalyticsSender.accountChangedUsername();
+      }
+
+      dispatch(
+        UpdateUserAction(
+          userId: user.id,
+          fullName: newFullName.value,
+          avatar: newAvatar.value,
+        ),
+      ).catchError((error) => AnalyticsSender.accountEditingFailed());
+
+      newAvatar.value = null;
+    };
 
     return LoadableView(
       isLoading: isInProgress,
@@ -105,19 +128,7 @@ class AccountPage extends HookWidget {
                     color: ColorRes.mainGreen,
                     text: Strings.saveChanges,
                     withRoundedBorder: true,
-                    onPressed: () {
-                      DropFocus.drop();
-
-                      dispatch(
-                        UpdateUserAction(
-                          userId: user.id,
-                          fullName: newFullName.value,
-                          avatar: newAvatar.value,
-                        ),
-                      );
-
-                      newAvatar.value = null;
-                    },
+                    onPressed: saveUpdatedAccount,
                   ),
                 ),
             ],

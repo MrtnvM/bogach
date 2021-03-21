@@ -320,7 +320,24 @@ class AnalyticsSender {
   static void tutorialEvent(String event) =>
       _send('tutorial_event', {'event': event});
 
-  // TODO(Maxim): Added steps for tutorial
+  /// ----------------------------------------------------------------
+  /// Account
+  /// ----------------------------------------------------------------
+
+  static void accountOpen() => _send('account_open');
+  static void accountChangedUsername() => _send('account_changed_username');
+  static void accountChangedAvatar() => _send('account_changed_avatar');
+  static void accountEditingFailed() => _send('account_editing_failed');
+  static void accountInviteFriendLinkCreated() =>
+      _send('account_invite_friend_link_created');
+  static void accountInvitationAccepted() =>
+      _send('account_invitation_accepted');
+  static void accountInvitationAcceptRequestFailed() =>
+      _send('account_invitation_accept_request_failed');
+  static void accountRemoveFriend() => _send('account_remove_friend');
+  static void accountOptionsButtonPressed() =>
+      _send('account_options_button_pressed');
+  static void accountLogout() => _send('account_logout');
 
   /// ----------------------------------------------------------------
   /// App events

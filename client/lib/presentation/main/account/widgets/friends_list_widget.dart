@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/multiplayer/actions/share_add_friend_link_action.dart';
@@ -61,8 +62,13 @@ class _InviteButton extends HookWidget {
   Widget build(BuildContext context) {
     final dispatch = useDispatcher();
 
+    final inviteFriend = () async {
+      await dispatch(ShareAddFriendLinkAction());
+      AnalyticsSender.accountInviteFriendLinkCreated();
+    };
+
     return InkWell(
-      onTap: () => dispatch(ShareAddFriendLinkAction()),
+      onTap: inviteFriend,
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 8,
