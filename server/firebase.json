@@ -34,7 +34,8 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "appAssociation": "AUTO",
     "rewrites": [
-      { "source": "/app/**", "dynamicLinks": true }
+      { "source": "/app/**", "dynamicLinks": true },
+      { "source": "/join/**", "dynamicLinks": true }
     ]
   },
   "database": {
