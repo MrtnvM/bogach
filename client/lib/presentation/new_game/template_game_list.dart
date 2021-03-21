@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/presentation/new_game/game_template_item.dart';
@@ -10,6 +11,7 @@ import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 
 class TemplateGameList extends HookWidget {
   const TemplateGameList({
@@ -25,6 +27,18 @@ class TemplateGameList extends HookWidget {
     final vm = useGameTemplateListViewModel();
     final mediaQueryData = useAdaptiveMediaQueryData();
 
+    final swiperController = useState(SwiperController());
+
+    useEffect(() {
+      swiperController.value.addListener(() {
+        final currentIndex = swiperController.value.index;
+        final templateName = vm.gameTemplates.itemsMap[currentIndex].name;
+        AnalyticsSender.singleplayerSwipeGame(templateName);
+      });
+
+      return swiperController.dispose;
+    }, []);
+
     return MediaQuery(
       data: mediaQueryData,
       child: LoadableView(
@@ -32,6 +46,7 @@ class TemplateGameList extends HookWidget {
         backgroundColor: ColorRes.transparent,
         indicatorColor: const AlwaysStoppedAnimation<Color>(ColorRes.mainGreen),
         child: GamesLoadableListView<GameTemplate>(
+          swiperController: swiperController.value,
           viewModel: LoadableListViewModel(
             items: vm.gameTemplates,
             itemBuilder: (i) => GameTemplateItem(

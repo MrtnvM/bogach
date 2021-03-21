@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
@@ -6,7 +7,7 @@ import 'package:cash_flow/features/new_game/actions/get_quests_action.dart';
 import 'package:cash_flow/presentation/main/games/widgets/profile_bar.dart';
 import 'package:cash_flow/presentation/multiplayer/multiplayer_game_list.dart';
 import 'package:cash_flow/presentation/multiplayer/widgets/multiplayer_game_count_badge.dart';
-import 'package:cash_flow/presentation/multiplayer/widgets/online_profiles_list.dart';
+import 'package:cash_flow/presentation/multiplayer/widgets/multiplayer_profiles_list.dart';
 import 'package:cash_flow/presentation/new_game/template_game_list.dart';
 import 'package:cash_flow/presentation/quests/quest_list.dart';
 import 'package:cash_flow/presentation/quests/quests_badge.dart';
@@ -26,6 +27,8 @@ class GamesPage extends HookWidget {
     final dispatch = useDispatcher();
 
     final refreshData = () {
+      AnalyticsSender.mainPageRefreshed();
+
       return Future.wait([
         dispatch(GetQuestsAction(userId: userId, isRefreshing: true)),
         dispatch(GetGameTemplatesAction()),
@@ -99,7 +102,7 @@ class _GamePageContent extends HookWidget {
         SizedBox(height: size(12)),
         SizedBox(
           height: size(100),
-          child: OnlineProfilesList(selectedProfiles),
+          child: MultiplayerProfilesList(selectedProfiles),
         ),
         SizedBox(height: size(0)),
         SizedBox(
