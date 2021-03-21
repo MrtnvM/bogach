@@ -106,8 +106,7 @@ export class ErrorRecorder {
     try {
       return await callback();
     } catch (err) {
-      if (!ErrorRecorder.isEnabled || err['type'] === 'domain') {
-        console.error('DOMAIN ERROR');
+      if (!ErrorRecorder.isEnabled) {
         throw err;
       }
 
@@ -125,7 +124,7 @@ export class ErrorRecorder {
 
       const error = new Error(errorInfo);
 
-      if (environment === 'local') {
+      if (environment === 'local' || err['type'] === 'domain') {
         console.error(errorInfo);
         throw error;
       }
