@@ -1,5 +1,4 @@
 import 'package:cash_flow/core/hooks/dispatcher.dart';
-import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/multiplayer/actions/room_listening_actions.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';

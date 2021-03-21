@@ -5,6 +5,7 @@ import 'package:cash_flow/cache/user_cache.dart';
 import 'package:cash_flow/core/utils/mappers/current_user_mappers.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/models/network/request/register_request_model.dart';
+import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/utils/error_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
@@ -15,9 +16,6 @@ import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
 const _defaultUserName = 'Anonymous';
-const _defaultAvatar = 'https://firebasestorage.googleapis.com/v0/b/'
-    'bogach-production.appspot.com/o/avatar%2Fdefault_avatar.jpeg?'
-    'alt=media&token=d8426252-e62c-4ae8-a8e0-0cfecc69dbee';
 
 class UserService {
   UserService({
@@ -243,7 +241,7 @@ class UserService {
 
     if (updatedUser.avatarUrl?.isEmpty ?? true) {
       updatedUser = updatedUser.copyWith(
-        avatarUrl: _defaultAvatar,
+        avatarUrl: Images.defaultAvatarUrl,
       );
     }
 
