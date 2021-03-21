@@ -9,10 +9,9 @@ import 'package:cash_flow/app_configuration.dart';
 
 Future<String> getAddFriendLink({@required UserProfile currentUser}) async {
   final packageName = await getPackageName();
-  final baseUrl = AppConfiguration.environment.dynamicLink.baseUrl;
 
-  final linkPrefix = '$baseUrl${DynamicLinks.addFriend}';
-  final deepLink = '$linkPrefix?${DynamicLinks.inviterId}=${currentUser.id}';
+  final baseUrl = AppConfiguration.environment.dynamicLink.baseUrl;
+  final deepLink = '$baseUrl?${DynamicLinks.inviterId}=${currentUser.id}';
   final link = Uri.parse(deepLink);
 
   final socialMetaTagParameters = SocialMetaTagParameters(
@@ -21,7 +20,7 @@ Future<String> getAddFriendLink({@required UserProfile currentUser}) async {
   );
 
   final parameters = DynamicLinkParameters(
-    uriPrefix: linkPrefix,
+    uriPrefix: baseUrl,
     link: link,
     androidParameters: getAndroidDynamicLinkParameters(packageName),
     iosParameters: getIosDynamicLinkParameters(packageName),
