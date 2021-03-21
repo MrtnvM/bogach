@@ -72,7 +72,8 @@
 	<string>Богач</string>
 	<key>FirebaseDynamicLinksCustomDomains</key>
 	<array>
-		<string>https://staging.app.bogach-game.ru/friends/invite</string>
+		<string>https://bogach-game.ru/app</string>
+		<string>https://staging.app.bogach-game.ru/app</string>
 		<string>https://staging.bogach-game.ru/join</string>
 		<string>https://staging.bogach-game.ru</string>
 		<string>https://bogach-game.ru</string>
