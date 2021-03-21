@@ -39,7 +39,11 @@ class CashFlowApp extends HookWidget {
     useUserPushTokenUploader();
     usePushNotificationsHandler();
     useDynamicLinkHandler();
-    useDeepLinkHandler();
+
+    // если когда нибудь будем его включать, нужно выяснить,
+    // почему срабатывает, когда происходит переход по dynamicLink, и что-то
+    // с этим сделать
+    //useDeepLinkHandler();
 
     final theme = Theme.of(context).copyWith(
       scaffoldBackgroundColor: ColorRes.scaffoldBackground,

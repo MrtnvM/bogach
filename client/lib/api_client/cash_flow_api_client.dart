@@ -77,6 +77,7 @@ class CashFlowApiClient extends ApiClient {
         path: 'startNewMonth',
         body: {'context': gameContext.toJson()},
         responseMapper: rm.voidResponse,
+        validate: true,
       );
 
   Future<Room> createRoom(CreateRoomRequestModel requestModel) => post(

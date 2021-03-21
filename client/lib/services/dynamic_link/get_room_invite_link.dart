@@ -13,11 +13,8 @@ Future<String> getRoomInviteLink({
 }) async {
   final packageName = await getPackageName();
 
-  final urlPrefix = '${AppConfiguration.environment.dynamicLink.baseUrl}'
-      '${DynamicLinks.join}';
-
-  final deepLink = '${AppConfiguration.environment.dynamicLink.baseUrl}'
-      '?${DynamicLinks.roomInvite}=$roomId';
+  final urlPrefix = AppConfiguration.environment.dynamicLink.baseUrl;
+  final deepLink = '$urlPrefix?${DynamicLinks.roomInvite}=$roomId';
   final link = Uri.parse(deepLink);
 
   final socialMetaTagParameters = SocialMetaTagParameters(
