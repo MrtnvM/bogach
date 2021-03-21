@@ -124,7 +124,7 @@ export class ErrorRecorder {
 
       const error = new Error(errorInfo);
 
-      if (environment === 'local') {
+      if (environment === 'local' || err['type'] === 'domain') {
         console.error(errorInfo);
         throw error;
       }
