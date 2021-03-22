@@ -1,23 +1,38 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
+import 'package:rxdart/rxdart.dart';
 
 class TrackOnlineStatusAction extends BaseAction {
   @override
-  AppState reduce() {
-    FirebaseDatabase.instance
-        .reference()
-        .child('.info/connected')
-        .onValue
-        .map((event) => event?.snapshot?.value == true)
-        .listen((isOnline) {
+  Future<AppState> reduce() async {
+    final void Function(bool) changeOnlineStatus = (isOnline) {
       scheduleMicrotask(() {
         dispatch(SetOnlineStatusAction(isOnline: isOnline));
       });
-    });
+    };
+
+    if (Platform.isIOS) {
+      FirebaseDatabase.instance
+          .reference()
+          .child('.info/connected')
+          .onValue
+          .map((event) => event?.snapshot?.value == true)
+          .listen(changeOnlineStatus);
+    } else {
+      final connectivity = Connectivity();
+      final currentStatus = await connectivity.checkConnectivity();
+      final onConnectivityChanged = connectivity.onConnectivityChanged;
+
+      Rx.concat([Stream.value(currentStatus), onConnectivityChanged])
+          .map((result) => result != ConnectivityResult.none)
+          .listen(changeOnlineStatus);
+    }
 
     return null;
   }
