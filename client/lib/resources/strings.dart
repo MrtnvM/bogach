@@ -513,4 +513,6 @@ class Strings {
   static String get sureToGoOut => 'Вы действительно хотите выйти из аккаунта?';
   static String get goOut => 'Выйти';
   static String get removeFromFriends => 'Удалить из друзей';
+  static String get updateProfileErrorMessage =>
+      'При обновлении профиля возникла ошибка';
 }
