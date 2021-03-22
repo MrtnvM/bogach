@@ -1,6 +1,6 @@
 import 'package:cash_flow/features/multiplayer/multiplayer_hooks.dart';
 import 'package:cash_flow/navigation/app_router.dart';
-import 'package:cash_flow/presentation/purchases/games_access_page.dart';
+import 'package:cash_flow/presentation/purchases/multiplayer_purchase_page.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/widgets/containers/badge.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class MultiplayerGameCountBadge extends HookWidget {
     return Badge(
       title: '$availableGamesCount',
       imageAsset: Images.multiplayerBadge,
-      onTap: () => appRouter.goTo(const GamesAccessPage()),
+      onTap: () => appRouter.goTo(const MultiplayerPurchasePage()),
     );
   }
 }

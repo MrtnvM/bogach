@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/profile/actions/remove_from_friends_action.dart';
@@ -92,6 +93,8 @@ class _OptionsButton extends HookWidget {
     final optionsButtonSize = size(32);
 
     final void Function(String) removeFromFriends = (id) {
+      AnalyticsSender.accountRemoveFriend();
+
       dispatch(RemoveFromFriendsAciton(id)).catchError(
         (error) => handleError(
           context: context,
@@ -102,10 +105,14 @@ class _OptionsButton extends HookWidget {
 
     return InkWell(
       borderRadius: BorderRadius.circular(optionsButtonSize / 2),
-      onTap: () => _showFriendActions(
-        context,
-        removeFromFriends: () => removeFromFriends(user.id),
-      ),
+      onTap: () {
+        AnalyticsSender.accountOptionsButtonPressed();
+
+        _showFriendActions(
+          context,
+          removeFromFriends: () => removeFromFriends(user.id),
+        );
+      },
       child: SizedBox(
         height: optionsButtonSize,
         width: optionsButtonSize,

@@ -1,6 +1,7 @@
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 
 class AnalyticsSender {
   AnalyticsSender._();
@@ -192,9 +193,10 @@ class AnalyticsSender {
   /// ----------------------------------------------------------------
 
   static void singleplayerGameStart() => _send('singleplayer_game_start');
-  static void singleplayerGameEnd() => _send('singleplayer_game_end');
-  static void singleplayerPageOpen() => _send('singleplayer_page_open');
   static void singleplayerContinueGame() => _send('singleplayer_game_continue');
+  static void singleplayerGameEnd() => _send('singleplayer_game_end');
+  static void singleplayerGameSwiped(String templateName) =>
+      _send('singleplayer_game_swiped', {'template_name': templateName});
   static void singleplayerTemplateSelected(String templateName) =>
       _send('singleplayer_template_selected', {'template_name': templateName});
 
@@ -205,11 +207,14 @@ class AnalyticsSender {
   static void multiplayerGameStart() => _send('multiplayer_game_start');
   static void multiplayerGameEnd() => _send('multiplayer_game_end');
 
-  static void multiplayerLevelsPageOpen() =>
-      _send('multiplayer_levels_page_open');
-
   static void multiplayerInviteLinkCreated() =>
       _send('multiplayer_invite_link_created');
+
+  static void multiplayerParticipantJoined() =>
+      _send('multiplayer_participant_joined');
+
+  static void multiplayerParticipantJoinFailed() =>
+      _send('multiplayer_participant_join_failed');
 
   static void multiplayerPurchasePageOpen() =>
       _send('multiplayer_purchase_page_open');
@@ -220,19 +225,38 @@ class AnalyticsSender {
   static void multiplayerGamesPurchased(String purchase) =>
       _send('multiplayer_games_purchased', {'purchase': purchase});
 
-  static void multiplayerPurchaseCanceled() =>
-      _send('multiplayer_purchase_canceled');
+  static void multiplayerPurchaseCanceled(String purchase) =>
+      _send('multiplayer_purchase_canceled', {'purchase': purchase});
 
-  static void multiplayerPurchaseFailed(String error) =>
-      _send('multiplayer_purchase_failed', {'error': error});
+  static void multiplayerPurchaseFailed({
+    @required String error,
+    @required String purchase,
+  }) =>
+      _send('multiplayer_purchase_failed',
+          {'error': error, 'purchase': purchase});
 
   static void multiplayerTemplateSelected(String templateName) =>
       _send('multiplayer_template_selected', {'template_name': templateName});
 
-  static void multiplayer1GameBought() => _send('multiplayer_1_game_bought');
-  static void multiplayer5GamesBought() => _send('multiplayer_5_games_bought');
+  static void multiplayerGameSwiped(String templateName) =>
+      _send('multiplayer_game_swiped', {'template_name': templateName});
+
+  static void multiplayer1GameBought() => //
+      _send('multiplayer_1_game_bought');
   static void multiplayer10GamesBought() =>
       _send('multiplayer_10_games_bought');
+  static void multiplayer25GamesBought() =>
+      _send('multiplayer_25_games_bought');
+
+  static void multiplayerFriendSelected() =>
+      _send('multiplayer_friend_selected');
+  static void multiplayerFriendDeselected() =>
+      _send('multiplayer_friend_deselected');
+
+  static void multiplayerOnlineUserSelected() =>
+      _send('multiplayer_online_user_selected');
+  static void multiplayerOnlineUserDeselected() =>
+      _send('multiplayer_online_user_deselected');
 
   /// ----------------------------------------------------------------
   /// Quests events
@@ -251,18 +275,21 @@ class AnalyticsSender {
       _send('quest_failed', {'quest': quest});
 
   static void questsFirstOpen() => _send('quests_first_open');
-  static void questsPageOpen() => _send('quests_page_open');
 
   static void questsPurchasePageOpen() => _send('quests_purchase_page_open');
   static void questsPurchaseStarted() => _send('quests_purchase_started');
   static void questsPurchaseCanceled() => _send('quests_purchase_canceled');
+  static void questsPurchaseFailed() => _send('quests_purchase_failed');
   static void questsPurchased() => _send('quests_purchased');
 
-  static void questSelected() => _send('quests_quest_selected');
+  static void questSelected(String quest) =>
+      _send('quests_quest_selected', {'quest': quest});
   static void questsFirstQuestSelected() =>
       _send('quests_first_quest_selected');
   static void questsSecondQuestSelected() =>
       _send('quests_second_quest_selected');
+  static void questsSwipeGame(String quest) =>
+      _send('quests_swipe_game', {'quest': quest});
 
   /// ----------------------------------------------------------------
   /// Onboarding
@@ -293,7 +320,24 @@ class AnalyticsSender {
   static void tutorialEvent(String event) =>
       _send('tutorial_event', {'event': event});
 
-  // TODO(Maxim): Added steps for tutorial
+  /// ----------------------------------------------------------------
+  /// Account
+  /// ----------------------------------------------------------------
+
+  static void accountOpen() => _send('account_open');
+  static void accountChangedUsername() => _send('account_changed_username');
+  static void accountChangedAvatar() => _send('account_changed_avatar');
+  static void accountEditingFailed() => _send('account_editing_failed');
+  static void accountInviteFriendLinkCreated() =>
+      _send('account_invite_friend_link_created');
+  static void accountInvitationAccepted() =>
+      _send('account_invitation_accepted');
+  static void accountInvitationAcceptRequestFailed() =>
+      _send('account_invitation_accept_request_failed');
+  static void accountRemoveFriend() => _send('account_remove_friend');
+  static void accountOptionsButtonPressed() =>
+      _send('account_options_button_pressed');
+  static void accountLogout() => _send('account_logout');
 
   /// ----------------------------------------------------------------
   /// App events
@@ -302,6 +346,11 @@ class AnalyticsSender {
   static void appLaunched() => _send('app_open');
   static void signIn() => _send('sign_in');
   static void singInFailed() => _send('sing_in_failed');
+  static void restorePurchasesStart() => _send('restore_purchases_start');
+  static void restorePurchasesCompleted() =>
+      _send('restore_purchases_completed');
+  static void restorePurchasesFailed() => _send('restore_purchases_failed');
+  static void mainPageRefreshed() => _send('main_page_refreshed');
 
   /// ----------------------------------------------------------------
   /// Common methods

@@ -7,7 +7,7 @@ import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/new_game/actions/get_quests_action.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/navigation/app_router.dart';
-import 'package:cash_flow/presentation/purchases/quests_access_page.dart';
+import 'package:cash_flow/presentation/purchases/quests_purchase_page.dart';
 import 'package:cash_flow/presentation/quests/quest_item_widget.dart';
 import 'package:cash_flow/presentation/quests/quests_hooks.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -57,6 +57,16 @@ class QuestList extends HookWidget {
               animationController.reverse();
             }
           });
+
+    useEffect(() {
+      swiperController.value.addListener(() {
+        final currentIndex = swiperController.value.index;
+        final quest = quests.itemsMap[currentIndex].name;
+        AnalyticsSender.questsSwipeGame(quest);
+      });
+
+      return swiperController.dispose;
+    }, []);
 
     return MediaQuery(
       data: mediaQueryData,
@@ -166,7 +176,7 @@ class _QuestItemWidget extends HookWidget {
 
     if (isQuestAvailable) {
       return (quest, action) {
-        AnalyticsSender.questSelected();
+        AnalyticsSender.questSelected(quest.name);
 
         if (index == 0) {
           AnalyticsSender.questsFirstQuestSelected();
@@ -184,7 +194,7 @@ class _QuestItemWidget extends HookWidget {
           AnalyticsSender.questsSecondQuestSelected();
         }
 
-        appRouter.goTo(QuestsAccessPage(quest: level));
+        appRouter.goTo(QuestsPurchasePage(quest: level));
       };
     }
 

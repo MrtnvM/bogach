@@ -12,7 +12,7 @@ import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/multiplayer/room_page.dart';
 import 'package:cash_flow/presentation/new_game/game_template_item.dart';
-import 'package:cash_flow/presentation/purchases/games_access_page.dart';
+import 'package:cash_flow/presentation/purchases/multiplayer_purchase_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/common/common_error_widget.dart';
 import 'package:cash_flow/widgets/common/empty_list_widget.dart';
@@ -22,6 +22,7 @@ import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 
 class MultiplayerGameList extends HookWidget {
   const MultiplayerGameList({
@@ -57,7 +58,8 @@ class MultiplayerGameList extends HookWidget {
     };
 
     final Function(GameTemplate) buyGames = (template) async {
-      final response = await appRouter.goTo<bool>(const GamesAccessPage());
+      final response =
+          await appRouter.goTo<bool>(const MultiplayerPurchasePage());
 
       if (response == null) {
         return;
@@ -107,6 +109,18 @@ class _TemplateList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQueryData = useAdaptiveMediaQueryData();
+
+    final swiperController = useState(SwiperController());
+
+    useEffect(() {
+      swiperController.value.addListener(() {
+        final currentIndex = swiperController.value.index;
+        final templateName = gameTemplates.itemsMap[currentIndex].name;
+        AnalyticsSender.multiplayerGameSwiped(templateName);
+      });
+
+      return swiperController.dispose;
+    }, []);
 
     return MediaQuery(
       data: mediaQueryData,

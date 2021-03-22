@@ -15,9 +15,7 @@ Future<void> Function(String questId, QuestAction action) useQuestStarter() {
   final isTutorialPassed = useConfig((c) => c.isGameboardTutorialPassed);
 
   return (questId, action) {
-    if (action == QuestAction.startNewGame) {
-      AnalyticsSender.questStart(questId);
-    } else if (action == QuestAction.continueGame) {
+    if (action == QuestAction.continueGame) {
       AnalyticsSender.questContinue(questId);
     }
 

@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
@@ -11,8 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 
-class OnlineProfilesList extends HookWidget {
-  const OnlineProfilesList(this.selectedProfiles);
+class MultiplayerProfilesList extends HookWidget {
+  const MultiplayerProfilesList(this.selectedProfiles);
 
   final ValueNotifier<Set<String>> selectedProfiles;
 
@@ -24,17 +25,20 @@ class OnlineProfilesList extends HookWidget {
     );
 
     final profiles = useGlobalState((s) {
+      final friendsIds = s.profile.currentUser?.friends ?? [];
+
       final onlineProfiles = s.multiplayer.onlineProfiles.map(
         (p) => MultiplayerProfile(
           userId: p.userId,
           userName: p.fullName,
           avatarUrl: p.avatarUrl,
           isOnline: true,
+          isFriend: friendsIds.contains(p.userId),
         ),
       );
 
       final onlineProfilesSet = onlineProfiles.map((p) => p.userId).toSet();
-      final friends = (s.profile.currentUser?.friends ?? [])
+      final friends = friendsIds
           .where((id) => !onlineProfilesSet.contains(id))
           .map((id) => s.multiplayer.userProfiles.itemsMap[id])
           .where((p) => p != null)
@@ -43,6 +47,7 @@ class OnlineProfilesList extends HookWidget {
                 userName: p.fullName,
                 avatarUrl: p.avatarUrl,
                 isOnline: false,
+                isFriend: true,
               ));
 
       return [...onlineProfiles, ...friends];
@@ -62,9 +67,22 @@ class OnlineProfilesList extends HookWidget {
                 profile: profiles[index],
                 onTap: (userId) {
                   final set = Set.of(selectedProfiles.value);
+                  final profile = profiles[index];
 
                   if (!set.remove(userId)) {
                     set.add(userId);
+
+                    if (profile.isFriend) {
+                      AnalyticsSender.multiplayerFriendSelected();
+                    } else {
+                      AnalyticsSender.multiplayerOnlineUserSelected();
+                    }
+                  } else {
+                    if (profile.isFriend) {
+                      AnalyticsSender.multiplayerFriendDeselected();
+                    } else {
+                      AnalyticsSender.multiplayerOnlineUserDeselected();
+                    }
                   }
 
                   selectedProfiles.value = set;

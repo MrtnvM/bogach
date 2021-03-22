@@ -11,12 +11,14 @@ class MultiplayerProfile {
     @required this.avatarUrl,
     @required this.userName,
     @required this.isOnline,
+    this.isFriend = false,
   });
 
   final String userId;
   final String avatarUrl;
   final String userName;
   final bool isOnline;
+  final bool isFriend;
 }
 
 class MultiplayerProfileWidget extends HookWidget {

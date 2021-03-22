@@ -1,10 +1,9 @@
 import 'package:cash_flow/core/hooks/dispatcher.dart';
-import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/multiplayer/actions/room_listening_actions.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/multiplayer/room_page.dart';
-import 'package:cash_flow/presentation/purchases/games_access_page.dart';
+import 'package:cash_flow/presentation/purchases/multiplayer_purchase_page.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/foundation.dart';
@@ -34,7 +33,7 @@ Function(String) useJoinRoom() {
 
     joinRoom = () async {
       if (multiplayerGamesCount <= 0) {
-        final response = await appRouter.goTo(const GamesAccessPage());
+        final response = await appRouter.goTo(const MultiplayerPurchasePage());
         if (response == null) {
           return;
         }

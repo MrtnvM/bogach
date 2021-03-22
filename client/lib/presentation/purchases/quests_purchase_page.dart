@@ -1,4 +1,5 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
@@ -25,8 +26,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
-class QuestsAccessPage extends HookWidget {
-  const QuestsAccessPage({this.quest});
+class QuestsPurchasePage extends HookWidget {
+  const QuestsPurchasePage({this.quest});
 
   final Quest quest;
 
@@ -71,7 +72,8 @@ class QuestsAccessPage extends HookWidget {
 
     useEffect(() {
       AnalyticsSender.questsPurchasePageOpen();
-      return null;
+      SessionTracker.questPurchasePage.start();
+      return SessionTracker.questPurchasePage.stop;
     }, []);
 
     final mediaQueryData = useAdaptiveMediaQueryData();
@@ -117,10 +119,15 @@ class _RestorePurchasesButton extends HookWidget {
   Widget build(BuildContext context) {
     final dispatch = useDispatcher();
 
-    final restorePurchases = () {
-      dispatch(QueryPastPurchasesAction()).catchError(
-        (error) => handleError(context: context, exception: error),
-      );
+    final restorePurchases = () async {
+      AnalyticsSender.restorePurchasesStart();
+
+      try {
+        await dispatch(QueryPastPurchasesAction());
+      } catch (error) {
+        AnalyticsSender.restorePurchasesFailed();
+        handleError(context: context, exception: error);
+      }
     };
 
     return GestureDetector(
@@ -258,6 +265,8 @@ class _BuyButton extends HookWidget {
         AnalyticsSender.questsPurchaseCanceled();
         Logger.i('Purchase canceled: ${error.product?.id}');
       } catch (error) {
+        AnalyticsSender.questsPurchaseFailed();
+
         handleError(
           context: context,
           exception: error,

@@ -10,8 +10,12 @@ class SessionTracker {
   static final gameLaunched = _TraceHolder('game_launched');
 
   static final quest = _TraceHolder('quest');
+  static final questPurchasePage = _TraceHolder('quest_purhcase_page');
   static final singleplayerGame = _TraceHolder('singleplayer_game');
+  static final roomPage = _TraceHolder('room_page');
   static final multiplayerGame = _TraceHolder('multiplayer_game');
+  static final multiplayerPurchasePage =
+      _TraceHolder('multiplayer_purchase_page');
 
   static final multiplayerGameCreated =
       _TraceHolder('multiplayer_game_created');

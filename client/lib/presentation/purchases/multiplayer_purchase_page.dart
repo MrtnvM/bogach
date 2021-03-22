@@ -1,4 +1,5 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
@@ -21,8 +22,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
-class GamesAccessPage extends HookWidget {
-  const GamesAccessPage();
+class MultiplayerPurchasePage extends HookWidget {
+  const MultiplayerPurchasePage();
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,8 @@ class GamesAccessPage extends HookWidget {
 
     useEffect(() {
       AnalyticsSender.multiplayerPurchasePageOpen();
-      return null;
+      SessionTracker.multiplayerPurchasePage.start();
+      return SessionTracker.multiplayerPurchasePage.stop;
     }, []);
 
     return LoadableView(
@@ -158,19 +160,37 @@ class _PurchaseGameList extends HookWidget {
 
     Function(MultiplayerGamePurchases) buyMultiplayerGame;
     buyMultiplayerGame = (multiplayerGamePurchase) async {
+      final purchaseName = describeEnum(multiplayerGamePurchase);
+
       try {
-        final purchaseName = describeEnum(multiplayerGamePurchase);
         AnalyticsSender.multiplayerPurchaseStarted(purchaseName);
+
+        switch (multiplayerGamePurchase) {
+          case MultiplayerGamePurchases.oneGame:
+            AnalyticsSender.multiplayer1GameBought();
+            break;
+
+          case MultiplayerGamePurchases.tenGames:
+            AnalyticsSender.multiplayer10GamesBought();
+            break;
+
+          case MultiplayerGamePurchases.twentyFiveGames:
+            AnalyticsSender.multiplayer25GamesBought();
+            break;
+        }
 
         await dispatch(BuyMultiplayerGames(multiplayerGamePurchase));
         AnalyticsSender.multiplayerGamesPurchased(purchaseName);
 
         appRouter.goBack(true);
       } on ProductPurchaseCanceledException catch (error) {
-        AnalyticsSender.multiplayerPurchaseCanceled();
+        AnalyticsSender.multiplayerPurchaseCanceled(purchaseName);
         Logger.i('Purchase canceled: ${error.product?.id}');
       } catch (error) {
-        AnalyticsSender.multiplayerPurchaseFailed(error.toString());
+        AnalyticsSender.multiplayerPurchaseFailed(
+          error: error.toString(),
+          purchase: purchaseName,
+        );
 
         handleError(
           context: context,

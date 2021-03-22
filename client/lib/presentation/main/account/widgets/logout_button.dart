@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:flutter/material.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:cash_flow/features/profile/actions/logout_action.dart';
@@ -58,6 +59,7 @@ class LogoutButton extends StatelessWidget {
   }
 
   void _onLogoutFinished() {
+    AnalyticsSender.accountLogout();
     appRouter.startWith(LoginPage());
   }
 }

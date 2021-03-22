@@ -1,4 +1,5 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
@@ -27,6 +28,11 @@ class RoomPage extends HookWidget {
     final room = useCurrentRoom();
 
     useAutoTransitionToCreatedGame();
+
+    useEffect(() {
+      SessionTracker.roomPage.start();
+      return SessionTracker.roomPage.stop;
+    }, []);
 
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.light,
@@ -92,10 +98,14 @@ class _JoinRoomButton extends HookWidget {
   Widget build(BuildContext context) {
     final userId = useUserId();
     final dispatch = useDispatcher();
-    final join = () {
-      return dispatch(SetRoomParticipantReadyAction(userId)).catchError(
-        (e) => handleError(context: context, exception: e),
-      );
+    final join = () async {
+      try {
+        await dispatch(SetRoomParticipantReadyAction(userId));
+        AnalyticsSender.multiplayerParticipantJoined();
+      } catch (e) {
+        AnalyticsSender.multiplayerParticipantJoinFailed();
+        handleError(context: context, exception: e);
+      }
     };
 
     return _Button(
