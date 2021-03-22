@@ -55,4 +55,8 @@ class Images {
   static const financesBarIcon = 'assets/images/svg/footer_financal.svg';
   static const progressBarIcon = 'assets/images/svg/footer_progress.svg';
   static const gameBoardBarIcon = 'assets/images/svg/footer_action.svg';
+
+  static const defaultAvatarUrl = 'https://firebasestorage.googleapis.com/v0/b/'
+      'bogach-production.appspot.com/o/avatar%2Fdefault_avatar.jpeg?'
+      'alt=media&token=d8426252-e62c-4ae8-a8e0-0cfecc69dbee';
 }

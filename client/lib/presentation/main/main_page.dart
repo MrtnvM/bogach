@@ -9,6 +9,7 @@ import 'package:cash_flow/models/domain/user/online/online_profile.dart';
 import 'package:cash_flow/presentation/main/account/account_page.dart';
 import 'package:cash_flow/presentation/main/games/games_page.dart';
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/widgets/common/bogach_loadable_view.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
@@ -29,7 +30,7 @@ class MainPage extends HookWidget {
       dispatch(SetUserOnlineAction(
         user: OnlineProfile(
           userId: user.id,
-          avatarUrl: user.avatarUrl,
+          avatarUrl: user.avatarUrl ?? Images.defaultAvatarUrl,
           fullName: user.fullName,
         ),
       ));
