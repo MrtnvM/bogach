@@ -80,22 +80,6 @@ class AccountPage extends HookWidget {
             errorMessage: Strings.updateProfileErrorMessage,
           );
         }
-
-        dispatch(
-          UpdateUserAction(
-            userId: user.id,
-            fullName: newFullName.value,
-            avatar: newAvatar.value,
-          ),
-        ).catchError((error) {
-          AnalyticsSender.accountEditingFailed();
-          handleError(
-            context: context,
-            exception: error,
-            onRetry: updateProfile,
-            errorMessage: Strings.updateProfileErrorMessage,
-          );
-        });
       };
 
       updateProfile();
