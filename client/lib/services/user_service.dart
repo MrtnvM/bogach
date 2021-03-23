@@ -8,7 +8,9 @@ import 'package:cash_flow/models/network/request/register_request_model.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/utils/error_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
+import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -188,6 +190,11 @@ class UserService {
     String newName,
     File newAvatar,
   }) async {
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      throw NetworkConnectionException(null);
+    }
+
     final newInfo = <String, dynamic>{};
 
     if (newName != null) {

@@ -17,13 +17,17 @@ export class UserService {
 
     /// Adding friend that tap on link to the inviter user
     usersAddToFriends.forEach(async (userAddToFriend) => {
-      const inviterUser = await this.addFriendsToUser(userAddToFriend, [userId]);
+      const {
+        updatedUser: inviterUser,
+        isNewFriendAdded: isNewFriendAddedForInviter,
+      } = await this.addFriendsToUser(userAddToFriend, [userId]);
+
       const device = await this.userProvider.getUserDevice(inviterUser.userId);
 
-      if (device) {
+      if (device && isNewFriendAddedForInviter) {
         await this.firebaseMessaging
           .sendMulticastNotification({
-            title: Strings.newFriend() + friendThatTapOnLink.userName,
+            title: Strings.newFriend() + friendThatTapOnLink.updatedUser.userName,
             body: Strings.friendRequestAccepted(),
             data: { type: 'new_friend' },
             pushTokens: [device.token],
@@ -51,26 +55,29 @@ export class UserService {
 
   private async addFriendsToUser(userId: UserEntity.Id, usersToAdd: string[]) {
     const user = await this.userProvider.getUserProfile(userId);
+    const { friends, isNewFriendAdded } = this.updateFriendsList(user, usersToAdd);
 
     const userWithNewFriends = produce(user, (draft) => {
-      draft.friends = this.updateFriendsList(user, usersToAdd);
+      draft.friends = friends;
     });
 
     const updatedUser = await this.userProvider.updateUserProfile(userWithNewFriends);
-    return updatedUser;
+    return { updatedUser, isNewFriendAdded };
   }
 
-  private updateFriendsList(user: User, usersToAdd: string[]) {
-    const currentFriends = user.friends || [];
+  private updateFriendsList(user: User, usersToAdd: UserEntity.Id[]) {
+    const friends = user.friends || [];
+    let isNewFriendAdded = false;
 
     usersToAdd
       .filter((userId) => userId !== user.userId)
       .forEach((userId) => {
-        if (!currentFriends.includes(userId)) {
-          currentFriends.push(userId);
+        if (!friends.includes(userId)) {
+          friends.push(userId);
+          isNewFriendAdded = true;
         }
       });
 
-    return currentFriends;
+    return { friends, isNewFriendAdded };
   }
 }

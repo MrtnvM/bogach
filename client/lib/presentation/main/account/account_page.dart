@@ -7,6 +7,7 @@ import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/profile/actions/update_user_action.dart';
+import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/main/account/widgets/friends_list_widget.dart';
 import 'package:cash_flow/presentation/main/account/widgets/logout_button.dart';
 import 'package:cash_flow/presentation/main/account/widgets/name_input.dart';
@@ -48,23 +49,40 @@ class AccountPage extends HookWidget {
     final saveUpdatedAccount = () {
       DropFocus.drop();
 
-      if (newAvatar.value != null) {
-        AnalyticsSender.accountChangedAvatar();
-      }
+      VoidCallback updateProfile;
 
-      if (user.fullName != newFullName.value) {
-        AnalyticsSender.accountChangedUsername();
-      }
+      updateProfile = () async {
+        try {
+          final action = UpdateUserAction(
+            userId: user.id,
+            fullName: newFullName.value,
+            avatar: newAvatar.value,
+          );
 
-      dispatch(
-        UpdateUserAction(
-          userId: user.id,
-          fullName: newFullName.value,
-          avatar: newAvatar.value,
-        ),
-      ).catchError((error) => AnalyticsSender.accountEditingFailed());
+          await dispatch(action);
 
-      newAvatar.value = null;
+          if (newAvatar.value != null) {
+            AnalyticsSender.accountChangedAvatar();
+          }
+
+          if (user.fullName != newFullName.value) {
+            AnalyticsSender.accountChangedUsername();
+          }
+
+          newAvatar.value = null;
+        } catch (error) {
+          AnalyticsSender.accountEditingFailed();
+
+          handleError(
+            context: context,
+            exception: error,
+            onRetry: updateProfile,
+            errorMessage: Strings.updateProfileErrorMessage,
+          );
+        }
+      };
+
+      updateProfile();
     };
 
     return LoadableView(
