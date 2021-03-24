@@ -22,6 +22,13 @@ class FriendsListWidget extends HookWidget {
   Widget build(BuildContext context) {
     final size = useAdaptiveSize();
     final inviteButtonSize = size(24);
+    final dispatch = useDispatcher();
+
+    final inviteFriend = () async {
+      dispatch(ShareAddFriendLinkAction())
+          .then((_) => AnalyticsSender.accountInviteFriendLinkCreated())
+          .catchError((e) => handleError(context: context, exception: e));
+    };
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -33,14 +40,18 @@ class FriendsListWidget extends HookWidget {
             text: Strings.friends,
             padding: EdgeInsets.zero,
             actionWidget: friends.isNotEmpty
-                ? _InviteButton(inviteButtonSize: inviteButtonSize, size: size)
+                ? _InviteButton(
+                    inviteButtonSize: inviteButtonSize,
+                    size: size,
+                    inviteFriend: inviteFriend,
+                  )
                 : null,
           ),
           const SizedBox(height: 4),
           const Divider(),
           const SizedBox(height: 4),
           if (friends.isEmpty)
-            const InviteFriendItemWidget()
+            InviteFriendItemWidget(inviteFriend: inviteFriend)
           else
             ...friends.map((item) => FriendItemWidget(user: item)).toList(),
         ],
@@ -54,21 +65,15 @@ class _InviteButton extends HookWidget {
     Key key,
     @required this.inviteButtonSize,
     @required this.size,
+    @required this.inviteFriend,
   }) : super(key: key);
 
   final double inviteButtonSize;
-  final double Function(double p1) size;
+  final double Function(double) size;
+  final VoidCallback inviteFriend;
 
   @override
   Widget build(BuildContext context) {
-    final dispatch = useDispatcher();
-
-    final inviteFriend = () async {
-      dispatch(ShareAddFriendLinkAction())
-          .then((_) => AnalyticsSender.accountInviteFriendLinkCreated())
-          .catchError((e) => handleError(context: context, exception: e));
-    };
-
     final borderRadius = BorderRadius.circular(inviteButtonSize / 2);
 
     return InkWell(
