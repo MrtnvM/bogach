@@ -8,6 +8,7 @@ import 'package:cash_flow/models/network/request/purchases/purchase_details_requ
 import 'package:cash_flow/models/network/request/purchases/update_purchases_request_model.dart';
 import 'package:cash_flow/utils/error_handler.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:rxdart/rxdart.dart';
@@ -266,30 +267,40 @@ class PurchaseService {
   }
 
   Future<PurchaseProfile> buyQuestsAccess(String userId) async {
-    final purchaseProfile = await restorePastPurchases(userId);
+    try {
+      final purchaseProfile = await restorePastPurchases(userId);
 
-    if (purchaseProfile.isQuestsAvailable) {
-      return purchaseProfile;
+      if (purchaseProfile?.isQuestsAvailable == true) {
+        return purchaseProfile;
+      }
+
+      final updatedPurchaseProfile = await buyNonConsumableProduct(
+        productId: questsAccessProductId,
+        userId: userId,
+      );
+
+      return updatedPurchaseProfile;
+    } catch (error, stacktrace) {
+      recordError(error, stacktrace);
+      rethrow;
     }
-
-    final updatedPurchaseProfile = await buyNonConsumableProduct(
-      productId: questsAccessProductId,
-      userId: userId,
-    );
-
-    return updatedPurchaseProfile;
   }
 
   Future<PurchaseProfile> buyMultiplayerGames({
     @required MultiplayerGamePurchases purchase,
     @required String userId,
   }) {
-    final productId = purchase.productId;
+    try {
+      final productId = purchase.productId;
 
-    return buyConsumableProduct(
-      productId: productId,
-      userId: userId,
-    );
+      return buyConsumableProduct(
+        productId: productId,
+        userId: userId,
+      );
+    } catch (error, stacktrace) {
+      recordError(error, stacktrace);
+      rethrow;
+    }
   }
 
   Future<PurchaseProfile> _sendPurchasesToServer(

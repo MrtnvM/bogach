@@ -478,7 +478,7 @@ class Strings {
       'Получи доступ к обновляемой базе квестов';
   static String get questsAccessAdvantage2 => 'Испытай себя в разных ситуациях';
   static String get questsAccessAdvantage3 => 'Найди лучшие стратегии';
-  static String get buyQuestsAccess => 'Купить за 149 ₽';
+  static String get buyQuestsAccess => 'Купить за 179 ₽';
   static String get startQuest => 'Перейти к квесту';
   static String get questsAccessRestorePurchases => 'Восстановить\nпокупки';
 
