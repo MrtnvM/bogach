@@ -55,6 +55,7 @@ class TemplateGameList extends HookWidget {
               onStartNewGamePressed: vm.createNewGame,
               onContinueGamePressed: vm.continueGame,
               onSelectionChanged: onSelectionChanged,
+              canContinueGame: vm.canContinueGame,
             ),
             loadListRequestState: vm.templatesRequestState,
             loadList: vm.loadGameTemplates,

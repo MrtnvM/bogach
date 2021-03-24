@@ -49,13 +49,21 @@ _GameTemplateListViewModel useGameTemplateListViewModel() {
   final userId = useUserId();
   final user = useCurrentUser();
 
-  final void Function(GameTemplate) goToGame = (template) {
+  // ignore: avoid_types_on_closure_parameters
+  final canContinueGame = (GameTemplate template) {
     final games = user.lastGames.singleplayerGames;
     final index = games.indexWhere((g) => g.templateId == template.id);
+    final hasSuchGame = index >= 0;
+    return hasSuchGame;
+  };
 
-    if (index < 0) {
+  final void Function(GameTemplate) continueGame = (template) {
+    if (!canContinueGame(template)) {
       return;
     }
+
+    final games = user.lastGames.singleplayerGames;
+    final index = games.indexWhere((g) => g.templateId == template.id);
 
     AnalyticsSender.singleplayerTemplateSelected(template.name);
     AnalyticsSender.singleplayerContinueGame();
@@ -71,7 +79,8 @@ _GameTemplateListViewModel useGameTemplateListViewModel() {
     templatesRequestState: templatesRequestState,
     loadGameTemplates: loadGameTemplates,
     createNewGame: createNewGame,
-    continueGame: goToGame,
+    continueGame: continueGame,
+    canContinueGame: canContinueGame,
   );
 }
 
@@ -82,6 +91,7 @@ class _GameTemplateListViewModel {
     @required this.createNewGame,
     @required this.continueGame,
     @required this.loadGameTemplates,
+    @required this.canContinueGame,
   });
 
   final OperationState templatesRequestState;
@@ -89,4 +99,5 @@ class _GameTemplateListViewModel {
   final void Function(GameTemplate) createNewGame;
   final void Function(GameTemplate) continueGame;
   final VoidCallback loadGameTemplates;
+  final bool Function(GameTemplate) canContinueGame;
 }
