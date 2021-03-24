@@ -4,7 +4,6 @@ import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
-import 'package:cash_flow/features/new_game/actions/start_quest_game_action.dart';
 import 'package:cash_flow/features/purchase/actions/buy_quests_access_action.dart';
 import 'package:cash_flow/features/purchase/actions/query_past_purchases_action.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
@@ -23,6 +22,7 @@ import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
@@ -48,27 +48,6 @@ class QuestsPurchasePage extends HookWidget {
     final hasQuestsAccess = useGlobalState(
       (s) => s.profile.currentUser?.purchaseProfile?.isQuestsAvailable ?? false,
     );
-    final dispatch = useDispatcher();
-
-    final startGame = () {
-      if (quest == null) {
-        appRouter.startWith(const MainPage());
-        return (_) async => null;
-      }
-
-      return dispatch(StartQuestGameAction(
-        quest.id,
-        QuestAction.startNewGame,
-      ));
-    };
-
-    useEffect(() {
-      if (hasQuestsAccess) {
-        startGame();
-      }
-
-      return null;
-    }, [hasQuestsAccess]);
 
     useEffect(() {
       AnalyticsSender.questsPurchasePageOpen();
@@ -98,7 +77,7 @@ class QuestsPurchasePage extends HookWidget {
               const _AdvantagesWidget(),
               SizedBox(height: 48 * offsetScaleFactor),
               if (hasQuestsAccess)
-                _StartQuestButton(onPressed: startGame)
+                _StartQuestButton(quest: quest)
               else
                 _BuyButton(
                   quest: quest,
@@ -256,7 +235,9 @@ class _BuyButton extends HookWidget {
         AnalyticsSender.questsPurchased();
 
         if (quest == null) {
-          appRouter.startWith(const MainPage());
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+            appRouter.startWith(const MainPage());
+          });
           return;
         }
 
@@ -313,16 +294,25 @@ class _BuyButton extends HookWidget {
   }
 }
 
-class _StartQuestButton extends StatelessWidget {
-  const _StartQuestButton({Key key, this.onPressed}) : super(key: key);
+class _StartQuestButton extends HookWidget {
+  const _StartQuestButton({Key key, this.quest}) : super(key: key);
 
-  final VoidCallback onPressed;
+  final Quest quest;
 
   @override
   Widget build(Object context) {
+    final startQuest = useQuestStarter();
+
     return RaisedButton(
       color: ColorRes.green,
-      onPressed: onPressed,
+      onPressed: () {
+        if (quest == null) {
+          appRouter.goBack();
+          return;
+        }
+
+        startQuest(quest.id, QuestAction.startNewGame);
+      },
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
