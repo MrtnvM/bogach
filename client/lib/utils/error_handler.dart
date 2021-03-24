@@ -1,3 +1,4 @@
+import 'package:cash_flow/models/errors/purchase_errors.dart';
 import 'package:cash_flow/models/network/errors/email_has_been_taken_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -30,7 +31,8 @@ void _recordError(dynamic error, dynamic stacktrace) {
 
   if (error is NetworkConnectionException ||
       error is InvalidCredentialsException ||
-      error is EmailHasBeenTakenException) {
+      error is EmailHasBeenTakenException ||
+      error is ProductPurchaseCanceledException) {
     return;
   }
 
