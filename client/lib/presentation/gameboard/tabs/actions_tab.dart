@@ -60,8 +60,9 @@ class ActionsTab extends HookWidget {
 }
 
 bool useIsGameboardActionInProgress() {
-  final activeGameState = useCurrentActiveGameState();
+  final gameId = useCurrentGameId();
   final isActionInProgress = useGlobalState((s) {
+    final activeGameState = s.game.activeGameStates[gameId];
     final isStartingNewMonth =
         s.getOperationState(Operation.startNewMonth).isInProgress;
 
