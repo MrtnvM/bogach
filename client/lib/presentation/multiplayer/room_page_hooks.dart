@@ -14,6 +14,7 @@ import 'package:cash_flow/presentation/gameboard/gameboard.dart';
 import 'package:cash_flow/presentation/multiplayer/widgets/current_room_data_provider.dart';
 import 'package:cash_flow/presentation/tutorial/tutorial_page.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 
@@ -41,13 +42,15 @@ void useAutoTransitionToCreatedGame() {
         SessionTracker.multiplayerGameCreated.stop();
         SessionTracker.multiplayerGameJoined.stop();
 
-        appRouter.goToRoot();
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          appRouter.goToRoot();
 
-        if (isTutorialPassed) {
-          appRouter.goTo(GameBoard(gameId: gameId));
-        } else {
-          appRouter.goTo(TutorialPage(gameId: gameId));
-        }
+          if (isTutorialPassed) {
+            appRouter.goTo(GameBoard(gameId: gameId));
+          } else {
+            appRouter.goTo(TutorialPage(gameId: gameId));
+          }
+        });
       };
 
       startGame();
