@@ -3,6 +3,7 @@ import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/multiplayer/actions/share_add_friend_link_action.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
+import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/main/account/widgets/friend_item_widget.dart';
 import 'package:cash_flow/presentation/main/account/widgets/invite_friend_item_widget.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -63,12 +64,16 @@ class _InviteButton extends HookWidget {
     final dispatch = useDispatcher();
 
     final inviteFriend = () async {
-      await dispatch(ShareAddFriendLinkAction());
-      AnalyticsSender.accountInviteFriendLinkCreated();
+      dispatch(ShareAddFriendLinkAction())
+          .then((_) => AnalyticsSender.accountInviteFriendLinkCreated())
+          .catchError((e) => handleError(context: context, exception: e));
     };
+
+    final borderRadius = BorderRadius.circular(inviteButtonSize / 2);
 
     return InkWell(
       onTap: inviteFriend,
+      borderRadius: borderRadius,
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 8,
@@ -77,7 +82,7 @@ class _InviteButton extends HookWidget {
         decoration: BoxDecoration(
           color: ColorRes.mainGreen.withAlpha(70),
           border: Border.all(color: ColorRes.mainGreen, width: 0.5),
-          borderRadius: BorderRadius.circular(inviteButtonSize / 2),
+          borderRadius: borderRadius,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

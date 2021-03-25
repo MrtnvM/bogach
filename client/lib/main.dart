@@ -109,7 +109,10 @@ Future<void> main({
         ),
       ),
     );
-  }, FirebaseCrashlytics.instance.recordError);
+  }, (exception, stacktrace) {
+    FirebaseCrashlytics.instance.recordError(exception, stacktrace);
+    Logger.e('Uncaught exception: $exception', exception, stacktrace);
+  });
 }
 
 Future<void> initializeFirebase(CashApiEnvironment environment) async {
