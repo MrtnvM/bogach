@@ -48,7 +48,7 @@ android {
         applicationId "io.mobile.bogach"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 38
+        versionCode 40
         versionName "2.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
