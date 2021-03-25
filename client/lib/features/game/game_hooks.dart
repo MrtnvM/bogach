@@ -9,9 +9,20 @@ import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/data/current_game_data_provider.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-GameContext useCurrentGameContext() {
+String useCurrentGameId() {
   final context = useContext();
   final gameId = CurrentGameDataProvider.of(context).gameId;
+  return gameId;
+}
+
+T useCurrentGame<T>(T Function(Game) converter) {
+  final gameId = useCurrentGameId();
+  final game = useGlobalState((s) => converter(s.game.games[gameId]));
+  return game;
+}
+
+GameContext useCurrentGameContext() {
+  final gameId = useCurrentGameId();
   final userId = useUserId();
 
   final gameContext = useMemoized(
@@ -22,23 +33,15 @@ GameContext useCurrentGameContext() {
   return gameContext;
 }
 
-T useCurrentGame<T>(T Function(Game) converter) {
-  final gameContext = useCurrentGameContext();
-  final gameId = gameContext.gameId;
-  final game = useGlobalState((s) => converter(s.game.games[gameId]));
-  return game;
-}
-
 ActiveGameState useCurrentActiveGameState() {
-  final gameContext = useCurrentGameContext();
+  final gameId = useCurrentGameId();
   final activeGameState =
-      useGlobalState((s) => s.game.activeGameStates[gameContext.gameId]);
+      useGlobalState((s) => s.game.activeGameStates[gameId]);
   return activeGameState;
 }
 
 CurrentGameState useCurrentGameState() {
-  final gameContext = useCurrentGameContext();
-  final gameId = gameContext.gameId;
+  final gameId = useCurrentGameId();
   final gameState = useGlobalState((s) => s.game.games[gameId]?.state);
   return gameState;
 }
