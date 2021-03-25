@@ -47,17 +47,4 @@ class StartQuestGameAction extends BaseAction {
       s.newGame.newGameId = gameId;
     });
   }
-
-  @override
-  void after() {
-    super.after();
-
-    final gameId = state.newGame.newGameId;
-    final userId = state.profile.currentUser.userId;
-
-    if (gameId != null) {
-      final gameContext = GameContext(gameId: gameId, userId: userId);
-      dispatch(StartGameAction(gameContext));
-    }
-  }
 }

@@ -30,48 +30,43 @@ Room useCurrentRoom() {
 }
 
 void useAutoTransitionToCreatedGame() {
-  final userId = useUserId();
   final roomState = useCurrentRoomState();
   final isTutorialPassed = useConfig((c) => c.isGameboardTutorialPassed);
-  final dispatch = useDispatcher();
 
   useEffect(() {
-    final roomId = roomState.roomId;
     final gameId = roomState.room?.gameId;
 
     if (gameId != null) {
       final startGame = () async {
-        final gameContext = GameContext(gameId: gameId, userId: userId);
-
-        await dispatch(StartGameAction(gameContext));
-        await Future.delayed(const Duration(milliseconds: 100));
-
-        appRouter.goToRoot();
-
         SessionTracker.multiplayerGameCreated.stop();
         SessionTracker.multiplayerGameJoined.stop();
 
-        if (isTutorialPassed) {
-          appRouter.goTo(GameBoard(gameId: gameContext.gameId));
-        } else {
-          appRouter.goTo(const TutorialPage());
-        }
+        appRouter.goToRoot();
 
-        dispatch(StopListeningRoomUpdatesAction(roomId));
+        if (isTutorialPassed) {
+          appRouter.goTo(GameBoard(gameId: gameId));
+        } else {
+          appRouter.goTo(TutorialPage(gameId: gameId));
+        }
       };
 
       startGame();
     }
 
     return null;
-  }, [roomState?.roomId]);
+  }, [roomState?.room?.gameId]);
 }
 
 _CurrentRoom useCurrentRoomState() {
   final userId = useUserId();
-  final context = useContext();
-  final roomId = CurrentRoomDataProvider.of(context).roomId;
-  final room = useGlobalState((s) => s.multiplayer.rooms[roomId]);
+  final roomId = useCurrentRoomId();
+  final room = useCurrentRoom();
+  final dispatch = useDispatcher();
+
+  useEffect(() {
+    dispatch(StartListeningRoomUpdatesAction(roomId));
+    return () => dispatch(StopListeningRoomUpdatesAction(roomId));
+  }, []);
 
   final isActionInProgress = useGlobalState(
     (s) =>

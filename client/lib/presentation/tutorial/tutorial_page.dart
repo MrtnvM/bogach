@@ -21,7 +21,9 @@ import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/material.dart';
 
 class TutorialPage extends StatefulWidget {
-  const TutorialPage({Key key}) : super(key: key);
+  const TutorialPage({Key key, @required this.gameId}) : super(key: key);
+
+  final String gameId;
 
   @override
   _TutorialPageState createState() => _TutorialPageState();
@@ -115,7 +117,7 @@ class _TutorialPageState extends State<TutorialPage> {
     return StoreProvider<AppState>(
       store: store,
       child: GameboardTutorialWidget(
-        gameId: gameId,
+        gameId: widget.gameId,
         child: GameBoard(key: gameboardKey, gameId: gameId),
       ),
     );

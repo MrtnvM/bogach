@@ -44,10 +44,12 @@ class _GameboardBody extends HookWidget {
     final activeGameState = useCurrentActiveGameState();
     final gameExists = useCurrentGame((g) => g != null);
     final isMultiplayer = useIsMultiplayerGame();
+    final gameContext = useCurrentGameContext();
     final dispatch = useDispatcher();
 
-    /// Stops active game when user exit from current screen
+    /// Subscribes & unsubscribes to/from game updates
     useEffect(() {
+      dispatch(StartGameAction(gameContext));
       return () => dispatch(StopGameAction(gameId));
     }, []);
 
