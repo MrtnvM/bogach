@@ -20,10 +20,12 @@ GameboardTutorialWidget useGameboardTutorial() {
 }
 
 class GameboardTutorialWidget extends InheritedWidget {
-  GameboardTutorialWidget({Key key, Widget child})
+  GameboardTutorialWidget({Key key, @required this.gameId, Widget child})
       : super(key: key, child: child);
 
   static TutorialCoachMark _currentTutorial;
+
+  final String gameId;
 
   final cashFlowKey = GlobalKey();
   final cashKey = GlobalKey();
@@ -94,7 +96,7 @@ class GameboardTutorialWidget extends InheritedWidget {
     );
 
     appRouter.goBack();
-    appRouter.goTo(const GameBoard());
+    appRouter.goTo(GameBoard(gameId: gameId));
   }
 
   List<TargetFocus> getTargets(BuildContext context) {

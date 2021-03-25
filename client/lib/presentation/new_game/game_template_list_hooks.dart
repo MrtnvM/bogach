@@ -1,4 +1,5 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
@@ -31,17 +32,21 @@ _GameTemplateListViewModel useGameTemplateListViewModel() {
   createNewGame = (template) {
     AnalyticsSender.singleplayerTemplateSelected(template.name);
 
-    dispatch(StartSinglePlayerGameAction(templateId: template.id))
-        .then((_) => isTutorialPassed
-            ? appRouter.goTo(const GameBoard())
-            : appRouter.goTo(const TutorialPage()))
-        .catchError(
-          (e) => handleError(
-            context: context,
-            exception: e,
-            onRetry: () => createNewGame(template),
-          ),
-        );
+    dispatch(StartSinglePlayerGameAction(templateId: template.id)).then((_) {
+      final gameId = StoreProvider.state<AppState>(context).newGame.newGameId;
+
+      if (isTutorialPassed) {
+        appRouter.goTo(GameBoard(gameId: gameId));
+      } else {
+        appRouter.goTo(const TutorialPage());
+      }
+    }).catchError(
+      (e) => handleError(
+        context: context,
+        exception: e,
+        onRetry: () => createNewGame(template),
+      ),
+    );
   };
 
   final loadGameTemplates = () => dispatch(GetGameTemplatesAction());
@@ -71,7 +76,7 @@ _GameTemplateListViewModel useGameTemplateListViewModel() {
     final gameId = user.lastGames.singleplayerGames[index].gameId;
     final gameContext = GameContext(gameId: gameId, userId: userId);
     dispatch(StartGameAction(gameContext));
-    appRouter.goTo(const GameBoard());
+    appRouter.goTo(GameBoard(gameId: gameContext.gameId));
   };
 
   return _GameTemplateListViewModel(

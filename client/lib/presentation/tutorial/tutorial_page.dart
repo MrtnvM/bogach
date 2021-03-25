@@ -31,6 +31,7 @@ class _TutorialPageState extends State<TutorialPage> {
   Store<AppState> store;
 
   final gameboardKey = GlobalKey();
+  final gameId = 'game1';
 
   @override
   void initState() {
@@ -46,12 +47,12 @@ class _TutorialPageState extends State<TutorialPage> {
           avatarUrl: Images.bogachAvatarUrl,
         );
 
-        s.game.activeGameState = ActiveGameState.gameEvent(
+        s.game.activeGameStates[gameId] = ActiveGameState.gameEvent(
           eventIndex: 0,
           sendingEventIndex: -1,
         );
 
-        s.game.currentGame = Game(
+        s.game.games[gameId] = Game(
           id: 'game1',
           name: Strings.tutorialQuestName,
           type: GameType.singleplayer(),
@@ -114,7 +115,8 @@ class _TutorialPageState extends State<TutorialPage> {
     return StoreProvider<AppState>(
       store: store,
       child: GameboardTutorialWidget(
-        child: GameBoard(key: gameboardKey),
+        gameId: gameId,
+        child: GameBoard(key: gameboardKey, gameId: gameId),
       ),
     );
   }

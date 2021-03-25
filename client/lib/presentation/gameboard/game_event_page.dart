@@ -1,5 +1,4 @@
 import 'package:cash_flow/core/hooks/dispatcher.dart';
-import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/actions/start_new_month_action.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
@@ -31,11 +30,12 @@ class GameEventPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeGameState = useGlobalState((s) => s.game.activeGameState);
+    final activeGameState = useCurrentActiveGameState();
     final gameEvents = useCurrentGame((g) => g.currentEvents);
     final dispatch = useDispatcher();
+    final gameContext = useCurrentGameContext();
 
-    final startNewMonth = () => dispatch(StartNewMonthAction())
+    final startNewMonth = () => dispatch(StartNewMonthAction(gameContext))
         .catchError((e) => handleError(context: context, exception: e));
 
     final isActionInProgress = useIsGameboardActionInProgress();

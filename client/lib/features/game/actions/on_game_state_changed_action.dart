@@ -14,10 +14,11 @@ class OnGameStateChangedAction extends BaseAction {
   @override
   AppState reduce() {
     return state.rebuild((s) {
-      var newActiveGameState = s.game.activeGameState;
+      final currentActiveGameState = s.game.activeGameStates[game.id];
+      var newActiveGameState = currentActiveGameState;
 
       if (game.state.gameStatus == GameStatus.playersMove) {
-        final userId = s.game.currentGameContext.userId;
+        final userId = s.profile.currentUser.userId;
         final progress = game.participants[userId].progress;
 
         if (progress.status == ParticipantProgressStatus.monthResult) {
@@ -32,7 +33,7 @@ class OnGameStateChangedAction extends BaseAction {
         }
 
         if (progress.status == ParticipantProgressStatus.playerMove) {
-          newActiveGameState = s.game.activeGameState.maybeWhen(
+          newActiveGameState = currentActiveGameState.maybeWhen(
             gameEvent: (eventIndex, sendingEventIndex) {
               return ActiveGameState.gameEvent(
                 eventIndex: progress.currentEventIndex,
@@ -55,8 +56,8 @@ class OnGameStateChangedAction extends BaseAction {
       }
 
       s.game
-        ..currentGame = game
-        ..activeGameState = newActiveGameState;
+        ..games[game.id] = game
+        ..activeGameStates[game.id] = newActiveGameState;
     });
   }
 }

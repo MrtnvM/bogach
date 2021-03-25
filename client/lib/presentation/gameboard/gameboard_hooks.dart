@@ -124,9 +124,10 @@ bool Function(double price) useIsEnoughCashValidator() {
 VoidCallback useSkipAction(String eventId) {
   final dispatch = useDispatcher();
   final context = useContext();
+  final gameContext = useCurrentGameContext();
 
   return () {
-    dispatch(SendPlayerMoveAction(eventId: eventId))
+    dispatch(SendPlayerMoveAction(gameContext: gameContext, eventId: eventId))
         .catchError((e) => handleError(context: context, exception: e));
   };
 }

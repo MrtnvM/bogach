@@ -1,4 +1,5 @@
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/table_divider.dart';
 import 'package:cash_flow/presentation/multiplayer/widgets/user_profile_item.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -11,8 +12,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class WaitingPlayersCard extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    final activeGameState = useCurrentActiveGameState();
     final userProfiles = useGlobalState((s) => s.game.participantProfiles);
-    final activeGameState = useGlobalState((s) => s.game.activeGameState);
 
     final waitingPlayerList = activeGameState.maybeWhen(
       waitingPlayers: (ids) => ids.map((id) => userProfiles.itemsMap[id]),

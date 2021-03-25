@@ -1,6 +1,5 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
-import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/game/actions/start_game_action.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
@@ -10,6 +9,7 @@ import 'package:cash_flow/presentation/gameboard/tabs/actions_tab.dart';
 import 'package:cash_flow/presentation/gameboard/tabs/finances_tab.dart';
 import 'package:cash_flow/presentation/gameboard/tabs/progress_tab.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/bottom_bar.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/data/current_game_data_provider.dart';
 import 'package:cash_flow/presentation/gameboard/winners_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
@@ -20,19 +20,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class GameBoard extends HookWidget {
-  const GameBoard({Key key}) : super(key: key);
+  const GameBoard({Key key, @required this.gameId}) : super(key: key);
+
+  final String gameId;
+
+  @override
+  Widget build(BuildContext context) {
+    return CurrentGameDataProvider(
+      gameId: gameId,
+      child: _GameboardBody(gameId: gameId),
+    );
+  }
+}
+
+class _GameboardBody extends HookWidget {
+  const _GameboardBody({@required this.gameId});
+
+  final String gameId;
 
   @override
   Widget build(BuildContext context) {
     final selectedIndex = useState(1);
-    final activeGameState = useGlobalState((s) => s.game.activeGameState);
+    final activeGameState = useCurrentActiveGameState();
     final gameExists = useCurrentGame((g) => g != null);
     final isMultiplayer = useIsMultiplayerGame();
     final dispatch = useDispatcher();
 
     /// Stops active game when user exit from current screen
     useEffect(() {
-      return () => dispatch(StopActiveGameAction());
+      return () => dispatch(StopGameAction(gameId));
     }, []);
 
     useGameboardAnalytics();

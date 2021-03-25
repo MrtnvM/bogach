@@ -4,7 +4,6 @@ import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/config/config_hooks.dart';
-import 'package:cash_flow/features/game/actions/set_game_context.dart';
 import 'package:cash_flow/features/game/actions/start_game_action.dart';
 import 'package:cash_flow/features/multiplayer/actions/room_listening_actions.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
@@ -31,7 +30,6 @@ void useAutoTransitionToCreatedGame() {
       final startGame = () async {
         final gameContext = GameContext(gameId: gameId, userId: userId);
 
-        await dispatch(SetGameContextAction(gameContext));
         await dispatch(StartGameAction(gameContext));
         await Future.delayed(const Duration(milliseconds: 100));
 
@@ -41,7 +39,7 @@ void useAutoTransitionToCreatedGame() {
         SessionTracker.multiplayerGameJoined.stop();
 
         if (isTutorialPassed) {
-          appRouter.goTo(const GameBoard());
+          appRouter.goTo(GameBoard(gameId: gameContext.gameId));
         } else {
           appRouter.goTo(const TutorialPage());
         }
