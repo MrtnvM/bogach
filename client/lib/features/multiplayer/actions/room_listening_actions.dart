@@ -40,8 +40,6 @@ class StopListeningRoomUpdatesAction extends BaseAction {
 
   @override
   AppState reduce() {
-    return state.rebuild((s) {
-      s.multiplayer.currentRoom = null;
-    });
+    return null;
   }
 }

@@ -2,13 +2,13 @@ import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/analytics/sender/common/session_tracker.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
-import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/multiplayer/actions/create_room_game_action.dart';
 import 'package:cash_flow/features/multiplayer/actions/set_room_participant_ready_action.dart';
 import 'package:cash_flow/features/multiplayer/actions/share_room_invite_link_action.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/multiplayer/room_page_hooks.dart';
+import 'package:cash_flow/presentation/multiplayer/widgets/current_room_data_provider.dart';
 import 'package:cash_flow/presentation/multiplayer/widgets/participants_list_widget.dart';
 import 'package:cash_flow/presentation/multiplayer/widgets/room_header.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -22,10 +22,28 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class RoomPage extends HookWidget {
+  const RoomPage({@required this.roomId});
+
+  final String roomId;
+
+  @override
+  Widget build(BuildContext context) {
+    return CurrentRoomDataProvider(
+      roomId: roomId,
+      child: _RoomPageBody(roomId: roomId),
+    );
+  }
+}
+
+class _RoomPageBody extends HookWidget {
+  const _RoomPageBody({@required this.roomId});
+
+  final String roomId;
+
   @override
   Widget build(BuildContext context) {
     final mediaQueryData = useAdaptiveMediaQueryData();
-    final room = useCurrentRoom();
+    final roomState = useCurrentRoomState();
 
     useAutoTransitionToCreatedGame();
 
@@ -38,7 +56,7 @@ class RoomPage extends HookWidget {
       value: SystemUiOverlayStyle.light,
       child: LoadableView(
         backgroundColor: ColorRes.black80,
-        isLoading: room.isActionInProgress,
+        isLoading: roomState.isActionInProgress,
         child: Scaffold(
           backgroundColor: ColorRes.mainPageBackground,
           body: MediaQuery(
@@ -48,7 +66,7 @@ class RoomPage extends HookWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  RoomHeader(templateId: room.room?.gameTemplateId),
+                  RoomHeader(templateId: roomState.room?.gameTemplateId),
                   const SizedBox(height: 16),
                   SectionTitle(text: Strings.players),
                   const SizedBox(height: 16),
@@ -56,7 +74,7 @@ class RoomPage extends HookWidget {
                   Expanded(child: ParticipantListWidget()),
                   const Divider(height: 1, indent: 16, endIndent: 16),
                   const SizedBox(height: 24),
-                  if (room.isCurrentUserRoomOwner) ...[
+                  if (roomState.isCurrentUserRoomOwner) ...[
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
@@ -68,15 +86,16 @@ class RoomPage extends HookWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                  ] else if (!room.isParticipantAlreadyJoined) ...[
+                  ] else if (!roomState.isParticipantAlreadyJoined) ...[
                     const _JoinRoomButton(),
                     const SizedBox(height: 16),
                   ],
-                  if (!room.isCurrentUserRoomOwner &&
-                      room.isParticipantAlreadyJoined &&
-                      room.ownerName != null) ...[
+                  if (!roomState.isCurrentUserRoomOwner &&
+                      roomState.isParticipantAlreadyJoined &&
+                      roomState.ownerName != null) ...[
                     Note(
-                      title: Strings.waitingWhenLeaderStartGame(room.ownerName),
+                      title: Strings.waitingWhenLeaderStartGame(
+                          roomState.ownerName),
                       margin: const EdgeInsets.symmetric(horizontal: 16),
                     ),
                     const SizedBox(height: 16),
@@ -98,9 +117,15 @@ class _JoinRoomButton extends HookWidget {
   Widget build(BuildContext context) {
     final userId = useUserId();
     final dispatch = useDispatcher();
+    final roomId = useCurrentRoomId();
+
     final join = () async {
       try {
-        await dispatch(SetRoomParticipantReadyAction(userId));
+        await dispatch(SetRoomParticipantReadyAction(
+          participantId: userId,
+          roomId: roomId,
+        ));
+
         AnalyticsSender.multiplayerParticipantJoined();
       } catch (e) {
         AnalyticsSender.multiplayerParticipantJoinFailed();
@@ -122,11 +147,12 @@ class _StartGameButton extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final room = useGlobalState((s) => s.multiplayer.currentRoom);
+    final room = useCurrentRoom();
     final canStartGame = room != null ? room.participants.length >= 2 : false;
 
     final dispatch = useDispatcher();
-    final startGame = () => dispatch(CreateRoomGameAction());
+    final startGame = () => dispatch(CreateRoomGameAction(roomId: room.id))
+        .catchError((e) => handleError(context: context, exception: e));
 
     return _Button(
       title: Strings.startGame,
@@ -142,7 +168,7 @@ class _InviteButton extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final roomId = useGlobalState((s) => s.multiplayer.currentRoom?.id);
+    final roomId = useCurrentRoomId();
     final dispatch = useDispatcher();
     final isLoading = useState(false);
 

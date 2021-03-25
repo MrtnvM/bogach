@@ -34,7 +34,7 @@ class JoinRoomAction extends BaseAction {
             .any((p) => p.status == RoomParticipantStatus.ready);
 
     return state.rebuild((s) {
-      s.multiplayer.currentRoom = room;
+      s.multiplayer.rooms[room.id] = room;
       s.multiplayer.userProfiles.addAll(participantProfiles);
 
       if (!isParticipantAlreadyJoined) {
