@@ -16,7 +16,7 @@ class OnCurrentRoomUpdatedAction extends BaseAction {
   @override
   Future<AppState> reduce() async {
     return state.rebuild((s) {
-      s.multiplayer.currentRoom = room;
+      s.multiplayer.rooms[room.id] = room;
     });
   }
 

@@ -9,7 +9,7 @@ T useConfig<T>(T Function(ConfigState) converter) {
 }
 
 _OnlineStatus useOnlineStatus() {
-  final isOnline = useConfig((c) => c.isOnline);
+  final isOnline = useConfig((c) => c.isOnline ?? true);
 
   final statusColor = isOnline //
       ? ColorRes.onlineStatus

@@ -5,7 +5,6 @@ import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/store/redux_action_observer.dart';
 import 'package:cash_flow/features/game/actions/on_game_error.dart';
 import 'package:cash_flow/features/game/actions/on_game_state_changed_action.dart';
-import 'package:cash_flow/features/game/actions/set_game_context.dart';
 import 'package:cash_flow/features/game/actions/set_game_participants_profiles_action.dart';
 import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
@@ -20,18 +19,14 @@ class StartGameAction extends BaseAction {
   final GameContext gameContext;
 
   @override
-  Future<void> before() async {
-    super.before();
-    await dispatchFuture(SetGameContextAction(gameContext));
-  }
-
-  @override
   Future<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
     final userService = GetIt.I.get<UserService>();
     final action$ = GetIt.I.get<ReduxActionObserver>().onAction;
 
-    final onStopActiveGame = action$.whereType<StopActiveGameAction>();
+    final onStopActiveGame = action$
+        .whereType<StopGameAction>()
+        .where((a) => a.gameId == gameContext.gameId);
 
     final userProfiles = gameService
         .getGame(gameContext)
@@ -40,12 +35,12 @@ class StartGameAction extends BaseAction {
         .map<BaseAction>(
           (profiles) => SetGameParticipantsProfilesAction(profiles),
         )
-        .onErrorReturnWith((e) => OnGameErrorAction(e));
+        .onErrorReturnWith((e) => OnGameErrorAction(e, gameContext));
 
     final gameSubscription = gameService
         .getGame(gameContext)
         .map<BaseAction>((game) => OnGameStateChangedAction(game))
-        .onErrorReturnWith((e) => OnGameErrorAction(e))
+        .onErrorReturnWith((e) => OnGameErrorAction(e, gameContext))
         .takeUntil(onStopActiveGame);
 
     Rx.concat([userProfiles, gameSubscription])
@@ -53,7 +48,8 @@ class StartGameAction extends BaseAction {
         .listen(dispatch);
 
     return state.rebuild((s) {
-      return s.game.activeGameState = ActiveGameState.waitingForStart();
+      final gameId = gameContext.gameId;
+      s.game.activeGameStates[gameId] = ActiveGameState.waitingForStart();
     });
   }
 
@@ -63,11 +59,13 @@ class StartGameAction extends BaseAction {
   }
 }
 
-class StopActiveGameAction extends BaseAction {
+class StopGameAction extends BaseAction {
+  StopGameAction(this.gameId);
+
+  final String gameId;
+
   @override
   AppState reduce() {
-    return state.rebuild((s) {
-      s.game.currentGame = null;
-    });
+    return null;
   }
 }

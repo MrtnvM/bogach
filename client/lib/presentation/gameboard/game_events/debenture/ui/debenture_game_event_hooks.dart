@@ -56,6 +56,7 @@ VoidCallback useDebenturePlayerActionHandler({
   final context = useContext();
   final dispatch = useDispatcher();
   final isEnoughCash = useIsEnoughCashValidator();
+  final gameContext = useCurrentGameContext();
 
   return () {
     final DebentureEventData eventData = event.data;
@@ -74,6 +75,7 @@ VoidCallback useDebenturePlayerActionHandler({
     dispatch(SendPlayerMoveAction(
       eventId: event.id,
       playerAction: playerAction,
+      gameContext: gameContext,
     )).catchError((e) => handleError(context: context, exception: e));
   };
 }

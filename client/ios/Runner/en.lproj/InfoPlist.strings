@@ -1,2 +1,2 @@
 "NSPhotoLibraryUsageDescription" = "This app requires access to the photo library for the selection of your avatar image";
-"NSCameraUsageDescription" = "This app requires access to the camera for the selection of your avatar image";
+"NSCameraUsageDescription" = "This app requires access to the camera for the creation of your avatar image";

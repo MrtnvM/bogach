@@ -1,6 +1,7 @@
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/models/domain/room/room_participant.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
+import 'package:cash_flow/presentation/multiplayer/room_page_hooks.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
@@ -13,7 +14,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class ParticipantListWidget extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final room = useGlobalState((s) => s.multiplayer.currentRoom);
+    final room = useCurrentRoom();
 
     final userProfiles = useGlobalState((s) {
       return StoreList<UserProfile>([

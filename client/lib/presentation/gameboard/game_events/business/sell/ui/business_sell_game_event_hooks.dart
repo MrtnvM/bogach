@@ -72,6 +72,7 @@ VoidCallback useBusinessSellPlayerActionHandler({
 }) {
   final context = useContext();
   final dispatch = useDispatcher();
+  final gameContext = useCurrentGameContext();
 
   return () {
     final playerAction = BusinessSellPlayerAction(
@@ -83,6 +84,7 @@ VoidCallback useBusinessSellPlayerActionHandler({
     dispatch(SendPlayerMoveAction(
       eventId: event.id,
       playerAction: playerAction,
+      gameContext: gameContext,
     )).catchError((e) => handleError(context: context, exception: e));
   };
 }

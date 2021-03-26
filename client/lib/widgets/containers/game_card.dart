@@ -14,7 +14,7 @@ class GameCard extends HookWidget {
     @required this.description,
     @required this.imageUrl,
     @required this.startGame,
-    @required this.isCollapsed,
+    @required this.isShowingActionsButtons,
     @required this.onTap,
     this.continueGame,
   });
@@ -22,7 +22,7 @@ class GameCard extends HookWidget {
   final String title;
   final String description;
   final String imageUrl;
-  final bool isCollapsed;
+  final bool isShowingActionsButtons;
   final VoidCallback onTap;
   final VoidCallback startGame;
   final VoidCallback continueGame;
@@ -45,7 +45,7 @@ class GameCard extends HookWidget {
             ),
             padding: EdgeInsets.only(
               top: size(16),
-              bottom: size(isCollapsed ? 16 : 20),
+              bottom: size(isShowingActionsButtons ? 16 : 20),
               left: size(16),
               right: size(16),
             ),
@@ -73,9 +73,9 @@ class GameCard extends HookWidget {
                         duration: const Duration(milliseconds: 300),
                         firstChild: _buildGameContent(),
                         secondChild: _buildActionButtons(
-                          isCollapsed: isCollapsed,
+                          isShowingActionsButtons: isShowingActionsButtons,
                         ),
-                        crossFadeState: !isCollapsed
+                        crossFadeState: !isShowingActionsButtons
                             ? CrossFadeState.showFirst
                             : CrossFadeState.showSecond,
                       ),
@@ -110,7 +110,7 @@ class GameCard extends HookWidget {
     );
   }
 
-  Widget _buildActionButtons({bool isCollapsed}) {
+  Widget _buildActionButtons({bool isShowingActionsButtons}) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -119,13 +119,13 @@ class GameCard extends HookWidget {
           _GameTemplateActionButton(
             title: Strings.startAgain,
             color: ColorRes.grey2,
-            action: startGame,
+            action: isShowingActionsButtons ? startGame : null,
           ),
           const SizedBox(height: 8),
           _GameTemplateActionButton(
             title: Strings.continueAction,
             color: ColorRes.yellow,
-            action: continueGame,
+            action: isShowingActionsButtons ? continueGame : null,
           ),
         ],
       ),

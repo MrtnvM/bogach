@@ -1,6 +1,4 @@
-import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
-import 'package:cash_flow/features/multiplayer/actions/share_add_friend_link_action.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
@@ -9,16 +7,17 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class InviteFriendItemWidget extends HookWidget {
-  const InviteFriendItemWidget();
+  const InviteFriendItemWidget({@required this.inviteFriend});
+
+  final VoidCallback inviteFriend;
 
   @override
   Widget build(BuildContext context) {
     final size = useAdaptiveSize();
-    final dispatch = useDispatcher();
     final avatarSize = size(48);
 
     return InkWell(
-      onTap: () => dispatch(ShareAddFriendLinkAction()),
+      onTap: inviteFriend,
       borderRadius: BorderRadius.circular(8),
       child: ListTile(
         contentPadding: const EdgeInsets.all(0),

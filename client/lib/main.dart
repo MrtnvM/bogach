@@ -21,10 +21,10 @@ import 'package:cash_flow/features/profile/actions/set_current_user_action.dart'
 import 'package:cash_flow/features/purchase/actions/listening_purchases_actions.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/utils/core/launch_counter.dart';
+import 'package:cash_flow/utils/error_handler.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -110,7 +110,7 @@ Future<void> main({
       ),
     );
   }, (exception, stacktrace) {
-    FirebaseCrashlytics.instance.recordError(exception, stacktrace);
+    recordError(exception, stacktrace);
     Logger.e('Uncaught exception: $exception', exception, stacktrace);
   });
 }

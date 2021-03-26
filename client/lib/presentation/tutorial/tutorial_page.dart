@@ -21,7 +21,9 @@ import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/material.dart';
 
 class TutorialPage extends StatefulWidget {
-  const TutorialPage({Key key}) : super(key: key);
+  const TutorialPage({Key key, @required this.gameId}) : super(key: key);
+
+  final String gameId;
 
   @override
   _TutorialPageState createState() => _TutorialPageState();
@@ -31,6 +33,7 @@ class _TutorialPageState extends State<TutorialPage> {
   Store<AppState> store;
 
   final gameboardKey = GlobalKey();
+  final gameId = 'game1';
 
   @override
   void initState() {
@@ -46,12 +49,12 @@ class _TutorialPageState extends State<TutorialPage> {
           avatarUrl: Images.bogachAvatarUrl,
         );
 
-        s.game.activeGameState = ActiveGameState.gameEvent(
+        s.game.activeGameStates[gameId] = ActiveGameState.gameEvent(
           eventIndex: 0,
           sendingEventIndex: -1,
         );
 
-        s.game.currentGame = Game(
+        s.game.games[gameId] = Game(
           id: 'game1',
           name: Strings.tutorialQuestName,
           type: GameType.singleplayer(),
@@ -114,7 +117,8 @@ class _TutorialPageState extends State<TutorialPage> {
     return StoreProvider<AppState>(
       store: store,
       child: GameboardTutorialWidget(
-        child: GameBoard(key: gameboardKey),
+        gameId: widget.gameId,
+        child: GameBoard(key: gameboardKey, gameId: gameId),
       ),
     );
   }

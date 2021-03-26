@@ -117,9 +117,9 @@ class _StartAgainButton extends HookWidget {
 class _MonthCountDescription extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final monthNumber = useGlobalState(
-      (s) => max(s.game.currentGame.state.monthNumber - 1, 0),
-    );
+    final monthNumber = useCurrentGame((g) {
+      return max(g.state.monthNumber - 1, 0);
+    });
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -207,8 +207,8 @@ class _HeadlineImage extends StatelessWidget {
 class _PlayerResultTable extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    final game = useCurrentGame((g) => g);
     final participants = useGlobalState((g) {
-      final game = g.game.currentGame;
       final userProfiles = g.multiplayer.userProfiles;
       final participants = game.participantsIds //
           .map((id) => userProfiles.itemsMap[id])
@@ -222,8 +222,6 @@ class _PlayerResultTable extends HookWidget {
 
       return participants;
     });
-
-    final game = useGlobalState((g) => g.game.currentGame);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 32),

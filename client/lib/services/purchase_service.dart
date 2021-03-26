@@ -8,7 +8,6 @@ import 'package:cash_flow/models/network/request/purchases/purchase_details_requ
 import 'package:cash_flow/models/network/request/purchases/update_purchases_request_model.dart';
 import 'package:cash_flow/utils/error_handler.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:rxdart/rxdart.dart';

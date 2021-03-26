@@ -3,7 +3,6 @@ library game_state;
 import 'package:built_value/built_value.dart';
 import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
-import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 
 import 'package:dash_kit_core/dash_kit_core.dart';
@@ -15,21 +14,15 @@ abstract class GameState implements Built<GameState, GameStateBuilder> {
 
   GameState._();
 
-  ActiveGameState get activeGameState;
-  int get currentMonth;
-
-  @nullable
-  Game get currentGame;
-
-  @nullable
-  GameContext get currentGameContext;
+  Map<String, Game> get games;
+  Map<String, ActiveGameState> get activeGameStates;
 
   StoreList<UserProfile> get participantProfiles;
 
   static GameState initial() => GameState(
         (b) => b
-          ..activeGameState = ActiveGameState.waitingForStart()
-          ..currentMonth = 0
+          ..activeGameStates = <String, ActiveGameState>{}
+          ..games = <String, Game>{}
           ..participantProfiles = StoreList<UserProfile>(),
       );
 }

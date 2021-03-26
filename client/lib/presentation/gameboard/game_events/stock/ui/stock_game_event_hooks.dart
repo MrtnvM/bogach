@@ -52,6 +52,7 @@ VoidCallback useStockPlayerActionHandler({
   final context = useContext();
   final dispatch = useDispatcher();
   final isEnoughCash = useIsEnoughCashValidator();
+  final gameContext = useCurrentGameContext();
 
   return () {
     final StockEventData eventData = event.data;
@@ -68,7 +69,11 @@ VoidCallback useStockPlayerActionHandler({
     );
 
     dispatch(
-      SendPlayerMoveAction(eventId: event.id, playerAction: playerAction),
+      SendPlayerMoveAction(
+        eventId: event.id,
+        playerAction: playerAction,
+        gameContext: gameContext,
+      ),
     ).catchError((e) {
       handleError(context: context, exception: e);
     });

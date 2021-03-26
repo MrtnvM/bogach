@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 // ignore: avoid_classes_with_only_static_members
 class SessionTracker {
   static bool isLoggingEnabled = !kReleaseMode;
+  static bool isTrackingEnabled = kReleaseMode;
 
   static final onboarding = _TraceHolder('onboarding');
   static final tutorial = _TraceHolder('tutorial');
@@ -33,6 +34,10 @@ class _TraceHolder {
   void start() {
     if (SessionTracker.isLoggingEnabled) {
       print('TRACKING (start): $key');
+    }
+
+    if (!SessionTracker.isTrackingEnabled) {
+      return;
     }
 
     FirebasePerformance.startTrace(key).then((trace) {

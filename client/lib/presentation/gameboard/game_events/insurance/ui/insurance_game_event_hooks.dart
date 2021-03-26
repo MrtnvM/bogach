@@ -1,5 +1,6 @@
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/features/game/actions/send_player_move_action.dart';
+import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/insurance/models/insurance_event_data.dart';
@@ -29,6 +30,7 @@ VoidCallback useInsurancePlayerActionHandler(GameEvent event) {
   final context = useContext();
   final dispatch = useDispatcher();
   final isEnoughCash = useIsEnoughCashValidator();
+  final gameContext = useCurrentGameContext();
 
   return () {
     final InsuranceEventData eventData = event.data;
@@ -40,8 +42,11 @@ VoidCallback useInsurancePlayerActionHandler(GameEvent event) {
 
     final action = InsurancePlayerAction(event.id);
 
-    dispatch(SendPlayerMoveAction(eventId: event.id, playerAction: action))
-        .catchError((e) => handleError(context: context, exception: e));
+    dispatch(SendPlayerMoveAction(
+      eventId: event.id,
+      playerAction: action,
+      gameContext: gameContext,
+    )).catchError((e) => handleError(context: context, exception: e));
   };
 }
 
