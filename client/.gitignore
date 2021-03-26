@@ -38,11 +38,17 @@ lib/generated_plugin_registrant.dart
 
 .vscode/
 
+*keystore*
 android/.settings/
 android/.project
+android/app/debug
+android/app/release
 android/app/.settings/org.eclipse.buildship.core.prefs
 android/app/.classpath
 android/app/.project
 
 ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+
+*.g.dart
+*.freezed.dart
 

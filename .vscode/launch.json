@@ -1,0 +1,89 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Attach to API Process",
+      "type": "node",
+      "request": "attach",
+      "processId": "${command:PickProcess}",
+      "sourceMaps": true,
+      "outFiles": ["${workspaceFolder}/server/functions/libs/*.js"]
+    },
+    {
+      "name": "Flutter - Development",
+      "type": "dart",
+      "request": "launch",
+      "program": "client/lib/main_development.dart",
+      "args": ["--flavor", "development"]
+    },
+    {
+      "name": "Flutter - Staging",
+      "type": "dart",
+      "request": "launch",
+      "program": "client/lib/main_staging.dart",
+      "args": ["--flavor", "staging"]
+    },
+    {
+      "name": "Flutter - UAT",
+      "type": "dart",
+      "request": "launch",
+      "program": "client/lib/main_uat.dart",
+      "args": ["--flavor", "uat"]
+    },
+    {
+      "name": "Flutter - Production",
+      "type": "dart",
+      "request": "launch",
+      "program": "client/lib/main_production.dart",
+      "args": ["--flavor", "production"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest All",
+      "program": "${workspaceFolder}/server/functions/node_modules/.bin/jest",
+      "args": ["--runInBand", "--config", "./server/functions/jest.config.js"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "windows": {
+        "program": "${workspaceFolder}/server/functions/node_modules/jest/bin/jest"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest Current File",
+      "program": "${workspaceFolder}/server/functions/node_modules/.bin/jest",
+      "args": [
+        "${fileBasenameNoExtension}",
+        "--config",
+        "./server/functions/jest.config.js"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "windows": {
+        "program": "${workspaceFolder}/server/functions/node_modules/jest/bin/jest"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest Current File - Node 12",
+      "program": "${workspaceFolder}/server/functions/node_modules/.bin/jest",
+      "args": [
+        "${fileBasenameNoExtension}",
+        "--config",
+        "./server/functions/jest.config.js"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "runtimeVersion": "12.20.2",
+      "disableOptimisticBPs": true,
+      "windows": {
+        "program": "${workspaceFolder}/server/functions/node_modules/jest/bin/jest"
+      }
+    }
+  ]
+}

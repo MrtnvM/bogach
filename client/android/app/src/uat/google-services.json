@@ -1,0 +1,131 @@
+{
+  "project_info": {
+    "project_number": "91375261919",
+    "firebase_url": "https://cash-flow-uat.firebaseio.com",
+    "project_id": "cash-flow-uat",
+    "storage_bucket": "cash-flow-uat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91375261919:android:7ce0446e3b0077bbc8b16a",
+        "android_client_info": {
+          "package_name": "io.mobile.bogach.uat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91375261919-ke5qgthi75miu0ihvg6ddqshqp7svs67.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaBQDDStFC4K-L94ig5wnpz4f_y9p5m94"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91375261919-ke5qgthi75miu0ihvg6ddqshqp7svs67.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "91375261919-fkq99fjedqljs8r5ipotv6ekm1ftdijt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.mobile.bogach.uat"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91375261919:android:30349136373b5e52c8b16a",
+        "android_client_info": {
+          "package_name": "io.mobile.cashflow.uat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91375261919-6r7ip8fil6gefl6cdoo653smvs6vd3fu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.cashflow.uat",
+            "certificate_hash": "cd1a0362bcc6404bfb8acbe5b5ecca1ad6393ced"
+          }
+        },
+        {
+          "client_id": "91375261919-n14fcjnbuqlmna2bnfimucamvat580ok.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.cashflow.uat",
+            "certificate_hash": "0ccb0b747b69a31f6ef3ebc7e6b45b368f50b820"
+          }
+        },
+        {
+          "client_id": "91375261919-q8ubm1g7jq84eurirr6qmqovcuh7ueuk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.cashflow.uat",
+            "certificate_hash": "4f299763be9fcacd21ebb298d484bb4c2b93dbcc"
+          }
+        },
+        {
+          "client_id": "91375261919-ev1tfosh30vo8209an79u0johar85gh3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.cashflow.uat",
+            "certificate_hash": "63ae35bd8770114f8205500832afa829ac7b9274"
+          }
+        },
+        {
+          "client_id": "91375261919-uavpu7vh0as9uj5056hnafpk527b9p07.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.cashflow.uat",
+            "certificate_hash": "d098e6d7c627dcb522eb44c1af9370838787f580"
+          }
+        },
+        {
+          "client_id": "91375261919-efc22v7re6gi1uvf6eh5k4sq3nrpammk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.mobile.cashflow.uat",
+            "certificate_hash": "4a5fe41854dadf8fbeee517b21bdcb5eca6be32d"
+          }
+        },
+        {
+          "client_id": "91375261919-ke5qgthi75miu0ihvg6ddqshqp7svs67.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaBQDDStFC4K-L94ig5wnpz4f_y9p5m94"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91375261919-ke5qgthi75miu0ihvg6ddqshqp7svs67.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "91375261919-fkq99fjedqljs8r5ipotv6ekm1ftdijt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.mobile.bogach.uat"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

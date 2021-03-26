@@ -1,0 +1,2709 @@
+{
+  "config": {
+    "debentures": [
+      {
+        "availableCount": { "max": 200, "min": 90, "stepValue": 10 },
+        "name": "ОФЗ 29006",
+        "nominal": { "max": 1000, "min": 1000, "stepValue": 0 },
+        "price": { "max": 1300, "min": 850, "stepValue": 10 },
+        "profitability": { "max": 7.3, "min": 7.3, "stepValue": 0 }
+      },
+      {
+        "availableCount": { "max": 200, "min": 90, "stepValue": 10 },
+        "name": "Республика Якутия",
+        "nominal": { "max": 1000, "min": 1000, "stepValue": 0 },
+        "price": { "max": 1300, "min": 850, "stepValue": 10 },
+        "profitability": { "max": 6.3, "min": 6.3, "stepValue": 0 }
+      },
+      {
+        "availableCount": { "max": 200, "min": 90, "stepValue": 10 },
+        "name": "Томская область",
+        "nominal": { "max": 1000, "min": 1000, "stepValue": 0 },
+        "price": { "max": 1300, "min": 850, "stepValue": 10 },
+        "profitability": { "max": 8.3, "min": 8.3, "stepValue": 0 }
+      }
+    ],
+    "gameTemplateId": "courier_template",
+    "initialCash": 5000,
+    "stocks": [
+      "ЛУКОЙЛ",
+      "Московская Биржа",
+      "Полюс Золото",
+      "Роснефть",
+      "Сбербанк России - привилегированные акции",
+      "Сургутнефтегаз"
+    ]
+  },
+  "createdAt": 1612279674000,
+  "currentEvents": [
+    {
+      "data": {
+        "availableCount": 140,
+        "currentPrice": 10142.329187464482,
+        "fairPrice": 8305.041666666666
+      },
+      "description": "",
+      "id": "159dc13a-0146-408a-8bc5-90877e9a4ed8",
+      "name": "Полюс Золото",
+      "type": "stock-price-changed-event"
+    },
+    {
+      "data": {
+        "availableCount": 200,
+        "currentPrice": 1208.7903016408939,
+        "nominal": 1000,
+        "profitabilityPercent": 6.3
+      },
+      "description": "Текущая цена: 1208.7903016408939 ₽",
+      "id": "8e33fb51-13ba-4317-a3e7-afad9b300b18",
+      "name": "Республика Якутия",
+      "type": "debenture-price-changed-event"
+    },
+    {
+      "data": {
+        "availableCount": 100,
+        "currentPrice": 404.1827277737121,
+        "fairPrice": 407.45833333333326
+      },
+      "description": "",
+      "id": "baa0d7a4-fd17-494c-8fff-f5f0b7437264",
+      "name": "Роснефть",
+      "type": "stock-price-changed-event"
+    },
+    {
+      "data": {
+        "availableCount": 90,
+        "currentPrice": 39.367337776501095,
+        "fairPrice": 37.41041666666667
+      },
+      "description": "",
+      "id": "3f6a62de-bf1a-40fb-a21e-cfefd6d6be23",
+      "name": "Сургутнефтегаз",
+      "type": "stock-price-changed-event"
+    }
+  ],
+  "history": {
+    "months": [
+      {
+        "events": [
+          {
+            "data": {
+              "businessId": "19f46fca-881d-4375-b8b5-f36a20b6abb2",
+              "currentPrice": 87000,
+              "debt": 74000,
+              "downPayment": 13000,
+              "fairPrice": 70000,
+              "passiveIncomePerMonth": 4500,
+              "payback": 62,
+              "sellProbability": 4
+            },
+            "description": "Автомойка",
+            "id": "d3043ee4-8af0-405b-98b9-66aca6e2ae66",
+            "name": "Автомойка",
+            "type": "business-buy-event"
+          },
+          {
+            "data": {
+              "availableCount": 100,
+              "currentPrice": 27.109523395409138,
+              "fairPrice": 29.292500000000004
+            },
+            "description": "",
+            "id": "44347aba-41a9-4740-ac62-3724676fca18",
+            "name": "Сургутнефтегаз",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 3951.9204966136836,
+              "fairPrice": 4347.2
+            },
+            "description": "",
+            "id": "03299e1a-d287-43ff-94c3-eca25fa82ab2",
+            "name": "Полюс Золото",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": { "expense": 3000, "insuranceType": "property" },
+            "description": "Срочно нужны деньги на ремонт компьютера",
+            "id": "2513c09b-3e4b-4377-972c-0c1e08c24fc6",
+            "name": "Проблемы с имуществом",
+            "type": "expense-event"
+          },
+          {
+            "data": { "expenseName": "Ребёнок", "monthlyPayment": 5000 },
+            "description": "В вашей семье пополнение",
+            "id": "23f2f75f-f400-4273-948c-3f16b76e5259",
+            "name": "Поздравляем с рождением ребёнка!",
+            "type": "monthly-expense-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 1300,
+              "nominal": 1000,
+              "profitabilityPercent": 7.3
+            },
+            "description": "Текущая цена: 1300 ₽",
+            "id": "e7106bd0-5f89-44bd-a424-c5818c97f773",
+            "name": "ОФЗ 29006",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 107.48312550223284,
+              "fairPrice": 117.57999999999998
+            },
+            "description": "",
+            "id": "086ad70e-7fa8-4d3a-8098-688070912ed9",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 160,
+              "currentPrice": 1298,
+              "nominal": 1000,
+              "profitabilityPercent": 7.3
+            },
+            "description": "Текущая цена: 1298 ₽",
+            "id": "3c99feda-48d3-4f46-b662-398de82e0b4f",
+            "name": "ОФЗ 29006",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "assetName": "1-комн. Квартира",
+              "currentPrice": 1200000,
+              "debt": 992000,
+              "downPayment": 208000,
+              "fairPrice": 1030000,
+              "passiveIncomePerMonth": -7400,
+              "payback": -7,
+              "realEstateId": "4aace56e-9b23-4d33-8d78-0a224cfe1d89",
+              "sellProbability": 17
+            },
+            "description": "",
+            "id": "f60089ae-dd3c-4567-b3d2-7956779f431d",
+            "name": "Продаётся квартира",
+            "type": "real-estate-buy-event"
+          },
+          {
+            "data": { "cost": 2000, "duration": 12, "insuranceType": "health", "value": 5500 },
+            "description": "Страховая компания предлагает купить полис и защитить свое здоровье от непредвиденных ситуаций",
+            "id": "166b737d-9fbb-42f9-9b28-0bee846a7291",
+            "name": "Страхование здоровья",
+            "type": "insurance-event"
+          },
+          {
+            "data": { "income": 10000 },
+            "description": "Вы получили единоразовую социальную выплату",
+            "id": "7848fc6a-a97f-46cd-83d7-227f9c201330",
+            "name": "Программа государственной поддержки",
+            "type": "income-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 153.7396445557502,
+              "fairPrice": 119.93416666666667
+            },
+            "description": "",
+            "id": "87e9291f-3c57-4343-8f12-edb8f4d55c06",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 309.4692952029121,
+              "fairPrice": 340.5375
+            },
+            "description": "",
+            "id": "c3e999e7-101f-4ac2-a60e-b5ed38d5f663",
+            "name": "Роснефть",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 100,
+              "currentPrice": 105.45487749744512,
+              "fairPrice": 117.57999999999998
+            },
+            "description": "",
+            "id": "c0c19af1-527c-4e4d-8a30-d09416fb9c83",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 170,
+              "currentPrice": 1286.08,
+              "nominal": 1000,
+              "profitabilityPercent": 7.3
+            },
+            "description": "Текущая цена: 1286.08 ₽",
+            "id": "f6bff047-1b4a-4a5f-9a04-0e4c770089b1",
+            "name": "ОФЗ 29006",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 3004.048354247211,
+              "fairPrice": 3035.2916666666665
+            },
+            "description": "",
+            "id": "643abd20-eba9-420f-8c0d-d9fb05cdae85",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 313.8517207255435,
+              "fairPrice": 337.14583333333337
+            },
+            "description": "",
+            "id": "89421800-b11f-4977-91ef-d6b24917005c",
+            "name": "Роснефть",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 29.498787556902773,
+              "fairPrice": 28.94333333333333
+            },
+            "description": "",
+            "id": "ac082ddc-acef-46fb-85ed-460c3d5f11c5",
+            "name": "Сургутнефтегаз",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "businessId": "0ccc9559-f90b-42c9-a133-db07fda36731",
+              "currentPrice": 145000,
+              "debt": 123000,
+              "downPayment": 22000,
+              "fairPrice": 127000,
+              "passiveIncomePerMonth": 4000,
+              "payback": 33,
+              "sellProbability": 3
+            },
+            "description": "Магазин продуктов",
+            "id": "f699f5e4-e73c-4964-b9ab-0eb26297df89",
+            "name": "Магазин продуктов",
+            "type": "business-buy-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 163.6370574571419,
+              "fairPrice": 128.75833333333333
+            },
+            "description": "",
+            "id": "399a72a6-d128-4272-8dc8-680a4851aea7",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 140,
+              "currentPrice": 4721.8735199773855,
+              "fairPrice": 4351.404166666667
+            },
+            "description": "",
+            "id": "526fafbf-113f-43c3-9e02-a86545dcec04",
+            "name": "Полюс Золото",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 1294.6368,
+              "nominal": 1000,
+              "profitabilityPercent": 8.3
+            },
+            "description": "Текущая цена: 1294.6368 ₽",
+            "id": "c7cfa0af-e6a2-4f94-b729-6ac10801447b",
+            "name": "Томская область",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 140,
+              "currentPrice": 3124.5134665380733,
+              "fairPrice": 3034.9583333333335
+            },
+            "description": "",
+            "id": "bdff4bbd-d96d-4f50-8e81-686ea0300df0",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": { "expense": 4000, "insuranceType": "property" },
+            "description": "Срочно нужны деньги на ремонт холодильника",
+            "id": "c8ad644c-77c7-4d8b-b7cb-9cdabb294a21",
+            "name": "Проблемы с имуществом",
+            "type": "expense-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 187.5090594158131,
+              "fairPrice": 132.66916666666665
+            },
+            "description": "",
+            "id": "23f99e98-fa09-43f6-a15b-b2abd50c4da6",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 1252.851328,
+              "nominal": 1000,
+              "profitabilityPercent": 7.3
+            },
+            "description": "Текущая цена: 1252.851328 ₽",
+            "id": "3e0beb61-3532-4ac7-8a43-fc2d6243394d",
+            "name": "ОФЗ 29006",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 100,
+              "currentPrice": 3255.0378259053427,
+              "fairPrice": 3034.625
+            },
+            "description": "",
+            "id": "a6e6e13e-444c-49e2-be1e-14816fb8d257",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 140,
+              "currentPrice": 4803.4888468057725,
+              "fairPrice": 4390.659166666667
+            },
+            "description": "",
+            "id": "dca99b95-2d99-4131-8de9-4426996697a8",
+            "name": "Полюс Золото",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": { "income": 9000 },
+            "description": "Вы получили премию на работе",
+            "id": "2abcd1cd-ed8c-4729-8be9-c55af8d80e96",
+            "name": "Премия",
+            "type": "income-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 292.33907417603035,
+              "fairPrice": 328.8625
+            },
+            "description": "",
+            "id": "9a07d2d4-9740-4381-ae64-cc1cccd236ec",
+            "name": "Роснефть",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 150,
+              "currentPrice": 1262.7372748799999,
+              "nominal": 1000,
+              "profitabilityPercent": 6.3
+            },
+            "description": "Текущая цена: 1262.7372748799999 ₽",
+            "id": "5edb1cf9-2098-4db6-84d7-877f2c682ac2",
+            "name": "Республика Якутия",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 4751.058382720204,
+              "fairPrice": 4450.4025
+            },
+            "description": "",
+            "id": "6f228778-7b66-4ef0-a08e-78cbfedcba9e",
+            "name": "Полюс Золото",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 198.83067208351832,
+              "fairPrice": 138.37333333333333
+            },
+            "description": "",
+            "id": "f25df22b-45ff-44a6-aaa3-66fc46e7d806",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "businessId": "5b25ddbf-ae50-47ad-8a03-cf76966488c7",
+              "currentPrice": 93000,
+              "debt": 82000,
+              "downPayment": 11000,
+              "fairPrice": 126000,
+              "passiveIncomePerMonth": 4000,
+              "payback": 52,
+              "sellProbability": 12
+            },
+            "description": "Магазин продуктов",
+            "id": "f353a411-a521-4ebe-8f92-0d8efc507970",
+            "name": "Магазин продуктов",
+            "type": "business-buy-event"
+          },
+          {
+            "data": {
+              "availableCount": 190,
+              "currentPrice": 1272.2277838848,
+              "nominal": 1000,
+              "profitabilityPercent": 7.3
+            },
+            "description": "Текущая цена: 1272.2277838848 ₽",
+            "id": "c4931f81-be21-4905-91db-403d3160d8f9",
+            "name": "ОФЗ 29006",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 100,
+              "currentPrice": 30.577983374855435,
+              "fairPrice": 28.561666666666667
+            },
+            "description": "",
+            "id": "4a0cabac-58de-4be9-b074-d818485c02ce",
+            "name": "Сургутнефтегаз",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 3499.47109460273,
+              "fairPrice": 3033.7916666666665
+            },
+            "description": "",
+            "id": "e1bf4d2f-7a8a-4836-ab6b-32c25313682a",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 115.15624647245804,
+              "fairPrice": 114.06416666666667
+            },
+            "description": "",
+            "id": "6d0feeb7-f6a6-43bc-acf9-f0cb0204bf39",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 111.84069475762489,
+              "fairPrice": 112.46416666666666
+            },
+            "description": "",
+            "id": "18a51433-71e4-435b-b4f1-0670fbb23b36",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 1271.3386725294079,
+              "nominal": 1000,
+              "profitabilityPercent": 7.3
+            },
+            "description": "Текущая цена: 1271.3386725294079 ₽",
+            "id": "c6a93bd1-2a14-4799-a972-50dedeb82f21",
+            "name": "ОФЗ 29006",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 322.8077616957979,
+              "fairPrice": 314.8041666666666
+            },
+            "description": "",
+            "id": "58e1c888-f6c3-4e2f-b157-5bcd9aee40d6",
+            "name": "Роснефть",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 221.31463580989524,
+              "fairPrice": 150.71833333333333
+            },
+            "description": "",
+            "id": "3c5d8dc0-550e-459b-854b-aeecb67e79f1",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 1270.4851256282316,
+              "nominal": 1000,
+              "profitabilityPercent": 8.3
+            },
+            "description": "Текущая цена: 1270.4851256282316 ₽",
+            "id": "bf040050-a056-4fac-9800-7f9a5341ba71",
+            "name": "Томская область",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "assetName": "Гараж",
+              "currentPrice": 137000,
+              "debt": 118800,
+              "downPayment": 18200,
+              "fairPrice": 143000,
+              "passiveIncomePerMonth": 400,
+              "payback": 4,
+              "realEstateId": "fff2a53c-d343-42cb-8eeb-39d1da454773",
+              "sellProbability": 17
+            },
+            "description": "",
+            "id": "3b13c485-ae7e-4a2e-bc31-896f5a099ff5",
+            "name": "Продаётся гараж",
+            "type": "real-estate-buy-event"
+          },
+          {
+            "data": { "cost": 4500, "duration": 12, "insuranceType": "property", "value": 8500 },
+            "description": "Страховая компания предлагает купить полис и защитить свое имущество от непредвиденных ситуаций",
+            "id": "6a12870d-ef73-48fa-a9c7-013e48dc6ff9",
+            "name": "Страхование имущества",
+            "type": "insurance-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 323.5375281399895,
+              "fairPrice": 314.7541666666666
+            },
+            "description": "",
+            "id": "7135f961-ab2e-4bc4-a195-19a32ff8f77d",
+            "name": "Роснефть",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 29.21204868065494,
+              "fairPrice": 28.204166666666666
+            },
+            "description": "",
+            "id": "62772bf6-6ed5-4ded-a478-f5e49e224b31",
+            "name": "Сургутнефтегаз",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 100,
+              "currentPrice": 4663.205173168348,
+              "fairPrice": 4474.735833333333
+            },
+            "description": "",
+            "id": "5a74ec1c-34a0-4ede-8a37-c12d4aa4f06b",
+            "name": "Полюс Золото",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": { "income": 20000 },
+            "description": "Вы получили налоговый вычет",
+            "id": "73f584a4-43e3-4615-9071-fb1d6044b8e4",
+            "name": "Налоговый вычет",
+            "type": "income-event"
+          },
+          {
+            "data": {
+              "availableCount": 160,
+              "currentPrice": 1229.6657206031023,
+              "nominal": 1000,
+              "profitabilityPercent": 8.3
+            },
+            "description": "Текущая цена: 1229.6657206031023 ₽",
+            "id": "f6400c73-33ba-461a-881d-5f9c99e37fe4",
+            "name": "Томская область",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 140,
+              "currentPrice": 108.5713410547687,
+              "fairPrice": 111.97416666666665
+            },
+            "description": "",
+            "id": "714c9bd0-fccf-4fca-91aa-5483052b3fda",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "businessId": "c72475a6-291a-4a3d-b32e-8497432b83ec",
+              "currentPrice": 73000,
+              "debt": 48000,
+              "downPayment": 25000,
+              "fairPrice": 117000,
+              "passiveIncomePerMonth": 3000,
+              "payback": 49,
+              "sellProbability": 13
+            },
+            "description": "Грузоперевозки",
+            "id": "aad91050-283d-40d3-9799-c4036e08b21b",
+            "name": "Грузоперевозки",
+            "type": "business-buy-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 4129.022361464591,
+              "fairPrice": 3204.6666666666665
+            },
+            "description": "",
+            "id": "5d770336-1ab1-4609-9bb2-f8c89107e60f",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 29.159364866369607,
+              "fairPrice": 28.126666666666665
+            },
+            "description": "",
+            "id": "4846809c-ed0d-4317-aa39-d9f501f4cc42",
+            "name": "Сургутнефтегаз",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 140,
+              "currentPrice": 3781.2946230026505,
+              "fairPrice": 4443.9025
+            },
+            "description": "",
+            "id": "a5820b65-75ee-42de-84cb-444c6ab5e562",
+            "name": "Полюс Золото",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 4090.2813574817174,
+              "fairPrice": 3322.3333333333335
+            },
+            "description": "",
+            "id": "f18d14f2-30b2-4854-a829-48186d970520",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 140,
+              "currentPrice": 112.97723506917548,
+              "fairPrice": 112.45333333333332
+            },
+            "description": "",
+            "id": "50d26b18-8867-4522-afdc-1344f4c78e55",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 190,
+              "currentPrice": 1210.4790917789783,
+              "nominal": 1000,
+              "profitabilityPercent": 7.3
+            },
+            "description": "Текущая цена: 1210.4790917789783 ₽",
+            "id": "b61044d1-87ef-4b8b-a6a3-64819a64244d",
+            "name": "ОФЗ 29006",
+            "type": "debenture-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 140,
+              "currentPrice": 4201.012198654665,
+              "fairPrice": 4389.735833333333
+            },
+            "description": "",
+            "id": "dcb528df-7268-49dc-a8e2-74f05a53fb3d",
+            "name": "Полюс Золото",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 1162.0599281078191,
+              "nominal": 1000,
+              "profitabilityPercent": 7.3
+            },
+            "description": "Текущая цена: 1162.0599281078191 ₽",
+            "id": "156c513c-87da-4c93-830d-f2e623574910",
+            "name": "ОФЗ 29006",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 396.99625085084665,
+              "fairPrice": 326.59166666666664
+            },
+            "description": "",
+            "id": "1083bd6c-a2f3-4ac3-8735-9d9382b84239",
+            "name": "Роснефть",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 28.834861239411154,
+              "fairPrice": 28.16291666666667
+            },
+            "description": "",
+            "id": "9f8eed58-e9f9-4025-93cf-c4c5a601b551",
+            "name": "Сургутнефтегаз",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "businessId": "81f6796d-a409-4e8b-a716-83aea3957811",
+              "currentPrice": 126000,
+              "debt": 113000,
+              "downPayment": 13000,
+              "fairPrice": 116000,
+              "passiveIncomePerMonth": 1000,
+              "payback": 10,
+              "sellProbability": 11
+            },
+            "description": "Кафе",
+            "id": "f5ba6b80-3beb-4b96-b9f2-8dc5fd680c44",
+            "name": "Кафе",
+            "type": "business-buy-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 411.34343242861996,
+              "fairPrice": 332.68749999999994
+            },
+            "description": "",
+            "id": "6eb68ed0-0d18-4114-8fb1-1467ee5efe04",
+            "name": "Роснефть",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 200,
+              "currentPrice": 1165.5775309835064,
+              "nominal": 1000,
+              "profitabilityPercent": 8.3
+            },
+            "description": "Текущая цена: 1165.5775309835064 ₽",
+            "id": "1dd4e632-3075-419d-820a-1adbbddbd0c9",
+            "name": "Томская область",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 4348.735650103926,
+              "fairPrice": 3569.625
+            },
+            "description": "",
+            "id": "77b56f8f-7670-45f7-a5c7-55bf1e9c341f",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 176.80917250193338,
+              "fairPrice": 184.88416666666663
+            },
+            "description": "",
+            "id": "70a5930e-859d-4bd0-86d2-2b62a29a54dc",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 159.56420994662142,
+              "fairPrice": 188.83666666666667
+            },
+            "description": "",
+            "id": "be097d54-73cd-4148-a488-305293d65682",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 4116.883541917196,
+              "fairPrice": 4455.916666666667
+            },
+            "description": "",
+            "id": "89586e4a-f2bf-4762-9df0-6616481c82a5",
+            "name": "Полюс Золото",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 1118.9544297441662,
+              "nominal": 1000,
+              "profitabilityPercent": 6.3
+            },
+            "description": "Текущая цена: 1118.9544297441662 ₽",
+            "id": "6658c9e2-448a-4aed-99d0-d1a86bf7ddbd",
+            "name": "Республика Якутия",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": { "income": 7500 },
+            "description": "Вы продали неиспользуемый письменный стол на Авито",
+            "id": "632feb5a-8e87-4105-a70d-c924c4f00f94",
+            "name": "Продажа",
+            "type": "income-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 103.35568183758241,
+              "fairPrice": 113.38499999999999
+            },
+            "description": "",
+            "id": "7f5cb8e8-09ed-4163-83b3-0c9e58224ca8",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": { "expense": 2000, "insuranceType": "property" },
+            "description": "Срочно нужны деньги на ремонт компьютера",
+            "id": "0773ebe1-8d47-4d69-9728-75ad63620c8d",
+            "name": "Проблемы с имуществом",
+            "type": "expense-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 1094.1962525543995,
+              "nominal": 1000,
+              "profitabilityPercent": 7.3
+            },
+            "description": "Текущая цена: 1094.1962525543995 ₽",
+            "id": "6d284bd5-e697-4bd8-8cf6-30532b452a37",
+            "name": "ОФЗ 29006",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 28.363265511134095,
+              "fairPrice": 28.73958333333334
+            },
+            "description": "",
+            "id": "aa3796b4-5506-43ca-85df-2971d28b0ef3",
+            "name": "Сургутнефтегаз",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 100.56864782019176,
+              "fairPrice": 112.77249999999998
+            },
+            "description": "",
+            "id": "f63909f4-37ef-44a4-be95-2281b242a715",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 140,
+              "currentPrice": 494.35033839697945,
+              "fairPrice": 352.6375
+            },
+            "description": "",
+            "id": "c4318a95-781d-45e2-acf7-df37cb36baa4",
+            "name": "Роснефть",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "assetName": "1-комн. Квартира",
+              "currentPrice": 1000000,
+              "debt": 858000,
+              "downPayment": 142000,
+              "fairPrice": 1070000,
+              "passiveIncomePerMonth": 4400,
+              "payback": 5,
+              "realEstateId": "67116c87-9049-43d5-8b68-9a5775a4173f",
+              "sellProbability": 16
+            },
+            "description": "",
+            "id": "8b3dc514-afb7-4578-b9fe-40dc5d2b0dfb",
+            "name": "Продаётся квартира",
+            "type": "real-estate-buy-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 4893.602865607149,
+              "fairPrice": 4017.2916666666665
+            },
+            "description": "",
+            "id": "fc778a21-892e-46b2-857e-58c7a8ce8656",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 180,
+              "currentPrice": 1090.4284024522235,
+              "nominal": 1000,
+              "profitabilityPercent": 6.3
+            },
+            "description": "Текущая цена: 1090.4284024522235 ₽",
+            "id": "7da8ebfd-dff0-4cc8-9ca3-1cb787ea9110",
+            "name": "Республика Якутия",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "businessId": "509b358d-bc4b-4585-8293-d8e83642a2ba",
+              "currentPrice": 146000,
+              "debt": 131000,
+              "downPayment": 15000,
+              "fairPrice": 78000,
+              "passiveIncomePerMonth": 4500,
+              "payback": 37,
+              "sellProbability": 10
+            },
+            "description": "Химчистка",
+            "id": "01341eca-2559-4fc8-9150-5449e06e0c56",
+            "name": "Химчистка",
+            "type": "business-buy-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 165.20498552527073,
+              "fairPrice": 190.24166666666667
+            },
+            "description": "",
+            "id": "e03d3771-ecb3-47ef-bd9c-55bb69586f1d",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 506.1498964260925,
+              "fairPrice": 367.14166666666665
+            },
+            "description": "",
+            "id": "b720dc61-d6b5-4840-9571-db56d850f299",
+            "name": "Роснефть",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": { "cost": 4000, "duration": 12, "insuranceType": "health", "value": 10000 },
+            "description": "Страховая компания предлагает купить полис и защитить свое здоровье от непредвиденных ситуаций",
+            "id": "190eaec7-30e8-4b44-9ab8-8755e99c2184",
+            "name": "Страхование здоровья",
+            "type": "insurance-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 140,
+              "currentPrice": 1116.8112663541347,
+              "nominal": 1000,
+              "profitabilityPercent": 6.3
+            },
+            "description": "Текущая цена: 1116.8112663541347 ₽",
+            "id": "581bdc8f-c37d-40d2-9889-83fa6c42a482",
+            "name": "Республика Якутия",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 140,
+              "currentPrice": 4354.2942489078505,
+              "fairPrice": 4360.25
+            },
+            "description": "",
+            "id": "838cc679-a3ca-43e3-85a2-c9729875e5ac",
+            "name": "Полюс Золото",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": { "expense": 3500, "insuranceType": "property" },
+            "description": "Срочно нужны деньги на ремонт холодильника",
+            "id": "e5550117-b146-4b95-8263-9a8742fdb390",
+            "name": "Проблемы с имуществом",
+            "type": "expense-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 170.91844053966312,
+              "fairPrice": 190.64000000000001
+            },
+            "description": "",
+            "id": "ec5764d4-cec0-4686-9d48-dfd5593e839c",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 26.363216508850417,
+              "fairPrice": 28.34958333333333
+            },
+            "description": "",
+            "id": "77efadfd-39fc-43c7-87d5-f2473a3e229e",
+            "name": "Сургутнефтегаз",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": { "income": 30000 },
+            "description": "Вы получили наследство от дальнего родственника",
+            "id": "6d7ad6c4-6e0f-448e-bfa1-a42edecd3b3f",
+            "name": "Наследство",
+            "type": "income-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 1092.1388156999692,
+              "nominal": 1000,
+              "profitabilityPercent": 6.3
+            },
+            "description": "Текущая цена: 1092.1388156999692 ₽",
+            "id": "1dba8ae2-40fc-4962-b1d7-d397f70bfaa2",
+            "name": "Республика Якутия",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 100,
+              "currentPrice": 4763.174817109947,
+              "fairPrice": 4353.208333333333
+            },
+            "description": "",
+            "id": "be4e641d-8908-400c-b872-451934694f7b",
+            "name": "Полюс Золото",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 89.4377065192599,
+              "fairPrice": 105.84333333333335
+            },
+            "description": "",
+            "id": "d35f145b-2055-4f6d-9129-5d6abab94731",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": { "availableCount": 140, "currentPrice": 5200.359023772934, "fairPrice": 4305 },
+            "description": "",
+            "id": "09a825d4-330e-4a5a-86f9-a8f28ac232b1",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 100,
+              "currentPrice": 4920.681088022377,
+              "fairPrice": 4443.541666666667
+            },
+            "description": "",
+            "id": "5f4426c9-44e1-4fd0-8f5f-de9b14636a85",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 160,
+              "currentPrice": 1108.4532630719705,
+              "nominal": 1000,
+              "profitabilityPercent": 7.3
+            },
+            "description": "Текущая цена: 1108.4532630719705 ₽",
+            "id": "d4780f64-d3b5-4e46-93da-0c16ccfb24ff",
+            "name": "ОФЗ 29006",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "businessId": "d06363a5-fe05-4604-b80d-7c1ff0f72f86",
+              "currentPrice": 94000,
+              "debt": 80000,
+              "downPayment": 14000,
+              "fairPrice": 122000,
+              "passiveIncomePerMonth": 3500,
+              "payback": 45,
+              "sellProbability": 7
+            },
+            "description": "Грузоперевозки",
+            "id": "d7eb7144-da31-46ad-b61c-e16f2599d9fd",
+            "name": "Грузоперевозки",
+            "type": "business-buy-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 5643.6126242875225,
+              "fairPrice": 4420.208333333333
+            },
+            "description": "",
+            "id": "bdb3b160-3c54-4f89-b75a-d1c29777c8b0",
+            "name": "Полюс Золото",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 433.21109561545,
+              "fairPrice": 401.49583333333334
+            },
+            "description": "",
+            "id": "62fe9816-c22e-41ea-afc8-f15a41cae6a9",
+            "name": "Роснефть",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 100,
+              "currentPrice": 185.8821590480726,
+              "fairPrice": 184.82916666666668
+            },
+            "description": "",
+            "id": "cf5736a7-a8d8-4adc-a1cd-1a4d98b834e3",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 190,
+              "currentPrice": 1104.1151325490916,
+              "nominal": 1000,
+              "profitabilityPercent": 7.3
+            },
+            "description": "Текущая цена: 1104.1151325490916 ₽",
+            "id": "31aebde1-95cb-49ac-813a-37886585135a",
+            "name": "ОФЗ 29006",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 5241.201108398755,
+              "fairPrice": 4496.375
+            },
+            "description": "",
+            "id": "90b8319c-3f93-4663-851c-fce34800dc8b",
+            "name": "Полюс Золото",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 5326.778630240137,
+              "fairPrice": 4572.25
+            },
+            "description": "",
+            "id": "4d34e957-9957-4eb8-8932-617702009aa6",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 1119.9505272471279,
+              "nominal": 1000,
+              "profitabilityPercent": 8.3
+            },
+            "description": "Текущая цена: 1119.9505272471279 ₽",
+            "id": "c60c4155-ace2-4d04-9f18-91c069b81440",
+            "name": "Томская область",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 140,
+              "currentPrice": 24.982046548412548,
+              "fairPrice": 27.88541666666667
+            },
+            "description": "",
+            "id": "0608bbad-1c9f-41c8-a3e3-c95907d35e96",
+            "name": "Сургутнефтегаз",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": { "availableCount": 90, "currentPrice": 93.8918994285746, "fairPrice": 99.945 },
+            "description": "",
+            "id": "dad7f626-1f57-4e22-9de6-835b020f8f7a",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 182.6313762968819,
+              "fairPrice": 180.92499999999998
+            },
+            "description": "",
+            "id": "cb07a147-3127-4b42-98f4-73937cbc3059",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "businessId": "7a26b0be-1a37-47b8-94a2-c46de3617e4d",
+              "currentPrice": 77000,
+              "debt": 60000,
+              "downPayment": 17000,
+              "fairPrice": 144000,
+              "passiveIncomePerMonth": 5000,
+              "payback": 78,
+              "sellProbability": 6
+            },
+            "description": "Грузоперевозки",
+            "id": "1bc53e1e-04fb-4b9b-accd-9ee82545052a",
+            "name": "Грузоперевозки",
+            "type": "business-buy-event"
+          },
+          {
+            "data": {
+              "availableCount": 180,
+              "currentPrice": 1095.1525061572427,
+              "nominal": 1000,
+              "profitabilityPercent": 6.3
+            },
+            "description": "Текущая цена: 1095.1525061572427 ₽",
+            "id": "2ecdbe30-bda5-47ce-90dc-2096350b255e",
+            "name": "Республика Якутия",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": { "income": 3000 },
+            "description": "Вы получили премию на работе",
+            "id": "3f0827f7-60ca-438c-80f2-9705b86d10cf",
+            "name": "Премия",
+            "type": "income-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 191.36101530960164,
+              "fairPrice": 178.71416666666664
+            },
+            "description": "",
+            "id": "b3ab2f92-b849-4582-9b9b-88c30c986bf7",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 5568.433449427367,
+              "fairPrice": 4875.208333333333
+            },
+            "description": "",
+            "id": "b916a069-b446-493f-8ee7-91cc5a60888d",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 432.11498974260587,
+              "fairPrice": 420.96666666666664
+            },
+            "description": "",
+            "id": "92e7a8da-90eb-45a4-8ea2-433c7d7cba9c",
+            "name": "Роснефть",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": { "cost": 3000, "duration": 12, "insuranceType": "property", "value": 8000 },
+            "description": "Страховая компания предлагает купить полис и защитить свое имущество от непредвиденных ситуаций",
+            "id": "af54f43e-9d27-4b69-9718-3965488df401",
+            "name": "Страхование имущества",
+            "type": "insurance-event"
+          },
+          {
+            "data": {
+              "availableCount": 140,
+              "currentPrice": 24.37420710992114,
+              "fairPrice": 27.13958333333333
+            },
+            "description": "",
+            "id": "df428435-d15f-4798-ab9e-1530facf4187",
+            "name": "Сургутнефтегаз",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 190,
+              "currentPrice": 1091.3464059109529,
+              "nominal": 1000,
+              "profitabilityPercent": 7.3
+            },
+            "description": "Текущая цена: 1091.3464059109529 ₽",
+            "id": "2f95ca84-dde8-4d10-86ec-f0b2e30f0dd7",
+            "name": "ОФЗ 29006",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "assetName": "Гараж",
+              "currentPrice": 143000,
+              "debt": 122100,
+              "downPayment": 20900,
+              "fairPrice": 148000,
+              "passiveIncomePerMonth": 800,
+              "payback": 7,
+              "realEstateId": "28b43886-ac95-4d88-8f8b-ef116aaff169",
+              "sellProbability": 15
+            },
+            "description": "",
+            "id": "fbaf0318-5393-4583-999a-c1e20864fb80",
+            "name": "Продаётся гараж",
+            "type": "real-estate-buy-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 207.0146963175276,
+              "fairPrice": 178.92583333333334
+            },
+            "description": "",
+            "id": "b07b707a-9fe7-4931-b01c-08135e726a05",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 86.03283283126008,
+              "fairPrice": 95.30083333333333
+            },
+            "description": "",
+            "id": "8eb3ee39-66fd-40a2-b2f3-970581c2fb7e",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 26.394359305174923,
+              "fairPrice": 26.821666666666662
+            },
+            "description": "",
+            "id": "cee0289e-7aa7-4c8f-b267-10c372320893",
+            "name": "Сургутнефтегаз",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 1107.6925496745148,
+              "nominal": 1000,
+              "profitabilityPercent": 8.3
+            },
+            "description": "Текущая цена: 1107.6925496745148 ₽",
+            "id": "465dd2c8-ef35-402f-b9b4-8afeff24b085",
+            "name": "Томская область",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 100,
+              "currentPrice": 411.17391590337166,
+              "fairPrice": 428.6458333333333
+            },
+            "description": "",
+            "id": "79fc9b2e-5f2a-4c26-8035-bc55595a6269",
+            "name": "Роснефть",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 216.65947950837165,
+              "fairPrice": 179.6916666666667
+            },
+            "description": "",
+            "id": "ff784e37-0b3a-44f9-bb4e-bb6b64b89ed4",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 100,
+              "currentPrice": 207.05284063831587,
+              "fairPrice": 181.2833333333334
+            },
+            "description": "",
+            "id": "4efc4533-f644-4445-8171-2223c3dfc3ef",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": { "availableCount": 120, "currentPrice": 5393.061543797567, "fairPrice": 5147 },
+            "description": "",
+            "id": "55c50dfe-d455-45df-9b92-2a58809b56c9",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 90.11546319043029,
+              "fairPrice": 91.49583333333334
+            },
+            "description": "",
+            "id": "6c7d5e06-0e3a-48e0-9380-847c0cefb133",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 1143.3848476875341,
+              "nominal": 1000,
+              "profitabilityPercent": 8.3
+            },
+            "description": "Текущая цена: 1143.3848476875341 ₽",
+            "id": "b52ba349-ef7b-47b4-887d-c1f7ebea7c9d",
+            "name": "Томская область",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "businessId": "88c047df-0325-4ed7-b8f3-222d1debbcdb",
+              "currentPrice": 77000,
+              "debt": 59000,
+              "downPayment": 18000,
+              "fairPrice": 150000,
+              "passiveIncomePerMonth": 4500,
+              "payback": 70,
+              "sellProbability": 8
+            },
+            "description": "Салон красоты",
+            "id": "6111f296-7ef9-4113-9b44-4ac02bcc42b9",
+            "name": "Салон красоты",
+            "type": "business-buy-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 150,
+              "currentPrice": 1177.6494537800327,
+              "nominal": 1000,
+              "profitabilityPercent": 7.3
+            },
+            "description": "Текущая цена: 1177.6494537800327 ₽",
+            "id": "4236c3f0-0560-450b-b1d5-3cf06d4aa4e0",
+            "name": "ОФЗ 29006",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": { "income": 19000 },
+            "description": "Вы получили налоговый вычет",
+            "id": "8c592052-31d4-4c9e-8367-9a815be89b1e",
+            "name": "Налоговый вычет",
+            "type": "income-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 92.88108636742344,
+              "fairPrice": 90.67583333333333
+            },
+            "description": "",
+            "id": "2646b70f-ab3b-4c56-8e83-d4ed89ff248d",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 5264.557867353865,
+              "fairPrice": 5211.583333333333
+            },
+            "description": "",
+            "id": "fc77fcd3-1807-4a37-92b2-636c4ca1aedf",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 6837.684367336358,
+              "fairPrice": 5148.041666666667
+            },
+            "description": "",
+            "id": "32751bbd-84de-46a9-bbbf-9992466469de",
+            "name": "Полюс Золото",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": { "expenseName": "Ребёнок", "monthlyPayment": 5000 },
+            "description": "В вашей семье пополнение",
+            "id": "35fcf73e-7b1e-48bd-ad44-670f02b6e326",
+            "name": "Поздравляем с рождением ребёнка!",
+            "type": "monthly-expense-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 140,
+              "currentPrice": 1140.5434756288314,
+              "nominal": 1000,
+              "profitabilityPercent": 8.3
+            },
+            "description": "Текущая цена: 1140.5434756288314 ₽",
+            "id": "4c0557ca-f8a6-4e2b-8fbf-bcd451d9e3f8",
+            "name": "Томская область",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 34.959864372723416,
+              "fairPrice": 26.374999999999996
+            },
+            "description": "",
+            "id": "9b80553d-d8dc-48a1-adb4-1a87b8cca59b",
+            "name": "Сургутнефтегаз",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 100,
+              "currentPrice": 5398.57167783526,
+              "fairPrice": 5268.166666666667
+            },
+            "description": "",
+            "id": "a1c21acd-af4b-4122-93e2-006b926f2795",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 430.8283308492408,
+              "fairPrice": 428.02500000000003
+            },
+            "description": "",
+            "id": "dda3d44e-a3d6-4dfa-97a7-1691a1a0364a",
+            "name": "Роснефть",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": { "expense": 3500, "insuranceType": "property" },
+            "description": "Срочно нужны деньги на ремонт компьютера",
+            "id": "c27275c9-cab7-4a61-b6f4-9bb06aa86910",
+            "name": "Проблемы с имуществом",
+            "type": "expense-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "businessId": "5c7680fd-83d4-4239-a8a2-31a215b84112",
+              "currentPrice": 110000,
+              "debt": 87000,
+              "downPayment": 23000,
+              "fairPrice": 118000,
+              "passiveIncomePerMonth": 4500,
+              "payback": 49,
+              "sellProbability": 14
+            },
+            "description": "Грузоперевозки",
+            "id": "52882324-6c81-4a0d-b86a-fc0d15bcad67",
+            "name": "Грузоперевозки",
+            "type": "business-buy-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 93.7020177101247,
+              "fairPrice": 90.18583333333332
+            },
+            "description": "",
+            "id": "aefa1985-a332-45d1-9a7c-0c514040645f",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 190,
+              "currentPrice": 1154.9217366036783,
+              "nominal": 1000,
+              "profitabilityPercent": 8.3
+            },
+            "description": "Текущая цена: 1154.9217366036783 ₽",
+            "id": "50f27a97-61a5-45b5-9294-a4715b76e6da",
+            "name": "Томская область",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 7369.573133840985,
+              "fairPrice": 5707.125
+            },
+            "description": "",
+            "id": "227d46df-42bd-4bdd-b312-27d5d2955fed",
+            "name": "Полюс Золото",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 42.1142817495258,
+              "fairPrice": 27.03958333333333
+            },
+            "description": "",
+            "id": "5c28c4e5-cde1-48ff-93cc-d6116bdcb336",
+            "name": "Сургутнефтегаз",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 105.07144270984858,
+              "fairPrice": 90.77999999999999
+            },
+            "description": "",
+            "id": "b65bfda9-d0c2-4818-881a-6b150fb8615d",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 140,
+              "currentPrice": 1158.7248671395312,
+              "nominal": 1000,
+              "profitabilityPercent": 6.3
+            },
+            "description": "Текущая цена: 1158.7248671395312 ₽",
+            "id": "4b759ae8-b812-4024-9fcd-d13411b72e72",
+            "name": "Республика Якутия",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 100,
+              "currentPrice": 6681.910104551443,
+              "fairPrice": 5983.541666666667
+            },
+            "description": "",
+            "id": "3af3ec0b-5ce5-447f-a83e-6b12a00599da",
+            "name": "Полюс Золото",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 213.2328814364518,
+              "fairPrice": 192.54
+            },
+            "description": "",
+            "id": "bf799b73-8a41-4d42-bb44-dcbaf732a8b2",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 1192.37587245395,
+              "nominal": 1000,
+              "profitabilityPercent": 6.3
+            },
+            "description": "Текущая цена: 1192.37587245395 ₽",
+            "id": "acb4028d-aea6-4df7-8636-13fa209036f0",
+            "name": "Республика Якутия",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 104.85006990354644,
+              "fairPrice": 92.12833333333333
+            },
+            "description": "",
+            "id": "09c3d0d6-8aa9-4015-9a32-8355a9425350",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": { "expense": 3500, "insuranceType": "property" },
+            "description": "Срочно нужны деньги на ремонт холодильника",
+            "id": "be58c1e8-4f04-4d6e-92c4-b76d2855c5f4",
+            "name": "Проблемы с имуществом",
+            "type": "expense-event"
+          },
+          {
+            "data": {
+              "assetName": "2-комн. Квартира",
+              "currentPrice": 1490000,
+              "debt": 1251000,
+              "downPayment": 239000,
+              "fairPrice": 1430000,
+              "passiveIncomePerMonth": 8600,
+              "payback": 7,
+              "realEstateId": "0fdbafc0-7bfc-47e8-8bb9-ea12c0f1d786",
+              "sellProbability": 14
+            },
+            "description": "",
+            "id": "a8b4fdf9-ce1f-49ea-966c-c3f54b19e400",
+            "name": "Продаётся квартира",
+            "type": "real-estate-buy-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 223.86694954179174,
+              "fairPrice": 196.165
+            },
+            "description": "",
+            "id": "dc839877-4f67-41bc-bf17-dae5d6d6d252",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": { "cost": 3500, "duration": 12, "insuranceType": "health", "value": 8000 },
+            "description": "Страховая компания предлагает купить полис и защитить свое здоровье от непредвиденных ситуаций",
+            "id": "36c2da28-dfcf-4a4b-a88a-a8c37a1ff39f",
+            "name": "Страхование здоровья",
+            "type": "insurance-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 6211.373583788938,
+              "fairPrice": 5483.291666666667
+            },
+            "description": "",
+            "id": "a11680d1-6c3c-4e7a-a739-237ff56e248a",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "businessId": "224aa6a2-4b1b-4653-8d1d-ee8d7ec325c3",
+              "currentPrice": 100000,
+              "debt": 76000,
+              "downPayment": 24000,
+              "fairPrice": 97000,
+              "passiveIncomePerMonth": 3500,
+              "payback": 42,
+              "sellProbability": 4
+            },
+            "description": "Салон красоты",
+            "id": "6b7bf34b-9049-4a68-bbd5-7fadeebbb6ab",
+            "name": "Салон красоты",
+            "type": "business-buy-event"
+          },
+          {
+            "data": { "income": 6000 },
+            "description": "Вы получили единоразовую социальную выплату",
+            "id": "189e5867-3581-4740-ab6f-ce6b6164aa08",
+            "name": "Программа государственной поддержки",
+            "type": "income-event"
+          },
+          {
+            "data": {
+              "availableCount": 200,
+              "currentPrice": 1214.680837555792,
+              "nominal": 1000,
+              "profitabilityPercent": 8.3
+            },
+            "description": "Текущая цена: 1214.680837555792 ₽",
+            "id": "8e2bf61d-4aa6-4b93-9ce2-6964d67fdedf",
+            "name": "Томская область",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 47.950038356389996,
+              "fairPrice": 31.770416666666666
+            },
+            "description": "",
+            "id": "e30dcea6-4143-404a-9ebf-09432b6d47dd",
+            "name": "Сургутнефтегаз",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 231.29667065238002,
+              "fairPrice": 201.3416666666667
+            },
+            "description": "",
+            "id": "29d2aa33-1222-42eb-9252-3e0ed9789ab9",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 6656.772761034498,
+              "fairPrice": 5580.958333333333
+            },
+            "description": "",
+            "id": "ccc234b6-8fa4-4bbb-b5d2-660976342b7b",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 150,
+              "currentPrice": 1256.0936040535605,
+              "nominal": 1000,
+              "profitabilityPercent": 8.3
+            },
+            "description": "Текущая цена: 1256.0936040535605 ₽",
+            "id": "22e06898-943c-4026-9d6f-54e7261f44ef",
+            "name": "Томская область",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 217.4007739838401,
+              "fairPrice": 204.75749999999996
+            },
+            "description": "",
+            "id": "c0d237fe-51cc-4169-9f51-6d6bc0a04d06",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 40.530151399021335,
+              "fairPrice": 33.32791666666667
+            },
+            "description": "",
+            "id": "4057b763-e493-4bfc-b078-2262f32ec167",
+            "name": "Сургутнефтегаз",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 95.6385774283814,
+              "fairPrice": 95.78416666666668
+            },
+            "description": "",
+            "id": "cc0620c6-037f-407b-bde1-0c0ff127e39a",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 170.13646504684758,
+              "fairPrice": 207.67416666666665
+            },
+            "description": "",
+            "id": "0ab6836f-741e-4e80-9f2f-d626f8ec4f2d",
+            "name": "Сбербанк России - привилегированные акции",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 86.40121501839069,
+              "fairPrice": 96.43916666666667
+            },
+            "description": "",
+            "id": "7e11f8be-9d09-4c9a-be86-108e22dd5b68",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": { "availableCount": 110, "currentPrice": 4999.145288657491, "fairPrice": 5704 },
+            "description": "",
+            "id": "b0afeb46-663e-45c1-bead-30129758c897",
+            "name": "ЛУКОЙЛ",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 90,
+              "currentPrice": 1275.8498598914182,
+              "nominal": 1000,
+              "profitabilityPercent": 7.3
+            },
+            "description": "Текущая цена: 1275.8498598914182 ₽",
+            "id": "720b1009-dc58-4ba9-8686-86a097b13a05",
+            "name": "ОФЗ 29006",
+            "type": "debenture-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 123.02556193455155,
+              "fairPrice": 96.935
+            },
+            "description": "",
+            "id": "9e9edab7-e864-4184-8c34-ea3493d42f0f",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "businessId": "646c354b-411b-4e80-8959-b27fdbde95d9",
+              "currentPrice": 99000,
+              "debt": 89000,
+              "downPayment": 10000,
+              "fairPrice": 138000,
+              "passiveIncomePerMonth": 5000,
+              "payback": 61,
+              "sellProbability": 14
+            },
+            "description": "Кафе",
+            "id": "07a5b774-d4e4-440f-8219-ad1a2656578e",
+            "name": "Кафе",
+            "type": "business-buy-event"
+          },
+          {
+            "data": {
+              "availableCount": 140,
+              "currentPrice": 10024.027561022127,
+              "fairPrice": 7173.791666666667
+            },
+            "description": "",
+            "id": "691c9bb0-b0e2-47b0-a5ae-ca415e0d1ca1",
+            "name": "Полюс Золото",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 140,
+              "currentPrice": 300.76222269288684,
+              "fairPrice": 419.95416666666665
+            },
+            "description": "",
+            "id": "0b1e7eb6-03f3-40d5-b651-304bb8498e77",
+            "name": "Роснефть",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 190,
+              "currentPrice": 1224.8158654957615,
+              "nominal": 1000,
+              "profitabilityPercent": 8.3
+            },
+            "description": "Текущая цена: 1224.8158654957615 ₽",
+            "id": "bfce3174-73c4-46ce-960a-3cf480c66085",
+            "name": "Томская область",
+            "type": "debenture-price-changed-event"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 12074.760517286273,
+              "fairPrice": 7763.166666666667
+            },
+            "description": "",
+            "id": "52c5c36a-9626-451a-862b-10454d5091a5",
+            "name": "Полюс Золото",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 130,
+              "currentPrice": 37.98980953899368,
+              "fairPrice": 36.187916666666666
+            },
+            "description": "",
+            "id": "872d2f46-7a3a-4738-b4e0-d43128977d98",
+            "name": "Сургутнефтегаз",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 110,
+              "currentPrice": 1175.8232308759311,
+              "nominal": 1000,
+              "profitabilityPercent": 8.3
+            },
+            "description": "Текущая цена: 1175.8232308759311 ₽",
+            "id": "654a6d07-ef7b-408a-aef6-d522e15b2089",
+            "name": "Томская область",
+            "type": "debenture-price-changed-event"
+          },
+          {
+            "data": {
+              "availableCount": 120,
+              "currentPrice": 124.35408053730642,
+              "fairPrice": 99.36666666666667
+            },
+            "description": "",
+            "id": "764d9181-3433-4667-adf8-f72fa04080dc",
+            "name": "Московская Биржа",
+            "type": "stock-price-changed-event"
+          },
+          {
+            "data": { "income": 30000 },
+            "description": "Вы получили наследство от дальнего родственника",
+            "id": "495628a0-198e-41f4-8d58-d89006e3694c",
+            "name": "Наследство",
+            "type": "income-event"
+          }
+        ]
+      }
+    ]
+  },
+  "id": "0449663b-9d9f-49da-926e-d1acdc5bbd9d",
+  "name": "Курьер, который хочет свободы",
+  "participants": {
+    "jueew9rLNEQP2n5vsFPcN3TDRk63": {
+      "account": { "cash": 39277.44337415511, "cashFlow": 2204.3333333333358, "credit": 0 },
+      "id": "jueew9rLNEQP2n5vsFPcN3TDRk63",
+      "possessionState": {
+        "assets": [
+          {
+            "averagePrice": 1188.6005234093932,
+            "count": 19,
+            "name": "ОФЗ 29006",
+            "nominal": 1000,
+            "profitabilityPercent": 7.3,
+            "type": "debenture"
+          },
+          {
+            "averagePrice": 1098.0978410431242,
+            "count": 9,
+            "name": "Республика Якутия",
+            "nominal": 1000,
+            "profitabilityPercent": 6.3,
+            "type": "debenture"
+          },
+          {
+            "buyPrice": 94000,
+            "downPayment": 14000,
+            "fairPrice": 122000,
+            "id": "d06363a5-fe05-4604-b80d-7c1ff0f72f86",
+            "name": "Грузоперевозки",
+            "passiveIncomePerMonth": 3500,
+            "payback": 45,
+            "sellProbability": 7,
+            "type": "business"
+          },
+          {
+            "averagePrice": 1135.3931356633009,
+            "count": 6,
+            "name": "Томская область",
+            "nominal": 1000,
+            "profitabilityPercent": 8.3,
+            "type": "debenture"
+          },
+          {
+            "averagePrice": 411.1739159033716,
+            "countInPortfolio": 11,
+            "fairPrice": 428.6458333333333,
+            "name": "Роснефть",
+            "type": "stock"
+          },
+          {
+            "buyPrice": 110000,
+            "downPayment": 23000,
+            "fairPrice": 118000,
+            "id": "5c7680fd-83d4-4239-a8a2-31a215b84112",
+            "name": "Грузоперевозки",
+            "passiveIncomePerMonth": 4500,
+            "payback": 49,
+            "sellProbability": 14,
+            "type": "business"
+          },
+          {
+            "cost": 3500,
+            "duration": 12,
+            "fromMonth": 30,
+            "id": "36c2da28-dfcf-4a4b-a88a-a8c37a1ff39f",
+            "insuranceType": "health",
+            "name": "Страхование здоровья",
+            "type": "insurance",
+            "value": 8000
+          },
+          {
+            "averagePrice": 4999.145288657491,
+            "countInPortfolio": 5,
+            "fairPrice": 5704,
+            "name": "ЛУКОЙЛ",
+            "type": "stock"
+          }
+        ],
+        "expenses": [
+          { "id": "expense1", "name": "Общее", "value": 11000 },
+          { "id": "23f2f75f-f400-4273-948c-3f16b76e5259", "name": "Ребёнок", "value": 5000 },
+          { "id": "35fcf73e-7b1e-48bd-ad44-670f02b6e326", "name": "Ребёнок", "value": 5000 },
+          { "id": "d06363a5-fe05-4604-b80d-7c1ff0f72f86", "name": "Грузоперевозки", "value": 0 },
+          { "id": "5c7680fd-83d4-4239-a8a2-31a215b84112", "name": "Грузоперевозки", "value": 0 }
+        ],
+        "incomes": [
+          { "id": "income1", "name": "Зарплата", "type": "salary", "value": 15000 },
+          { "name": "Облигации", "type": "investment", "value": 115.58333333333333 },
+          { "name": "Облигации", "type": "investment", "value": 47.25 },
+          {
+            "id": "d06363a5-fe05-4604-b80d-7c1ff0f72f86",
+            "name": "Бизнес",
+            "type": "business",
+            "value": 3500
+          },
+          { "name": "Облигации", "type": "investment", "value": 41.5 },
+          {
+            "id": "5c7680fd-83d4-4239-a8a2-31a215b84112",
+            "name": "Бизнес",
+            "type": "business",
+            "value": 4500
+          }
+        ],
+        "liabilities": [
+          {
+            "id": "d06363a5-fe05-4604-b80d-7c1ff0f72f86",
+            "monthlyPayment": 0,
+            "name": "Грузоперевозки",
+            "type": "business_credit",
+            "value": 80000
+          },
+          {
+            "id": "5c7680fd-83d4-4239-a8a2-31a215b84112",
+            "monthlyPayment": 0,
+            "name": "Грузоперевозки",
+            "type": "business_credit",
+            "value": 87000
+          }
+        ]
+      },
+      "possessions": {
+        "assets": [
+          {
+            "averagePrice": 1188.6005234093932,
+            "count": 19,
+            "name": "ОФЗ 29006",
+            "nominal": 1000,
+            "profitabilityPercent": 7.3,
+            "type": "debenture"
+          },
+          {
+            "averagePrice": 1098.0978410431242,
+            "count": 9,
+            "name": "Республика Якутия",
+            "nominal": 1000,
+            "profitabilityPercent": 6.3,
+            "type": "debenture"
+          },
+          {
+            "buyPrice": 94000,
+            "downPayment": 14000,
+            "fairPrice": 122000,
+            "id": "d06363a5-fe05-4604-b80d-7c1ff0f72f86",
+            "name": "Грузоперевозки",
+            "passiveIncomePerMonth": 3500,
+            "payback": 45,
+            "sellProbability": 7,
+            "type": "business"
+          },
+          {
+            "averagePrice": 1135.3931356633009,
+            "count": 6,
+            "name": "Томская область",
+            "nominal": 1000,
+            "profitabilityPercent": 8.3,
+            "type": "debenture"
+          },
+          {
+            "averagePrice": 411.1739159033716,
+            "countInPortfolio": 11,
+            "fairPrice": 428.6458333333333,
+            "name": "Роснефть",
+            "type": "stock"
+          },
+          {
+            "buyPrice": 110000,
+            "downPayment": 23000,
+            "fairPrice": 118000,
+            "id": "5c7680fd-83d4-4239-a8a2-31a215b84112",
+            "name": "Грузоперевозки",
+            "passiveIncomePerMonth": 4500,
+            "payback": 49,
+            "sellProbability": 14,
+            "type": "business"
+          },
+          {
+            "cost": 3500,
+            "duration": 12,
+            "fromMonth": 30,
+            "id": "36c2da28-dfcf-4a4b-a88a-a8c37a1ff39f",
+            "insuranceType": "health",
+            "name": "Страхование здоровья",
+            "type": "insurance",
+            "value": 8000
+          },
+          {
+            "averagePrice": 4999.145288657491,
+            "countInPortfolio": 5,
+            "fairPrice": 5704,
+            "name": "ЛУКОЙЛ",
+            "type": "stock"
+          }
+        ],
+        "expenses": [
+          { "id": "expense1", "name": "Общее", "value": 11000 },
+          { "id": "23f2f75f-f400-4273-948c-3f16b76e5259", "name": "Ребёнок", "value": 5000 },
+          { "id": "35fcf73e-7b1e-48bd-ad44-670f02b6e326", "name": "Ребёнок", "value": 5000 }
+        ],
+        "incomes": [{ "id": "income1", "name": "Зарплата", "type": "salary", "value": 15000 }],
+        "liabilities": [
+          {
+            "id": "d06363a5-fe05-4604-b80d-7c1ff0f72f86",
+            "monthlyPayment": 0,
+            "name": "Грузоперевозки",
+            "type": "business_credit",
+            "value": 80000
+          },
+          {
+            "id": "5c7680fd-83d4-4239-a8a2-31a215b84112",
+            "monthlyPayment": 0,
+            "name": "Грузоперевозки",
+            "type": "business_credit",
+            "value": 87000
+          }
+        ]
+      },
+      "progress": {
+        "currentEventIndex": 3,
+        "currentMonthForParticipant": 36,
+        "monthResults": [
+          {
+            "cash": 5000,
+            "totalAssets": 0,
+            "totalExpense": 11000,
+            "totalIncome": 15000,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": -3954.9728622438215,
+            "totalAssets": 4954.9728622438215,
+            "totalExpense": 16000,
+            "totalIncome": 15000,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": 3575.5541900813705,
+            "totalAssets": 6424.4458099186295,
+            "totalExpense": 16000,
+            "totalIncome": 15000,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": 2575.5541900813705,
+            "totalAssets": 6424.4458099186295,
+            "totalExpense": 16000,
+            "totalIncome": 15000,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": 2297.427710058756,
+            "totalAssets": 2472.5253133049464,
+            "totalExpense": 16000,
+            "totalIncome": 15000,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": 50.65971539208999,
+            "totalAssets": 3725.376641304946,
+            "totalExpense": 16000,
+            "totalIncome": 15006.083333333334,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": 8056.743048725424,
+            "totalAssets": 3725.376641304946,
+            "totalExpense": 16000,
+            "totalIncome": 15006.083333333334,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": 6928.641577022514,
+            "totalAssets": 4106.776190972511,
+            "totalExpense": 16000,
+            "totalIncome": 15018.25,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": -56.57735726206113,
+            "totalAssets": 10154.00025841664,
+            "totalExpense": 16000,
+            "totalIncome": 15048.666666666666,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": -1007.9106905953951,
+            "totalAssets": 10154.00025841664,
+            "totalExpense": 16000,
+            "totalIncome": 15048.666666666666,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": 15760.757813921127,
+            "totalAssets": 12433.998420566782,
+            "totalExpense": 16000,
+            "totalIncome": 15048.666666666666,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": -315.7540114228086,
+            "totalAssets": 27559.176912577386,
+            "totalExpense": 16000,
+            "totalIncome": 15048.666666666666,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": 9757.07847599009,
+            "totalAssets": 18244.298061105877,
+            "totalExpense": 16000,
+            "totalIncome": 15079.083333333334,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": 8836.161809323425,
+            "totalAssets": 18244.298061105877,
+            "totalExpense": 16000,
+            "totalIncome": 15079.083333333334,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": 1576.819136924436,
+            "totalAssets": 30093.224066838196,
+            "totalExpense": 16000,
+            "totalIncome": 15089.583333333334,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": -903.8859626525771,
+            "totalAssets": 31669.595833081876,
+            "totalExpense": 16000,
+            "totalIncome": 15095.666666666666,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": 669.8554868931499,
+            "totalAssets": 29276.132683882555,
+            "totalExpense": 16000,
+            "totalIncome": 15095.666666666666,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": 619.8164024676662,
+            "totalAssets": 25159.24914196536,
+            "totalExpense": 16000,
+            "totalIncome": 15095.666666666666,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": 19781.880989733785,
+            "totalAssets": 35129.601221365905,
+            "totalExpense": 16000,
+            "totalIncome": 15132.416666666666,
+            "totalLiabilities": 0
+          },
+          {
+            "cash": 7311.9277266618155,
+            "totalAssets": 130238.05448443787,
+            "totalExpense": 16000,
+            "totalIncome": 18638.5,
+            "totalLiabilities": 80000
+          },
+          {
+            "cash": 2955.950303125768,
+            "totalAssets": 137256.86524130724,
+            "totalExpense": 16000,
+            "totalIncome": 18662.833333333336,
+            "totalLiabilities": 80000
+          },
+          {
+            "cash": 3392.7159152981803,
+            "totalAssets": 139496.7662958015,
+            "totalExpense": 16000,
+            "totalIncome": 18676.666666666668,
+            "totalLiabilities": 80000
+          },
+          {
+            "cash": 9069.382581964848,
+            "totalAssets": 139496.7662958015,
+            "totalExpense": 16000,
+            "totalIncome": 18676.666666666668,
+            "totalLiabilities": 80000
+          },
+          {
+            "cash": 8466.825045892569,
+            "totalAssets": 148071.84602031283,
+            "totalExpense": 16000,
+            "totalIncome": 18676.666666666668,
+            "totalLiabilities": 80000
+          },
+          {
+            "cash": 5519.802754614301,
+            "totalAssets": 153702.45164492444,
+            "totalExpense": 16000,
+            "totalIncome": 18683.583333333336,
+            "totalLiabilities": 80000
+          },
+          {
+            "cash": 8203.386087947638,
+            "totalAssets": 153702.45164492444,
+            "totalExpense": 16000,
+            "totalIncome": 18683.583333333336,
+            "totalLiabilities": 80000
+          },
+          {
+            "cash": 29886.969421280974,
+            "totalAssets": 153702.45164492444,
+            "totalExpense": 21000,
+            "totalIncome": 18683.583333333336,
+            "totalLiabilities": 80000
+          },
+          {
+            "cash": 27570.55275461431,
+            "totalAssets": 153702.45164492444,
+            "totalExpense": 21000,
+            "totalIncome": 18683.583333333336,
+            "totalLiabilities": 80000
+          },
+          {
+            "cash": 5205.263556865271,
+            "totalAssets": 266002.5635419684,
+            "totalExpense": 21000,
+            "totalIncome": 23204.333333333336,
+            "totalLiabilities": 167000
+          },
+          {
+            "cash": 18547.169817442555,
+            "totalAssets": 255801.5624030835,
+            "totalExpense": 21000,
+            "totalIncome": 23204.333333333336,
+            "totalLiabilities": 167000
+          },
+          {
+            "cash": 17251.50315077589,
+            "totalAssets": 263801.5624030835,
+            "totalExpense": 21000,
+            "totalIncome": 23204.333333333336,
+            "totalLiabilities": 167000
+          },
+          {
+            "cash": 25455.836484109226,
+            "totalAssets": 263801.5624030835,
+            "totalExpense": 21000,
+            "totalIncome": 23204.333333333336,
+            "totalLiabilities": 167000
+          },
+          {
+            "cash": 27660.169817442562,
+            "totalAssets": 263801.5624030835,
+            "totalExpense": 21000,
+            "totalIncome": 23204.333333333336,
+            "totalLiabilities": 167000
+          },
+          {
+            "cash": 4868.776707488443,
+            "totalAssets": 288797.28884637094,
+            "totalExpense": 21000,
+            "totalIncome": 23204.333333333336,
+            "totalLiabilities": 167000
+          },
+          {
+            "cash": 7073.110040821779,
+            "totalAssets": 288797.28884637094,
+            "totalExpense": 21000,
+            "totalIncome": 23204.333333333336,
+            "totalLiabilities": 167000
+          },
+          {
+            "cash": 39277.44337415511,
+            "totalAssets": 288797.28884637094,
+            "totalExpense": 21000,
+            "totalIncome": 23204.333333333336,
+            "totalLiabilities": 167000
+          }
+        ],
+        "progress": 0,
+        "status": "player_move"
+      },
+      "updatedAt": 1612280775000
+    }
+  },
+  "participantsIds": ["jueew9rLNEQP2n5vsFPcN3TDRk63"],
+  "state": {
+    "gameStatus": "players_move",
+    "monthNumber": 36,
+    "moveStartDateInUTC": "2021-02-02T15:27:54.107Z",
+    "winners": [{ "targetValue": 0, "userId": "jueew9rLNEQP2n5vsFPcN3TDRk63" }]
+  },
+  "target": { "type": "passive_income", "value": 15000 },
+  "type": "singleplayer",
+  "updatedAt": 1612280761000
+}

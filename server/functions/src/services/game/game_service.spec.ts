@@ -1,0 +1,187 @@
+/// <reference types="@types/jest"/>
+
+import produce from 'immer';
+import { mock, instance, when, capture, verify, anything, reset } from 'ts-mockito';
+import { GameProvider } from '../../providers/game_provider';
+import { GameService } from './game_service';
+import { GameContext } from '../../models/domain/game/game_context';
+import { TestData } from './game_service.spec.utils';
+import { GameLevelsProvider } from '../../providers/game_levels_provider';
+import { UserProvider } from '../../providers/user_provider';
+import { TimerProvider } from '../../providers/timer_provider';
+
+describe('Game Service - Singleplayer game', () => {
+  const mockGameProvider = mock(GameProvider);
+  const mockUserProvider = mock(UserProvider);
+  const mockGameLevelsProvider = mock(GameLevelsProvider);
+  const mockTimerProvider = mock(TimerProvider);
+
+  let gameService: GameService;
+
+  beforeEach(() => {
+    reset(mockGameProvider);
+    reset(mockUserProvider);
+    reset(mockGameLevelsProvider);
+    reset(mockTimerProvider);
+
+    gameService = new GameService(
+      instance(mockGameProvider),
+      instance(mockGameLevelsProvider),
+      instance(mockUserProvider),
+      instance(mockTimerProvider)
+    );
+
+    const gameLevelsProvider = new GameLevelsProvider();
+    when(mockGameLevelsProvider.getGameLevels()).thenReturn(gameLevelsProvider.getGameLevels());
+  });
+
+  test('Successfully handle not last game event', async () => {
+    const { gameId, userId, game, firstEventId, firstEventPlayerAction } = TestData;
+
+    when(mockGameProvider.getGame(gameId)).thenResolve(game);
+
+    const gameContext: GameContext = { gameId, userId };
+    await gameService.handlePlayerAction(firstEventId, firstEventPlayerAction, gameContext);
+
+    const expectedAccount = produce(game.participants[userId].account, (draft) => {
+      const firstEventAssetCost = 1_100;
+      draft.cash -= firstEventAssetCost;
+    });
+
+    const expectedGameState = produce(game.state, (draft) => {
+      draft.winners = [{ userId, targetValue: 0.0189 }];
+    });
+
+    const expectedParticipantState = produce(game.participants[userId].progress, (draft) => {
+      draft.currentEventIndex = 1;
+      draft.progress = 0.0189;
+    });
+
+    const [newGame] = capture(mockGameProvider.updateGameForUser).last();
+
+    expect(newGame.participants[userId].account).toStrictEqual(expectedAccount);
+    expect(newGame.participants[userId].progress).toStrictEqual(expectedParticipantState);
+    expect(newGame.participants[userId].possessions).not.toStrictEqual(
+      game.participants[userId].possessions
+    );
+    expect(newGame.state).toStrictEqual(expectedGameState);
+  });
+
+  test('Successfully handle last game event', async () => {
+    const { gameId, game, userId, lastEventId, lastEventPlayerAction } = TestData;
+
+    when(mockGameProvider.getGame(gameId)).thenResolve(game);
+
+    const gameContext: GameContext = { gameId, userId };
+    await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
+
+    const expectedAccount = produce(game.participants[userId].account, (draft) => {
+      const lastEventAssetCost = 900;
+      const newCash = draft.cash + draft.cashFlow - lastEventAssetCost;
+      draft.cash = newCash;
+    });
+
+    const expectedParticipantState = produce(game.participants[userId].progress, (draft) => {
+      draft.currentEventIndex = 1;
+      draft.status = 'month_result';
+      draft.progress = 0.0291;
+      draft.monthResults['1'] = {
+        cash: 29_100,
+        totalIncome: 10_005,
+        totalExpense: 0,
+        totalAssets: 900,
+        totalLiabilities: 0,
+      };
+    });
+
+    const expectedGameState = produce(game.state, (draft) => {
+      draft.monthNumber += 1;
+      draft.winners = [{ userId, targetValue: 0.0291 }];
+    });
+
+    const [newGame] = capture(mockGameProvider.updateGame).last();
+
+    expect(newGame.participants[userId].account).toStrictEqual(expectedAccount);
+    expect(newGame.participants[userId].progress).toStrictEqual(expectedParticipantState);
+    expect(newGame.participants[userId].possessions).not.toStrictEqual(
+      game.participants[userId].possessions
+    );
+    expect(newGame.state).toStrictEqual(expectedGameState);
+    expect(newGame.currentEvents).not.toStrictEqual(game.currentEvents);
+  });
+
+  test('Successfully game over', async () => {
+    const { gameId, userId, lastEventId, lastEventPlayerAction } = TestData;
+    const game = produce(TestData.game, (draft) => {
+      const participant = draft.participants[userId];
+      participant.account.cash = 999999;
+    });
+
+    when(mockGameProvider.getGame(gameId)).thenResolve(game);
+
+    const gameContext: GameContext = { gameId, userId };
+    await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
+
+    const expectedAccount = produce(game.participants[userId].account, (draft) => {
+      const lastEventAssetCost = 900;
+      const newCash = draft.cash + draft.cashFlow - lastEventAssetCost;
+      draft.cash = newCash;
+    });
+
+    const expectedGameState = produce(game.state, (draft) => {
+      draft.monthNumber += 1;
+      draft.gameStatus = 'game_over';
+      draft.winners = [{ userId, targetValue: 1.009099 }];
+    });
+
+    const expectedParticipantProgress = produce(game.participants[userId].progress, (draft) => {
+      draft.currentEventIndex = 1;
+      draft.status = 'month_result';
+      draft.progress = 1.009099;
+    });
+
+    const [newGame] = capture(mockGameProvider.updateGame).last();
+
+    expect(newGame.participants[userId].account).toStrictEqual(expectedAccount);
+    expect(newGame.participants[userId].progress).toStrictEqual(expectedParticipantProgress);
+    expect(newGame.participants[userId].possessions).not.toStrictEqual(
+      game.participants[userId].possessions
+    );
+    expect(newGame.state).toStrictEqual(expectedGameState);
+    expect(newGame.currentEvents).toStrictEqual(game.currentEvents);
+  });
+
+  test('Can not update completed game', async () => {
+    const { gameId, userId, lastEventId, lastEventPlayerAction } = TestData;
+    const game = produce(TestData.game, (draft) => {
+      const participant = draft.participants[userId];
+      participant.account.cash = 1_000_000;
+      draft.state.gameStatus = 'game_over';
+    });
+
+    when(mockGameProvider.getGame(gameId)).thenResolve(game);
+
+    const gameContext: GameContext = { gameId, userId };
+    await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
+
+    verify(mockGameProvider.updateGame(anything())).never();
+  });
+
+  test('Successfully removed completed singleplayer game', async () => {
+    const { gameId, game, userId, lastEventId, lastEventPlayerAction } = TestData;
+
+    const singleplayerGame = produce(game, (draft) => {
+      const participant = draft.participants[userId];
+      participant.account.cash = 1_100_000;
+      draft.type = 'singleplayer';
+      draft.config.level = null;
+    });
+
+    when(mockGameProvider.getGame(gameId)).thenResolve(singleplayerGame);
+
+    const gameContext: GameContext = { gameId, userId };
+    await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
+
+    verify(mockUserProvider.removeGameFromLastGames(userId, gameId)).once();
+  });
+});

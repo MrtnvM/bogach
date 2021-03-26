@@ -1,0 +1,33 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+
+    match /avatar/{filename} {
+      allow read, write: if request.auth != null;
+    }
+
+    match /avatars/{filename} {
+      allow read, write: if request.auth != null;
+    }
+
+    match /assets/{filename} {
+      allow read, write: if request.auth != null;
+    }
+
+    match /game_images/{filename} { 
+      allow read, write: if request.auth != null;
+    }
+    
+    match /quest_icons_images/{filename} { 
+      allow read, write: if request.auth != null;
+    }
+      
+    match /users/{uid}/{allPaths=**} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}

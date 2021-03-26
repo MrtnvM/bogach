@@ -1,0 +1,22 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.mobile.bogach.staging",
+      "sha256_cert_fingerprints": [
+        "8E:E1:9A:61:31:45:F1:50:28:50:72:0D:F0:CC:A0:CC:99:F3:DD:F6:0C:98:E9:1C:46:E2:7D:EC:A4:BD:77:8A"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.mobile.bogach",
+      "sha256_cert_fingerprints": [
+        "8E:E1:9A:61:31:45:F1:50:28:50:72:0D:F0:CC:A0:CC:99:F3:DD:F6:0C:98:E9:1C:46:E2:7D:EC:A4:BD:77:8A"
+      ]
+    }
+  }
+]

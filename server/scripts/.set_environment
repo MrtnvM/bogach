@@ -1,0 +1,28 @@
+CURRENT_PATH=$(pwd) 
+ENV=$1
+
+if [[ $ENV =~ (staging|uat) ]]; then 
+    echo "Environment: $ENV"
+else 
+    echo "\033[1;31mERROR: Environment should be one of the values - staging, uat \033[0m"
+    exit 1
+fi
+
+if [[ "$CURRENT_PATH" != */server ]]; then
+    echo "\033[1;31mERROR: Script should be executed from server folder \033[0m"
+    exit 1
+fi
+
+if [ -f "google_application_credentials.json" ]; then
+    rm google_application_credentials.json
+fi
+
+if [ -f "firebase_service_account.json" ]; then
+    rm firebase_service_account.json
+fi
+
+cp "./environments/$ENV/google_application_credentials.json" "./google_application_credentials.json"
+echo "Changed google_application_credentials to $ENV version"
+
+cp "./environments/$ENV/firebase_service_account.json" "./firebase_service_account.json"
+echo "Changed firebase_service_account to $ENV version"
