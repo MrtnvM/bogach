@@ -337,6 +337,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  device_info:
+    dependency: transitive
+    description:
+      name: device_info
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0"
   device_preview:
     dependency: "direct main"
     description:
@@ -386,6 +393,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.0-nullsafety.3"
+  fimber:
+    dependency: "direct main"
+    description:
+      name: fimber
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.4"
   firebase:
     dependency: transitive
     description:
@@ -568,6 +582,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.11"
+  flutter_rollbar:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "97655c249a8dd09883453ff23ca2186110da5e11"
+      url: "https://github.com/robertBadamshin/flutter_rollbar"
+    source: git
+    version: "0.0.2"
   flutter_secure_storage:
     dependency: "direct main"
     description:

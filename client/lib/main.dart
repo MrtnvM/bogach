@@ -21,11 +21,15 @@ import 'package:cash_flow/features/profile/actions/set_current_user_action.dart'
 import 'package:cash_flow/features/purchase/actions/listening_purchases_actions.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/utils/core/launch_counter.dart';
+import 'package:cash_flow/utils/core/logging/firebase_tree.dart';
+import 'package:cash_flow/utils/core/logging/logger_tree.dart';
+import 'package:cash_flow/utils/core/logging/rollbar_tree.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
+import 'package:fimber/fimber.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rollbar/flutter_rollbar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -38,12 +42,16 @@ Future<void> main({
   @required CashApiEnvironment environment,
 }) async {
   environment = environment ?? CashApiEnvironment.production;
-  WidgetsFlutterBinding.ensureInitialized();
 
+  Fimber.plantTree(FirebaseReportingTree());
+  Fimber.plantTree(RollbarTree(environmentName: environment.name));
   if (environment.isLoggerEnabled) {
     Logger.init();
     Logger.enabled = true;
+    Fimber.plantTree(LoggerTree());
   }
+
+  WidgetsFlutterBinding.ensureInitialized();
 
   await initializeFirebase(environment);
   await AppConfiguration.init(environment: environment);
@@ -109,7 +117,9 @@ Future<void> main({
         ),
       ),
     );
-  }, FirebaseCrashlytics.instance.recordError);
+  }, (error, stack) {
+    Fimber.e('runZonedGuarded error:', ex: error, stacktrace: stack);
+  });
 }
 
 Future<void> initializeFirebase(CashApiEnvironment environment) async {

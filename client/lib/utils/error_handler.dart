@@ -1,6 +1,7 @@
+import 'package:cash_flow/models/network/core/response_model.dart';
 import 'package:cash_flow/models/network/errors/email_has_been_taken_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:fimber/fimber.dart';
 import 'package:flutter/services.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 
@@ -23,24 +24,36 @@ void recordError(dynamic error, [dynamic stacktrace]) {
   throw error;
 }
 
-void _recordError(dynamic error, dynamic stacktrace) {
-  if (stacktrace != null) {
-    FirebaseCrashlytics.instance.log(stacktrace.toString());
-  }
+String _getErrorMessage(dynamic error) {
+  const prefix = 'network request error:';
 
-  if (error is NetworkConnectionException ||
-      error is InvalidCredentialsException ||
+  if (error is RequestErrorException || error is NetworkConnectionException) {
+    final dioError = error.error;
+    final message = dioError.message;
+    final uri = dioError.request.uri;
+
+    return '$prefix; message: $message; url: $uri';
+  } else if (error is ResponseErrorModel) {
+    final response = error.response;
+    final message = response.statusMessage;
+    final uri = response.realUri.query;
+    return '$prefix; status: $message; url: $uri';
+  } else {
+    return '$prefix $error';
+  }
+}
+
+void _recordError(dynamic error, dynamic stacktrace) {
+  if (error is InvalidCredentialsException ||
       error is EmailHasBeenTakenException) {
     return;
   }
 
-  if (error is RequestErrorException) {
-    final exception = error.error;
+  final message = _getErrorMessage(error);
 
-    if (exception != null) {
-      FirebaseCrashlytics.instance.log(exception.toString());
-    }
-  }
-
-  FirebaseCrashlytics.instance.recordError(error, stacktrace);
+  Fimber.e(
+    message,
+    ex: error,
+    stacktrace: stacktrace,
+  );
 }
