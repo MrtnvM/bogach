@@ -9,7 +9,7 @@ class RollbarTree extends LogTree {
   }) {
     Rollbar()
       ..accessToken = 'f37216d51fe449f19afad8eff9d8b519'
-      ..environment = environmentName;
+      ..environment = '${environmentName}_client';
   }
 
   static const List<String> defaultLevels = ['V', 'D', 'I', 'W', 'E'];
