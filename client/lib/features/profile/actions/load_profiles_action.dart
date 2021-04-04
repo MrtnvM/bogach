@@ -18,15 +18,13 @@ class LoadProfilesAction extends BaseAction {
 
   @override
   Future<AppState> reduce() async {
-    // final userService = GetIt.I.get<UserService>();
+    final userService = GetIt.I.get<UserService>();
 
-    // final profiles = await userService.loadProfiles(ids);
+    final profiles = await userService.loadProfiles(ids);
 
-    // return state.rebuild((s) {
-    //   final userProfiles = [...s.multiplayer.userProfiles.items, ...profiles];
-    //   s.multiplayer.userProfiles = StoreList<UserProfile>(userProfiles);
-    // });
-
-    return null;
+    return state.rebuild((s) {
+      final userProfiles = [...s.multiplayer.userProfiles.items, ...profiles];
+      s.multiplayer.userProfiles = StoreList<UserProfile>(userProfiles);
+    });
   }
 }

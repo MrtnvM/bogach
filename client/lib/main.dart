@@ -29,7 +29,6 @@ import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:fimber/fimber.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rollbar/flutter_rollbar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -43,13 +42,7 @@ Future<void> main({
 }) async {
   environment = environment ?? CashApiEnvironment.production;
 
-  Fimber.plantTree(FirebaseReportingTree());
-  Fimber.plantTree(RollbarTree(environmentName: environment.name));
-  if (environment.isLoggerEnabled) {
-    Logger.init();
-    Logger.enabled = true;
-    Fimber.plantTree(LoggerTree());
-  }
+  initLogging(environment.name, environment.isLoggerEnabled);
 
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -132,4 +125,14 @@ void configurePurchases() {
 
 void configureAnalytics(CashApiEnvironment environment) {
   AnalyticsSender.isEnabled = environment.isAnalyticsEnabled;
+}
+
+void initLogging(String environmentName, isLoggerEnabled) {
+  Fimber.plantTree(FirebaseReportingTree());
+  Fimber.plantTree(RollbarTree(environmentName: environmentName));
+  if (isLoggerEnabled) {
+    Logger.init();
+    Logger.enabled = true;
+    Fimber.plantTree(LoggerTree());
+  }
 }

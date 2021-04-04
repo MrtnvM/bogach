@@ -4,7 +4,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 class FirebaseReportingTree extends LogTree {
   FirebaseReportingTree({this.logLevels = defaultLevels});
 
-  static const List<String> defaultLevels = ['W', 'E'];
+  static const List<String> defaultLevels = ['V', 'D', 'I', 'W', 'E'];
   final List<String> logLevels;
 
   @override

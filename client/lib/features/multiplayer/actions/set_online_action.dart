@@ -24,7 +24,7 @@ class SetUserOnlineAction extends BaseAction {
     final onlineProfileRequest = multiplayerService.setUserOnline(user);
     final onlineProfiles =
         await onlineProfileRequest.catchError((error, stacktrace) {
-      Fimber.e('SetUserOnlineAction', ex: error, stacktrace: stacktrace);
+      Fimber.e('SetUserOnlineActionError', ex: error, stacktrace: stacktrace);
       return <OnlineProfile>[];
     });
 
