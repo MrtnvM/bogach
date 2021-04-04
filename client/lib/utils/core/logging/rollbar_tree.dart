@@ -26,8 +26,7 @@ class RollbarTree extends LogTree {
     var level = RollbarLogLevel.INFO;
     var telemetryType = RollbarTelemetryType.LOG;
 
-    if (ex != null) {
-      rollbarMessage += ' ${ex.message}';
+    if (ex != null && ex is Exception) {
       rollbarMessage += ';\n exception: $ex';
       level = RollbarLogLevel.ERROR;
       telemetryType = RollbarTelemetryType.ERROR;

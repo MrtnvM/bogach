@@ -33,7 +33,7 @@ class CashFlowApiClient extends ApiClient {
       );
 
   Future<List<Quest>> getQuests(String userId) => get(
-        path: 'gameLevelsddd?user_id=$userId',
+        path: 'gameLevels?user_id=$userId',
         responseMapper: rm.jsonArray(
           (json) => json.map((item) => Quest.fromJson(item)).toList(),
         ),
