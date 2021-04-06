@@ -119,18 +119,21 @@ export class ErrorRecorder {
       const errorInfo =
         `${this.component.toUpperCase()}\n` +
         `ENVIRONMENT: ${environment}\n` +
-        `ERROR MESSAGE: ${errorMessage}\n` +
-        `CONTEXT: ${JSON.stringify(context, null, 2)}`;
+        `ERROR MESSAGE: ${errorMessage}\n`;
+      +`CONTEXT: ${JSON.stringify(context, null, 2)}`;
 
-      const error = new Error(errorInfo);
+      const errorName = `${this.component.toUpperCase()}, ENVIRONMENT: ${environment},
+         ERROR MESSAGE: ${errorMessage}, CONTEXT: ${JSON.stringify(context, null, 2)}`;
 
-      if (environment === 'local' || err['type'] === 'domain') {
+      //const error = new Error(errorInfo);
+
+      if (environment === 'local' || err['type'] !== 'domain') {
         console.error(errorInfo);
-        throw error;
+        throw err;
       }
 
-      rollbar.error(error, `COMPONENT: ${this.component}, ` + `ENVIRONMENT: ${environment}`);
-      throw error;
+      rollbar.error(err, errorName);
+      throw err;
     }
   }
 }

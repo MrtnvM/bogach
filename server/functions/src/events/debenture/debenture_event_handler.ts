@@ -124,7 +124,7 @@ export class DebentureEventHandler extends PlayerActionHandler {
 
     const isEnoughMoney = userAccount.cash >= totalPrice;
     if (!isEnoughMoney) {
-      throw DomainErrors.notEnoughCash;
+      throw DomainErrors.notEnoughDebenturesOnMarket;
     }
 
     const isEnoughCountAvailable = availableCount >= actionCount;

@@ -24,6 +24,7 @@ import 'package:cash_flow/utils/core/launch_counter.dart';
 import 'package:cash_flow/utils/core/logging/firebase_tree.dart';
 import 'package:cash_flow/utils/core/logging/logger_tree.dart';
 import 'package:cash_flow/utils/core/logging/rollbar_tree.dart';
+import 'package:cash_flow/utils/debug.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:fimber/fimber.dart';
@@ -128,8 +129,11 @@ void configureAnalytics(CashApiEnvironment environment) {
 }
 
 void initLogging(String environmentName, isLoggerEnabled) {
-  Fimber.plantTree(FirebaseReportingTree());
-  Fimber.plantTree(RollbarTree(environmentName: environmentName));
+  release(() {
+    Fimber.plantTree(FirebaseReportingTree());
+    Fimber.plantTree(RollbarTree(environmentName: environmentName));
+  });
+
   if (isLoggerEnabled) {
     Logger.init();
     Logger.enabled = true;
