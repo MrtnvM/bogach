@@ -5,7 +5,6 @@ import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/models/domain/user/online/online_profile.dart';
 import 'package:cash_flow/services/multiplayer_service.dart';
-import 'package:fimber/fimber_base.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
@@ -24,7 +23,6 @@ class SetUserOnlineAction extends BaseAction {
     final onlineProfileRequest = multiplayerService.setUserOnline(user);
     final onlineProfiles =
         await onlineProfileRequest.catchError((error, stacktrace) {
-      Fimber.e("SetUserOnlineAction", ex: error, stacktrace: stacktrace);
       return <OnlineProfile>[];
     });
 
