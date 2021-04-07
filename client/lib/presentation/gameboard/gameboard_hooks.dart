@@ -105,7 +105,19 @@ bool Function(double price) useIsEnoughCashValidator() {
   final context = useContext();
 
   return (price) {
-    return true;
+    final isEnoughCash = price <= account.cash;
+
+    if (!isEnoughCash) {
+      final error = DomainGameError(
+        type: 'domain',
+        code: 'not_enough_cash',
+        message: {'ru': Strings.notEnoughCashError},
+      );
+
+      handleError(context: context, exception: error);
+    }
+
+    return isEnoughCash;
   };
 }
 
