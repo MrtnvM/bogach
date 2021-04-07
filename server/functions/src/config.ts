@@ -121,7 +121,7 @@ export class ErrorRecorder {
         `ENVIRONMENT: ${environment}, ` +
         `CONTEXT: ${JSON.stringify(context, null, 2)}`;
 
-      if (environment === 'local' || error['type'] !== 'domain') {
+      if (environment === 'local' || error['type'] === 'domain') {
         console.error(errorInfo);
         throw error;
       }
