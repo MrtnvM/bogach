@@ -87,7 +87,6 @@ export const getCredentials = () => {
 };
 
 /// Rollbar
-
 export const rollbar = new Rollbar({
   accessToken: '30d4dbdf62264a4cb93cda53ea80bebe',
   captureUncaught: true,
@@ -105,35 +104,30 @@ export class ErrorRecorder {
 
     try {
       return await callback();
-    } catch (err) {
+    } catch (error) {
       if (!ErrorRecorder.isEnabled) {
-        throw err;
+        throw error;
       }
 
-      let errorMessage = (err && err['message']) || err;
+      let errorMessage = (error && error['message']) || error;
 
       if (typeof errorMessage === 'object') {
         errorMessage = JSON.stringify(errorMessage);
       }
 
       const errorInfo =
-        `${this.component.toUpperCase()}\n` +
-        `ENVIRONMENT: ${environment}\n` +
-        `ERROR MESSAGE: ${errorMessage}\n`;
-      +`CONTEXT: ${JSON.stringify(context, null, 2)}`;
+        `ERROR MESSAGE: ${errorMessage}, ` +
+        `COMPONENT: ${this.component.toUpperCase()}, ` +
+        `ENVIRONMENT: ${environment}, ` +
+        `CONTEXT: ${JSON.stringify(context, null, 2)}`;
 
-      const errorName = `${this.component.toUpperCase()}, ENVIRONMENT: ${environment},
-         ERROR MESSAGE: ${errorMessage}, CONTEXT: ${JSON.stringify(context, null, 2)}`;
-
-      //const error = new Error(errorInfo);
-
-      if (environment === 'local' || err['type'] !== 'domain') {
+      if (environment === 'local' || error['type'] !== 'domain') {
         console.error(errorInfo);
-        throw err;
+        throw error;
       }
 
-      rollbar.error(err, errorName);
-      throw err;
+      rollbar.error(error, errorInfo);
+      throw error;
     }
   }
 }
