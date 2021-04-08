@@ -13,6 +13,16 @@ class LoggerTree extends LogTree {
   @override
   void log(String level, String message,
       {String tag, dynamic ex, StackTrace stacktrace}) {
-    Logger.e(message, ex, stacktrace);
+    if (level == 'V') {
+      Logger.v(message, ex, stacktrace);
+    } else if (level == 'D') {
+      Logger.d(message, ex, stacktrace);
+    } else if (level == 'I') {
+      Logger.i(message, ex, stacktrace);
+    } else if (level == 'W') {
+      Logger.w(message, ex, stacktrace);
+    } else if (level == 'E') {
+      Logger.e(message, ex, stacktrace);
+    }
   }
 }
