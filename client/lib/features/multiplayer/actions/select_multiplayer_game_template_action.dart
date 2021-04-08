@@ -12,7 +12,7 @@ class SelectMultiplayerGameTemplateAction extends BaseAction {
   AppState reduce() {
     return state.rebuild((s) {
       s.multiplayer.selectedGameTemplate = gameTemplate;
-      s.multiplayer.currentRoom = null;
+      s.multiplayer.createdRoomId = null;
     });
   }
 }

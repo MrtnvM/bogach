@@ -7,6 +7,7 @@ class GameTemplateItem extends HookWidget {
   const GameTemplateItem({
     @required this.gameTemplate,
     @required this.onStartNewGamePressed,
+    this.canContinueGame,
     this.onContinueGamePressed,
     this.onSelectionChanged,
     this.selectedItemId,
@@ -14,6 +15,7 @@ class GameTemplateItem extends HookWidget {
 
   final String selectedItemId;
   final GameTemplate gameTemplate;
+  final bool Function(GameTemplate) canContinueGame;
   final void Function(GameTemplate) onStartNewGamePressed;
   final void Function(GameTemplate) onContinueGamePressed;
   final void Function(String) onSelectionChanged;
@@ -36,9 +38,9 @@ class GameTemplateItem extends HookWidget {
       imageUrl: gameTemplate.image,
       startGame: startGame,
       continueGame: continueGame,
-      isCollapsed: selectedItemId == gameTemplate.id,
+      isShowingActionsButtons: selectedItemId == gameTemplate.id,
       onTap: () {
-        if (onContinueGamePressed == null) {
+        if (canContinueGame == null || !canContinueGame(gameTemplate)) {
           startGame();
           return;
         }

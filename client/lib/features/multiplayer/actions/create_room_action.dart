@@ -32,7 +32,8 @@ class CreateRoomAction extends BaseAction {
     final room = await gameService.createRoom(requestModel);
 
     return state.rebuild((s) {
-      s.multiplayer.currentRoom = room;
+      s.multiplayer.createdRoomId = room.id;
+      s.multiplayer.rooms[room.id] = room;
     });
   }
 
@@ -40,10 +41,10 @@ class CreateRoomAction extends BaseAction {
   void after() {
     super.after();
 
-    final room = state.multiplayer.currentRoom;
+    final roomId = state.multiplayer.createdRoomId;
 
-    if (room != null) {
-      dispatch(StartListeningRoomUpdatesAction(room.id));
+    if (roomId != null) {
+      dispatch(StartListeningRoomUpdatesAction(roomId));
     }
   }
 }

@@ -1,4 +1,4 @@
-import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/chart/dot/dot_user_progress_chart.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class ProgressTab extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final game = useGlobalState((s) => s.game.currentGame);
+    final game = useCurrentGame((g) => g);
 
     return ContainerWithHeaderImage(
       navBarTitle: Strings.progressTabTitle,

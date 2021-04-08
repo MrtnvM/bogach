@@ -89,9 +89,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string></string>
+	<string>This app requires access to the camera for the creation of your avatar image</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
+	<string>This app requires access to the photo library for the selection of your avatar image</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

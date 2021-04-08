@@ -1,4 +1,5 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
@@ -42,17 +43,20 @@ class MultiplayerGameList extends HookWidget {
     final gameTemplates = useGlobalState((s) => s.newGame.gameTemplates);
     final dispatch = useDispatcher();
     final availableMultiplayerGamesCount = useAvailableMultiplayerGamesCount();
+    final context = useContext();
 
     final Function(GameTemplate) onGameTemplateSelected = (template) async {
       await dispatch(SelectMultiplayerGameTemplateAction(template));
 
-      dispatch(CreateRoomAction(selectedProfiles))
-          .then((_) => appRouter.goTo(RoomPage()))
-          .catchError((error) {
+      dispatch(CreateRoomAction(selectedProfiles)).then((_) {
+        final appState = StoreProvider.state<AppState>(context);
+        final roomId = appState.multiplayer.createdRoomId;
+
+        appRouter.goTo(RoomPage(roomId: roomId));
+      }).catchError((error) {
         Logger.e('ERROR: On room creation with template ID: ${template.id}');
         Logger.e(error);
 
-        // TODO(Maxim): Show detailed error
         handleError(context: context, exception: error);
       });
     };

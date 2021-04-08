@@ -284,30 +284,40 @@ class PurchaseService {
   }
 
   Future<PurchaseProfile> buyQuestsAccess(String userId) async {
-    final purchaseProfile = await restorePastPurchases(userId);
+    try {
+      final purchaseProfile = await restorePastPurchases(userId);
 
-    if (purchaseProfile.isQuestsAvailable) {
-      return purchaseProfile;
+      if (purchaseProfile?.isQuestsAvailable == true) {
+        return purchaseProfile;
+      }
+
+      final updatedPurchaseProfile = await buyNonConsumableProduct(
+        productId: questsAccessProductId,
+        userId: userId,
+      );
+
+      return updatedPurchaseProfile;
+    } catch (error, stacktrace) {
+      recordError(error, stacktrace);
+      rethrow;
     }
-
-    final updatedPurchaseProfile = await buyNonConsumableProduct(
-      productId: questsAccessProductId,
-      userId: userId,
-    );
-
-    return updatedPurchaseProfile;
   }
 
   Future<PurchaseProfile> buyMultiplayerGames({
     @required MultiplayerGamePurchases purchase,
     @required String userId,
   }) {
-    final productId = purchase.productId;
+    try {
+      final productId = purchase.productId;
 
-    return buyConsumableProduct(
-      productId: productId,
-      userId: userId,
-    );
+      return buyConsumableProduct(
+        productId: productId,
+        userId: userId,
+      );
+    } catch (error, stacktrace) {
+      recordError(error, stacktrace);
+      rethrow;
+    }
   }
 
   Future<PurchaseProfile> _sendPurchasesToServer(

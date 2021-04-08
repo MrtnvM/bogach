@@ -3,6 +3,7 @@ import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/multiplayer/actions/share_add_friend_link_action.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
+import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/main/account/widgets/friend_item_widget.dart';
 import 'package:cash_flow/presentation/main/account/widgets/invite_friend_item_widget.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -21,6 +22,13 @@ class FriendsListWidget extends HookWidget {
   Widget build(BuildContext context) {
     final size = useAdaptiveSize();
     final inviteButtonSize = size(24);
+    final dispatch = useDispatcher();
+
+    final inviteFriend = () async {
+      dispatch(ShareAddFriendLinkAction())
+          .then((_) => AnalyticsSender.accountInviteFriendLinkCreated())
+          .catchError((e) => handleError(context: context, exception: e));
+    };
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -32,14 +40,18 @@ class FriendsListWidget extends HookWidget {
             text: Strings.friends,
             padding: EdgeInsets.zero,
             actionWidget: friends.isNotEmpty
-                ? _InviteButton(inviteButtonSize: inviteButtonSize, size: size)
+                ? _InviteButton(
+                    inviteButtonSize: inviteButtonSize,
+                    size: size,
+                    inviteFriend: inviteFriend,
+                  )
                 : null,
           ),
           const SizedBox(height: 4),
           const Divider(),
           const SizedBox(height: 4),
           if (friends.isEmpty)
-            const InviteFriendItemWidget()
+            InviteFriendItemWidget(inviteFriend: inviteFriend)
           else
             ...friends.map((item) => FriendItemWidget(user: item)).toList(),
         ],
@@ -53,22 +65,20 @@ class _InviteButton extends HookWidget {
     Key key,
     @required this.inviteButtonSize,
     @required this.size,
+    @required this.inviteFriend,
   }) : super(key: key);
 
   final double inviteButtonSize;
-  final double Function(double p1) size;
+  final double Function(double) size;
+  final VoidCallback inviteFriend;
 
   @override
   Widget build(BuildContext context) {
-    final dispatch = useDispatcher();
-
-    final inviteFriend = () async {
-      await dispatch(ShareAddFriendLinkAction());
-      AnalyticsSender.accountInviteFriendLinkCreated();
-    };
+    final borderRadius = BorderRadius.circular(inviteButtonSize / 2);
 
     return InkWell(
       onTap: inviteFriend,
+      borderRadius: borderRadius,
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 8,
@@ -77,7 +87,7 @@ class _InviteButton extends HookWidget {
         decoration: BoxDecoration(
           color: ColorRes.mainGreen.withAlpha(70),
           border: Border.all(color: ColorRes.mainGreen, width: 0.5),
-          borderRadius: BorderRadius.circular(inviteButtonSize / 2),
+          borderRadius: borderRadius,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

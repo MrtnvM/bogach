@@ -14,9 +14,9 @@ void debug(void Function() debugAction) {
   }
 }
 
-void release(void Function() debugAction) {
+void release(void Function() releaseAction) {
   if (!Debug.isDebugModeEnabled()) {
-    debugAction();
+    releaseAction();
   }
 }
 

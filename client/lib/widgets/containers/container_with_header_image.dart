@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
@@ -13,7 +12,6 @@ import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
 import 'package:cash_flow/widgets/backgrounds/status_bar_background.dart';
 import 'package:cash_flow/widgets/tutorial/gameboard_tutorial_widget.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -70,7 +68,7 @@ class ContainerWithHeaderImage extends HookWidget {
     final startNewMonthOperationState = useGlobalState(
       (s) => s.getOperationState(Operation.startNewMonth),
     );
-    final activeGameState = useGlobalState((s) => s.game.activeGameState);
+    final activeGameState = useCurrentActiveGameState();
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) => onScroll());
       return null;
@@ -118,7 +116,7 @@ class ContainerWithHeaderImage extends HookWidget {
   }
 }
 
-class _Header extends StatelessWidget {
+class _Header extends HookWidget {
   const _Header({
     Key key,
     this.imageHeight,
@@ -139,7 +137,7 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final game = StoreProvider.state<AppState>(context).game.currentGame;
+    final game = useCurrentGame((g) => g);
     final isMultiplayerGame = game.type == GameType.multiplayer();
 
     return Stack(
@@ -207,7 +205,7 @@ class _HeaderBackground extends StatelessWidget {
   }
 }
 
-class _HeaderContent extends StatelessWidget {
+class _HeaderContent extends HookWidget {
   const _HeaderContent({
     Key key,
     this.navBarTitle,
@@ -224,8 +222,7 @@ class _HeaderContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameTutorial = GameboardTutorialWidget.of(context);
-    final appState = StoreProvider.state<AppState>(context);
-    final isQuestGame = appState.game.currentGame.config.level != null;
+    final isQuestGame = useCurrentGame((g) => g.config.level != null);
 
     return Column(
       children: <Widget>[

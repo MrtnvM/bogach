@@ -60,11 +60,12 @@ class ActionsTab extends HookWidget {
 }
 
 bool useIsGameboardActionInProgress() {
+  final gameId = useCurrentGameId();
   final isActionInProgress = useGlobalState((s) {
+    final activeGameState = s.game.activeGameStates[gameId];
     final isStartingNewMonth =
         s.getOperationState(Operation.startNewMonth).isInProgress;
 
-    final activeGameState = s.game.activeGameState;
     final isSendingTurnEvent = activeGameState.maybeWhen(
       gameEvent: (eventIndex, sendingEventIndex) =>
           eventIndex == sendingEventIndex,

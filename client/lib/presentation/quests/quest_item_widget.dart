@@ -40,7 +40,7 @@ class QuestItemWidget extends HookWidget {
       imageUrl: quest.image,
       startGame: startGame,
       continueGame: continueGame,
-      isCollapsed: selectedQuestId == quest.id,
+      isShowingActionsButtons: selectedQuestId == quest.id,
       onTap: () {
         if (isLocked) {
           onQuestSelected?.call(null, QuestAction.startNewGame);

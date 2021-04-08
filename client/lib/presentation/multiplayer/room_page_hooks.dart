@@ -4,61 +4,70 @@ import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/config/config_hooks.dart';
-import 'package:cash_flow/features/game/actions/set_game_context.dart';
-import 'package:cash_flow/features/game/actions/start_game_action.dart';
 import 'package:cash_flow/features/multiplayer/actions/room_listening_actions.dart';
-import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/models/domain/room/room.dart';
 import 'package:cash_flow/models/domain/room/room_participant.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard.dart';
+import 'package:cash_flow/presentation/multiplayer/widgets/current_room_data_provider.dart';
 import 'package:cash_flow/presentation/tutorial/tutorial_page.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 
+String useCurrentRoomId() {
+  final context = useContext();
+  final roomId = CurrentRoomDataProvider.of(context).roomId;
+  return roomId;
+}
+
+Room useCurrentRoom() {
+  final roomId = useCurrentRoomId();
+  final room = useGlobalState((s) => s.multiplayer.rooms[roomId]);
+  return room;
+}
+
 void useAutoTransitionToCreatedGame() {
-  final userId = useUserId();
-  final room = useGlobalState((s) => s.multiplayer.currentRoom);
+  final roomState = useCurrentRoomState();
   final isTutorialPassed = useConfig((c) => c.isGameboardTutorialPassed);
-  final dispatch = useDispatcher();
 
   useEffect(() {
-    final roomId = room?.id;
-    final gameId = room?.gameId;
+    final gameId = roomState.room?.gameId;
 
     if (gameId != null) {
       final startGame = () async {
-        final gameContext = GameContext(gameId: gameId, userId: userId);
-
-        await dispatch(SetGameContextAction(gameContext));
-        await dispatch(StartGameAction(gameContext));
-        await Future.delayed(const Duration(milliseconds: 100));
-
-        appRouter.goToRoot();
-
         SessionTracker.multiplayerGameCreated.stop();
         SessionTracker.multiplayerGameJoined.stop();
 
-        if (isTutorialPassed) {
-          appRouter.goTo(const GameBoard());
-        } else {
-          appRouter.goTo(const TutorialPage());
-        }
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          appRouter.goToRoot();
 
-        dispatch(StopListeningRoomUpdatesAction(roomId));
+          if (isTutorialPassed) {
+            appRouter.goTo(GameBoard(gameId: gameId));
+          } else {
+            appRouter.goTo(TutorialPage(gameId: gameId));
+          }
+        });
       };
 
       startGame();
     }
 
     return null;
-  }, [room?.gameId]);
+  }, [roomState?.room?.gameId]);
 }
 
-_CurrentRoom useCurrentRoom() {
+_CurrentRoom useCurrentRoomState() {
   final userId = useUserId();
-  final room = useGlobalState((s) => s.multiplayer.currentRoom);
+  final roomId = useCurrentRoomId();
+  final room = useCurrentRoom();
+  final dispatch = useDispatcher();
+
+  useEffect(() {
+    dispatch(StartListeningRoomUpdatesAction(roomId));
+    return () => dispatch(StopListeningRoomUpdatesAction(roomId));
+  }, []);
 
   final isActionInProgress = useGlobalState(
     (s) =>
@@ -74,6 +83,7 @@ _CurrentRoom useCurrentRoom() {
           .any((p) => p.status == RoomParticipantStatus.ready);
 
   return _CurrentRoom(
+    roomId: roomId,
     room: room,
     isActionInProgress: isActionInProgress,
     isParticipantAlreadyJoined: isParticipantAlreadyJoined,
@@ -84,6 +94,7 @@ _CurrentRoom useCurrentRoom() {
 
 class _CurrentRoom {
   _CurrentRoom({
+    @required this.roomId,
     @required this.room,
     @required this.isActionInProgress,
     @required this.isCurrentUserRoomOwner,
@@ -91,6 +102,7 @@ class _CurrentRoom {
     @required this.ownerName,
   });
 
+  final String roomId;
   final Room room;
   final bool isActionInProgress;
   final bool isCurrentUserRoomOwner;

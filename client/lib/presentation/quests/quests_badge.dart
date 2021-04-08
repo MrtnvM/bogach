@@ -18,7 +18,11 @@ class QuestsBadge extends HookWidget {
     return Badge(
       title: '$currentIndex / ${questsCount == 0 ? '-' : questsCount}',
       imageAsset: Images.questsBadge,
-      onTap: () => appRouter.goTo(const QuestsPurchasePage()),
+      onTap: () {
+        if (!user.purchaseProfile.isQuestsAvailable) {
+          appRouter.goTo(const QuestsPurchasePage());
+        }
+      },
     );
   }
 }

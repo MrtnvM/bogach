@@ -372,9 +372,14 @@ class AnalyticsSender {
     }
 
     print(
+      '${kReleaseMode ? '' : "[DEBUG] "}'
       'ANALYTICS EVENT: $eventName'
       '${parameters.isNotEmpty ? '\nPARAMS: $parameters' : ''}',
     );
+
+    if (!kReleaseMode) {
+      return;
+    }
 
     if (_userId != null) {
       parameters = {...parameters, 'userId': _userId};

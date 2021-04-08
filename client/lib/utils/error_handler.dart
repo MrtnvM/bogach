@@ -1,4 +1,5 @@
 import 'package:cash_flow/models/network/core/response_model.dart';
+import 'package:cash_flow/models/errors/purchase_errors.dart';
 import 'package:cash_flow/models/network/errors/email_has_been_taken_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
 import 'package:fimber/fimber.dart';
@@ -44,8 +45,10 @@ String _getErrorMessage(dynamic error) {
 }
 
 void _recordError(dynamic error, dynamic stacktrace) {
-  if (error is InvalidCredentialsException ||
-      error is EmailHasBeenTakenException) {
+  if (error is NetworkConnectionException ||
+      error is InvalidCredentialsException ||
+      error is EmailHasBeenTakenException ||
+      error is ProductPurchaseCanceledException) {
     return;
   }
 
