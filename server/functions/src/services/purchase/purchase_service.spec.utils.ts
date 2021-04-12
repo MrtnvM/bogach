@@ -17,7 +17,7 @@ const getInitialProfile = (profile?: Partial<User>): User => {
     purchaseProfile: profile?.purchaseProfile,
 
     playedGames: profile?.playedGames || {
-      multiplayerGames: [],
+      multiplayerGames: []
     },
   };
 };

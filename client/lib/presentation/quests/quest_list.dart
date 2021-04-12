@@ -38,8 +38,9 @@ class QuestList extends HookWidget {
     );
 
     final user = useCurrentUser();
+    final completedGames = useCompletedQuestGames();
     final currentQuestIndex = user.currentQuestIndex ?? 0;
-    final quests = useGlobalState((s) => s.newGame.quests);
+    final quests = useQuestsTemplates(completedGames);
 
     final dispatch = useDispatcher();
 
@@ -48,6 +49,11 @@ class QuestList extends HookWidget {
     final animationController = useAnimationController(
       duration: const Duration(milliseconds: 300),
     );
+
+    bool isQuestAvailable(int index) {
+      return index <= currentQuestIndex ||
+          completedGames.any((e) => e.templateId == quests.itemsIds[index]);
+    }
 
     final offsetAnimation = Tween(begin: 0.0, end: 10.0)
         .chain(CurveTween(curve: Curves.elasticIn))
@@ -96,7 +102,7 @@ class QuestList extends HookWidget {
               }
 
               return Opacity(
-                opacity: i > currentQuestIndex ? 0.7 : 1.0,
+                opacity: isQuestAvailable(i) ? 1.0 : 0.7,
                 child: _QuestItemWidget(
                   quest: quests.items[i],
                   index: i,

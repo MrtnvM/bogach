@@ -9,6 +9,9 @@ import { TestData } from './game_service.spec.utils';
 import { GameLevelsProvider } from '../../providers/game_levels_provider';
 import { UserProvider } from '../../providers/user_provider';
 import { TimerProvider } from '../../providers/timer_provider';
+import { ErrorRecorder } from '../../config';
+import { PlayedGameInfo } from '../../models/domain/user/player_game_info';
+import { nowInUtc } from '../../utils/datetime';
 
 describe('Game Service - Singleplayer game', () => {
   const mockGameProvider = mock(GameProvider);
@@ -183,5 +186,63 @@ describe('Game Service - Singleplayer game', () => {
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
 
     verify(mockUserProvider.removeGameFromLastGames(userId, gameId)).once();
+  });
+
+  test('Successfully increasing played multiplayer games counter', async () => {
+    const { userId, getInitialProfile } = TestData;
+    const initialProfile = getInitialProfile({
+      boughtQuestsAccess: false,
+      multiplayerGamePlayed: 0,
+    });
+    const gameCreationDate = nowInUtc();
+
+    when(mockUserProvider.getUserProfile(userId)).thenResolve(initialProfile);
+    when(mockUserProvider.getUserPurchases(userId)).thenResolve([]);
+
+    await gameService.reduceMultiplayerGames(
+      [initialProfile.userId],
+      'gameId',
+      gameCreationDate
+    );
+
+    const [newUserProfile] = capture(mockUserProvider.updateUserProfile).last();
+    const expectedProfile = produce(initialProfile, (draft) => {
+      const playedGames = draft.playedGames || {
+        multiplayerGames: [],
+      };
+      playedGames.multiplayerGames = [];
+
+      const playedGameInfo: PlayedGameInfo = {
+        gameId: 'gameId',
+        createdAt: gameCreationDate,
+      };
+      playedGames.multiplayerGames.push(playedGameInfo);
+
+      draft.playedGames = playedGames;
+    });
+    expect(expectedProfile).toStrictEqual(newUserProfile);
+  });
+
+  test('Reduce zero multiplayer games', async () => {
+    const { userId, getInitialProfile } = TestData;
+    const initialProfile = getInitialProfile({
+      boughtQuestsAccess: false,
+      multiplayerGamePlayed: 0,
+      purchaseProfile: {
+        isQuestsAvailable: false,
+        boughtMultiplayerGamesCount: 0,
+      },
+    });
+
+    when(mockUserProvider.getUserProfile(userId)).thenResolve(initialProfile);
+    when(mockUserProvider.getUserPurchases(userId)).thenResolve([]);
+
+    ErrorRecorder.isEnabled = false;
+
+    await expect(
+      gameService.reduceMultiplayerGames([initialProfile.userId], 'gameId', nowInUtc())
+    ).rejects.toThrow(/.*multiplayerGamesCount can't be less then zero.*/);
+
+    ErrorRecorder.isEnabled = true;
   });
 });

@@ -1,5 +1,5 @@
 import { GameEntity, Game } from '../../models/domain/game/game';
-import { UserEntity } from '../../models/domain/user/user';
+import { User, UserEntity } from '../../models/domain/user/user';
 import { DebentureEvent } from '../../events/debenture/debenture_event';
 import { GameEventEntity } from '../../models/domain/game/game_event';
 import { GameFixture } from '../../core/fixtures/game_fixture';
@@ -91,6 +91,24 @@ export const game: Game = GameFixture.createGame({
   ],
 });
 
+const getInitialProfile = (profile?: Partial<User>): User => {
+  return {
+    userId: profile?.userId || userId,
+    userName: profile?.userName || 'John Dow',
+    avatarUrl: profile?.avatarUrl || '',
+
+    currentQuestIndex: profile?.currentQuestIndex,
+    boughtQuestsAccess: profile?.boughtQuestsAccess,
+
+    multiplayerGamePlayed: profile?.multiplayerGamePlayed || 0,
+    purchaseProfile: profile?.purchaseProfile,
+
+    playedGames: profile?.playedGames || {
+      multiplayerGames: [],
+    },
+  };
+};
+
 export const TestData = {
   gameId,
   userId,
@@ -99,4 +117,5 @@ export const TestData = {
   firstEventPlayerAction,
   lastEventId,
   lastEventPlayerAction,
+  getInitialProfile,
 };

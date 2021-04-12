@@ -25,7 +25,27 @@ _GameTemplateListViewModel useGameTemplateListViewModel() {
   final user = useCurrentUser();
   final isTutorialPassed = useConfig((c) => c.isGameboardTutorialPassed);
 
-  final gameTemplates = useGlobalState((s) => s.newGame.gameTemplates);
+  final gameTemplates = useGlobalState((s) {
+    final completedGames =
+        s.profile.currentUser?.completedGames?.singleplayerGames ?? [];
+
+    final templates = StoreList(s.newGame.gameTemplates.items.toList());
+    templates.updateList(templates.items.rebuild((b) => b.sort((a, b) {
+          final aIndex = completedGames.indexWhere((e) => e.templateId == a.id);
+          final bIndex = completedGames.indexWhere((e) => e.templateId == b.id);
+
+          if (aIndex == -1 && bIndex == -1) {
+            return 0;
+          } else if (aIndex == -1) {
+            return -1;
+          } else if (bIndex == -1) {
+            return 1;
+          }
+
+          return aIndex.compareTo(bIndex);
+        })));
+    return templates;
+  });
   final templatesRequestState = useOperationState(Operation.loadGameTemplates);
   final loadGameTemplates = () => dispatch(GetGameTemplatesAction());
 
