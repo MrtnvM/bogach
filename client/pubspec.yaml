@@ -22,9 +22,7 @@ dependencies:
   in_app_purchase: ^0.3.3
   connectivity: ^2.0.0
   fimber: ^0.4.4
-  flutter_rollbar:
-    git: 
-      url: https://github.com/robertBadamshin/flutter_rollbar
+  flutter_rollbar: ^0.0.2
 
   # Test
   mockito: ^4.1.2
@@ -84,6 +82,10 @@ dependencies:
   dash_kit_control_panel: ^1.0.0
   dash_kit_loadable: ^2.1.2
   dash_kit_uikit: ^1.0.0
+
+dependency_overrides:
+  # for dash_kit_control_panel and flutter_rollbar compatibility
+  package_info: ^0.4.3
 
 dev_dependencies:
   effective_dart: ^1.2.4

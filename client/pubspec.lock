@@ -585,11 +585,9 @@ packages:
   flutter_rollbar:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "97655c249a8dd09883453ff23ca2186110da5e11"
-      url: "https://github.com/robertBadamshin/flutter_rollbar"
-    source: git
+      name: flutter_rollbar
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.0.2"
   flutter_secure_storage:
     dependency: "direct main"
@@ -877,7 +875,7 @@ packages:
     source: hosted
     version: "1.9.3"
   package_info:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: package_info
       url: "https://pub.dartlang.org"
