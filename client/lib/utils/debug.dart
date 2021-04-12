@@ -14,6 +14,12 @@ void debug(void Function() debugAction) {
   }
 }
 
+void release(void Function() releaseAction) {
+  if (!Debug.isDebugModeEnabled()) {
+    releaseAction();
+  }
+}
+
 void demo(void Function() demoAction) {
   if (Debug.isDemoMode) {
     demoAction();

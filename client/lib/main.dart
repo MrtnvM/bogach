@@ -21,9 +21,13 @@ import 'package:cash_flow/features/profile/actions/set_current_user_action.dart'
 import 'package:cash_flow/features/purchase/actions/listening_purchases_actions.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/utils/core/launch_counter.dart';
-import 'package:cash_flow/utils/error_handler.dart';
+import 'package:cash_flow/utils/core/logging/firebase_tree.dart';
+import 'package:cash_flow/utils/core/logging/logger_tree.dart';
+import 'package:cash_flow/utils/core/logging/rollbar_tree.dart';
+import 'package:cash_flow/utils/debug.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
+import 'package:fimber/fimber.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -38,12 +42,10 @@ Future<void> main({
   @required CashApiEnvironment environment,
 }) async {
   environment = environment ?? CashApiEnvironment.production;
-  WidgetsFlutterBinding.ensureInitialized();
 
-  if (environment.isLoggerEnabled) {
-    Logger.init();
-    Logger.enabled = true;
-  }
+  initLogging(environment.name, environment.isLoggerEnabled);
+
+  WidgetsFlutterBinding.ensureInitialized();
 
   await initializeFirebase(environment);
   await AppConfiguration.init(environment: environment);
@@ -109,9 +111,8 @@ Future<void> main({
         ),
       ),
     );
-  }, (exception, stacktrace) {
-    recordError(exception, stacktrace);
-    Logger.e('Uncaught exception: $exception', exception, stacktrace);
+  }, (error, stack) {
+    Fimber.e('runZonedGuarded error:', ex: error, stacktrace: stack);
   });
 }
 
@@ -125,4 +126,17 @@ void configurePurchases() {
 
 void configureAnalytics(CashApiEnvironment environment) {
   AnalyticsSender.isEnabled = environment.isAnalyticsEnabled;
+}
+
+void initLogging(String environmentName, isLoggerEnabled) {
+  release(() {
+    Fimber.plantTree(FirebaseReportingTree());
+    Fimber.plantTree(RollbarTree(environmentName: environmentName));
+  });
+
+  if (isLoggerEnabled) {
+    Logger.init();
+    Logger.enabled = true;
+    Fimber.plantTree(LoggerTree());
+  }
 }

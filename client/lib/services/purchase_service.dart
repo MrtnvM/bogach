@@ -8,6 +8,7 @@ import 'package:cash_flow/models/network/request/purchases/purchase_details_requ
 import 'package:cash_flow/models/network/request/purchases/update_purchases_request_model.dart';
 import 'package:cash_flow/utils/error_handler.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
+import 'package:fimber/fimber_base.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:rxdart/rxdart.dart';
@@ -69,8 +70,13 @@ class PurchaseService {
         await _connection.queryPastPurchases().catchError(recordError);
 
     if (response.error != null) {
-      Logger.e('Query of Past Purchases failed: ${response.error}');
-      throw QueryPastPurchasesRequestException(response.error);
+      final error = QueryPastPurchasesRequestException(response.error);
+      Fimber.e(
+        'Query of Past Purchases failed',
+        ex: error,
+        stacktrace: StackTrace.current,
+      );
+      throw error;
     }
 
     final pastPurchases = response.pastPurchases;
@@ -190,14 +196,22 @@ class PurchaseService {
         } else {
           Logger.i('Completion purchase for product $productId failed');
         }
-      } catch (error) {
-        Logger.e('Failed to complete purchase for product $productId: $error');
+      } catch (error, stacktrace) {
+        Fimber.e(
+          'Error completion on buying product ($productId)',
+          ex: error,
+          stacktrace: stacktrace,
+        );
       }
 
       return purchaseProfile;
       // ignore: avoid_catches_without_on_clauses
-    } catch (error) {
-      Logger.e('Error on buying product ($productId): $error');
+    } catch (error, stacktrace) {
+      Fimber.e(
+        'Error on buying product ($productId)',
+        ex: error,
+        stacktrace: stacktrace,
+      );
       rethrow;
     } finally {
       _currentPurchasingProduct = null;
@@ -257,8 +271,12 @@ class PurchaseService {
 
       return purchaseProfile;
       // ignore: avoid_catches_without_on_clauses
-    } catch (error) {
-      Logger.e('Error on buying product ($productId): $error');
+    } catch (error, stacktrace) {
+      Fimber.e(
+        'Error on buying product ($productId)',
+        ex: error,
+        stacktrace: stacktrace,
+      );
       rethrow;
     } finally {
       _currentPurchasingProduct = null;
