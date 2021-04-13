@@ -1,15 +1,22 @@
 /// <reference types="@types/jest"/>
 
 import * as admin from 'firebase-admin';
+import { Firestore } from './core/firebase/firestore';
 import { RealtimeDatabase } from './core/firebase/realtime_database';
+import { FirestoreUserDAO } from './dao/firestore/firestore_user_dao';
 import { RealtimeDatabaseGameDAO } from './dao/realtime_database/realtime_database_game_dao';
 import { RealtimeDatabaseRefs } from './dao/realtime_database/realtime_database_refs';
 import { Game } from './models/domain/game/game';
+import { PurchaseDetails } from './models/purchases/purchase_details';
+import { FirestoreSelector } from './providers/firestore_selector';
+import { UserProvider } from './providers/user_provider';
+import { PurchaseService } from './services/purchase/purchase_service';
 import {
   applyGameTransformers,
   GameEventsTransformer,
   HistoryGameTransformer,
 } from './transformers/game_transformers';
+import { writeJson } from './utils/json';
 
 const stagingConfig = {
   databaseURL: 'https://cash-flow-staging.firebaseio.com',
@@ -36,6 +43,61 @@ if (!linterFix) {
 admin.initializeApp(stagingConfig);
 
 describe('Firebase sandbox', () => {
+  test.skip('Query user from Firestore', async () => {
+    jest.setTimeout(15_000);
+
+    const firestore = admin.firestore();
+    const usersRef = firestore.collection('users');
+
+    const query = usersRef.where('purchaseProfile.isQuestsAvailable', '==', true);
+    const queryResult = await query.get();
+
+    const questPurchasers = queryResult.docs
+      .map((doc) => doc.data())
+      .map((u) => [u.userName, u.userId]);
+
+    const path = 'data/purchasers.json';
+
+    writeJson(path, questPurchasers);
+  });
+
+  test.only('Give bonus to Quests Purchaser', async () => {
+    jest.setTimeout(90_000);
+
+    const userId = '';
+
+    const firestore = admin.firestore();
+    const devicesRef = firestore.collection('devices');
+    const deviceDoc = await devicesRef.doc(userId).get();
+    const device = deviceDoc.data() || {};
+
+    const selector = new FirestoreSelector(firestore);
+    const firestoreInstance = new Firestore();
+    const userDao = new FirestoreUserDAO(selector, firestoreInstance);
+    const userProvider = new UserProvider(userDao);
+    const purchseService = new PurchaseService(userProvider);
+
+    const purchaseDetails: PurchaseDetails = {
+      productId: 'bogach.multiplayer.games.10',
+      purchaseId: '10000007925390781',
+      source: 'IAPSource.AppStore',
+      verificationData: '',
+    };
+
+    await purchseService.updatePurchases(userId, [purchaseDetails]);
+
+    const messaging = admin.messaging();
+    await messaging.send({
+      token: device.token,
+      notification: {
+        title: 'Стал обладателем квестов?',
+        body: 'Лови +10 мультиплеерных игр в качестве бонуса!',
+      },
+    });
+
+    console.log('Push notification sent');
+  });
+
   test.skip('Test game transformer with data from DB', async () => {
     jest.setTimeout(15_000);
 
