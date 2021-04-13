@@ -18,4 +18,4 @@ client/android/app/purchases_test/
 
 ui-debug.log
 
-data/
+data/purchasers.json
