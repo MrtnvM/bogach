@@ -28,6 +28,7 @@ class Strings {
   static String get noGalleryAccessMessage =>
       'Разрешите доступ к галерее в настройках приложения';
   static String get goToSettings => 'Перейти в настройки';
+  static String get from => 'из';
 
   // Main Page
   static String get gamesTabTitle => 'Игры';

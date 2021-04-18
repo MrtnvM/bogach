@@ -71,6 +71,7 @@ dependencies:
   flutter_swiper: ^1.1.6
   shimmer: ^1.1.2
   app_settings: ^4.0.4
+  percent_indicator: ^2.1.7+2
   k_chart:
     git:
       url: https://github.com/robertBadamshin/k_chart

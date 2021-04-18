@@ -20,9 +20,19 @@ class AccountBar extends HookWidget {
 
     return Container(
       width: double.infinity,
-      height: 35,
-      color: ColorRes.primaryWhiteColor,
+      height: 54,
+      decoration: BoxDecoration(
+        color: ColorRes.primaryWhiteColor,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.grey,
+            blurRadius: 8,
+          )
+        ],
+      ),
       padding: const EdgeInsets.only(left: 16, right: 16),
+      margin: const EdgeInsets.only(left: 16, right: 16),
       child: Row(
         children: [
           Expanded(
@@ -63,7 +73,7 @@ class AccountBar extends HookWidget {
             fontSize: 12,
           ),
         ),
-        const Spacer(),
+        const SizedBox(height: 4),
         Text(
           title,
           style: Styles.bodyBlack.copyWith(
