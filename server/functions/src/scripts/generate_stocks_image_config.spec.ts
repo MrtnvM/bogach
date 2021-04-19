@@ -6,7 +6,7 @@ import { readJsonFile, writeJson } from '../utils/json';
 const dataPath = 'server/functions/data';
 const stocksPath = `${dataPath}/stocks_history`;
 const stocksConfigPath = `${dataPath}/stocks`;
-const path = `${stocksConfigPath}/stocks_image_config.json`;
+export const stocksImagesConfigPath = `${stocksConfigPath}/stocks_images_config.json`;
 
 describe('Stocks Images', () => {
   test('Generate & Check Stocks Images', async () => {
@@ -23,7 +23,7 @@ describe('Stocks Images', () => {
       stocksImages[stockName] = stocksImages[stockName] || null;
     }
 
-    writeJson(path, stocksImages);
+    writeJson(stocksImagesConfigPath, stocksImages);
 
     const emptyStockImages = Object.keys(stocksImages)
       .map((stockName) => [stockName, stocksImages[stockName]])
@@ -41,7 +41,7 @@ describe('Stocks Images', () => {
 });
 
 const getStocksImages = async () => {
-  if (!fs.existsSync(path)) {
+  if (!fs.existsSync(stocksImagesConfigPath)) {
     if (!fs.existsSync(dataPath)) {
       fs.mkdirSync(dataPath);
     }
@@ -50,9 +50,10 @@ const getStocksImages = async () => {
       fs.mkdirSync(stocksConfigPath);
     }
 
-    fs.writeFileSync(path, '{}');
+    fs.writeFileSync(stocksImagesConfigPath, '{}');
   }
 
-  const stocksImages: { [stock: string]: string | null } = (await readJsonFile(path)) || {};
+  const stocksImages: { [stock: string]: string | null } =
+    (await readJsonFile(stocksImagesConfigPath)) || {};
   return stocksImages;
 };

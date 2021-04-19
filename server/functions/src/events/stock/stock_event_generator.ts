@@ -6,8 +6,11 @@ import { StockEvent } from './stock_event';
 import { Game } from '../../models/domain/game/game';
 import { randomValueFromRange, valueRange } from '../../core/data/value_range';
 import { StockEventCandlesDataSource } from './stock_event_candles_data_source';
+import { readJsonFile } from '../../utils/json';
+import { stocksImagesConfigPath } from '../../scripts/generate_stocks_image_config.spec';
 
 const stockCandlesCache: { [stock: string]: StockEvent.Candle[] } = {};
+const stocksImagesCache: { [stock: string]: string } = {};
 
 const getStockCandles = (stockName: string): StockEvent.Candle[] => {
   const cachedStockCandles = stockCandlesCache[stockName];
@@ -19,6 +22,20 @@ const getStockCandles = (stockName: string): StockEvent.Candle[] => {
   stockCandlesCache[stockName] = stockCandles;
 
   return stockCandles;
+};
+
+const getStockImage = (stockName: string) => {
+  const cachedStockImage = stocksImagesCache[stockName];
+  if (cachedStockImage) {
+    return cachedStockImage;
+  }
+
+  const stocksImages = readJsonFile(stocksImagesConfigPath);
+  Object.keys(stocksImages).forEach((stock) => {
+    stocksImagesCache[stock] = stocksImages[stock];
+  });
+
+  return stocksImagesCache[stockName];
 };
 
 export namespace StockEventGenerator {
@@ -54,6 +71,7 @@ export namespace StockEventGenerator {
 
     return generateEvent({
       name: stockName,
+      image: getStockImage(stockName),
       currentPrice: valueRange([currentPrice, currentPrice, 0]),
       fairPrice: valueRange([yearAverageStockPrice, yearAverageStockPrice, 0]),
       availableCount: valueRange([maxCount, maxCount, 0]),
