@@ -13,6 +13,7 @@ import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard.dart';
 import 'package:cash_flow/presentation/tutorial/tutorial_page.dart';
+import 'package:cash_flow/utils/sorts/template_sorts.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -28,22 +29,13 @@ _GameTemplateListViewModel useGameTemplateListViewModel() {
   final gameTemplates = useGlobalState((s) {
     final completedGames =
         s.profile.currentUser?.completedGames?.singleplayerGames ?? [];
-
     final templates = StoreList(s.newGame.gameTemplates.items.toList());
-    templates.updateList(templates.items.rebuild((b) => b.sort((a, b) {
-          final aIndex = completedGames.indexWhere((e) => e.templateId == a.id);
-          final bIndex = completedGames.indexWhere((e) => e.templateId == b.id);
 
-          if (aIndex == -1 && bIndex == -1) {
-            return 0;
-          } else if (aIndex == -1) {
-            return -1;
-          } else if (bIndex == -1) {
-            return 1;
-          }
+    templates.updateList(sortTemplates(
+      templates: templates.items,
+      completedGames: completedGames,
+    ));
 
-          return aIndex.compareTo(bIndex);
-        })));
     return templates;
   });
   final templatesRequestState = useOperationState(Operation.loadGameTemplates);

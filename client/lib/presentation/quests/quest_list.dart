@@ -6,6 +6,7 @@ import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/new_game/actions/get_quests_action.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
+import 'package:cash_flow/models/domain/game/quest/quest_ui_model.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/purchases/quests_purchase_page.dart';
 import 'package:cash_flow/presentation/quests/quest_item_widget.dart';
@@ -38,9 +39,8 @@ class QuestList extends HookWidget {
     );
 
     final user = useCurrentUser();
-    final completedGames = useCompletedQuestGames();
     final currentQuestIndex = user.currentQuestIndex ?? 0;
-    final quests = useQuestsTemplates(completedGames);
+    final quests = useQuestsTemplates();
 
     final dispatch = useDispatcher();
 
@@ -49,11 +49,6 @@ class QuestList extends HookWidget {
     final animationController = useAnimationController(
       duration: const Duration(milliseconds: 300),
     );
-
-    bool isQuestAvailable(int index) {
-      return index <= currentQuestIndex ||
-          completedGames.any((e) => e.templateId == quests.itemsIds[index]);
-    }
 
     final offsetAnimation = Tween(begin: 0.0, end: 10.0)
         .chain(CurveTween(curve: Curves.elasticIn))
@@ -67,7 +62,7 @@ class QuestList extends HookWidget {
     useEffect(() {
       swiperController.value.addListener(() {
         final currentIndex = swiperController.value.index;
-        final quest = quests.itemsMap[currentIndex].name;
+        final quest = quests.items[currentIndex].quest.name;
         AnalyticsSender.questsSwipeGame(quest);
       });
 
@@ -81,12 +76,12 @@ class QuestList extends HookWidget {
             getQuestsRequestState.isRefreshing,
         backgroundColor: ColorRes.transparent,
         indicatorColor: const AlwaysStoppedAnimation<Color>(ColorRes.mainGreen),
-        child: GamesLoadableListView<Quest>(
+        child: GamesLoadableListView<QuestUiModel>(
           swiperController: swiperController.value,
           viewModel: LoadableListViewModel(
             items: quests,
             itemBuilder: (i) {
-              if (i == currentQuestIndex) {
+              if (i == 0) {
                 return AnimatedBuilder(
                   animation: offsetAnimation,
                   builder: (context, child) => Transform.translate(
@@ -102,12 +97,12 @@ class QuestList extends HookWidget {
               }
 
               return Opacity(
-                opacity: isQuestAvailable(i) ? 1.0 : 0.7,
+                opacity: quests.items[i].isAvailable ? 1.0 : 0.7,
                 child: _QuestItemWidget(
                   quest: quests.items[i],
                   index: i,
                   defaultAction: () async {
-                    if (i != currentQuestIndex) {
+                    if (!quests.items[i].isAvailable) {
                       await swiperController.value.move(currentQuestIndex);
                     }
 
@@ -142,7 +137,7 @@ class _QuestItemWidget extends HookWidget {
     this.defaultAction,
   });
 
-  final Quest quest;
+  final QuestUiModel quest;
   final int index;
   final VoidCallback defaultAction;
   final String selectedItemId;
@@ -150,7 +145,7 @@ class _QuestItemWidget extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final onQuestSelected = _getOnQuestSelectedFn();
+    final onQuestSelected = _getOnQuestSelectedFn(quest);
     final user = useCurrentUser();
     final lastQuestGameInfo = user.lastGames.questGames.firstWhere(
       (g) => g.templateId == quest.id,
@@ -158,7 +153,7 @@ class _QuestItemWidget extends HookWidget {
     );
 
     return QuestItemWidget(
-      quest: quest,
+      quest: quest.quest,
       currentGameId: lastQuestGameInfo?.gameId,
       isLocked: onQuestSelected == null,
       onQuestSelected: onQuestSelected ?? (l, a) => defaultAction(),
@@ -167,16 +162,17 @@ class _QuestItemWidget extends HookWidget {
     );
   }
 
-  Function(Quest, QuestAction) _getOnQuestSelectedFn() {
+  Function(Quest, QuestAction) _getOnQuestSelectedFn(QuestUiModel quest) {
     final user = useCurrentUser();
     final startQuest = useQuestStarter();
+    final quests = useGlobalState((s) => s.newGame.quests);
 
-    final currentQuestIndex = user.currentQuestIndex ?? 0;
     final hasQuestsAccess = user.purchaseProfile?.isQuestsAvailable ?? false;
+    final isFirstQuest = quests.itemsIds.first == quest.id;
 
     final isQuestPurchased =
-        index < 1 || hasQuestsAccess || user.boughtQuestsAccess;
-    final isQuestOpenedByUser = index <= currentQuestIndex;
+        isFirstQuest || hasQuestsAccess || user.boughtQuestsAccess;
+    final isQuestOpenedByUser = quest.isAvailable;
     final isQuestAvailable =
         (isQuestPurchased && isQuestOpenedByUser) || DemoMode.isEnabled;
 

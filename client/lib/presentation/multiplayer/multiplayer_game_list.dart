@@ -11,7 +11,7 @@ import 'package:cash_flow/features/new_game/actions/get_game_templates_action.da
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
-import 'package:cash_flow/presentation/multiplayer/multiplater_game_list_hooks.dart';
+import 'package:cash_flow/presentation/multiplayer/multiplayer_game_list_hooks.dart';
 import 'package:cash_flow/presentation/multiplayer/room_page.dart';
 import 'package:cash_flow/presentation/new_game/game_template_item.dart';
 import 'package:cash_flow/presentation/purchases/multiplayer_purchase_page.dart';

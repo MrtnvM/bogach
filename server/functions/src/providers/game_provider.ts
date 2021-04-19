@@ -219,7 +219,7 @@ export class GameProvider {
     const updateProfileOperations = game.participantsIds.map(async (participantId) => {
       const user = await this.userDao.getUser(participantId);
       if (!user) {
-        return;
+        throw new Error("ERROR: Can't find the user with id:" + participantId);
       }
 
       let lastGames = user.lastGames || LastGamesEntity.initial();
@@ -283,6 +283,7 @@ export class GameProvider {
     const updateProfileOperations = game.participantsIds.map(async (participantId) => {
       const user = await this.userDao.getUser(participantId);
       if (!user) {
+        throw new Error("ERROR: Can't find the user with id:" + participantId);
         return;
       }
 
