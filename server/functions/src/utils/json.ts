@@ -18,3 +18,18 @@ export const writeJson = (path: string, data: any) => {
   const jsonData = JSON.stringify(data, null, 2);
   fs.writeFileSync(path, jsonData);
 };
+
+export const readJsonFile = (path: string): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(path, (err, content) => {
+      if (err) {
+        console.log('Error loading JSON file:', err);
+        reject(err);
+        return;
+      }
+
+      const json = JSON.parse(content as any);
+      resolve(json);
+    });
+  });
+};
