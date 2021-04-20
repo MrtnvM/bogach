@@ -107,14 +107,20 @@ class InfoTable extends StatelessWidget {
           width: iconSize,
           height: iconSize,
           decoration: BoxDecoration(
-            color: ColorRes.greyCog,
+            color: ColorRes.lightGrey,
             borderRadius: BorderRadius.circular(iconSize / 2),
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: image?.startsWith('https://') == true
                 ? CachedNetworkImage(imageUrl: image)
-                : AssetImage(image),
+                : Center(
+                    child: SizedBox(
+                      height: 26,
+                      width: 26,
+                      child: SvgPicture.asset(image),
+                    ),
+                  ),
           ),
         ),
         const SizedBox(width: 12),

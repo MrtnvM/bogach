@@ -4,6 +4,7 @@ import 'package:cash_flow/presentation/gameboard/game_events/salary_change/salar
 import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
+import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,8 @@ class SalaryChangeEvent extends HookWidget {
       children: <Widget>[
         InfoTable(
           title: event.name,
+          subtitle: Strings.salaryChange,
+          image: Images.eventSalaryChange,
           withShadow: false,
           description: event.description,
           rows: <Widget>[

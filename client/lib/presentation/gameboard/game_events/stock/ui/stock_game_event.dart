@@ -12,6 +12,7 @@ import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/containers/game_event_selector/game_event_selector_widget.dart';
@@ -58,7 +59,7 @@ class StockGameEvent extends HookWidget {
         InfoTable(
           title: '${event.name}',
           subtitle: Strings.stock,
-          image: event.image,
+          image: event.image ?? Images.eventStock,
           withShadow: false,
           rows: <Widget>[
             if (!isQuest)

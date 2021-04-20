@@ -10,6 +10,7 @@ import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_content.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
+import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/containers/game_event_selector/game_event_selector_widget.dart';
@@ -58,7 +59,9 @@ class DebentureGameEventWidget extends HookWidget {
     return Column(
       children: <Widget>[
         InfoTable(
-          title: '${Strings.debentures} - ${event.name}',
+          title: event.name,
+          subtitle: Strings.debentures,
+          image: Images.eventDebenture,
           withShadow: false,
           rows: <Widget>[
             for (final item in infoTableData.entries)
