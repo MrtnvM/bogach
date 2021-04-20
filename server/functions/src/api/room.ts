@@ -9,7 +9,6 @@ import { UserProvider } from '../providers/user_provider';
 import { GameService } from '../services/game/game_service';
 import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { TimerProvider } from '../providers/timer_provider';
-import { PurchaseService } from '../services/purchase/purchase_service';
 import { GameTemplatesProvider } from '../providers/game_templates_provider';
 import { DAOs } from '../dao/daos';
 
@@ -25,7 +24,6 @@ export const create = (daos: DAOs) => {
 
   const roomService = new RoomService(gameProvider, userProvider, timerProvider, firebaseMessaging);
   const gameService = new GameService(gameProvider, gameLevelProvider, userProvider, timerProvider);
-  const purchaseService = new PurchaseService(userProvider);
 
   const createRoom = https.onRequest(async (request, response) => {
     const apiRequest = APIRequest.from(request, response);
@@ -59,7 +57,7 @@ export const create = (daos: DAOs) => {
 
     const createRoomGameRequest = async () => {
       const { room, game } = await roomService.createRoomGame(roomId);
-      await purchaseService.reduceMultiplayerGames(
+      await gameService.reduceMultiplayerGames(
         room.participants.map((participant) => participant.id),
         game.id,
         (game.createdAt && new Date(game.createdAt).getTime()) || undefined
