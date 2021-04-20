@@ -6,6 +6,10 @@ export const writeJson = (path: string, data: any) => {
   for (let i = 0; i < directories.length; i++) {
     const dirPath = directories.slice(0, i + 1).join('/');
 
+    if (dirPath === '') {
+      continue;
+    }
+
     if (!fs.existsSync(dirPath)) {
       fs.mkdirSync(dirPath);
     }
