@@ -11,12 +11,14 @@ import 'package:cash_flow/presentation/main/games/games_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/utils/advertising/google_ad_native_helper.dart';
 import 'package:cash_flow/widgets/common/bogach_loadable_view.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class MainPage extends HookWidget {
   const MainPage();
@@ -66,6 +68,35 @@ class MainPage extends HookWidget {
 
     useStream(stream, initialData: null);
 
+    final isLoadedAd = useState(false);
+    final adValue = useState<NativeAd>(null);
+
+    useEffect(() {
+      final nativeAd = NativeAd(
+        adUnitId: getNativeGoogleAdUnitId(),
+        factoryId: 'listTile',
+        request: const AdRequest(),
+        listener: AdListener(
+          onAdLoaded: (_) {
+            isLoadedAd.value = true;
+          },
+          onAdFailedToLoad: (ad, error) {
+            // Releases an ad resource when it fails to load
+            ad.dispose();
+
+            print(
+                'Ad load failed (code=${error.code} message=${error.message})');
+          },
+        ),
+      );
+
+      nativeAd.load();
+
+      adValue.value = nativeAd;
+
+      return null;
+    }, []);
+
     final pageIndex = useState(0);
 
     return AnnotatedRegion(
@@ -76,9 +107,19 @@ class MainPage extends HookWidget {
           backgroundColor: ColorRes.mainPageBackground,
           body: IndexedStack(
             index: pageIndex.value,
-            children: const [
+            children: [
               GamesPage(),
-              AccountPage(),
+              if (isLoadedAd.value)
+                Padding(
+                  padding: EdgeInsets.only(top: 40.0),
+                  child: Container(
+                    height: 72.0,
+                    alignment: Alignment.center,
+                    child: AdWidget(ad: adValue.value),
+                  ),
+                )
+              else
+                AccountPage(),
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(

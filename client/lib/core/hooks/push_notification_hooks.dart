@@ -60,11 +60,11 @@ void usePushMessageSubscription(void onMessage(Map<String, dynamic> message)) {
   };
 
   useEffect(() {
-    firebaseMessaging.configure(
-      onMessage: onPushNotification,
-      onLaunch: onPushNotification,
-      onResume: onPushNotification,
-    );
+    // firebaseMessaging.configure(
+    //   onMessage: onPushNotification,
+    //   onLaunch: onPushNotification,
+    //   onResume: onPushNotification,
+    // );
 
     return null;
   }, []);
