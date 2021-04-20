@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
@@ -131,7 +133,7 @@ class _RoundProgress extends HookWidget {
         radius: size,
         lineWidth: 5.0,
         animation: true,
-        percent: progress,
+        percent: min(max(progress, 0), 1),
         center: Container(
           padding: const EdgeInsets.all(3),
           decoration: BoxDecoration(
