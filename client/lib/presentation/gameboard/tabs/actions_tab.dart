@@ -12,6 +12,21 @@ class ActionsTab extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isLoading = useIsGameboardActionInProgress();
+    final scrollController = useScrollController();
+    final activeGameState = useCurrentActiveGameState();
+
+    final currenEventIndex = activeGameState.maybeWhen(
+      gameEvent: (eventIndex, sendingEventIndex) => eventIndex,
+      orElse: () => -1,
+    );
+
+    useEffect(() {
+      if (scrollController.hasClients) {
+        scrollController.jumpTo(0);
+      }
+
+      return null;
+    }, [currenEventIndex]);
 
     return Column(
       children: [
@@ -20,6 +35,7 @@ class ActionsTab extends HookWidget {
           child: Stack(
             children: [
               ListView(
+                controller: scrollController,
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
                 children: const [
                   GameEventPage(),
