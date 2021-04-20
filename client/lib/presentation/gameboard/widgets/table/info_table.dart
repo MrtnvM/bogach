@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/table_divider.dart';
+import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/containers/card_container.dart';
@@ -11,6 +13,8 @@ class InfoTable extends StatelessWidget {
     Key key,
     this.title,
     this.titleValue,
+    this.subtitle,
+    this.image,
     this.description,
     this.rows,
     this.titleTextStyle = Styles.tableHeaderTitleBlack,
@@ -21,6 +25,8 @@ class InfoTable extends StatelessWidget {
 
   final String title;
   final String titleValue;
+  final String subtitle;
+  final String image;
   final String description;
   final List<Widget> rows;
   final TextStyle titleTextStyle;
@@ -68,9 +74,7 @@ class InfoTable extends StatelessWidget {
     return <Widget>[
       Row(
         children: [
-          Expanded(
-            child: Text(title, style: titleTextStyle),
-          ),
+          Expanded(child: _buildHeaderTitle()),
           if (titleValue != null) Text(titleValue, style: titleValueStyle),
           if (onInfoClick != null) _buildInfoIcon()
         ],
@@ -88,6 +92,50 @@ class InfoTable extends StatelessWidget {
         )
       ],
     ];
+  }
+
+  Widget _buildHeaderTitle() {
+    if (subtitle == null || image == null) {
+      return Text(title, style: titleTextStyle);
+    }
+
+    const iconSize = 40.0;
+
+    return Row(
+      children: [
+        Container(
+          width: iconSize,
+          height: iconSize,
+          decoration: BoxDecoration(
+            color: ColorRes.greyCog,
+            borderRadius: BorderRadius.circular(iconSize / 2),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: image?.startsWith('https://') == true
+                ? CachedNetworkImage(imageUrl: image)
+                : AssetImage(image),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: titleTextStyle),
+              Text(
+                subtitle,
+                style: Styles.bodyBlack.copyWith(
+                  fontSize: 13,
+                  color: ColorRes.greyCog,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildInfoIcon() {

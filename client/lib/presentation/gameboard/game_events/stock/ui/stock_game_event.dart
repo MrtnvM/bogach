@@ -56,7 +56,9 @@ class StockGameEvent extends HookWidget {
     return Column(
       children: <Widget>[
         InfoTable(
-          title: '${Strings.stock} - ${event.name}',
+          title: '${event.name}',
+          subtitle: Strings.stock,
+          image: event.image,
           withShadow: false,
           rows: <Widget>[
             if (!isQuest)
