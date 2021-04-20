@@ -7,7 +7,7 @@ import { Game } from '../../models/domain/game/game';
 import { randomValueFromRange, valueRange } from '../../core/data/value_range';
 import { StockEventCandlesDataSource } from './stock_event_candles_data_source';
 import { readJsonFile } from '../../utils/json';
-import { stocksImagesConfigPath } from '../../scripts/generate_stocks_image_config.spec';
+import { stocksImagesConfigPath } from '../../scripts/generate_stocks_image_config';
 
 const stockCandlesCache: { [stock: string]: StockEvent.Candle[] } = {};
 const stocksImagesCache: { [stock: string]: string } = {};
