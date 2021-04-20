@@ -4,7 +4,7 @@ export interface GameEvent<EventData = any> {
   readonly id: GameEventEntity.Id;
   readonly name: string;
   readonly description: string;
-  readonly image?: string;
+  readonly image?: string | null;
   readonly type: GameEventEntity.Type;
   readonly data: EventData;
 }

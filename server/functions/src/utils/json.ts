@@ -37,3 +37,9 @@ export const readJsonFile = (path: string): Promise<any> => {
     });
   });
 };
+
+export const readJsonFileSync = (path: string): any => {
+  const content = fs.readFileSync(path);
+  const data = JSON.parse(content as any);
+  return data;
+};
