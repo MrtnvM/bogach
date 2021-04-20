@@ -20,6 +20,7 @@ export interface User {
 
   readonly playedGames?: PlayedGames;
   readonly lastGames?: LastGames;
+  readonly completedGames?: LastGames;
 
   readonly friends?: UserEntity.Id[];
 }

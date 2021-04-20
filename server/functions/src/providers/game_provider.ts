@@ -219,7 +219,7 @@ export class GameProvider {
     const updateProfileOperations = game.participantsIds.map(async (participantId) => {
       const user = await this.userDao.getUser(participantId);
       if (!user) {
-        return;
+        throw new Error("ERROR: Can't find the user with id:" + participantId);
       }
 
       let lastGames = user.lastGames || LastGamesEntity.initial();
@@ -271,6 +271,71 @@ export class GameProvider {
 
       const updatedProfile = produce(user, (draft) => {
         draft.lastGames = lastGames;
+      });
+
+      await this.userDao.updateUserProfile(updatedProfile);
+    });
+
+    await Promise.all(updateProfileOperations);
+  }
+
+  async updateGameParticipantsCompletedGames(game: Game): Promise<void> {
+    const updateProfileOperations = game.participantsIds.map(async (participantId) => {
+      const user = await this.userDao.getUser(participantId);
+      if (!user) {
+        throw new Error("ERROR: Can't find the user with id:" + participantId);
+        return;
+      }
+
+      const templateId = game.config.gameTemplateId;
+
+      let completedGames = user.completedGames || LastGamesEntity.initial();
+      let existingGame: LastGameInfo | undefined;
+
+      const newLastGame: LastGameInfo = {
+        gameId: game.id,
+        templateId: templateId,
+        createdAt: game.createdAt,
+      };
+
+      const isSingleplayerGame = game.type === 'singleplayer' && !game.config.level;
+      if (isSingleplayerGame) {
+        existingGame = completedGames.singleplayerGames.find((g) => g.templateId === templateId);
+
+        completedGames = produce(completedGames, (draft) => {
+          draft.singleplayerGames = completedGames.singleplayerGames
+            .filter((g) => g.gameId !== existingGame?.gameId && g.createdAt !== undefined);
+
+          draft.singleplayerGames.push(newLastGame);
+        });
+      }
+
+      const isQuestGame = game.type === 'singleplayer' && game.config.level;
+      if (isQuestGame) {
+        existingGame = completedGames.questGames.find((g) => g.templateId === templateId);
+
+        completedGames = produce(completedGames, (draft) => {
+          draft.questGames = completedGames.questGames
+            .filter((g) => g.gameId !== existingGame?.gameId && g.createdAt !== undefined);
+
+          draft.questGames.push(newLastGame);
+        });
+      }
+
+      const isMultiplayerGame = game.type === 'multiplayer';
+      if (isMultiplayerGame) {
+        existingGame = completedGames.multiplayerGames.find((g) => g.templateId === templateId);
+
+        completedGames = produce(completedGames, (draft) => {
+          draft.multiplayerGames = completedGames.multiplayerGames
+            .filter((g) => g.gameId !== existingGame?.gameId && g.createdAt !== undefined);
+
+          draft.multiplayerGames.push(newLastGame);
+        });
+      }
+
+      const updatedProfile = produce(user, (draft) => {
+        draft.completedGames = completedGames;
       });
 
       await this.userDao.updateUserProfile(updatedProfile);
