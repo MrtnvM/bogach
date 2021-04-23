@@ -19,8 +19,8 @@ import google_mobile_ads
     GeneratedPluginRegistrant.register(with: self)
     
     let listTileFactory = ListTileNativeAdFactory()
-        FLTGoogleMobileAdsPlugin.registerNativeAdFactory(
-            self, factoryId: "listTile", nativeAdFactory: listTileFactory)
+    FLTGoogleMobileAdsPlugin.registerNativeAdFactory(
+        self, factoryId: "listTile", nativeAdFactory: listTileFactory)
     
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }

@@ -72,28 +72,7 @@ class MainPage extends HookWidget {
     final adValue = useState<NativeAd>(null);
 
     useEffect(() {
-      final nativeAd = NativeAd(
-        adUnitId: getNativeGoogleAdUnitId(),
-        factoryId: 'listTile',
-        request: const AdRequest(),
-        listener: AdListener(
-          onAdLoaded: (_) {
-            isLoadedAd.value = true;
-          },
-          onAdFailedToLoad: (ad, error) {
-            // Releases an ad resource when it fails to load
-            ad.dispose();
-
-            print(
-                'Ad load failed (code=${error.code} message=${error.message})');
-          },
-        ),
-      );
-
-      nativeAd.load();
-
-      adValue.value = nativeAd;
-
+      loadAd(isLoadedAd, adValue);
       return null;
     }, []);
 
@@ -111,11 +90,21 @@ class MainPage extends HookWidget {
               GamesPage(),
               if (isLoadedAd.value)
                 Padding(
-                  padding: EdgeInsets.only(top: 40.0),
-                  child: Container(
-                    height: 72.0,
-                    alignment: Alignment.center,
-                    child: AdWidget(ad: adValue.value),
+                  padding: const EdgeInsets.only(top: 40.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        height: 72.0,
+                        alignment: Alignment.center,
+                        child: AdWidget(ad: adValue.value),
+                      ),
+                      const SizedBox(height: 24),
+                      RaisedButton(
+                        onPressed: () => loadAd(isLoadedAd, adValue),
+                        child: const Text('Load ad'),
+                      )
+                    ],
                   ),
                 )
               else
@@ -146,5 +135,36 @@ class MainPage extends HookWidget {
         ),
       ),
     );
+  }
+
+  void loadAd(
+    ValueNotifier<bool> isLoadedAd,
+    ValueNotifier<NativeAd> adValue,
+  ) async {
+    final status = await MobileAds.instance.initialize();
+    final s = status.adapterStatuses['GADMobileAds'];
+    print(s);
+
+    final nativeAd = NativeAd(
+      adUnitId: getNativeGoogleAdUnitId(),
+      factoryId: 'listTile',
+      request: const AdRequest(),
+      listener: AdListener(
+        onAdLoaded: (_) {
+          isLoadedAd.value = true;
+        },
+        onAdFailedToLoad: (ad, error) {
+          // Releases an ad resource when it fails to load
+          ad.dispose();
+
+          print('Ad load failed (code=${error.code} message=${error.message})');
+        },
+      ),
+      customOptions: <String, Object>{},
+    );
+
+    nativeAd.load();
+
+    adValue.value = nativeAd;
   }
 }
