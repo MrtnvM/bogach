@@ -9,11 +9,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class TopBar extends HookWidget {
   static const height = 174.0;
+  static const bottomOffset = 24.0;
 
   @override
   Widget build(BuildContext context) {
     final notchSize = useNotchSize();
-    const bottomOffset = 24.0;
 
     return SizedBox(
       height: height,

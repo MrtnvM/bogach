@@ -139,17 +139,27 @@ class _GameboardContentWidget extends HookWidget {
     final tabs = tabItems.map((i) => i.tab).toList();
     final tabWidgets = tabItems.map((i) => i.widget).toList();
 
-    return Column(
-      children: [
-        TopBar(),
-        Expanded(child: TabBarView(children: tabWidgets)),
-        BottomTabBar(
-          tabController: tabController,
-          activeColor: ColorRes.mainGreen,
-          items: tabs,
-          onTap: (i) => DefaultTabController.of(context).animateTo(i),
-        ),
-      ],
+    return ConstrainedBox(
+      constraints: const BoxConstraints.expand(),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            top: TopBar.height - TopBar.bottomOffset,
+            child: Column(
+              children: [
+                Expanded(child: TabBarView(children: tabWidgets)),
+                BottomTabBar(
+                  tabController: tabController,
+                  activeColor: ColorRes.mainGreen,
+                  items: tabs,
+                  onTap: (i) => DefaultTabController.of(context).animateTo(i),
+                ),
+              ],
+            ),
+          ),
+          TopBar(),
+        ],
+      ),
     );
   }
 }
