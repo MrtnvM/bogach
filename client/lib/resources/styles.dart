@@ -221,4 +221,17 @@ class Styles {
     fontWeight: FontWeight.w500,
     color: ColorRes.black,
   );
+
+  static const selectedTab = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.normal,
+    fontStyle: FontStyle.normal,
+    color: ColorRes.mainGreen,
+    fontFamily: _defaultFontFamily,
+  );
+
+  static final unselectedTab = selectedTab.copyWith(
+    fontSize: 11,
+    color: ColorRes.greyCog,
+  );
 }
