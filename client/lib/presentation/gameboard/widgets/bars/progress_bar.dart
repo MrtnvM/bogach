@@ -13,7 +13,9 @@ import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ProgressBar extends HookWidget {
-  const ProgressBar({Key key}) : super(key: key);
+  const ProgressBar({Key key, @required this.onMenuTap}) : super(key: key);
+
+  final VoidCallback onMenuTap;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class ProgressBar extends HookWidget {
     final progress = currentTargetValue / target.value;
 
     return Container(
-      padding: const EdgeInsets.only(left: 24.0, right: 24),
+      padding: const EdgeInsets.only(left: 24.0, right: 8),
       height: 66,
       child: Row(
         children: [
@@ -36,7 +38,7 @@ class ProgressBar extends HookWidget {
             currentValue: currentTargetValue,
           ),
           const Spacer(),
-          const _MenuButton(),
+          _MenuButton(onMenuTap: onMenuTap),
         ],
       ),
     );
@@ -100,11 +102,20 @@ class _ProgressTitle extends HookWidget {
 }
 
 class _MenuButton extends StatelessWidget {
-  const _MenuButton({Key key}) : super(key: key);
+  const _MenuButton({Key key, @required this.onMenuTap}) : super(key: key);
+
+  final VoidCallback onMenuTap;
 
   @override
   Widget build(BuildContext context) {
-    return const Icon(Icons.menu, color: Colors.white);
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: onMenuTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        child: const Icon(Icons.menu, color: Colors.white),
+      ),
+    );
   }
 }
 

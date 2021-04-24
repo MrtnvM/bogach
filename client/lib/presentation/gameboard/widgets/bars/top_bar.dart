@@ -8,8 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class TopBar extends HookWidget {
+  const TopBar({this.onMenuTap});
+
   static const height = 174.0;
   static const bottomOffset = 24.0;
+
+  final VoidCallback onMenuTap;
 
   @override
   Widget build(BuildContext context) {
@@ -44,22 +48,22 @@ class TopBar extends HookWidget {
             ),
             child: const _CirclesBackground(),
           ),
+          const Align(
+            alignment: Alignment.bottomCenter,
+            child: AccountBar(),
+          ),
           Positioned(
             top: notchSize.top,
             left: 0,
             right: 0,
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: const <Widget>[
-                ProgressBar(),
-                SizedBox(height: 16),
+              children: <Widget>[
+                ProgressBar(onMenuTap: onMenuTap),
+                const SizedBox(height: 16),
               ],
             ),
           ),
-          const Align(
-            alignment: Alignment.bottomCenter,
-            child: AccountBar(),
-          )
         ],
       ),
     );

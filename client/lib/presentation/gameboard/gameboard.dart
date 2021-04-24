@@ -9,6 +9,8 @@ import 'package:cash_flow/presentation/gameboard/tabs/progress_tab.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/bottom_tab_bar.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/top_bar.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/data/current_game_data_provider.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/menu/gameboard_menu.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/menu/gameboard_menu_controller.dart';
 import 'package:cash_flow/presentation/gameboard/winners_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
@@ -32,9 +34,12 @@ class GameBoard extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CurrentGameDataProvider(
-      gameId: gameId,
-      child: _GameboardBody(gameId: gameId),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: CurrentGameDataProvider(
+        gameId: gameId,
+        child: _GameboardBody(gameId: gameId),
+      ),
     );
   }
 }
@@ -138,6 +143,7 @@ class _GameboardContentWidget extends HookWidget {
     final tabController = DefaultTabController.of(context);
     final tabs = tabItems.map((i) => i.tab).toList();
     final tabWidgets = tabItems.map((i) => i.widget).toList();
+    final menuController = useState(GameboardMenuController());
 
     return ConstrainedBox(
       constraints: const BoxConstraints.expand(),
@@ -157,7 +163,16 @@ class _GameboardContentWidget extends HookWidget {
               ],
             ),
           ),
-          TopBar(),
+          TopBar(
+            onMenuTap: () {
+              if (menuController.value.isShown) {
+                menuController.value.close();
+              } else {
+                menuController.value.show();
+              }
+            },
+          ),
+          GameboardMenu(controller: menuController.value),
         ],
       ),
     );
