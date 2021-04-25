@@ -221,4 +221,11 @@ class Styles {
     fontWeight: FontWeight.w500,
     color: ColorRes.black,
   );
+
+  static const dialogTitle = TextStyle(
+    fontFamily: _defaultFontFamily,
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    color: ColorRes.black,
+  );
 }

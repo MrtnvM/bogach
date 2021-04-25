@@ -43,6 +43,7 @@ dependencies:
   firebase_messaging: ^7.0.0
   firebase_performance: ^0.4.0
   firebase_storage: ^4.0.0
+  firebase_remote_config: ^0.4.3
   cloud_firestore: ^0.14.2
 
   # Notifications
@@ -82,6 +83,9 @@ dependencies:
   dash_kit_control_panel: ^1.0.0
   dash_kit_loadable: ^2.1.2
   dash_kit_uikit: ^1.0.0
+
+  version: ^1.3.0
+  launch_review: ^2.0.0
 
 dependency_overrides:
   # for dash_kit_control_panel and flutter_rollbar compatibility
