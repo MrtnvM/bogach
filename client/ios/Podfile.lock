@@ -8,7 +8,7 @@ PODS:
   - AppAuth/ExternalUserAgent (1.4.0)
   - apple_sign_in (0.0.1):
     - Flutter
-  - cloud_firestore (0.14.3):
+  - cloud_firestore (0.14.4):
     - Firebase/CoreOnly (~> 6.33.0)
     - Firebase/Firestore (~> 6.33.0)
     - firebase_core
@@ -56,6 +56,9 @@ PODS:
   - Firebase/Performance (6.33.0):
     - Firebase/CoreOnly
     - FirebasePerformance (~> 3.3.0)
+  - Firebase/RemoteConfig (6.33.0):
+    - Firebase/CoreOnly
+    - FirebaseRemoteConfig (~> 4.9.0)
   - Firebase/Storage (6.33.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 3.9.0)
@@ -64,12 +67,12 @@ PODS:
     - Firebase/CoreOnly (~> 6.33.0)
     - firebase_core
     - Flutter
-  - firebase_auth (0.18.1-2):
+  - firebase_auth (0.18.4-1):
     - Firebase/Auth (~> 6.33.0)
     - Firebase/CoreOnly (~> 6.33.0)
     - firebase_core
     - Flutter
-  - firebase_core (0.5.2):
+  - firebase_core (0.5.3):
     - Firebase/CoreOnly (~> 6.33.0)
     - Flutter
   - firebase_crashlytics (0.2.1-1):
@@ -94,6 +97,11 @@ PODS:
   - firebase_performance (0.4.0-2):
     - Firebase/CoreOnly (~> 6.33.0)
     - Firebase/Performance (~> 6.33.0)
+    - firebase_core
+    - Flutter
+  - firebase_remote_config (0.4.3):
+    - Firebase/CoreOnly (~> 6.33.0)
+    - Firebase/RemoteConfig (~> 6.33.0)
     - firebase_core
     - Flutter
   - firebase_storage (4.0.1):
@@ -242,6 +250,8 @@ PODS:
     - Flutter
   - in_app_purchase (0.0.1):
     - Flutter
+  - launch_review (0.0.1):
+    - Flutter
   - leveldb-library (1.22.1)
   - nanopb (1.30906.0):
     - nanopb/decode (= 1.30906.0)
@@ -284,6 +294,7 @@ DEPENDENCIES:
   - firebase_dynamic_links (from `.symlinks/plugins/firebase_dynamic_links/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - firebase_performance (from `.symlinks/plugins/firebase_performance/ios`)
+  - firebase_remote_config (from `.symlinks/plugins/firebase_remote_config/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `6.33.0`)
   - Flutter (from `Flutter`)
@@ -293,6 +304,7 @@ DEPENDENCIES:
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - in_app_purchase (from `.symlinks/plugins/in_app_purchase/ios`)
+  - launch_review (from `.symlinks/plugins/launch_review/ios`)
   - notification_permissions (from `.symlinks/plugins/notification_permissions/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -364,6 +376,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   firebase_performance:
     :path: ".symlinks/plugins/firebase_performance/ios"
+  firebase_remote_config:
+    :path: ".symlinks/plugins/firebase_remote_config/ios"
   firebase_storage:
     :path: ".symlinks/plugins/firebase_storage/ios"
   FirebaseFirestore:
@@ -383,6 +397,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker/ios"
   in_app_purchase:
     :path: ".symlinks/plugins/in_app_purchase/ios"
+  launch_review:
+    :path: ".symlinks/plugins/launch_review/ios"
   notification_permissions:
     :path: ".symlinks/plugins/notification_permissions/ios"
   package_info:
@@ -409,20 +425,21 @@ SPEC CHECKSUMS:
   app_settings: d103828c9f5d515c4df9ee754dabd443f7cedcf3
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   apple_sign_in: 7716c7ddfa195aeab7dec0dc374ef4ff45d1adb4
-  cloud_firestore: 19c6f947dd14be9d71695ea23eefde67cd8829c8
+  cloud_firestore: b8c0e15fa49dfff87c2817d288b577e5dca2df13
   connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
   device_info: 3ebad48f726348f69abd802f3334a8d1ed795fbd
   FBSDKCoreKit: 1d5acf7c9d7a2f92bb1a242dc60cae5b7adb91df
   FBSDKLoginKit: f1ea8026a58b52d30c9f2e6a58ca7d813619fb83
   Firebase: 8db6f2d1b2c5e2984efba4949a145875a8f65fe5
   firebase_analytics: 4538549a97ab7ef715588ec23cb3b555455169e7
-  firebase_auth: c61cb3bbf3f89be67b11b77c644e794522742b03
-  firebase_core: 350ba329d1641211bc6183a3236893cafdacfea7
+  firebase_auth: d5159db3873478d1ac839af7b10d2f831516136a
+  firebase_core: 5d6a02f3d85acd5f8321c2d6d62877626a670659
   firebase_crashlytics: 6a9073813cf08b198f1b2db351fd265789fd8f8e
   firebase_database: 1796692eaae26a21ff45761d394b0026360a7b76
   firebase_dynamic_links: 8d626841687201c8ea8e6d970da543664293ec2d
   firebase_messaging: 0aea2cd5885b65e19ede58ee3507f485c992cc75
   firebase_performance: cd84eff8335c51f70846b2e5b4ac9d7523ff7285
+  firebase_remote_config: 259817aa1d7db2d84f01d1536b4f847dd2058e47
   firebase_storage: 7ab602a75a80cab746f4f31c98a4927f9f376e92
   FirebaseABTesting: 8a9d8df3acc2b43f4a22014ddf9f601bca6af699
   FirebaseAnalytics: 5dd088bd2e67bb9d13dbf792d1164ceaf3052193
@@ -454,6 +471,7 @@ SPEC CHECKSUMS:
   image_cropper: c8f9b4157933c7bb965a66d1c5e6c8fd408c6eb4
   image_picker: 9c3312491f862b28d21ecd8fdf0ee14e601b3f09
   in_app_purchase: 3e2155afa9d03d4fa32d9e62d567885080ce97d6
+  launch_review: 75d5a956ba8eaa493e9c9d4bf4c05e505e8d5ed0
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   notification_permissions: b74860c2967c1579243a675e63cd55e0ae75cef7

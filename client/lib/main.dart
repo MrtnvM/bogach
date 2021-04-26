@@ -66,7 +66,7 @@ Future<void> main({
   configureUiKit();
   configureAnalytics(environment);
 
-  configureDependencyInjection(
+  await configureDependencyInjection(
     environment,
     apiClient,
     sharedPreferences,

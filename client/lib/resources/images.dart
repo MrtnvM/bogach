@@ -39,6 +39,9 @@ class Images {
       'assets/images/png/multiplayer_header_image.png';
   static const cup = 'assets/images/png/cup.png';
 
+  static const dog = 'assets/images/png/dog.png';
+  static const thinkingMan = 'assets/images/png/thinking_man.png';
+
   static const onboarding1 = 'assets/images/png/finances 1.png';
   static const onboarding2 = 'assets/images/png/finances 2.png';
   static const onboarding3 = 'assets/images/png/finances 3.png';
