@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/bars/gameboard_timer.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
@@ -127,6 +128,7 @@ class _RoundProgress extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final gameTutorial = useGameboardTutorial();
+    final isMultiplayer = useIsMultiplayerGame();
     const size = 56.0;
 
     return Container(
@@ -140,29 +142,41 @@ class _RoundProgress extends HookWidget {
           BoxShadow(color: Colors.black.withAlpha(60), blurRadius: 8),
         ],
       ),
-      child: CircularPercentIndicator(
-        radius: size,
-        lineWidth: 5.0,
-        animation: true,
-        percent: min(max(progress, 0), 1),
-        center: Container(
-          padding: const EdgeInsets.all(3),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            '${(progress * 100).toInt()}%',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 12.0,
-              color: Colors.white,
+      child: Stack(
+        children: [
+          CircularPercentIndicator(
+            radius: size,
+            lineWidth: 5.0,
+            animation: true,
+            percent: min(max(progress, 0), 1),
+            center: Container(
+              padding: const EdgeInsets.all(3),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                '${(progress * 100).toInt()}%',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12.0,
+                  color: Colors.white,
+                ),
+              ),
             ),
+            circularStrokeCap: CircularStrokeCap.round,
+            progressColor: Colors.yellow,
+            backgroundColor: Colors.white,
+            animateFromLastPercent: true,
           ),
-        ),
-        circularStrokeCap: CircularStrokeCap.round,
-        progressColor: Colors.yellow,
-        backgroundColor: Colors.white,
-        animateFromLastPercent: true,
+          if (isMultiplayer)
+            Opacity(
+              opacity: 0.9,
+              child: Container(
+                alignment: Alignment.bottomCenter,
+                child: GameboardTimer(),
+              ),
+            ),
+        ],
       ),
     );
   }
