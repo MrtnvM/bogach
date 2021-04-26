@@ -1,7 +1,6 @@
-import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
-import 'package:cash_flow/features/game/actions/start_game_action.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
+import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/tabs/actions_tab.dart';
 import 'package:cash_flow/presentation/gameboard/tabs/finances_tab.dart';
@@ -57,24 +56,11 @@ class _GameboardBody extends HookWidget {
     final gameExists = useCurrentGame((g) => g != null);
     final isMultiplayer = useIsMultiplayerGame();
 
-    final gameContext = useCurrentGameContext();
-    final dispatch = useDispatcher();
-
     useGameboardAnalytics();
-
-    /// Subscribes & unsubscribes to/from game updates
-    useEffect(() {
-      dispatch(StartGameAction(gameContext));
-      return () => dispatch(StopGameAction(gameId));
-    }, []);
+    useGameWatcher();
 
     if (!gameExists) {
-      return LoadableView(
-        isLoading: !gameExists,
-        backgroundColor: ColorRes.white,
-        indicatorColor: const AlwaysStoppedAnimation(ColorRes.mainGreen),
-        child: Container(),
-      );
+      return const _LoadingGameWidget();
     }
 
     final tabItems = _getTabItems(context, isMultiplayer);
@@ -175,6 +161,39 @@ class _GameboardContentWidget extends HookWidget {
           GameboardMenu(controller: menuController.value),
         ],
       ),
+    );
+  }
+}
+
+class _LoadingGameWidget extends HookWidget {
+  const _LoadingGameWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    final gameExists = useCurrentGame((g) => g != null);
+    final notchSize = useNotchSize();
+
+    return Stack(
+      children: [
+        Center(
+          child: LoadableView(
+            isLoading: !gameExists,
+            backgroundColor: ColorRes.white,
+            indicatorColor: const AlwaysStoppedAnimation(ColorRes.mainGreen),
+            child: Container(),
+          ),
+        ),
+        GestureDetector(
+          onTap: appRouter.goBack,
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              vertical: notchSize.top + 16,
+              horizontal: 16,
+            ),
+            child: const Icon(Icons.arrow_back, color: Colors.black87),
+          ),
+        ),
+      ],
     );
   }
 }

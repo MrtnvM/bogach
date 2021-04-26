@@ -14,6 +14,7 @@ class ProgressTab extends HookWidget {
         top: 24 + TopBar.bottomOffset,
         left: 32,
         right: 32,
+        bottom: 24,
       ),
       height: 400,
       child: DotUserProgressChart(game: game),
