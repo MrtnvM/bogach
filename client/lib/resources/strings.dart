@@ -515,4 +515,11 @@ class Strings {
   static String get removeFromFriends => 'Удалить из друзей';
   static String get updateProfileErrorMessage =>
       'При обновлении профиля возникла ошибка';
+
+  // Update App Dialog
+  static String get updateIsNeeded => 'Необходимо обновление';
+  static String get weImproveGame => 'Мы стремимся сделать игру интереснее и '
+      'познавательнее для вас. Пожалуйста, обновите приложение для'
+      ' доступа к новым функциям - это не займет много времени :)';
+  static String get update => 'Обновить';
 }
