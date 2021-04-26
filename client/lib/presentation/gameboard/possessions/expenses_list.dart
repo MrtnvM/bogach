@@ -26,7 +26,7 @@ class ExpensesList extends HookWidget {
       titleTextStyle: Styles.tableHeaderTitleBlack,
       titleValueStyle: Styles.tableHeaderValueBlack,
       rows: [
-        for (final expense in expenses)
+        for (final expense in expenses.where((e) => e.value != 0))
           TitleRow(title: expense.name, value: expense.value.toPrice())
       ],
     );

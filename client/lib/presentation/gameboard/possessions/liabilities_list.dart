@@ -24,7 +24,7 @@ class LiabilitiesList extends HookWidget {
       titleTextStyle: Styles.tableHeaderTitleBlack,
       titleValueStyle: Styles.tableHeaderValueBlack,
       rows: [
-        for (final liability in liabilities)
+        for (final liability in liabilities.where((l) => l.value != 0))
           DetailRow(
             title: liability.name,
             value: liability.value.toPrice(),
