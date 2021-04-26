@@ -1,3 +1,4 @@
+import 'package:feedback/feedback.dart';
 import 'package:intl/intl.dart';
 
 // ignore: avoid_classes_with_only_static_members
@@ -516,4 +517,20 @@ class Strings {
   static String get removeFromFriends => 'Удалить из друзей';
   static String get updateProfileErrorMessage =>
       'При обновлении профиля возникла ошибка';
+
+  static final ruFeedbackTranslations = _RuFeedbackTranslations();
+}
+
+class _RuFeedbackTranslations extends FeedbackTranslation {
+  @override
+  String get draw => 'Нарисовать';
+
+  @override
+  String get feedbackDescriptionText => 'Что случилось?';
+
+  @override
+  String get navigate => 'Навигация';
+
+  @override
+  String get submitButtonText => 'Отправить';
 }

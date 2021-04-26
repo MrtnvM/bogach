@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:cash_flow/core/hooks/feedback_hooks.dart';
+import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/styles.dart';
@@ -16,6 +18,8 @@ class GameboardMenu extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isMenuShown = useState(false);
+    final game = useCurrentGame((g) => g);
+    final feedbackSender = useFeedbackSender();
 
     useEffect(() {
       controller.addListener(() {
@@ -69,7 +73,10 @@ class GameboardMenu extends HookWidget {
                     _buildMenuItem(
                       'Обратная связь',
                       Icons.message,
-                      controller.close,
+                      () {
+                        controller.close();
+                        feedbackSender.showFeedbackPage(game);
+                      },
                     ),
                   ],
                 ),

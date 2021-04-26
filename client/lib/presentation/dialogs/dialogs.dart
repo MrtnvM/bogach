@@ -86,6 +86,7 @@ void handleError({
   @required BuildContext context,
   @required dynamic exception,
   VoidCallback onRetry,
+  VoidCallback onCancel,
   String errorMessage,
   bool barrierDismissible = true,
   bool displayNegative = true,
@@ -112,6 +113,7 @@ void handleError({
       context: context,
       message: Strings.cannotAuthoriseThroughSocial,
       onRetry: onRetry,
+      onCancel: onCancel,
       barrierDismissible: barrierDismissible,
       displayNegative: displayNegative,
     );
@@ -124,6 +126,7 @@ void handleError({
         context: context,
         message: Strings.noInternetError,
         onRetry: onRetry,
+        onCancel: onCancel,
         barrierDismissible: barrierDismissible,
         displayNegative: displayNegative,
       );
@@ -134,6 +137,7 @@ void handleError({
         context: context,
         message: Strings.restorePurchasesError,
         onRetry: onRetry,
+        onCancel: onCancel,
         barrierDismissible: barrierDismissible,
         displayNegative: displayNegative,
       );
@@ -152,6 +156,7 @@ void handleError({
         context: context,
         message: errorMessage,
         onRetry: onRetry,
+        onCancel: onCancel,
         barrierDismissible: barrierDismissible,
         displayNegative: displayNegative,
       );
@@ -164,6 +169,7 @@ void handleError({
         context: context,
         message: message,
         onRetry: onRetry,
+        onCancel: onCancel,
         barrierDismissible: barrierDismissible,
         displayNegative: displayNegative,
       );
@@ -176,6 +182,7 @@ Future<void> showErrorDialog({
   String title,
   String message,
   VoidCallback onRetry,
+  VoidCallback onCancel,
   bool barrierDismissible = true,
   bool displayNegative = true,
 }) async {
@@ -190,9 +197,12 @@ Future<void> showErrorDialog({
     barrierDismissible: barrierDismissible,
   );
 
-  if (response == DialogResponse.confirm && onRetry != null) {
-    onRetry();
+  if (response == DialogResponse.confirm) {
+    onRetry?.call();
+    return;
   }
+
+  onCancel?.call();
 }
 
 enum DialogResponse { confirm, decline, cancel }
