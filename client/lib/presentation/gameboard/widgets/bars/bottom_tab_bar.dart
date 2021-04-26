@@ -53,17 +53,18 @@ class BottomTabBarState extends State<BottomTabBar> {
   Color activeColor;
   Duration duration = const Duration(milliseconds: 170);
   int currentIndex;
+  bool _isAnimationListenerEnabled = true;
 
   @override
   void initState() {
     super.initState();
     currentIndex = widget.tabController.index;
-    widget.tabController.addListener(_onTabChanged);
+    widget.tabController.animation.addListener(_onChangingSelectedTab);
   }
 
   @override
   void dispose() {
-    widget.tabController.removeListener(_onTabChanged);
+    widget.tabController.animation.removeListener(_onChangingSelectedTab);
     super.dispose();
   }
 
@@ -92,7 +93,10 @@ class BottomTabBarState extends State<BottomTabBar> {
                 final index = items.indexOf(item);
 
                 return GestureDetector(
-                  onTap: () => _select(index),
+                  onTap: () {
+                    _isAnimationListenerEnabled = false;
+                    _select(index);
+                  },
                   child: _buildItemWidget(item, index == currentIndex),
                 );
               }).toList(),
@@ -122,9 +126,19 @@ class BottomTabBarState extends State<BottomTabBar> {
     widget.onTap(index);
   }
 
-  void _onTabChanged() {
-    final index = widget.tabController.index;
-    _select(index);
+  void _onChangingSelectedTab() {
+    final offset = widget.tabController.offset;
+
+    if (!_isAnimationListenerEnabled) {
+      if (offset == 0) {
+        _isAnimationListenerEnabled = true;
+      }
+
+      return;
+    }
+
+    final newIndex = (widget.tabController.index + offset).round();
+    _select(newIndex);
   }
 
   double _getIndicatorPosition(int index) {
