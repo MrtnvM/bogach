@@ -205,55 +205,52 @@ Future<void> showUpdateAppDialog({
   return showDialog<DialogResponse>(
     context: context,
     barrierDismissible: false,
-    builder: (context) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
-        contentPadding: const EdgeInsets.all(0),
-        insetPadding: const EdgeInsets.symmetric(horizontal: 19),
-        content: Stack(
-          children: [
-            Image.asset(
-              Images.dog,
-              // Images.thinkingMan,
-              width: double.maxFinite,
-              fit: BoxFit.cover,
+    builder: (_) => AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
+      contentPadding: const EdgeInsets.all(0),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 19),
+      content: Stack(
+        children: [
+          Image.asset(
+            Images.dog,
+            width: double.maxFinite,
+            fit: BoxFit.cover,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 20),
+                Text(
+                  Strings.updateIsNeeded,
+                  style: Styles.dialogTitle,
+                ),
+                const SizedBox(height: 18),
+                Text(
+                  Strings.weImproveGame,
+                  maxLines: 10,
+                  textAlign: TextAlign.center,
+                  style: Styles.body1.copyWith(color: Colors.black),
+                ),
+                const SizedBox(height: 40),
+                ColorButton(
+                  color: ColorRes.mainGreen,
+                  onPressed: onUpdate,
+                  text: Strings.update,
+                  borderRadius: 20,
+                  padding: 8,
+                  textStyle: Styles.accountCommon.copyWith(
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 20),
-                  Text(
-                    Strings.updateIsNeeded,
-                    style: Styles.dialogTitle,
-                  ),
-                  const SizedBox(height: 18),
-                  Text(
-                    Strings.weImproveGame,
-                    maxLines: 10,
-                    textAlign: TextAlign.center,
-                    style: Styles.body1.copyWith(color: Colors.black),
-                  ),
-                  const SizedBox(height: 40),
-                  ColorButton(
-                    color: ColorRes.mainGreen,
-                    onPressed: onUpdate,
-                    text: Strings.update,
-                    borderRadius: 20,
-                    padding: 8,
-                    textStyle: Styles.accountCommon.copyWith(
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    },
+          ),
+        ],
+      ),
+    ),
   );
 }
 

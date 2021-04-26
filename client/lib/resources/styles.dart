@@ -228,4 +228,11 @@ class Styles {
     fontWeight: FontWeight.w600,
     color: ColorRes.black,
   );
+
+  static const defaultColorButtonText = TextStyle(
+    fontFamily: 'Montserrat',
+    fontSize: 16,
+    color: ColorRes.mainBlack,
+    fontWeight: FontWeight.w500,
+  );
 }

@@ -1,4 +1,5 @@
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 
 class ColorButton extends StatelessWidget {
@@ -35,13 +36,7 @@ class ColorButton extends StatelessWidget {
         alignment: Alignment.center,
         child: Text(
           text,
-          style: textStyle ??
-              const TextStyle(
-                fontFamily: 'Montserrat',
-                fontSize: 16,
-                color: ColorRes.mainBlack,
-                fontWeight: FontWeight.w500,
-              ),
+          style: textStyle ?? Styles.defaultColorButtonText,
         ),
       ),
     );
