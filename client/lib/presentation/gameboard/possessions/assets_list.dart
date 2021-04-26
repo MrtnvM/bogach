@@ -22,11 +22,18 @@ class AssetsList extends HookWidget {
   Widget build(BuildContext context) {
     final userId = useUserId();
     final currentMonth = useCurrentGameState().monthNumber;
+    final cash = useAccount().cash;
     final assets = useCurrentGame(
       (g) => g.participants[userId].possessionState.assets,
     );
 
-    final cashAssets = _getAssets<CashAsset>(assets, AssetType.cash);
+    final cashAssets = _getAssets<CashAsset>(assets, AssetType.cash)
+      ..add(CashAsset(
+        name: Strings.cash,
+        value: cash,
+        type: AssetType.cash,
+      ));
+
     final totalCash = _calculateSum<CashAsset>(cashAssets, (a) => a.value);
 
     final insuranses =
@@ -75,7 +82,7 @@ class AssetsList extends HookWidget {
       titleTextStyle: Styles.tableHeaderTitleBlack,
       titleValueStyle: Styles.tableHeaderValueBlack,
       rows: <Widget>[
-        TitleRow(title: '${Strings.cash}:', value: totalCash.toPrice()),
+        TitleRow(title: '${Strings.cash}', value: totalCash.toPrice()),
         DetailRow(
           title: Strings.insuranceTitle,
           value: totalInsurance.toPrice(),
