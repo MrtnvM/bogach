@@ -16,6 +16,8 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 class ProgressBar extends HookWidget {
   const ProgressBar({Key key, @required this.onMenuTap}) : super(key: key);
 
+  static const height = 66.0;
+
   final VoidCallback onMenuTap;
 
   @override
@@ -29,8 +31,9 @@ class ProgressBar extends HookWidget {
 
     return Container(
       padding: const EdgeInsets.only(left: 24.0, right: 8),
-      height: 66,
+      height: height,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _RoundProgress(progress: progress),
           const SizedBox(width: 16),

@@ -136,7 +136,7 @@ class _GameboardContentWidget extends HookWidget {
       child: Stack(
         children: [
           Positioned.fill(
-            top: TopBar.height - TopBar.bottomOffset,
+            top: TopBar.getHeight(context) - TopBar.bottomOffset,
             child: Column(
               children: [
                 Expanded(child: TabBarView(children: tabWidgets)),

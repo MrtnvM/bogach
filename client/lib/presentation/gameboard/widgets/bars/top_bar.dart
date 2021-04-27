@@ -10,14 +10,23 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class TopBar extends HookWidget {
   const TopBar({this.onMenuTap});
 
-  static const height = 174.0;
   static const bottomOffset = 24.0;
+  static const topBarContentHeight = 130.0;
+
+  static double getHeight(BuildContext context) {
+    final statusBarHeight = MediaQuery.of(context).padding.top;
+    return topBarContentHeight + statusBarHeight;
+  }
 
   final VoidCallback onMenuTap;
 
   @override
   Widget build(BuildContext context) {
     final notchSize = useNotchSize();
+    final height = getHeight(context);
+    final progressBarTopPadding = notchSize.top > 20
+        ? 0.0
+        : (height - AccountBar.height - ProgressBar.height - notchSize.top) / 2;
 
     return SizedBox(
       height: height,
@@ -53,11 +62,12 @@ class TopBar extends HookWidget {
             child: AccountBar(),
           ),
           Positioned(
-            top: notchSize.top,
+            top: notchSize.top + progressBarTopPadding,
             left: 0,
             right: 0,
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 ProgressBar(onMenuTap: onMenuTap),
                 const SizedBox(height: 16),

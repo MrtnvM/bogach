@@ -12,6 +12,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class AccountBar extends HookWidget {
   const AccountBar({Key key}) : super(key: key);
 
+  static const height = 54.0;
+
   @override
   Widget build(BuildContext context) {
     final userId = useUserId();
@@ -20,7 +22,7 @@ class AccountBar extends HookWidget {
 
     return Container(
       width: double.infinity,
-      height: 54,
+      height: height,
       decoration: BoxDecoration(
         color: ColorRes.primaryWhiteColor,
         borderRadius: BorderRadius.circular(8),
