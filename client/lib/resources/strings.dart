@@ -18,6 +18,7 @@ class Strings {
 
   // Common
   static String get submit => 'Отправить';
+  static String get close => 'Закрыть';
   static String get select => 'Выбрать';
   static String get logout => 'Выйти из аккаунта';
   static String get gallery => 'Галерея';
@@ -294,20 +295,17 @@ class Strings {
   static String get total => 'Итого';
 
   static String get waitingPlayersList => 'Ждем хода игроков';
-
-  static String get gameBoardTitle => 'GameBoard';
+  static String get feedback => 'Обратная связь';
 
   static String get targetTypeCash => 'Капитал';
-
   static String get targetTypePassiveIncome => 'Пассивный доход';
 
   static String get cashFlow => 'Денежный поток';
+  static String get cashFlowShort => 'Поток';
   static String get cashFlowDescription =>
       'Практически главный показатель в игре\n\n'
       'Это сумма, на которую ты становишься богаче каждый месяц\n\n'
       'Денежный поток - это доходы минус расходы';
-
-  static String get cashFlowShort => 'Поток';
 
   static String get credit => 'Кредит';
   static String get creditDescription =>

@@ -5,6 +5,7 @@ import 'package:cash_flow/core/hooks/feedback_hooks.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -60,22 +61,22 @@ class GameboardMenu extends HookWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildMenuItem(
-                      'Закрыть',
-                      Icons.close,
-                      controller.close,
+                    _MenuItem(
+                      title: Strings.close,
+                      icon: Icons.close,
+                      onTap: controller.close,
                     ),
-                    _buildDivider(),
-                    _buildMenuItem(
-                      'В главное меню',
-                      Icons.arrow_back_sharp,
-                      appRouter.goBack,
+                    const _Divider(),
+                    _MenuItem(
+                      title: Strings.goToMainMenu,
+                      icon: Icons.arrow_back_sharp,
+                      onTap: appRouter.goBack,
                     ),
-                    _buildDivider(),
-                    _buildMenuItem(
-                      'Обратная связь',
-                      Icons.message,
-                      () {
+                    const _Divider(),
+                    _MenuItem(
+                      title: Strings.feedback,
+                      icon: Icons.message,
+                      onTap: () {
                         controller.close();
                         feedbackSender.showFeedbackPage(game, userId);
                       },
@@ -89,8 +90,22 @@ class GameboardMenu extends HookWidget {
       ),
     );
   }
+}
 
-  Widget _buildMenuItem(String title, IconData icon, VoidCallback onTap) {
+class _MenuItem extends StatelessWidget {
+  const _MenuItem({
+    Key key,
+    this.title,
+    this.icon,
+    this.onTap,
+  }) : super(key: key);
+
+  final String title;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.translucent,
@@ -106,8 +121,13 @@ class GameboardMenu extends HookWidget {
       ),
     );
   }
+}
 
-  Widget _buildDivider() {
+class _Divider extends StatelessWidget {
+  const _Divider({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
       color: ColorRes.greyCog.withAlpha(100),
