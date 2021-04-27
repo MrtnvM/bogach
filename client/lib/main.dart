@@ -103,7 +103,6 @@ Future<void> main({
   SessionTracker.gameLaunched.start();
 
   _initGoogleMobileAds();
-  print("debug");
 
   runZonedGuarded<Future<void>>(() async {
     runApp(
@@ -146,6 +145,9 @@ void initLogging(String environmentName, isLoggerEnabled) {
 }
 
 Future<void> _initGoogleMobileAds() async {
-  final status = MobileAds.instance.initialize();
-  print(status);
+  // TODO measure time and decide where to place - in action or app start
+  // https://gitlab.com/cash-flow-team/cash-flow/-/issues/304
+  debug(() {
+    MobileAds.instance.initialize();
+  });
 }
