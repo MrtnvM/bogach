@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,10 +14,9 @@ String _userId;
 
 _FeedbackSender useFeedbackSender() {
   final context = useContext();
-  final userId = useUserId();
 
   return _FeedbackSender(
-    showFeedbackPage: (game) {
+    showFeedbackPage: (game, userId) {
       _currentGame = game;
       _userId = userId;
 
@@ -34,7 +32,7 @@ class _FeedbackSender {
     @required this.sendFeedback,
   });
 
-  final void Function(Game game) showFeedbackPage;
+  final void Function(Game game, String userId) showFeedbackPage;
   final void Function(
     BuildContext context,
     String whatsWrong,

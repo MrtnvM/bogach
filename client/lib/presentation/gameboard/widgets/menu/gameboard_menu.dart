@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/feedback_hooks.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -18,6 +19,7 @@ class GameboardMenu extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isMenuShown = useState(false);
+    final userId = useUserId();
     final game = useCurrentGame((g) => g);
     final feedbackSender = useFeedbackSender();
 
@@ -75,7 +77,7 @@ class GameboardMenu extends HookWidget {
                       Icons.message,
                       () {
                         controller.close();
-                        feedbackSender.showFeedbackPage(game);
+                        feedbackSender.showFeedbackPage(game, userId);
                       },
                     ),
                   ],
