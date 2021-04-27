@@ -8,6 +8,7 @@
 
 import google_mobile_ads
 
+// TODO change design https://gitlab.com/cash-flow-team/cash-flow/-/issues/304
 class ListTileNativeAdFactory : FLTNativeAdFactory {
     
     func createNativeAd(_ nativeAd: GADUnifiedNativeAd,

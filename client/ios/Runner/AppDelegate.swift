@@ -18,6 +18,7 @@ import google_mobile_ads
     
     GeneratedPluginRegistrant.register(with: self)
     
+    // TODO change factoryId https://gitlab.com/cash-flow-team/cash-flow/-/issues/304
     let listTileFactory = ListTileNativeAdFactory()
     FLTGoogleMobileAdsPlugin.registerNativeAdFactory(
         self, factoryId: "listTile", nativeAdFactory: listTileFactory)
