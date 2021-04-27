@@ -4,6 +4,7 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
+import 'package:cash_flow/widgets/texts/animated_price.dart';
 import 'package:cash_flow/widgets/tutorial/gameboard_tutorial_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class AccountBar extends HookWidget {
   Widget build(BuildContext context) {
     final userId = useUserId();
     final account = useCurrentGame((g) => g.participants[userId].account);
+    final previousAccount = usePrevious(account);
     final gameboardTutorial = useGameboardTutorial();
 
     return Container(
@@ -42,6 +44,7 @@ class AccountBar extends HookWidget {
             child: _buildItem(
               title: '${Strings.cashFlowShort}',
               value: account.cashFlow,
+              previousValue: previousAccount?.cashFlow ?? account.cashFlow,
             ),
           ),
           _buildDivider(),
@@ -50,6 +53,7 @@ class AccountBar extends HookWidget {
             child: _buildItem(
               title: '${Strings.cash}',
               value: account.cash,
+              previousValue: previousAccount?.cash ?? account.cashFlow,
             ),
           ),
           _buildDivider(),
@@ -58,6 +62,7 @@ class AccountBar extends HookWidget {
             child: _buildItem(
               title: '${Strings.credit}',
               value: account.credit,
+              previousValue: previousAccount?.credit ?? account.credit,
             ),
           ),
         ],
@@ -65,12 +70,18 @@ class AccountBar extends HookWidget {
     );
   }
 
-  Widget _buildItem({String title, double value}) {
+  Widget _buildItem({
+    @required String title,
+    @required double value,
+    @required double previousValue,
+  }) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(
-          value.toPrice(),
+        AnimatedPrice(
+          begin: previousValue,
+          end: value,
+          duration: const Duration(milliseconds: 500),
           style: Styles.tableHeaderTitleBlack.copyWith(
             fontSize: 12,
           ),
