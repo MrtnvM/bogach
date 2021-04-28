@@ -1,11 +1,12 @@
 import 'dart:async';
 
+import 'package:fimber/fimber.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:notification_permissions/notification_permissions.dart';
 
 FirebaseMessaging useFirebaseMessaging() {
-  return useMemoized(() => FirebaseMessaging());
+  return useMemoized(() => FirebaseMessaging.instance);
 }
 
 void usePushNotificationsPermissionRequest({
@@ -18,7 +19,7 @@ void usePushNotificationsPermissionRequest({
     final requestDelay = useDelay ? delay : const Duration();
 
     Future.delayed(requestDelay).then((_) async {
-      firebaseMessaging.requestNotificationPermissions();
+      firebaseMessaging.requestPermission();
     });
 
     return null;
@@ -48,23 +49,17 @@ void usePushTokenSubscription(void onTokenUpdated(String token), [List keys]) {
 }
 
 void usePushMessageSubscription(void onMessage(Map<String, dynamic> message)) {
-  final firebaseMessaging = useFirebaseMessaging();
-
-  final void Function(Map<String, dynamic>) onPushNotification = (message) {
-    final Map<String, dynamic> data =
-        message['data']?.cast<String, dynamic>() ?? message;
-
-    if (data != null) {
-      onMessage(data);
+  final void Function(RemoteMessage) onPushNotification = (message) {
+    if (message.data != null) {
+      onMessage(message.data);
+    } else {
+      Fimber.e('Push notification with empty data', ex: message);
     }
   };
 
   useEffect(() {
-    // firebaseMessaging.configure(
-    //   onMessage: onPushNotification,
-    //   onLaunch: onPushNotification,
-    //   onResume: onPushNotification,
-    // );
+    FirebaseMessaging.onMessage.listen(onPushNotification);
+    FirebaseMessaging.onMessageOpenedApp.listen(onPushNotification);
 
     return null;
   }, []);
