@@ -103,14 +103,14 @@ class AssetsList extends HookWidget {
             title: Strings.investments,
             value: totalDebentures.toPrice(),
             details: debentures.map(
-              (i) {
+              (debenture) {
                 final description = Strings.itemsPerPrice(
-                  count: i.count,
-                  price: i.averagePrice.toPrice(),
+                  count: debenture.count,
+                  price: debenture.averagePrice.toPrice(),
                 );
 
-                return '${i.name} '
-                    '(${i.profitabilityPercent.toPercent()}); '
+                return '${debenture.name} '
+                    '(${debenture.profitabilityPercent.toPercent()}); '
                     '$description';
               },
             ).toList(),
@@ -120,13 +120,13 @@ class AssetsList extends HookWidget {
             title: Strings.stock,
             value: totalStocks.toPrice(),
             details: stocks.map(
-              (i) {
+              (stock) {
                 final description = Strings.itemsPerPrice(
-                  count: i.countInPortfolio,
-                  price: i.averagePrice.toPrice(),
+                  count: stock.countInPortfolio,
+                  price: stock.averagePrice.toPrice(),
                 );
 
-                return '${i.name}; $description';
+                return '${stock.name}; $description';
               },
             ).toList(),
           ),
@@ -135,8 +135,8 @@ class AssetsList extends HookWidget {
             title: Strings.property,
             value: totalRealties.toPrice(),
             details: realties
-                .map((i) => '${i.name}; '
-                    '${Strings.cost} - ${i.downPayment.toPrice()}')
+                .map((realty) => '${realty.name}; '
+                    '${Strings.cost} - ${realty.downPayment.toPrice()}')
                 .toList(),
           ),
         if (businesses.isNotEmpty)
@@ -144,8 +144,9 @@ class AssetsList extends HookWidget {
             title: Strings.business,
             value: totalBusinesses.toPrice(),
             details: businesses
-                .map((i) => '${i.name}; '
-                    '${Strings.firstPayment} - ${i.downPayment.toPrice()}')
+                .map((business) => '${business.name}; '
+                    '${Strings.firstPayment} - '
+                    '${business.downPayment.toPrice()}')
                 .toList(),
           ),
         if (otherAssets.isNotEmpty)
@@ -153,8 +154,9 @@ class AssetsList extends HookWidget {
             title: Strings.other,
             value: totalOtherAssets.toPrice(),
             details: otherAssets
-                .map((i) => '${i.name}; '
-                    '${Strings.firstPayment} - ${i.downPayment.toPrice()}')
+                .map((otherAsset) => '${otherAsset.name}; '
+                    '${Strings.firstPayment} - '
+                    '${otherAsset.downPayment.toPrice()}')
                 .toList(),
           ),
       ],

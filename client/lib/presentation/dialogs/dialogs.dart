@@ -200,8 +200,8 @@ Future<void> showErrorDialog({
     barrierDismissible: barrierDismissible,
   );
 
-  if (response == DialogResponse.confirm) {
-    onRetry?.call();
+  if (response == DialogResponse.confirm && onRetry != null) {
+    onRetry();
     return;
   }
 

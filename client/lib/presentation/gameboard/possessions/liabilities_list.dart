@@ -13,7 +13,9 @@ class LiabilitiesList extends HookWidget {
   Widget build(BuildContext context) {
     final userId = useUserId();
     final liabilities = useCurrentGame(
-      (g) => g.participants[userId].possessionState.liabilities,
+      (g) => g.participants[userId].possessionState.liabilities
+          .where((l) => l.value != 0)
+          .toList(),
     );
 
     final totalLiability = liabilities.fold<double>(0.0, (s, i) => s + i.value);
@@ -24,7 +26,7 @@ class LiabilitiesList extends HookWidget {
       titleTextStyle: Styles.tableHeaderTitleBlack,
       titleValueStyle: Styles.tableHeaderValueBlack,
       rows: [
-        for (final liability in liabilities.where((l) => l.value != 0))
+        for (final liability in liabilities)
           DetailRow(
             title: liability.name,
             value: liability.value.toPrice(),
