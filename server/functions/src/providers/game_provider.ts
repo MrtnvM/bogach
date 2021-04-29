@@ -298,37 +298,45 @@ export class GameProvider {
         createdAt: game.createdAt,
       };
 
-      const isSingleplayerGame = game.type === 'singleplayer' && !game.config.level;
+      const isWinner =
+        game.state.winners.find(
+          (winner) => winner.userId === user.userId && winner.targetValue >= 1
+        ) !== undefined;
+
+      const isSingleplayerGame = game.type === 'singleplayer' && !game.config.level && isWinner;
       if (isSingleplayerGame) {
         existingGame = completedGames.singleplayerGames.find((g) => g.templateId === templateId);
 
         completedGames = produce(completedGames, (draft) => {
-          draft.singleplayerGames = completedGames.singleplayerGames
-            .filter((g) => g.gameId !== existingGame?.gameId && g.createdAt !== undefined);
+          draft.singleplayerGames = completedGames.singleplayerGames.filter(
+            (g) => g.gameId !== existingGame?.gameId && g.createdAt !== undefined
+          );
 
           draft.singleplayerGames.push(newLastGame);
         });
       }
 
-      const isQuestGame = game.type === 'singleplayer' && game.config.level;
+      const isQuestGame = game.type === 'singleplayer' && game.config.level && isWinner;
       if (isQuestGame) {
         existingGame = completedGames.questGames.find((g) => g.templateId === templateId);
 
         completedGames = produce(completedGames, (draft) => {
-          draft.questGames = completedGames.questGames
-            .filter((g) => g.gameId !== existingGame?.gameId && g.createdAt !== undefined);
+          draft.questGames = completedGames.questGames.filter(
+            (g) => g.gameId !== existingGame?.gameId && g.createdAt !== undefined
+          );
 
           draft.questGames.push(newLastGame);
         });
       }
 
-      const isMultiplayerGame = game.type === 'multiplayer';
+      const isMultiplayerGame = game.type === 'multiplayer' && isWinner;
       if (isMultiplayerGame) {
         existingGame = completedGames.multiplayerGames.find((g) => g.templateId === templateId);
 
         completedGames = produce(completedGames, (draft) => {
-          draft.multiplayerGames = completedGames.multiplayerGames
-            .filter((g) => g.gameId !== existingGame?.gameId && g.createdAt !== undefined);
+          draft.multiplayerGames = completedGames.multiplayerGames.filter(
+            (g) => g.gameId !== existingGame?.gameId && g.createdAt !== undefined
+          );
 
           draft.multiplayerGames.push(newLastGame);
         });
