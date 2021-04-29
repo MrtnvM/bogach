@@ -62,4 +62,16 @@ class Images {
   static const defaultAvatarUrl = 'https://firebasestorage.googleapis.com/v0/b/'
       'bogach-production.appspot.com/o/avatar%2Fdefault_avatar.jpeg?'
       'alt=media&token=d8426252-e62c-4ae8-a8e0-0cfecc69dbee';
+
+  // Events icons
+  static const eventDebenture = 'assets/images/svg/debenture.svg';
+  static const eventIncome = 'assets/images/svg/income.svg';
+  static const eventSalaryChange = 'assets/images/svg/salary_change.svg';
+  static const eventExpense = 'assets/images/svg/expense.svg';
+  static const eventMonthlyExpense = 'assets/images/svg/monthly_expense.svg';
+  static const eventStock = 'assets/images/svg/stock.svg';
+  static const eventRealEstate = 'assets/images/svg/real_estate.svg';
+  static const eventBusiness = 'assets/images/svg/business.svg';
+  static const eventNews = 'assets/images/svg/news.svg';
+  static const eventInsurance = 'assets/images/svg/insurance.svg';
 }

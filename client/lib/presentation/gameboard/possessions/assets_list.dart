@@ -22,11 +22,18 @@ class AssetsList extends HookWidget {
   Widget build(BuildContext context) {
     final userId = useUserId();
     final currentMonth = useCurrentGameState().monthNumber;
+    final cash = useAccount().cash;
     final assets = useCurrentGame(
       (g) => g.participants[userId].possessionState.assets,
     );
 
-    final cashAssets = _getAssets<CashAsset>(assets, AssetType.cash);
+    final cashAssets = _getAssets<CashAsset>(assets, AssetType.cash)
+      ..add(CashAsset(
+        name: Strings.cash,
+        value: cash,
+        type: AssetType.cash,
+      ));
+
     final totalCash = _calculateSum<CashAsset>(cashAssets, (a) => a.value);
 
     final insuranses =
@@ -75,74 +82,83 @@ class AssetsList extends HookWidget {
       titleTextStyle: Styles.tableHeaderTitleBlack,
       titleValueStyle: Styles.tableHeaderValueBlack,
       rows: <Widget>[
-        TitleRow(title: '${Strings.cash}:', value: totalCash.toPrice()),
-        DetailRow(
-          title: Strings.insuranceTitle,
-          value: totalInsurance.toPrice(),
-          details: insuranses.map((insurance) {
-            final monthsLeft =
-                insurance.duration - (currentMonth - insurance.fromMonth);
+        if (totalCash != 0)
+          TitleRow(title: '${Strings.cash}', value: totalCash.toPrice()),
+        if (insuranses.isNotEmpty)
+          DetailRow(
+            title: Strings.insuranceTitle,
+            value: totalInsurance.toPrice(),
+            details: insuranses.map((insurance) {
+              final monthsLeft =
+                  insurance.duration - (currentMonth - insurance.fromMonth);
 
-            return '${insurance.name}; '
-                '${Strings.defence} - ${insurance.value.toPrice()}; '
-                '${Strings.cost} - ${insurance.cost.toPrice()}; '
-                '${Strings.expires(monthsLeft)}';
-          }).toList(),
-        ),
-        DetailRow(
-          title: Strings.investments,
-          value: totalDebentures.toPrice(),
-          details: debentures.map(
-            (i) {
-              final description = Strings.itemsPerPrice(
-                count: i.count,
-                price: i.averagePrice.toPrice(),
-              );
+              return '${insurance.name}; '
+                  '${Strings.defence} - ${insurance.value.toPrice()}; '
+                  '${Strings.cost} - ${insurance.cost.toPrice()}; '
+                  '${Strings.expires(monthsLeft)}';
+            }).toList(),
+          ),
+        if (debentures.isNotEmpty)
+          DetailRow(
+            title: Strings.investments,
+            value: totalDebentures.toPrice(),
+            details: debentures.map(
+              (debenture) {
+                final description = Strings.itemsPerPrice(
+                  count: debenture.count,
+                  price: debenture.averagePrice.toPrice(),
+                );
 
-              return '${i.name} '
-                  '(${i.profitabilityPercent.toPercent()}); '
-                  '$description';
-            },
-          ).toList(),
-        ),
-        DetailRow(
-          title: Strings.stock,
-          value: totalStocks.toPrice(),
-          details: stocks.map(
-            (i) {
-              final description = Strings.itemsPerPrice(
-                count: i.countInPortfolio,
-                price: i.averagePrice.toPrice(),
-              );
+                return '${debenture.name} '
+                    '(${debenture.profitabilityPercent.toPercent()}); '
+                    '$description';
+              },
+            ).toList(),
+          ),
+        if (stocks.isNotEmpty)
+          DetailRow(
+            title: Strings.stock,
+            value: totalStocks.toPrice(),
+            details: stocks.map(
+              (stock) {
+                final description = Strings.itemsPerPrice(
+                  count: stock.countInPortfolio,
+                  price: stock.averagePrice.toPrice(),
+                );
 
-              return '${i.name}; $description';
-            },
-          ).toList(),
-        ),
-        DetailRow(
-          title: Strings.property,
-          value: totalRealties.toPrice(),
-          details: realties
-              .map((i) => '${i.name}; '
-                  '${Strings.cost} - ${i.downPayment.toPrice()}')
-              .toList(),
-        ),
-        DetailRow(
-          title: Strings.business,
-          value: totalBusinesses.toPrice(),
-          details: businesses
-              .map((i) => '${i.name}; '
-                  '${Strings.firstPayment} - ${i.downPayment.toPrice()}')
-              .toList(),
-        ),
-        DetailRow(
-          title: Strings.other,
-          value: totalOtherAssets.toPrice(),
-          details: otherAssets
-              .map((i) => '${i.name}; '
-                  '${Strings.firstPayment} - ${i.downPayment.toPrice()}')
-              .toList(),
-        ),
+                return '${stock.name}; $description';
+              },
+            ).toList(),
+          ),
+        if (realties.isNotEmpty)
+          DetailRow(
+            title: Strings.property,
+            value: totalRealties.toPrice(),
+            details: realties
+                .map((realty) => '${realty.name}; '
+                    '${Strings.cost} - ${realty.downPayment.toPrice()}')
+                .toList(),
+          ),
+        if (businesses.isNotEmpty)
+          DetailRow(
+            title: Strings.business,
+            value: totalBusinesses.toPrice(),
+            details: businesses
+                .map((business) => '${business.name}; '
+                    '${Strings.firstPayment} - '
+                    '${business.downPayment.toPrice()}')
+                .toList(),
+          ),
+        if (otherAssets.isNotEmpty)
+          DetailRow(
+            title: Strings.other,
+            value: totalOtherAssets.toPrice(),
+            details: otherAssets
+                .map((otherAsset) => '${otherAsset.name}; '
+                    '${Strings.firstPayment} - '
+                    '${otherAsset.downPayment.toPrice()}')
+                .toList(),
+          ),
       ],
     );
   }

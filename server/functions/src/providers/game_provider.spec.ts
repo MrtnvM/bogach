@@ -75,9 +75,11 @@ describe('Game Provider', () => {
     const userId = 'user1';
 
     const gameTemplate = GameTemplateFixture.createGameTemplate({ id: templateId });
+    const user = UserFixture.createUser({ userId });
 
     when(mockTemplateProvider.getGameTemplate(templateId)).thenReturn(gameTemplate);
     when(mockGameDao.createGame(anything())).thenCall((game) => Promise.resolve(game));
+    when(mockUserDao.getUser(userId)).thenResolve(user);
 
     const createdGame = await gameProvider.createGame(templateId, [userId]);
     const monthResults = createdGame.participants[userId].progress.monthResults;

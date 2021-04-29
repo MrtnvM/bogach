@@ -14,6 +14,7 @@ class GameEvent {
     @required this.id,
     @required this.name,
     @required this.description,
+    this.image,
     @required this.type,
     @required this.data,
   });
@@ -26,6 +27,7 @@ class GameEvent {
       id: json['id'],
       name: json['name'],
       description: json['description'],
+      image: json['image'],
       type: type,
       data: eventData,
     );
@@ -34,6 +36,7 @@ class GameEvent {
   final String id;
   final String name;
   final String description;
+  final String image;
   @JsonKey(fromJson: GameEventType.fromJson, toJson: GameEventType.toJson)
   final GameEventType type;
   final GameEventData data;

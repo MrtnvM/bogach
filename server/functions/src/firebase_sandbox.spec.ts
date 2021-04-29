@@ -43,7 +43,7 @@ if (!linterFix) {
 admin.initializeApp(stagingConfig);
 
 describe('Firebase sandbox', () => {
-  test.skip('Query user from Firestore', async () => {
+  test.skip('Query purchasers from Firestore', async () => {
     jest.setTimeout(15_000);
 
     const firestore = admin.firestore();
@@ -61,7 +61,7 @@ describe('Firebase sandbox', () => {
     writeJson(path, questPurchasers);
   });
 
-  test.only('Give bonus to Quests Purchaser', async () => {
+  test.skip('Give bonus to Quests Purchaser', async () => {
     jest.setTimeout(90_000);
 
     const userId = '';

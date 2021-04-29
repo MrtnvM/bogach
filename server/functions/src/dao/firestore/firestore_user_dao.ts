@@ -52,7 +52,7 @@ export class FirestoreUserDAO implements IUserDAO {
     const onlineProfiles = (await this.firestore.getQueryItems(query)) || [];
     onlineProfiles.forEach(OnlineProfileEntity.validate);
     return (onlineProfiles as OnlineProfile[]).filter(
-      (profile) => profile.userId != userId && profile.onlineAt >= minTimeOnline
+      (profile) => profile.userId !== userId && profile.onlineAt >= minTimeOnline
     );
   }
 }

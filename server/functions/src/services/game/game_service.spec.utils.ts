@@ -1,9 +1,10 @@
 import { GameEntity, Game } from '../../models/domain/game/game';
 import { User, UserEntity } from '../../models/domain/user/user';
-import { DebentureEvent } from '../../events/debenture/debenture_event';
 import { GameEventEntity } from '../../models/domain/game/game_event';
 import { GameFixture } from '../../core/fixtures/game_fixture';
 import { ParticipantFixture } from '../../core/fixtures/participant_fixture';
+import { IncomeEvent } from '../../events/income/income_event';
+import { ExpenseEvent } from '../../events/expense/expense_event';
 
 export const gameId: GameEntity.Id = 'game1';
 export const userId: UserEntity.Id = 'user1';
@@ -11,19 +12,31 @@ export const userId: UserEntity.Id = 'user1';
 export const firstEventId: GameEventEntity.Id = 'event1';
 export const lastEventId: GameEventEntity.Id = 'event2';
 
-export const firstEventPlayerAction: DebentureEvent.PlayerAction = {
-  eventId: firstEventId,
-  action: 'buy',
-  count: 1,
-};
-
-export const lastEventPlayerAction: DebentureEvent.PlayerAction = {
-  eventId: lastEventId,
-  action: 'buy',
-  count: 1,
-};
+export const firstEventPlayerAction: IncomeEvent.PlayerAction = {};
+export const lastEventPlayerAction: ExpenseEvent.PlayerAction = {};
 
 const create = <T>(obj: T) => obj;
+
+export const incomeEvent = create<IncomeEvent.Event>({
+  id: firstEventId,
+  name: 'Event 1 (Income)',
+  description: 'Event 1 (Income)',
+  type: IncomeEvent.Type,
+  data: {
+    income: 1_000,
+  },
+});
+
+export const expenseEvent = create<ExpenseEvent.Event>({
+  id: lastEventId,
+  name: 'Event 2 (Expense)',
+  description: 'Event 2 (Expense)',
+  type: ExpenseEvent.Type,
+  data: {
+    expense: 1_000,
+    insuranceType: 'health',
+  },
+});
 
 export const game: Game = GameFixture.createGame({
   id: gameId,
@@ -63,32 +76,7 @@ export const game: Game = GameFixture.createGame({
       },
     }),
   },
-  currentEvents: [
-    create<DebentureEvent.Event>({
-      id: firstEventId,
-      name: 'Debenture Event 1',
-      description: 'Debenture Event 1',
-      type: DebentureEvent.Type,
-      data: {
-        currentPrice: 1_100,
-        nominal: 1_000,
-        profitabilityPercent: 8,
-        availableCount: 100,
-      },
-    }),
-    create<DebentureEvent.Event>({
-      id: lastEventId,
-      name: 'Debenture Event 2',
-      description: 'Debenture Event 2',
-      type: DebentureEvent.Type,
-      data: {
-        currentPrice: 900,
-        nominal: 1_000,
-        profitabilityPercent: 6,
-        availableCount: 100,
-      },
-    }),
-  ],
+  currentEvents: [incomeEvent, expenseEvent],
 });
 
 const getInitialProfile = (profile?: Partial<User>): User => {
@@ -118,4 +106,6 @@ export const TestData = {
   lastEventId,
   lastEventPlayerAction,
   getInitialProfile,
+  incomeEvent,
+  expenseEvent,
 };

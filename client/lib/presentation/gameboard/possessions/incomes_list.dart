@@ -30,11 +30,15 @@ class IncomesList extends HookWidget {
       titleTextStyle: Styles.tableHeaderTitleBlack,
       titleValueStyle: Styles.tableHeaderValueBlack,
       rows: [
-        TitleRow(title: Strings.salary, value: salary.toPrice()),
-        TitleRow(title: Strings.investments, value: investment.toPrice()),
-        TitleRow(title: Strings.business, value: business.toPrice()),
-        TitleRow(title: Strings.realty, value: realty.toPrice()),
-        TitleRow(title: Strings.other, value: other.toPrice()),
+        if (salary != 0)
+          TitleRow(title: Strings.salary, value: salary.toPrice()),
+        if (investment != 0)
+          TitleRow(title: Strings.investments, value: investment.toPrice()),
+        if (business != 0)
+          TitleRow(title: Strings.business, value: business.toPrice()),
+        if (realty != 0)
+          TitleRow(title: Strings.realty, value: realty.toPrice()),
+        if (other != 0) TitleRow(title: Strings.other, value: other.toPrice()),
       ],
     );
   }

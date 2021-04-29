@@ -40,8 +40,9 @@ class GameEventPage extends HookWidget {
 
     final isActionInProgress = useIsGameboardActionInProgress();
 
-    return Opacity(
+    return AnimatedOpacity(
       opacity: isActionInProgress ? 0 : 1,
+      duration: const Duration(milliseconds: 200),
       child: activeGameState.maybeWhen(
         gameEvent: (eventIndex, _) => gameEvents.isEmpty
             ? _buildNoGameEventsState()

@@ -38,6 +38,7 @@ describe('User Provider', () => {
         isQuestsAvailable: false,
         boughtMultiplayerGamesCount: 3,
       },
+      friends: [],
       profileVersion: 3,
       playedGames: playedGameInfo,
       lastGames: LastGamesEntity.initial(),
@@ -76,6 +77,7 @@ describe('User Provider', () => {
         boughtMultiplayerGamesCount: PurchaseProfileEntity.initialMultiplayerGamesCount,
       };
       draft.profileVersion = 3;
+      draft.friends = [];
       draft.lastGames = LastGamesEntity.initial();
     });
 
