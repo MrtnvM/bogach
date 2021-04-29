@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 class RaisedIconButton extends StatelessWidget {
   const RaisedIconButton({
-    @required this.icon,
-    @required this.onPressed,
+    required this.icon,
+    required this.onPressed,
     this.size = 28,
     this.buttonColor = ColorRes.grey,
     this.iconColor = ColorRes.mainBlack,

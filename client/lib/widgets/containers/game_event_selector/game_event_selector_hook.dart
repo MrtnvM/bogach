@@ -2,16 +2,14 @@ import 'dart:math';
 
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/widgets/containers/game_event_selector/selector_state_model.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 SelectorStateModel normalizeSelectorState({
-  @required BuySellAction currentAction,
-  @required int selectedCount,
-  @required double availableCash,
-  @required int maxCountToBuy,
-  @required double currentPrice,
-  @required int alreadyHave,
+  required BuySellAction currentAction,
+  required int selectedCount,
+  required double? availableCash,
+  required int maxCountToBuy,
+  required double currentPrice,
+  required int alreadyHave,
 }) {
   assert(maxCountToBuy > 0);
   assert(currentPrice > 0);

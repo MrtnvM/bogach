@@ -7,7 +7,6 @@ import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/cache/add_friends_storage.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 
 class AddFriendsAction extends BaseAction {
@@ -16,9 +15,9 @@ class AddFriendsAction extends BaseAction {
   // а затем пользователь закрыл приложение. Запрос отправится только если
   // пользователь перейдет по динамик линке еще раз
   AddFriendsAction({
-    @required this.userId,
+    required this.userId,
     this.retryCount = 0,
-  }) : assert(userId != null);
+  });
 
   final String userId;
   final int retryCount;
@@ -29,7 +28,7 @@ class AddFriendsAction extends BaseAction {
   Operation get operationKey => Operation.addFriend;
 
   @override
-  Future<AppState> reduce() async {
+  Future<AppState?> reduce() async {
     final userService = GetIt.I.get<UserService>();
     final usersAddToFriendsStorage = GetIt.I.get<UsersAddToFriendsStorage>();
 
@@ -56,7 +55,7 @@ class AddFriendsAction extends BaseAction {
 
   Future<void> _resendActionWithDelay(AddFriendsAction action) async {
     final delayDuration = Duration(
-      seconds: pow(_retryDelaySeconds, action.retryCount),
+      seconds: pow(_retryDelaySeconds, action.retryCount) as int,
     );
 
     Future.delayed(delayDuration).then((_) => dispatch(action));

@@ -7,7 +7,7 @@ class ProductPurchaseFailedException implements Exception {
 
   @override
   String toString() {
-    return product?.productDescription ?? '';
+    return product.productDescription;
   }
 }
 
@@ -18,7 +18,7 @@ class ProductPurchaseCanceledException implements Exception {
 
   @override
   String toString() {
-    return product?.productDescription ?? '';
+    return product.productDescription;
   }
 }
 
@@ -36,11 +36,11 @@ class NoInAppPurchaseProductsException implements Exception {
 class QueryPastPurchasesRequestException implements Exception {
   QueryPastPurchasesRequestException(this.error);
 
-  final IAPError error;
+  final IAPError? error;
 
   @override
   String toString() {
-    return 'Source: ${error?.source?.runtimeType?.toString()}\n'
+    return 'Source: ${error?.source.runtimeType.toString()}\n'
         'Code: ${error?.code}'
         'Message: ${error?.message}'
         'Details: ${error?.details?.toString()}';

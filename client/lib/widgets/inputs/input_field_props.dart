@@ -25,14 +25,14 @@ class InputFieldProps {
     this.initialValue,
   });
 
-  final String hint;
-  final String label;
-  final ValueChanged<String> onSubmitted;
-  final List<FormatResult> validatorRules;
-  final TextEditingController controller;
+  final String? hint;
+  final String? label;
+  final ValueChanged<String>? onSubmitted;
+  final List<FormatResult>? validatorRules;
+  final TextEditingController? controller;
   final TextAlign textAlign;
-  final FocusNode focusNode;
-  final FocusNode nextFocusNode;
+  final FocusNode? focusNode;
+  final FocusNode? nextFocusNode;
   final TextInputAction textInputAction;
   final bool obscureText;
   final TextCapitalization textCapitalization;
@@ -41,7 +41,7 @@ class InputFieldProps {
   final int maxLines;
   final int lines;
   final int maxLength;
-  final List<TextInputFormatter> inputFormatters;
-  final ValueChanged<String> onChanged;
-  final String initialValue;
+  final List<TextInputFormatter>? inputFormatters;
+  final ValueChanged<String>? onChanged;
+  final String? initialValue;
 }

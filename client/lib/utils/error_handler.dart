@@ -6,7 +6,7 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/services.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 
-void recordError(dynamic error, [dynamic stacktrace]) {
+T recordError<T>(dynamic error, [dynamic stacktrace]) {
   _recordError(error, stacktrace);
 
   if (error is PlatformException) {

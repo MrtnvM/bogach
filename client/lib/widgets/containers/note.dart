@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 
 class Note extends StatelessWidget {
   const Note({
-    Key key,
-    @required this.title,
+    Key? key,
+    required this.title,
     this.margin,
   }) : super(key: key);
 
   final String title;
-  final EdgeInsets margin;
+  final EdgeInsets? margin;
 
   @override
   Widget build(BuildContext context) {

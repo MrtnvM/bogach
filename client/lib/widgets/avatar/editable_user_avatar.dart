@@ -4,25 +4,24 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/utils/image_picker.dart';
 import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
 import 'package:cash_flow/widgets/buttons/raised_icon_button.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class EditableUserAvatar extends HookWidget {
   const EditableUserAvatar({
-    @required this.url,
+    required this.url,
     this.onChanged,
     this.avatarSize = 40,
   });
 
-  final String url;
-  final void Function(File imageFile) onChanged;
+  final String? url;
+  final void Function(File? imageFile)? onChanged;
   final double avatarSize;
 
   @override
   Widget build(BuildContext context) {
-    final pickedImage = useState<File>(null);
+    final pickedImage = useState<File?>(null);
 
     useEffect(() {
       pickedImage.value = null;
@@ -39,15 +38,15 @@ class EditableUserAvatar extends HookWidget {
     return Center(
       child: Stack(
         children: [
-          RaisedButton(
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(shape: const CircleBorder()),
             onPressed: pickImage,
-            shape: const CircleBorder(),
             child: UserAvatar(
               url: url,
               size: avatarSize,
               borderWidth: 0,
               pickedAvatar: pickedImage.value != null
-                  ? FileImage(pickedImage.value)
+                  ? FileImage(pickedImage.value!)
                   : null,
             ),
           ),

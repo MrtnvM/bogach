@@ -16,7 +16,7 @@ class ExpenseGameEvent extends HookWidget {
   const ExpenseGameEvent(this.event);
 
   final GameEvent event;
-  ExpenseEventData get eventData => event.data;
+  ExpenseEventData get eventData => event.data as ExpenseEventData;
 
   @override
   Widget build(BuildContext context) {

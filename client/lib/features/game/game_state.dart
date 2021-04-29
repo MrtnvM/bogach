@@ -11,7 +11,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 part 'game_state.g.dart';
 
 abstract class GameState implements Built<GameState, GameStateBuilder> {
-  factory GameState([void Function(GameStateBuilder b) updates]) = _$GameState;
+  factory GameState([void Function(GameStateBuilder b)? updates]) = _$GameState;
 
   GameState._();
 

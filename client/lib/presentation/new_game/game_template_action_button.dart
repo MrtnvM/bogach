@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 
 class GameTemplateActionButton extends StatelessWidget {
   const GameTemplateActionButton({
-    Key key,
+    Key? key,
     this.action,
     this.color,
     this.title,
   }) : super(key: key);
 
-  final VoidCallback action;
-  final Color color;
-  final String title;
+  final VoidCallback? action;
+  final Color? color;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class GameTemplateActionButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
           border: Border.all(color: ColorRes.grey.withAlpha(70)),
         ),
-        child: Text(title, style: Styles.bodyBlack.copyWith(fontSize: 12.5)),
+        child: Text(title!, style: Styles.bodyBlack.copyWith(fontSize: 12.5)),
       ),
     );
   }

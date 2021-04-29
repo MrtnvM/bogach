@@ -5,9 +5,9 @@ part 'played_games.freezed.dart';
 part 'played_games.g.dart';
 
 @freezed
-abstract class PlayedGames with _$PlayedGames {
+class PlayedGames with _$PlayedGames {
     factory PlayedGames({
-    List<PlayedGameInfo> multiplayerGames,
+    @Default(<PlayedGameInfo>[]) List<PlayedGameInfo> multiplayerGames,
   }) = _PlayedGames;
 
    factory PlayedGames.fromJson(Map<String, dynamic> json) =>

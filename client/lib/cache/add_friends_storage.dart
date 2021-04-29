@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UsersAddToFriendsStorage {
-  const UsersAddToFriendsStorage({this.preferences});
+  const UsersAddToFriendsStorage({required this.preferences});
 
   final SharedPreferences preferences;
   static const _usersAddToFriendsKey = 'users_add_to_friends_key';

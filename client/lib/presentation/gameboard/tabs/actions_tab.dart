@@ -13,7 +13,7 @@ class ActionsTab extends HookWidget {
   Widget build(BuildContext context) {
     final isLoading = useIsGameboardActionInProgress();
     final scrollController = useScrollController();
-    final activeGameState = useCurrentActiveGameState();
+    final activeGameState = useCurrentActiveGameState()!;
 
     final currenEventIndex = activeGameState.maybeWhen(
       gameEvent: (eventIndex, sendingEventIndex) => eventIndex,
@@ -62,14 +62,14 @@ bool useIsGameboardActionInProgress() {
     final isStartingNewMonth =
         s.getOperationState(Operation.startNewMonth).isInProgress;
 
-    final isSendingTurnEvent = activeGameState.maybeWhen(
+    final isSendingTurnEvent = activeGameState?.maybeWhen(
       gameEvent: (eventIndex, sendingEventIndex) =>
           eventIndex == sendingEventIndex,
       orElse: () => false,
-    );
+    ) ?? false;
 
     return isSendingTurnEvent || isStartingNewMonth;
   });
 
-  return isActionInProgress;
+  return isActionInProgress ?? false;
 }

@@ -4,12 +4,12 @@ part 'income.freezed.dart';
 part 'income.g.dart';
 
 @freezed
-abstract class Income with _$Income {
+class Income with _$Income {
   factory Income({
-    @required String name,
-    @required double value,
+    required String name,
+    required double value,
     @JsonKey(unknownEnumValue: IncomeType.other, defaultValue: IncomeType.other)
-    @required
+    required
         IncomeType type,
   }) = _Income;
 

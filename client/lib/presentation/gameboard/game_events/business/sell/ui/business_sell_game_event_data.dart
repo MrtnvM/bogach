@@ -1,15 +1,13 @@
-import 'package:flutter/foundation.dart';
-
 class BusinessesToSellData {
   BusinessesToSellData(this.businessesTableData);
 
-  final List<BusinessToSellTableData> businessesTableData;
+  final List<BusinessToSellTableData>? businessesTableData;
 }
 
 class BusinessToSellTableData {
   BusinessToSellTableData({
-    @required this.businessId,
-    @required this.tableData,
+    required this.businessId,
+    required this.tableData,
   });
 
   final String businessId;

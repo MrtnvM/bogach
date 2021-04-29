@@ -12,6 +12,11 @@ PurchaseDetails createPurchase(
     purchaseId: 'purhcase$id',
     status: status,
     pendingComplete: pendingComplete,
+    verificationData: PurchaseVerificationData(
+      localVerificationData: '',
+      serverVerificationData: '',
+      source: IAPSource.GooglePlay,
+    ),
   );
 }
 
@@ -21,5 +26,7 @@ ProductDetails createProduct(int id, [int price = 149]) {
     title: 'Product #1',
     description: 'Product #$id description',
     price: price.toString(),
+    rawPrice: price.toDouble(),
+    currencyCode: 'ru'
   );
 }

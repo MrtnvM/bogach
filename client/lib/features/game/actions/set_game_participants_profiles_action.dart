@@ -4,8 +4,7 @@ import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 
 class SetGameParticipantsProfilesAction extends BaseAction {
-  SetGameParticipantsProfilesAction(this.userProfiles)
-      : assert(userProfiles != null);
+  SetGameParticipantsProfilesAction(this.userProfiles);
 
   final List<UserProfile> userProfiles;
 

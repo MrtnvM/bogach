@@ -28,7 +28,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     SessionTracker.onboarding.start();
 
     _controller.addListener(() {
-      final page = _controller.page.round();
+      final page = _controller.page!.round();
 
       if (page == 1 && !isSecondPageEventSent) {
         isSecondPageEventSent = true;

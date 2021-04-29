@@ -20,9 +20,9 @@ class BuyMultiplayerGames extends BaseAction {
   bool abortDispatch() => state.profile.currentUser == null;
 
   @override
-  Future<AppState> reduce() async {
+  Future<AppState?> reduce() async {
     final purchaseService = GetIt.I.get<PurchaseService>();
-    final userId = state.profile.currentUser.id;
+    final userId = state.profile.currentUser!.id;
 
     final purchaseProfile = await purchaseService.buyMultiplayerGames(
       userId: userId,
@@ -36,7 +36,7 @@ class BuyMultiplayerGames extends BaseAction {
     Logger.i('New purchase profile:\n$purchaseProfile');
 
     return state.rebuild((s) {
-      s.profile.currentUser = s.profile.currentUser.copyWith(
+      s.profile.currentUser = s.profile.currentUser!.copyWith(
         purchaseProfile: purchaseProfile,
       );
     });

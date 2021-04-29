@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 
 class NameInput extends StatelessWidget {
   const NameInput({
-    Key key,
-    @required this.initialValue,
-    @required this.onChange,
+    Key? key,
+    required this.initialValue,
+    required this.onChange,
   }) : super(key: key);
 
-  final String initialValue;
+  final String? initialValue;
   final void Function(String) onChange;
 
   @override

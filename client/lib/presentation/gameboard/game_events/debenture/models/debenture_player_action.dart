@@ -10,8 +10,8 @@ class DebenturePlayerAction extends PlayerAction {
 
   @JsonKey(fromJson: BuySellAction.fromJson, toJson: BuySellAction.toJson)
   final BuySellAction action;
-  final int count;
-  final String eventId;
+  final int? count;
+  final String? eventId;
 
   @override
   Map<String, dynamic> toJson() => _$DebenturePlayerActionToJson(this);

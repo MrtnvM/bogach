@@ -5,7 +5,7 @@ class DotModel {
     this.userId,
   });
 
-  final int xValue;
-  final int yValue;
-  final String userId;
+  final int? xValue;
+  final int? yValue;
+  final String? userId;
 }

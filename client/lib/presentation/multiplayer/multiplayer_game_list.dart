@@ -28,8 +28,8 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 
 class MultiplayerGameList extends HookWidget {
   const MultiplayerGameList({
-    @required this.selectedProfiles,
-    @required this.onItemSelected,
+    required this.selectedProfiles,
+    required this.onItemSelected,
   });
 
   final Set<String> selectedProfiles;
@@ -39,7 +39,7 @@ class MultiplayerGameList extends HookWidget {
   Widget build(BuildContext context) {
     final getGameTemplatesRequestState = useGlobalState((s) {
       return s.getOperationState(Operation.loadGameTemplates);
-    });
+    })!;
 
     final gameTemplates = useMultiplayerGameTemplates();
     final dispatch = useDispatcher();
@@ -50,11 +50,11 @@ class MultiplayerGameList extends HookWidget {
       await dispatch(SelectMultiplayerGameTemplateAction(template));
 
       dispatch(CreateRoomAction(selectedProfiles)).then((_) {
-        final appState = StoreProvider.state<AppState>(context);
+        final appState = StoreProvider.state<AppState>(context)!;
         final roomId = appState.multiplayer.createdRoomId;
 
         appRouter.goTo(RoomPage(roomId: roomId));
-      }).catchError((error) {
+      }).onError((error, st) {
         Logger.e('ERROR: On room creation with template ID: ${template.id}');
         Logger.e(error);
 
@@ -82,7 +82,7 @@ class MultiplayerGameList extends HookWidget {
         onGameTemplateSelected: (template) {
           onItemSelected();
 
-          if (availableMultiplayerGamesCount <= 0) {
+          if (availableMultiplayerGamesCount! <= 0) {
             buyGames(template);
           } else {
             onGameTemplateSelected(template);
@@ -99,14 +99,14 @@ class MultiplayerGameList extends HookWidget {
 
 class _TemplateList extends HookWidget {
   const _TemplateList({
-    @required this.gameTemplates,
-    @required this.onGameTemplateSelected,
-    @required this.loadGameTemplatesRequestState,
-    @required this.loadGameTemplates,
-    Key key,
+    required this.gameTemplates,
+    required this.onGameTemplateSelected,
+    required this.loadGameTemplatesRequestState,
+    required this.loadGameTemplates,
+    Key? key,
   }) : super(key: key);
 
-  final StoreList<GameTemplate> gameTemplates;
+  final StoreList<GameTemplate>? gameTemplates;
   final void Function(GameTemplate template) onGameTemplateSelected;
   final OperationState loadGameTemplatesRequestState;
   final VoidCallback loadGameTemplates;
@@ -120,7 +120,7 @@ class _TemplateList extends HookWidget {
     useEffect(() {
       swiperController.value.addListener(() {
         final currentIndex = swiperController.value.index;
-        final templateName = gameTemplates.itemsMap[currentIndex].name;
+        final templateName = gameTemplates!.itemsMap[currentIndex]!.name;
         AnalyticsSender.multiplayerGameSwiped(templateName);
       });
 
@@ -131,9 +131,9 @@ class _TemplateList extends HookWidget {
       data: mediaQueryData,
       child: GamesLoadableListView<GameTemplate>(
         viewModel: LoadableListViewModel(
-          items: gameTemplates,
+          items: gameTemplates!,
           itemBuilder: (i) => GameTemplateItem(
-            gameTemplate: gameTemplates.items[i],
+            gameTemplate: gameTemplates!.items[i],
             onStartNewGamePressed: (template) {
               onGameTemplateSelected(template);
               AnalyticsSender.multiplayerTemplateSelected(template.name);
@@ -143,6 +143,7 @@ class _TemplateList extends HookWidget {
           loadList: loadGameTemplates,
           emptyStateWidget: const EmptyListWidget(),
           errorWidget: CommonErrorWidget(loadGameTemplates),
+          itemSeparator: (i) => const SizedBox(),
         ),
       ),
     );

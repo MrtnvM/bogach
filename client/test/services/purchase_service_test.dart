@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/core/purchases/purchases.dart';
 import 'package:cash_flow/models/domain/user/purchase_profile.dart';
 import 'package:cash_flow/models/errors/purchase_errors.dart';
@@ -8,22 +9,29 @@ import 'package:cash_flow/models/network/request/purchases/update_purchases_requ
 import 'package:cash_flow/services/purchase_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../mocks/fake_purchase_details.dart';
-import '../mocks/mock_api_client.dart';
-import '../mocks/mock_in_app_purchase_connection.dart';
-import 'purhcase_service_test.utils.dart';
+import 'purchase_service_test.mocks.dart';
+import 'purchase_service_test.utils.dart';
 
+@GenerateMocks([
+  CashFlowApiClient,
+  InAppPurchaseConnection,
+  PurchaseParam,
+])
 void main() {
   final mockApiClient = MockCashFlowApiClient();
   final mockConnection = MockInAppPurchaseConnection();
-  PurchaseService purchaseService;
+  final mockPurchaseParam = MockPurchaseParam();
+  late PurchaseService purchaseService;
 
   setUp(() {
     reset(mockApiClient);
     reset(mockConnection);
+    reset(mockPurchaseParam);
 
     purchaseService = PurchaseService(
       apiClient: mockApiClient,
@@ -250,9 +258,9 @@ void main() {
     );
 
     when(
-      mockConnection.buyNonConsumable(purchaseParam: anyNamed('purchaseParam')),
+      mockConnection.buyNonConsumable(purchaseParam: mockPurchaseParam),
     ).thenAnswer((_) {
-      purchases.value = [purchase1];
+      purchases.add([purchase1]);
       return Future.value(true);
     });
 
@@ -276,7 +284,7 @@ void main() {
       mockConnection.purchaseUpdatedStream,
       mockConnection.queryProductDetails({product1.id}),
       mockConnection.buyNonConsumable(
-        purchaseParam: anyNamed('purchaseParam'),
+        purchaseParam: mockPurchaseParam,
       ),
       mockApiClient.sendPurchasedProducts(updatePurchaseRequestModel),
       mockConnection.completePurchase(purchase1),
@@ -308,9 +316,9 @@ void main() {
     );
 
     when(
-      mockConnection.buyConsumable(purchaseParam: anyNamed('purchaseParam')),
+      mockConnection.buyConsumable(purchaseParam: mockPurchaseParam),
     ).thenAnswer((_) {
-      purchases.value = [purchase1];
+      purchases.add([purchase1]);
       return Future.value(true);
     });
 
@@ -345,7 +353,7 @@ void main() {
     verifyInOrder([
       mockConnection.purchaseUpdatedStream,
       mockConnection.queryProductDetails({product1.id}),
-      mockConnection.buyConsumable(purchaseParam: anyNamed('purchaseParam')),
+      mockConnection.buyConsumable(purchaseParam: mockPurchaseParam),
       mockApiClient.sendPurchasedProducts(updatePurchaseRequestModel),
       mockConnection.completePurchase(purchase1),
     ]);
@@ -360,6 +368,11 @@ void main() {
       purchaseId: 'purchase1',
       productId: questsAccessProductId,
       status: PurchaseStatus.purchased,
+      verificationData: PurchaseVerificationData(
+        localVerificationData: '',
+        serverVerificationData: '',
+        source: IAPSource.GooglePlay,
+      ),
     );
 
     final purchases = BehaviorSubject<List<PurchaseDetails>>.seeded([]);
@@ -405,10 +418,15 @@ void main() {
     const userId = 'user1';
     final product1 = createProduct(1);
     final purchase1 = FakePurchaseDetails(
-      productId: null,
-      purchaseId: null,
-      status: null,
-      pendingComplete: null,
+      productId: '',
+      purchaseId: '',
+      status: PurchaseStatus.pending,
+      pendingComplete: false,
+      verificationData: PurchaseVerificationData(
+        localVerificationData: '',
+        serverVerificationData: '',
+        source: IAPSource.GooglePlay,
+      ),
     );
     final purchases = BehaviorSubject<List<PurchaseDetails>>.seeded([]);
 
@@ -424,9 +442,9 @@ void main() {
     );
 
     when(
-      mockConnection.buyConsumable(purchaseParam: anyNamed('purchaseParam')),
+      mockConnection.buyConsumable(purchaseParam: mockPurchaseParam),
     ).thenAnswer((_) {
-      purchases.value = [purchase1];
+      purchases.add([purchase1]);
       return Future.value(true);
     });
 
@@ -446,7 +464,7 @@ void main() {
     verifyInOrder([
       mockConnection.purchaseUpdatedStream,
       mockConnection.queryProductDetails({product1.id}),
-      mockConnection.buyConsumable(purchaseParam: anyNamed('purchaseParam')),
+      mockConnection.buyConsumable(purchaseParam: mockPurchaseParam),
     ]);
 
     verifyNoMoreInteractions(mockConnection);
@@ -475,9 +493,9 @@ void main() {
     );
 
     when(
-      mockConnection.buyConsumable(purchaseParam: anyNamed('purchaseParam')),
+      mockConnection.buyConsumable(purchaseParam: mockPurchaseParam),
     ).thenAnswer((_) {
-      purchases.value = [purchase1];
+      purchases.add([purchase1]);
       return Future.value(true);
     });
 
@@ -501,7 +519,7 @@ void main() {
     verifyInOrder([
       mockConnection.purchaseUpdatedStream,
       mockConnection.queryProductDetails({product1.id}),
-      mockConnection.buyConsumable(purchaseParam: anyNamed('purchaseParam')),
+      mockConnection.buyConsumable(purchaseParam: mockPurchaseParam),
       mockConnection.completePurchase(purchase1),
     ]);
 

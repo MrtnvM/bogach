@@ -8,7 +8,7 @@ part 'real_estate_buy_player_action.g.dart';
 class RealEstateBuyPlayerAction extends PlayerAction {
   const RealEstateBuyPlayerAction(this.eventId);
 
-  final String eventId;
+  final String? eventId;
 
   @override
   Map<String, dynamic> toJson() => _$RealEstateBuyPlayerActionToJson(this);

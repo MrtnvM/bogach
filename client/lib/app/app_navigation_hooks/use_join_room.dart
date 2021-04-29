@@ -11,13 +11,13 @@ import 'package:cash_flow/features/multiplayer/actions/join_room_action.dart';
 import 'package:cash_flow/features/multiplayer/multiplayer_hooks.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-Function(String) useJoinRoom() {
+Function(String?) useJoinRoom() {
   final context = useContext();
   final dispatch = useDispatcher();
   final store = useStore();
 
   return (roomId) {
-    VoidCallback joinRoom;
+    VoidCallback? joinRoom;
 
     final user = store.state.profile.currentUser;
 
@@ -37,10 +37,10 @@ Function(String) useJoinRoom() {
         }
       }
 
-      dispatch(JoinRoomAction(roomId)).then((_) async {
+      dispatch(JoinRoomAction(roomId!)).then((_) async {
         appRouter.goToRoot();
         appRouter.goTo(RoomPage(roomId: roomId));
-      }).catchError((error) {
+      }).onError((error, st) {
         handleError(
           context: context,
           exception: error,

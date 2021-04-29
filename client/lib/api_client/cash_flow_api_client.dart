@@ -8,6 +8,7 @@ import 'package:cash_flow/models/domain/room/room.dart';
 import 'package:cash_flow/models/domain/user/online/online_profile.dart';
 import 'package:cash_flow/models/domain/user/purchase_profile.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
+import 'package:cash_flow/models/network/core/response_model.dart';
 import 'package:cash_flow/models/network/request/game/create_room_request_model.dart';
 import 'package:cash_flow/models/network/request/game/player_action_request_model.dart';
 import 'package:cash_flow/models/network/request/purchases/update_purchases_request_model.dart';
@@ -15,18 +16,16 @@ import 'package:cash_flow/models/network/responses/game_template_response_model.
 import 'package:cash_flow/models/network/responses/new_game_response_model.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 
 class CashFlowApiClient extends ApiClient {
   CashFlowApiClient({
-    @required ApiEnvironment environment,
-    @required Dio dio,
+    required ApiEnvironment environment,
+    required Dio dio,
   }) : super(environment: environment, dio: dio, delegate: null);
 
   Future<List<GameTemplateResponseModel>> getGameTemplates() => get(
         path: 'getAllGameTemplates',
-        responseMapper: rm.jsonArray((json) => json
+        responseMapper: rm.jsonArray((json) => json!
             .map((item) => GameTemplateResponseModel.fromJson(item))
             .toList()),
         headers: [contentJson],
@@ -35,32 +34,32 @@ class CashFlowApiClient extends ApiClient {
   Future<List<Quest>> getQuests(String userId) => get(
         path: 'gameLevels?user_id=$userId',
         responseMapper: rm.jsonArray(
-          (json) => json.map((item) => Quest.fromJson(item)).toList(),
+          (json) => json!.map((item) => Quest.fromJson(item)).toList(),
         ),
       );
 
   Future<NewGameResponseModel> createNewGame({
-    @required String templateId,
-    @required String userId,
+    required String templateId,
+    required String userId,
   }) =>
       post(
         path: 'createGame',
         body: {'templateId': templateId, 'userId': userId},
         responseMapper: rm.standard(
-          (json) => NewGameResponseModel.fromJson(json),
+          (json) => NewGameResponseModel.fromJson(json!),
         ),
         headers: [contentJson],
       );
 
   Future<NewGameResponseModel> createNewQuestGame({
-    @required String questId,
-    @required String userId,
+    required String questId,
+    required String userId,
   }) =>
       post(
         path: 'createGameByLevel',
         body: {'gameLevelId': questId, 'userId': userId},
         responseMapper: rm.standard(
-          (json) => NewGameResponseModel.fromJson(json),
+          (json) => NewGameResponseModel.fromJson(json!),
         ),
         headers: [contentJson],
       );
@@ -70,7 +69,7 @@ class CashFlowApiClient extends ApiClient {
         body: playerAction.toJson(),
         validate: false,
         headers: [contentJson],
-        responseMapper: rm.standard((json) => null),
+        responseMapper: rm.standard((json) => VoidResponseModel()),
       );
 
   Future<void> startNewMonth(GameContext gameContext) => post(
@@ -83,10 +82,10 @@ class CashFlowApiClient extends ApiClient {
   Future<Room> createRoom(CreateRoomRequestModel requestModel) => post(
         path: 'createRoom',
         body: requestModel.toJson(),
-        responseMapper: rm.standard((json) => Room.fromJson(json)),
+        responseMapper: rm.standard((json) => Room.fromJson(json!)),
       );
 
-  Future<void> setRoomParticipantReady(String roomId, String participantId) =>
+  Future<void> setRoomParticipantReady(String? roomId, String participantId) =>
       post(
         path: 'setRoomParticipantReady',
         body: {
@@ -108,13 +107,13 @@ class CashFlowApiClient extends ApiClient {
       post(
         path: 'updatePurchases',
         body: updatedPurchases.toJson(),
-        responseMapper: rm.standard((json) => PurchaseProfile.fromJson(json)),
+        responseMapper: rm.standard((json) => PurchaseProfile.fromJson(json!)),
       );
 
   Future<UserProfile> getUserProfile(String userId) => get(
         path: 'getUserProfile?userId=$userId',
         headers: [contentJson],
-        responseMapper: rm.standard((json) => UserProfile.fromJson(json)),
+        responseMapper: rm.standard((json) => UserProfile.fromJson(json!)),
       );
 
   Future<void> setOnlineStatus(OnlineProfile user) => post(
@@ -128,22 +127,22 @@ class CashFlowApiClient extends ApiClient {
       path: 'getOnlineProfiles?user_id=$id',
       headers: [contentJson],
       responseMapper: rm.jsonArray(
-        (json) => json.map((item) => OnlineProfile.fromJson(item)).toList(),
+        (json) => json!.map((item) => OnlineProfile.fromJson(item)).toList(),
       ));
 
   Future<void> addFriends(String userId, List<String> usersAddToFriends) =>
       post(
-        path: 'addFriends',
-        body: {
-          'userId': userId,
-          'usersAddToFriends': usersAddToFriends,
-        },
-        validate: true,
-      );
+          path: 'addFriends',
+          body: {
+            'userId': userId,
+            'usersAddToFriends': usersAddToFriends,
+          },
+          validate: true,
+          responseMapper: rm.standard((json) => VoidResponseModel()));
 
   Future<void> removeFromFriends({
-    @required String userId,
-    @required String removedFriendId,
+    required String userId,
+    required String removedFriendId,
   }) =>
       delete(
         path: 'removeFromFriends',
@@ -152,5 +151,6 @@ class CashFlowApiClient extends ApiClient {
           'removedFriendId': removedFriendId,
         },
         validate: true,
+        responseMapper: rm.standard((json) => VoidResponseModel()),
       );
 }

@@ -15,7 +15,7 @@ class ValueSliderBuilder extends UiKitBuilder {
 }
 
 class _ValueSliderExample extends HookWidget {
-  const _ValueSliderExample({Key key}) : super(key: key);
+  const _ValueSliderExample({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

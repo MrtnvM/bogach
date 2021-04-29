@@ -4,9 +4,9 @@ import 'package:cash_flow/models/errors/domain_game_error.dart';
 import 'package:cash_flow/models/network/core/response_model.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 
-T Function(Response) standard<T>(T Function(Map<String, dynamic>) mapper) {
+T Function(Response) standard<T>(T Function(Map<String, dynamic>?) mapper) {
   return (response) {
-    final statusCode = response.statusCode;
+    final statusCode = response.statusCode!;
     final isRequestSuccessful = statusCode >= 200 && statusCode < 300;
     final data = response.data;
     final isJsonResponse = data is Map<String, dynamic>;
@@ -30,9 +30,9 @@ T Function(Response) standard<T>(T Function(Map<String, dynamic>) mapper) {
   };
 }
 
-T Function(Response) jsonArray<T>(T Function(List<dynamic>) mapper) {
+T Function(Response) jsonArray<T>(T Function(List<dynamic>?) mapper) {
   return (response) {
-    final statusCode = response.statusCode;
+    final statusCode = response.statusCode!;
     final isRequestSuccessful = statusCode >= 200 && statusCode < 300;
     final data = response.data;
     final isEmptyString = data is String && data.isEmpty;

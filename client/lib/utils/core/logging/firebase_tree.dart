@@ -1,4 +1,4 @@
-import 'package:fimber/fimber_base.dart';
+import 'package:fimber/fimber.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class FirebaseReportingTree extends LogTree {
@@ -12,7 +12,7 @@ class FirebaseReportingTree extends LogTree {
 
   @override
   void log(String level, String message,
-      {String tag, dynamic ex, StackTrace stacktrace}) {
+      {String? tag, dynamic ex, StackTrace? stacktrace}) {
     final crashlytics = FirebaseCrashlytics.instance;
     crashlytics.log(message);
 

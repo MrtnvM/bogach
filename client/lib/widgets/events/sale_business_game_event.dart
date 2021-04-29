@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
@@ -9,7 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SaleBusinessGameEvent extends StatefulWidget {
-  const SaleBusinessGameEvent(this.viewModel) : assert(viewModel != null);
+  const SaleBusinessGameEvent(this.viewModel);
 
   final SaleBusinessViewModel viewModel;
 
@@ -33,15 +35,15 @@ class SaleBusinessGameEventState extends State<SaleBusinessGameEvent> {
 
   Widget _buildInfo(SaleBusinessViewModel viewModel) {
     final map = {
-      Strings.marketPrice: viewModel.marketPrice.toPrice(),
-      Strings.downPayment: viewModel.downPayment.toPrice(),
-      Strings.debt: viewModel.debt.toPrice(),
-      Strings.passiveIncomePerMonth: viewModel.passiveIncomePerMonth.toPrice(),
-      Strings.roi: viewModel.roi.toPercent(),
-      Strings.saleRate: viewModel.saleRate.toPercent(),
+      Strings.marketPrice: viewModel.marketPrice!.toPrice(),
+      Strings.downPayment: viewModel.downPayment!.toPrice(),
+      Strings.debt: viewModel.debt!.toPrice(),
+      Strings.passiveIncomePerMonth: viewModel.passiveIncomePerMonth!.toPrice(),
+      Strings.roi: viewModel.roi!.toPercent(),
+      Strings.saleRate: viewModel.saleRate!.toPercent(),
     };
 
-    return InfoTable(map);
+    return InfoTable(LinkedHashMap.from(map));
   }
 
   Widget _buildBody() {
@@ -77,7 +79,7 @@ class SaleBusinessGameEventState extends State<SaleBusinessGameEvent> {
             width: 4,
           )),
           TextSpan(
-              text: widget.viewModel.marketPrice.toPrice(),
+              text: widget.viewModel.marketPrice!.toPrice(),
               style: Styles.body2.copyWith(color: ColorRes.mainGreen)),
         ],
       ),
@@ -97,12 +99,12 @@ class SaleBusinessViewModel {
     this.buttonsProperties,
   });
 
-  final int offeredPrice;
-  final int marketPrice;
-  final int downPayment;
-  final int debt;
-  final int passiveIncomePerMonth;
-  final double roi;
-  final double saleRate;
-  final ButtonsProperties buttonsProperties;
+  final int? offeredPrice;
+  final int? marketPrice;
+  final int? downPayment;
+  final int? debt;
+  final int? passiveIncomePerMonth;
+  final double? roi;
+  final double? saleRate;
+  final ButtonsProperties? buttonsProperties;
 }

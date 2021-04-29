@@ -5,13 +5,13 @@ part 'candle_data.freezed.dart';
 part 'candle_data.g.dart';
 
 @freezed
-abstract class CandleData with _$CandleData {
+class CandleData with _$CandleData {
   factory CandleData({
-    double low,
-    double high,
-    double open,
-    double close,
-    @JsonKey(fromJson: fromISO8601DateJson) DateTime time,
+    required double low,
+    required double high,
+    required double open,
+    required double close,
+    @JsonKey(fromJson: fromISO8601DateJson) DateTime? time,
   }) = _CandleData;
 
   factory CandleData.fromJson(Map<String, dynamic> json) =>

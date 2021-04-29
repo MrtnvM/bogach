@@ -5,13 +5,13 @@ part 'insurance_event_data.g.dart';
 part 'insurance_event_data.freezed.dart';
 
 @freezed
-abstract class InsuranceEventData
+class InsuranceEventData
     with _$InsuranceEventData
     implements GameEventData {
   factory InsuranceEventData({
-    int cost,
-    int value,
-    int duration,
+    required int cost,
+    required int value,
+    required int duration,
   }) = _InsuranceEventData;
 
   factory InsuranceEventData.fromJson(Map<String, dynamic> json) =>

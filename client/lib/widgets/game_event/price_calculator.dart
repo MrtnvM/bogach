@@ -8,17 +8,15 @@ typedef OnCountChangedCallback = void Function(int);
 
 class PriceCalculator extends StatelessWidget {
   const PriceCalculator({
-    @required this.currentPrice,
-    Key key,
+    required this.currentPrice,
+    Key? key,
     this.onCountChanged,
     this.count = 1,
-  })  : assert(currentPrice != null),
-        assert(count != null),
-        super(key: key);
+  })  : super(key: key);
 
   final int count;
   final double currentPrice;
-  final OnCountChangedCallback onCountChanged;
+  final OnCountChangedCallback? onCountChanged;
 
   @override
   Widget build(BuildContext context) {

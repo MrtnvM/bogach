@@ -6,11 +6,11 @@ bool isBuyAction(BuySellAction action) => action == const BuySellAction.buy();
 bool isSellAction(BuySellAction action) => action == const BuySellAction.sell();
 
 @freezed
-abstract class BuySellAction with _$BuySellAction {
+class BuySellAction with _$BuySellAction {
   const factory BuySellAction.buy() = BuyAction;
   const factory BuySellAction.sell() = SellAction;
 
-  static BuySellAction fromJson(String action) {
+  static BuySellAction fromJson(String? action) {
     switch (action) {
       case 'buy':
         return const BuySellAction.buy();

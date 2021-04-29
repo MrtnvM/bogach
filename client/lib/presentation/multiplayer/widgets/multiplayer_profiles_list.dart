@@ -22,7 +22,7 @@ class MultiplayerProfilesList extends HookWidget {
     final size = useAdaptiveSize();
     final getOnlineRequestState = useGlobalState(
       (s) => s.getOperationState(Operation.setOnline),
-    );
+    )!;
 
     final profiles = useGlobalState((s) {
       final friendsIds = s.profile.currentUser?.friends ?? [];
@@ -43,7 +43,7 @@ class MultiplayerProfilesList extends HookWidget {
           .map((id) => s.multiplayer.userProfiles.itemsMap[id])
           .where((p) => p != null)
           .map((p) => MultiplayerProfile(
-                userId: p.userId,
+                userId: p!.userId,
                 userName: p.fullName,
                 avatarUrl: p.avatarUrl,
                 isOnline: false,
@@ -51,7 +51,7 @@ class MultiplayerProfilesList extends HookWidget {
               ));
 
       return [...onlineProfiles, ...friends];
-    });
+    })!;
 
     return LoadableView(
       indicatorColor: const AlwaysStoppedAnimation<Color>(ColorRes.mainGreen),

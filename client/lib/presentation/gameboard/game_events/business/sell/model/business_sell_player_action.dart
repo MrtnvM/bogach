@@ -14,8 +14,8 @@ class BusinessSellPlayerAction extends PlayerAction {
 
   @JsonKey(fromJson: BuySellAction.fromJson, toJson: BuySellAction.toJson)
   final BuySellAction action;
-  final String eventId;
-  final String businessId;
+  final String? eventId;
+  final String? businessId;
 
   @override
   Map<String, dynamic> toJson() => _$BusinessSellPlayerActionToJson(this);

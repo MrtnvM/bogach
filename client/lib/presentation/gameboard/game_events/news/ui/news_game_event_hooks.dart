@@ -8,7 +8,7 @@ import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-VoidCallback useNewsPlayerActionHandler({@required GameEvent event}) {
+VoidCallback useNewsPlayerActionHandler({required GameEvent event}) {
   final context = useContext();
   final dispatch = useDispatcher();
   final gameContext = useCurrentGameContext();
@@ -18,6 +18,6 @@ VoidCallback useNewsPlayerActionHandler({@required GameEvent event}) {
       eventId: event.id,
       playerAction: const EmptyPlayerAction(),
       gameContext: gameContext,
-    )).catchError((e) => handleError(context: context, exception: e));
+    )).onError((e, st) => handleError(context: context, exception: e));
   };
 }

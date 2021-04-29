@@ -19,17 +19,17 @@ class GameTemplateResponseModel {
       _$GameTemplateResponseModelFromJson(json);
 
   @JsonKey(name: 'id')
-  final String id;
+  final String? id;
   @JsonKey(name: 'name')
-  final String name;
+  final String? name;
   @JsonKey(name: 'icon')
-  final String icon;
+  final String? icon;
   @JsonKey(name: 'image')
-  final String image;
+  final String? image;
   @JsonKey(name: 'target')
-  final Target target;
+  final Target? target;
   @JsonKey(name: 'accountState')
-  final Account accountState;
+  final Account? accountState;
 
   Map<String, dynamic> toJson() => _$GameTemplateResponseModelToJson(this);
 }

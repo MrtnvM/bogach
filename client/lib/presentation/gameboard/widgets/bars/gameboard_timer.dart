@@ -38,7 +38,7 @@ class GameboardTimer extends HookWidget {
 }
 
 int _useTimerRemainingSeconds() {
-  final moveStartDate = useCurrentGame((s) => s.state.moveStartDateInUTC);
+  final moveStartDate = useCurrentGame((s) => s?.state.moveStartDateInUTC);
   final remainingSeconds = useState(_getRemainingSeconds(moveStartDate));
 
   useEffect(() {
@@ -62,7 +62,7 @@ int _useTimerRemainingSeconds() {
   return remainingSecondsValue;
 }
 
-int _getRemainingSeconds(DateTime moveStartDate) {
+int _getRemainingSeconds(DateTime? moveStartDate) {
   if (moveStartDate == null) {
     return 0;
   }

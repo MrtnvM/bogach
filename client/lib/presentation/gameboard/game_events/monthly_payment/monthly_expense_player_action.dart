@@ -7,7 +7,7 @@ part 'monthly_expense_player_action.g.dart';
 class MonthlyExpensePlayerAction extends PlayerAction {
   const MonthlyExpensePlayerAction(this.eventId);
 
-  final String eventId;
+  final String? eventId;
 
   @override
   Map<String, dynamic> toJson() => _$MonthlyExpensePlayerActionToJson(this);

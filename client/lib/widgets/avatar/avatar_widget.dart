@@ -5,19 +5,19 @@ import 'package:flutter/material.dart';
 
 class UserAvatar extends StatelessWidget {
   const UserAvatar({
-    @required this.url,
+    required this.url,
     this.size = 40,
     this.borderWidth = 2,
     this.borderColor = Colors.white,
     this.pickedAvatar,
   }) : avatarSize = size - borderWidth;
 
-  final String url;
+  final String? url;
   final double size;
   final double borderWidth;
-  final Color borderColor;
+  final Color? borderColor;
   final double avatarSize;
-  final FileImage pickedAvatar;
+  final FileImage? pickedAvatar;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class UserAvatar extends StatelessWidget {
         borderRadius: BorderRadius.circular(size),
         border: Border.all(
           width: borderWidth,
-          color: borderColor,
+          color: borderColor!,
         ),
       ),
       width: size,
@@ -39,12 +39,12 @@ class UserAvatar extends StatelessWidget {
     );
   }
 
-  ImageProvider _pickSource() {
+  ImageProvider? _pickSource() {
     if (pickedAvatar != null) {
       return pickedAvatar;
     }
     if (url != null) {
-      return CachedNetworkImageProvider(url);
+      return CachedNetworkImageProvider(url!);
     }
     return const AssetImage(Images.defaultAvatar);
   }

@@ -6,8 +6,6 @@ enum AdMobAdUnit {
 }
 
 String getNativeGoogleAdUnitId([AdMobAdUnit adUnit = AdMobAdUnit.test]) {
-  assert(adUnit != null);
-
   if (Platform.isAndroid) {
     switch (adUnit) {
       case AdMobAdUnit.singleplayerMonthResult:

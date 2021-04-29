@@ -26,7 +26,7 @@ class MainPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = useCurrentUser();
+    final user = useCurrentUser()!;
     final dispatch = useDispatcher();
 
     final setOnline = () {

@@ -8,16 +8,15 @@ typedef OnActionChangedCallback = void Function(BuySellAction);
 
 class BuySellBar extends StatelessWidget {
   const BuySellBar({
-    Key key,
+    Key? key,
     this.selectedAction = const BuySellAction.buy(),
     this.onActionChanged,
     this.canSell,
-  })  : assert(selectedAction != null),
-        super(key: key);
+  })  : super(key: key);
 
   final BuySellAction selectedAction;
-  final OnActionChangedCallback onActionChanged;
-  final bool canSell;
+  final OnActionChangedCallback? onActionChanged;
+  final bool? canSell;
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +30,15 @@ class BuySellBar extends StatelessWidget {
           context,
           action: buyAction,
           selectedAction: selectedAction,
-          onSelected: () => onActionChanged(buyAction),
+          onSelected: () => onActionChanged!(buyAction),
           isEnabled: true,
         ),
         _buildBarButton(
           context,
           action: sellAction,
           selectedAction: selectedAction,
-          onSelected: () => onActionChanged(sellAction),
-          isEnabled: canSell,
+          onSelected: () => onActionChanged!(sellAction),
+          isEnabled: canSell!,
         ),
       ],
     );
@@ -47,10 +46,10 @@ class BuySellBar extends StatelessWidget {
 
   Widget _buildBarButton(
     BuildContext context, {
-    @required BuySellAction action,
-    @required BuySellAction selectedAction,
-    @required VoidCallback onSelected,
-    @required bool isEnabled,
+    required BuySellAction action,
+    required BuySellAction selectedAction,
+    required VoidCallback onSelected,
+    required bool isEnabled,
   }) {
     final title = action.map(
       buy: (_) => Strings.purchasing,
@@ -94,12 +93,12 @@ class BuySellBar extends StatelessWidget {
     );
   }
 
-  Color _getBarColor({bool isEnabled, bool isSelected}) {
+  Color _getBarColor({bool? isEnabled, required bool isSelected}) {
     if (isSelected) {
       return ColorRes.mainGreen;
     }
 
-    if (!isEnabled) {
+    if (!isEnabled!) {
       return ColorRes.grey2;
     }
 

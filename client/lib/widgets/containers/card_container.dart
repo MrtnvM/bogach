@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 
 class CardContainer extends StatelessWidget {
   const CardContainer({
-    @required this.child,
-    Key key,
+    required this.child,
+    Key? key,
     this.padding,
     this.backgroundColor,
   }) : super(key: key);
 
   final Widget child;
-  final EdgeInsets padding;
-  final Color backgroundColor;
+  final EdgeInsets? padding;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {

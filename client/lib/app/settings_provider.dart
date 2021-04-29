@@ -8,17 +8,16 @@ import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 
 class SettingsProvider extends ControlPanelSettingsProvider {
-  SettingsProvider({@required this.alice, @required this.dios}) {
+  SettingsProvider({required this.alice, required this.dios}) {
     _configureProxy(dios);
   }
 
   final Alice alice;
   final List<Dio> dios;
 
-  String _proxyIp;
+  String _proxyIp = '';
 
   @override
   Future<List<ControlPanelSetting>> buildSettings() async {
@@ -33,7 +32,7 @@ class SettingsProvider extends ControlPanelSettingsProvider {
     });
 
     final pushProps = PushNotificationsSettingProps(
-      getToken: FirebaseMessaging().getToken(),
+      getToken: FirebaseMessaging.instance.getToken(),
     );
 
     final networkProps = NetworkSettingProps(
@@ -58,14 +57,15 @@ class SettingsProvider extends ControlPanelSettingsProvider {
 
   void _configureProxy(List<Dio> dios) {
     for (final dio in dios) {
-      final DefaultHttpClientAdapter adapter = dio.httpClientAdapter;
+      final adapter = dio.httpClientAdapter as DefaultHttpClientAdapter;
 
       adapter.onHttpClientCreate = (client) {
         client.findProxy = (uri) {
-          return _proxyIp != null ? 'PROXY $_proxyIp:8888' : 'DIRECT';
+          return _proxyIp.isNotEmpty ? 'PROXY $_proxyIp:8888' : 'DIRECT';
         };
 
-        client.badCertificateCallback = (cert, host, port) => _proxyIp != null;
+        client.badCertificateCallback =
+            (cert, host, port) => _proxyIp.isNotEmpty;
       };
     }
   }

@@ -17,7 +17,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'business_sell_game_event_data.dart';
 
-Map<String, String> useBusinessSellInfoTableData(GameEvent event) {
+Map<String, String?> useBusinessSellInfoTableData(GameEvent event) {
   return useMemoized(() {
     final data = {
       Strings.description: event.description,
@@ -27,16 +27,16 @@ Map<String, String> useBusinessSellInfoTableData(GameEvent event) {
 }
 
 BusinessesToSellData useBusinessToSellData(GameEvent event) {
-  final userId = useUserId();
+  final userId = useUserId()!;
   final assets = useCurrentGame(
-    (g) => g.participants[userId].possessionState.assets,
+    (g) => g?.participants[userId]?.possessionState.assets,
   );
 
   return useMemoized(() {
-    final BusinessSellEventData eventData = event.data;
+    final eventData = event.data as BusinessSellEventData;
 
     final businessesToSell = assets
-        .where((asset) => asset.type == AssetType.business)
+        ?.where((asset) => asset.type == AssetType.business)
         .cast<BusinessAsset>()
         .where((asset) => asset.id == eventData.businessId)
         .toList();
@@ -47,13 +47,13 @@ BusinessesToSellData useBusinessToSellData(GameEvent event) {
 
     final businessesToSellData = businessesToSell.map((businessToSell) {
       final businessData = {
-        Strings.offeredPrice: eventData.currentPrice.toPrice(),
+        Strings.offeredPrice: eventData.currentPrice!.toPrice(),
         Strings.fairPrice: businessToSell.fairPrice.toPrice(),
         Strings.downPayment: businessToSell.downPayment.toPrice(),
         Strings.passiveIncomePerMonth:
             businessToSell.passiveIncomePerMonth.toPrice(),
         Strings.roi: businessToSell.payback.toPercent(),
-        Strings.sellProbability: eventData.sellProbability.toPercent(),
+        Strings.sellProbability: eventData.sellProbability!.toPercent(),
       };
 
       return BusinessToSellTableData(
@@ -67,8 +67,8 @@ BusinessesToSellData useBusinessToSellData(GameEvent event) {
 }
 
 VoidCallback useBusinessSellPlayerActionHandler({
-  @required GameEvent event,
-  @required String businessId,
+  required GameEvent event,
+  required String businessId,
 }) {
   final context = useContext();
   final dispatch = useDispatcher();
@@ -85,7 +85,7 @@ VoidCallback useBusinessSellPlayerActionHandler({
       eventId: event.id,
       playerAction: playerAction,
       gameContext: gameContext,
-    )).catchError((e) => handleError(context: context, exception: e));
+    )).onError((e, st) => handleError(context: context, exception: e));
   };
 }
 

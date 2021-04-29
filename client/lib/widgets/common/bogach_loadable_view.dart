@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 
 class BogachLoadableView extends StatelessWidget {
   const BogachLoadableView({
-    Key key,
-    @required this.isLoading,
-    @required this.child,
+    Key? key,
+    required this.isLoading,
+    required this.child,
   }) : super(key: key);
 
-  final bool isLoading;
+  final bool? isLoading;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return LoadableView(
-      isLoading: isLoading,
+      isLoading: isLoading!,
       backgroundColor: ColorRes.black.withAlpha(120),
       indicatorColor: const AlwaysStoppedAnimation(ColorRes.mainGreen),
       child: child,

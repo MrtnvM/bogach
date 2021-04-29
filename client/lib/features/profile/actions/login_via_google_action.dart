@@ -5,15 +5,13 @@ import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/features/profile/actions/start_listening_profile_updates_action.dart';
 import 'package:cash_flow/services/user_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
 class LoginViaGoogleAction extends BaseAction {
   LoginViaGoogleAction({
-    @required this.accessToken,
-    @required this.idToken,
-  })  : assert(accessToken != null),
-        assert(idToken != null);
+    required this.accessToken,
+    required this.idToken,
+  });
 
   final String accessToken;
   final String idToken;

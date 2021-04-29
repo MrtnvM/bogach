@@ -8,8 +8,8 @@ const lastAppVersion = 'last_app_version';
 
 class UpdatesService {
   UpdatesService({
-    @required this.remoteConfig,
-    @required this.preferences,
+    required this.remoteConfig,
+    required this.preferences,
   }) {
     if (!preferences.containsKey(lastAppVersion)) {
       remoteConfig.setDefaults({
@@ -27,8 +27,8 @@ class UpdatesService {
 
   Future<String> getLastAppVersion() async {
     try {
-      await remoteConfig.fetch(expiration: const Duration(milliseconds: 1));
-      final updated = await remoteConfig.activateFetched();
+      await remoteConfig.fetch();
+      final updated = await remoteConfig.fetchAndActivate();
       final lastAppVersionValue = remoteConfig.getString(lastAppVersion);
       if (updated) {
         preferences.setString(lastAppVersion, lastAppVersionValue);

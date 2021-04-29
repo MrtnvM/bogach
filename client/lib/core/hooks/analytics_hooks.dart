@@ -6,7 +6,7 @@ void useUserIdSender() {
   final user = useCurrentUser();
 
   useEffect(() {
-    AnalyticsSender.setUserId(user.userId);
+    AnalyticsSender.setUserId(user!.userId);
     return null;
   }, [user]);
 }

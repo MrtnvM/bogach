@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
@@ -8,7 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class WindfallIncomeGameEvent extends StatefulWidget {
-  const WindfallIncomeGameEvent(this.viewModel) : assert(viewModel != null);
+  const WindfallIncomeGameEvent(this.viewModel);
 
   final WindfallIncomeViewModel viewModel;
 
@@ -45,7 +47,7 @@ class WindfallIncomeGameEventState extends State<WindfallIncomeGameEvent> {
       Strings.windfallIncome: viewModel.income.toPrice(),
     };
 
-    return InfoTable(map);
+    return InfoTable(LinkedHashMap.from(map));
   }
 
   Widget _buildDescription() {
@@ -58,8 +60,8 @@ class WindfallIncomeGameEventState extends State<WindfallIncomeGameEvent> {
 
 class WindfallIncomeViewModel {
   const WindfallIncomeViewModel({
-    this.income,
-    this.buttonsProperties,
+    required this.income,
+    required this.buttonsProperties,
   });
 
   final int income;

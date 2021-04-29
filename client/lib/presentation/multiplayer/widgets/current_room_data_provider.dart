@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 
 class CurrentRoomDataProvider extends InheritedWidget {
   const CurrentRoomDataProvider({
-    Key key,
-    @required this.roomId,
-    @required Widget child,
+    Key? key,
+    required this.roomId,
+    required Widget child,
   }) : super(key: key, child: child);
 
-  final String roomId;
+  final String? roomId;
 
   static CurrentRoomDataProvider of(BuildContext context) {
     final result =
-        context.dependOnInheritedWidgetOfExactType<CurrentRoomDataProvider>();
-    assert(result != null, 'No CurrentRoomDataProvider found in context');
+        context.dependOnInheritedWidgetOfExactType<CurrentRoomDataProvider>()!;
     return result;
   }
 

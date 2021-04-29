@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 
 class BorderInputField extends StatefulWidget {
   const BorderInputField({
-    @required this.props,
-  }) : assert(props != null);
+    required this.props,
+  });
 
   final InputFieldProps props;
 
@@ -20,7 +20,7 @@ class BorderInputField extends StatefulWidget {
 
 class _BorderInputFieldState extends State<BorderInputField> {
   final _key = GlobalKey<FormFieldState>();
-  String _validationResult;
+  String? _validationResult;
 
   @override
   void initState() {
@@ -31,10 +31,10 @@ class _BorderInputFieldState extends State<BorderInputField> {
 
     if (widget.props.autovalidateMode != AutovalidateMode.disabled &&
         widget.props.validatorRules != null &&
-        widget.props.controller?.text?.isNotEmpty == true) {
+        widget.props.controller?.text.isNotEmpty == true) {
       _validationResult = validate(
-        widget.props.controller.text,
-        widget.props.validatorRules,
+        widget.props.controller!.text,
+        widget.props.validatorRules!,
       );
     }
   }
@@ -51,7 +51,7 @@ class _BorderInputFieldState extends State<BorderInputField> {
           Row(
             children: <Widget>[
               Text(
-                widget.props.label.toUpperCase(),
+                widget.props.label!.toUpperCase(),
                 style: _validationResult?.isNotEmpty == true
                     ? Styles.caption.copyWith(color: ColorRes.red)
                     : Styles.caption.copyWith(color: ColorRes.grey),
@@ -59,7 +59,7 @@ class _BorderInputFieldState extends State<BorderInputField> {
               const Spacer(),
               if (_validationResult?.isNotEmpty == true)
                 Text(
-                  _validationResult,
+                  _validationResult!,
                   style: Styles.overline.copyWith(color: ColorRes.red),
                 ),
             ],
@@ -107,7 +107,7 @@ class _BorderInputFieldState extends State<BorderInputField> {
               return null;
             }
 
-            _validationResult = validate(value, widget.props.validatorRules);
+            _validationResult = validate(value, widget.props.validatorRules!);
             return null;
           },
           textAlign: widget.props.textAlign,

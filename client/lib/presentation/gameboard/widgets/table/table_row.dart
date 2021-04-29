@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class TableRow extends StatelessWidget {
   const TableRow({this.title, this.value});
 
-  final String title;
-  final String value;
+  final String? title;
+  final String? value;
 
   @override
   Widget build(BuildContext context) {
@@ -13,12 +13,12 @@ class TableRow extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            title,
+            title!,
             style: Styles.tableRowTitle,
           ),
         ),
         Text(
-          value,
+          value!,
           style: Styles.tableRowValue,
         ),
       ],

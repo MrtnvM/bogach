@@ -23,9 +23,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class RoomPage extends HookWidget {
-  const RoomPage({@required this.roomId});
+  const RoomPage({required this.roomId});
 
-  final String roomId;
+  final String? roomId;
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +37,9 @@ class RoomPage extends HookWidget {
 }
 
 class _RoomPageBody extends HookWidget {
-  const _RoomPageBody({@required this.roomId});
+  const _RoomPageBody({required this.roomId});
 
-  final String roomId;
+  final String? roomId;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class _RoomPageBody extends HookWidget {
       value: SystemUiOverlayStyle.light,
       child: LoadableView(
         backgroundColor: ColorRes.black80,
-        isLoading: roomState.isActionInProgress,
+        isLoading: roomState.isActionInProgress!,
         child: Scaffold(
           backgroundColor: ColorRes.mainPageBackground,
           body: MediaQuery(
@@ -121,7 +121,7 @@ class _RoomPageBody extends HookWidget {
 }
 
 class _JoinRoomButton extends HookWidget {
-  const _JoinRoomButton({Key key}) : super(key: key);
+  const _JoinRoomButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +132,7 @@ class _JoinRoomButton extends HookWidget {
     final join = () async {
       try {
         await dispatch(SetRoomParticipantReadyAction(
-          participantId: userId,
+          participantId: userId!,
           roomId: roomId,
         ));
 
@@ -153,7 +153,7 @@ class _JoinRoomButton extends HookWidget {
 }
 
 class _StartGameButton extends HookWidget {
-  const _StartGameButton({Key key}) : super(key: key);
+  const _StartGameButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -166,8 +166,8 @@ class _StartGameButton extends HookWidget {
         : false;
 
     final dispatch = useDispatcher();
-    final startGame = () => dispatch(CreateRoomGameAction(roomId: room.id))
-        .catchError((e) => handleError(context: context, exception: e));
+    final startGame = () => dispatch(CreateRoomGameAction(roomId: room!.id))
+        .onError((e, st) => handleError(context: context, exception: e));
 
     return _Button(
       title: Strings.startGame,
@@ -179,7 +179,7 @@ class _StartGameButton extends HookWidget {
 }
 
 class _InviteButton extends HookWidget {
-  const _InviteButton({Key key}) : super(key: key);
+  const _InviteButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -191,11 +191,12 @@ class _InviteButton extends HookWidget {
       AnalyticsSender.multiplayerInviteLinkCreated();
       isLoading.value = true;
 
-      dispatch(ShareRoomInviteLinkAction(roomId))
+      dispatch(ShareRoomInviteLinkAction(roomId!))
           .then((_) => isLoading.value = false)
-          .catchError((e) {
+          .onError((e, st) {
         isLoading.value = false;
         handleError(context: context, exception: e);
+        return false;
       });
     };
 
@@ -211,18 +212,18 @@ class _InviteButton extends HookWidget {
 
 class _Button extends StatelessWidget {
   const _Button({
-    @required this.title,
-    @required this.icon,
-    @required this.color,
-    @required this.onTap,
+    required this.title,
+    required this.icon,
+    required this.color,
+    required this.onTap,
     this.isLoading = false,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final String title;
   final IconData icon;
   final Color color;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final bool isLoading;
 
   @override

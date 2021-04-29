@@ -11,9 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class RoomHeader extends HookWidget {
-  const RoomHeader({Key key, @required this.templateId}) : super(key: key);
+  const RoomHeader({Key? key, required this.templateId}) : super(key: key);
 
-  final String templateId;
+  final String? templateId;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class RoomHeader extends HookWidget {
     );
   }
 
-  Positioned _buildRoomContent(GameTemplate template, Size screenSize) {
+  Positioned _buildRoomContent(GameTemplate? template, Size screenSize) {
     return Positioned(
       bottom: 16,
       left: 16,
@@ -106,7 +106,7 @@ class RoomHeader extends HookWidget {
       children: [
         Positioned.fill(
           child: Image(
-            image: CachedNetworkImageProvider(template.image),
+            image: CachedNetworkImageProvider(template.image!),
             fit: BoxFit.cover,
           ),
         ),

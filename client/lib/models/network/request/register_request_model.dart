@@ -7,16 +7,16 @@ part 'register_request_model.g.dart';
 abstract class RegisterRequestModel
     implements Built<RegisterRequestModel, RegisterRequestModelBuilder> {
   factory RegisterRequestModel(
-          [void Function(RegisterRequestModelBuilder b) updates]) =
+          [void Function(RegisterRequestModelBuilder b)? updates]) =
       _$RegisterRequestModel;
 
   RegisterRequestModel._();
 
-  String get nickName;
+  String? get nickName;
 
-  String get email;
+  String? get email;
 
-  String get password;
+  String? get password;
 
-  String get repeatPassword;
+  String? get repeatPassword;
 }

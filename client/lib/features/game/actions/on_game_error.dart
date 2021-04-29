@@ -18,9 +18,9 @@ class OnGameErrorAction extends BaseAction {
       setErrorOperationStateIfNeeded(Operation.createRoomGame, s);
 
       final gameId = gameContext.gameId;
-      final activeGameState = s.game.activeGameStates[gameId];
+      final activeGameState = state.game.activeGameStates[gameId]!;
 
-      s.game.activeGameStates[gameId] = activeGameState.maybeMap(
+      s.game.activeGameStates?[gameId] = activeGameState.maybeMap(
         gameEvent: (gameEventState) => gameEventState.copyWith(
           sendingEventIndex: -1,
         ),

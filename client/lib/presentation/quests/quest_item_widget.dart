@@ -7,20 +7,20 @@ enum QuestAction { startNewGame, continueGame }
 
 class QuestItemWidget extends HookWidget {
   const QuestItemWidget({
-    @required this.quest,
-    @required this.currentGameId,
-    @required this.onQuestSelected,
-    @required this.isLocked,
-    @required this.selectedQuestId,
-    @required this.onSelectionChanged,
+    required this.quest,
+    required this.currentGameId,
+    required this.onQuestSelected,
+    required this.isLocked,
+    required this.selectedQuestId,
+    required this.onSelectionChanged,
   });
 
   final Quest quest;
-  final String currentGameId;
+  final String? currentGameId;
   final bool isLocked;
-  final void Function(Quest, QuestAction) onQuestSelected;
-  final String selectedQuestId;
-  final void Function(String) onSelectionChanged;
+  final void Function(Quest?, QuestAction) onQuestSelected;
+  final String? selectedQuestId;
+  final void Function(String?) onSelectionChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +43,13 @@ class QuestItemWidget extends HookWidget {
       isShowingActionsButtons: selectedQuestId == quest.id,
       onTap: () {
         if (isLocked) {
-          onQuestSelected?.call(null, QuestAction.startNewGame);
+          onQuestSelected.call(null, QuestAction.startNewGame);
           onSelectionChanged(null);
           return;
         }
 
         if (currentGameId == null) {
-          onQuestSelected?.call(quest, QuestAction.startNewGame);
+          onQuestSelected.call(quest, QuestAction.startNewGame);
           onSelectionChanged(null);
           return;
         }

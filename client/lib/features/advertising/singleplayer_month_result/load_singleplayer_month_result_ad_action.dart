@@ -5,18 +5,17 @@ import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app_configuration.dart';
 import 'package:cash_flow/configuration/cash_api_environment.dart';
 import 'package:fimber/fimber.dart';
-import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../google_ad_units_ids.dart';
 
 class LoadSingleplayerMonthResultAdAction extends BaseAction {
-  LoadSingleplayerMonthResultAdAction({@required this.month});
+  LoadSingleplayerMonthResultAdAction({required this.month});
 
-  final int month;
+  final int? month;
 
   @override
-  Future<AppState> reduce() async {
+  Future<AppState?> reduce() async {
     final adUnitId = getNativeGoogleAdUnitId(
       AppConfiguration.environment == CashApiEnvironment.production
           ? AdMobAdUnit.singleplayerMonthResult
@@ -50,18 +49,18 @@ class LoadSingleplayerMonthResultAdAction extends BaseAction {
 }
 
 class SetSinglepalyerMonthResultAd extends BaseAction {
-  SetSinglepalyerMonthResultAd({@required this.ad, @required this.month});
+  SetSinglepalyerMonthResultAd({required this.ad, required this.month});
 
-  final Ad ad;
-  final int month;
+  final Ad? ad;
+  final int? month;
 
   @override
   FutureOr<AppState> reduce() {
     return state.rebuild((s) {
-      if (ad != null) {
-        s.game.monthResultAds[month] = ad;
+      if (ad != null && month != null) {
+        s.game.monthResultAds?[month!] = ad!;
       } else {
-        s.game.monthResultAds.remove(month);
+        s.game.monthResultAds?.remove(month);
       }
     });
   }

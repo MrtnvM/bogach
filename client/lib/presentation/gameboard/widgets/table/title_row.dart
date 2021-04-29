@@ -2,10 +2,10 @@ import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 
 class TitleRow extends StatelessWidget {
-  const TitleRow({@required this.title, @required this.value});
+  const TitleRow({required this.title, required this.value});
 
   final String title;
-  final String value;
+  final String? value;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class TitleRow extends StatelessWidget {
             if (value != null)
               Expanded(
                 child: Text(
-                  value,
+                  value!,
                   style: Styles.bodyBlack,
                   textAlign: TextAlign.end,
                 ),

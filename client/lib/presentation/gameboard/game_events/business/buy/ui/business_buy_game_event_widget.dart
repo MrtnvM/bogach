@@ -16,11 +16,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class BusinessBuyGameEventWidget extends HookWidget {
-  const BusinessBuyGameEventWidget(this.event) : assert(event != null);
+  const BusinessBuyGameEventWidget(this.event);
 
   final GameEvent event;
 
-  BusinessBuyEventData get eventData => event.data;
+  BusinessBuyEventData get eventData => event.data as BusinessBuyEventData;
 
   @override
   Widget build(BuildContext context) {

@@ -35,15 +35,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'features/profile/actions/start_listening_profile_updates_action.dart';
 
-Future<void> main({@required CashApiEnvironment environment}) async {
-  environment = environment ?? CashApiEnvironment.production;
-
+Future<void> main({
+  CashApiEnvironment environment = CashApiEnvironment.production,
+}) async {
   initLogging(environment.name, environment.isLoggerEnabled);
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,14 +76,13 @@ Future<void> main({@required CashApiEnvironment environment}) async {
   final store = configureStore();
 
   Intl.defaultLocale = 'ru';
-  await initializeDateFormatting('ru');
 
   final currentUser = await userCache.getUserProfile();
 
   final isAuthorized = currentUser?.userId != null;
   store.dispatch(SetCurrentUserAction(currentUser));
   if (isAuthorized) {
-    store.dispatch(StartListeningProfileUpdatesAction(currentUser.id));
+    store.dispatch(StartListeningProfileUpdatesAction(currentUser!.id));
   }
   store.dispatch(StartListeningPurchasesAction());
 

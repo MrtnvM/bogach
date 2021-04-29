@@ -19,9 +19,9 @@ class ParticipantListWidget extends HookWidget {
     final userProfiles = useGlobalState((s) {
       return StoreList<UserProfile>([
         ...s.multiplayer.userProfiles.items,
-        s.profile.currentUser,
+        s.profile.currentUser!,
       ]);
-    });
+    })!;
 
     final participantsList = (room?.participants ?? [])
         .map((p) => Tuple(p, userProfiles.itemsMap[p.id]))
@@ -43,12 +43,12 @@ class ParticipantListWidget extends HookWidget {
   }
 
   Widget _buildParticipantWidget({
-    @required UserProfile profile,
-    @required RoomParticipant participant,
+    required UserProfile profile,
+    required RoomParticipant participant,
   }) {
-    IconData icon;
-    String status;
-    Color color;
+    IconData? icon;
+    late String status;
+    Color? color;
 
     switch (participant.status) {
       case RoomParticipantStatus.waiting:

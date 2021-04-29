@@ -7,8 +7,8 @@ const _singleplayer = 'singleplayer';
 const _multiplayer = 'multiplayer';
 
 @freezed
-abstract class GameType implements _$GameType {
-  GameType._();
+class GameType with _$GameType {
+  const GameType._();
 
   factory GameType.singleplayer() = SingleplayerGameType;
   factory GameType.multiplayer() = MultiplayerGameType;
@@ -18,7 +18,7 @@ abstract class GameType implements _$GameType {
         multiplayer: (_) => _multiplayer,
       );
 
-  static GameType fromJson(String json) {
+  static GameType fromJson(String? json) {
     switch (json) {
       case _singleplayer:
         return GameType.singleplayer();
@@ -34,4 +34,5 @@ abstract class GameType implements _$GameType {
   static String toJson(GameType type) {
     return type.jsonValue();
   }
+
 }

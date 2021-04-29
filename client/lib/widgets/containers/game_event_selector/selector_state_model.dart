@@ -1,12 +1,10 @@
-import 'package:flutter/material.dart';
-
 class SelectorStateModel {
   const SelectorStateModel({
-    @required this.availableCount,
-    @required this.selectedCount,
-    @required this.maxCount,
-    @required this.minCount,
-    @required this.canSell,
+    required this.availableCount,
+    required this.selectedCount,
+    required this.maxCount,
+    required this.minCount,
+    required this.canSell,
   });
 
   final int availableCount;

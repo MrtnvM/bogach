@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:app_settings/app_settings.dart';
 
 void showWarningAlertDialog({
-  BuildContext context,
-  String errorMessage,
-  String submitButtonText,
-  VoidCallback onSubmit,
-  bool needCancelButton,
+  required BuildContext context,
+  String? errorMessage,
+  String? submitButtonText,
+  VoidCallback? onSubmit,
+  bool? needCancelButton,
 }) {
   showAlert(
     title: Strings.commonError,
@@ -22,27 +22,27 @@ void showWarningAlertDialog({
 }
 
 Future<dynamic> showAlert({
-  @required BuildContext context,
-  String title,
-  String message,
-  VoidCallback onSubmit,
-  String cancelButtonText,
-  String submitButtonText,
-  bool needCancelButton,
-  VoidCallback onCancel,
-  bool needThirdButton,
-  String thirdButtonText,
-  VoidCallback onThirdButtonPressed,
+  required BuildContext context,
+  String? title,
+  String? message,
+  VoidCallback? onSubmit,
+  String? cancelButtonText,
+  String? submitButtonText,
+  bool? needCancelButton,
+  VoidCallback? onCancel,
+  bool? needThirdButton,
+  String? thirdButtonText,
+  VoidCallback? onThirdButtonPressed,
 }) async {
   FocusScope.of(context).requestFocus(FocusNode());
   message ??= Strings.commonError;
   cancelButtonText ??= Strings.cancel;
   submitButtonText ??= Strings.retry;
   needCancelButton ??= true;
-  onCancel ??= () => null;
+  onCancel ??= () {};
   needThirdButton ??= false;
   thirdButtonText ??= '';
-  onThirdButtonPressed ??= () => null;
+  onThirdButtonPressed ??= () {};
 
   final thirdButton = _buildDialogButton(
     thirdButtonText,
@@ -80,7 +80,7 @@ Future<dynamic> showAlert({
 }
 
 Widget _buildDialogButton(String text, VoidCallback onPressed) {
-  return FlatButton(
+  return TextButton(
     onPressed: () {
       appRouter.goBack();
       onPressed();
@@ -100,8 +100,8 @@ const _buttonsStyle = TextStyle(
 enum NoAccessMode { gallery, camera }
 
 void showDialogGoToAppSettings(BuildContext context, NoAccessMode mode) {
-  String title;
-  String message;
+  late String title;
+  late String message;
 
   switch (mode) {
     case NoAccessMode.gallery:
@@ -122,11 +122,11 @@ void showDialogGoToAppSettings(BuildContext context, NoAccessMode mode) {
         title: Text(title),
         content: Text(message),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             onPressed: AppSettings.openAppSettings,
             child: Text(Strings.goToSettings),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: const Text(Strings.cancel),
           )

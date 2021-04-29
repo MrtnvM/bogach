@@ -5,27 +5,25 @@ import 'package:flutter/material.dart';
 
 class CashCheckbox extends StatelessWidget {
   const CashCheckbox.text({
-    @required this.text,
+    required String this.text,
     this.isChecked,
     this.onChanged,
     this.activeColor = ColorRes.grass,
     this.style = Styles.body1,
-  })  : assert(text != null),
-        widget = null;
+  })  : widget = null;
 
   const CashCheckbox.widget({
-    @required this.widget,
+    required Widget this.widget,
     this.isChecked,
     this.onChanged,
     this.activeColor = ColorRes.grass,
     this.style = Styles.body1,
-  })  : assert(widget != null),
-        text = null;
+  })  : text = null;
 
-  final bool isChecked;
-  final ValueChanged<bool> onChanged;
-  final String text;
-  final Widget widget;
+  final bool? isChecked;
+  final ValueChanged<bool?>? onChanged;
+  final String? text;
+  final Widget? widget;
   final Color activeColor;
   final TextStyle style;
 
@@ -42,10 +40,10 @@ class CashCheckbox extends StatelessWidget {
         ),
         Flexible(
           child: GestureDetector(
-            onTap: () => onChanged(isChecked),
+            onTap: () => onChanged!(isChecked),
             child: widget ??
                 Text(
-                  text,
+                  text!,
                   style: style.copyWith(color: ColorRes.black),
                 ),
           ),

@@ -4,13 +4,12 @@ import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/services/purchase_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:built_collection/built_collection.dart';
 
 class QueryProductsForSaleAction extends BaseAction {
-  QueryProductsForSaleAction({@required this.ids})
-      : assert(ids?.isNotEmpty == true);
+  QueryProductsForSaleAction({required this.ids})
+      : assert(ids.isNotEmpty);
 
   final Set<String> ids;
 

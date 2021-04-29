@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'business/business_asset.dart';
@@ -16,13 +17,12 @@ class Asset {
 
   factory Asset.fromJson(Map<String, dynamic> json) {
     final typeString = json['type'];
-    final type = AssetType.values.firstWhere(
+    final type = AssetType.values.firstWhereOrNull(
       (e) => e.toString() == 'AssetType.$typeString',
-      orElse: () => null,
     );
 
     if (type == null) {
-      return null;
+      throw Exception('Unknown asset type');
     }
 
     switch (type) {
@@ -47,12 +47,10 @@ class Asset {
       case AssetType.other:
         return OtherAsset.fromJson(json);
     }
-
-    return null;
   }
 
-  String get name => null;
-  AssetType get type => null;
+  String? get name => null;
+  AssetType? get type => null;
 
   Map<String, dynamic> toJson() => {};
 }

@@ -6,13 +6,13 @@ class TitleText extends StatelessWidget {
     this.fontSize = 19,
   });
 
-  final String text;
+  final String? text;
   final double fontSize;
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      text!,
       textAlign: TextAlign.center,
       style: TextStyle(
         fontFamily: 'Montserrat',

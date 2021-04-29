@@ -13,9 +13,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 VoidCallback useGameRestarter() {
   final context = useContext();
   final dispatch = useDispatcher();
-  final currentQuest = useCurrentGame((g) => g.config.level);
+  final currentQuest = useCurrentGame((g) => g?.config.level);
 
-  void Function() startAgain;
+  void Function()? startAgain;
   startAgain = () {
     if (currentQuest == null) {
       return;
@@ -28,16 +28,18 @@ VoidCallback useGameRestarter() {
 
     dispatch(action).then((_) {
       final newGameId =
-          StoreProvider.state<AppState>(context).newGame.newGameId;
+          StoreProvider.state<AppState>(context)!.newGame.newGameId!;
 
       appRouter.goToRoot();
       appRouter.goTo(GameBoard(gameId: newGameId));
-    }).catchError(
-      (error) => handleError(
-        context: context,
-        exception: error,
-        onRetry: startAgain,
-      ),
+    }).onError(
+      (error, st) {
+        handleError(
+          context: context,
+          exception: error,
+          onRetry: startAgain,
+        );
+      },
     );
   };
 

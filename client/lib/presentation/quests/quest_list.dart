@@ -15,6 +15,7 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/common/common_error_widget.dart';
 import 'package:cash_flow/widgets/common/empty_list_widget.dart';
 import 'package:cash_flow/widgets/progress/games_loadable_list_view.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
@@ -24,23 +25,23 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 
 class QuestList extends HookWidget {
   const QuestList({
-    @required this.selectedItemId,
-    @required this.onSelectionChanged,
+    required this.selectedItemId,
+    required this.onSelectionChanged,
   });
 
-  final String selectedItemId;
-  final void Function(String) onSelectionChanged;
+  final String? selectedItemId;
+  final void Function(String?) onSelectionChanged;
 
   @override
   Widget build(BuildContext context) {
     final userId = useUserId();
     final getQuestsRequestState = useGlobalState(
       (s) => s.getOperationState(Operation.getQuests),
-    );
+    )!;
 
-    final user = useCurrentUser();
+    final user = useCurrentUser()!;
     final currentQuestIndex = user.currentQuestIndex ?? 0;
-    final quests = useQuestsTemplates();
+    final quests = useQuestsTemplates()!;
 
     final dispatch = useDispatcher();
 
@@ -61,7 +62,7 @@ class QuestList extends HookWidget {
 
     useEffect(() {
       swiperController.value.addListener(() {
-        final currentIndex = swiperController.value.index;
+        final currentIndex = swiperController.value.index!;
         final quest = quests.items[currentIndex].quest.name;
         AnalyticsSender.questsSwipeGame(quest);
       });
@@ -115,12 +116,13 @@ class QuestList extends HookWidget {
             },
             loadListRequestState: getQuestsRequestState,
             loadList: () {
-              dispatch(GetQuestsAction(userId: userId));
+              dispatch(GetQuestsAction(userId: userId!));
             },
             emptyStateWidget: const EmptyListWidget(),
             errorWidget: CommonErrorWidget(
-              () => dispatch(GetQuestsAction(userId: userId)),
+              () => dispatch(GetQuestsAction(userId: userId!)),
             ),
+            itemSeparator: (i) => const SizedBox(),
           ),
         ),
       ),
@@ -130,55 +132,54 @@ class QuestList extends HookWidget {
 
 class _QuestItemWidget extends HookWidget {
   const _QuestItemWidget({
-    @required this.quest,
-    @required this.index,
-    @required this.selectedItemId,
-    @required this.onSelectionChanged,
+    required this.quest,
+    required this.index,
+    required this.selectedItemId,
+    required this.onSelectionChanged,
     this.defaultAction,
   });
 
   final QuestUiModel quest;
   final int index;
-  final VoidCallback defaultAction;
-  final String selectedItemId;
-  final void Function(String) onSelectionChanged;
+  final VoidCallback? defaultAction;
+  final String? selectedItemId;
+  final void Function(String?) onSelectionChanged;
 
   @override
   Widget build(BuildContext context) {
     final onQuestSelected = _getOnQuestSelectedFn(quest);
-    final user = useCurrentUser();
-    final lastQuestGameInfo = user.lastGames.questGames.firstWhere(
+    final user = useCurrentUser()!;
+    final lastQuestGameInfo = user.lastGames.questGames.firstWhereOrNull(
       (g) => g.templateId == quest.id,
-      orElse: () => null,
     );
 
     return QuestItemWidget(
       quest: quest.quest,
       currentGameId: lastQuestGameInfo?.gameId,
       isLocked: onQuestSelected == null,
-      onQuestSelected: onQuestSelected ?? (l, a) => defaultAction(),
+      onQuestSelected: onQuestSelected ?? ((l, a) => defaultAction?.call()),
       selectedQuestId: selectedItemId,
       onSelectionChanged: onSelectionChanged,
     );
   }
 
-  Function(Quest, QuestAction) _getOnQuestSelectedFn(QuestUiModel quest) {
-    final user = useCurrentUser();
+  Function(Quest?, QuestAction)? _getOnQuestSelectedFn(QuestUiModel quest) {
+    final user = useCurrentUser()!;
     final startQuest = useQuestStarter();
-    final quests = useGlobalState((s) => s.newGame.quests);
+    final quests = useGlobalState((s) => s.newGame.quests)!;
 
     final hasQuestsAccess = user.purchaseProfile?.isQuestsAvailable ?? false;
     final isFirstQuest = quests.itemsIds.first == quest.id;
 
     final isQuestPurchased =
-        isFirstQuest || hasQuestsAccess || user.boughtQuestsAccess;
+        isFirstQuest || hasQuestsAccess || user.boughtQuestsAccess!;
     final isQuestOpenedByUser = quest.isAvailable;
     final isQuestAvailable =
         (isQuestPurchased && isQuestOpenedByUser) || DemoMode.isEnabled;
 
     if (isQuestAvailable) {
       return (quest, action) {
-        AnalyticsSender.questSelected(quest.name);
+        AnalyticsSender.questSelected(quest!.name);
 
         if (index == 0) {
           AnalyticsSender.questsFirstQuestSelected();

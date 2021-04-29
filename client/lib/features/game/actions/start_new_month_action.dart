@@ -16,7 +16,7 @@ class StartNewMonthAction extends BaseAction {
   Operation get operationKey => Operation.startNewMonth;
 
   @override
-  Future<AppState> reduce() async {
+  Future<AppState?> reduce() async {
     final gameService = GetIt.I.get<GameService>();
     await gameService.startNewMonth(gameContext);
 

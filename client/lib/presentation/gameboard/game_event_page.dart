@@ -21,12 +21,12 @@ import 'game_events/business/sell/ui/business_sell_game_event_widget.dart';
 import 'game_events/stock/ui/stock_game_event.dart';
 
 class GameEventPage extends HookWidget {
-  const GameEventPage({Key key}) : super(key: key);
+  const GameEventPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final activeGameState = useCurrentActiveGameState();
-    final gameEvents = useCurrentGame((g) => g.currentEvents);
+    final activeGameState = useCurrentActiveGameState()!;
+    final gameEvents = useCurrentGame((g) => g!.currentEvents) ?? [];
 
     final isActionInProgress = useIsGameboardActionInProgress();
 

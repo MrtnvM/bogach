@@ -10,11 +10,11 @@ import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 void useGameboardAnalytics() {
-  final gameExists = useCurrentGame((g) => g != null);
-  final templateId = useCurrentGame((g) => g?.config?.gameTemplateId);
+  final gameExists = useCurrentGame((g) => g) != null;
+  final templateId = useCurrentGame((g) => g?.config.gameTemplateId);
   final isMultiplayer = useIsMultiplayerGame();
   final isQuest = useIsQuestGame();
-  final quest = useCurrentGame((g) => g?.config?.level);
+  final quest = useCurrentGame((g) => g?.config.level);
   final isGameOver = useIsGameOver();
   final isWin = useIsCurrentParticipantWinGame();
 
@@ -41,9 +41,9 @@ void useGameboardAnalytics() {
       AnalyticsSender.multiplayerGameStart();
 
       SessionTracker.multiplayerGame.start();
-      SessionTracker.multiplayerGame.setAttribute('template_id', templateId);
+      SessionTracker.multiplayerGame.setAttribute('template_id', templateId!);
     } else if (isQuest) {
-      AnalyticsSender.questStart(quest);
+      AnalyticsSender.questStart(quest!);
 
       SessionTracker.quest.start();
       SessionTracker.quest.setAttribute('quest_id', quest);
@@ -51,7 +51,7 @@ void useGameboardAnalytics() {
       AnalyticsSender.singleplayerGameStart();
 
       SessionTracker.singleplayerGame.start();
-      SessionTracker.singleplayerGame.setAttribute('template_id', templateId);
+      SessionTracker.singleplayerGame.setAttribute('template_id', templateId!);
     }
 
     return null;
@@ -91,9 +91,9 @@ void useGameboardAnalytics() {
       SessionTracker.quest.stop();
 
       if (isWin) {
-        AnalyticsSender.questCompleted(quest);
+        AnalyticsSender.questCompleted(quest!);
       } else {
-        AnalyticsSender.questFailed(quest);
+        AnalyticsSender.questFailed(quest!);
       }
     }
     return null;
@@ -121,13 +121,13 @@ bool Function(double price) useIsEnoughCashValidator() {
   };
 }
 
-VoidCallback useSkipAction(String eventId) {
+VoidCallback useSkipAction(String? eventId) {
   final dispatch = useDispatcher();
   final context = useContext();
   final gameContext = useCurrentGameContext();
 
   return () {
     dispatch(SendPlayerMoveAction(gameContext: gameContext, eventId: eventId))
-        .catchError((e) => handleError(context: context, exception: e));
+        .onError((e, st) => handleError(context: context, exception: e));
   };
 }

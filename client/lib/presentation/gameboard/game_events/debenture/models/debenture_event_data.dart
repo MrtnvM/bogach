@@ -6,14 +6,14 @@ part 'debenture_event_data.freezed.dart';
 part 'debenture_event_data.g.dart';
 
 @freezed
-abstract class DebentureEventData
+class DebentureEventData
     with _$DebentureEventData
     implements GameEventData {
   factory DebentureEventData({
-    double currentPrice,
-    double nominal,
-    double profitabilityPercent,
-    int availableCount,
+    required double currentPrice,
+    required double nominal,
+    required double profitabilityPercent,
+    required int availableCount,
   }) = _DebentureEventData;
 
   factory DebentureEventData.fromJson(Map<String, dynamic> json) =>
