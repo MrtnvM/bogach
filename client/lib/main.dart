@@ -25,6 +25,7 @@ import 'package:cash_flow/utils/core/logging/firebase_tree.dart';
 import 'package:cash_flow/utils/core/logging/logger_tree.dart';
 import 'package:cash_flow/utils/core/logging/rollbar_tree.dart';
 import 'package:cash_flow/utils/debug.dart';
+import 'package:cash_flow/widgets/utils/feedback_widget.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:fimber/fimber.dart';
@@ -66,7 +67,7 @@ Future<void> main({
   configureUiKit();
   configureAnalytics(environment);
 
-  configureDependencyInjection(
+  await configureDependencyInjection(
     environment,
     apiClient,
     sharedPreferences,
@@ -108,9 +109,11 @@ Future<void> main({
     runApp(
       StoreProvider<AppState>(
         store: store,
-        child: CashFlowApp(
-          isAuthorised: isAuthorized,
-          isFirstLaunch: isFirstLaunch,
+        child: FeedbackWidget(
+          child: CashFlowApp(
+            isAuthorised: isAuthorized,
+            isFirstLaunch: isFirstLaunch,
+          ),
         ),
       ),
     );

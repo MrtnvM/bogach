@@ -32,6 +32,7 @@ export namespace StockEvent {
   export type Info = {
     readonly name: string;
     readonly description?: string;
+    readonly image?: string;
     readonly currentPrice: ValueRange;
     readonly fairPrice: ValueRange;
     readonly availableCount?: ValueRange;

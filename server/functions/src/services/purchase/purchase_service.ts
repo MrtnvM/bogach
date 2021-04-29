@@ -1,13 +1,10 @@
-import { produce, Draft } from 'immer';
+import { produce } from 'immer';
 
 import { UserProvider } from '../../providers/user_provider';
-import { UserEntity, User } from '../../models/domain/user/user';
+import { UserEntity } from '../../models/domain/user/user';
 import { Purchases } from '../../core/purchases/purchases';
 import { PurchaseDetails } from '../../models/purchases/purchase_details';
 import { PurchaseProfile, PurchaseProfileEntity } from '../../models/purchases/purchase_profile';
-import { GameEntity } from '../../models/domain/game/game';
-import { PlayedGameInfo } from '../../models/domain/user/player_game_info';
-import { nowInUtc } from '../../utils/datetime';
 import { ErrorRecorder } from '../../config';
 
 export class PurchaseService {
@@ -82,76 +79,5 @@ export class PurchaseService {
       isQuestsAvailable,
       boughtMultiplayerGamesCount: boughtMultiplayerGamesCount,
     };
-  }
-
-  async reduceMultiplayerGames(
-    participantsIds: UserEntity.Id[],
-    gameId: GameEntity.Id,
-    gameCreationDate?: number
-  ) {
-    const context = { participantsIds, gameId, gameCreationDate };
-
-    return this.errorRecorder.executeWithErrorRecording(context, async () => {
-      if (!Array.isArray(participantsIds) || participantsIds?.length === 0) {
-        throw new Error("ParticipantIds can't be empty");
-      }
-
-      const participants = await Promise.all(
-        participantsIds.map((userId) => this.userProvider.getUserProfile(userId))
-      );
-
-      const updatedParticipants = this.updateProfileStates(participants, gameId, gameCreationDate);
-
-      await Promise.all(updatedParticipants);
-    });
-  }
-
-  private updateProfileStates(
-    participants: User[],
-    gameId: string,
-    gameCreationDate?: number
-  ): Promise<User>[] {
-    const updatedParticipants = participants.map((profile) => {
-      const updatedProfile = produce(profile, (draft) => {
-        if (!draft.playedGames) {
-          draft.playedGames = {
-            multiplayerGames: [],
-          };
-        }
-
-        draft.playedGames.multiplayerGames = this.addMultiplayerGame(
-          draft,
-          gameId,
-          gameCreationDate
-        );
-
-        const multiplayerGamePlayed = draft.playedGames?.multiplayerGames?.length || 0;
-
-        const boughtMultiplayerGamesCount =
-          draft.purchaseProfile?.boughtMultiplayerGamesCount !== undefined
-            ? draft.purchaseProfile?.boughtMultiplayerGamesCount
-            : PurchaseProfileEntity.initialMultiplayerGamesCount;
-
-        const availableGames = boughtMultiplayerGamesCount - multiplayerGamePlayed;
-
-        if (availableGames < 0) {
-          throw new Error("multiplayerGamesCount can't be less then zero");
-        }
-      });
-      return this.userProvider.updateUserProfile(updatedProfile);
-    });
-
-    return updatedParticipants;
-  }
-
-  private addMultiplayerGame(draft: Draft<User>, gameId: string, gameCreationDate?: number) {
-    const multiplayerGameInfo: PlayedGameInfo = {
-      gameId: gameId,
-      createdAt: gameCreationDate || nowInUtc(),
-    };
-
-    draft.playedGames!.multiplayerGames.push(multiplayerGameInfo);
-
-    return draft.playedGames!.multiplayerGames;
   }
 }

@@ -221,4 +221,31 @@ class Styles {
     fontWeight: FontWeight.w500,
     color: ColorRes.black,
   );
+
+  static const dialogTitle = TextStyle(
+    fontFamily: _defaultFontFamily,
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    color: ColorRes.black,
+  );
+
+  static const defaultColorButtonText = TextStyle(
+    fontFamily: 'Montserrat',
+    fontSize: 16,
+    color: ColorRes.mainBlack,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const selectedTab = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.normal,
+    fontStyle: FontStyle.normal,
+    color: ColorRes.mainGreen,
+    fontFamily: _defaultFontFamily,
+  );
+
+  static final unselectedTab = selectedTab.copyWith(
+    fontSize: 11,
+    color: ColorRes.greyCog,
+  );
 }

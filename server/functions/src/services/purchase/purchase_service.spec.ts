@@ -9,9 +9,6 @@ import { User } from '../../models/domain/user/user';
 import { Purchases } from '../../core/purchases/purchases';
 import { TestData } from './purchase_service.spec.utils';
 import { PurchaseProfileEntity } from '../../models/purchases/purchase_profile';
-import { PlayedGameInfo } from '../../models/domain/user/player_game_info';
-import { nowInUtc } from '../../utils/datetime';
-import { ErrorRecorder } from '../../config';
 
 describe('Purchase Service', () => {
   const mockUserProvider = mock(UserProvider);
@@ -144,64 +141,6 @@ describe('Purchase Service', () => {
       draft.purchaseProfile!.boughtMultiplayerGamesCount = 15;
     });
     expect(expectedProfile).toStrictEqual(newUserProfile);
-  });
-
-  test('Successfully increasing played multiplayer games counter', async () => {
-    const { userId, getInitialProfile } = TestData;
-    const initialProfile = getInitialProfile({
-      boughtQuestsAccess: false,
-      multiplayerGamePlayed: 0,
-    });
-    const gameCreationDate = nowInUtc();
-
-    when(mockUserProvider.getUserProfile(userId)).thenResolve(initialProfile);
-    when(mockUserProvider.getUserPurchases(userId)).thenResolve([]);
-
-    await purchaseService.reduceMultiplayerGames(
-      [initialProfile.userId],
-      'gameId',
-      gameCreationDate
-    );
-
-    const [newUserProfile] = capture(mockUserProvider.updateUserProfile).last();
-    const expectedProfile = produce(initialProfile, (draft) => {
-      const playedGames = draft.playedGames || {
-        multiplayerGames: [],
-      };
-      playedGames.multiplayerGames = [];
-
-      const playedGameInfo: PlayedGameInfo = {
-        gameId: 'gameId',
-        createdAt: gameCreationDate,
-      };
-      playedGames.multiplayerGames.push(playedGameInfo);
-
-      draft.playedGames = playedGames;
-    });
-    expect(expectedProfile).toStrictEqual(newUserProfile);
-  });
-
-  test('Reduce zero multiplayer games', async () => {
-    const { userId, getInitialProfile } = TestData;
-    const initialProfile = getInitialProfile({
-      boughtQuestsAccess: false,
-      multiplayerGamePlayed: 0,
-      purchaseProfile: {
-        isQuestsAvailable: false,
-        boughtMultiplayerGamesCount: 0,
-      },
-    });
-
-    when(mockUserProvider.getUserProfile(userId)).thenResolve(initialProfile);
-    when(mockUserProvider.getUserPurchases(userId)).thenResolve([]);
-
-    ErrorRecorder.isEnabled = false;
-
-    await expect(
-      purchaseService.reduceMultiplayerGames([initialProfile.userId], 'gameId', nowInUtc())
-    ).rejects.toThrow(/.*multiplayerGamesCount can't be less then zero.*/);
-
-    ErrorRecorder.isEnabled = true;
   });
 
   test('Calculation of purchase profile', () => {
