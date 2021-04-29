@@ -3,8 +3,8 @@ import 'dart:typed_data';
 
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
+import 'package:cash_flow/widgets/utils/better_feedback/better_feedback.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:feedback/feedback.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
