@@ -133,6 +133,7 @@ class _RoundProgress extends HookWidget {
     final gameTutorial = useGameboardTutorial();
     final isMultiplayer = useIsMultiplayerGame();
     const size = 56.0;
+    final progressValue = min(max(progress, 0), 1);
 
     return Container(
       key: gameTutorial?.currentProgressKey,
@@ -151,14 +152,14 @@ class _RoundProgress extends HookWidget {
             radius: size,
             lineWidth: 5.0,
             animation: true,
-            percent: min(max(progress, 0), 1),
+            percent: progressValue,
             center: Container(
               padding: const EdgeInsets.all(3),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                '${(progress * 100).toInt()}%',
+                '${(progressValue * 100).toInt()}%',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 12.0,
