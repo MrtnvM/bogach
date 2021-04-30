@@ -2,8 +2,6 @@ import UIKit
 import Flutter
 import FirebaseCore
 
-import google_mobile_ads
-
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
   override func application(
@@ -18,10 +16,7 @@ import google_mobile_ads
     
     GeneratedPluginRegistrant.register(with: self)
     
-    // TODO change factoryId https://gitlab.com/cash-flow-team/cash-flow/-/issues/304
-    let listTileFactory = ListTileNativeAdFactory()
-    FLTGoogleMobileAdsPlugin.registerNativeAdFactory(
-        self, factoryId: "listTile", nativeAdFactory: listTileFactory)
+    SingleplayerMonthResultAdFactory.register(with: self)
     
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
