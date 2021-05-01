@@ -3,7 +3,6 @@ import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
-import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:cash_flow/widgets/texts/animated_price.dart';
 import 'package:cash_flow/widgets/tutorial/gameboard_tutorial_widget.dart';
 import 'package:flutter/cupertino.dart';

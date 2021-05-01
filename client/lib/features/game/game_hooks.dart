@@ -55,6 +55,12 @@ Account useAccount() {
   return account ?? defaultAccount;
 }
 
+bool useIsSingleplayerGame() {
+  return useCurrentGame(
+    (g) => g?.config?.level == null && g?.type == GameType.singleplayer(),
+  );
+}
+
 bool useIsMultiplayerGame() {
   return useCurrentGame((g) => g?.type == GameType.multiplayer());
 }
