@@ -7,6 +7,7 @@ import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 
 class SettingsProvider extends ControlPanelSettingsProvider {
@@ -32,7 +33,7 @@ class SettingsProvider extends ControlPanelSettingsProvider {
     });
 
     final pushProps = PushNotificationsSettingProps(
-      getToken: Future.value('token'),
+      getToken: FirebaseMessaging().getToken(),
     );
 
     final networkProps = NetworkSettingProps(
