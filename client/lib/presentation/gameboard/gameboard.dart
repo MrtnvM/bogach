@@ -1,4 +1,5 @@
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
+import 'package:cash_flow/features/advertising/singleplayer_month_result/singleplayer_month_result_ad_hooks.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard_hooks.dart';
@@ -58,6 +59,7 @@ class _GameboardBody extends HookWidget {
 
     useGameboardAnalytics();
     useGameWatcher();
+    useSingleplayerMonthResultAdLoader();
 
     if (!gameExists) {
       return const _LoadingGameWidget();

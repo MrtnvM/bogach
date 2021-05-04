@@ -206,7 +206,6 @@ class UserService {
           .ref()
           .child('users/$userId/avatar')
           .putFile(newAvatar)
-          .onComplete
           .then((task) => task.ref.getDownloadURL())
           .catchError(recordError);
 

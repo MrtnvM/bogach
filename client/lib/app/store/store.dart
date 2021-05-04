@@ -46,7 +46,7 @@ Future<void> configureDependencyInjection(
   UserCache userCache,
 ) async {
   final firebaseAuth = FirebaseAuth.instance;
-  final firebaseMessaging = FirebaseMessaging();
+  final firebaseMessaging = FirebaseMessaging.instance;
   final cloudStorage = FirebaseStorage.instance;
   final firestore = FirebaseFirestore.instance;
   final remoteConfig = await RemoteConfig.instance;

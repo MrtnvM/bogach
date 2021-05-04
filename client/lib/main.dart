@@ -32,6 +32,7 @@ import 'package:fimber/fimber.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -101,6 +102,8 @@ Future<void> main({
 
   AnalyticsSender.appLaunched();
   SessionTracker.gameLaunched.start();
+
+  MobileAds.instance.initialize();
 
   runZonedGuarded<Future<void>>(() async {
     runApp(
