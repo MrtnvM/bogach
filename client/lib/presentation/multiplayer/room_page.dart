@@ -6,6 +6,7 @@ import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/multiplayer/actions/create_room_game_action.dart';
 import 'package:cash_flow/features/multiplayer/actions/set_room_participant_ready_action.dart';
 import 'package:cash_flow/features/multiplayer/actions/share_room_invite_link_action.dart';
+import 'package:cash_flow/models/domain/room/room_participant.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/multiplayer/room_page_hooks.dart';
 import 'package:cash_flow/presentation/multiplayer/widgets/current_room_data_provider.dart';
@@ -75,6 +76,15 @@ class _RoomPageBody extends HookWidget {
                   const Divider(height: 1, indent: 16, endIndent: 16),
                   const SizedBox(height: 24),
                   if (roomState.isCurrentUserRoomOwner) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Text(
+                        Strings.startHint,
+                        style: Styles.body1.copyWith(color: ColorRes.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
@@ -148,7 +158,12 @@ class _StartGameButton extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final room = useCurrentRoom();
-    final canStartGame = room != null ? room.participants.length >= 2 : false;
+    final canStartGame = room != null
+        ? room.participants
+                .where((p) => p.status == RoomParticipantStatus.ready)
+                .length >=
+            2
+        : false;
 
     final dispatch = useDispatcher();
     final startGame = () => dispatch(CreateRoomGameAction(roomId: room.id))

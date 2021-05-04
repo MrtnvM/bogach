@@ -421,6 +421,8 @@ class Strings {
   static String get selectedPlayers => 'Выбранные игроки';
   static String get allPlayers => 'Все игроки';
   static String get players => 'Игроки';
+  static String get startHint =>
+      'Для начала игры необходимо как минимум 2 участника';
   static String get createRoom => 'Создать комнату';
   static String get inviteByLink => 'Пригласить по ссылке';
   static String get invite => 'Пригласить';
