@@ -56,7 +56,6 @@ Future<void> _sendFeedback(
         .child(collection)
         .child('$child.png')
         .putData(image)
-        .onComplete
         .then((value) => value.ref.getDownloadURL());
 
     await FirebaseFirestore.instance.collection(collection).doc(child).set({

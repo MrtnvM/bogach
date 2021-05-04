@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/bars/progress_bar.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -24,7 +26,7 @@ class TopBar extends HookWidget {
   Widget build(BuildContext context) {
     final notchSize = useNotchSize();
     final height = getHeight(context);
-    final progressBarTopPadding = notchSize.top > 20
+    final progressBarTopPadding = notchSize.top > 20 && Platform.isIOS
         ? 0.0
         : (height - AccountBar.height - ProgressBar.height - notchSize.top) / 2;
 

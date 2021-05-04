@@ -6,6 +6,7 @@ import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 
 import 'package:dash_kit_core/dash_kit_core.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 part 'game_state.g.dart';
 
@@ -19,10 +20,13 @@ abstract class GameState implements Built<GameState, GameStateBuilder> {
 
   StoreList<UserProfile> get participantProfiles;
 
+  Map<int, Ad> get monthResultAds;
+
   static GameState initial() => GameState(
         (b) => b
           ..activeGameStates = <String, ActiveGameState>{}
           ..games = <String, Game>{}
-          ..participantProfiles = StoreList<UserProfile>(),
+          ..participantProfiles = StoreList<UserProfile>()
+          ..monthResultAds = <int, Ad>{},
       );
 }
