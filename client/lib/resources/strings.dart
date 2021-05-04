@@ -519,7 +519,7 @@ class Strings {
       'При обновлении профиля возникла ошибка';
 
   // Update App Dialog
-  static String get updateIsNeeded => 'Необходимо обновление';
+  static String get updateIsNeeded => 'У нас что-то новенькое!';
   static String get weImproveGame => 'Мы стремимся сделать игру интереснее и '
       'познавательнее для вас. Пожалуйста, обновите приложение для'
       ' доступа к новым функциям - это не займет много времени :)';
