@@ -72,7 +72,15 @@ class MainPage extends HookWidget {
     final pageIndex = useState(0);
 
     useAppUpdatesChecker(() {
-      showUpdateAppDialog(context: context, onUpdate: launchMarket);
+      AnalyticsSender.updateAppBannerShown();
+
+      showUpdateAppDialog(
+        context: context,
+        onUpdate: () {
+          AnalyticsSender.updateAppBannerButtonClicked();
+          launchMarket();
+        },
+      );
     });
 
     return AnnotatedRegion(
