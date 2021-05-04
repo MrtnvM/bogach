@@ -45,6 +45,9 @@ dependencies:
   cloud_firestore: ^0.16.0
   firebase_remote_config: ^0.6.0
 
+  # Analytics
+  amplitude_flutter: ^2.0.0
+
   # Notifications
   notification_permissions: ^0.4.8
 
