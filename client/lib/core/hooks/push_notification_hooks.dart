@@ -58,6 +58,7 @@ void usePushMessageSubscription(void onMessage(Map<String, dynamic> message)) {
   };
 
   useEffect(() {
+    FirebaseMessaging.instance.getInitialMessage().then(onPushNotification);
     FirebaseMessaging.onMessage.listen(onPushNotification);
     FirebaseMessaging.onMessageOpenedApp.listen(onPushNotification);
 
