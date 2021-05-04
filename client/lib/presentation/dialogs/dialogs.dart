@@ -216,9 +216,9 @@ Future<void> showUpdateAppDialog({
     context: context,
     barrierDismissible: false,
     builder: (_) => AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       contentPadding: const EdgeInsets.all(0),
-      insetPadding: const EdgeInsets.symmetric(horizontal: 19),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16),
       content: Stack(
         children: [
           Image.asset(
@@ -227,7 +227,7 @@ Future<void> showUpdateAppDialog({
             fit: BoxFit.cover,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -253,6 +253,7 @@ Future<void> showUpdateAppDialog({
                   padding: 8,
                   textStyle: Styles.accountCommon.copyWith(
                     color: Colors.white,
+                    fontSize: 17,
                   ),
                 ),
               ],
