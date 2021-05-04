@@ -1,4 +1,8 @@
 PODS:
+  - Amplitude (7.2.0)
+  - amplitude_flutter (0.0.1):
+    - Amplitude (= 7.2.0)
+    - Flutter
   - "app_settings (3.0.0+1)":
     - Flutter
   - AppAuth (1.4.0):
@@ -281,6 +285,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - amplitude_flutter (from `.symlinks/plugins/amplitude_flutter/ios`)
   - app_settings (from `.symlinks/plugins/app_settings/ios`)
   - apple_sign_in (from `.symlinks/plugins/apple_sign_in/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
@@ -316,6 +321,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Amplitude
     - AppAuth
     - FBSDKCoreKit
     - FBSDKLoginKit
@@ -350,6 +356,8 @@ SPEC REPOS:
     - TOCropViewController
 
 EXTERNAL SOURCES:
+  amplitude_flutter:
+    :path: ".symlinks/plugins/amplitude_flutter/ios"
   app_settings:
     :path: ".symlinks/plugins/app_settings/ios"
   apple_sign_in:
@@ -422,6 +430,8 @@ CHECKOUT OPTIONS:
     :tag: 6.33.0
 
 SPEC CHECKSUMS:
+  Amplitude: c948c6f99c7f798c196523b2a5584367401d910f
+  amplitude_flutter: 5c934cf8331619b62bbd5a69f3cfea9090b3ca94
   app_settings: d103828c9f5d515c4df9ee754dabd443f7cedcf3
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   apple_sign_in: 7716c7ddfa195aeab7dec0dc374ef4ff45d1adb4
@@ -487,6 +497,6 @@ SPEC CHECKSUMS:
   uni_links: d97da20c7701486ba192624d99bffaaffcfc298a
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
-PODFILE CHECKSUM: 93584f25a53915b1bc5310019b452b0b42fb624c
+PODFILE CHECKSUM: e6d4b009e1664af94d16fc0fcbbfa6c0dcaf2e51
 
 COCOAPODS: 1.10.1

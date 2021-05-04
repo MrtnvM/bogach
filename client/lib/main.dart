@@ -9,6 +9,7 @@ import 'package:cash_flow/app/store/store.dart';
 import 'package:cash_flow/app_configuration.dart';
 import 'package:cash_flow/cache/user_cache.dart';
 import 'package:cash_flow/cash_flow_app.dart';
+import 'package:cash_flow/configuration/analytics.dart';
 import 'package:cash_flow/configuration/api_client.dart';
 import 'package:cash_flow/configuration/cash_api_environment.dart';
 import 'package:cash_flow/configuration/control_panel.dart';
@@ -39,16 +40,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'features/profile/actions/start_listening_profile_updates_action.dart';
 
-Future<void> main({
-  @required CashApiEnvironment environment,
-}) async {
+Future<void> main({@required CashApiEnvironment environment}) async {
   environment = environment ?? CashApiEnvironment.production;
 
   initLogging(environment.name, environment.isLoggerEnabled);
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  await initializeFirebase(environment);
+  await Firebase.initializeApp();
   await AppConfiguration.init(environment: environment);
 
   final tokenStorage = TokenStorage();
@@ -119,16 +118,8 @@ Future<void> main({
   });
 }
 
-Future<void> initializeFirebase(CashApiEnvironment environment) async {
-  await Firebase.initializeApp();
-}
-
 void configurePurchases() {
   InAppPurchaseConnection.enablePendingPurchases();
-}
-
-void configureAnalytics(CashApiEnvironment environment) {
-  AnalyticsSender.isEnabled = environment.isAnalyticsEnabled;
 }
 
 void initLogging(String environmentName, isLoggerEnabled) {
