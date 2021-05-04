@@ -354,6 +354,10 @@ class AnalyticsSender {
   static void restorePurchasesFailed() => _send('restore_purchases_failed');
   static void mainPageRefreshed() => _send('main_page_refreshed');
 
+  static void updateAppBannerShown() => _send('update_app_banner_shown');
+  static void updateAppBannerButtonClicked() =>
+      _send('update_app_banner_button_clicked');
+
   /// ----------------------------------------------------------------
   /// Common methods
   /// ----------------------------------------------------------------
