@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.gms.ads.formats.UnifiedNativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_ad_image"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:contentDescription="@string/image_of_the_ad"
+            android:scaleType="fitXY"
+            tools:background="#EDEDED" />
+
+        <TextView
+            android:id="@+id/tv_ad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:text="@string/ad"
+            android:textColor="#AAAAAA"
+            android:textSize="13sp"
+            tools:ignore="RelativeOverlap" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_toStartOf="@id/tv_ad"
+            android:layout_toEndOf="@id/iv_ad_image"
+            android:ellipsize="end"
+            android:lines="1"
+            android:maxLines="1"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            tools:text="Title" />
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_title"
+            android:layout_alignStart="@id/tv_title"
+            android:layout_alignParentEnd="true"
+            android:ellipsize="end"
+            android:lines="2"
+            android:maxLines="2"
+            android:textColor="#828282"
+            android:textSize="13sp"
+            tools:text="Description" />
+
+        <TextView
+            android:id="@+id/tv_advertiser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_ad_image"
+            android:layout_alignStart="@id/iv_ad_image"
+            android:layout_marginTop="12dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:maxLines="2"
+            android:textColor="#828282"
+            android:textSize="13sp"
+            tools:text="Advertiser" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_below="@id/iv_ad_image"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="4dp"
+            >
+
+            <TextView
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxLines="2"
+                android:textColor="#2cdb1d"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:text="Price" />
+
+            <TextView
+                android:id="@+id/tv_store"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxLines="1"
+                android:textColor="#828282"
+                android:textSize="15sp"
+                tools:text="Store" />
+
+            <Button
+                android:id="@+id/btn_action"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="@android:color/transparent"
+                android:elevation="0dp"
+                android:padding="0dp"
+                android:shadowColor="@android:color/transparent"
+                android:textColor="#0079fa"
+                android:textSize="15sp"
+                android:layout_marginStart="16dp"
+                tools:text="Install" />
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</com.google.android.gms.ads.formats.UnifiedNativeAdView>

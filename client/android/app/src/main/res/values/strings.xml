@@ -3,4 +3,6 @@
     <string name="app_name">Богач</string>
     <string name="facebook_app_id">210237670277363</string>
     <string name="fb_login_protocol_scheme">fb210237670277363</string>
+    <string name="ad">Ad</string>
+    <string name="image_of_the_ad">Image of the ad</string>
 </resources>
