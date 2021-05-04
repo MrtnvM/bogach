@@ -363,6 +363,7 @@ class AnalyticsSender {
 
     firebaseAnalytics.setUserId(userId);
     FirebaseCrashlytics.instance.setUserIdentifier(userId);
+    amplitudeAnalytics.setUserId(userId);
   }
 
   static void _send(
