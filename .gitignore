@@ -19,3 +19,5 @@ client/android/app/purchases_test/
 ui-debug.log
 
 data/purchasers.json
+
+data/games/
