@@ -98,6 +98,29 @@ describe('Firebase sandbox', () => {
     console.log('Push notification sent');
   });
 
+  test.skip('Get user profile', async () => {
+    const userId = 'w05ns50DYyRzNZ7YYjG2NzcPyfM2';
+
+    const firestore = admin.firestore();
+    const selector = new FirestoreSelector(firestore);
+    const firestoreInstance = new Firestore();
+    const userDao = new FirestoreUserDAO(selector, firestoreInstance);
+    const userProvider = new UserProvider(userDao);
+
+    const profile = await userProvider.getUserProfile(userId);
+    console.log(JSON.stringify(profile, null, 2));
+  });
+
+  test.skip('Get game', async () => {
+    const gameId = '7d7a2d0d-a51c-497f-a7f6-80fb5d546e2b';
+    const realtimeDatabase = admin.database();
+    const gameRef = realtimeDatabase.ref('games').child(gameId);
+    const game = await gameRef.once('value');
+
+    const path = `data/games/Game - ${gameId}.json`;
+    writeJson(path, game);
+  });
+
   test.skip('Test game transformer with data from DB', async () => {
     jest.setTimeout(15_000);
 
