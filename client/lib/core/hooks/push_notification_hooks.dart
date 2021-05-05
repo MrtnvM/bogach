@@ -50,7 +50,7 @@ void usePushTokenSubscription(void onTokenUpdated(String token), [List keys]) {
 
 void usePushMessageSubscription(void onMessage(Map<String, dynamic> message)) {
   final void Function(RemoteMessage) onPushNotification = (message) {
-    if (message.data != null) {
+    if (message?.data != null) {
       onMessage(message.data);
     } else {
       Fimber.e('Push notification with empty data', ex: message);
