@@ -133,7 +133,7 @@ class _RoundProgress extends HookWidget {
     final gameTutorial = useGameboardTutorial();
     final isMultiplayer = useIsMultiplayerGame();
     const size = 56.0;
-    final progressValue = min(max(progress, 0), 1);
+    final progressValue = min(max(progress, 0.0), 1.0);
 
     return Container(
       key: gameTutorial?.currentProgressKey,
