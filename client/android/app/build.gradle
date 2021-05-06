@@ -49,7 +49,7 @@ android {
         applicationId "io.mobile.bogach"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 43
+        versionCode 44
         versionName "2.1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
