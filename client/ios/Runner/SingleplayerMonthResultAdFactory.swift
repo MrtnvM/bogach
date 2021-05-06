@@ -34,9 +34,11 @@ class SingleplayerMonthResultAdFactory : FLTNativeAdFactory {
         let adView = nibView as! SingleplayerMonthResultAdView
         
         adView.titleLabel.text = nativeAd.headline
+        adView.headlineView = adView.titleLabel
         
         adView.descriptionLabel.text = nativeAd.body
         adView.descriptionLabel.isHidden = nativeAd.body == nil
+        adView.bodyView = adView.descriptionLabel
         
         adView.iconImageView.image = nativeAd.icon?.image
         adView.iconImageView.isHidden = nativeAd.icon == nil
@@ -45,11 +47,13 @@ class SingleplayerMonthResultAdFactory : FLTNativeAdFactory {
         adView.iconImageView.layer.borderWidth = 1
         adView.iconImageView.layer.borderColor =
             UIColor.lightGray.withAlphaComponent(0.25).cgColor
+        adView.imageView = adView.iconImageView
         
         adView.callToActionButton.setTitle(nativeAd.callToAction ?? "", for: .normal)
         adView.callToActionButton.isUserInteractionEnabled = false
         adView.callToActionButton.layer.cornerRadius = 12
         adView.callToActionButton.layer.masksToBounds = true
+        adView.callToActionView = adView.callToActionButton
         
         if (nativeAd.callToAction == nil) {
             adView.callToActionButton.isHidden = true
@@ -58,8 +62,10 @@ class SingleplayerMonthResultAdFactory : FLTNativeAdFactory {
         
         adView.ratingImageView.image = imageOfStars(from: nativeAd.starRating)
         adView.ratingImageView.isHidden = nativeAd.starRating == nil
+        adView.starRatingView = adView.ratingImageView
         
         adView.storeLabel.text = nativeAd.store ?? ""
+        adView.storeView = adView.storeLabel
         
         if (nativeAd.store == nil) {
             adView.storeSpacingConstraint.constant = 0
@@ -67,6 +73,7 @@ class SingleplayerMonthResultAdFactory : FLTNativeAdFactory {
         }
 
         adView.priceLabel.text = nativeAd.price ?? ""
+        adView.priceView = adView.priceLabel
         
         if (nativeAd.price == nil) {
             adView.priceLabel.isHidden = true
@@ -75,6 +82,7 @@ class SingleplayerMonthResultAdFactory : FLTNativeAdFactory {
         
         adView.advertiserLabel.text = nativeAd.advertiser ?? ""
         adView.advertiserLabel.isHidden = nativeAd.advertiser == nil
+        adView.advertiserView = adView.advertiserLabel
 
         adView.nativeAd = nativeAd
         
