@@ -31,26 +31,34 @@ class SingleplayerMonthResultAdFactory(private val context: Context) : NativeAdF
         val tvPrice = nativeAdView.findViewById<TextView>(R.id.tv_price)
 
         tvTitle.text = nativeAd.headline
+        nativeAdView.headlineView = tvTitle
+
         tvDescription.text = nativeAd.body
+        nativeAdView.bodyView = tvDescription
 
         val icon = nativeAd.icon
         ivAdImage.visibility = if (icon != null) View.VISIBLE else View.INVISIBLE
         if (icon != null) {
             ivAdImage.setImageDrawable(nativeAd.icon.drawable)
         }
+        nativeAdView.imageView = ivAdImage
 
         btnAdAction.text = nativeAd.callToAction
         btnAdAction.visibility = if (nativeAd.callToAction != null) View.VISIBLE else View.GONE
         btnAdAction.isClickable = false
+        nativeAdView.callToActionView = btnAdAction
 
         tvStore.text = nativeAd.store
         tvStore.visibility = if (nativeAd.store != null) View.VISIBLE else View.GONE
+        nativeAdView.storeView = tvStore
 
         tvPrice.text = nativeAd.price
         tvPrice.visibility = if (nativeAd.price != null) View.VISIBLE else View.GONE
+        nativeAdView.priceView = tvPrice
 
         tvAdvertiser.text = nativeAd.advertiser
         tvAdvertiser.visibility = if (nativeAd.advertiser != null) View.VISIBLE else View.GONE
+        nativeAdView.advertiserView = tvAdvertiser
 
         return nativeAdView
     }
