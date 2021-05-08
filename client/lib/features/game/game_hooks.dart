@@ -1,5 +1,7 @@
 import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/features/game/actions/start_game_action.dart';
 import 'package:cash_flow/models/domain/active_game_state/active_game_state.dart';
 import 'package:cash_flow/models/domain/game/account/account.dart';
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
@@ -53,6 +55,12 @@ Account useAccount() {
   return account ?? defaultAccount;
 }
 
+bool useIsSingleplayerGame() {
+  return useCurrentGame(
+    (g) => g?.config?.level == null && g?.type == GameType.singleplayer(),
+  );
+}
+
 bool useIsMultiplayerGame() {
   return useCurrentGame((g) => g?.type == GameType.multiplayer());
 }
@@ -76,4 +84,14 @@ bool useIsCurrentParticipantWinGame() {
   });
 
   return isWin;
+}
+
+void useGameWatcher() {
+  final gameContext = useCurrentGameContext();
+  final dispatch = useDispatcher();
+
+  useEffect(() {
+    dispatch(StartGameAction(gameContext));
+    return () => dispatch(StopGameAction(gameContext.gameId));
+  }, []);
 }

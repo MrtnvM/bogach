@@ -1,3 +1,4 @@
+import 'package:amplitude_flutter/amplitude.dart';
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -7,6 +8,7 @@ class AnalyticsSender {
   AnalyticsSender._();
 
   static final firebaseAnalytics = FirebaseAnalytics();
+  static final amplitudeAnalytics = Amplitude.getInstance();
 
   static bool isEnabled = false;
   static String _userId;
@@ -352,6 +354,10 @@ class AnalyticsSender {
   static void restorePurchasesFailed() => _send('restore_purchases_failed');
   static void mainPageRefreshed() => _send('main_page_refreshed');
 
+  static void updateAppBannerShown() => _send('update_app_banner_shown');
+  static void updateAppBannerButtonClicked() =>
+      _send('update_app_banner_button_clicked');
+
   /// ----------------------------------------------------------------
   /// Common methods
   /// ----------------------------------------------------------------
@@ -361,12 +367,16 @@ class AnalyticsSender {
 
     firebaseAnalytics.setUserId(userId);
     FirebaseCrashlytics.instance.setUserIdentifier(userId);
+    amplitudeAnalytics.setUserId(userId);
   }
 
   static void _send(
     String eventName, [
     Map<String, dynamic> parameters = const {},
   ]) {
+    amplitudeAnalytics.logEvent(eventName, eventProperties: parameters);
+    Amplitude.getInstance().uploadEvents();
+
     if (!isEnabled) {
       return;
     }

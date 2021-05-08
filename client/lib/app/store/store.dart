@@ -9,6 +9,7 @@ import 'package:cash_flow/services/config_service.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/multiplayer_service.dart';
 import 'package:cash_flow/services/purchase_service.dart';
+import 'package:cash_flow/services/updates_service.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
@@ -17,6 +18,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -36,17 +38,18 @@ Store<AppState> configureStore() {
   );
 }
 
-void configureDependencyInjection(
+Future<void> configureDependencyInjection(
   CashApiEnvironment environment,
   CashFlowApiClient apiClient,
   SharedPreferences sharedPreferences,
   TokenStorage tokenStorage,
   UserCache userCache,
-) {
+) async {
   final firebaseAuth = FirebaseAuth.instance;
-  final firebaseMessaging = FirebaseMessaging();
+  final firebaseMessaging = FirebaseMessaging.instance;
   final cloudStorage = FirebaseStorage.instance;
   final firestore = FirebaseFirestore.instance;
+  final remoteConfig = await RemoteConfig.instance;
   var realtimeDatabase = FirebaseDatabase.instance;
 
   if (environment == CashApiEnvironment.development) {
@@ -90,6 +93,11 @@ void configureDependencyInjection(
     preferences: sharedPreferences,
   );
 
+  final updatesService = UpdatesService(
+    remoteConfig: remoteConfig,
+    preferences: sharedPreferences,
+  );
+
   final usersAddToFriendsStorage = UsersAddToFriendsStorage(
     preferences: sharedPreferences,
   );
@@ -98,6 +106,7 @@ void configureDependencyInjection(
   GetIt.I.registerSingleton<UserService>(userService);
   GetIt.I.registerSingleton<PurchaseService>(purchaseService);
   GetIt.I.registerSingleton<ConfigService>(configService);
+  GetIt.I.registerSingleton<UpdatesService>(updatesService);
   GetIt.I.registerSingleton<MultiplayerService>(multiplayerService);
   GetIt.I.registerSingleton<UsersAddToFriendsStorage>(usersAddToFriendsStorage);
 }

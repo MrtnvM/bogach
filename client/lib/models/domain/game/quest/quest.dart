@@ -1,3 +1,4 @@
+import 'package:cash_flow/models/domain/game/quest/quest_template.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -11,6 +12,7 @@ abstract class Quest with _$Quest implements StoreListItem {
     @required String name,
     @required String description,
     @required String icon,
+    @required QuestTemplate template,
     @JsonSerializable(nullable: true) String image,
   }) = _Quest;
 

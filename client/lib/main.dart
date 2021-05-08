@@ -9,6 +9,7 @@ import 'package:cash_flow/app/store/store.dart';
 import 'package:cash_flow/app_configuration.dart';
 import 'package:cash_flow/cache/user_cache.dart';
 import 'package:cash_flow/cash_flow_app.dart';
+import 'package:cash_flow/configuration/analytics.dart';
 import 'package:cash_flow/configuration/api_client.dart';
 import 'package:cash_flow/configuration/cash_api_environment.dart';
 import 'package:cash_flow/configuration/control_panel.dart';
@@ -21,12 +22,18 @@ import 'package:cash_flow/features/profile/actions/set_current_user_action.dart'
 import 'package:cash_flow/features/purchase/actions/listening_purchases_actions.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/utils/core/launch_counter.dart';
-import 'package:cash_flow/utils/error_handler.dart';
+import 'package:cash_flow/utils/core/logging/firebase_tree.dart';
+import 'package:cash_flow/utils/core/logging/logger_tree.dart';
+import 'package:cash_flow/utils/core/logging/rollbar_tree.dart';
+import 'package:cash_flow/utils/debug.dart';
+import 'package:cash_flow/widgets/utils/feedback_widget.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
+import 'package:fimber/fimber.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -34,18 +41,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'features/profile/actions/start_listening_profile_updates_action.dart';
 
-Future<void> main({
-  @required CashApiEnvironment environment,
-}) async {
+Future<void> main({@required CashApiEnvironment environment}) async {
   environment = environment ?? CashApiEnvironment.production;
+
+  initLogging(environment.name, environment.isLoggerEnabled);
+
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (environment.isLoggerEnabled) {
-    Logger.init();
-    Logger.enabled = true;
-  }
-
-  await initializeFirebase(environment);
+  await Firebase.initializeApp();
   await AppConfiguration.init(environment: environment);
 
   final tokenStorage = TokenStorage();
@@ -63,7 +66,7 @@ Future<void> main({
   configureUiKit();
   configureAnalytics(environment);
 
-  configureDependencyInjection(
+  await configureDependencyInjection(
     environment,
     apiClient,
     sharedPreferences,
@@ -99,30 +102,38 @@ Future<void> main({
   AnalyticsSender.appLaunched();
   SessionTracker.gameLaunched.start();
 
+  MobileAds.instance.initialize();
+
   runZonedGuarded<Future<void>>(() async {
     runApp(
       StoreProvider<AppState>(
         store: store,
-        child: CashFlowApp(
-          isAuthorised: isAuthorized,
-          isFirstLaunch: isFirstLaunch,
+        child: FeedbackWidget(
+          child: CashFlowApp(
+            isAuthorised: isAuthorized,
+            isFirstLaunch: isFirstLaunch,
+          ),
         ),
       ),
     );
-  }, (exception, stacktrace) {
-    recordError(exception, stacktrace);
-    Logger.e('Uncaught exception: $exception', exception, stacktrace);
+  }, (error, stack) {
+    Fimber.e('runZonedGuarded error:', ex: error, stacktrace: stack);
   });
-}
-
-Future<void> initializeFirebase(CashApiEnvironment environment) async {
-  await Firebase.initializeApp();
 }
 
 void configurePurchases() {
   InAppPurchaseConnection.enablePendingPurchases();
 }
 
-void configureAnalytics(CashApiEnvironment environment) {
-  AnalyticsSender.isEnabled = environment.isAnalyticsEnabled;
+void initLogging(String environmentName, isLoggerEnabled) {
+  release(() {
+    Fimber.plantTree(FirebaseReportingTree());
+    Fimber.plantTree(RollbarTree(environmentName: environmentName));
+  });
+
+  if (isLoggerEnabled) {
+    Logger.init();
+    Logger.enabled = true;
+    Fimber.plantTree(LoggerTree());
+  }
 }

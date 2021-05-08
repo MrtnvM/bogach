@@ -174,9 +174,7 @@ class _Header extends HookWidget {
 }
 
 class _HeaderBackground extends StatelessWidget {
-  const _HeaderBackground({
-    Key key,
-  }) : super(key: key);
+  const _HeaderBackground({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

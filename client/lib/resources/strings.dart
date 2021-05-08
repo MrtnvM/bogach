@@ -1,3 +1,4 @@
+import 'package:feedback/feedback.dart';
 import 'package:intl/intl.dart';
 
 // ignore: avoid_classes_with_only_static_members
@@ -17,6 +18,7 @@ class Strings {
 
   // Common
   static String get submit => 'Отправить';
+  static String get close => 'Закрыть';
   static String get select => 'Выбрать';
   static String get logout => 'Выйти из аккаунта';
   static String get gallery => 'Галерея';
@@ -28,6 +30,7 @@ class Strings {
   static String get noGalleryAccessMessage =>
       'Разрешите доступ к галерее в настройках приложения';
   static String get goToSettings => 'Перейти в настройки';
+  static String get from => 'из';
 
   // Main Page
   static String get gamesTabTitle => 'Игры';
@@ -292,20 +295,17 @@ class Strings {
   static String get total => 'Итого';
 
   static String get waitingPlayersList => 'Ждем хода игроков';
-
-  static String get gameBoardTitle => 'GameBoard';
+  static String get feedback => 'Обратная связь';
 
   static String get targetTypeCash => 'Капитал';
-
   static String get targetTypePassiveIncome => 'Пассивный доход';
 
   static String get cashFlow => 'Денежный поток';
+  static String get cashFlowShort => 'Поток';
   static String get cashFlowDescription =>
       'Практически главный показатель в игре\n\n'
       'Это сумма, на которую ты становишься богаче каждый месяц\n\n'
       'Денежный поток - это доходы минус расходы';
-
-  static String get cashFlowShort => 'Поток';
 
   static String get credit => 'Кредит';
   static String get creditDescription =>
@@ -421,6 +421,8 @@ class Strings {
   static String get selectedPlayers => 'Выбранные игроки';
   static String get allPlayers => 'Все игроки';
   static String get players => 'Игроки';
+  static String get startHint =>
+      'Для начала игры необходимо как минимум 2 участника';
   static String get createRoom => 'Создать комнату';
   static String get inviteByLink => 'Пригласить по ссылке';
   static String get invite => 'Пригласить';
@@ -515,4 +517,27 @@ class Strings {
   static String get removeFromFriends => 'Удалить из друзей';
   static String get updateProfileErrorMessage =>
       'При обновлении профиля возникла ошибка';
+
+  // Update App Dialog
+  static String get updateIsNeeded => 'У нас что-то новенькое!';
+  static String get weImproveGame => 'Мы стремимся сделать игру интереснее и '
+      'познавательнее для вас. Пожалуйста, обновите приложение для'
+      ' доступа к новым функциям - это не займет много времени :)';
+  static String get update => 'Обновить';
+
+  static final ruFeedbackTranslations = _RuFeedbackTranslations();
+}
+
+class _RuFeedbackTranslations extends FeedbackTranslation {
+  @override
+  String get draw => 'Нарисовать';
+
+  @override
+  String get feedbackDescriptionText => 'Что случилось?';
+
+  @override
+  String get navigate => 'Навигация';
+
+  @override
+  String get submitButtonText => 'Отправить';
 }

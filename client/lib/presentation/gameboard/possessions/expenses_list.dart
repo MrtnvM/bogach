@@ -13,7 +13,9 @@ class ExpensesList extends HookWidget {
   Widget build(BuildContext context) {
     final userId = useUserId();
     final expenses = useCurrentGame(
-      (g) => g.participants[userId].possessionState.expenses,
+      (g) => g.participants[userId].possessionState.expenses
+          .where((e) => e.value != 0)
+          .toList(),
     );
     final totalExpense = expenses.fold<double>(
       0.0,

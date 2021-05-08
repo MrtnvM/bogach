@@ -13,6 +13,7 @@ import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard.dart';
 import 'package:cash_flow/presentation/tutorial/tutorial_page.dart';
+import 'package:cash_flow/utils/sorts/template_sorts.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -25,7 +26,18 @@ _GameTemplateListViewModel useGameTemplateListViewModel() {
   final user = useCurrentUser();
   final isTutorialPassed = useConfig((c) => c.isGameboardTutorialPassed);
 
-  final gameTemplates = useGlobalState((s) => s.newGame.gameTemplates);
+  final gameTemplates = useGlobalState((s) {
+    final completedGames =
+        s.profile.currentUser?.completedGames?.singleplayerGames ?? [];
+    final templates = StoreList(s.newGame.gameTemplates.items.toList());
+
+    templates.updateList(sortTemplates(
+      templates: templates.items,
+      completedGames: completedGames,
+    ));
+
+    return templates;
+  });
   final templatesRequestState = useOperationState(Operation.loadGameTemplates);
   final loadGameTemplates = () => dispatch(GetGameTemplatesAction());
 

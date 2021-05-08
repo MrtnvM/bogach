@@ -3,7 +3,10 @@ import 'dart:ui';
 import 'package:cash_flow/models/errors/domain_game_error.dart';
 import 'package:cash_flow/models/errors/past_purchase_error.dart';
 import 'package:cash_flow/resources/colors.dart';
+import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/resources/styles.dart';
+import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -86,6 +89,7 @@ void handleError({
   @required BuildContext context,
   @required dynamic exception,
   VoidCallback onRetry,
+  VoidCallback onCancel,
   String errorMessage,
   bool barrierDismissible = true,
   bool displayNegative = true,
@@ -112,6 +116,7 @@ void handleError({
       context: context,
       message: Strings.cannotAuthoriseThroughSocial,
       onRetry: onRetry,
+      onCancel: onCancel,
       barrierDismissible: barrierDismissible,
       displayNegative: displayNegative,
     );
@@ -124,6 +129,7 @@ void handleError({
         context: context,
         message: Strings.noInternetError,
         onRetry: onRetry,
+        onCancel: onCancel,
         barrierDismissible: barrierDismissible,
         displayNegative: displayNegative,
       );
@@ -134,6 +140,7 @@ void handleError({
         context: context,
         message: Strings.restorePurchasesError,
         onRetry: onRetry,
+        onCancel: onCancel,
         barrierDismissible: barrierDismissible,
         displayNegative: displayNegative,
       );
@@ -152,6 +159,7 @@ void handleError({
         context: context,
         message: errorMessage,
         onRetry: onRetry,
+        onCancel: onCancel,
         barrierDismissible: barrierDismissible,
         displayNegative: displayNegative,
       );
@@ -164,6 +172,7 @@ void handleError({
         context: context,
         message: message,
         onRetry: onRetry,
+        onCancel: onCancel,
         barrierDismissible: barrierDismissible,
         displayNegative: displayNegative,
       );
@@ -176,6 +185,7 @@ Future<void> showErrorDialog({
   String title,
   String message,
   VoidCallback onRetry,
+  VoidCallback onCancel,
   bool barrierDismissible = true,
   bool displayNegative = true,
 }) async {
@@ -192,7 +202,67 @@ Future<void> showErrorDialog({
 
   if (response == DialogResponse.confirm && onRetry != null) {
     onRetry();
+    return;
   }
+
+  onCancel?.call();
+}
+
+Future<void> showUpdateAppDialog({
+  @required BuildContext context,
+  @required VoidCallback onUpdate,
+}) {
+  return showDialog<DialogResponse>(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      contentPadding: const EdgeInsets.all(0),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16),
+      content: Stack(
+        children: [
+          Image.asset(
+            Images.dog,
+            width: double.maxFinite,
+            fit: BoxFit.cover,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 20),
+                Text(
+                  Strings.updateIsNeeded,
+                  style: Styles.dialogTitle,
+                ),
+                const SizedBox(height: 18),
+                Text(
+                  Strings.weImproveGame,
+                  maxLines: 10,
+                  textAlign: TextAlign.center,
+                  style: Styles.body1.copyWith(color: Colors.black),
+                ),
+                const SizedBox(height: 40),
+                ColorButton(
+                  color: ColorRes.mainGreen,
+                  onPressed: onUpdate,
+                  text: Strings.update,
+                  borderRadius: 20,
+                  padding: 8,
+                  textStyle: Styles.accountCommon.copyWith(
+                    color: Colors.white,
+                    fontSize: 17,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
 
 enum DialogResponse { confirm, decline, cancel }

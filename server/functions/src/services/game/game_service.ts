@@ -24,7 +24,7 @@ import { BusinessSellEventHandler } from '../../events/business/sell/business_se
 import { MonthlyExpenseEventHandler } from '../../events/monthly_expense/monthly_expense_event_handler';
 import { InsuranceHandler } from '../../events/insurance/insurance_handler';
 import { SalaryChangeEventHandler } from '../../events/salary_change/salary_change_event_handler';
-import { UserEntity } from '../../models/domain/user/user';
+import { User, UserEntity } from '../../models/domain/user/user';
 import { InsuranceTransformer } from '../../transformers/game/insurance_transformer';
 import { ResetEventIndexTransformer } from '../../transformers/game/reset_event_index_transformer';
 import { RealEstateBuyEventHandler } from '../../events/estate/buy/real_estate_buy_event_handler';
@@ -34,6 +34,10 @@ import { TimerProvider } from '../../providers/timer_provider';
 import { Game, GameEntity } from '../../models/domain/game/game';
 import { GameTemplateEntity } from '../../game_templates/models/game_template';
 import { ErrorRecorder } from '../../config';
+import produce, { Draft } from 'immer';
+import { PlayedGameInfo } from '../../models/domain/user/player_game_info';
+import { PurchaseProfileEntity } from '../../models/purchases/purchase_profile';
+import { nowInUtc } from '../../utils/datetime';
 
 export class GameService {
   constructor(
@@ -153,6 +157,10 @@ export class GameService {
           `GAME: ${JSON.stringify(game, null, 2)}`;
 
         throw new Error(errorMessage);
+      }
+
+      if (updatedGame.state.gameStatus === 'game_over') {
+        await this.gameProvider.updateGameParticipantsCompletedGames(updatedGame);
       }
 
       if (game.state.monthNumber < updatedGame.state.monthNumber) {
@@ -304,5 +312,76 @@ export class GameService {
       gameId: updatedGame.id,
       monthNumber: updatedGame.state.monthNumber,
     });
+  }
+
+  async reduceMultiplayerGames(
+    participantsIds: UserEntity.Id[],
+    gameId: GameEntity.Id,
+    gameCreationDate?: number
+  ) {
+    const context = { participantsIds, gameId, gameCreationDate };
+
+    return this.errorRecorder.executeWithErrorRecording(context, async () => {
+      if (!Array.isArray(participantsIds) || participantsIds?.length === 0) {
+        throw new Error("ParticipantIds can't be empty");
+      }
+
+      const participants = await Promise.all(
+        participantsIds.map((userId) => this.userProvider.getUserProfile(userId))
+      );
+
+      const updatedParticipants = this.updateProfileStates(participants, gameId, gameCreationDate);
+
+      await Promise.all(updatedParticipants);
+    });
+  }
+
+  private updateProfileStates(
+    participants: User[],
+    gameId: string,
+    gameCreationDate?: number
+  ): Promise<User>[] {
+    const updatedParticipants = participants.map((profile) => {
+      const updatedProfile = produce(profile, (draft) => {
+        if (!draft.playedGames) {
+          draft.playedGames = {
+            multiplayerGames: [],
+          };
+        }
+
+        draft.playedGames.multiplayerGames = this.addMultiplayerGame(
+          draft,
+          gameId,
+          gameCreationDate
+        );
+
+        const multiplayerGamePlayed = draft.playedGames?.multiplayerGames?.length || 0;
+
+        const boughtMultiplayerGamesCount =
+          draft.purchaseProfile?.boughtMultiplayerGamesCount !== undefined
+            ? draft.purchaseProfile?.boughtMultiplayerGamesCount
+            : PurchaseProfileEntity.initialMultiplayerGamesCount;
+
+        const availableGames = boughtMultiplayerGamesCount - multiplayerGamePlayed;
+
+        if (availableGames < 0) {
+          throw new Error("multiplayerGamesCount can't be less then zero");
+        }
+      });
+      return this.userProvider.updateUserProfile(updatedProfile);
+    });
+
+    return updatedParticipants;
+  }
+
+  private addMultiplayerGame(draft: Draft<User>, gameId: string, gameCreationDate?: number) {
+    const multiplayerGameInfo: PlayedGameInfo = {
+      gameId: gameId,
+      createdAt: gameCreationDate || nowInUtc(),
+    };
+
+    draft.playedGames!.multiplayerGames.push(multiplayerGameInfo);
+
+    return draft.playedGames!.multiplayerGames;
   }
 }

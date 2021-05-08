@@ -79,12 +79,15 @@
 		<string>https://bogach-game.ru</string>
 		<string>https://bogach-game.ru/join</string>
 	</array>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-3584659164590042~5559630399</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
 		<string>fb-messenger-share-api</string>
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
+		<string>itms</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
