@@ -71,6 +71,7 @@ dependencies:
   #charts_flutter: ^0.10.0 #wait for Google update https://github.com/google/charts/issues/579#issuecomment-817792878
   cupertino_icons: ^1.0.2
   url_launcher: ^6.0.3
+  syncfusion_flutter_charts: ^19.1.63
   share: ^2.0.1
   flutter_swiper:
     git:
