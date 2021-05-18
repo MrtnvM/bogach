@@ -81,6 +81,8 @@ class SendPlayerMoveAction extends BaseAction {
       );
 
       dispatch(SetActiveGameState(gameContext, activeGameState));
+
+      return Future.error(error!);
     });
 
     return null;
