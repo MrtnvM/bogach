@@ -52,7 +52,7 @@ Iterable<LineSeries<DotModel, int>> buildParticipantsCharts(Game game) {
       xValueMapper: (dot, _) => dot.xValue,
       yValueMapper: (dot, _) => dot.yValue,
       // Enable data label
-      dataLabelSettings: DataLabelSettings(isVisible: true),
+      dataLabelSettings: DataLabelSettings(isVisible: false),
       markerSettings: const MarkerSettings(isVisible: true),
     );
   });
