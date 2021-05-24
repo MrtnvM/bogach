@@ -21,8 +21,10 @@ class _ResetConfigSettingState extends State<ResetConfigSetting> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-      child: RaisedButton(
-        color: Colors.red.withAlpha(240),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.red.withAlpha(240),
+        ),
         onPressed: _resetConfig,
         child: FittedBox(
           child: Text(
@@ -41,10 +43,10 @@ class _ResetConfigSettingState extends State<ResetConfigSetting> {
   void _resetConfig() {
     context.dispatch(ResetConfigAction()).then((_) {
       const snackBar = SnackBar(content: Text('App config have been reset'));
-      Scaffold.of(context).showSnackBar(snackBar);
-    }).catchError((_) {
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }).onError((_, st) {
       const snackBar = SnackBar(content: Text('Reset was failed!'));
-      Scaffold.of(context).showSnackBar(snackBar);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     });
   }
 }

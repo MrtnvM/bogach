@@ -3,14 +3,14 @@ import 'dart:typed_data';
 
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
-import 'package:cash_flow/widgets/utils/better_feedback/better_feedback.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:feedback/feedback.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-Game _currentGame;
-String _userId;
+Game? _currentGame;
+String? _userId;
 
 _FeedbackSender useFeedbackSender() {
   final context = useContext();
@@ -20,7 +20,12 @@ _FeedbackSender useFeedbackSender() {
       _currentGame = game;
       _userId = userId;
 
-      BetterFeedback.of(context).show();
+      BetterFeedback.of(context)!
+          .show((feedback, feedbackScreenshot) => _sendFeedback(
+                context,
+                feedback,
+                feedbackScreenshot,
+              ));
     },
     sendFeedback: _sendFeedback,
   );
@@ -28,8 +33,8 @@ _FeedbackSender useFeedbackSender() {
 
 class _FeedbackSender {
   _FeedbackSender({
-    @required this.showFeedbackPage,
-    @required this.sendFeedback,
+    required this.showFeedbackPage,
+    required this.sendFeedback,
   });
 
   final void Function(Game game, String userId) showFeedbackPage;
@@ -43,7 +48,7 @@ class _FeedbackSender {
 Future<void> _sendFeedback(
   BuildContext context,
   String whatsWrong,
-  Uint8List image,
+  Uint8List? image,
 ) async {
   try {
     final date = DateTime.now();
@@ -51,12 +56,14 @@ Future<void> _sendFeedback(
     const collection = 'feedback';
     final child = '$timestamp';
 
-    final imageUrl = await FirebaseStorage.instance
-        .ref()
-        .child(collection)
-        .child('$child.png')
-        .putData(image)
-        .then((value) => value.ref.getDownloadURL());
+    final imageUrl = image?.isNotEmpty == true
+        ? await FirebaseStorage.instance
+            .ref()
+            .child(collection)
+            .child('$child.png')
+            .putData(image!)
+            .then((value) => value.ref.getDownloadURL())
+        : null;
 
     await FirebaseFirestore.instance.collection(collection).doc(child).set({
       'id': timestamp,
@@ -64,10 +71,10 @@ Future<void> _sendFeedback(
       'whatsWrong': whatsWrong,
       'imageUrl': imageUrl,
       'date': date.toIso8601String(),
-      'game': json.encode(_currentGame.toJson()),
+      'game': json.encode(_currentGame?.toJson()),
     });
 
-    BetterFeedback.of(context).hide();
+    BetterFeedback.of(context)!.hide();
   } catch (error) {
     handleError(
       context: context,
@@ -75,7 +82,7 @@ Future<void> _sendFeedback(
       onRetry: () {
         _sendFeedback(context, whatsWrong, image);
       },
-      onCancel: () => BetterFeedback.of(context).hide(),
+      onCancel: () => BetterFeedback.of(context)!.hide(),
     );
   }
 }

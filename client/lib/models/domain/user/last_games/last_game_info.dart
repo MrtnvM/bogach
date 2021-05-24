@@ -5,11 +5,11 @@ part 'last_game_info.freezed.dart';
 part 'last_game_info.g.dart';
 
 @freezed
-abstract class LastGameInfo with _$LastGameInfo {
+class LastGameInfo with _$LastGameInfo {
   factory LastGameInfo({
-    String gameId,
-    String templateId,
-    @JsonKey(fromJson: fromISO8601DateJson) DateTime createdAt,
+    required String gameId,
+    required String templateId,
+    @JsonKey(fromJson: fromISO8601DateJson) required DateTime? createdAt,
   }) = _LastGameInfo;
 
   factory LastGameInfo.fromJson(Map<String, dynamic> json) =>

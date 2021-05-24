@@ -1,15 +1,11 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/models/domain/user/last_games/last_game_info.dart';
-import 'package:flutter/foundation.dart';
 
 List<GameTemplate> sortTemplates({
-  @required BuiltList<GameTemplate> templates,
-  @required List<LastGameInfo> completedGames,
+  required BuiltList<GameTemplate> templates,
+  required List<LastGameInfo> completedGames,
 }) {
-  assert(templates != null);
-  assert(completedGames != null);
-
   return templates
       .rebuild((b) => b.sort((a, b) {
             final aIndex =

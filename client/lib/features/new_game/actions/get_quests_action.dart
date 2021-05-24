@@ -4,13 +4,11 @@ import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/services/game_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
 class GetQuestsAction extends BaseAction {
-  GetQuestsAction({@required this.userId, bool isRefreshing})
-      : assert(userId != null),
-        super(isRefreshing: isRefreshing);
+  GetQuestsAction({required this.userId, bool isRefreshing = false})
+      : super(isRefreshing: isRefreshing);
 
   final String userId;
 
@@ -24,7 +22,7 @@ class GetQuestsAction extends BaseAction {
     final quests = await gameService.getQuests(userId);
 
     return state.rebuild((s) {
-      s.newGame.quests.updateList(quests);
+      s.newGame.quests!.updateList(quests);
     });
   }
 }

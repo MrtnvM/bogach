@@ -6,18 +6,18 @@ import 'package:flutter/material.dart';
 
 class GameEventWidget extends StatelessWidget {
   const GameEventWidget({
-    @required this.icon,
-    @required this.name,
-    @required this.child,
-    @required this.buttonsState,
-    @required this.buttonsProperties,
+    required this.icon,
+    required this.name,
+    required this.child,
+    required this.buttonsState,
+    required this.buttonsProperties,
   });
 
   final IconData icon;
   final String name;
   final Widget child;
   final ButtonsState buttonsState;
-  final ButtonsProperties buttonsProperties;
+  final ButtonsProperties? buttonsProperties;
 
   @override
   Widget build(BuildContext context) {

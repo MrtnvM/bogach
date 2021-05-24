@@ -1,6 +1,5 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
-import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/business/buy/model/business_buy_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/business/sell/ui/business_sell_game_event_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/business/sell/ui/business_sell_items/businesses_to_sell_widget.dart';
@@ -16,15 +15,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class BusinessSellGameEventWidget extends HookWidget {
-  const BusinessSellGameEventWidget(this.event) : assert(event != null);
+  const BusinessSellGameEventWidget(this.event);
 
   final GameEvent event;
-  BusinessBuyEventData get eventData => event.data;
+
+  BusinessBuyEventData get eventData => event.data as BusinessBuyEventData;
 
   @override
   Widget build(BuildContext context) {
     final infoTableData = useBusinessSellInfoTableData(event);
-    final checkedBusinessId = useState<String>();
+    final checkedBusinessId = useState<String>('');
     final sendPlayerAction = useBusinessSellPlayerActionHandler(
       event: event,
       businessId: checkedBusinessId.value,
@@ -72,14 +72,7 @@ class BusinessSellGameEventWidget extends HookWidget {
         const SizedBox(height: 28),
         PlayerActionBar(
           confirm: () {
-            if (checkedBusinessId.value == null) {
-              showErrorDialog(
-                context: context,
-                message: Strings.sellBusinessNoChecked,
-              );
-            } else {
-              sendPlayerAction();
-            }
+            sendPlayerAction();
 
             AnalyticsSender.sellBusiness(
               event.name,

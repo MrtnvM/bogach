@@ -4,10 +4,10 @@ part 'expense.freezed.dart';
 part 'expense.g.dart';
 
 @freezed
-abstract class Expense with _$Expense {
+class Expense with _$Expense {
   factory Expense({
-    @required String name,
-    @required double value,
+    required String name,
+    required double value,
   }) = _Expense;
 
   factory Expense.fromJson(Map<String, dynamic> json) =>

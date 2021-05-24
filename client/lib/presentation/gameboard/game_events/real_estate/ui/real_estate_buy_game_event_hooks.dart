@@ -12,9 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 
-Map<String, String> useRealEstateBuyInfoTableData(GameEvent event) {
+Map<String, String?> useRealEstateBuyInfoTableData(GameEvent event) {
   return useMemoized(() {
-    final RealEstateBuyEventData eventData = event.data;
+    final eventData = event.data as RealEstateBuyEventData;
 
     final data = {
       Strings.description: event.name,
@@ -38,7 +38,7 @@ VoidCallback useRealEstateBuyPlayerActionHandler(GameEvent event) {
   final gameContext = useCurrentGameContext();
 
   return () {
-    final RealEstateBuyEventData eventData = event.data;
+    final eventData = event.data as RealEstateBuyEventData;
     final price = eventData.downPayment;
 
     if (!isEnoughCash(price.toDouble())) {
@@ -51,7 +51,7 @@ VoidCallback useRealEstateBuyPlayerActionHandler(GameEvent event) {
       eventId: event.id,
       playerAction: action,
       gameContext: gameContext,
-    )).catchError((e) => handleError(context: context, exception: e));
+    )).onError((e, st) => handleError(context: context, exception: e));
   };
 }
 

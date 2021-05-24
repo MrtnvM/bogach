@@ -10,7 +10,7 @@ class UserCache {
 
   final FlutterSecureStorage _secureStorage;
 
-  Future<UserProfile> getUserProfile() async {
+  Future<UserProfile?> getUserProfile() async {
     final jsonString = await _secureStorage.read(key: _userProfileKey);
     if (jsonString == null) {
       return null;
@@ -26,7 +26,7 @@ class UserCache {
     return profile;
   }
 
-  Future<void> setUserProfile(UserProfile profile) async {
+  Future<void> setUserProfile(UserProfile? profile) async {
     if (profile == null) {
       throw Exception('Can not update user profile cache with null');
     }

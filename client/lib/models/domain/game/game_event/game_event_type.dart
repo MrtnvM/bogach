@@ -28,8 +28,8 @@ const _salaryChangeEventType = 'salary-change-event';
 const _newsEventType = 'news-event';
 
 @freezed
-abstract class GameEventType implements _$GameEventType {
-  GameEventType._();
+class GameEventType with _$GameEventType {
+  const GameEventType._();
 
   factory GameEventType.debenture() = DebentureGameEventType;
   factory GameEventType.stock() = StockGameEventType;
@@ -57,19 +57,19 @@ abstract class GameEventType implements _$GameEventType {
         news: (_) => Strings.news,
       );
 
-  dynamic parseGameEventData(Map<String, dynamic> json) {
+  dynamic parseGameEventData(Map<String, dynamic>? json) {
     return map(
-      debenture: (_) => DebentureEventData.fromJson(json),
-      stock: (_) => StockEventData.fromJson(json),
-      businessBuy: (_) => BusinessBuyEventData.fromJson(json),
-      businessSell: (_) => BusinessSellEventData.fromJson(json),
-      income: (_) => IncomeEventData.fromJson(json),
-      expense: (_) => ExpenseEventData.fromJson(json),
-      monthlyExpense: (_) => MonthlyExpenseEventData.fromJson(json),
-      insurance: (_) => InsuranceEventData.fromJson(json),
-      realEstateBuy: (_) => RealEstateBuyEventData.fromJson(json),
-      salaryChange: (_) => SalaryChangeEventData.fromJson(json),
-      news: (_) => NewsEventData.fromJson(json),
+      debenture: (_) => DebentureEventData.fromJson(json!),
+      stock: (_) => StockEventData.fromJson(json!),
+      businessBuy: (_) => BusinessBuyEventData.fromJson(json!),
+      businessSell: (_) => BusinessSellEventData.fromJson(json!),
+      income: (_) => IncomeEventData.fromJson(json!),
+      expense: (_) => ExpenseEventData.fromJson(json!),
+      monthlyExpense: (_) => MonthlyExpenseEventData.fromJson(json!),
+      insurance: (_) => InsuranceEventData.fromJson(json!),
+      realEstateBuy: (_) => RealEstateBuyEventData.fromJson(json!),
+      salaryChange: (_) => SalaryChangeEventData.fromJson(json!),
+      news: (_) => NewsEventData.fromJson(json!),
     );
   }
 
@@ -87,7 +87,7 @@ abstract class GameEventType implements _$GameEventType {
         news: (_) => _newsEventType,
       );
 
-  static GameEventType fromJson(String json) {
+  static GameEventType fromJson(String? json) {
     switch (json) {
       case _debentureEventType:
         return GameEventType.debenture();
@@ -131,4 +131,5 @@ abstract class GameEventType implements _$GameEventType {
   static String toJson(GameEventType type) {
     return type.jsonValue();
   }
+
 }

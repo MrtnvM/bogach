@@ -4,11 +4,10 @@ import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/services/game_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
 class CreateRoomGameAction extends BaseAction {
-  CreateRoomGameAction({@required this.roomId});
+  CreateRoomGameAction({required this.roomId});
 
   final String roomId;
 
@@ -25,8 +24,8 @@ class CreateRoomGameAction extends BaseAction {
     await gameService.createRoomGame(roomId);
 
     return state.rebuild((s) {
-      final currentUser = s.profile.currentUser;
-      final multiplayerGamePlayed = currentUser.multiplayerGamePlayed ?? 0;
+      final currentUser = s.profile.currentUser!;
+      final multiplayerGamePlayed = currentUser.multiplayerGamePlayed;
 
       final updatedUser = currentUser.copyWith(
         multiplayerGamePlayed: multiplayerGamePlayed + 1,

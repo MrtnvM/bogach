@@ -5,11 +5,10 @@ import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
 class LoadProfilesAction extends BaseAction {
-  LoadProfilesAction({@required this.ids}) : assert(ids != null);
+  LoadProfilesAction({required this.ids});
 
   final List<String> ids;
 
@@ -23,7 +22,7 @@ class LoadProfilesAction extends BaseAction {
     final profiles = await userService.loadProfiles(ids);
 
     return state.rebuild((s) {
-      final userProfiles = [...s.multiplayer.userProfiles.items, ...profiles];
+      final userProfiles = [...s.multiplayer.userProfiles!.items, ...profiles];
       s.multiplayer.userProfiles = StoreList<UserProfile>(userProfiles);
     });
   }

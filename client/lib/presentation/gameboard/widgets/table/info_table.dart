@@ -10,8 +10,8 @@ import 'package:flutter_svg/svg.dart';
 
 class InfoTable extends StatelessWidget {
   const InfoTable({
-    Key key,
-    this.title,
+    Key? key,
+    required this.title,
     this.titleValue,
     this.subtitle,
     this.image,
@@ -24,15 +24,15 @@ class InfoTable extends StatelessWidget {
   }) : super(key: key);
 
   final String title;
-  final String titleValue;
-  final String subtitle;
-  final String image;
-  final String description;
-  final List<Widget> rows;
+  final String? titleValue;
+  final String? description;
+  final String? subtitle;
+  final String? image;
+  final List<Widget>? rows;
   final TextStyle titleTextStyle;
   final TextStyle titleValueStyle;
   final bool withShadow;
-  final VoidCallback onInfoClick;
+  final VoidCallback? onInfoClick;
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +59,11 @@ class InfoTable extends StatelessWidget {
       key: GameboardTutorialWidget.of(context)?.gameEventKey,
       children: <Widget>[
         ..._buildHeader(),
-        if (rows.isNotEmpty) ...[
+        if (rows?.isNotEmpty ?? false) ...[
           const TableDivider(),
-          for (var i = 0; i < rows.length; i++) ...[
-            rows[i],
-            if (i != rows.length - 1) const TableDivider(),
+          for (var i = 0; i < rows!.length; i++) ...[
+            rows![i],
+            if (i != rows!.length - 1) const TableDivider(),
           ]
         ]
       ],
@@ -75,7 +75,7 @@ class InfoTable extends StatelessWidget {
       Row(
         children: [
           Expanded(child: _buildHeaderTitle()),
-          if (titleValue != null) Text(titleValue, style: titleValueStyle),
+          if (titleValue != null) Text(titleValue!, style: titleValueStyle),
           if (onInfoClick != null) _buildInfoIcon()
         ],
       ),
@@ -84,7 +84,7 @@ class InfoTable extends StatelessWidget {
         Container(
           alignment: Alignment.centerLeft,
           child: Text(
-            description,
+            description!,
             style: Styles.tableRowDetails,
             overflow: TextOverflow.ellipsis,
             maxLines: 4,
@@ -113,12 +113,12 @@ class InfoTable extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: image?.startsWith('https://') == true
-                ? CachedNetworkImage(imageUrl: image)
+                ? CachedNetworkImage(imageUrl: image!)
                 : Center(
                     child: SizedBox(
                       height: 26,
                       width: 26,
-                      child: SvgPicture.asset(image),
+                      child: SvgPicture.asset(image!),
                     ),
                   ),
           ),
@@ -131,7 +131,7 @@ class InfoTable extends StatelessWidget {
             children: [
               Text(title, style: titleTextStyle),
               Text(
-                subtitle,
+                subtitle!,
                 style: Styles.bodyBlack.copyWith(
                   fontSize: 13,
                   color: ColorRes.greyCog,

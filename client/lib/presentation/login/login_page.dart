@@ -1,4 +1,5 @@
-import 'package:apple_sign_in/apple_sign_in.dart';
+import 'dart:io';
+
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/configuration/system_ui.dart';
@@ -23,10 +24,11 @@ import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends HookWidget {
@@ -93,10 +95,12 @@ class LoginPage extends HookWidget {
         //   type: _SocialButtonType.vk,
         // ),
         // const SizedBox(height: 16),
-        _buildAppleSignInButton(
-          dispatch,
-          isAuthorising,
-        ),
+        if (Platform.isIOS)
+          _buildAppleSignInButton(
+            context,
+            dispatch,
+            isAuthorising,
+          ),
         const SizedBox(height: 32),
         buildPrivacyPolicy(context),
       ],
@@ -104,23 +108,25 @@ class LoginPage extends HookWidget {
   }
 
   Widget _buildSocialMedias({
-    @required String icon,
-    @required String title,
-    @required _SocialButtonType type,
-    @required BuildContext context,
-    @required ValueNotifier<bool> isAuthorising,
-    @required Future<void> dispatch(BaseAction action),
+    required String icon,
+    required String title,
+    required _SocialButtonType type,
+    required BuildContext context,
+    required ValueNotifier<bool> isAuthorising,
+    required Future<void> dispatch(BaseAction action),
   }) {
-    return FlatButton(
-      color: Colors.white,
+    return TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4.0),
+        ),
+      ),
       onPressed: () => loginViaSocial(
         type,
         context,
         dispatch,
         isAuthorising,
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4.0),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -148,22 +154,17 @@ class LoginPage extends HookWidget {
   }
 
   Widget _buildAppleSignInButton(
+    BuildContext context,
     Future<void> dispatch(BaseAction action),
     ValueNotifier<bool> isAuthorising,
   ) {
-    return FutureBuilder(
-      future: AppleSignIn.isAvailable(),
-      builder: (context, snapShoot) =>
-          snapShoot.hasData && snapShoot.data == true
-              ? _buildSocialMedias(
-                  icon: Images.icApple,
-                  title: Strings.apple,
-                  type: _SocialButtonType.apple,
-                  context: context,
-                  dispatch: dispatch,
-                  isAuthorising: isAuthorising,
-                )
-              : Container(),
+    return _buildSocialMedias(
+      icon: Images.icApple,
+      title: Strings.apple,
+      type: _SocialButtonType.apple,
+      context: context,
+      dispatch: dispatch,
+      isAuthorising: isAuthorising,
     );
   }
 
@@ -255,22 +256,23 @@ class LoginPage extends HookWidget {
   ) async {
     isAuthorising.value = true;
 
-    final facebookLogin = FacebookLogin();
-    final result = await facebookLogin.logIn(['email']).catchError(recordError);
+    final result = await FacebookAuth.instance.login(
+      permissions: ['email'],
+    ).onError(recordError);
 
     switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
+      case LoginStatus.success:
         _loginViaFacebook(
           context,
           dispatch,
           isAuthorising,
-          result.accessToken.token,
+          result.accessToken!.token,
         );
         break;
 
-      case FacebookLoginStatus.error:
-        Logger.e('Facebook Auth Error', result.errorMessage);
-        _onLoginError(context, Exception(result.errorMessage), isAuthorising);
+      case LoginStatus.failed:
+        Logger.e('Facebook Auth Error', result.message);
+        _onLoginError(context, Exception(result.message), isAuthorising);
         break;
 
       default:
@@ -290,7 +292,7 @@ class LoginPage extends HookWidget {
     dispatch(action)
         .whenComplete(() => isAuthorising.value = false)
         .then((value) => _onLoginSuccess(dispatch))
-        .catchError((error) => _onLoginError(context, error, isAuthorising));
+        .onError((error, st) => _onLoginError(context, error, isAuthorising));
   }
 
   void _onLoginError(
@@ -310,7 +312,7 @@ class LoginPage extends HookWidget {
     Future<void> dispatch(BaseAction action),
     ValueNotifier<bool> isAuthorising,
   ) async {
-    final account = await GoogleSignIn().signIn().catchError((e) {
+    final account = await GoogleSignIn().signIn().onError((e, st) {
       Logger.e('Google Auth Error', e);
       _onLoginError(context, e, isAuthorising);
       recordError(e);
@@ -330,17 +332,17 @@ class LoginPage extends HookWidget {
       context: context,
       dispatch: dispatch,
       isAuthorising: isAuthorising,
-      token: authentication.accessToken,
-      idToken: authentication.idToken,
+      token: authentication.accessToken!,
+      idToken: authentication.idToken!,
     );
   }
 
   void _loginViaGoogle({
-    @required BuildContext context,
-    @required Future<void> dispatch(BaseAction action),
-    @required ValueNotifier<bool> isAuthorising,
-    @required String token,
-    @required String idToken,
+    required BuildContext context,
+    required Future<void> dispatch(BaseAction action),
+    required ValueNotifier<bool> isAuthorising,
+    required String token,
+    required String idToken,
   }) {
     final action = LoginViaGoogleAction(
       accessToken: token,
@@ -349,7 +351,7 @@ class LoginPage extends HookWidget {
 
     dispatch(action)
         .then((value) => _onLoginSuccess(dispatch))
-        .catchError((error) => _onLoginError(context, error, isAuthorising));
+        .onError((error, st) => _onLoginError(context, error, isAuthorising));
   }
 
   Future<void> _onLoginViaAppleClicked(
@@ -357,42 +359,36 @@ class LoginPage extends HookWidget {
     Future<void> dispatch(BaseAction action),
     ValueNotifier<bool> isAuthorising,
   ) async {
-    final result = await AppleSignIn.performRequests([
-      const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
-    ]).catchError(recordError);
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
 
-    switch (result.status) {
-      case AuthorizationStatus.authorized:
-        final identityToken =
-            String.fromCharCodes(result.credential.identityToken);
-        final accessToken =
-            String.fromCharCodes(result.credential.authorizationCode);
-        final firstName = result.credential.fullName.givenName;
-        final lastName = result.credential.fullName.familyName;
+      final identityToken = credential.identityToken;
+      final accessToken = credential.authorizationCode;
+      final firstName = credential.givenName;
+      final lastName = credential.familyName;
 
-        isAuthorising.value = true;
+      isAuthorising.value = true;
 
-        final action = LoginViaAppleAction(
-          idToken: identityToken,
-          accessToken: accessToken,
-          firstName: firstName,
-          lastName: lastName,
-        );
+      final action = LoginViaAppleAction(
+        idToken: identityToken!,
+        accessToken: accessToken,
+        firstName: firstName,
+        lastName: lastName,
+      );
 
-        dispatch(action) //
-            .then((value) => _onLoginSuccess(dispatch))
-            .catchError((e) => _onLoginError(context, e, isAuthorising));
-
-        break;
-
-      case AuthorizationStatus.error:
-        Logger.e('Apple Auth Error', result.error);
-        _onLoginError(context, result.error, isAuthorising);
-        break;
-
-      case AuthorizationStatus.cancelled:
+      dispatch(action) //
+          .then((value) {
         isAuthorising.value = false;
-        break;
+        return _onLoginSuccess(dispatch);
+      }).catchError((e) => _onLoginError(context, e, isAuthorising));
+    } catch (ex) {
+      Logger.e('Apple Auth Error', ex);
+      _onLoginError(context, ex, isAuthorising);
     }
   }
 

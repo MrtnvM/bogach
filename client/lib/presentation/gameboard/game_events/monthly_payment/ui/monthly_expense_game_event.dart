@@ -18,7 +18,8 @@ class MonthlyExpenseEvent extends HookWidget {
 
   final GameEvent event;
 
-  MonthlyExpenseEventData get eventData => event.data;
+  MonthlyExpenseEventData get eventData =>
+      event.data as MonthlyExpenseEventData;
 
   @override
   Widget build(BuildContext context) {

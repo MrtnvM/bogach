@@ -29,7 +29,7 @@ class _TraceHolder {
 
   final String key;
 
-  Trace _trace;
+  Trace? _trace;
 
   void start() {
     if (SessionTracker.isLoggingEnabled) {

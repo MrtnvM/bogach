@@ -1,13 +1,9 @@
-import 'package:flutter/cupertino.dart';
-
 class ExpenseWidgetData {
   ExpenseWidgetData({
-    @required this.eventName,
-    @required this.eventDescription,
-    @required this.data,
-  })  : assert(eventName != null),
-        assert(eventDescription != null),
-        assert(data != null);
+    required this.eventName,
+    required this.eventDescription,
+    required this.data,
+  });
 
   final String eventName;
   final String eventDescription;

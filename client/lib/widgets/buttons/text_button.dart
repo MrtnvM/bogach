@@ -8,8 +8,8 @@ class TextButton extends StatelessWidget {
     this.color = Colors.white,
   });
 
-  final String text;
-  final VoidCallback onPressed;
+  final String? text;
+  final VoidCallback? onPressed;
   final Color color;
 
   @override
@@ -18,7 +18,7 @@ class TextButton extends StatelessWidget {
       onTap: onPressed,
       child: Padding(
         padding: const EdgeInsets.all(8),
-        child: Text(text,
+        child: Text(text!,
             style: Styles.body1.copyWith(
               color: color,
               fontWeight: FontWeight.w500,

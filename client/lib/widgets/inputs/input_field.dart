@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 
 class InputField extends StatefulWidget {
   const InputField({
-    @required this.props,
-  }) : assert(props != null);
+    required this.props,
+  });
 
   final InputFieldProps props;
 
@@ -20,20 +20,20 @@ class InputField extends StatefulWidget {
 
 class _InputFieldState extends State<InputField> {
   final key = GlobalKey<FormFieldState>();
-  String value;
-  String validationResult;
+  String? value;
+  String? validationResult;
 
   @override
   void initState() {
     super.initState();
     widget.props.focusNode?.addListener(() {
-      key.currentState.validate();
+      key.currentState!.validate();
     });
 
     if (widget.props.autovalidateMode != AutovalidateMode.disabled &&
         widget.props.validatorRules != null &&
-        widget.props.controller?.text?.isNotEmpty == true) {
-      validationResult = validate(value, widget.props.validatorRules);
+        widget.props.controller?.text.isNotEmpty == true) {
+      validationResult = validate(value, widget.props.validatorRules!);
     }
   }
 
@@ -72,7 +72,7 @@ class _InputFieldState extends State<InputField> {
           return null;
         }
 
-        validationResult = validate(value, widget.props.validatorRules);
+        validationResult = validate(value, widget.props.validatorRules!);
         return validationResult;
       },
       textAlign: widget.props.textAlign,
@@ -90,7 +90,13 @@ class _InputFieldState extends State<InputField> {
       obscureText: widget.props.obscureText,
       inputFormatters: widget.props.inputFormatters,
       maxLength: widget.props.maxLength,
-      buildCounter: (context, {currentLength, maxLength, isFocused}) => null,
+      buildCounter: (
+        context, {
+        currentLength = 0,
+        maxLength,
+        isFocused = false,
+      }) =>
+          null,
     );
   }
 
@@ -107,8 +113,8 @@ class _InputFieldState extends State<InputField> {
   }
 
   bool _hasValue() =>
-      widget.props?.controller?.text?.isNotEmpty == true ||
+      widget.props.controller?.text.isNotEmpty == true ||
       value?.isNotEmpty == true;
 
-  bool _hasFocus() => widget.props?.focusNode?.hasFocus == true;
+  bool _hasFocus() => widget.props.focusNode?.hasFocus == true;
 }

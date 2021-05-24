@@ -15,7 +15,7 @@ class NewsGameEvent extends HookWidget {
 
   final GameEvent event;
 
-  NewsEventData get eventData => event.data;
+  NewsEventData get eventData => event.data as NewsEventData;
 
   @override
   Widget build(BuildContext context) {

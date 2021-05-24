@@ -1,13 +1,11 @@
-import 'package:flutter/cupertino.dart';
-
 class GameEventInfoDialogModel {
   GameEventInfoDialogModel({
-    @required this.title,
-    @required this.description,
-    @required this.keyPoints,
-    @required this.riskLevel,
-    @required this.profitabilityLevel,
-    @required this.complexityLevel,
+    required this.title,
+    required this.description,
+    required this.keyPoints,
+    required this.riskLevel,
+    required this.profitabilityLevel,
+    required this.complexityLevel,
   });
 
   final String title;

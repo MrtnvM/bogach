@@ -1,13 +1,12 @@
 import 'dart:convert';
 
 import 'package:cash_flow/features/config/config_state.dart';
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const _configKey = 'APP_CONFIG';
 
 class ConfigService {
-  ConfigService({@required this.preferences});
+  ConfigService({required this.preferences});
 
   final SharedPreferences preferences;
 
@@ -17,7 +16,7 @@ class ConfigService {
     }
 
     try {
-      final jsonString = preferences.getString(_configKey);
+      final jsonString = preferences.getString(_configKey)!;
       final jsonData = json.decode(jsonString);
       final config = ConfigState.fromJson(jsonData);
       return config;

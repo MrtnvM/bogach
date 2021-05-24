@@ -10,16 +10,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class NavigationBar extends HookWidget {
   const NavigationBar({
-    @required this.opacity,
-    Key key,
+    required this.opacity,
+    Key? key,
     this.title,
     this.subtitle,
     this.goBack,
   }) : super(key: key);
 
-  final String title;
-  final String subtitle;
-  final VoidCallback goBack;
+  final String? title;
+  final String? subtitle;
+  final VoidCallback? goBack;
   final double opacity;
 
   @override
@@ -62,10 +62,10 @@ class NavigationBar extends HookWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             if (title?.isNotEmpty ?? false)
-              Text(title, style: Styles.navBarTitle),
+              Text(title!, style: Styles.navBarTitle),
             if (subtitle?.isNotEmpty ?? false) ...[
               const SizedBox(height: 10),
-              Text(subtitle, style: Styles.navBarSubtitle),
+              Text(subtitle!, style: Styles.navBarSubtitle),
             ]
           ],
         ),

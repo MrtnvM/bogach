@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class FriendsListWidget extends HookWidget {
-  const FriendsListWidget({Key key, @required this.friends}) : super(key: key);
+  const FriendsListWidget({Key? key, required this.friends}) : super(key: key);
 
   final List<UserProfile> friends;
 
@@ -24,10 +24,10 @@ class FriendsListWidget extends HookWidget {
     final inviteButtonSize = size(24);
     final dispatch = useDispatcher();
 
-    final inviteFriend = () async {
+    final inviteFriend = () {
       dispatch(ShareAddFriendLinkAction())
           .then((_) => AnalyticsSender.accountInviteFriendLinkCreated())
-          .catchError((e) => handleError(context: context, exception: e));
+          .onError((e, st) => handleError(context: context, exception: e));
     };
 
     return Padding(
@@ -62,10 +62,10 @@ class FriendsListWidget extends HookWidget {
 
 class _InviteButton extends HookWidget {
   const _InviteButton({
-    Key key,
-    @required this.inviteButtonSize,
-    @required this.size,
-    @required this.inviteFriend,
+    Key? key,
+    required this.inviteButtonSize,
+    required this.size,
+    required this.inviteFriend,
   }) : super(key: key);
 
   final double inviteButtonSize;

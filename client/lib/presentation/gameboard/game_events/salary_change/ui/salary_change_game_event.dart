@@ -18,7 +18,7 @@ class SalaryChangeEvent extends HookWidget {
 
   final GameEvent event;
 
-  SalaryChangeEventData get eventData => event.data;
+  SalaryChangeEventData get eventData => event.data as SalaryChangeEventData;
 
   @override
   Widget build(BuildContext context) {

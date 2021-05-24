@@ -1,4 +1,4 @@
-DateTime fromISO8601DateJson(dynamic date) {
+DateTime? fromISO8601DateJson(dynamic date) {
   if (date == null) {
     return null;
   }
@@ -8,12 +8,12 @@ DateTime fromISO8601DateJson(dynamic date) {
   }
 
   if (date is num) {
-    return DateTime.fromMillisecondsSinceEpoch(date);
+    return DateTime.fromMillisecondsSinceEpoch(date as int);
   }
 
   throw Exception('Unknown date format');
 }
 
-int toISO8601DateJson(DateTime date) {
-  return date.millisecondsSinceEpoch;
+int? toISO8601DateJson(DateTime? date) {
+  return date?.millisecondsSinceEpoch;
 }

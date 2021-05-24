@@ -25,7 +25,7 @@ class StockGameEvent extends HookWidget {
 
   final GameEvent event;
 
-  StockEventData get eventData => event.data;
+  StockEventData get eventData => event.data as StockEventData;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class StockGameEvent extends HookWidget {
     final skipPlayerAction = useSkipAction(event.id);
 
     final userId = useUserId();
-    final cash = useCurrentGame((g) => g.participants[userId].account.cash);
+    final cash = useCurrentGame((g) => g!.participants[userId!]!.account.cash);
     final alreadyHaveCount = useCurrentStock(event)?.countInPortfolio ?? 0;
 
     final stockDialogInfoModel = useStockInfoDialogModel();

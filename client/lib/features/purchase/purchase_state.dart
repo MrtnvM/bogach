@@ -8,17 +8,18 @@ part 'purchase_state.g.dart';
 
 abstract class PurchaseState
     implements Built<PurchaseState, PurchaseStateBuilder> {
-  factory PurchaseState([void Function(PurchaseStateBuilder b) updates]) =
+  factory PurchaseState([void Function(PurchaseStateBuilder b)? updates]) =
       _$PurchaseState;
 
   PurchaseState._();
 
-  BuiltList<PurchaseDetails> get pastPurchases;
+  BuiltList<PurchaseDetails>? get pastPurchases;
   BuiltList<ProductDetails> get productsForSale;
 
   bool get isPurchasesAvailable;
 
   static PurchaseState initial() => PurchaseState((b) => b
     ..isPurchasesAvailable = true
+    ..pastPurchases = ListBuilder()
     ..productsForSale = ListBuilder());
 }

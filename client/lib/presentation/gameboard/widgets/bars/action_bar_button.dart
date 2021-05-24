@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 class ActionBarButton extends StatelessWidget {
   const ActionBarButton({
-    @required this.text,
-    @required this.color,
+    required this.text,
+    required this.color,
     this.maxTitleLines = 1,
     this.onPressed,
   });
@@ -13,18 +13,20 @@ class ActionBarButton extends StatelessWidget {
   final String text;
   final Color color;
   final int maxTitleLines;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 48,
-      child: RaisedButton(
+      child: ElevatedButton(
         onPressed: onPressed,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
+        style: ElevatedButton.styleFrom(
+          primary: color,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+          ),
         ),
-        color: color,
         child: Container(
           alignment: Alignment.center,
           constraints: const BoxConstraints.expand(),

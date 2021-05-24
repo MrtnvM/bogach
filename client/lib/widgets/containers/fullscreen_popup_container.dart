@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 
 class FullscreenPopupContainer extends StatelessWidget {
   const FullscreenPopupContainer({
-    @required this.backgroundColor,
-    @required this.content,
-    Key key,
+    required this.backgroundColor,
+    required this.content,
+    Key? key,
     this.onClose,
     this.topRightActionWidget,
   }) : super(key: key);
 
   final Color backgroundColor;
   final Widget content;
-  final VoidCallback onClose;
-  final Widget topRightActionWidget;
+  final VoidCallback? onClose;
+  final Widget? topRightActionWidget;
 
   @override
   Widget build(BuildContext context) {

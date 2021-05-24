@@ -9,10 +9,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class BusinessesDescriptionToSellGameEvent extends HookWidget {
   const BusinessesDescriptionToSellGameEvent({
-    @required this.event,
-    @required this.onItemCheck,
-  })  : assert(event != null),
-        assert(onItemCheck != null);
+    required this.event,
+    required this.onItemCheck,
+  });
 
   final GameEvent event;
   final void Function(String checkedBusinessId) onItemCheck;
@@ -20,7 +19,7 @@ class BusinessesDescriptionToSellGameEvent extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final infoTableData = useBusinessToSellData(event);
-    final checkedItemId = useState<String>();
+    final checkedItemId = useState<String>('');
 
     return Column(
       children: _buildBody(infoTableData, checkedItemId),
@@ -35,11 +34,11 @@ class BusinessesDescriptionToSellGameEvent extends HookWidget {
       return <Widget>[];
     }
 
-    return businessesToSellData.businessesTableData
+    return businessesToSellData.businessesTableData!
         .map((businessTableData) {
           final businessId = businessTableData.businessId;
           final onlyOneBusiness =
-              businessesToSellData.businessesTableData.length == 1;
+              businessesToSellData.businessesTableData!.length == 1;
           final businessChecked = checkedItemId.value == businessId;
           final isChecked = businessChecked || onlyOneBusiness;
 
@@ -57,7 +56,7 @@ class BusinessesDescriptionToSellGameEvent extends HookWidget {
                     child: Checkbox(
                       value: isChecked,
                       onChanged: (value) {
-                        if (value) {
+                        if (value!) {
                           selectBusiness(checkedItemId, businessId);
                         }
                       },

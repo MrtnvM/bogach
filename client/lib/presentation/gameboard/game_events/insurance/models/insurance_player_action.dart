@@ -5,7 +5,7 @@ part 'insurance_player_action.g.dart';
 
 @JsonSerializable()
 class InsurancePlayerAction extends PlayerAction {
-  const InsurancePlayerAction(this.eventId) : assert(eventId != null);
+  const InsurancePlayerAction(this.eventId);
 
   final String eventId;
 

@@ -65,13 +65,15 @@ class CommonErrorWidget extends StatelessWidget {
     return SizedBox(
       height: 32,
       width: 120,
-      child: RaisedButton(
-        onPressed: onPressed,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          primary: ColorRes.mainGreen,
+          padding: const EdgeInsets.all(4),
         ),
-        color: ColorRes.mainGreen,
-        padding: const EdgeInsets.all(4),
+        onPressed: onPressed,
         child: Container(
           width: double.infinity,
           alignment: Alignment.center,

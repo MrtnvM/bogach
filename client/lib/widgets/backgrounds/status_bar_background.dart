@@ -5,9 +5,9 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:flutter/material.dart';
 
 class StatusBarBackground extends StatelessWidget {
-  const StatusBarBackground({Key key, this.scrollOffset}) : super(key: key);
+  const StatusBarBackground({Key? key, this.scrollOffset}) : super(key: key);
 
-  final double scrollOffset;
+  final double? scrollOffset;
 
   @override
   Widget build(BuildContext context) {

@@ -9,7 +9,7 @@ part 'new_game_state.g.dart';
 
 abstract class NewGameState
     implements Built<NewGameState, NewGameStateBuilder> {
-  factory NewGameState([void Function(NewGameStateBuilder b) updates]) =
+  factory NewGameState([void Function(NewGameStateBuilder b)? updates]) =
       _$NewGameState;
 
   NewGameState._();
@@ -17,8 +17,7 @@ abstract class NewGameState
   StoreList<GameTemplate> get gameTemplates;
   StoreList<Quest> get quests;
 
-  @nullable
-  String get newGameId;
+  String? get newGameId;
 
   static NewGameState initial() => NewGameState(
         (b) => b

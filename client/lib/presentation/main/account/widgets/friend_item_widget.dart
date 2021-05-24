@@ -15,9 +15,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:shimmer/shimmer.dart';
 
 class FriendItemWidget extends HookWidget {
-  const FriendItemWidget({@required this.user});
+  const FriendItemWidget({required this.user});
 
-  final UserProfile user;
+  final UserProfile? user;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class FriendItemWidget extends HookWidget {
     }
 
     return Text(
-      user.fullName,
+      user!.fullName,
       style: Styles.friendName,
       maxLines: 1,
       softWrap: true,
@@ -66,9 +66,9 @@ class FriendItemWidget extends HookWidget {
     }
 
     return UserAvatar(
-      url: user.avatarUrl,
+      url: user!.avatarUrl,
       size: size,
-      borderColor: user.isOnline ? ColorRes.mainGreen : ColorRes.transparent,
+      borderColor: user!.isOnline ? ColorRes.mainGreen : ColorRes.transparent,
     );
   }
 
@@ -77,14 +77,14 @@ class FriendItemWidget extends HookWidget {
       return const SizedBox();
     }
 
-    return _OptionsButton(user: user);
+    return _OptionsButton(user: user!);
   }
 }
 
 class _OptionsButton extends HookWidget {
-  const _OptionsButton({Key key, @required this.user}) : super(key: key);
+  const _OptionsButton({Key? key, required this.user}) : super(key: key);
 
-  final UserProfile user;
+  final UserProfile? user;
 
   @override
   Widget build(BuildContext context) {
@@ -92,11 +92,11 @@ class _OptionsButton extends HookWidget {
     final size = useAdaptiveSize();
     final optionsButtonSize = size(32);
 
-    final void Function(String) removeFromFriends = (id) {
+    final removeFromFriends = (id) {
       AnalyticsSender.accountRemoveFriend();
 
-      dispatch(RemoveFromFriendsAciton(id)).catchError(
-        (error) => handleError(
+      dispatch(RemoveFromFriendsAciton(id)).onError(
+        (error, st) => handleError(
           context: context,
           exception: error,
         ),
@@ -110,7 +110,7 @@ class _OptionsButton extends HookWidget {
 
         _showFriendActions(
           context,
-          removeFromFriends: () => removeFromFriends(user.id),
+          removeFromFriends: () => removeFromFriends(user!.id),
         );
       },
       child: SizedBox(
@@ -123,7 +123,7 @@ class _OptionsButton extends HookWidget {
 
   void _showFriendActions(
     BuildContext context, {
-    @required VoidCallback removeFromFriends,
+    required VoidCallback removeFromFriends,
   }) {
     if (user == null) {
       return;
@@ -140,12 +140,12 @@ class _OptionsButton extends HookWidget {
             children: [
               const SizedBox(height: 8),
               UserAvatar(
-                url: user.avatarUrl,
+                url: user!.avatarUrl,
                 size: 48,
                 borderColor: ColorRes.transparent,
               ),
               const SizedBox(height: 8),
-              Text(user.fullName, style: Styles.bodyBlackBold),
+              Text(user!.fullName, style: Styles.bodyBlackBold),
               const SizedBox(height: 16),
               const Divider(height: 1),
               const SizedBox(height: 12),
@@ -170,7 +170,7 @@ class _OptionsButton extends HookWidget {
                 ),
               ),
               const SizedBox(height: 4),
-              FlatButton(
+              TextButton(
                 onPressed: appRouter.goBack,
                 child: Text(
                   Strings.cancel,

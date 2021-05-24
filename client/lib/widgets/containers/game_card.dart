@@ -10,22 +10,22 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class GameCard extends HookWidget {
   const GameCard({
-    @required this.title,
-    @required this.description,
-    @required this.imageUrl,
-    @required this.startGame,
-    @required this.isShowingActionsButtons,
-    @required this.onTap,
+    required this.title,
+    required this.description,
+    required this.imageUrl,
+    required this.startGame,
+    required this.isShowingActionsButtons,
+    required this.onTap,
     this.continueGame,
   });
 
   final String title;
   final String description;
-  final String imageUrl;
+  final String? imageUrl;
   final bool isShowingActionsButtons;
   final VoidCallback onTap;
   final VoidCallback startGame;
-  final VoidCallback continueGame;
+  final VoidCallback? continueGame;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class GameCard extends HookWidget {
                 )
               ],
               image: imageUrl != null //
-                  ? _getGameItemDecorationImage(imageUrl)
+                  ? _getGameItemDecorationImage(imageUrl!)
                   : null,
             ),
             child: Column(
@@ -110,7 +110,7 @@ class GameCard extends HookWidget {
     );
   }
 
-  Widget _buildActionButtons({bool isShowingActionsButtons}) {
+  Widget _buildActionButtons({required bool isShowingActionsButtons}) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -146,15 +146,15 @@ DecorationImage _getGameItemDecorationImage(String url) {
 
 class _GameTemplateActionButton extends HookWidget {
   const _GameTemplateActionButton({
-    Key key,
+    Key? key,
     this.action,
     this.color,
     this.title,
   }) : super(key: key);
 
-  final VoidCallback action;
-  final Color color;
-  final String title;
+  final VoidCallback? action;
+  final Color? color;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +172,7 @@ class _GameTemplateActionButton extends HookWidget {
           border: Border.all(color: ColorRes.grey.withAlpha(70)),
         ),
         child: Text(
-          title,
+          title!,
           style: Styles.bodyBlack.copyWith(fontSize: 12.5),
         ),
       ),

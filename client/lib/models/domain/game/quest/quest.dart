@@ -6,14 +6,14 @@ part 'quest.freezed.dart';
 part 'quest.g.dart';
 
 @freezed
-abstract class Quest with _$Quest implements StoreListItem {
+class Quest with _$Quest implements StoreListItem {
   factory Quest({
-    @required String id,
-    @required String name,
-    @required String description,
-    @required String icon,
-    @required QuestTemplate template,
-    @JsonSerializable(nullable: true) String image,
+    required String id,
+    required String name,
+    required String description,
+    required String icon,
+    required QuestTemplate template,
+    String? image,
   }) = _Quest;
 
   factory Quest.fromJson(Map<String, dynamic> json) => _$QuestFromJson(json);

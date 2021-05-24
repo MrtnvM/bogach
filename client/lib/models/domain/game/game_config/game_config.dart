@@ -4,12 +4,12 @@ part 'game_config.freezed.dart';
 part 'game_config.g.dart';
 
 @freezed
-abstract class GameConfig with _$GameConfig {
+class GameConfig with _$GameConfig {
   factory GameConfig({
-    String level,
-    int monthLimit,
-    int initialCash,
-    String gameTemplateId,
+    required int initialCash,
+    required String gameTemplateId,
+    String? level,
+    int? monthLimit,
   }) = _GameConfig;
 
   factory GameConfig.fromJson(Map<String, dynamic> json) =>

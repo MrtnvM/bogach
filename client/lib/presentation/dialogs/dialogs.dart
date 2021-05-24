@@ -22,12 +22,12 @@ void showNotImplementedDialog(BuildContext context) {
   );
 }
 
-Future<DialogResponse> showCashDialog({
-  @required BuildContext context,
-  @required String title,
-  @required String message,
-  String positiveButton,
-  String negativeButton,
+Future<DialogResponse?> showCashDialog({
+  required BuildContext context,
+  required String title,
+  required String message,
+  String? positiveButton,
+  String? negativeButton,
   bool displayPositive = true,
   bool displayNegative = true,
   bool barrierDismissible = true,
@@ -58,7 +58,7 @@ Future<DialogResponse> showCashDialog({
                   children: <Widget>[
                     if (displayPositive)
                       Expanded(
-                        child: FlatButton(
+                        child: TextButton(
                           onPressed: () {
                             Navigator.pop(context, DialogResponse.confirm);
                           },
@@ -69,7 +69,7 @@ Future<DialogResponse> showCashDialog({
                       const SizedBox(width: 19),
                     if (displayNegative)
                       Expanded(
-                        child: FlatButton(
+                        child: TextButton(
                           onPressed: () {
                             Navigator.pop(context, DialogResponse.decline);
                           },
@@ -85,26 +85,26 @@ Future<DialogResponse> showCashDialog({
       });
 }
 
-void handleError({
-  @required BuildContext context,
-  @required dynamic exception,
-  VoidCallback onRetry,
-  VoidCallback onCancel,
-  String errorMessage,
+void handleError<T>({
+  required BuildContext context,
+  required dynamic exception,
+  VoidCallback? onRetry,
+  VoidCallback? onCancel,
+  String? errorMessage,
   bool barrierDismissible = true,
   bool displayNegative = true,
 }) {
   if (exception is DomainGameError) {
-    final scaffold = Scaffold.of(context);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     final locale = Intl.defaultLocale;
-    final errorMessage = exception.message[locale] ?? Strings.commonError;
+    final errorMessage = exception.message[locale!] ?? Strings.commonError;
 
-    scaffold.showSnackBar(SnackBar(
+    scaffoldMessenger.showSnackBar(SnackBar(
       content: Text(errorMessage),
       action: SnackBarAction(
         label: Strings.ok,
         textColor: ColorRes.lightGreen,
-        onPressed: () => null,
+        onPressed: () {},
       ),
     ));
     return;
@@ -147,7 +147,7 @@ void handleError({
       break;
 
     case PlatformException:
-      String errorMessage;
+      String? errorMessage;
 
       switch (exception.code) {
         case 'ERROR_NETWORK_REQUEST_FAILED':
@@ -181,11 +181,11 @@ void handleError({
 }
 
 Future<void> showErrorDialog({
-  @required BuildContext context,
-  String title,
-  String message,
-  VoidCallback onRetry,
-  VoidCallback onCancel,
+  required BuildContext context,
+  String? title,
+  String? message,
+  VoidCallback? onRetry,
+  VoidCallback? onCancel,
   bool barrierDismissible = true,
   bool displayNegative = true,
 }) async {
@@ -209,8 +209,8 @@ Future<void> showErrorDialog({
 }
 
 Future<void> showUpdateAppDialog({
-  @required BuildContext context,
-  @required VoidCallback onUpdate,
+  required BuildContext context,
+  required VoidCallback onUpdate,
 }) {
   return showDialog<DialogResponse>(
     context: context,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class DropFocus extends StatelessWidget {
   const DropFocus({this.child});
 
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +14,6 @@ class DropFocus extends StatelessWidget {
   }
 
   static void drop() {
-    WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
+    WidgetsBinding.instance!.focusManager.primaryFocus?.unfocus();
   }
 }

@@ -9,7 +9,7 @@ import 'package:cash_flow/services/user_service.dart';
 import 'package:get_it/get_it.dart';
 
 class JoinRoomAction extends BaseAction {
-  JoinRoomAction(this.roomId) : assert(roomId != null);
+  JoinRoomAction(this.roomId);
 
   final String roomId;
 
@@ -22,26 +22,26 @@ class JoinRoomAction extends BaseAction {
     final userService = GetIt.I.get<UserService>();
 
     final room = await gameService.getRoom(roomId);
-    final userId = state.profile.currentUser.id;
+    final userId = state.profile.currentUser!.id;
 
     final participantsIds = room.participants.map((p) => p.id).toList();
     final participantProfiles = await userService.loadProfiles(participantsIds);
 
-    final isCurrentUserRoomOwner = room?.owner?.id == userId;
+    final isCurrentUserRoomOwner = room.owner.id == userId;
     final isParticipantAlreadyJoined = isCurrentUserRoomOwner ||
-        (room?.participants ?? [])
+        room.participants
             .where((p) => p.id == userId)
             .any((p) => p.status == RoomParticipantStatus.ready);
 
     return state.rebuild((s) {
-      s.multiplayer.rooms[room.id] = room;
-      s.multiplayer.userProfiles.addAll(participantProfiles);
+      s.multiplayer.rooms![room.id] = room;
+      s.multiplayer.userProfiles!.addAll(participantProfiles);
 
       if (!isParticipantAlreadyJoined) {
-        final currentUser = s.profile.currentUser;
-        final playedGamesCount = currentUser.multiplayerGamePlayed ?? 0;
+        final currentUser = s.profile.currentUser!;
+        final playedGamesCount = currentUser.multiplayerGamePlayed;
 
-        final updatedUser = s.profile.currentUser.copyWith(
+        final updatedUser = s.profile.currentUser!.copyWith(
           multiplayerGamePlayed: playedGamesCount,
         );
 

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 VoidCallback useSalaryChangePlayerActionHandler({
-  @required GameEvent event,
+  required GameEvent event,
 }) {
   final context = useContext();
   final dispatch = useDispatcher();
@@ -21,6 +21,6 @@ VoidCallback useSalaryChangePlayerActionHandler({
       eventId: event.id,
       playerAction: action,
       gameContext: gameContext,
-    )).catchError((e) => handleError(context: context, exception: e));
+    )).onError((e, st) => handleError(context: context, exception: e));
   };
 }

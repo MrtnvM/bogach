@@ -9,7 +9,7 @@ class ReduxActionObserver extends ActionObserver {
   Stream<ReduxAction> get onAction => _onAction.stream;
 
   @override
-  void observe(ReduxAction action, int dispatchCount, {bool ini}) {
+  void observe(ReduxAction action, int dispatchCount, {bool? ini}) {
     _onAction.add(action);
   }
 }

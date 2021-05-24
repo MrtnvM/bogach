@@ -7,25 +7,28 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_profile.freezed.dart';
+
 part 'user_profile.g.dart';
 
 @freezed
-abstract class UserProfile with _$UserProfile implements StoreListItem {
+class UserProfile with _$UserProfile implements StoreListItem {
   factory UserProfile({
-    @required String userId,
-    @JsonKey(name: 'userName') String fullName,
-    @JsonKey(ignore: true) String status,
-    String avatarUrl,
-    int currentQuestIndex,
-    @JsonKey(defaultValue: false) bool boughtQuestsAccess,
-    @JsonKey(defaultValue: 0) int multiplayerGamePlayed,
-    PurchaseProfile purchaseProfile,
-    @JsonKey(defaultValue: 1) int profileVersion,
-    PlayedGames playedGames,
-    @JsonKey(fromJson: _lastGamesFromJson) LastGames lastGames,
-    @JsonKey(fromJson: _lastGamesFromJson) LastGames completedGames,
-    @JsonKey(defaultValue: <String>[]) List<String> friends,
+    required String userId,
+    @JsonKey(name: 'userName') required String fullName,
+    @JsonKey(ignore: true) String? status,
+    String? avatarUrl,
+    int? currentQuestIndex,
+    @JsonKey(defaultValue: false) bool? boughtQuestsAccess,
+    @JsonKey(defaultValue: 0) required int multiplayerGamePlayed,
+    PurchaseProfile? purchaseProfile,
+    @JsonKey(defaultValue: 1) required int profileVersion,
+    PlayedGames? playedGames,
+    @JsonKey(fromJson: _lastGamesFromJson) required LastGames lastGames,
+    @JsonKey(fromJson: _lastGamesFromJson) required LastGames completedGames,
+    @JsonKey(defaultValue: <String>[]) required List<String> friends,
   }) = _UserProfile;
+
+  const UserProfile._();
 
   factory UserProfile.fromJson(Map<String, dynamic> json) =>
       _$UserProfileFromJson(json);
@@ -33,16 +36,34 @@ abstract class UserProfile with _$UserProfile implements StoreListItem {
   factory UserProfile.unknownUser(String userId) => UserProfile(
         userId: userId,
         fullName: Strings.unknownUser,
+        completedGames: LastGames.empty,
+        lastGames: LastGames.empty,
+        friends: <String>[],
+        multiplayerGamePlayed: 0,
+        profileVersion: 1,
+      );
+
+  factory UserProfile.withName({
+    required String userId,
+    required String fullName,
+    required String avatarUrl,
+  }) =>
+      UserProfile(
+        userId: userId,
+        fullName: fullName,
+        avatarUrl: avatarUrl,
+        completedGames: LastGames.empty,
+        lastGames: LastGames.empty,
+        friends: <String>[],
+        multiplayerGamePlayed: 0,
+        profileVersion: 1,
       );
 
   @override
-  @late
-  Object get id => userId;
+  String get id => userId;
 
-  @late
-  bool get isAnonymous => fullName == null || fullName.isEmpty;
+  bool get isAnonymous => fullName.isEmpty;
 
-  @late
   bool get isOnline => status == 'online';
 }
 

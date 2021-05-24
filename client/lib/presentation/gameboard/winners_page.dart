@@ -22,7 +22,7 @@ class WinnersPage extends HookWidget {
     final isWin = useIsCurrentParticipantWinGame();
     final isMultiplayer = useIsMultiplayerGame();
     final isQuest = useIsQuestGame();
-    final gameExists = useCurrentGame((g) => g != null);
+    final gameExists = useCurrentGame((g) => g != null)!;
 
     if (!gameExists) {
       return LoadableView(
@@ -118,8 +118,8 @@ class _MonthCountDescription extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final monthNumber = useCurrentGame((g) {
-      return max(g.state.monthNumber - 1, 0);
-    });
+      return max(g?.state.monthNumber ?? 0 - 1, 0);
+    })!;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -139,13 +139,13 @@ class _MonthCountDescription extends HookWidget {
 
 class _HeadlineDescription extends StatelessWidget {
   const _HeadlineDescription({
-    @required this.isWin,
-    @required this.isMultiplayer,
-    Key key,
+    required this.isWin,
+    required this.isMultiplayer,
+    Key? key,
   }) : super(key: key);
 
-  final bool isWin;
-  final bool isMultiplayer;
+  final bool? isWin;
+  final bool? isMultiplayer;
 
   @override
   Widget build(BuildContext context) {
@@ -153,29 +153,29 @@ class _HeadlineDescription extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          isWin
-              ? isMultiplayer
+          isWin!
+              ? isMultiplayer!
                   ? Strings.winnersMultiplayerPageDescription
                   : Strings.winnersPageDescription
               : Strings.gameFailedPageDescription,
           style: const TextStyle(fontSize: 17, color: Colors.white),
           textAlign: TextAlign.center,
         ),
-        if (isWin && !isMultiplayer) _MonthCountDescription(),
+        if (isWin! && !isMultiplayer!) _MonthCountDescription(),
       ],
     );
   }
 }
 
 class _HeadlineTitle extends StatelessWidget {
-  const _HeadlineTitle({@required this.isWin, Key key}) : super(key: key);
+  const _HeadlineTitle({required this.isWin, Key? key}) : super(key: key);
 
-  final bool isWin;
+  final bool? isWin;
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      isWin ? Strings.winnersPageTitle : Strings.gameFailedPageTitle,
+      isWin! ? Strings.winnersPageTitle : Strings.gameFailedPageTitle,
       style: const TextStyle(
         fontSize: 22,
         color: Colors.white,
@@ -187,7 +187,7 @@ class _HeadlineTitle extends StatelessWidget {
 }
 
 class _HeadlineImage extends StatelessWidget {
-  const _HeadlineImage({@required this.isWin, Key key}) : super(key: key);
+  const _HeadlineImage({required this.isWin, Key? key}) : super(key: key);
 
   final bool isWin;
 
@@ -207,21 +207,21 @@ class _HeadlineImage extends StatelessWidget {
 class _PlayerResultTable extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final game = useCurrentGame((g) => g);
+    final game = useCurrentGame((g) => g)!;
     final participants = useGlobalState((g) {
       final userProfiles = g.multiplayer.userProfiles;
       final participants = game.participantsIds //
-          .map((id) => userProfiles.itemsMap[id])
-          .toList();
+              .map((id) => userProfiles.itemsMap[id])
+              .toList();
 
       participants.sort((p1, p2) {
-        final target1 = mapGameToCurrentTargetValue(game, p1.userId);
-        final target2 = mapGameToCurrentTargetValue(game, p2.userId);
+        final target1 = mapGameToCurrentTargetValue(game, p1!.userId);
+        final target2 = mapGameToCurrentTargetValue(game, p2!.userId);
         return target1 > target2 ? 0 : 1;
       });
 
       return participants;
-    });
+    })!;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 32),
@@ -229,7 +229,7 @@ class _PlayerResultTable extends HookWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           for (int i = 0; i < participants.length; i++)
-            _buildParticipant(i, participants[i], game),
+            _buildParticipant(i, participants[i]!, game),
         ],
       ),
     );

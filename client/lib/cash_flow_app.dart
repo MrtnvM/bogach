@@ -10,8 +10,7 @@ import 'package:cash_flow/presentation/main/main_page.dart';
 import 'package:cash_flow/presentation/onboarding/onboarding_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/inputs/drop_focus.dart';
-// ignore: implementation_imports
-import 'package:dash_kit_control_panel/src/services/device_preview_mode.dart';
+import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:device_preview/device_preview.dart';
@@ -21,8 +20,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class CashFlowApp extends HookWidget {
   CashFlowApp({
-    @required this.isAuthorised,
-    @required this.isFirstLaunch,
+    required this.isAuthorised,
+    required this.isFirstLaunch,
   }) : super(key: GlobalKey());
 
   final bool isAuthorised;
@@ -31,9 +30,10 @@ class CashFlowApp extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isAppOperationInProgress = useGlobalState((s) {
-      final operations = [Operation.joinRoom, Operation.addFriend];
-      return operations.any((o) => s.getOperationState(o).isInProgress);
-    });
+          final operations = [Operation.joinRoom, Operation.addFriend];
+          return operations.any((o) => s.getOperationState(o).isInProgress);
+        }) ??
+        false;
 
     usePushNotificationsPermissionRequest(useDelay: true);
     useUserPushTokenUploader();
@@ -58,19 +58,21 @@ class CashFlowApp extends HookWidget {
     );
 
     return DropFocus(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        builder: (context, widget) => LoadableView(
-          backgroundColor: ColorRes.black80,
-          isLoading: isAppOperationInProgress,
-          child: DevicePreviewWrapper(child: widget),
+      child: DevicePreviewWrapper(
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          builder: (context, widget) => LoadableView(
+            backgroundColor: ColorRes.black80,
+            isLoading: isAppOperationInProgress,
+            child: DevicePreviewWrapper.appBuilder(context, widget!),
+          ),
+          navigatorKey: appRouter.navigatorKey,
+          navigatorObservers: [
+            ...getAnalyticsObservers(),
+          ],
+          home: _getHomePage(),
+          theme: theme,
         ),
-        navigatorKey: appRouter.navigatorKey,
-        navigatorObservers: [
-          ...getAnalyticsObservers(),
-        ],
-        home: _getHomePage(),
-        theme: theme,
       ),
     );
   }
@@ -97,16 +99,16 @@ class CashFlowApp extends HookWidget {
 }
 
 class DevicePreviewWrapper extends StatelessWidget {
-  const DevicePreviewWrapper({@required this.child}) : assert(child != null);
+  const DevicePreviewWrapper({required this.child});
 
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<bool>(
       stream: DevicePreviewMode.onModeChanged,
       builder: (context, snapShoot) => DevicePreview(
-        enabled: false,
+        enabled: snapShoot.hasData && snapShoot.data!,
         builder: (context) => child,
       ),
     );

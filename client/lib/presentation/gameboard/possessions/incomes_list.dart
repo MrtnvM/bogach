@@ -14,8 +14,8 @@ class IncomesList extends HookWidget {
   Widget build(BuildContext context) {
     final userId = useUserId();
     final incomes = useCurrentGame(
-      (g) => g.participants[userId].possessionState.incomes,
-    );
+      (g) => g!.participants[userId!]!.possessionState.incomes,
+    )!;
 
     final totalIncome = incomes.fold<double>(0.0, (s, i) => s + i.value);
     final salary = _calculateSum(incomes, IncomeType.salary);

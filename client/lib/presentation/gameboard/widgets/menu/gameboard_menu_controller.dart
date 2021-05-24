@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class GameboardMenuController extends Listenable {
-  var _listeners = <VoidCallback>[];
+  final _listeners = <VoidCallback>[];
   var _isShown = false;
 
   bool get isShown => _isShown;
@@ -33,7 +33,7 @@ class GameboardMenuController extends Listenable {
   }
 
   void dispose() {
-    _listeners = null;
+    _listeners.clear();
   }
 
   void _notifyListeners() {

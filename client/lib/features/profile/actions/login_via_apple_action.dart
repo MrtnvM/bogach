@@ -4,22 +4,20 @@ import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/features/profile/actions/start_listening_profile_updates_action.dart';
 import 'package:cash_flow/services/user_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
 class LoginViaAppleAction extends BaseAction {
   LoginViaAppleAction({
-    @required this.accessToken,
-    @required this.idToken,
-    @required this.firstName,
-    @required this.lastName,
-  })  : assert(accessToken != null),
-        assert(idToken != null);
+    required this.accessToken,
+    required this.idToken,
+    required this.firstName,
+    required this.lastName,
+  });
 
   final String accessToken;
   final String idToken;
-  final String firstName;
-  final String lastName;
+  final String? firstName;
+  final String? lastName;
 
   @override
   Future<AppState> reduce() async {

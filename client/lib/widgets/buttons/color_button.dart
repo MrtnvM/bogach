@@ -3,33 +3,32 @@ import 'package:flutter/material.dart';
 
 class ColorButton extends StatelessWidget {
   const ColorButton({
-    @required this.onPressed,
-    @required this.text,
+    required this.onPressed,
+    required this.text,
     this.textStyle,
     this.color = Colors.white,
-    this.disabledColor,
     this.borderRadius = 4,
     this.padding = 14,
   });
 
   final Function() onPressed;
   final String text;
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
   final Color color;
-  final Color disabledColor;
   final double borderRadius;
   final double padding;
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      onPressed: onPressed,
-      disabledColor: disabledColor ?? color.withAlpha(180),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(borderRadius),
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
+        ),
+        primary: color,
+        padding: EdgeInsets.all(padding),
       ),
-      color: color,
-      padding: EdgeInsets.all(padding),
+      onPressed: onPressed,
       child: Container(
         width: double.infinity,
         alignment: Alignment.center,

@@ -19,5 +19,7 @@ List<T> _getAssetsWithType<T>(List<Asset> assets, AssetType type) {
 
 List<Asset> _getAssets() {
   final userId = useUserId();
-  return useCurrentGame((g) => g.participants[userId].possessionState.assets);
+  return useCurrentGame((g) =>
+          g?.participants[userId]?.possessionState.assets ?? <Asset>[]) ??
+      <Asset>[];
 }

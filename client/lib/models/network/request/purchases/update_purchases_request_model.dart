@@ -6,10 +6,10 @@ part 'update_purchases_request_model.freezed.dart';
 part 'update_purchases_request_model.g.dart';
 
 @freezed
-abstract class UpdatePurchasesRequestModel with _$UpdatePurchasesRequestModel {
+class UpdatePurchasesRequestModel with _$UpdatePurchasesRequestModel {
   factory UpdatePurchasesRequestModel({
-    @required String userId,
-    @required List<PurchaseDetailsRequestModel> purchases,
+    required String userId,
+    required List<PurchaseDetailsRequestModel> purchases,
   }) = _UpdatePurchasesRequestModel;
 
   factory UpdatePurchasesRequestModel.fromJson(Map<String, dynamic> json) =>

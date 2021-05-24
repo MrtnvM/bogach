@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class TableDivider extends StatelessWidget {
   const TableDivider({
-    Key key,
+    Key? key,
     this.color = ColorRes.newGameBoardInvestmentsDividerColor,
   }) : super(key: key);
 

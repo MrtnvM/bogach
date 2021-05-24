@@ -24,16 +24,16 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class AccountPage extends HookWidget {
-  const AccountPage({Key key}) : super(key: key);
+  const AccountPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final user = useCurrentUser();
+    final user = useCurrentUser()!;
     final dispatch = useDispatcher();
     final friends = useCurrentUserFriends();
 
     final newFullName = useState(user.fullName);
-    final newAvatar = useState<File>(null);
+    final newAvatar = useState<File?>(null);
 
     final isInfoTheSame =
         newFullName.value == user.fullName && newAvatar.value == null;
@@ -41,7 +41,7 @@ class AccountPage extends HookWidget {
     final isInProgress = useGlobalState((s) {
       final operations = [Operation.updateUser, Operation.removeFromFriends];
       return operations.any((o) => s.getOperationState(o).isInProgress);
-    });
+    })!;
 
     final mediaQuery = useAdaptiveMediaQueryData();
     final size = useAdaptiveSize();
@@ -49,7 +49,7 @@ class AccountPage extends HookWidget {
     final saveUpdatedAccount = () {
       DropFocus.drop();
 
-      VoidCallback updateProfile;
+      VoidCallback? updateProfile;
 
       updateProfile = () async {
         try {

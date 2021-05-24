@@ -4,12 +4,10 @@ import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/services/game_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
 class StartSinglePlayerGameAction extends BaseAction {
-  StartSinglePlayerGameAction({@required this.templateId})
-      : assert(templateId != null);
+  StartSinglePlayerGameAction({required this.templateId});
 
   final String templateId;
 
@@ -22,7 +20,7 @@ class StartSinglePlayerGameAction extends BaseAction {
   @override
   Future<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
-    final userId = state.profile.currentUser.id;
+    final userId = state.profile.currentUser!.id;
 
     final newGameId = await gameService.createNewGame(
       templateId: templateId,

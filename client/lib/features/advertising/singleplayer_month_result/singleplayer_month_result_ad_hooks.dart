@@ -7,7 +7,7 @@ import 'load_singleplayer_month_result_ad_action.dart';
 
 void useSingleplayerMonthResultAdLoader() {
   final dispatch = useDispatcher();
-  final month = useCurrentGame((g) => g?.state?.monthNumber);
+  final month = useCurrentGame((g) => g?.state.monthNumber);
   final isSingleplayerGame = useIsSingleplayerGame();
 
   _useAdDisposer();
@@ -30,7 +30,7 @@ void useSingleplayerMonthResultAdLoader() {
 
 void _useAdDisposer() {
   final dispatch = useDispatcher();
-  final month = useCurrentGame((g) => g?.state?.monthNumber);
+  final month = useCurrentGame((g) => g?.state.monthNumber);
   final isSingleplayerGame = useIsSingleplayerGame();
   final ads = useGlobalState((s) => s.game.monthResultAds);
 
@@ -38,9 +38,9 @@ void _useAdDisposer() {
     return;
   }
 
-  final adsForDispose = ads.entries //
-      .where((e) => e.key < month && e.value != null)
-      .toList();
+  final adsForDispose = ads?.entries //
+      .where((e) => e.key < month)
+      .toList() ?? [];
 
   for (final adEntry in adsForDispose) {
     final month = adEntry.key;

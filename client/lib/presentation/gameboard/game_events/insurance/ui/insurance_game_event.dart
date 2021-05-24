@@ -18,7 +18,7 @@ class InsuranceGameEvent extends HookWidget {
   const InsuranceGameEvent(this.event);
 
   final GameEvent event;
-  InsuranceEventData get eventData => event.data;
+  InsuranceEventData get eventData => event.data as InsuranceEventData;
 
   @override
   Widget build(BuildContext context) {

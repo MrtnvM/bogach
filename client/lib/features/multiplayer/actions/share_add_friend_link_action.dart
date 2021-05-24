@@ -11,9 +11,9 @@ class ShareAddFriendLinkAction extends BaseAction {
   Operation get operationKey => Operation.shareRoomInviteLink;
 
   @override
-  Future<AppState> reduce() async {
+  Future<AppState?> reduce() async {
     final link = await getAddFriendLink(
-      currentUser: state.profile.currentUser,
+      currentUser: state.profile.currentUser!,
     );
 
     await shareDynamicLink(link);

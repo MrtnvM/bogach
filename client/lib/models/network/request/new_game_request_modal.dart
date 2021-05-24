@@ -13,10 +13,10 @@ class NewGameRequestModel {
       _$NewGameRequestModelFromJson(json);
 
   @JsonKey(name: 'templateId')
-  final int templateId;
+  final int? templateId;
 
   @JsonKey(name: 'userId')
-  final int userId;
+  final int? userId;
 
   Map<String, dynamic> toJson() => _$NewGameRequestModelToJson(this);
 }

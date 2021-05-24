@@ -81,10 +81,10 @@ class GameEventInfoDialogContent extends HookWidget {
   }
 
   Container buildParameterContainer({
-    String name,
-    Rating level,
-    String activeIcon,
-    String deactiveIcon,
+    required String name,
+    required Rating level,
+    required String activeIcon,
+    required String deactiveIcon,
   }) {
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -128,7 +128,11 @@ class GameEventInfoDialogContent extends HookWidget {
     );
   }
 
-  List<Widget> drawIcons(Rating level, String activeIcon, String deactiveIcon) {
+  List<Widget> drawIcons(
+    Rating level,
+    String activeIcon,
+    String deactiveIcon,
+  ) {
     final ratingValue = RatingExtension.getRatingLevel(level);
     return [
       for (var i = 0; i < 3; i++) ...[

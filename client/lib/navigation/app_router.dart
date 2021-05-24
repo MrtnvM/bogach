@@ -6,11 +6,11 @@ class AppRouter {
   final navigatorKey = GlobalKey<NavigatorState>();
 
   BuildContext get context {
-    return navigatorKey.currentState.overlay.context;
+    return navigatorKey.currentState!.overlay!.context;
   }
 
   void startWith(Widget route) {
-    navigatorKey.currentState.pushAndRemoveUntil<Widget>(
+    navigatorKey.currentState!.pushAndRemoveUntil<Widget>(
       MaterialPageRoute(
         builder: (context) => route,
         settings: RouteSettings(
@@ -21,8 +21,8 @@ class AppRouter {
     );
   }
 
-  Future<T> goTo<T>(Widget route) {
-    return navigatorKey.currentState.push<T>(
+  Future<T?> goTo<T>(Widget route) {
+    return navigatorKey.currentState!.push<T>(
       MaterialPageRoute(
         builder: (context) => route,
         settings: RouteSettings(
@@ -33,20 +33,20 @@ class AppRouter {
   }
 
   void goToRoot() {
-    navigatorKey.currentState.popUntil(
+    navigatorKey.currentState!.popUntil(
       (predicate) => predicate.isFirst,
     );
   }
 
   void goBackUntil(String name) {
-    navigatorKey.currentState.popUntil(
+    navigatorKey.currentState!.popUntil(
       (predicate) => predicate.settings.name == name,
     );
   }
 
   void goBack([dynamic value]) {
-    if (navigatorKey.currentState.canPop()) {
-      navigatorKey.currentState.pop(value);
+    if (navigatorKey.currentState!.canPop()) {
+      navigatorKey.currentState!.pop(value);
     }
   }
 }

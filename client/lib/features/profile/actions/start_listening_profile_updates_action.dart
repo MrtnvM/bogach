@@ -9,12 +9,12 @@ import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
 class StartListeningProfileUpdatesAction extends BaseAction {
-  StartListeningProfileUpdatesAction(this.userId) : assert(userId != null);
+  StartListeningProfileUpdatesAction(this.userId);
 
   final String userId;
 
   @override
-  Future<AppState> reduce() async {
+  Future<AppState?> reduce() async {
     final userService = GetIt.I.get<UserService>();
     final action$ = GetIt.I.get<ReduxActionObserver>().onAction;
 
@@ -32,7 +32,7 @@ class StopListeningProfileUpdatesAction extends BaseAction {
   StopListeningProfileUpdatesAction();
 
   @override
-  AppState reduce() {
+  AppState? reduce() {
     return null;
   }
 }

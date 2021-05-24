@@ -13,15 +13,15 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'gameboard_menu_controller.dart';
 
 class GameboardMenu extends HookWidget {
-  const GameboardMenu({Key key, @required this.controller}) : super(key: key);
+  const GameboardMenu({Key? key, required this.controller}) : super(key: key);
 
   final GameboardMenuController controller;
 
   @override
   Widget build(BuildContext context) {
     final isMenuShown = useState(false);
-    final userId = useUserId();
-    final game = useCurrentGame((g) => g);
+    final userId = useUserId()!;
+    final game = useCurrentGame((g) => g)!;
     final feedbackSender = useFeedbackSender();
 
     useEffect(() {
@@ -94,10 +94,10 @@ class GameboardMenu extends HookWidget {
 
 class _MenuItem extends StatelessWidget {
   const _MenuItem({
-    Key key,
-    this.title,
-    this.icon,
-    this.onTap,
+    Key? key,
+    required this.title,
+    required this.icon,
+    required this.onTap,
   }) : super(key: key);
 
   final String title;
@@ -124,7 +124,7 @@ class _MenuItem extends StatelessWidget {
 }
 
 class _Divider extends StatelessWidget {
-  const _Divider({Key key}) : super(key: key);
+  const _Divider({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

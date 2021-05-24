@@ -21,8 +21,10 @@ class _UiKitSettingState extends State<UiKitSetting> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-      child: RaisedButton(
-        color: Colors.green.withAlpha(240),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.green.withAlpha(240),
+        ),
         onPressed: openUiKit,
         child: FittedBox(
           child: Text(

@@ -8,9 +8,9 @@ import 'package:flutter/services.dart';
 
 class CashFlowScaffold extends StatelessWidget {
   const CashFlowScaffold({
-    @required this.child,
+    required this.child,
     this.title,
-    Key key,
+    Key? key,
     this.footerImage,
     this.horizontalPadding = 32,
     this.showBackArrow = false,
@@ -19,8 +19,8 @@ class CashFlowScaffold extends StatelessWidget {
   }) : super(key: key);
 
   final Widget child;
-  final String title;
-  final String footerImage;
+  final String? title;
+  final String? footerImage;
   final double horizontalPadding;
   final bool showBackArrow;
   final Color backgroundColor;
@@ -55,7 +55,7 @@ class CashFlowScaffold extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
+  PreferredSizeWidget? _buildAppBar() {
     return title != null
         ? AppBar(
             title: TitleText(title),
@@ -78,7 +78,7 @@ class CashFlowScaffold extends StatelessWidget {
         isEnabled: AppConfiguration.controlPanelEnabled,
         child: Center(
           child: Image.asset(
-            footerImage,
+            footerImage!,
             fit: BoxFit.cover,
           ),
         ),

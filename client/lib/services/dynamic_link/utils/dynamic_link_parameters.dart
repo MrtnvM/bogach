@@ -12,7 +12,7 @@ AndroidParameters getAndroidDynamicLinkParameters(String packageName) {
 IosParameters getIosDynamicLinkParameters(String packageName) {
   return IosParameters(
     bundleId: packageName,
-    customScheme: AppConfiguration.environment.dynamicLink.customScheme,
+    customScheme: AppConfiguration.environment!.dynamicLink.customScheme,
     appStoreId: '1531498628',
   );
 }

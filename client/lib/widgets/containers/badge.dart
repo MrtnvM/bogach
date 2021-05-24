@@ -6,17 +6,15 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class Badge extends HookWidget {
   const Badge({
-    @required this.title,
-    @required this.imageAsset,
+    required this.title,
+    required this.imageAsset,
     this.onTap,
-    Key key,
-  })  : assert(title != null),
-        assert(imageAsset != null),
-        super(key: key);
+    Key? key,
+  })  : super(key: key);
 
   final String title;
   final String imageAsset;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

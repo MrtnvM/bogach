@@ -8,7 +8,7 @@ class EventButtons extends StatelessWidget {
   const EventButtons(this._state, this.properties);
 
   final ButtonsState _state;
-  final ButtonsProperties properties;
+  final ButtonsProperties? properties;
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +29,19 @@ class EventButtons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         ActionButton(
-          onPressed: properties.onTakeLoan,
+          onPressed: properties!.onTakeLoan,
           color: ColorRes.orange,
           text: Strings.takeLoan,
         ),
         const SizedBox(width: 6),
         ActionButton(
-          onPressed: isNormal ? properties.onConfirm : properties.onBuy,
+          onPressed: isNormal ? properties!.onConfirm : properties!.onBuy,
           color: ColorRes.green,
           text: isNormal ? Strings.ok : Strings.buy,
         ),
         const SizedBox(width: 6),
         ActionButton(
-          onPressed: properties.onSkip,
+          onPressed: properties!.onSkip,
           color: Colors.grey,
           text: Strings.skip,
         ),
@@ -66,10 +66,10 @@ class EventButtons extends StatelessWidget {
 class ButtonsProperties {
   ButtonsProperties({this.onTakeLoan, this.onConfirm, this.onBuy, this.onSkip});
 
-  final VoidCallback onTakeLoan;
-  final VoidCallback onConfirm;
-  final VoidCallback onBuy;
-  final VoidCallback onSkip;
+  final VoidCallback? onTakeLoan;
+  final VoidCallback? onConfirm;
+  final VoidCallback? onBuy;
+  final VoidCallback? onSkip;
 }
 
 enum ButtonsState {

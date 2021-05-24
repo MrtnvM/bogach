@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class HorizontalUserProfileList extends StatelessWidget {
   const HorizontalUserProfileList({
-    @required this.profiles,
-    @required this.onProfileSelected,
-    Key key,
+    required this.profiles,
+    required this.onProfileSelected,
+    Key? key,
   }) : super(key: key);
 
   final List<UserProfile> profiles;

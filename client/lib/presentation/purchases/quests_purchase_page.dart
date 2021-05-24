@@ -29,7 +29,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 class QuestsPurchasePage extends HookWidget {
   const QuestsPurchasePage({this.quest});
 
-  final Quest quest;
+  final Quest? quest;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class QuestsPurchasePage extends HookWidget {
           s.getOperationState(Operation.buyQuestsAcceess).isInProgress ||
           s.getOperationState(Operation.queryPastPurchases).isInProgress ||
           s.getOperationState(Operation.createQuestGame).isInProgress,
-    );
+    )!;
 
     final isStoreAvailable = useFuture(
       InAppPurchaseConnection.instance.isAvailable(),
@@ -47,7 +47,7 @@ class QuestsPurchasePage extends HookWidget {
 
     final hasQuestsAccess = useGlobalState(
       (s) => s.profile.currentUser?.purchaseProfile?.isQuestsAvailable ?? false,
-    );
+    )!;
 
     useEffect(() {
       AnalyticsSender.questsPurchasePageOpen();
@@ -92,7 +92,7 @@ class QuestsPurchasePage extends HookWidget {
 }
 
 class _RestorePurchasesButton extends HookWidget {
-  const _RestorePurchasesButton({Key key}) : super(key: key);
+  const _RestorePurchasesButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +124,7 @@ class _RestorePurchasesButton extends HookWidget {
 }
 
 class _HeadlineImage extends StatelessWidget {
-  const _HeadlineImage({Key key}) : super(key: key);
+  const _HeadlineImage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +141,7 @@ class _HeadlineImage extends StatelessWidget {
 }
 
 class _QuestsAccessDescription extends StatelessWidget {
-  const _QuestsAccessDescription({Key key}) : super(key: key);
+  const _QuestsAccessDescription({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +174,7 @@ class _QuestsAccessDescription extends StatelessWidget {
 }
 
 class _AdvantagesWidget extends StatelessWidget {
-  const _AdvantagesWidget({Key key}) : super(key: key);
+  const _AdvantagesWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -214,20 +214,20 @@ class _AdvantagesWidget extends StatelessWidget {
 
 class _BuyButton extends HookWidget {
   const _BuyButton({
-    @required this.quest,
-    @required this.isStoreAvailable,
-    Key key,
+    required this.quest,
+    required this.isStoreAvailable,
+    Key? key,
   }) : super(key: key);
 
-  final Quest quest;
-  final bool isStoreAvailable;
+  final Quest? quest;
+  final bool? isStoreAvailable;
 
   @override
   Widget build(BuildContext context) {
     final dispatch = useDispatcher();
     final startQuest = useQuestStarter();
 
-    VoidCallback buyQuestsAccess;
+    VoidCallback? buyQuestsAccess;
     buyQuestsAccess = () async {
       try {
         AnalyticsSender.questsPurchaseStarted();
@@ -235,16 +235,16 @@ class _BuyButton extends HookWidget {
         AnalyticsSender.questsPurchased();
 
         if (quest == null) {
-          SchedulerBinding.instance.addPostFrameCallback((_) {
+          SchedulerBinding.instance!.addPostFrameCallback((_) {
             appRouter.startWith(const MainPage());
           });
           return;
         }
 
-        await startQuest(quest.id, QuestAction.startNewGame);
+        await startQuest(quest!.id, QuestAction.startNewGame);
       } on ProductPurchaseCanceledException catch (error) {
         AnalyticsSender.questsPurchaseCanceled();
-        Logger.i('Purchase canceled: ${error.product?.id}');
+        Logger.i('Purchase canceled: ${error.product.id}');
       } catch (error) {
         AnalyticsSender.questsPurchaseFailed();
 
@@ -259,8 +259,8 @@ class _BuyButton extends HookWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        RaisedButton(
-          color: ColorRes.green,
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(primary: ColorRes.green),
           onPressed: buyQuestsAccess,
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -278,7 +278,7 @@ class _BuyButton extends HookWidget {
             ],
           ),
         ),
-        if (!isStoreAvailable) ...[
+        if (!isStoreAvailable!) ...[
           const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -295,23 +295,23 @@ class _BuyButton extends HookWidget {
 }
 
 class _StartQuestButton extends HookWidget {
-  const _StartQuestButton({Key key, this.quest}) : super(key: key);
+  const _StartQuestButton({Key? key, this.quest}) : super(key: key);
 
-  final Quest quest;
+  final Quest? quest;
 
   @override
   Widget build(Object context) {
     final startQuest = useQuestStarter();
 
-    return RaisedButton(
-      color: ColorRes.green,
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(primary: ColorRes.green),
       onPressed: () {
         if (quest == null) {
           appRouter.goBack();
           return;
         }
 
-        startQuest(quest.id, QuestAction.startNewGame);
+        startQuest(quest!.id, QuestAction.startNewGame);
       },
       child: Row(
         mainAxisSize: MainAxisSize.min,

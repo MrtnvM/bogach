@@ -11,12 +11,12 @@ import 'package:get_it/get_it.dart';
 class OnCurrentRoomUpdatedAction extends BaseAction {
   OnCurrentRoomUpdatedAction(this.room);
 
-  final Room room;
+  final Room? room;
 
   @override
   Future<AppState> reduce() async {
     return state.rebuild((s) {
-      s.multiplayer.rooms[room.id] = room;
+      s.multiplayer.rooms![room!.id] = room;
     });
   }
 
@@ -36,7 +36,7 @@ class OnCurrentRoomUpdatedAction extends BaseAction {
       return store.state.multiplayer.userProfiles.itemsMap[id] != null;
     };
 
-    final participantWithoutProfile = room.participants
+    final participantWithoutProfile = room!.participants
         .where((p) => !isParticipantProfileLoaded(p.id))
         .map((p) => p.id)
         .toList();
@@ -45,7 +45,7 @@ class OnCurrentRoomUpdatedAction extends BaseAction {
         .loadProfiles(participantWithoutProfile)
         .catchError((error) {
           Logger.e('PARTICIPANT PROFILES LOADING FAILED\n$error');
-          return [];
+          return const <UserProfile>[];
         })
         .then((profiles) => _OnProfilesLoadedAction(profiles))
         .then(dispatch);
@@ -60,7 +60,7 @@ class _OnProfilesLoadedAction extends BaseAction {
   @override
   AppState reduce() {
     return state.rebuild((s) {
-      s.multiplayer.userProfiles.addAll(userProfiles);
+      s.multiplayer.userProfiles!.addAll(userProfiles);
     });
   }
 }

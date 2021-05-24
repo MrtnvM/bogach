@@ -9,16 +9,16 @@ import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-Future<File> chooseImage({
-  @required BuildContext context,
-  CropAspectRatio aspectRatio,
+Future<File?> chooseImage({
+  required BuildContext context,
+  CropAspectRatio? aspectRatio,
 }) async {
   final source = await _showChooseSourceTypeDialog(context);
   if (source == null) {
     return null;
   }
 
-  ImageSource imageSource;
+  late ImageSource imageSource;
 
   switch (source) {
     case ImageSourceType.camera:
@@ -53,7 +53,7 @@ Future<File> chooseImage({
   return null;
 }
 
-Future<ImageSourceType> _showChooseSourceTypeDialog(BuildContext context) {
+Future<ImageSourceType?> _showChooseSourceTypeDialog(BuildContext context) {
   return showDialog<ImageSourceType>(
     context: context,
     builder: (context) => SimpleDialog(
@@ -99,7 +99,7 @@ Future<ImageSourceType> _showChooseSourceTypeDialog(BuildContext context) {
   );
 }
 
-Future<File> _cropImage(File image, CropAspectRatio aspectRatio) async {
+Future<File> _cropImage(File image, CropAspectRatio? aspectRatio) async {
   final croppedFile = await ImageCropper.cropImage(
     sourcePath: image.path,
     aspectRatio: aspectRatio,

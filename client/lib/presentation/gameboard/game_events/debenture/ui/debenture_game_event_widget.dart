@@ -19,12 +19,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class DebentureGameEventWidget extends HookWidget {
   const DebentureGameEventWidget({
-    @required this.event,
-    Key key,
+    required this.event,
+    Key? key,
   }) : super(key: key);
   final GameEvent event;
 
-  DebentureEventData get eventData => event.data;
+  DebentureEventData get eventData => event.data as DebentureEventData;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class DebentureGameEventWidget extends HookWidget {
     final skipPlayerAction = useSkipAction(event.id);
 
     final userId = useUserId();
-    final cash = useCurrentGame((g) => g.participants[userId].account.cash);
+    final cash = useCurrentGame((g) => g!.participants[userId!]!.account.cash);
 
     final alreadyHave = useCurrentDebenture(event)?.count ?? 0;
     final passiveIncomePerMonth =

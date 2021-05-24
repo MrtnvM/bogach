@@ -7,7 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class InviteFriendItemWidget extends HookWidget {
-  const InviteFriendItemWidget({@required this.inviteFriend});
+  const InviteFriendItemWidget({required this.inviteFriend});
 
   final VoidCallback inviteFriend;
 

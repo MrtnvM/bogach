@@ -22,7 +22,7 @@ class InfoTable extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Row(
-                children: <Widget>[Text(key), const Spacer(), Text(map[key])],
+                children: <Widget>[Text(key), const Spacer(), Text(map[key]!)],
               ),
               const SizedBox(height: 2),
               const Divider(

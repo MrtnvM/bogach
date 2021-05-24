@@ -22,7 +22,7 @@ class MonthResultWidget extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final month = useCurrentGame((g) => g.state.monthNumber);
+    final month = useCurrentGame((g) => g!.state.monthNumber);
     final ad = useGlobalState((s) => s.game.monthResultAds[month]);
     final size = useAdaptiveSize();
 
@@ -42,7 +42,7 @@ class MonthResultWidget extends HookWidget {
           Container(
             height: 84,
             margin: const EdgeInsets.symmetric(horizontal: 2),
-            child: AdWidget(ad: ad),
+            child: AdWidget(ad: ad as AdWithView),
           ),
           SizedBox(height: size(24)),
         ],
@@ -63,10 +63,10 @@ class MonthResultCard extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final userId = useUserId();
-    final month = useCurrentGame((g) => g.state.monthNumber);
+    final month = useCurrentGame((g) => g!.state.monthNumber)!;
     final monthResults = useCurrentGame(
-      (g) => g.participants[userId].progress.monthResults,
-    );
+      (g) => g!.participants[userId!]!.progress.monthResults,
+    )!;
     final calculateChange = useMonthChangeCalculator();
 
     final currentResults = monthResults[month - 1];
@@ -124,7 +124,11 @@ class MonthResultCard extends HookWidget {
     );
   }
 
-  Widget _buildItem({String title, String value, Color color}) {
+  Widget _buildItem({
+    required String title,
+    required String value,
+    required Color color,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 0.0),
       child: Column(
@@ -207,14 +211,14 @@ class MonthResultCard extends HookWidget {
     ];
   }
 
-  Color _getValueColor(double value, {bool shouldReverse}) {
+  Color _getValueColor(double value, {bool? shouldReverse}) {
     final isValueTooLow = double.parse(value.toStringAsFixed(1)) == 0.0;
 
     if (isValueTooLow || value.isNaN || value.isInfinite) {
       return ColorRes.mainBlack;
     }
 
-    if (value > 0 && !shouldReverse || value < 0 && shouldReverse) {
+    if (value > 0 && !shouldReverse! || value < 0 && shouldReverse!) {
       return green;
     }
 
@@ -233,10 +237,10 @@ class MonthResultCard extends HookWidget {
 
 double Function(double Function(MonthResult)) useMonthChangeCalculator() {
   final userId = useUserId();
-  final month = useCurrentGame((g) => g.state.monthNumber);
+  final month = useCurrentGame((g) => g!.state.monthNumber)!;
   final monthResults = useCurrentGame(
-    (g) => g.participants[userId].progress.monthResults,
-  );
+    (g) => g!.participants[userId!]!.progress.monthResults,
+  )!;
 
   final previousResults = monthResults[month - 2];
   final currentResults = monthResults[month - 1];

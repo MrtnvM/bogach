@@ -15,9 +15,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
 
 ExpenseWidgetData useExpenseEventData({
-  @required GameEvent event,
+  required GameEvent event,
 }) {
-  final ExpenseEventData eventData = event.data;
+  final eventData = event.data as ExpenseEventData;
   final userInsurances = useUserAssetsWithType<InsuranceAsset>(
     AssetType.insurance,
   );
@@ -50,7 +50,7 @@ ExpenseWidgetData useExpenseEventData({
   return expenseWidgetData;
 }
 
-VoidCallback useExpensePlayerActionHandler({@required GameEvent event}) {
+VoidCallback useExpensePlayerActionHandler({required GameEvent event}) {
   final context = useContext();
   final dispatch = useDispatcher();
   final gameContext = useCurrentGameContext();
@@ -60,6 +60,6 @@ VoidCallback useExpensePlayerActionHandler({@required GameEvent event}) {
       eventId: event.id,
       playerAction: const EmptyPlayerAction(),
       gameContext: gameContext,
-    )).catchError((e) => handleError(context: context, exception: e));
+    )).onError((e, st) => handleError(context: context, exception: e));
   };
 }

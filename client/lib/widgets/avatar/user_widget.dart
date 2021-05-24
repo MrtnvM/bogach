@@ -18,7 +18,7 @@ class UserWidget extends HookWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        UserAvatar(url: user.avatarUrl),
+        UserAvatar(url: user!.avatarUrl),
         const SizedBox(width: 12),
         Container(
           constraints: BoxConstraints(maxWidth: screenSize.width * 0.8),

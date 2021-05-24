@@ -13,17 +13,13 @@ import 'package:cash_flow/utils/error_handler.dart';
 import 'package:cash_flow/utils/mappers/new_game_mapper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
 
 class GameService {
   GameService({
-    @required this.apiClient,
-    @required this.firestore,
-    @required this.realtimeDatabase,
-  })  : assert(apiClient != null),
-        assert(firestore != null),
-        assert(realtimeDatabase != null),
-        assert(realtimeDatabase != null);
+    required this.apiClient,
+    required this.firestore,
+    required this.realtimeDatabase,
+  });
 
   final CashFlowApiClient apiClient;
   final FirebaseFirestore firestore;
@@ -32,32 +28,29 @@ class GameService {
   Future<List<GameTemplate>> getGameTemplates() {
     return apiClient
         .getGameTemplates()
-        .then(mapToGameTemplates)
-        .catchError(recordError);
+        .then(mapToGameTemplates);
   }
 
   Future<List<Quest>> getQuests(String userId) {
-    return apiClient.getQuests(userId).catchError(recordError);
+    return apiClient.getQuests(userId);
   }
 
   Future<String> createNewGame({
-    @required String templateId,
-    @required String userId,
+    required String templateId,
+    required String userId,
   }) {
     return apiClient
         .createNewGame(templateId: templateId, userId: userId)
-        .then((response) => response.id)
-        .catchError(recordError);
+        .then((response) => response.id);
   }
 
   Future<String> createQuestGame({
-    @required String gameLevelId,
-    @required String userId,
+    required String gameLevelId,
+    required String userId,
   }) {
     return apiClient
         .createNewQuestGame(questId: gameLevelId, userId: userId)
-        .then((response) => response.id)
-        .catchError(recordError);
+        .then((response) => response.id);
   }
 
   Stream<Game> getGame(GameContext gameContext) {
@@ -75,13 +68,12 @@ class GameService {
     }).handleError(recordError, test: (e) => true);
   }
 
-  Future<Game> getGameByLevel(String levelId, String userId) async {
+  Future<Game?> getGameByLevel(String levelId, String userId) async {
     final gameDocs = await firestore
         .collection('games')
         .where('participants', arrayContains: userId)
         .where('config.level', isEqualTo: levelId)
-        .get()
-        .catchError(recordError);
+        .get();
 
     final games = gameDocs.docs
         .map((d) => Game.fromJson(d.data()))
@@ -96,25 +88,25 @@ class GameService {
   }
 
   Future<void> sendPlayerAction(PlayerActionRequestModel playerAction) {
-    return apiClient.sendPlayerAction(playerAction).catchError(recordError);
+    return apiClient.sendPlayerAction(playerAction);
   }
 
   Future<void> startNewMonth(GameContext gameContext) {
-    return apiClient.startNewMonth(gameContext).catchError(recordError);
+    return apiClient.startNewMonth(gameContext);
   }
 
   Future<Room> createRoom(CreateRoomRequestModel requestModel) {
-    return apiClient.createRoom(requestModel).catchError(recordError);
+    return apiClient.createRoom(requestModel);
   }
 
-  Future<void> setRoomParticipantReady(String roomId, String participantId) {
+  Future<void> setRoomParticipantReady(String? roomId, String participantId) {
     return apiClient
         .setRoomParticipantReady(roomId, participantId)
-        .catchError(recordError);
+        .onError(recordError);
   }
 
   Future<void> createRoomGame(String roomId) {
-    return apiClient.createRoomGame(roomId).catchError(recordError);
+    return apiClient.createRoomGame(roomId);
   }
 
   Stream<Room> subscribeOnRoomUpdates(String roomId) {
@@ -122,8 +114,8 @@ class GameService {
         .collection('rooms')
         .doc(roomId)
         .snapshots()
-        .where((snapshot) => snapshot?.data() != null)
-        .map((snapshot) => Room.fromJson(snapshot.data()))
+        .where((snapshot) => snapshot.data() != null)
+        .map((snapshot) => Room.fromJson(snapshot.data()!))
         .handleError(recordError, test: (e) => true);
   }
 
@@ -132,7 +124,7 @@ class GameService {
         .collection('rooms')
         .doc(roomId)
         .get()
-        .then((snapshot) => Room.fromJson(snapshot.data()))
-        .catchError(recordError);
+        .then((snapshot) => Room.fromJson(snapshot.data()!))
+        .onError(recordError);
   }
 }

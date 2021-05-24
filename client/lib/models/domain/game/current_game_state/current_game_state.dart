@@ -3,16 +3,17 @@ import 'package:cash_flow/utils/core/date.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'current_game_state.freezed.dart';
+
 part 'current_game_state.g.dart';
 
 @freezed
-abstract class CurrentGameState with _$CurrentGameState {
+class CurrentGameState with _$CurrentGameState {
   factory CurrentGameState({
     @JsonKey(fromJson: fromISO8601DateJson, toJson: toISO8601DateJson)
-        DateTime moveStartDateInUTC,
-    GameStatus gameStatus,
-    int monthNumber,
-    List<Winner> winners,
+        DateTime? moveStartDateInUTC,
+    required GameStatus gameStatus,
+    required int monthNumber,
+    @JsonKey(defaultValue: <Winner>[]) required List<Winner> winners,
   }) = _CurrentGameState;
 
   factory CurrentGameState.fromJson(Map<String, dynamic> json) =>

@@ -5,13 +5,12 @@ import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TrackOnlineStatusAction extends BaseAction {
   @override
-  Future<AppState> reduce() async {
-    final void Function(bool) changeOnlineStatus = (isOnline) {
+  Future<AppState?> reduce() async {
+    final changeOnlineStatus = (isOnline) {
       scheduleMicrotask(() {
         dispatch(SetOnlineStatusAction(isOnline: isOnline));
       });
@@ -22,7 +21,7 @@ class TrackOnlineStatusAction extends BaseAction {
           .reference()
           .child('.info/connected')
           .onValue
-          .map((event) => event?.snapshot?.value == true)
+          .map((event) => event.snapshot.value == true)
           .listen(changeOnlineStatus);
     } else {
       final connectivity = Connectivity();
@@ -39,14 +38,14 @@ class TrackOnlineStatusAction extends BaseAction {
 }
 
 class SetOnlineStatusAction extends BaseAction {
-  SetOnlineStatusAction({@required this.isOnline});
+  SetOnlineStatusAction({required this.isOnline});
 
   final bool isOnline;
 
   @override
   AppState reduce() {
     return state.rebuild((s) {
-      s.config = s.config.copyWith(isOnline: isOnline);
+      s.config = s.config!.copyWith(isOnline: isOnline);
     });
   }
 }

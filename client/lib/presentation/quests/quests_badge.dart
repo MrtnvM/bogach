@@ -10,8 +10,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class QuestsBadge extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final questsCount =
-        useGlobalState((s) => s.newGame.quests?.items?.length) ?? 0;
+    final questsCount = useGlobalState((s) => s.newGame.quests.items.length);
     final user = useCurrentUser();
     final currentIndex = user?.currentQuestIndex ?? 0;
 
@@ -19,7 +18,7 @@ class QuestsBadge extends HookWidget {
       title: '$currentIndex / ${questsCount == 0 ? '-' : questsCount}',
       imageAsset: Images.questsBadge,
       onTap: () {
-        if (!user.purchaseProfile.isQuestsAvailable) {
+        if (user?.purchaseProfile?.isQuestsAvailable == false) {
           appRouter.goTo(const QuestsPurchasePage());
         }
       },

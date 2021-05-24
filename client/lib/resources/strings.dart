@@ -1,4 +1,3 @@
-import 'package:feedback/feedback.dart';
 import 'package:intl/intl.dart';
 
 // ignore: avoid_classes_with_only_static_members
@@ -195,7 +194,8 @@ class Strings {
 
   static String getSelling(String name) => 'Продается $name';
 
-  static String itemsPerPrice({int count, String price}) => '$count по $price';
+  static String itemsPerPrice({int? count, String? price}) =>
+      '$count по $price';
 
   static const noInternetError = 'Не удалось подключиться к серверу. '
       'Пожалуйста, проверьте ваше интернет-соединение';
@@ -431,7 +431,8 @@ class Strings {
   static String get roomCreationFailed =>
       'При создании комнаты возникла ошибка';
   static String get join => 'Присоединиться';
-  static String waitingWhenLeaderStartGame(String leaderName) {
+
+  static String waitingWhenLeaderStartGame(String? leaderName) {
     return 'Ожидаем пока $leaderName начнет игру...';
   }
 
@@ -524,20 +525,4 @@ class Strings {
       'познавательнее для вас. Пожалуйста, обновите приложение для'
       ' доступа к новым функциям - это не займет много времени :)';
   static String get update => 'Обновить';
-
-  static final ruFeedbackTranslations = _RuFeedbackTranslations();
-}
-
-class _RuFeedbackTranslations extends FeedbackTranslation {
-  @override
-  String get draw => 'Нарисовать';
-
-  @override
-  String get feedbackDescriptionText => 'Что случилось?';
-
-  @override
-  String get navigate => 'Навигация';
-
-  @override
-  String get submitButtonText => 'Отправить';
 }

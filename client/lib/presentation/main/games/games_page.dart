@@ -30,7 +30,7 @@ class GamesPage extends HookWidget {
       AnalyticsSender.mainPageRefreshed();
 
       return Future.wait([
-        dispatch(GetQuestsAction(userId: userId, isRefreshing: true)),
+        dispatch(GetQuestsAction(userId: userId!, isRefreshing: true)),
         dispatch(GetGameTemplatesAction()),
       ]);
     };
@@ -52,12 +52,12 @@ class GamesPage extends HookWidget {
 }
 
 class _GamePageContent extends HookWidget {
-  const _GamePageContent({Key key}) : super(key: key);
+  const _GamePageContent({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final selectedSinglePlayerGameTemplateId = useState<String>(null);
-    final selectedQuestId = useState<String>(null);
+    final selectedSinglePlayerGameTemplateId = useState<String?>(null);
+    final selectedQuestId = useState<String?>(null);
     final selectedProfiles = useState(<String>{});
     final size = useAdaptiveSize();
 

@@ -6,12 +6,12 @@ part 'purchase_details_request_model.freezed.dart';
 part 'purchase_details_request_model.g.dart';
 
 @freezed
-abstract class PurchaseDetailsRequestModel with _$PurchaseDetailsRequestModel {
+class PurchaseDetailsRequestModel with _$PurchaseDetailsRequestModel {
   factory PurchaseDetailsRequestModel({
-    @required String productId,
-    @required String purchaseId,
-    String verificationData,
-    String source,
+    required String productId,
+    required String purchaseId,
+    String? verificationData,
+    String? source,
   }) = _PurchaseDetailsRequestModel;
 
   factory PurchaseDetailsRequestModel.fromJson(Map<String, dynamic> json) =>
@@ -20,9 +20,9 @@ abstract class PurchaseDetailsRequestModel with _$PurchaseDetailsRequestModel {
   static PurchaseDetailsRequestModel fromPurchase(PurchaseDetails purchase) {
     return PurchaseDetailsRequestModel(
       productId: purchase.productID,
-      purchaseId: purchase.purchaseID,
-      verificationData: purchase.verificationData?.serverVerificationData,
-      source: purchase.verificationData?.source?.toString(),
+      purchaseId: purchase.purchaseID!,
+      verificationData: purchase.verificationData.serverVerificationData,
+      source: purchase.verificationData.source.toString(),
     );
   }
 }

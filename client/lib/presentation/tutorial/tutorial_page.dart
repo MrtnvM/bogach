@@ -21,7 +21,7 @@ import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/material.dart';
 
 class TutorialPage extends StatefulWidget {
-  const TutorialPage({Key key, @required this.gameId}) : super(key: key);
+  const TutorialPage({Key? key, required this.gameId}) : super(key: key);
 
   final String gameId;
 
@@ -30,7 +30,7 @@ class TutorialPage extends StatefulWidget {
 }
 
 class _TutorialPageState extends State<TutorialPage> {
-  Store<AppState> store;
+  late Store<AppState> store;
 
   final gameboardKey = GlobalKey();
   final gameId = 'game1';
@@ -43,18 +43,18 @@ class _TutorialPageState extends State<TutorialPage> {
 
     store = Store(
       initialState: AppState.initial().rebuild((s) {
-        s.profile.currentUser = UserProfile(
+        s.profile.currentUser = UserProfile.withName(
           userId: userId,
           fullName: Strings.mascotName,
           avatarUrl: Images.bogachAvatarUrl,
         );
 
-        s.game.activeGameStates[gameId] = ActiveGameState.gameEvent(
+        s.game.activeGameStates![gameId] = ActiveGameState.gameEvent(
           eventIndex: 0,
           sendingEventIndex: -1,
         );
 
-        s.game.games[gameId] = Game(
+        s.game.games![gameId] = Game(
           id: 'game1',
           name: Strings.tutorialQuestName,
           type: GameType.singleplayer(),
@@ -99,14 +99,19 @@ class _TutorialPageState extends State<TutorialPage> {
               ),
             ),
           ],
-          config: GameConfig(level: 'level1', monthLimit: 7),
+          config: GameConfig(
+            level: 'level1',
+            monthLimit: 7,
+            initialCash: 1000,
+            gameTemplateId: '',
+          ),
         );
       }),
     );
 
     Future.delayed(const Duration(milliseconds: 300)).then((_) {
-      final gameboardContext = gameboardKey.currentContext;
-      final gameTutorial = GameboardTutorialWidget.of(gameboardContext);
+      final gameboardContext = gameboardKey.currentContext!;
+      final gameTutorial = GameboardTutorialWidget.of(gameboardContext)!;
 
       gameTutorial.showTutorial(context);
     });

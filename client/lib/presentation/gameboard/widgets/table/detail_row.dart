@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 
 class DetailRow extends StatelessWidget {
   const DetailRow({
-    @required this.title,
-    @required this.value,
+    required this.title,
+    required this.value,
     this.details = const [],
-  })  : assert(title != null),
-        assert(value != null);
+  });
 
   final String title;
   final String value;

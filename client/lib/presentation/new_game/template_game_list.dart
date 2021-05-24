@@ -15,12 +15,12 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 
 class TemplateGameList extends HookWidget {
   const TemplateGameList({
-    @required this.selectedItemId,
-    @required this.onSelectionChanged,
+    required this.selectedItemId,
+    required this.onSelectionChanged,
   });
 
-  final String selectedItemId;
-  final void Function(String) onSelectionChanged;
+  final String? selectedItemId;
+  final void Function(String?) onSelectionChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class TemplateGameList extends HookWidget {
     useEffect(() {
       swiperController.value.addListener(() {
         final currentIndex = swiperController.value.index;
-        final templateName = vm.gameTemplates.itemsMap[currentIndex].name;
+        final templateName = vm.gameTemplates!.itemsMap[currentIndex]!.name;
         AnalyticsSender.singleplayerGameSwiped(templateName);
       });
 
@@ -42,25 +42,26 @@ class TemplateGameList extends HookWidget {
     return MediaQuery(
       data: mediaQueryData,
       child: LoadableView(
-        isLoading: vm.templatesRequestState.isInProgress,
+        isLoading: vm.templatesRequestState!.isInProgress,
         backgroundColor: ColorRes.transparent,
         indicatorColor: const AlwaysStoppedAnimation<Color>(ColorRes.mainGreen),
         child: GamesLoadableListView<GameTemplate>(
           swiperController: swiperController.value,
           viewModel: LoadableListViewModel(
-            items: vm.gameTemplates,
+            items: vm.gameTemplates!,
             itemBuilder: (i) => GameTemplateItem(
               selectedItemId: selectedItemId,
-              gameTemplate: vm.gameTemplates.items[i],
+              gameTemplate: vm.gameTemplates!.items[i],
               onStartNewGamePressed: vm.createNewGame,
               onContinueGamePressed: vm.continueGame,
               onSelectionChanged: onSelectionChanged,
               canContinueGame: vm.canContinueGame,
             ),
-            loadListRequestState: vm.templatesRequestState,
+            loadListRequestState: vm.templatesRequestState!,
             loadList: vm.loadGameTemplates,
             emptyStateWidget: const EmptyListWidget(),
             errorWidget: CommonErrorWidget(vm.loadGameTemplates),
+            itemSeparator: (i) => const SizedBox(),
           ),
         ),
       ),

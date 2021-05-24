@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 
 class OnboardingScaffold extends StatelessWidget {
   const OnboardingScaffold({
-    @required this.title,
-    @required this.subtitle,
-    @required this.image,
-    Key key,
+    required this.title,
+    required this.subtitle,
+    required this.image,
+    Key? key,
     this.actionWidget,
   }) : super(key: key);
 
   final String title;
   final String subtitle;
   final String image;
-  final Widget actionWidget;
+  final Widget? actionWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class OnboardingScaffold extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
-                if (actionWidget != null) actionWidget,
+                if (actionWidget != null) actionWidget!,
               ],
             ),
           ),

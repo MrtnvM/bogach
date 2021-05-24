@@ -17,7 +17,7 @@ class IncomeGameEvent extends HookWidget {
 
   final GameEvent event;
 
-  IncomeEventData get eventData => event.data;
+  IncomeEventData get eventData => event.data as IncomeEventData;
 
   @override
   Widget build(BuildContext context) {

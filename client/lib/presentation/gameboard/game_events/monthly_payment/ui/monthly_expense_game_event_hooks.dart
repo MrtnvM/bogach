@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 VoidCallback useMonthlyExpensePlayerActionHandler({
-  @required GameEvent event,
+  required GameEvent event,
 }) {
   final context = useContext();
   final dispatch = useDispatcher();
@@ -19,6 +19,6 @@ VoidCallback useMonthlyExpensePlayerActionHandler({
       eventId: event.id,
       playerAction: MonthlyExpensePlayerAction(event.id),
       gameContext: gameContext,
-    )).catchError((e) => handleError(context: context, exception: e));
+    )).onError((e, st) => handleError(context: context, exception: e));
   };
 }

@@ -2,13 +2,12 @@ import 'dart:io';
 
 import 'package:cash_flow/resources/dynamic_links.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
-import 'package:flutter/foundation.dart';
 
 class CashApiEnvironment extends ApiEnvironment {
   const CashApiEnvironment({
-    @required String baseUrl,
-    @required this.name,
-    @required this.dynamicLink,
+    required String baseUrl,
+    required this.name,
+    required this.dynamicLink,
     bool validateRequestsByDefault = true,
     bool isRequestsAuthorisedByDefault = false,
     this.realtimeDatabaseUrl,
@@ -17,14 +16,14 @@ class CashApiEnvironment extends ApiEnvironment {
     this.isLoggerEnabled = false,
   }) : super(
           baseUrl: baseUrl,
-          validateRequestsByDefaut: validateRequestsByDefault,
+          validateRequestsByDefault: validateRequestsByDefault,
           isRequestsAuthorisedByDefault: isRequestsAuthorisedByDefault,
         );
 
   final String name;
   final DynamicLinks dynamicLink;
-  final String firestoreHostUrl;
-  final String realtimeDatabaseUrl;
+  final String? firestoreHostUrl;
+  final String? realtimeDatabaseUrl;
   final bool isAnalyticsEnabled;
   final bool isLoggerEnabled;
 

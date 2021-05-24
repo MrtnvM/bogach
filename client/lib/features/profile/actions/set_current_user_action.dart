@@ -5,7 +5,7 @@ import 'package:cash_flow/models/domain/user/user_profile.dart';
 class SetCurrentUserAction extends BaseAction {
   SetCurrentUserAction(this.user);
 
-  final UserProfile user;
+  final UserProfile? user;
 
   @override
   AppState reduce() {

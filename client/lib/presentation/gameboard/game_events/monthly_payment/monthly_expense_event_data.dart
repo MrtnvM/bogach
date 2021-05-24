@@ -6,12 +6,12 @@ part 'monthly_expense_event_data.freezed.dart';
 part 'monthly_expense_event_data.g.dart';
 
 @freezed
-abstract class MonthlyExpenseEventData
+class MonthlyExpenseEventData
     with _$MonthlyExpenseEventData
     implements GameEventData {
   factory MonthlyExpenseEventData({
-    int monthlyPayment,
-    String expenseName,
+    required int monthlyPayment,
+    required String expenseName,
   }) = _MonthlyExpenseEventData;
 
   factory MonthlyExpenseEventData.fromJson(Map<String, dynamic> json) =>

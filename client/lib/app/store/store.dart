@@ -1,5 +1,6 @@
 import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/app/app_state.dart';
+import 'package:cash_flow/app/store/cash_error_observer.dart';
 import 'package:cash_flow/app/store/redux_action_logger.dart';
 import 'package:cash_flow/app/store/redux_action_observer.dart';
 import 'package:cash_flow/cache/add_friends_storage.dart';
@@ -31,6 +32,7 @@ Store<AppState> configureStore() {
 
   return Store(
     initialState: AppState.initial(),
+    errorObserver: CashErrorObserver<AppState>(),
     actionObservers: [
       actionObserver,
       actionLogger,
@@ -49,7 +51,7 @@ Future<void> configureDependencyInjection(
   final firebaseMessaging = FirebaseMessaging.instance;
   final cloudStorage = FirebaseStorage.instance;
   final firestore = FirebaseFirestore.instance;
-  final remoteConfig = await RemoteConfig.instance;
+  final remoteConfig = RemoteConfig.instance;
   var realtimeDatabase = FirebaseDatabase.instance;
 
   if (environment == CashApiEnvironment.development) {

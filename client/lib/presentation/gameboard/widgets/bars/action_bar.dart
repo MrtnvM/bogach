@@ -7,15 +7,15 @@ import 'package:flutter/material.dart';
 
 class PlayerActionBar extends StatelessWidget {
   const PlayerActionBar({
-    @required this.confirm,
-    Key key,
+    required this.confirm,
+    Key? key,
     this.takeLoan,
     this.skip,
   }) : super(key: key);
 
   final VoidCallback confirm;
-  final VoidCallback takeLoan;
-  final VoidCallback skip;
+  final VoidCallback? takeLoan;
+  final VoidCallback? skip;
 
   @override
   Widget build(BuildContext context) {
@@ -74,14 +74,16 @@ class PlayerActionBar extends StatelessWidget {
 
   Widget _actionBarItem({
     Color color = ColorRes.white,
-    String text,
-    Function() onPressed,
+    required String text,
+    Function()? onPressed,
   }) {
-    return RaisedButton(
+    return ElevatedButton(
       onPressed: onPressed,
-      elevation: 0,
-      color: color,
-      padding: const EdgeInsets.all(0),
+      style: ElevatedButton.styleFrom(
+        primary: color,
+        padding: const EdgeInsets.all(0),
+        elevation: 0,
+      ),
       child: Container(
         alignment: Alignment.center,
         constraints: const BoxConstraints.expand(),

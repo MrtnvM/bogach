@@ -20,8 +20,8 @@ class CreateRoomAction extends BaseAction {
   Future<AppState> reduce() async {
     final gameService = GetIt.I.get<GameService>();
 
-    final userId = state.profile.currentUser.id;
-    final gameTemplateId = state.multiplayer.selectedGameTemplate.id;
+    final userId = state.profile.currentUser?.id;
+    final gameTemplateId = state.multiplayer.selectedGameTemplate?.id;
 
     final requestModel = CreateRoomRequestModel(
       currentUserId: userId,
@@ -33,7 +33,7 @@ class CreateRoomAction extends BaseAction {
 
     return state.rebuild((s) {
       s.multiplayer.createdRoomId = room.id;
-      s.multiplayer.rooms[room.id] = room;
+      s.multiplayer.rooms?[room.id] = room;
     });
   }
 

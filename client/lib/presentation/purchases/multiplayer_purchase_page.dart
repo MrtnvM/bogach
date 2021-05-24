@@ -34,7 +34,7 @@ class MultiplayerPurchasePage extends HookWidget {
 
     final isOperationInProgress = useGlobalState(
       (s) => s.getOperationState(Operation.buyMultiplayerGames).isInProgress,
-    );
+    )!;
 
     useEffect(() {
       AnalyticsSender.multiplayerPurchasePageOpen();
@@ -66,7 +66,7 @@ class MultiplayerPurchasePage extends HookWidget {
 }
 
 class _HeadlineImage extends HookWidget {
-  const _HeadlineImage({Key key}) : super(key: key);
+  const _HeadlineImage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +121,7 @@ class _HeadlineImage extends HookWidget {
 }
 
 class _MultiplayerAccessDescription extends HookWidget {
-  const _MultiplayerAccessDescription({Key key}) : super(key: key);
+  const _MultiplayerAccessDescription({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -148,17 +148,17 @@ class _MultiplayerAccessDescription extends HookWidget {
 
 class _PurchaseGameList extends HookWidget {
   const _PurchaseGameList({
-    @required this.isStoreAvailable,
-    Key key,
+    required this.isStoreAvailable,
+    Key? key,
   }) : super(key: key);
 
-  final bool isStoreAvailable;
+  final bool? isStoreAvailable;
 
   @override
   Widget build(BuildContext context) {
     final dispatch = useDispatcher();
 
-    Function(MultiplayerGamePurchases) buyMultiplayerGame;
+    late Function(MultiplayerGamePurchases) buyMultiplayerGame;
     buyMultiplayerGame = (multiplayerGamePurchase) async {
       final purchaseName = describeEnum(multiplayerGamePurchase);
 
@@ -185,7 +185,7 @@ class _PurchaseGameList extends HookWidget {
         appRouter.goBack(true);
       } on ProductPurchaseCanceledException catch (error) {
         AnalyticsSender.multiplayerPurchaseCanceled(purchaseName);
-        Logger.i('Purchase canceled: ${error.product?.id}');
+        Logger.i('Purchase canceled: ${error.product.id}');
       } catch (error) {
         AnalyticsSender.multiplayerPurchaseFailed(
           error: error.toString(),
@@ -201,7 +201,7 @@ class _PurchaseGameList extends HookWidget {
       }
     };
 
-    if (!isStoreAvailable) {
+    if (!isStoreAvailable!) {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -256,11 +256,11 @@ class _PurchaseGameList extends HookWidget {
 
 class _PurchaseWidget extends StatelessWidget {
   const _PurchaseWidget({
-    Key key,
-    @required this.purchase,
-    @required this.title,
-    @required this.price,
-    @required this.buy,
+    Key? key,
+    required this.purchase,
+    required this.title,
+    required this.price,
+    required this.buy,
     this.oldPrice,
     this.discont,
     this.isDefaultOption = false,
@@ -269,8 +269,8 @@ class _PurchaseWidget extends StatelessWidget {
   final MultiplayerGamePurchases purchase;
   final String title;
   final String price;
-  final String oldPrice;
-  final int discont;
+  final String? oldPrice;
+  final int? discont;
   final void Function(MultiplayerGamePurchases) buy;
   final bool isDefaultOption;
 
@@ -308,7 +308,7 @@ class _PurchaseWidget extends StatelessWidget {
               const Divider(),
               const SizedBox(height: 8),
               Text(
-                price ?? '',
+                price,
                 style: Styles.bodyWhiteBold.copyWith(
                   fontSize: 17,
                 ),
@@ -356,9 +356,9 @@ class _PurchaseWidget extends StatelessWidget {
                 ],
               ],
               const Spacer(),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () => buy(purchase),
-                color: ColorRes.mainGreen,
+                style: ElevatedButton.styleFrom(primary: ColorRes.mainGreen),
                 child: Text(Strings.select, style: Styles.bodyWhiteBold),
               ),
             ],

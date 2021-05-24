@@ -4,16 +4,16 @@ part 'liability.freezed.dart';
 part 'liability.g.dart';
 
 @freezed
-abstract class Liability with _$Liability {
+class Liability with _$Liability {
   factory Liability({
-    @required String name,
+    required String name,
     @JsonKey(
         unknownEnumValue: LiabilityType.other,
         defaultValue: LiabilityType.other)
-    @required
+    required
         LiabilityType type,
-    @required double monthlyPayment,
-    @required double value,
+    required double monthlyPayment,
+    required double value,
   }) = _Liability;
 
   factory Liability.fromJson(Map<String, dynamic> json) =>
