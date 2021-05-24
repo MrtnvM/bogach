@@ -314,6 +314,13 @@ export class GameProvider {
 
           draft.singleplayerGames.push(newLastGame);
         });
+
+        const statistic = await this.gameDao.getLevelStatistic(templateId);
+        const updatedStatistic = produce(statistic, (draft) => {
+          draft.statistic[user.userId] = game.state.monthNumber;
+        });
+
+        await this.gameDao.updateLevelStatistic(updatedStatistic);
       }
 
       const isQuestGame = game.type === 'singleplayer' && game.config.level && isWinner;

@@ -1,4 +1,5 @@
 import * as admin from 'firebase-admin';
+import { GameTemplateEntity } from '../game_templates/models/game_template';
 
 import { GameEntity } from '../models/domain/game/game';
 import { RoomEntity } from '../models/domain/room';
@@ -29,4 +30,7 @@ export class FirestoreSelector {
 
   recentSessions = (): CollectionReference => this.firestore.collection('recent_sessions');
   recentSession = (userId: UserEntity.Id) => this.recentSessions().doc(userId);
+
+  levelStatistics = (): CollectionReference => this.firestore.collection('level_statistics');
+  levelStatistic = (teemplateId: GameTemplateEntity.Id) => this.recentSessions().doc(teemplateId);
 }
