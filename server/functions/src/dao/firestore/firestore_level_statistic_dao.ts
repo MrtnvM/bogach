@@ -12,13 +12,20 @@ export class FirestoreLevelStatisticDAO implements ILevelStatisticDAO {
 
     const selector = this.selector.levelStatistic(statistic.id);
     const updatedStatistic = await this.firestore.updateItem(selector, statistic);
-    
+
     return updatedStatistic as LevelStatistic;
   }
 
   async getLevelStatistic(templateId: GameTemplateEntity.Id): Promise<LevelStatistic> {
     const selector = this.selector.levelStatistic(templateId);
-    const statistic = await this.firestore.getItemData(selector) || {};
+    var statistic = await this.firestore.getItemData(selector);
+
+    if (!statistic) {
+      statistic = await this.firestore.createItem(selector, {
+        id: templateId,
+        statistic: {},
+      });
+    }
 
     LevelStatistic.validate(statistic);
 

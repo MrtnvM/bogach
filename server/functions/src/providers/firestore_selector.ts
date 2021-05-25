@@ -32,5 +32,5 @@ export class FirestoreSelector {
   recentSession = (userId: UserEntity.Id) => this.recentSessions().doc(userId);
 
   levelStatistics = (): CollectionReference => this.firestore.collection('level_statistics');
-  levelStatistic = (teemplateId: GameTemplateEntity.Id) => this.recentSessions().doc(teemplateId);
+  levelStatistic = (templateId: GameTemplateEntity.Id) => this.levelStatistics().doc(templateId);
 }
