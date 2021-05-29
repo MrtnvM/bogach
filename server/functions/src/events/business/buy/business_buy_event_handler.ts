@@ -67,8 +67,6 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
   }
 
   async handle(game: Game, event: Event, action: Action, userId: UserEntity.Id): Promise<Game> {
-    // TODO parse as parameter
-    const buyInCredit = false;
 
     const {
       businessId,
@@ -79,6 +77,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
       passiveIncomePerMonth,
       payback,
       sellProbability,
+      buyInCredit,
     } = event.data;
 
     const { action: businessAction } = action;
@@ -250,11 +249,15 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
       userCash: userAccount.cash,
       priceToPay: priceToPay,
     };
+    console.log(creditParameters);
     const isCreditAvailable = this.creditHandler.isCreditAvailable(creditParameters);
 
+    console.log(isCreditAvailable);
     if (!isCreditAvailable) {
+      console.log("not available")
       throw DomainErrors.creditIsNotAvilable;
     }
+    console.log("available")
 
     const sumToCredit = priceToPay - userAccount.cash;
     const newAccountBalance = 0;
@@ -265,7 +268,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     const credit: Liability = {
       id: businessId,
       name: businessName,
-      type: 'business_credit',
+      type: 'credit',
       monthlyPayment: monthlyPayment,
       value: sumToCredit,
     };

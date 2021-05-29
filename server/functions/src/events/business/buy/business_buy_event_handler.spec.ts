@@ -8,8 +8,8 @@ import { BusinessBuyEventHandler } from './business_buy_event_handler';
 import { Liability, LiabilityEntity } from '../../../models/domain/liability';
 import { BusinessBuyEvent } from './business_buy_event';
 import { DomainErrors } from '../../../core/exceptions/domain/domain_errors';
-import { mock, reset } from 'ts-mockito';
-import { CreditHandler } from '../../common/credit_handler';
+import { mock, reset, when } from 'ts-mockito';
+import { CreditHandler, CreditParameters } from '../../common/credit_handler';
 
 describe('Business buy event event handler', () => {
   const { eventId, userId, game, initialCash } = stubs;
@@ -33,6 +33,7 @@ describe('Business buy event event handler', () => {
       passiveIncomePerMonth: 2100,
       payback: 40,
       sellProbability: 7,
+      buyInCredit: false,
     });
 
     const action = utils.businessOfferEventPlayerAction({
@@ -104,6 +105,7 @@ describe('Business buy event event handler', () => {
       passiveIncomePerMonth: 2100,
       payback: 40,
       sellProbability: 7,
+      buyInCredit: false,
     };
     const event: BusinessBuyEvent.Event = {
       id: eventId,
@@ -161,6 +163,7 @@ describe('Business buy event event handler', () => {
       passiveIncomePerMonth: 2100,
       payback: 40,
       sellProbability: 7,
+      buyInCredit: false,
     });
 
     const action = utils.businessOfferEventPlayerAction({
@@ -173,6 +176,112 @@ describe('Business buy event event handler', () => {
       throw new Error('Should fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(DomainErrors.notEnoughCash);
+    }
+  });
+
+  test('Successfully buy business in credit', async () => {
+    const handler = new BusinessBuyEventHandler(mockCreditHandler);
+
+    /*const creditParameters: CreditParameters = {
+      userCashFlow: 10_000,
+      userCash: 100_000,
+      priceToPay: 32_000,
+    };
+    when(mockCreditHandler.isCreditAvailable(creditParameters)).thenReturn(true);*/
+
+    const event = utils.businessOfferEvent({
+      businessId: 'randomId',
+      currentPrice: 130_000,
+      fairPrice: 120_000,
+      downPayment: 115_000,
+      debt: 15_000,
+      passiveIncomePerMonth: 2100,
+      payback: 40,
+      sellProbability: 7,
+      buyInCredit: true,
+    });
+
+    const action = utils.businessOfferEventPlayerAction({
+      eventId,
+      action: 'buy',
+    });
+
+    const newGame = await handler.handle(game, event, action, userId);
+
+    const newBusinessAsset: BusinessAsset = {
+      id: 'randomId',
+      name: 'Торговая точка',
+      type: 'business',
+      buyPrice: 130_000,
+      downPayment: 115_000,
+      fairPrice: 120_000,
+      passiveIncomePerMonth: 2100,
+      payback: 40,
+      sellProbability: 7,
+    };
+
+    const newDefaultLiability: Liability = {
+      id: 'randomId',
+      name: 'Торговая точка',
+      type: 'business_credit',
+      monthlyPayment: 0,
+      value: 15_000,
+    };
+
+    const newCredit: Liability = {
+      id: 'randomId',
+      name: 'Торговая точка',
+      type: 'credit',
+      // TODO посчитать округление в другом тесте
+      monthlyPayment: 1250,
+      value: 15_000,
+    };
+
+    const expectedGame = produce(game, (draft) => {
+      const participant = draft.participants[userId];
+
+      participant.possessions.assets.push(newBusinessAsset);
+      participant.account.cash = 0;
+      participant.account.credit = 15_000;
+      participant.possessions.liabilities.push(newDefaultLiability);
+      participant.possessions.liabilities.push(newCredit);
+    });
+
+    expect(newGame).toStrictEqual(expectedGame);
+  });
+
+  test('Can not buy new business in credit if not enough cash flow', async () => {
+    const handler = new BusinessBuyEventHandler(mockCreditHandler);
+
+    const creditParameters: CreditParameters = {
+      userCashFlow: 10_000,
+      userCash: 100_000,
+      priceToPay: 116_000,
+    };
+    when(mockCreditHandler.isCreditAvailable(creditParameters)).thenReturn(false);
+
+    const event = utils.businessOfferEvent({
+      businessId: 'randomId',
+      currentPrice: 130_000,
+      fairPrice: 120_000,
+      downPayment: 116_000,
+      debt: 14_000,
+      passiveIncomePerMonth: 2100,
+      payback: 40,
+      sellProbability: 7,
+      buyInCredit: true,
+    });
+
+    const action = utils.businessOfferEventPlayerAction({
+      eventId,
+      action: 'buy',
+    });
+
+    try {
+      await handler.handle(game, event, action, userId);
+      throw new Error('Should fail on previous line');
+    } catch (error) {
+      expect(error).toStrictEqual(DomainErrors.creditIsNotAvilable);
     }
   });
 });

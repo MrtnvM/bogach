@@ -12,7 +12,7 @@ export interface Liability {
 export namespace LiabilityEntity {
   export type Id = string;
 
-  export type Type = 'mortgage' | 'business_credit' | 'other' | 'real_estate_credit';
+  export type Type = 'mortgage' | 'business_credit' | 'other' | 'real_estate_credit' | 'credit';
   export const TypeValues: Type[] = ['mortgage', 'business_credit', 'other', 'real_estate_credit'];
 
   export const validate = (liability: any) => {

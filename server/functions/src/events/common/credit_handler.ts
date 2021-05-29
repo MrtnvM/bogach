@@ -1,4 +1,4 @@
-interface CreditParameters {
+export interface CreditParameters {
       readonly userCashFlow: number;
       readonly userCash: number;
       readonly priceToPay: number;
