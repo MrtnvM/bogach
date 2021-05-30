@@ -8,7 +8,7 @@ import { BusinessBuyEventHandler } from './business_buy_event_handler';
 import { Liability, LiabilityEntity } from '../../../models/domain/liability';
 import { BusinessBuyEvent } from './business_buy_event';
 import { DomainErrors } from '../../../core/exceptions/domain/domain_errors';
-import { capture, anything, mock, reset, when, instance } from 'ts-mockito';
+import { mock, reset, instance, when, capture, anything } from 'ts-mockito';
 import { CreditHandler, CreditParameters } from '../../common/credit_handler';
 
 describe('Business buy event event handler', () => {
@@ -180,14 +180,10 @@ describe('Business buy event event handler', () => {
   });
 
   test('Successfully buy business in credit', async () => {
-    const handler = new BusinessBuyEventHandler(mockCreditHandler);
+    const creditHandler = instance(mockCreditHandler);
+    const handler = new BusinessBuyEventHandler(creditHandler);
 
-    /*const creditParameters: CreditParameters = {
-      userCashFlow: 10_000,
-      userCash: 100_000,
-      priceToPay: 32_000,
-    };
-    when(mockCreditHandler.isCreditAvailable(creditParameters)).thenReturn(true);*/
+    when(mockCreditHandler.isCreditAvailable(anything())).thenReturn(true);
 
     const event = utils.businessOfferEvent({
       businessId: 'randomId',
@@ -248,9 +244,17 @@ describe('Business buy event event handler', () => {
     });
 
     expect(newGame).toStrictEqual(expectedGame);
+
+    const expectedCreditParams: CreditParameters = {
+      userCashFlow: 10_000,
+      userCash: 100_000,
+      priceToPay: 115_000,
+    };
+    const [creditParams] = capture(mockCreditHandler.isCreditAvailable).last();
+    expect(creditParams).toStrictEqual(expectedCreditParams);
   });
 
-  test.only('Can not buy new business in credit if not enough cash flow', async () => {
+  test('Can not buy new business in credit if not enough cash flow', async () => {
     const creditHandler = instance(mockCreditHandler);
     const handler = new BusinessBuyEventHandler(creditHandler);
 
@@ -275,7 +279,7 @@ describe('Business buy event event handler', () => {
 
     try {
       await handler.handle(game, event, action, userId);
-      // throw new Error('Should fail on previous line');
+      throw new Error('Should fail on previous line');
     } catch (error) {
       expect(error).toStrictEqual(DomainErrors.creditIsNotAvilable);
     }
@@ -285,7 +289,6 @@ describe('Business buy event event handler', () => {
       userCash: 100_000,
       priceToPay: 116_000,
     };
-
     const [creditParams] = capture(mockCreditHandler.isCreditAvailable).last();
     expect(creditParams).toStrictEqual(expectedCreditParams);
   });

@@ -16,6 +16,8 @@ export class CreditHandler {
             const sumToCredit = priceToPay - userCash;
             const monthlyPayment = sumToCredit / 12;
 
+            console.log("monthlyPayment " + monthlyPayment)
+
             return userCashFlow > monthlyPayment;
             // TODO наверно отсюда передавать параметры кредита
       }
