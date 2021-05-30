@@ -75,10 +75,9 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
       passiveIncomePerMonth,
       payback,
       sellProbability,
-      buyInCredit,
     } = event.data;
 
-    const { action: businessAction } = action;
+    const { action: businessAction, inCredit } = action;
 
     if (businessAction !== 'buy') {
       throw new Error(
@@ -113,7 +112,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
       payback,
       sellProbability,
       debt,
-      buyInCredit,
+      buyInCredit: inCredit,
     };
 
     const actionResult = this.applyBuyAction(actionBuyParameters);
@@ -250,20 +249,16 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
       userCash: userAccount.cash,
       priceToPay: priceToPay,
     };
-    console.log(creditParameters);
-    
+
     const {
       isAvailable: isCreditAvailable,
       monthlyPayment,
       creditSum,
     } = this.creditHandler.isCreditAvailable(creditParameters);
 
-    console.log(isCreditAvailable);
     if (!isCreditAvailable) {
-      console.log('not available');
       throw DomainErrors.creditIsNotAvilable;
     }
-    console.log('available');
 
     const newAccountBalance = 0;
     const newCreditValue = userAccount.credit + creditSum;

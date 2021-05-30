@@ -17,12 +17,12 @@ export namespace BusinessBuyEvent {
     readonly passiveIncomePerMonth: number;
     readonly payback: number;
     readonly sellProbability: number;
-    readonly buyInCredit: boolean;
   }
 
   export interface PlayerAction {
     readonly eventId: GameEventEntity.Id;
     readonly action: BuySellAction;
+    readonly inCredit: boolean;
   }
 
   export type Info = {
@@ -51,7 +51,6 @@ export namespace BusinessBuyEvent {
     entity.hasNumberValue('passiveIncomePerMonth');
     entity.hasNumberValue('payback');
     entity.hasNumberValue('sellProbability');
-    entity.hasValue('buyInCredit');
 
     entity.checkWithRules([
       [(a) => a.currentPrice <= 0, "CurrentPrice can't be <= 0"],
@@ -70,5 +69,6 @@ export namespace BusinessBuyEvent {
 
     entity.hasValue('eventId');
     entity.checkUnion('action', BuySellActionValues);
+    entity.hasValue('inCredit');
   };
 }

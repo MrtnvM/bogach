@@ -33,12 +33,12 @@ describe('Business buy event event handler', () => {
       passiveIncomePerMonth: 2100,
       payback: 40,
       sellProbability: 7,
-      buyInCredit: false,
     });
 
     const action = utils.businessOfferEventPlayerAction({
       eventId,
       action: 'buy',
+      inCredit: false,
     });
 
     const newGame = await handler.handle(game, event, action, userId);
@@ -83,6 +83,7 @@ describe('Business buy event event handler', () => {
     const action = utils.businessOfferEventPlayerAction({
       eventId,
       action: 'buy',
+      inCredit: false,
     });
 
     try {
@@ -105,7 +106,6 @@ describe('Business buy event event handler', () => {
       passiveIncomePerMonth: 2100,
       payback: 40,
       sellProbability: 7,
-      buyInCredit: false,
     };
     const event: BusinessBuyEvent.Event = {
       id: eventId,
@@ -118,6 +118,7 @@ describe('Business buy event event handler', () => {
     const action = utils.businessOfferEventPlayerAction({
       eventId,
       action: 'buy',
+      inCredit: false,
     });
 
     try {
@@ -137,6 +138,7 @@ describe('Business buy event event handler', () => {
     const action = utils.businessOfferEventPlayerAction({
       eventId,
       action: 'sell',
+      inCredit: false,
     });
 
     try {
@@ -163,12 +165,12 @@ describe('Business buy event event handler', () => {
       passiveIncomePerMonth: 2100,
       payback: 40,
       sellProbability: 7,
-      buyInCredit: false,
     });
 
     const action = utils.businessOfferEventPlayerAction({
       eventId,
       action: 'buy',
+      inCredit: false,
     });
 
     try {
@@ -199,12 +201,12 @@ describe('Business buy event event handler', () => {
       passiveIncomePerMonth: 2100,
       payback: 40,
       sellProbability: 7,
-      buyInCredit: true,
     });
 
     const action = utils.businessOfferEventPlayerAction({
       eventId,
       action: 'buy',
+      inCredit: true,
     });
 
     const newGame = await handler.handle(game, event, action, userId);
@@ -279,12 +281,12 @@ describe('Business buy event event handler', () => {
       passiveIncomePerMonth: 2100,
       payback: 40,
       sellProbability: 7,
-      buyInCredit: true,
     });
 
     const action = utils.businessOfferEventPlayerAction({
       eventId,
       action: 'buy',
+      inCredit: true,
     });
 
     try {

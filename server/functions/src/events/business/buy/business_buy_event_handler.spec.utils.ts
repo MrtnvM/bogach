@@ -85,7 +85,6 @@ const dryCleaningBusinessOfferEvent = (currentPrice: number) => {
     payback: 21,
     debt: 99_000,
     sellProbability: 7,
-    buyInCredit: false,
   };
 
   const event: BusinessBuyEvent.Event = {

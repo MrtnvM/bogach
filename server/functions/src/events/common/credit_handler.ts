@@ -15,9 +15,10 @@ export class CreditHandler {
     const { userCashFlow, userCash, priceToPay } = parameters;
 
     const creditSum = priceToPay - userCash;
-    const monthlyPayment = Math.round(creditSum / 12);
+    
+    const monthlyPayment = Math.floor(creditSum / 12);
 
-    const isAvailable = userCashFlow > monthlyPayment;
+    const isAvailable = userCashFlow >= monthlyPayment;
 
     const creditResult: CreditResult = {
       isAvailable,
