@@ -68,6 +68,7 @@ export namespace BusinessBuyEventGenerator {
         passiveIncomePerMonth: passiveIncomePerMonthValue,
         payback,
         sellProbability: sellProbabilityValue,
+        buyInCredit: true,
       },
     };
   };
