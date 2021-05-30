@@ -45,9 +45,8 @@ interface ActionBuyParameters {
 }
 
 export class BusinessBuyEventHandler extends PlayerActionHandler {
-
   constructor(private creditHandler: CreditHandler) {
-    super()
+    super();
   }
 
   get gameEventType(): string {
@@ -67,7 +66,6 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
   }
 
   async handle(game: Game, event: Event, action: Action, userId: UserEntity.Id): Promise<Game> {
-
     const {
       businessId,
       currentPrice,
@@ -166,7 +164,10 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     }
 
     const newAssets = this.addNewItemToAssets(actionParameters);
-    var newLiabilities = this.addNewLiability(actionParameters.liabilities, buyResult.defaultLiability);
+    var newLiabilities = this.addNewLiability(
+      actionParameters.liabilities,
+      buyResult.defaultLiability
+    );
     newLiabilities = this.addNewLiability(newLiabilities, buyResult.credit);
 
     const actionResult: ActionResult = {
@@ -250,27 +251,29 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
       priceToPay: priceToPay,
     };
     console.log(creditParameters);
-    const isCreditAvailable = this.creditHandler.isCreditAvailable(creditParameters);
+    
+    const {
+      isAvailable: isCreditAvailable,
+      monthlyPayment,
+      creditSum,
+    } = this.creditHandler.isCreditAvailable(creditParameters);
 
     console.log(isCreditAvailable);
     if (!isCreditAvailable) {
-      console.log("not available")
+      console.log('not available');
       throw DomainErrors.creditIsNotAvilable;
     }
-    console.log("available")
+    console.log('available');
 
-    const sumToCredit = priceToPay - userAccount.cash;
     const newAccountBalance = 0;
-    const newCreditValue = userAccount.credit + sumToCredit;
-
-    const monthlyPayment = Math.round(sumToCredit / 12);
+    const newCreditValue = userAccount.credit + creditSum;
 
     const credit: Liability = {
       id: businessId,
       name: businessName,
       type: 'credit',
       monthlyPayment: monthlyPayment,
-      value: sumToCredit,
+      value: creditSum,
     };
 
     const defaultLiability = this.createDefaultLiability(actionParameters);

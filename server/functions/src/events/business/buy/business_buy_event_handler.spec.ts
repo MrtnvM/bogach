@@ -9,7 +9,7 @@ import { Liability, LiabilityEntity } from '../../../models/domain/liability';
 import { BusinessBuyEvent } from './business_buy_event';
 import { DomainErrors } from '../../../core/exceptions/domain/domain_errors';
 import { mock, reset, instance, when, capture, anything } from 'ts-mockito';
-import { CreditHandler, CreditParameters } from '../../common/credit_handler';
+import { CreditHandler, CreditParameters, CreditResult } from '../../common/credit_handler';
 
 describe('Business buy event event handler', () => {
   const { eventId, userId, game, initialCash } = stubs;
@@ -183,7 +183,12 @@ describe('Business buy event event handler', () => {
     const creditHandler = instance(mockCreditHandler);
     const handler = new BusinessBuyEventHandler(creditHandler);
 
-    when(mockCreditHandler.isCreditAvailable(anything())).thenReturn(true);
+    const creditResult: CreditResult = {
+      isAvailable: true,
+      monthlyPayment: 1250,
+      creditSum: 15_000,
+    };
+    when(mockCreditHandler.isCreditAvailable(anything())).thenReturn(creditResult);
 
     const event = utils.businessOfferEvent({
       businessId: 'randomId',
@@ -258,7 +263,12 @@ describe('Business buy event event handler', () => {
     const creditHandler = instance(mockCreditHandler);
     const handler = new BusinessBuyEventHandler(creditHandler);
 
-    when(mockCreditHandler.isCreditAvailable(anything())).thenReturn(false);
+    const creditResult: CreditResult = {
+      isAvailable: false,
+      monthlyPayment: 0,
+      creditSum: 0,
+    };
+    when(mockCreditHandler.isCreditAvailable(anything())).thenReturn(creditResult);
 
     const event = utils.businessOfferEvent({
       businessId: 'randomId',
