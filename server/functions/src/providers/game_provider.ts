@@ -22,6 +22,7 @@ import { IRoomDAO } from '../dao/room_dao';
 import { IUserDAO } from '../dao/user_dao';
 import { LastGameInfo, LastGamesEntity } from '../models/domain/user/last_games';
 import { ILevelStatisticDAO } from '../dao/level_statistic_dao';
+import { LevelStatistic } from '../models/domain/level_statistic/level_statistic';
 
 export class GameProvider {
   constructor(
@@ -359,6 +360,38 @@ export class GameProvider {
     });
 
     await Promise.all(updateProfileOperations);
+  }
+
+  async updateLevelStatistic(game: Game): Promise<LevelStatistic> {
+    const templateId = game.config.gameTemplateId;
+    
+    const updateStatisticOperations = game.participantsIds.map(async (participantId) => {
+      const user = await this.userDao.getUser(participantId);
+      if (!user) {
+        throw new Error("ERROR: Can't find the user with id:" + participantId);
+        return;
+      }
+
+      const isWinner =
+        game.state.winners.find(
+          (winner) => winner.userId === user.userId && winner.targetValue >= 1
+        ) !== undefined;
+
+      const isSingleplayerGame = game.type === 'singleplayer' && !game.config.level && isWinner;
+      if (isSingleplayerGame) {
+
+        const statistic = await this.levelStatisticDao.getLevelStatistic(templateId);
+        const updatedStatistic = produce(statistic, (draft) => {
+          draft.statistic[user.userId] = game.state.monthNumber;
+        });
+
+        await this.levelStatisticDao.updateLevelStatistic(updatedStatistic);
+      }
+    });
+
+    await Promise.all(updateStatisticOperations);
+
+    return this.levelStatisticDao.getLevelStatistic(templateId);
   }
 
   private checkParticipantsIds(participantsIds: any) {

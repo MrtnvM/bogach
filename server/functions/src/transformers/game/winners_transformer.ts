@@ -26,6 +26,7 @@ export class WinnersTransformer extends GameTransformer {
     const winners: GameEntity.Winner[] = usersProgress.map((p) => ({
       userId: p.participantId,
       targetValue: p.progress,
+      benchmark: 0,
     }));
 
     const isTargetArchived = usersProgress[0].progress >= 1;

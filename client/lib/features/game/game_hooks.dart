@@ -88,6 +88,15 @@ bool useIsCurrentParticipantWinGame() {
   return isWin ?? false;
 }
 
+int useCurrentParticipantBenchmark() {
+  final userId = useUserId();
+  final percent = useCurrentGame((g) => g?.state.winners.firstWhere(
+        (p) => p.userId == userId,
+      ).benchmark) ?? 0;
+
+  return percent;
+}
+
 void useGameWatcher() {
   final gameContext = useCurrentGameContext();
   final dispatch = useDispatcher();
