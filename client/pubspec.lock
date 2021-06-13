@@ -828,7 +828,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "9172cf7ec1d7499c0e7a8422ab6885da52fb19f5"
+      resolved-ref: "3606a1c254af1f987f2df88214b4faffad660feb"
       url: "https://github.com/MrtnvM/k_chart"
     source: git
     version: "0.2.0"
