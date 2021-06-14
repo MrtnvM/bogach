@@ -9,6 +9,7 @@ class BusinessBuyPlayerAction extends PlayerAction {
   const BusinessBuyPlayerAction(
     this.action,
     this.eventId,
+    // ignore: avoid_positional_boolean_parameters
     this.inCredit,
   );
 

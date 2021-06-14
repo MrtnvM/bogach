@@ -95,7 +95,8 @@
 // /// A class which mocks [CashFlowApiClient].
 // ///
 // /// See the documentation for Mockito's code generation for more information.
-// class MockCashFlowApiClient extends _i1.Mock implements _i11.CashFlowApiClient {
+// class MockCashFlowApiClient extends _i1.Mock
+//implements _i11.CashFlowApiClient {
 //   MockCashFlowApiClient() {
 //     _i1.throwOnMissingStub(this);
 //   }
@@ -115,7 +116,8 @@
 //   @override
 //   _i13.Future<List<_i14.GameTemplateResponseModel>> getGameTemplates() =>
 //       (super.noSuchMethod(Invocation.method(#getGameTemplates, []),
-//               returnValue: Future<List<_i14.GameTemplateResponseModel>>.value(
+//               returnValue:
+// Future<List<_i14.GameTemplateResponseModel>>.value(
 //                   <_i14.GameTemplateResponseModel>[]))
 //           as _i13.Future<List<_i14.GameTemplateResponseModel>>);
 //   @override
@@ -128,7 +130,8 @@
 //           {String? templateId, String? userId}) =>
 //       (super.noSuchMethod(
 //           Invocation.method(
-//               #createNewGame, [], {#templateId: templateId, #userId: userId}),
+//
+//#createNewGame, [], {#templateId: templateId, #userId: userId}),
 //           returnValue: Future<_i4.NewGameResponseModel>.value(
 //               _FakeNewGameResponseModel())) as _i13
 //           .Future<_i4.NewGameResponseModel>);
@@ -144,7 +147,8 @@
 //   @override
 //   _i13.Future<void> sendPlayerAction(
 //           _i16.PlayerActionRequestModel? playerAction) =>
-//       (super.noSuchMethod(Invocation.method(#sendPlayerAction, [playerAction]),
+//
+//(super.noSuchMethod(Invocation.method(#sendPlayerAction, [playerAction]),
 //           returnValue: Future<void>.value(null),
 //           returnValueForMissingStub: Future.value()) as _i13.Future<void>);
 //   @override
@@ -153,7 +157,8 @@
 //           returnValue: Future<void>.value(null),
 //           returnValueForMissingStub: Future.value()) as _i13.Future<void>);
 //   @override
-//   _i13.Future<_i5.Room> createRoom(_i18.CreateRoomRequestModel? requestModel) =>
+//   _i13.Future<_i5.Room>
+//createRoom(_i18.CreateRoomRequestModel? requestModel) =>
 //       (super.noSuchMethod(Invocation.method(#createRoom, [requestModel]),
 //               returnValue: Future<_i5.Room>.value(_FakeRoom()))
 //           as _i13.Future<_i5.Room>);
@@ -161,7 +166,8 @@
 //   _i13.Future<void> setRoomParticipantReady(
 //           String? roomId, String? participantId) =>
 //       (super.noSuchMethod(
-//           Invocation.method(#setRoomParticipantReady, [roomId, participantId]),
+//
+//Invocation.method(#setRoomParticipantReady, [roomId, participantId]),
 //           returnValue: Future<void>.value(null),
 //           returnValueForMissingStub: Future.value()) as _i13.Future<void>);
 //   @override
@@ -440,7 +446,8 @@
 //           returnValue: _FakeProductDetails()) as _i8.ProductDetails);
 //   @override
 //   bool get sandboxTesting => (super
-//           .noSuchMethod(Invocation.getter(#sandboxTesting), returnValue: false)
+//
+//.noSuchMethod(Invocation.getter(#sandboxTesting), returnValue: false)
 //       as bool);
 //   @override
 //   bool get simulatesAskToBuyInSandbox =>

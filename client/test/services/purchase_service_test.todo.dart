@@ -417,7 +417,8 @@
 //     verifyNoMoreInteractions(mockApiClient);
 //   });
 
-//   test('Successful canceling or handling failed purchase on Android', () async {
+//   test('Successful canceling or handling failed purchase on Android',
+// () async {
 //     const userId = 'user1';
 //     final product1 = createProduct(1);
 //     final purchase1 = FakePurchaseDetails(
