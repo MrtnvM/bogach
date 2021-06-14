@@ -823,6 +823,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.1"
+  k_chart:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: master
+      resolved-ref: "3606a1c254af1f987f2df88214b4faffad660feb"
+      url: "https://github.com/MrtnvM/k_chart"
+    source: git
+    version: "0.2.0"
   launch_review:
     dependency: "direct main"
     description:

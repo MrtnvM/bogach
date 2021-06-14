@@ -67,6 +67,8 @@ export namespace StockEventGenerator {
       stockEventCandles.reduce((acc, c) => c.close + acc, 0) / monthCountInYear;
     const currentPrice = random.float(currentCandle.low, currentCandle.high);
 
+    stockEventCandles[stockEventCandles.length - 1].close = currentPrice;
+
     const maxCount = random.int(9, 14) * 10;
 
     return generateEvent({
@@ -90,7 +92,7 @@ export namespace StockEventGenerator {
     // to avoid array exceed
     const stockCandlesProlonged = stockCandles.concat(stockCandles);
 
-    let candles = stockCandlesProlonged.slice(0, currentCandleIndex);
+    let candles = stockCandlesProlonged.slice(0, currentCandleIndex + 1);
     candles = candles.slice(-Math.min(historyCandlesLength, candles.length));
 
     const candleHistoryNotFull = candles.length < historyCandlesLength;

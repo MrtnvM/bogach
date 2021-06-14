@@ -47,9 +47,11 @@ VoidCallback useBusinessBuyPlayerActionHandler({
       return;
     }
 
+    const inCredit = false;
     final playerAction = BusinessBuyPlayerAction(
       const BuySellAction.buy(),
       event.id,
+      inCredit,
     );
 
     final action = SendPlayerMoveAction(

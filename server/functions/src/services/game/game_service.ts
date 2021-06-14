@@ -39,6 +39,7 @@ import produce, { Draft } from 'immer';
 import { PlayedGameInfo } from '../../models/domain/user/player_game_info';
 import { PurchaseProfileEntity } from '../../models/purchases/purchase_profile';
 import { nowInUtc } from '../../utils/datetime';
+import { CreditHandler } from '../../events/common/credit_handler';
 
 export class GameService {
   constructor(
@@ -55,7 +56,7 @@ export class GameService {
   private handlers: PlayerActionHandler[] = [
     new DebentureEventHandler(),
     new StockEventHandler(),
-    new BusinessBuyEventHandler(),
+    new BusinessBuyEventHandler(new CreditHandler()),
     new BusinessSellEventHandler(),
     new IncomeHandler(),
     new ExpenseHandler(),
