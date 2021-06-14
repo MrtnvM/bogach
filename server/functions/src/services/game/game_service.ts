@@ -162,7 +162,9 @@ export class GameService {
 
       if (updatedGame.state.gameStatus === 'game_over') {
         const statistic = await this.gameProvider.updateLevelStatistic(updatedGame);
-        updatedGame = applyGameTransformers(game, [new StatisticsTransformer(statistic, userId)]);
+        updatedGame = applyGameTransformers(updatedGame, [
+          new StatisticsTransformer(statistic, userId),
+        ]);
 
         await this.gameProvider.updateGameParticipantsCompletedGames(updatedGame);
       }

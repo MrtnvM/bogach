@@ -51,7 +51,7 @@ describe('Game Service - Singleplayer game', () => {
     });
 
     const expectedGameState = produce(game.state, (draft) => {
-      draft.winners = [{ userId, targetValue: 0.021 }];
+      draft.winners = [{ userId, targetValue: 0.021, benchmark: 0 }];
     });
 
     const expectedParticipantState = produce(game.participants[userId].progress, (draft) => {
@@ -96,7 +96,7 @@ describe('Game Service - Singleplayer game', () => {
 
     const expectedGameState = produce(game.state, (draft) => {
       draft.monthNumber += 1;
-      draft.winners = [{ userId, targetValue: 0.029 }];
+      draft.winners = [{ userId, targetValue: 0.029, benchmark: 0 }];
     });
 
     const [newGame] = capture(mockGameProvider.updateGame).last();
@@ -118,6 +118,10 @@ describe('Game Service - Singleplayer game', () => {
     });
 
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
+    when(mockGameProvider.updateLevelStatistic(anything())).thenResolve({
+      id: 'level1',
+      statistic: new Map<string, number>(),
+    });
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
@@ -129,7 +133,7 @@ describe('Game Service - Singleplayer game', () => {
     const expectedGameState = produce(game.state, (draft) => {
       draft.monthNumber += 1;
       draft.gameStatus = 'game_over';
-      draft.winners = [{ userId, targetValue: 1.008999 }];
+      draft.winners = [{ userId, targetValue: 1.008999, benchmark: 0 }];
     });
 
     const expectedParticipantProgress = produce(game.participants[userId].progress, (draft) => {
@@ -176,6 +180,10 @@ describe('Game Service - Singleplayer game', () => {
     });
 
     when(mockGameProvider.getGame(gameId)).thenResolve(singleplayerGame);
+    when(mockGameProvider.updateLevelStatistic(anything())).thenResolve({
+      id: 'level1',
+      statistic: new Map<string, number>(),
+    });
 
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
@@ -194,11 +202,7 @@ describe('Game Service - Singleplayer game', () => {
     when(mockUserProvider.getUserProfile(userId)).thenResolve(initialProfile);
     when(mockUserProvider.getUserPurchases(userId)).thenResolve([]);
 
-    await gameService.reduceMultiplayerGames(
-      [initialProfile.userId],
-      'gameId',
-      gameCreationDate
-    );
+    await gameService.reduceMultiplayerGames([initialProfile.userId], 'gameId', gameCreationDate);
 
     const [newUserProfile] = capture(mockUserProvider.updateUserProfile).last();
     const expectedProfile = produce(initialProfile, (draft) => {

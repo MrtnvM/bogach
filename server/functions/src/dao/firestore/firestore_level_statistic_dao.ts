@@ -18,7 +18,7 @@ export class FirestoreLevelStatisticDAO implements ILevelStatisticDAO {
 
   async getLevelStatistic(templateId: GameTemplateEntity.Id): Promise<LevelStatistic> {
     const selector = this.selector.levelStatistic(templateId);
-    var statistic = await this.firestore.getItemData(selector);
+    let statistic = await this.firestore.getItemData(selector);
 
     if (!statistic) {
       statistic = await this.firestore.createItem(selector, {
