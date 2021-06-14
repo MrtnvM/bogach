@@ -90,11 +90,24 @@ bool useIsCurrentParticipantWinGame() {
 
 int useCurrentParticipantBenchmark() {
   final userId = useUserId();
-  final percent = useCurrentGame((g) => g?.state.winners.firstWhere(
-        (p) => p.userId == userId,
-      ).benchmark) ?? 0;
+  final percent = useCurrentGame((g) {
+    if (g == null) {
+      return 0;
+    }
 
-  return percent;
+    final winnerIndex = g.state.winners.indexWhere(
+      (p) => p.userId == userId,
+    );
+
+    if (winnerIndex < 0) {
+      return 0;
+    }
+
+    final winner = g.state.winners[winnerIndex];
+    return winner.benchmark;
+  });
+
+  return percent ?? 0;
 }
 
 void useGameWatcher() {
