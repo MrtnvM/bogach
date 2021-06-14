@@ -10,7 +10,12 @@ describe('Statistics Transformer Tests', () => {
 
   const statistics = (months: number[]): LevelStatistic => ({
     id: 'level1',
-    statistic: new Map<string, number>(months.map((month, index) => [`user${index}`, month])),
+    statistic: months
+      .map((month, index) => [`user${index}`, month])
+      .reduce((acc, [playerUserId, month]) => {
+        acc[playerUserId] = month;
+        return acc;
+      }, {}),
   });
 
   const createGame = (currentMonth: number) => {
@@ -50,7 +55,7 @@ describe('Statistics Transformer Tests', () => {
   test('Benchamark calculated correctly - equal to 0', async () => {
     const currentMonth = 13;
     const statistic1 = statistics([10, 12, 8, 9, 10]);
-    statistic1.statistic.set(userId, currentMonth);
+    statistic1.statistic[userId] = currentMonth;
     const transformer = new StatisticsTransformer(statistic1, userId);
     const game = createGame(currentMonth);
 
@@ -62,7 +67,7 @@ describe('Statistics Transformer Tests', () => {
   test('Benchamark calculated correctly', async () => {
     const currentMonth = 9;
     const statistic1 = statistics([10, 12, 8, 9, 10, 16, 11]);
-    statistic1.statistic.set(userId, currentMonth);
+    statistic1.statistic[userId] = currentMonth;
     const transformer = new StatisticsTransformer(statistic1, userId);
     const game = createGame(currentMonth);
 
@@ -74,7 +79,7 @@ describe('Statistics Transformer Tests', () => {
   test('Benchamark calculated correctly for best result', async () => {
     const currentMonth = 8;
     const statistic1 = statistics([10, 12, 8, 9, 10, 16, 11]);
-    statistic1.statistic.set(userId, currentMonth);
+    statistic1.statistic[userId] = currentMonth;
     const transformer = new StatisticsTransformer(statistic1, userId);
     const game = createGame(currentMonth);
 

@@ -16,8 +16,8 @@ export class StatisticsTransformer extends GameTransformer {
   apply(game: Game): Game {
     const currentUserResult = game.state.monthNumber;
 
-    const allResults = [...this.statistics.statistic.keys()]
-      .map((userId) => this.statistics.statistic.get(userId) as number)
+    const allResults = Object.keys(this.statistics.statistic)
+      .map((userId) => this.statistics.statistic[userId])
       .sort((result1, result2) => result1 - result2);
 
     if (allResults.length <= 4) {
@@ -40,8 +40,8 @@ export class StatisticsTransformer extends GameTransformer {
       return game;
     }
 
-    const benchmark =
-      ((allResults.length - (currentUserResultIndex + 1)) / allResults.length) * 100;
+    const benchamarkValue = (allResults.length - (currentUserResultIndex + 1)) / allResults.length;
+    const benchmark = Math.round(benchamarkValue * 100);
 
     return produce(game, (draft) => {
       const winnerIndex = draft.state.winners.findIndex((w) => w.userId === this.userId);

@@ -1,9 +1,8 @@
 import { Entity } from '../../../core/domain/entity';
-import { UserEntity } from '../user/user';
 
 export interface LevelStatistic {
   readonly id: LevelStatistic.Id;
-  readonly statistic: Map<UserEntity.Id, number>;
+  readonly statistic: { [userId: string]: number };
 }
 
 export namespace LevelStatistic {

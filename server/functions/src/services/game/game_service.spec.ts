@@ -120,7 +120,7 @@ describe('Game Service - Singleplayer game', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve(game);
     when(mockGameProvider.updateLevelStatistic(anything())).thenResolve({
       id: 'level1',
-      statistic: new Map<string, number>(),
+      statistic: {},
     });
 
     const gameContext: GameContext = { gameId, userId };
@@ -182,7 +182,7 @@ describe('Game Service - Singleplayer game', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve(singleplayerGame);
     when(mockGameProvider.updateLevelStatistic(anything())).thenResolve({
       id: 'level1',
-      statistic: new Map<string, number>(),
+      statistic: {},
     });
 
     const gameContext: GameContext = { gameId, userId };
