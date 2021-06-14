@@ -364,25 +364,19 @@ export class GameProvider {
 
   async updateLevelStatistic(game: Game): Promise<LevelStatistic> {
     const templateId = game.config.gameTemplateId;
-    
-    const updateStatisticOperations = game.participantsIds.map(async (participantId) => {
-      const user = await this.userDao.getUser(participantId);
-      if (!user) {
-        throw new Error("ERROR: Can't find the user with id:" + participantId);
-        return;
-      }
 
+    const updateStatisticOperations = game.participantsIds.map(async (userId) => {
       const isWinner =
-        game.state.winners.find(
-          (winner) => winner.userId === user.userId && winner.targetValue >= 1
-        ) !== undefined;
+        game.state.winners.find((winner) => winner.userId === userId && winner.targetValue >= 1) !==
+        undefined;
 
-      const isSingleplayerGame = game.type === 'singleplayer' && !game.config.level && isWinner;
-      if (isSingleplayerGame) {
+      const isSingleplayerGame = game.type === 'singleplayer' && !game.config.level;
 
+      if (isSingleplayerGame && isWinner) {
         const statistic = await this.levelStatisticDao.getLevelStatistic(templateId);
+
         const updatedStatistic = produce(statistic, (draft) => {
-          draft.statistic[user.userId] = game.state.monthNumber;
+          draft.statistic[userId] = game.state.monthNumber;
         });
 
         await this.levelStatisticDao.updateLevelStatistic(updatedStatistic);

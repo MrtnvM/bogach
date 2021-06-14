@@ -17,6 +17,7 @@ import {
   applyGameTransformers,
   HistoryGameTransformer,
   UpdateMoveStartDateTransformer,
+  StatisticsTransformer,
 } from '../../transformers/game_transformers';
 import { IncomeHandler } from '../../events/income/income_handler';
 import { ExpenseHandler } from '../../events/expense/expense_handler';
@@ -38,7 +39,6 @@ import produce, { Draft } from 'immer';
 import { PlayedGameInfo } from '../../models/domain/user/player_game_info';
 import { PurchaseProfileEntity } from '../../models/purchases/purchase_profile';
 import { nowInUtc } from '../../utils/datetime';
-import { StatisticsTransformer } from '../../transformers/game/statistic_transformer';
 
 export class GameService {
   constructor(
@@ -161,12 +161,10 @@ export class GameService {
       }
 
       if (updatedGame.state.gameStatus === 'game_over') {
-        await this.gameProvider.updateGameParticipantsCompletedGames(updatedGame);
-
         const statistic = await this.gameProvider.updateLevelStatistic(updatedGame);
-        updatedGame = applyGameTransformers(game, [
-          new StatisticsTransformer(statistic),
-        ]);
+        updatedGame = applyGameTransformers(game, [new StatisticsTransformer(statistic, userId)]);
+
+        await this.gameProvider.updateGameParticipantsCompletedGames(updatedGame);
       }
 
       if (game.state.monthNumber < updatedGame.state.monthNumber) {
