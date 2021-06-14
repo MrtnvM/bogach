@@ -162,10 +162,14 @@ export class GameService {
       }
 
       if (updatedGame.state.gameStatus === 'game_over') {
-        const statistic = await this.gameProvider.updateLevelStatistic(updatedGame);
-        updatedGame = applyGameTransformers(updatedGame, [
-          new StatisticsTransformer(statistic, userId),
-        ]);
+        const isSingleplayerGame = game.type === 'singleplayer' && !game.config.level;
+
+        if (isSingleplayerGame) {
+          const statistic = await this.gameProvider.updateLevelStatistic(updatedGame);
+          updatedGame = applyGameTransformers(updatedGame, [
+            new StatisticsTransformer(statistic, userId),
+          ]);
+        }
 
         await this.gameProvider.updateGameParticipantsCompletedGames(updatedGame);
       }
