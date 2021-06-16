@@ -33,6 +33,7 @@ Map<String, String> useBusinessBuyInfoTableData(GameEvent event) {
 VoidCallback useBusinessBuyPlayerActionHandler({
   required GameEvent event,
   required BuySellAction action,
+  required inCredit,
 }) {
   final dispatch = useDispatcher();
   final context = useContext();
@@ -43,11 +44,10 @@ VoidCallback useBusinessBuyPlayerActionHandler({
     final eventData = event.data as BusinessBuyEventData;
     final price = eventData.currentPrice - eventData.debt;
 
-    if (!isEnoughCash(price.toDouble())) {
+    if (inCredit == false && !isEnoughCash(price.toDouble())) {
       return;
     }
 
-    const inCredit = false;
     final playerAction = BusinessBuyPlayerAction(
       const BuySellAction.buy(),
       event.id,
