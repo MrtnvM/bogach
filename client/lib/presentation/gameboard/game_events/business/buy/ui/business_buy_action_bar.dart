@@ -24,6 +24,7 @@ class BusinessBuyActionBar extends HookWidget {
     final skipPlayerAction = useSkipAction(event.id);
 
     return PlayerActionBar(
+      buySellAction: const BuySellAction.buy(),
       confirm: () {
         sendPlayerAction();
         AnalyticsSender.buyBusiness(

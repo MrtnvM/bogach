@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
@@ -7,15 +8,17 @@ import 'package:flutter/material.dart';
 
 class PlayerActionBar extends StatelessWidget {
   const PlayerActionBar({
-    required this.confirm,
     Key? key,
+    required this.confirm,
     this.takeLoan,
     this.skip,
+    this.buySellAction,
   }) : super(key: key);
 
   final VoidCallback confirm;
   final VoidCallback? takeLoan;
   final VoidCallback? skip;
+  final BuySellAction? buySellAction;
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +55,14 @@ class PlayerActionBar extends StatelessWidget {
               ),
             Expanded(
               child: _actionBarItem(
-                color: takeLoan != null ? ColorRes.white : ColorRes.mainGreen,
-                text: Strings.confirm,
+                color: buySellAction == const BuySellAction.sell()
+                    ? ColorRes.mainRed
+                    : ColorRes.mainGreen,
+                text: buySellAction != null
+                    ? buySellAction == const BuySellAction.buy()
+                        ? Strings.buy
+                        : Strings.sell
+                    : Strings.ok,
                 onPressed: confirm,
               ),
             ),
@@ -82,12 +91,13 @@ class PlayerActionBar extends StatelessWidget {
     required String text,
     Function()? onPressed,
   }) {
-    return Container(
+    return AnimatedContainer(
       color: color,
+      duration: const Duration(milliseconds: 50),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          primary: color,
+          primary: Colors.transparent,
           padding: const EdgeInsets.all(0),
           elevation: 0,
         ),
@@ -96,12 +106,12 @@ class PlayerActionBar extends StatelessWidget {
           constraints: const BoxConstraints.expand(),
           child: AutoSizeText(
             text,
-            minFontSize: 10,
+            minFontSize: 11,
             overflow: TextOverflow.visible,
             textAlign: TextAlign.center,
             maxLines: 2,
             style: Styles.bodyBlack.copyWith(
-              fontSize: 13,
+              fontSize: 14.5,
               color: color == ColorRes.white ? ColorRes.black : ColorRes.white,
             ),
           ),

@@ -20,7 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class StockGameEvent extends HookWidget {
-  const StockGameEvent(this.event, this.selectorState);
+  StockGameEvent(this.event, this.selectorState)
+      : super(key: ValueKey(event.id));
 
   final GameEvent event;
   final ValueNotifier<SelectorState> selectorState;

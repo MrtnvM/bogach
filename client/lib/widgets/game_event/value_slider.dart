@@ -32,9 +32,8 @@ class ValueSlider extends HookWidget {
     final isEnoughCash = isSellAction(currentAction) ||
         isBuyAction(currentAction) && totalPrice <= account.cash;
 
-    final sliderActiveColor = isEnoughCash
-        ? ColorRes.mainGreen //
-        : ColorRes.primaryYellowColor;
+    final sliderActiveColor =
+        isEnoughCash ? ColorRes.mainGreen : ColorRes.grey2;
     final sliderInactiveColor = isEnoughCash
         ? ColorRes.lightGreen.withOpacity(0.6)
         : ColorRes.primaryYellowColor.withOpacity(0.4);

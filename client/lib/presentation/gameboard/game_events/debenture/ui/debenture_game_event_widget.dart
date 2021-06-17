@@ -17,7 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class DebentureGameEventWidget extends HookWidget {
-  const DebentureGameEventWidget(this.event, this.selectorState);
+  DebentureGameEventWidget(this.event, this.selectorState)
+      : super(key: ValueKey(event.id));
 
   final GameEvent event;
   final ValueNotifier<SelectorState> selectorState;

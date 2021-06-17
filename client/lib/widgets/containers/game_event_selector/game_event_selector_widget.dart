@@ -18,7 +18,7 @@ class GameEventSelectorWidget extends HookWidget {
     required this.viewModel,
     required this.onPlayerActionParamsChanged,
     Key? key,
-  })  : super(key: key);
+  }) : super(key: key);
 
   final SelectorViewModel viewModel;
   final OnPlayerActionParamsChanged onPlayerActionParamsChanged;
@@ -39,25 +39,26 @@ class GameEventSelectorWidget extends HookWidget {
 
     _selectedCount.value = selectorStateModel.selectedCount;
 
-    return CardContainer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          if (viewModel.changeableType)
-            BuySellBar(
-              selectedAction: _buySellAction.value,
-              onActionChanged: (action) {
-                _selectedCount.value = 1;
-                _buySellAction.value = action;
-                onPlayerActionParamsChanged(action, _selectedCount.value);
-              },
-              canSell: selectorStateModel.canSell,
-            ),
-          Padding(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        if (viewModel.changeableType)
+          BuySellBar(
+            selectedAction: _buySellAction.value,
+            onActionChanged: (action) {
+              _selectedCount.value = 1;
+              _buySellAction.value = action;
+              onPlayerActionParamsChanged(action, _selectedCount.value);
+            },
+            canSell: selectorStateModel.canSell,
+          ),
+        CardContainer(
+          child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Column(
               children: <Widget>[
                 PriceCalculator(
+                  action: _buySellAction.value,
                   count: selectorStateModel.selectedCount,
                   currentPrice: viewModel.currentPrice!.toDouble(),
                   onCountChanged: (count) {
@@ -83,8 +84,8 @@ class GameEventSelectorWidget extends HookWidget {
               ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

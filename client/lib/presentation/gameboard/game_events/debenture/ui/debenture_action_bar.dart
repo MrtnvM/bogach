@@ -33,6 +33,7 @@ class DebentureActionBar extends HookWidget {
     final skipPlayerAction = useSkipAction(event.id);
 
     return PlayerActionBar(
+      buySellAction: action,
       confirm: () {
         sendPlayerAction();
 
