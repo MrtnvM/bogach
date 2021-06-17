@@ -25,11 +25,16 @@ class PlayerActionBar extends StatelessWidget {
       key: gameTutorial?.gameEventActionsKey,
       height: 49,
       decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black.withAlpha(10),
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(20),
-            blurRadius: 3,
-            spreadRadius: 3,
+            color: Colors.black.withAlpha(25),
+            blurRadius: 5,
+            spreadRadius: 5,
           ),
         ],
       ),
@@ -77,25 +82,28 @@ class PlayerActionBar extends StatelessWidget {
     required String text,
     Function()? onPressed,
   }) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        primary: color,
-        padding: const EdgeInsets.all(0),
-        elevation: 0,
-      ),
-      child: Container(
-        alignment: Alignment.center,
-        constraints: const BoxConstraints.expand(),
-        child: AutoSizeText(
-          text,
-          minFontSize: 10,
-          overflow: TextOverflow.visible,
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          style: Styles.bodyBlack.copyWith(
-            fontSize: 13,
-            color: color == ColorRes.white ? ColorRes.black : ColorRes.white,
+    return Container(
+      color: color,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          primary: color,
+          padding: const EdgeInsets.all(0),
+          elevation: 0,
+        ),
+        child: Container(
+          alignment: Alignment.center,
+          constraints: const BoxConstraints.expand(),
+          child: AutoSizeText(
+            text,
+            minFontSize: 10,
+            overflow: TextOverflow.visible,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            style: Styles.bodyBlack.copyWith(
+              fontSize: 13,
+              color: color == ColorRes.white ? ColorRes.black : ColorRes.white,
+            ),
           ),
         ),
       ),

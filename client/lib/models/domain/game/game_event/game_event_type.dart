@@ -4,10 +4,10 @@ import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/de
 import 'package:cash_flow/presentation/gameboard/game_events/expense/models/expense_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/income/models/income_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/insurance/models/insurance_event_data.dart';
-import 'package:cash_flow/presentation/gameboard/game_events/monthly_payment/monthly_expense_event_data.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/monthly_payment/models/monthly_expense_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/news/models/news_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/real_estate/models/real_estate_buy_event_data.dart';
-import 'package:cash_flow/presentation/gameboard/game_events/salary_change/salary_change_event_data.dart';
+import 'package:cash_flow/presentation/gameboard/game_events/salary_change/models/salary_change_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/model/stock_event_data.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -131,5 +131,4 @@ class GameEventType with _$GameEventType {
   static String toJson(GameEventType type) {
     return type.jsonValue();
   }
-
 }

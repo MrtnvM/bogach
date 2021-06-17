@@ -47,13 +47,13 @@ BusinessesToSellData useBusinessToSellData(GameEvent event) {
 
     final businessesToSellData = businessesToSell.map((businessToSell) {
       final businessData = {
-        Strings.offeredPrice: eventData.currentPrice!.toPrice(),
+        Strings.offeredPrice: eventData.currentPrice.toPrice(),
         Strings.fairPrice: businessToSell.fairPrice.toPrice(),
         Strings.downPayment: businessToSell.downPayment.toPrice(),
         Strings.passiveIncomePerMonth:
             businessToSell.passiveIncomePerMonth.toPrice(),
         Strings.roi: businessToSell.payback.toPercent(),
-        Strings.sellProbability: eventData.sellProbability!.toPercent(),
+        Strings.sellProbability: eventData.sellProbability.toPercent(),
       };
 
       return BusinessToSellTableData(
