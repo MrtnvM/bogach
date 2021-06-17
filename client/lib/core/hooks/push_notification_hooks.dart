@@ -57,8 +57,6 @@ void usePushMessageSubscription(void onMessage(Map<String, dynamic> message)) {
   final onPushNotification = (message) {
     if (message?.data != null) {
       onMessage(message.data);
-    } else {
-      Fimber.e('Push notification with empty data', ex: message);
     }
   };
 
