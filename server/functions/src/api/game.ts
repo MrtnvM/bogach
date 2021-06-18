@@ -17,7 +17,13 @@ export const create = (daos: DAOs) => {
 
   const gameLevelsProvider = new GameLevelsProvider();
   const gameTemplatesProvider = new GameTemplatesProvider();
-  const gameProvider = new GameProvider(daos.game, daos.room, daos.user, gameTemplatesProvider);
+  const gameProvider = new GameProvider(
+    daos.game,
+    daos.room,
+    daos.user,
+    daos.levelStatistic,
+    gameTemplatesProvider
+  );
   const userProvider = new UserProvider(daos.user);
   const timerProvider = new TimerProvider();
 
@@ -34,7 +40,7 @@ export const create = (daos: DAOs) => {
 
     const templateId = apiRequest.jsonField('templateId');
     const participantsIds = apiRequest.optionalJsonField('participantsIds');
-    
+
     const userId = apiRequest.optionalJsonField('userId');
 
     const game = gameService.createNewGame(templateId, participantsIds || [userId]);

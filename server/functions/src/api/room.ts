@@ -17,7 +17,13 @@ export const create = (daos: DAOs) => {
 
   const gameTemplatesProvider = new GameTemplatesProvider();
   const gameLevelProvider = new GameLevelsProvider();
-  const gameProvider = new GameProvider(daos.game, daos.room, daos.user, gameTemplatesProvider);
+  const gameProvider = new GameProvider(
+    daos.game,
+    daos.room,
+    daos.user,
+    daos.levelStatistic,
+    gameTemplatesProvider,
+  );
   const userProvider = new UserProvider(daos.user);
   const timerProvider = new TimerProvider();
   const firebaseMessaging = new FirebaseMessaging();

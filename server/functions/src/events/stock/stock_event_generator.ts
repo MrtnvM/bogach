@@ -8,6 +8,7 @@ import { randomValueFromRange, valueRange } from '../../core/data/value_range';
 import { StockEventCandlesDataSource } from './stock_event_candles_data_source';
 import { readJsonFileSync } from '../../utils/json';
 import { stocksImagesConfigPath } from '../../scripts/generate_stocks_image_config';
+import { produce } from 'immer';
 
 const stockCandlesCache: { [stock: string]: StockEvent.Candle[] } = {};
 const stocksImagesCache: { [stock: string]: string } = {};
@@ -67,7 +68,11 @@ export namespace StockEventGenerator {
       stockEventCandles.reduce((acc, c) => c.close + acc, 0) / monthCountInYear;
     const currentPrice = random.float(currentCandle.low, currentCandle.high);
 
-    stockEventCandles[stockEventCandles.length - 1].close = currentPrice;
+    const lastCandleIndex = stockEventCandles.length - 1;
+    const lastCandle = produce(stockEventCandles[lastCandleIndex], (draft) => {
+      draft.close = currentPrice;
+    });
+    stockEventCandles[lastCandleIndex] = lastCandle;
 
     const maxCount = random.int(9, 14) * 10;
 

@@ -21,12 +21,15 @@ import { IGameDAO } from '../dao/game_dao';
 import { IRoomDAO } from '../dao/room_dao';
 import { IUserDAO } from '../dao/user_dao';
 import { LastGameInfo, LastGamesEntity } from '../models/domain/user/last_games';
+import { ILevelStatisticDAO } from '../dao/level_statistic_dao';
+import { LevelStatistic } from '../models/domain/level_statistic/level_statistic';
 
 export class GameProvider {
   constructor(
     private gameDao: IGameDAO,
     private roomDao: IRoomDAO,
     private userDao: IUserDAO,
+    private levelStatisticDao: ILevelStatisticDAO,
     private gameTemplateProvider: GameTemplatesProvider
   ) {}
 
@@ -314,6 +317,13 @@ export class GameProvider {
 
           draft.singleplayerGames.push(newLastGame);
         });
+
+        const statistic = await this.levelStatisticDao.getLevelStatistic(templateId);
+        const updatedStatistic = produce(statistic, (draft) => {
+          draft.statistic[user.userId] = game.state.monthNumber;
+        });
+
+        await this.levelStatisticDao.updateLevelStatistic(updatedStatistic);
       }
 
       const isQuestGame = game.type === 'singleplayer' && game.config.level && isWinner;
@@ -350,6 +360,32 @@ export class GameProvider {
     });
 
     await Promise.all(updateProfileOperations);
+  }
+
+  async updateLevelStatistic(game: Game): Promise<LevelStatistic> {
+    const templateId = game.config.gameTemplateId;
+
+    const updateStatisticOperations = game.participantsIds.map(async (userId) => {
+      const isWinner =
+        game.state.winners.find((winner) => winner.userId === userId && winner.targetValue >= 1) !==
+        undefined;
+
+      const isSingleplayerGame = game.type === 'singleplayer' && !game.config.level;
+
+      if (isSingleplayerGame && isWinner) {
+        const statistic = await this.levelStatisticDao.getLevelStatistic(templateId);
+
+        const updatedStatistic = produce(statistic, (draft) => {
+          draft.statistic[userId] = game.state.monthNumber;
+        });
+
+        await this.levelStatisticDao.updateLevelStatistic(updatedStatistic);
+      }
+    });
+
+    await Promise.all(updateStatisticOperations);
+
+    return this.levelStatisticDao.getLevelStatistic(templateId);
   }
 
   private checkParticipantsIds(participantsIds: any) {

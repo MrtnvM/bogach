@@ -104,6 +104,7 @@ export namespace GameEntity {
   export type Winner = {
     readonly userId: UserEntity.Id;
     readonly targetValue: number;
+    readonly benchmark: number;
   };
 
   export type History = { months: HistoryMonth[] };

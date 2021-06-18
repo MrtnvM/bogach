@@ -383,10 +383,13 @@ class Strings {
   static String get winnersPageDescription => 'Ты достиг своей цели всего за';
   static String get winnersMultiplayerPageDescription =>
       'Ты достиг своей цели!';
+  static String get wonForNMonths => 'Ты достиг своей цели за';
+  static String wonFasterThan(int percentage) =>
+      'Быстрее чем $percentage% пользователей!';
 
-  static String get gameFailedPageTitle => 'Цель не достигнута!';
+  static String get gameFailedPageTitle => 'Цель не достигнута';
   static String get gameFailedPageDescription =>
-      'Ты явно можешь лучше!\nНужна еще одна попытка!';
+      'Ты явно можешь лучше.\nНужна еще одна попытка!';
 
   static String get startAgain => 'Начать заново';
 
