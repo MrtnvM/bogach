@@ -131,19 +131,18 @@ class LoginPage extends HookWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
+          const SizedBox(width: 24),
           SvgPicture.asset(icon, width: 24, height: 24),
-          const SizedBox(width: 12),
-          Flexible(
-            child: SizedBox(
-              height: 44,
-              child: Center(
-                child: SizedBox(
-                  width: 200,
-                  child: Text(
-                    Strings.getAuthButtonTitle(title),
-                    style: Styles.subhead.copyWith(color: ColorRes.mainBlack),
-                    maxLines: 1,
-                  ),
+          const SizedBox(width: 20),
+          SizedBox(
+            height: 44,
+            child: Center(
+              child: SizedBox(
+                width: 200,
+                child: Text(
+                  Strings.getAuthButtonTitle(title),
+                  style: Styles.subhead.copyWith(color: ColorRes.mainBlack),
+                  maxLines: 1,
                 ),
               ),
             ),
