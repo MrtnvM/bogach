@@ -90,9 +90,10 @@ bool useIsCurrentParticipantWinGame() {
 
 int useCurrentParticipantBenchmark() {
   final userId = useUserId();
+  const defaultBenchmarkPercentValue = 0;
   final percent = useCurrentGame((g) {
     if (g == null) {
-      return 0;
+      return defaultBenchmarkPercentValue;
     }
 
     final winnerIndex = g.state.winners.indexWhere(
@@ -100,14 +101,14 @@ int useCurrentParticipantBenchmark() {
     );
 
     if (winnerIndex < 0) {
-      return 0;
+      return defaultBenchmarkPercentValue;
     }
 
     final winner = g.state.winners[winnerIndex];
     return winner.benchmark;
   });
 
-  return percent ?? 0;
+  return percent ?? defaultBenchmarkPercentValue;
 }
 
 void useGameWatcher() {
