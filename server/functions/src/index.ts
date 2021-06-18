@@ -16,6 +16,7 @@ import { RealtimeDatabaseGameDAO } from './dao/realtime_database/realtime_databa
 import { FirestoreRoomDAO } from './dao/firestore/firestore_room_dao';
 import { FirestoreUserDAO } from './dao/firestore/firestore_user_dao';
 import { DAOs } from './dao/daos';
+import { FirestoreLevelStatisticDAO } from './dao/firestore/firestore_level_statistic_dao';
 
 admin.initializeApp({
   databaseURL: getDatabaseURL(),
@@ -33,8 +34,9 @@ const db = new RealtimeDatabase();
 const gameDao = new RealtimeDatabaseGameDAO(refs, db);
 const roomDao = new FirestoreRoomDAO(selector, firestore);
 const userDao = new FirestoreUserDAO(selector, firestore);
+const levelStatistic = new FirestoreLevelStatisticDAO(selector, firestore);
 
-const daos: DAOs = { game: gameDao, user: userDao, room: roomDao };
+const daos: DAOs = { game: gameDao, user: userDao, room: roomDao, levelStatistic: levelStatistic };
 
 const GameAPI = gameAPI.create(daos);
 const RoomAPI = roomAPI.create(daos);

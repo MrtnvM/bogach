@@ -21,8 +21,9 @@ class WinnersPage extends HookWidget {
   Widget build(BuildContext context) {
     final isWin = useIsCurrentParticipantWinGame();
     final isMultiplayer = useIsMultiplayerGame();
-    final isQuest = useIsQuestGame();
+    final isSingleplayer = useIsSingleplayerGame();
     final gameExists = useCurrentGame((g) => g != null)!;
+    final benchmark = useCurrentParticipantBenchmark();
 
     if (!gameExists) {
       return LoadableView(
@@ -44,17 +45,18 @@ class WinnersPage extends HookWidget {
             const SizedBox(height: 40),
             _HeadlineTitle(isWin: isWin),
             const SizedBox(height: 24),
-            _HeadlineDescription(isWin: isWin, isMultiplayer: isMultiplayer),
+            _HeadlineDescription(
+              isWin: isWin,
+              isMultiplayer: isMultiplayer,
+              isSinglePlayer: isSingleplayer,
+              benchmark: benchmark,
+            ),
             if (isMultiplayer) ...[
               const SizedBox(height: 24),
               _PlayerResultTable(),
             ],
             const SizedBox(height: 54),
             if (isWin) ...[
-              if (isQuest) ...[
-                _GoToQuestsButton(),
-                const SizedBox(height: 16),
-              ],
               _GoToMainMenuButton(),
             ] else ...[
               if (!isMultiplayer) ...[
@@ -65,20 +67,6 @@ class WinnersPage extends HookWidget {
             ],
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _GoToQuestsButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 200),
-      child: ColorButton(
-        color: ColorRes.yellow,
-        text: Strings.goToQuests,
-        onPressed: appRouter.goBack,
       ),
     );
   }
@@ -129,7 +117,7 @@ class _MonthCountDescription extends HookWidget {
           '$monthNumber ${Strings.months(monthNumber)}',
           style: Styles.caption.copyWith(
             color: Colors.white,
-            fontSize: 24,
+            fontSize: 26,
           ),
         ),
       ],
@@ -141,29 +129,74 @@ class _HeadlineDescription extends StatelessWidget {
   const _HeadlineDescription({
     required this.isWin,
     required this.isMultiplayer,
+    required this.isSinglePlayer,
+    required this.benchmark,
     Key? key,
   }) : super(key: key);
 
-  final bool? isWin;
-  final bool? isMultiplayer;
+  final bool isWin;
+  final bool isMultiplayer;
+  final bool isSinglePlayer;
+  final int benchmark;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          isWin!
-              ? isMultiplayer!
-                  ? Strings.winnersMultiplayerPageDescription
-                  : Strings.winnersPageDescription
-              : Strings.gameFailedPageDescription,
-          style: const TextStyle(fontSize: 17, color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
-        if (isWin! && !isMultiplayer!) _MonthCountDescription(),
+        if (isWin) ...[
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            decoration: BoxDecoration(
+              color: Colors.white24,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withAlpha(150),
+                  blurRadius: 50,
+                )
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  _getWinnerLabel(),
+                  style: const TextStyle(
+                    fontSize: 17,
+                    color: Color(0xFFFCFCFC),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                if (isWin && !isMultiplayer) _MonthCountDescription(),
+              ],
+            ),
+          ),
+          if (benchmark > 0) ...[
+            const SizedBox(height: 20),
+            Text(
+              Strings.wonFasterThan(benchmark),
+              style: const TextStyle(fontSize: 18, color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ] else
+          Text(
+            Strings.gameFailedPageDescription,
+            style: const TextStyle(fontSize: 17, color: Color(0xFFFCFCFC)),
+            textAlign: TextAlign.center,
+          ),
       ],
     );
+  }
+
+  String _getWinnerLabel() {
+    if (isMultiplayer) {
+      return Strings.winnersMultiplayerPageDescription;
+    }
+
+    return Strings.wonForNMonths;
   }
 }
 
@@ -177,7 +210,7 @@ class _HeadlineTitle extends StatelessWidget {
     return Text(
       isWin! ? Strings.winnersPageTitle : Strings.gameFailedPageTitle,
       style: const TextStyle(
-        fontSize: 22,
+        fontSize: 24,
         color: Colors.white,
         fontWeight: FontWeight.w600,
       ),
@@ -211,8 +244,8 @@ class _PlayerResultTable extends HookWidget {
     final participants = useGlobalState((g) {
       final userProfiles = g.multiplayer.userProfiles;
       final participants = game.participantsIds //
-              .map((id) => userProfiles.itemsMap[id])
-              .toList();
+          .map((id) => userProfiles.itemsMap[id])
+          .toList();
 
       participants.sort((p1, p2) {
         final target1 = mapGameToCurrentTargetValue(game, p1!.userId);

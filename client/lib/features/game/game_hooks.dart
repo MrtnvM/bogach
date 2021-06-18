@@ -88,6 +88,29 @@ bool useIsCurrentParticipantWinGame() {
   return isWin ?? false;
 }
 
+int useCurrentParticipantBenchmark() {
+  final userId = useUserId();
+  const defaultBenchmarkPercentValue = 0;
+  final percent = useCurrentGame((g) {
+    if (g == null) {
+      return defaultBenchmarkPercentValue;
+    }
+
+    final winnerIndex = g.state.winners.indexWhere(
+      (p) => p.userId == userId,
+    );
+
+    if (winnerIndex < 0) {
+      return defaultBenchmarkPercentValue;
+    }
+
+    final winner = g.state.winners[winnerIndex];
+    return winner.benchmark;
+  });
+
+  return percent ?? defaultBenchmarkPercentValue;
+}
+
 void useGameWatcher() {
   final gameContext = useCurrentGameContext();
   final dispatch = useDispatcher();

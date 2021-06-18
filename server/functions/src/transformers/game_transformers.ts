@@ -11,6 +11,7 @@ export { StocksInitializerGameTransformer } from './game/configuration/stocks/st
 export { DebentureInitializerGameTransformer } from './game/configuration/debenture/debenture_initializer_game_transformer';
 export { HistoryGameTransformer } from './game/history_game_transformer';
 export { UpdateMoveStartDateTransformer } from './game/update_move_start_date_transformer';
+export { StatisticsTransformer } from './game/statistics_transformer';
 
 export const applyGameTransformers = (game: Game, transformers: GameTransformer[]) => {
   return (transformers || []).reduce((prev, transformer) => {

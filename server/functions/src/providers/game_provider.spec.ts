@@ -14,11 +14,13 @@ import { FirestoreUserDAO } from '../dao/firestore/firestore_user_dao';
 import { LastGamesEntity } from '../models/domain/user/last_games';
 import { User } from '../models/domain/user/user';
 import { QuestFixture } from '../core/fixtures/quest_fixture';
+import { FirestoreLevelStatisticDAO } from '../dao/firestore/firestore_level_statistic_dao';
 
 describe('Game Provider', () => {
   const mockGameDao = mock(FirestoreGameDAO);
   const mockUserDao = mock(FirestoreUserDAO);
   const mockRoomDao = mock(FirestoreRoomDAO);
+  const mockLevelStatisticDao = mock(FirestoreLevelStatisticDAO);
   const mockTemplateProvider = mock(GameTemplatesProvider);
 
   let gameProvider: GameProvider;
@@ -27,13 +29,15 @@ describe('Game Provider', () => {
     reset(mockGameDao);
     reset(mockUserDao);
     reset(mockRoomDao);
+    reset(mockLevelStatisticDao);
     reset(mockTemplateProvider);
 
     gameProvider = new GameProvider(
       instance(mockGameDao),
       instance(mockRoomDao),
       instance(mockUserDao),
-      instance(mockTemplateProvider)
+      instance(mockLevelStatisticDao),
+      instance(mockTemplateProvider),
     );
   });
 
