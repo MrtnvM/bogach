@@ -13,12 +13,14 @@ class PlayerActionBar extends StatelessWidget {
     this.takeLoan,
     this.skip,
     this.buySellAction,
+    this.count,
   }) : super(key: key);
 
   final VoidCallback confirm;
   final VoidCallback? takeLoan;
   final VoidCallback? skip;
   final BuySellAction? buySellAction;
+  final int? count;
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +37,9 @@ class PlayerActionBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(25),
-            blurRadius: 5,
-            spreadRadius: 5,
+            color: Colors.black.withAlpha(5),
+            blurRadius: 3,
+            spreadRadius: 3,
           ),
         ],
       ),
@@ -55,6 +57,7 @@ class PlayerActionBar extends StatelessWidget {
               ),
             Expanded(
               child: _actionBarItem(
+                withCounter: true,
                 color: buySellAction == const BuySellAction.sell()
                     ? ColorRes.mainRed
                     : ColorRes.mainGreen,
@@ -90,6 +93,7 @@ class PlayerActionBar extends StatelessWidget {
     Color color = ColorRes.white,
     required String text,
     Function()? onPressed,
+    bool withCounter = false,
   }) {
     return AnimatedContainer(
       color: color,
@@ -104,18 +108,63 @@ class PlayerActionBar extends StatelessWidget {
         child: Container(
           alignment: Alignment.center,
           constraints: const BoxConstraints.expand(),
-          child: AutoSizeText(
-            text,
-            minFontSize: 11,
-            overflow: TextOverflow.visible,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            style: Styles.bodyBlack.copyWith(
-              fontSize: 14.5,
-              color: color == ColorRes.white ? ColorRes.black : ColorRes.white,
-            ),
+          child: _buildTitle(
+            text: text,
+            color: color,
+            withCounter: withCounter,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTitle({
+    required String text,
+    required Color color,
+    required bool withCounter,
+  }) {
+    if (count == null || !withCounter) {
+      return _buildTitleText(text, color);
+    }
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildTitleText(text, color),
+        const SizedBox(width: 8),
+        Container(
+          constraints: const BoxConstraints(minWidth: 20, maxHeight: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Center(
+            child: Text(
+              '$count',
+              style: TextStyle(
+                color: color,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildTitleText(String text, Color color) {
+    return AutoSizeText(
+      text,
+      minFontSize: 11,
+      overflow: TextOverflow.visible,
+      textAlign: TextAlign.center,
+      maxLines: 2,
+      style: Styles.bodyBlack.copyWith(
+        fontSize: 14.5,
+        color: color == ColorRes.white ? ColorRes.black : ColorRes.white,
       ),
     );
   }

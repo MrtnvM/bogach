@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
@@ -107,15 +109,43 @@ class ActionsTab extends HookWidget {
       news: (_) => NewsGameActionBar(event: event),
     );
 
+    const actionBarPadding = 16.0;
+    const dividerOffset = 2.0;
+
     return Positioned(
-      bottom: 12,
-      height: 48,
-      left: 16,
-      right: 16,
+      bottom: 0,
+      height: 48 + actionBarPadding * 2 + dividerOffset,
+      left: 0,
+      right: 0,
       child: AnimatedOpacity(
         opacity: isActionInProgress ? 0 : 1,
         duration: const Duration(milliseconds: 200),
-        child: actionBar,
+        child: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withAlpha(10),
+                blurRadius: 4,
+                spreadRadius: 3,
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Divider(height: 1),
+              ClipRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+                  child: Container(
+                    margin: const EdgeInsets.all(16.0),
+                    child: actionBar,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

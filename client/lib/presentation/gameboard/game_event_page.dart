@@ -77,7 +77,7 @@ class GameEventPage extends HookWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 64),
+      padding: const EdgeInsets.only(bottom: 74),
       child: eventWidget,
     );
   }

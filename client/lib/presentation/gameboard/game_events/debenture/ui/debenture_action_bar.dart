@@ -34,6 +34,7 @@ class DebentureActionBar extends HookWidget {
 
     return PlayerActionBar(
       buySellAction: action,
+      count: count,
       confirm: () {
         sendPlayerAction();
 
