@@ -150,7 +150,7 @@ class LoginPage extends HookWidget {
                 height: 44,
                 child: Center(
                   child: Container(
-                    padding: const EdgeInsets.only(top: 3),
+                    padding: const EdgeInsets.only(top: 1),
                     width: 200,
                     child: Text(
                       Strings.getAuthButtonTitle(title),

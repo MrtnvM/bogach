@@ -156,6 +156,7 @@ class Strings {
   static const roi = 'ROI за год:';
   static const saleRate = 'Вероятность продажи';
   static const takeLoan = 'Взять\nкредит';
+  static String get buyInCredit => 'В кредит';
 
   static const investments = 'Вложения';
   static String get debentures => 'Облигации';
