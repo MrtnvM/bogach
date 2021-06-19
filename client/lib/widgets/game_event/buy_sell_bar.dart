@@ -73,7 +73,7 @@ class BuySellBar extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.only(top: isSelected ? 0 : 6),
           child: Container(
-            height: isSelected ? 50 : 44,
+            height: isSelected ? 42 : 36,
             decoration: BoxDecoration(
               color: isEnabled
                   ? color.withAlpha(isSelected ? 255 : 180)
@@ -91,7 +91,7 @@ class BuySellBar extends StatelessWidget {
                   title,
                   style: Styles.body1.copyWith(
                     color: isEnabled ? Colors.white : Colors.grey,
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: action == selectedAction
                         ? FontWeight.w700
                         : FontWeight.w500,
