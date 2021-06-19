@@ -38,9 +38,6 @@ class QuestList extends HookWidget {
     final getQuestsRequestState = useGlobalState(
       (s) => s.getOperationState(Operation.getQuests),
     )!;
-
-    final user = useCurrentUser()!;
-    final currentQuestIndex = user.currentQuestIndex ?? 0;
     final quests = useQuestsTemplates()!;
 
     final dispatch = useDispatcher();
@@ -60,15 +57,7 @@ class QuestList extends HookWidget {
             }
           });
 
-    useEffect(() {
-      swiperController.value.addListener(() {
-        final currentIndex = swiperController.value.index!;
-        final quest = quests.items[currentIndex].quest.name;
-        AnalyticsSender.questsSwipeGame(quest);
-      });
-
-      return swiperController.dispose;
-    }, []);
+    useEffect(() => swiperController.dispose, []);
 
     return MediaQuery(
       data: mediaQueryData,
@@ -104,7 +93,16 @@ class QuestList extends HookWidget {
                   index: i,
                   defaultAction: () async {
                     if (!quests.items[i].isAvailable) {
-                      await swiperController.value.move(currentQuestIndex);
+                      var nearestAvailableQuest = -1;
+
+                      for (var j = i - 1; j >= 0; j--) {
+                        if (quests.items[j].isAvailable) {
+                          nearestAvailableQuest = j;
+                          break;
+                        }
+                      }
+
+                      await swiperController.value.move(nearestAvailableQuest);
                     }
 
                     animationController.forward();

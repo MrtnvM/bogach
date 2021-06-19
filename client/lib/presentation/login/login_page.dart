@@ -115,40 +115,54 @@ class LoginPage extends HookWidget {
     required ValueNotifier<bool> isAuthorising,
     required Future<void> dispatch(BaseAction action),
   }) {
-    return TextButton(
-      style: TextButton.styleFrom(
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4.0),
-        ),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(40),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(50),
+            blurRadius: 5,
+          ),
+        ],
       ),
-      onPressed: () => loginViaSocial(
-        type,
-        context,
-        dispatch,
-        isAuthorising,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          SvgPicture.asset(icon, width: 24, height: 24),
-          const SizedBox(width: 12),
-          Flexible(
-            child: SizedBox(
-              height: 44,
-              child: Center(
-                child: SizedBox(
-                  width: 200,
-                  child: Text(
-                    Strings.getAuthButtonTitle(title),
-                    style: Styles.subhead.copyWith(color: ColorRes.mainBlack),
-                    maxLines: 1,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(40),
+        child: TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4.0),
+            ),
+          ),
+          onPressed: () => loginViaSocial(
+            type,
+            context,
+            dispatch,
+            isAuthorising,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              const SizedBox(width: 24),
+              SvgPicture.asset(icon, width: 24, height: 24),
+              const SizedBox(width: 20),
+              SizedBox(
+                height: 44,
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 3),
+                    width: 200,
+                    child: Text(
+                      Strings.getAuthButtonTitle(title),
+                      style: Styles.subhead.copyWith(color: ColorRes.mainBlack),
+                      maxLines: 1,
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

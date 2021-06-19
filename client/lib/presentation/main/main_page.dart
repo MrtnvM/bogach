@@ -55,16 +55,10 @@ class MainPage extends HookWidget {
       },
     );
 
-    useEffect(() {
-      setOnline();
-      return null;
-    }, [user]);
+    useEffect(setOnline, [user]);
 
     final stream = useMemoized(
-      () => Stream.periodic(
-        const Duration(seconds: 30),
-        (_) => setOnline(),
-      ),
+      () => Stream.periodic(const Duration(seconds: 30), (_) => setOnline()),
     );
 
     useStream(stream, initialData: null);

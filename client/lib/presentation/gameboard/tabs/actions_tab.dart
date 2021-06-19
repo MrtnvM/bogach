@@ -42,8 +42,6 @@ class ActionsTab extends HookWidget {
       if (scrollController.hasClients) {
         scrollController.jumpTo(0);
       }
-
-      return null;
     }, [currenEventIndex]);
 
     return Column(

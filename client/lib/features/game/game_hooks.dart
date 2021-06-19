@@ -9,6 +9,7 @@ import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/game/type/game_type.dart';
 import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/data/current_game_data_provider.dart';
+import 'package:cash_flow/presentation/tutorial/tutorial_page.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 String? useCurrentGameId() {
@@ -116,6 +117,10 @@ void useGameWatcher() {
   final dispatch = useDispatcher();
 
   useEffect(() {
+    if (gameContext.gameId == TUTORIAL_GAME_ID) {
+      return null;
+    }
+
     dispatch(StartGameAction(gameContext));
     return () => dispatch(StopGameAction(gameContext.gameId));
   }, []);

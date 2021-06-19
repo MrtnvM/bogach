@@ -63,6 +63,7 @@ class _ProgressTitle extends HookWidget {
   Widget build(BuildContext context) {
     final currentMonth = useCurrentGame((g) => g!.state.monthNumber);
     final monthLimit = useCurrentGame((g) => g!.config.monthLimit);
+    final gameboardTutorial = useGameboardTutorial();
 
     final monthPast = monthLimit != null
         ? '${Strings.month}: $currentMonth / $monthLimit'
@@ -93,6 +94,7 @@ class _ProgressTitle extends HookWidget {
         if (monthPast != null)
           Text(
             monthPast,
+            key: gameboardTutorial?.monthKey,
             textAlign: TextAlign.left,
             style: Styles.tableHeaderTitleBlack.copyWith(
               color: Colors.white,

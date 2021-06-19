@@ -1,4 +1,3 @@
-import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_template/game_template.dart';
 import 'package:cash_flow/presentation/new_game/game_template_item.dart';
@@ -28,16 +27,7 @@ class TemplateGameList extends HookWidget {
     final mediaQueryData = useAdaptiveMediaQueryData();
 
     final swiperController = useState(SwiperController());
-
-    useEffect(() {
-      swiperController.value.addListener(() {
-        final currentIndex = swiperController.value.index;
-        final templateName = vm.gameTemplates!.itemsMap[currentIndex]!.name;
-        AnalyticsSender.singleplayerGameSwiped(templateName);
-      });
-
-      return swiperController.dispose;
-    }, []);
+    useEffect(() => swiperController.dispose, []);
 
     return MediaQuery(
       data: mediaQueryData,
