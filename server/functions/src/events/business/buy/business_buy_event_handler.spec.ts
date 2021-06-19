@@ -16,14 +16,16 @@ describe('Business buy event event handler', () => {
 
   const mockCreditHandler = mock(CreditHandler);
 
+  let handler: BusinessBuyEventHandler;
+
   beforeEach(() => {
     GameEntity.validate(game);
     reset(mockCreditHandler);
+
+    handler = new BusinessBuyEventHandler(instance(mockCreditHandler));
   });
 
   test('Successfully bought new business', async () => {
-    const handler = new BusinessBuyEventHandler(mockCreditHandler);
-
     const event = utils.businessOfferEvent({
       businessId: 'randomId',
       currentPrice: 100_000,
@@ -75,8 +77,6 @@ describe('Business buy event event handler', () => {
   });
 
   test('Cant buy two the same businesses', async () => {
-    const handler = new BusinessBuyEventHandler(mockCreditHandler);
-
     const currentPrice = 120_000;
     const event = utils.dryCleaningBusinessOfferEvent(currentPrice);
 
@@ -95,8 +95,6 @@ describe('Business buy event event handler', () => {
   });
 
   test('Cant buy two the same businesses if liability present', async () => {
-    const handler = new BusinessBuyEventHandler(mockCreditHandler);
-
     const newBusinessData: BusinessBuyEvent.Data = {
       businessId: 'existingLiabilityId',
       currentPrice: 100_000,
@@ -130,8 +128,6 @@ describe('Business buy event event handler', () => {
   });
 
   test('Can not handle sell action', async () => {
-    const handler = new BusinessBuyEventHandler(mockCreditHandler);
-
     const currentPrice = 120_000;
     const event = utils.dryCleaningBusinessOfferEvent(currentPrice);
 
@@ -154,8 +150,6 @@ describe('Business buy event event handler', () => {
   });
 
   test('Can not buy new business if not enough money', async () => {
-    const handler = new BusinessBuyEventHandler(mockCreditHandler);
-
     const event = utils.businessOfferEvent({
       businessId: 'randomId',
       currentPrice: 130_000,
@@ -182,9 +176,6 @@ describe('Business buy event event handler', () => {
   });
 
   test('Successfully buy business in credit', async () => {
-    const creditHandler = instance(mockCreditHandler);
-    const handler = new BusinessBuyEventHandler(creditHandler);
-
     const creditResult: CreditResult = {
       isAvailable: true,
       monthlyPayment: 1250,
@@ -262,9 +253,6 @@ describe('Business buy event event handler', () => {
   });
 
   test('Can not buy new business in credit if not enough cash flow', async () => {
-    const creditHandler = instance(mockCreditHandler);
-    const handler = new BusinessBuyEventHandler(creditHandler);
-
     const creditResult: CreditResult = {
       isAvailable: false,
       monthlyPayment: 0,

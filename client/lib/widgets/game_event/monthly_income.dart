@@ -23,7 +23,7 @@ class MonthlyIncomeWidget extends StatelessWidget {
 
     final color = action!.map(
       buy: (_) => ColorRes.mainGreen,
-      sell: (_) => ColorRes.red,
+      sell: (_) => ColorRes.mainRed,
     );
 
     final multiplier = action!.map(

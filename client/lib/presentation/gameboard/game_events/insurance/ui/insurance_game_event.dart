@@ -2,8 +2,6 @@ import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/insurance/models/insurance_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/insurance/ui/insurance_game_event_hooks.dart';
-import 'package:cash_flow/presentation/gameboard/gameboard_hooks.dart';
-import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_content.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
@@ -22,8 +20,6 @@ class InsuranceGameEvent extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sendPlayerAction = useInsurancePlayerActionHandler(event);
-    final skipPlayerAction = useSkipAction(event.id);
     final infoTableData = useInsuranceInfoTableData(event);
     final insuranceInfoDialogModel = useInsuranceInfoDialogModel();
 
@@ -57,24 +53,6 @@ class InsuranceGameEvent extends HookWidget {
                   ),
                 );
               },
-            );
-          },
-        ),
-        const SizedBox(height: 28),
-        PlayerActionBar(
-          confirm: () {
-            sendPlayerAction();
-            AnalyticsSender.buyInsurance(
-              event.name,
-              eventData.cost,
-            );
-          },
-          skip: () {
-            skipPlayerAction();
-
-            AnalyticsSender.skipBuyInsurance(
-              event.name,
-              eventData.cost,
             );
           },
         ),

@@ -6,6 +6,7 @@ import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/de
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event_widget.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/insurance/models/insurance_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/insurance/ui/insurance_game_event.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/data/selector_state.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/containers/event_buttons.dart';
 import 'package:cash_flow/widgets/containers/indicators_table.dart';
@@ -119,7 +120,7 @@ class UiKit extends StatelessWidget {
     return Column(
       children: <Widget>[
         DebentureGameEventWidget(
-          event: GameEvent(
+          GameEvent(
             id: 'event1',
             name: 'Облигации',
             description: 'Облигации',
@@ -131,6 +132,7 @@ class UiKit extends StatelessWidget {
               availableCount: 15,
             ),
           ),
+          ValueNotifier(SelectorState.zero),
         ),
         BusinessBuyGameEventWidget(
           GameEvent(

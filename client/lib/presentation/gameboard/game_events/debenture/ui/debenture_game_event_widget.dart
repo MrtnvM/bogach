@@ -5,8 +5,7 @@ import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/debenture_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event_hooks.dart';
-import 'package:cash_flow/presentation/gameboard/gameboard_hooks.dart';
-import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/data/selector_state.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_content.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
@@ -18,11 +17,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class DebentureGameEventWidget extends HookWidget {
-  const DebentureGameEventWidget({
-    required this.event,
-    Key? key,
-  }) : super(key: key);
+  DebentureGameEventWidget(this.event, this.selectorState)
+      : super(key: ValueKey(event.id));
+
   final GameEvent event;
+  final ValueNotifier<SelectorState> selectorState;
 
   DebentureEventData get eventData => event.data as DebentureEventData;
 
@@ -31,12 +30,6 @@ class DebentureGameEventWidget extends HookWidget {
     final buySellAction = useState(const BuySellAction.buy());
     final selectedCount = useState(1);
     final infoTableData = useDebentureInfoTableData(event);
-    final sendPlayerAction = useDebenturePlayerActionHandler(
-      event: event,
-      selectedCount: selectedCount.value,
-      action: buySellAction.value,
-    );
-    final skipPlayerAction = useSkipAction(event.id);
 
     final userId = useUserId();
     final cash = useCurrentGame((g) => g!.participants[userId!]!.account.cash);
@@ -46,6 +39,15 @@ class DebentureGameEventWidget extends HookWidget {
         eventData.nominal * eventData.profitabilityPercent / 100 / 12;
 
     final debentureDialogInfoModel = useDebentureInfoDialogModel();
+
+    useEffect(() {
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        selectorState.value = SelectorState(
+          action: buySellAction.value,
+          count: selectedCount.value,
+        );
+      });
+    }, [buySellAction.value, selectedCount.value]);
 
     final selectorViewModel = SelectorViewModel(
       currentPrice: eventData.currentPrice,
@@ -95,28 +97,6 @@ class DebentureGameEventWidget extends HookWidget {
             buySellAction.value = action;
           },
         ),
-        const SizedBox(height: 28),
-        PlayerActionBar(
-          confirm: () {
-            sendPlayerAction();
-
-            AnalyticsSender.buySellDebenture(
-              buySellAction.value,
-              selectedCount.value,
-              event.name,
-              eventData.currentPrice,
-            );
-          },
-          skip: () {
-            skipPlayerAction();
-
-            AnalyticsSender.skipBuySellDebenture(
-              buySellAction.value,
-              event.name,
-              eventData.currentPrice,
-            );
-          },
-        )
       ],
     );
   }

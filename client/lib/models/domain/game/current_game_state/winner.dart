@@ -8,7 +8,7 @@ class Winner with _$Winner {
   factory Winner({
     required String userId,
     required double targetValue,
-    required int benchmark,
+    @JsonKey(defaultValue: 0) required int benchmark,
   }) = _Winner;
 
   factory Winner.fromJson(Map<String, dynamic> json) => _$WinnerFromJson(json);
