@@ -324,14 +324,14 @@ packages:
       name: device_frame
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.0"
+    version: "0.4.2"
   device_preview:
     dependency: "direct main"
     description:
       name: device_preview
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.1"
+    version: "0.7.3"
   dio:
     dependency: transitive
     description:
@@ -635,7 +635,7 @@ packages:
       name: flutter_svg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.21.0+1"
+    version: "0.22.0"
   flutter_swiper:
     dependency: "direct main"
     description:
@@ -675,7 +675,7 @@ packages:
       name: freezed_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.1"
+    version: "0.14.2"
   get_it:
     dependency: "direct main"
     description:
@@ -828,7 +828,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "3606a1c254af1f987f2df88214b4faffad660feb"
+      resolved-ref: "3802043b6a1fe6167becf5e1ff075405abd4d211"
       url: "https://github.com/MrtnvM/k_chart"
     source: git
     version: "0.2.0"
@@ -936,14 +936,14 @@ packages:
       name: path_drawing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.0"
+    version: "0.5.1"
   path_parsing:
     dependency: transitive
     description:
       name: path_parsing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0"
+    version: "0.2.1"
   path_provider:
     dependency: transitive
     description:

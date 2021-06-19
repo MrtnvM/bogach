@@ -12,6 +12,7 @@ import 'package:cash_flow/presentation/gameboard/game_events/stock/ui/stock_game
 import 'package:cash_flow/presentation/gameboard/month_result_widget.dart';
 import 'package:cash_flow/presentation/gameboard/tabs/actions_tab.dart';
 import 'package:cash_flow/presentation/gameboard/waiting_players_card.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/data/selector_state.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -21,7 +22,12 @@ import 'game_events/business/sell/ui/business_sell_game_event_widget.dart';
 import 'game_events/stock/ui/stock_game_event.dart';
 
 class GameEventPage extends HookWidget {
-  const GameEventPage({Key? key}) : super(key: key);
+  const GameEventPage({
+    Key? key,
+    required this.selectorState,
+  }) : super(key: key);
+
+  final ValueNotifier<SelectorState> selectorState;
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +62,11 @@ class GameEventPage extends HookWidget {
   }
 
   Widget _buildEventBody(GameEvent event) {
-    return event.type.map(
-      debenture: (_) => DebentureGameEventWidget(event: event),
-      stock: (_) => StockGameEvent(event),
+    final eventWidget = event.type.map(
+      debenture: (_) => DebentureGameEventWidget(event, selectorState),
+      stock: (_) => StockGameEvent(event, selectorState),
       businessBuy: (_) => BusinessBuyGameEventWidget(event),
-      businessSell: (_) => BusinessSellGameEventWidget(event),
+      businessSell: (_) => BusinessSellGameEventWidget(event, selectorState),
       income: (_) => IncomeGameEvent(event),
       expense: (_) => ExpenseGameEvent(event),
       monthlyExpense: (_) => MonthlyExpenseEvent(event),
@@ -68,6 +74,11 @@ class GameEventPage extends HookWidget {
       realEstateBuy: (_) => RealEstateBuyGameEvent(event),
       salaryChange: (_) => SalaryChangeEvent(event),
       news: (_) => NewsGameEvent(event),
+    );
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 74),
+      child: eventWidget,
     );
   }
 }

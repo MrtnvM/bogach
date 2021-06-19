@@ -66,6 +66,11 @@ class AnalyticsSender {
     _send('business_buy_event', params);
   }
 
+  static void buyBusinessInCredit(String businessName, int price) {
+    final params = {'business_name': businessName, 'business_price': price};
+    _send('business_buy_in_credit_event', params);
+  }
+
   static void skipBuyBusiness(String businessName, int price) {
     final params = {'business_name': businessName, 'business_price': price};
     _send('business_skip_buy_event', params);

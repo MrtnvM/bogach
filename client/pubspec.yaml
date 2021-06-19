@@ -18,7 +18,7 @@ dependencies:
   crypto: 3.0.1
   get_it: ^6.1.1
   json_serializable: ^4.1.1
-  device_preview: ^0.7.1
+  device_preview: ^0.7.3
   in_app_purchase: ^0.5.2
   connectivity: ^3.0.3
   fimber: ^0.6.1
@@ -67,7 +67,7 @@ dependencies:
   tutorial_coach_mark: ^1.0.0
   cached_network_image: ^3.0.0
   smooth_page_indicator: ^0.3.0-nullsafety.0
-  flutter_svg: ^0.21.0-nullsafety.0
+  flutter_svg: ^0.22.0
   #charts_flutter: ^0.10.0 #wait for Google update https://github.com/google/charts/issues/579#issuecomment-817792878
   cupertino_icons: ^1.0.2
   url_launcher: ^6.0.3

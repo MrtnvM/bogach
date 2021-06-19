@@ -75,10 +75,11 @@ class _GameboardBody extends HookWidget {
           length: tabItems.length,
           initialIndex: 1,
           child: activeGameState?.maybeMap(
-            gameEvent: (_) => _GameboardContentWidget(tabItems: tabItems),
-            gameOver: (_) => WinnersPage(),
-            orElse: () => _GameboardContentWidget(tabItems: tabItems),
-          ) ?? _GameboardContentWidget(tabItems: tabItems),
+                gameEvent: (_) => _GameboardContentWidget(tabItems: tabItems),
+                gameOver: (_) => WinnersPage(),
+                orElse: () => _GameboardContentWidget(tabItems: tabItems),
+              ) ??
+              _GameboardContentWidget(tabItems: tabItems),
         ),
       ),
     );
