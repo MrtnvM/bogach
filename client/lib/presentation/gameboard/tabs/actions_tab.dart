@@ -24,8 +24,6 @@ class ActionsTab extends HookWidget {
       if (scrollController.hasClients) {
         scrollController.jumpTo(0);
       }
-
-      return null;
     }, [currenEventIndex]);
 
     return Column(
@@ -63,10 +61,11 @@ bool useIsGameboardActionInProgress() {
         s.getOperationState(Operation.startNewMonth).isInProgress;
 
     final isSendingTurnEvent = activeGameState?.maybeWhen(
-      gameEvent: (eventIndex, sendingEventIndex) =>
-          eventIndex == sendingEventIndex,
-      orElse: () => false,
-    ) ?? false;
+          gameEvent: (eventIndex, sendingEventIndex) =>
+              eventIndex == sendingEventIndex,
+          orElse: () => false,
+        ) ??
+        false;
 
     return isSendingTurnEvent || isStartingNewMonth;
   });

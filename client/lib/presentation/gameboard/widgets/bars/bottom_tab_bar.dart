@@ -159,6 +159,7 @@ class BottomTabBarState extends State<BottomTabBar> {
         .copyWith(color: color);
 
     return Container(
+      key: item.key,
       color: item.backgroundColor,
       height: barHeight,
       width: width / items.length,

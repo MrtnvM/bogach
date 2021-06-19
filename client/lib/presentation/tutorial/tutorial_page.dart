@@ -20,6 +20,9 @@ import 'package:cash_flow/widgets/tutorial/gameboard_tutorial_widget.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/material.dart';
 
+// ignore: constant_identifier_names
+const TUTORIAL_GAME_ID = 'tutorial_game';
+
 class TutorialPage extends StatefulWidget {
   const TutorialPage({Key? key, required this.gameId}) : super(key: key);
 
@@ -33,7 +36,7 @@ class _TutorialPageState extends State<TutorialPage> {
   late Store<AppState> store;
 
   final gameboardKey = GlobalKey();
-  final gameId = 'game1';
+  final gameId = TUTORIAL_GAME_ID;
 
   @override
   void initState() {
@@ -55,7 +58,7 @@ class _TutorialPageState extends State<TutorialPage> {
         );
 
         s.game.games![gameId] = Game(
-          id: 'game1',
+          id: gameId,
           name: Strings.tutorialQuestName,
           type: GameType.singleplayer(),
           state: CurrentGameState(

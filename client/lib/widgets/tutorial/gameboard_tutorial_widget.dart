@@ -36,7 +36,6 @@ class GameboardTutorialWidget extends InheritedWidget {
   final monthKey = GlobalKey();
 
   final currentProgressKey = GlobalKey();
-  final progressBarKey = GlobalKey();
 
   final gameEventKey = GlobalKey();
   final gameEventActionsKey = GlobalKey();
@@ -167,7 +166,7 @@ class GameboardTutorialWidget extends InheritedWidget {
         contents: createTargetContent(
           title: Strings.gameEvent,
           description: Strings.gameEventDescription,
-          align: ContentAlign.top,
+          align: ContentAlign.bottom,
           context: context,
           buttonTitle: Strings.tutorialGoNext6,
         ),
