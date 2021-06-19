@@ -50,8 +50,8 @@ class PlayerActionBar extends StatelessWidget {
             if (takeLoan != null)
               Expanded(
                 child: _actionBarItem(
-                  color: ColorRes.mainGreen,
-                  text: Strings.takeLoan,
+                  color: ColorRes.mainRed,
+                  text: Strings.buyInCredit,
                   onPressed: takeLoan,
                 ),
               ),
@@ -70,16 +70,11 @@ class PlayerActionBar extends StatelessWidget {
               ),
             ),
             if (skip != null) ...[
-              if (takeLoan != null)
-                Container(
-                  width: 1,
-                  height: double.infinity,
-                  color: ColorRes.newGameBoardConditionDividerColor,
-                ),
               Expanded(
                 child: _actionBarItem(
                   text: Strings.skip,
                   onPressed: skip,
+                  rippleColor: Colors.grey.withAlpha(150),
                 ),
               ),
             ],
@@ -91,28 +86,27 @@ class PlayerActionBar extends StatelessWidget {
 
   Widget _actionBarItem({
     Color color = ColorRes.white,
+    Color rippleColor = ColorRes.white,
     required String text,
     Function()? onPressed,
     bool withCounter = false,
   }) {
-    return AnimatedContainer(
-      color: color,
-      duration: const Duration(milliseconds: 50),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          primary: Colors.transparent,
-          padding: const EdgeInsets.all(0),
-          elevation: 0,
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        primary: color,
+        onPrimary: rippleColor,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(0)),
         ),
-        child: Container(
-          alignment: Alignment.center,
-          constraints: const BoxConstraints.expand(),
-          child: _buildTitle(
-            text: text,
-            color: color,
-            withCounter: withCounter,
-          ),
+      ),
+      child: Container(
+        alignment: Alignment.center,
+        constraints: const BoxConstraints.expand(),
+        child: _buildTitle(
+          text: text,
+          color: color,
+          withCounter: withCounter,
         ),
       ),
     );
