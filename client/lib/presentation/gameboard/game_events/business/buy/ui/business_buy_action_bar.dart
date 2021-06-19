@@ -1,4 +1,5 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
+import 'package:cash_flow/app/feature_toggle.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/business/buy/model/business_buy_event_data.dart';
@@ -17,16 +18,33 @@ class BusinessBuyActionBar extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sendPlayerAction = useBusinessBuyPlayerActionHandler(
+    const buySellAction = BuySellAction.buy();
+    final buyBusiness = useBusinessBuyPlayerActionHandler(
       event: event,
-      action: const BuySellAction.buy(),
+      action: buySellAction,
+      inCredit: false,
+    );
+    final buyBusinessInCredit = useBusinessBuyPlayerActionHandler(
+      event: event,
+      action: buySellAction,
+      inCredit: true,
     );
     final skipPlayerAction = useSkipAction(event.id);
 
+    final VoidCallback? takeLoan;
+    if (Features.creditEnabled) {
+      takeLoan = () {
+        buyBusinessInCredit();
+        AnalyticsSender.buyBusinessInCredit(event.name, eventData.currentPrice);
+      };
+    } else {
+      takeLoan = null;
+    }
+
     return PlayerActionBar(
-      buySellAction: const BuySellAction.buy(),
+      buySellAction: buySellAction,
       confirm: () {
-        sendPlayerAction();
+        buyBusiness();
         AnalyticsSender.buyBusiness(
           event.name,
           eventData.currentPrice,
@@ -40,6 +58,7 @@ class BusinessBuyActionBar extends HookWidget {
           eventData.currentPrice,
         );
       },
+      takeLoan: takeLoan,
     );
   }
 }

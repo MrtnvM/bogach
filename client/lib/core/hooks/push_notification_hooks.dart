@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:fimber/fimber.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:notification_permissions/notification_permissions.dart';
