@@ -6,13 +6,13 @@ part 'room.freezed.dart';
 part 'room.g.dart';
 
 @freezed
-abstract class Room with _$Room {
+class Room with _$Room {
   factory Room({
-    @required String id,
-    String gameTemplateId,
-    UserProfile owner,
-    String gameId,
-    List<RoomParticipant> participants,
+    required String id,
+    required String gameTemplateId,
+    required UserProfile owner,
+    required List<RoomParticipant> participants,
+    String? gameId,
   }) = _Room;
 
   factory Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);

@@ -13,6 +13,7 @@ import 'package:cash_flow/presentation/gameboard/gameboard_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_model.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -21,7 +22,7 @@ Map<String, String> useStockInfoTableData(GameEvent event) {
   final isQuest = useIsQuestGame();
   final alreadyHave = currentStock?.countInPortfolio ?? 0;
 
-  final StockEventData eventData = event.data;
+  final eventData = event.data as StockEventData;
   final currentPrice = eventData.currentPrice;
   final previousPrice = currentStock?.averagePrice;
   final priceChange = previousPrice == null
@@ -34,7 +35,7 @@ Map<String, String> useStockInfoTableData(GameEvent event) {
     Strings.alreadyHave: alreadyHave == 0
         ? alreadyHave.toString()
         : Strings.getUserAvailableCount(
-            currentStock.countInPortfolio.toString(),
+            currentStock!.countInPortfolio.toString(),
             currentStock.averagePrice.toPrice(),
           ),
     if (alreadyHave > 0)
@@ -45,9 +46,9 @@ Map<String, String> useStockInfoTableData(GameEvent event) {
 }
 
 VoidCallback useStockPlayerActionHandler({
-  @required GameEvent event,
-  @required int selectedCount,
-  @required BuySellAction action,
+  required GameEvent event,
+  required int selectedCount,
+  required BuySellAction action,
 }) {
   final context = useContext();
   final dispatch = useDispatcher();
@@ -55,7 +56,7 @@ VoidCallback useStockPlayerActionHandler({
   final gameContext = useCurrentGameContext();
 
   return () {
-    final StockEventData eventData = event.data;
+    final eventData = event.data as StockEventData;
     final totalPrice = eventData.currentPrice * selectedCount;
 
     if (isBuyAction(action) && !isEnoughCash(totalPrice)) {
@@ -74,24 +75,23 @@ VoidCallback useStockPlayerActionHandler({
         playerAction: playerAction,
         gameContext: gameContext,
       ),
-    ).catchError((e) {
+    ).onError((e, st) {
       handleError(context: context, exception: e);
     });
   };
 }
 
-StockAsset useCurrentStock(GameEvent event) {
+StockAsset? useCurrentStock(GameEvent event) {
   final userId = useUserId();
   final stockAssets = useCurrentGame((g) {
-    return g.participants[userId].possessionState.assets
+    return g?.participants[userId]?.possessionState.assets
         .where((a) => a.type == AssetType.stock)
         .cast<StockAsset>()
         .toList();
   });
 
-  final currentStock = stockAssets.firstWhere(
+  final currentStock = stockAssets?.firstWhereOrNull(
     (s) => s.name == event.name,
-    orElse: () => null,
   );
 
   return currentStock;

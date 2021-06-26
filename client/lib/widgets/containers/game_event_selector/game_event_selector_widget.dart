@@ -15,12 +15,10 @@ typedef OnPlayerActionParamsChanged = void Function(
 
 class GameEventSelectorWidget extends HookWidget {
   const GameEventSelectorWidget({
-    @required this.viewModel,
-    @required this.onPlayerActionParamsChanged,
-    Key key,
-  })  : assert(viewModel != null),
-        assert(onPlayerActionParamsChanged != null),
-        super(key: key);
+    required this.viewModel,
+    required this.onPlayerActionParamsChanged,
+    Key? key,
+  }) : super(key: key);
 
   final SelectorViewModel viewModel;
   final OnPlayerActionParamsChanged onPlayerActionParamsChanged;
@@ -34,34 +32,35 @@ class GameEventSelectorWidget extends HookWidget {
       currentAction: _buySellAction.value,
       selectedCount: _selectedCount.value,
       availableCash: viewModel.availableCash,
-      maxCountToBuy: viewModel.maxCount,
-      currentPrice: viewModel.currentPrice,
-      alreadyHave: viewModel.alreadyHave,
+      maxCountToBuy: viewModel.maxCount!,
+      currentPrice: viewModel.currentPrice!,
+      alreadyHave: viewModel.alreadyHave!,
     );
 
     _selectedCount.value = selectorStateModel.selectedCount;
 
-    return CardContainer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          if (viewModel.changeableType)
-            BuySellBar(
-              selectedAction: _buySellAction.value,
-              onActionChanged: (action) {
-                _selectedCount.value = 1;
-                _buySellAction.value = action;
-                onPlayerActionParamsChanged(action, _selectedCount.value);
-              },
-              canSell: selectorStateModel.canSell,
-            ),
-          Padding(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        if (viewModel.changeableType)
+          BuySellBar(
+            selectedAction: _buySellAction.value,
+            onActionChanged: (action) {
+              _selectedCount.value = 1;
+              _buySellAction.value = action;
+              onPlayerActionParamsChanged(action, _selectedCount.value);
+            },
+            canSell: selectorStateModel.canSell,
+          ),
+        CardContainer(
+          child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Column(
               children: <Widget>[
                 PriceCalculator(
+                  action: _buySellAction.value,
                   count: selectorStateModel.selectedCount,
-                  currentPrice: viewModel.currentPrice.toDouble(),
+                  currentPrice: viewModel.currentPrice!.toDouble(),
                   onCountChanged: (count) {
                     _selectedCount.value = count;
                     onPlayerActionParamsChanged(_buySellAction.value, count);
@@ -70,7 +69,7 @@ class GameEventSelectorWidget extends HookWidget {
                 GameEventValueSelector(
                   action: _buySellAction.value,
                   selectedCount: selectorStateModel.selectedCount,
-                  currentPrice: viewModel.currentPrice.toDouble(),
+                  currentPrice: viewModel.currentPrice!.toDouble(),
                   availableCount: selectorStateModel.availableCount,
                   maxCount: selectorStateModel.maxCount,
                   minCount: selectorStateModel.minCount,
@@ -85,8 +84,8 @@ class GameEventSelectorWidget extends HookWidget {
               ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -101,10 +100,10 @@ class SelectorViewModel {
     this.availableCash,
   });
 
-  final double currentPrice;
+  final double? currentPrice;
   final double passiveIncomePerMonth;
-  final int alreadyHave;
-  final int maxCount;
+  final int? alreadyHave;
+  final int? maxCount;
   final bool changeableType;
-  final double availableCash;
+  final double? availableCash;
 }

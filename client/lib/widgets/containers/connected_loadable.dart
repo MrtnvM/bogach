@@ -9,8 +9,8 @@ class ConnectedLoadable extends StatelessWidget {
     this.converter,
   });
 
-  final Widget child;
-  final bool Function(AppState) converter;
+  final Widget? child;
+  final bool Function(AppState)? converter;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class ConnectedLoadable extends StatelessWidget {
       converter: converter,
       builder: (context, isLoading) => LoadableView(
         isLoading: isLoading,
-        child: child,
+        child: child!,
       ),
     );
   }

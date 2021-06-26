@@ -14,12 +14,14 @@ Function(String) useAddFriend() {
   final dispatch = useDispatcher();
 
   return (inviterId) async {
-    final user = StoreProvider.state<AppState>(context).profile.currentUser;
+    final user = StoreProvider.state<AppState>(context)?.profile.currentUser;
     final usersAddToFriendsStorage = GetIt.I.get<UsersAddToFriendsStorage>();
 
     try {
       if (user == null) {
         usersAddToFriendsStorage.addUserId(inviterId);
+        // TODO(Artem): я правильно понял?
+        return;
       }
 
       await dispatch(AddFriendToStorageAction(userAddToFriendId: inviterId));

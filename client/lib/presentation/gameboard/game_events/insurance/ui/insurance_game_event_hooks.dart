@@ -14,7 +14,7 @@ import 'package:cash_flow/utils/extensions/extensions.dart';
 
 Map<String, String> useInsuranceInfoTableData(GameEvent event) {
   return useMemoized(() {
-    final InsuranceEventData eventData = event.data;
+    final eventData = event.data as InsuranceEventData;
 
     final data = {
       Strings.cost: eventData.cost.toPrice(),
@@ -33,7 +33,7 @@ VoidCallback useInsurancePlayerActionHandler(GameEvent event) {
   final gameContext = useCurrentGameContext();
 
   return () {
-    final InsuranceEventData eventData = event.data;
+    final eventData = event.data as InsuranceEventData;
     final price = eventData.cost;
 
     if (!isEnoughCash(price.toDouble())) {
@@ -46,7 +46,7 @@ VoidCallback useInsurancePlayerActionHandler(GameEvent event) {
       eventId: event.id,
       playerAction: action,
       gameContext: gameContext,
-    )).catchError((e) => handleError(context: context, exception: e));
+    )).onError((e, st) => handleError(context: context, exception: e));
   };
 }
 

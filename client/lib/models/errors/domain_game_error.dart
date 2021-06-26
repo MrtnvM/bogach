@@ -5,11 +5,11 @@ part 'domain_game_error.freezed.dart';
 part 'domain_game_error.g.dart';
 
 @freezed
-abstract class DomainGameError with _$DomainGameError {
+class DomainGameError with _$DomainGameError {
   factory DomainGameError({
-    @required String type,
-    @required String code,
-    @required Map<String, String> message,
+    required String type,
+    required String code,
+    required Map<String, String> message,
   }) = _DomainGameError;
 
   factory DomainGameError.fromJson(Map<String, dynamic> json) =>

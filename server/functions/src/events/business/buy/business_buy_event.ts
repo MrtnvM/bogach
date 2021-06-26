@@ -22,6 +22,7 @@ export namespace BusinessBuyEvent {
   export interface PlayerAction {
     readonly eventId: GameEventEntity.Id;
     readonly action: BuySellAction;
+    readonly inCredit: boolean;
   }
 
   export type Info = {
@@ -68,5 +69,6 @@ export namespace BusinessBuyEvent {
 
     entity.hasValue('eventId');
     entity.checkUnion('action', BuySellActionValues);
+    entity.hasValue('inCredit');
   };
 }

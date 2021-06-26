@@ -4,23 +4,23 @@ import 'package:flutter/material.dart';
 
 class IndicatorsTable extends StatelessWidget {
   IndicatorsTable({
-    BuildContext context,
+    required BuildContext context,
     this.icon,
     this.name,
     this.result,
-    this.rows,
-  })  : textStyle = Theme.of(context).textTheme.subtitle1,
+    required this.rows,
+  })   : textStyle = Theme.of(context).textTheme.subtitle1,
         assert(rows is List<RowHeaderItem>);
 
-  final String icon;
-  final String name;
-  final String result;
+  final String? icon;
+  final String? name;
+  final String? result;
   final List<RowHeaderItem> rows;
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
-    final items = rows.where((key) => key != null).toList();
+    final items = rows;
     final itemsLength = items.length;
 
     return Container(
@@ -46,13 +46,14 @@ class IndicatorsTable extends StatelessWidget {
         child = _buildRowHeaderItem(context, item);
         break;
       case RowItem:
-        child = _buildRowItem(context, item);
+        child = _buildRowItem(context, item as RowItem);
         break;
       case RowHeaderAttributeItem:
-        child = _buildRowHeaderAttributeItem(context, item);
+        child = _buildRowHeaderAttributeItem(
+            context, item as RowHeaderAttributeItem);
         break;
       case RowAttributeItem:
-        child = _buildRowAttributeItem(context, item);
+        child = _buildRowAttributeItem(context, item as RowAttributeItem);
         break;
     }
 
@@ -68,8 +69,8 @@ class IndicatorsTable extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Text(
-          item.name,
-          style: textStyle.copyWith(
+          item.name!,
+          style: textStyle!.copyWith(
             fontStyle: FontStyle.italic,
             color: ColorRes.blue,
             fontWeight: FontWeight.w500,
@@ -84,11 +85,11 @@ class IndicatorsTable extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Text(
-          item.name,
+          item.name!,
           style: textStyle,
         ),
         const Spacer(),
-        Text(item.value, style: textStyle),
+        Text(item.value!, style: textStyle),
       ],
     );
   }
@@ -97,7 +98,7 @@ class IndicatorsTable extends StatelessWidget {
     BuildContext context,
     RowHeaderAttributeItem item,
   ) {
-    final style = textStyle.copyWith(
+    final style = textStyle!.copyWith(
       fontStyle: FontStyle.italic,
       color: ColorRes.blue,
     );
@@ -108,14 +109,14 @@ class IndicatorsTable extends StatelessWidget {
         Expanded(
           flex: 13,
           child: Text(
-            item.name,
+            item.name!,
             style: style,
           ),
         ),
         Expanded(
           flex: 10,
           child: Text(
-            item.attribute,
+            item.attribute!,
             style: style,
             textAlign: TextAlign.end,
           ),
@@ -123,7 +124,7 @@ class IndicatorsTable extends StatelessWidget {
         Expanded(
           flex: 10,
           child: Text(
-            item.value,
+            item.value!,
             style: style,
             textAlign: TextAlign.end,
           ),
@@ -142,14 +143,14 @@ class IndicatorsTable extends StatelessWidget {
         Expanded(
           flex: 13,
           child: Text(
-            item.name,
+            item.name!,
             style: textStyle,
           ),
         ),
         Expanded(
           flex: 10,
           child: Text(
-            item.attribute,
+            item.attribute!,
             style: textStyle,
             textAlign: TextAlign.end,
           ),
@@ -157,7 +158,7 @@ class IndicatorsTable extends StatelessWidget {
         Expanded(
           flex: 10,
           child: Text(
-            item.value,
+            item.value!,
             style: textStyle,
             textAlign: TextAlign.end,
           ),
@@ -173,11 +174,11 @@ class IndicatorsTable extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Text(
-            name.toUpperCase(),
+            name!.toUpperCase(),
             style: Theme.of(context).textTheme.subtitle1,
           ),
           const Spacer(),
-          Text(result, style: Theme.of(context).textTheme.subtitle1),
+          Text(result!, style: Theme.of(context).textTheme.subtitle1),
         ],
       ),
     );
@@ -187,31 +188,31 @@ class IndicatorsTable extends StatelessWidget {
 class RowHeaderItem {
   const RowHeaderItem({this.name});
 
-  final String name;
+  final String? name;
 }
 
 class RowItem extends RowHeaderItem {
   const RowItem({
     this.value,
-    String name,
+    String? name,
   }) : super(name: name);
 
-  final String value;
+  final String? value;
 }
 
 class RowHeaderAttributeItem extends RowItem {
   const RowHeaderAttributeItem({
     this.attribute,
-    String name,
-    String value,
+    String? name,
+    String? value,
   }) : super(name: name, value: value);
-  final String attribute;
+  final String? attribute;
 }
 
 class RowAttributeItem extends RowHeaderAttributeItem {
   const RowAttributeItem({
-    String attribute,
-    String name,
-    String value,
+    String? attribute,
+    String? name,
+    String? value,
   }) : super(name: name, attribute: attribute, value: value);
 }

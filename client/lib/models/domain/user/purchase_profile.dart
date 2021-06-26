@@ -4,10 +4,10 @@ part 'purchase_profile.freezed.dart';
 part 'purchase_profile.g.dart';
 
 @freezed
-abstract class PurchaseProfile with _$PurchaseProfile {
+class PurchaseProfile with _$PurchaseProfile {
   factory PurchaseProfile({
-    @JsonKey(defaultValue: false) bool isQuestsAvailable,
-    @JsonKey(defaultValue: 0) int boughtMultiplayerGamesCount,
+    @JsonKey(defaultValue: false) required bool isQuestsAvailable,
+    @JsonKey(defaultValue: 0) required int boughtMultiplayerGamesCount,
   }) = _PurchaseProfile;
 
   factory PurchaseProfile.fromJson(Map<String, dynamic> json) =>

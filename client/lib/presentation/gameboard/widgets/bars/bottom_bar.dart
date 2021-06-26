@@ -5,21 +5,21 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class BottomBarItem {
   const BottomBarItem({
-    @required this.title,
-    @required this.image,
+    required this.title,
+    required this.image,
     this.key,
     this.onPressed,
   });
 
   final String title;
   final String image;
-  final GlobalKey key;
-  final VoidCallback onPressed;
+  final GlobalKey? key;
+  final VoidCallback? onPressed;
 }
 
 class BottomBar extends StatelessWidget {
   const BottomBar({
-    Key key,
+    Key? key,
     this.items = const [],
     this.selectedItemIndex = 0,
   })  : assert(selectedItemIndex >= 0 && selectedItemIndex < items.length),
@@ -55,7 +55,10 @@ class BottomBar extends StatelessWidget {
     );
   }
 
-  Widget _buildBarButton({BottomBarItem item, bool isSelected}) {
+  Widget _buildBarButton({
+    required BottomBarItem item,
+    required bool isSelected,
+  }) {
     return GestureDetector(
       onTap: item.onPressed,
       behavior: HitTestBehavior.translucent,

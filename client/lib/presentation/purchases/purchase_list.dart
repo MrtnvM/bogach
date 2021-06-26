@@ -9,6 +9,7 @@ import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/appbar/app_bar.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
@@ -44,12 +45,12 @@ class _PurchaseListPageState extends State<PurchaseListPage> {
   }
 
   Widget _buildBody() {
-    return AppStateConnector<BuiltList<PurchaseDetails>>(
+    return AppStateConnector<BuiltList<PurchaseDetails>?>(
       converter: (s) => s.purchase.pastPurchases,
       builder: (context, pastPurchases) => ListView(
         children: [
           const Text('Past purchases', style: Styles.navBarTitle),
-          ...pastPurchases.map(_buildItem).toList(),
+          ...pastPurchases!.map(_buildItem).toList(),
           const Divider(),
           const Text('Possible purchases', style: Styles.navBarTitle),
           ...buildPossiblePurchases([
@@ -71,18 +72,17 @@ class _PurchaseListPageState extends State<PurchaseListPage> {
 
   void _purchaseItem(String productId) {
     context.dispatch(QueryProductsForSaleAction(ids: {productId})).then((_) {
-      final appState = StoreProvider.state<AppState>(context);
+      final appState = StoreProvider.state<AppState>(context)!;
       final productsForSale = appState.purchase.productsForSale;
 
-      final product = productsForSale.firstWhere(
+      final product = productsForSale.firstWhereOrNull(
         (p) => p.id == productId,
-        orElse: () => null,
       );
 
       if (mounted) {
-        context.dispatch(BuyConsumableAction(product: product));
+        context.dispatch(BuyConsumableAction(product: product!));
       }
-    }).catchError((error) {
+    }).onError((error, st) {
       handleError(context: context, exception: error);
     });
   }
@@ -97,7 +97,7 @@ class _PurchaseListPageState extends State<PurchaseListPage> {
 extension PurchaseDetailsExtension on PurchaseDetails {
   String getDescription() {
     final transactionDateString =
-        DateTime.fromMillisecondsSinceEpoch(int.parse(transactionDate))
+        DateTime.fromMillisecondsSinceEpoch(int.parse(transactionDate!))
             .toIso8601String();
     final statusString = status.toString();
     final platformString = platform.name;

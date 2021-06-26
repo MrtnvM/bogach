@@ -21,11 +21,11 @@ class AssetsList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final userId = useUserId();
-    final currentMonth = useCurrentGameState().monthNumber;
+    final currentMonth = useCurrentGameState()!.monthNumber;
     final cash = useAccount().cash;
     final assets = useCurrentGame(
-      (g) => g.participants[userId].possessionState.assets,
-    );
+      (g) => g?.participants[userId]?.possessionState.assets,
+    )!;
 
     final cashAssets = _getAssets<CashAsset>(assets, AssetType.cash)
       ..add(CashAsset(

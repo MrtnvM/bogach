@@ -10,14 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class AccountBar extends HookWidget {
-  const AccountBar({Key key}) : super(key: key);
+  const AccountBar({Key? key}) : super(key: key);
 
   static const height = 54.0;
 
   @override
   Widget build(BuildContext context) {
     final userId = useUserId();
-    final account = useCurrentGame((g) => g.participants[userId].account);
+    final account = useCurrentGame((g) => g!.participants[userId]!.account)!;
     final previousAccount = usePrevious(account);
     final gameboardTutorial = useGameboardTutorial();
 
@@ -70,9 +70,9 @@ class AccountBar extends HookWidget {
   }
 
   Widget _buildItem({
-    @required String title,
-    @required double value,
-    @required double previousValue,
+    required String title,
+    required double value,
+    required double previousValue,
   }) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

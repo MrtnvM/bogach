@@ -5,35 +5,35 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class BottomTabBarItem {
   BottomTabBarItem({
-    @required this.title,
-    this.icon,
-    this.svgAsset,
-    this.backgroundColor = Colors.white,
+    required this.title,
+    required this.svgAsset,
     this.key,
-  }) : assert(icon != null || svgAsset != null);
+    this.icon,
+    this.backgroundColor = Colors.white,
+  });
 
-  final Key key;
-  final String svgAsset;
-  final IconData icon;
+  final Key? key;
+  final String? svgAsset;
+  final IconData? icon;
   final String title;
   final Color backgroundColor;
 }
 
 class BottomTabBar extends StatefulWidget {
   const BottomTabBar({
-    Key key,
-    @required this.tabController,
-    @required this.onTap,
-    @required this.items,
+    Key? key,
+    required this.tabController,
+    required this.onTap,
+    required this.items,
+    this.indicatorColor,
     this.activeColor,
     this.inactiveColor = Colors.grey,
-    this.indicatorColor,
     this.shadow = true,
   }) : super(key: key);
 
   final TabController tabController;
-  final Color indicatorColor;
-  final Color activeColor;
+  final Color? indicatorColor;
+  final Color? activeColor;
   final Color inactiveColor;
   final bool shadow;
   final ValueChanged<int> onTap;
@@ -50,21 +50,21 @@ class BottomTabBarState extends State<BottomTabBar> {
   List<BottomTabBarItem> get items => widget.items;
 
   double width = 0;
-  Color activeColor;
+  Color? activeColor;
   Duration duration = const Duration(milliseconds: 170);
-  int currentIndex;
+  late int currentIndex;
   bool _isAnimationListenerEnabled = true;
 
   @override
   void initState() {
     super.initState();
     currentIndex = widget.tabController.index;
-    widget.tabController.animation.addListener(_onChangingSelectedTab);
+    widget.tabController.animation?.addListener(_onChangingSelectedTab);
   }
 
   @override
   void dispose() {
-    widget.tabController.animation.removeListener(_onChangingSelectedTab);
+    widget.tabController.animation?.removeListener(_onChangingSelectedTab);
     super.dispose();
   }
 
@@ -83,7 +83,6 @@ class BottomTabBarState extends State<BottomTabBar> {
             : null,
       ),
       child: Stack(
-        overflow: Overflow.visible,
         children: <Widget>[
           Positioned(
             top: indicatorHeight,
@@ -145,10 +144,10 @@ class BottomTabBarState extends State<BottomTabBar> {
     final isLtr = Directionality.of(context) == TextDirection.ltr;
 
     if (isLtr) {
-      return lerpDouble(-1.0, 1.0, index / (items.length - 1));
+      return lerpDouble(-1.0, 1.0, index / (items.length - 1)) ?? 0.0;
     }
 
-    return lerpDouble(1.0, -1.0, index / (items.length - 1));
+    return lerpDouble(1.0, -1.0, index / (items.length - 1)) ?? 0.0;
   }
 
   Widget _buildItemWidget(
@@ -160,6 +159,7 @@ class BottomTabBarState extends State<BottomTabBar> {
         .copyWith(color: color);
 
     return Container(
+      key: item.key,
       color: item.backgroundColor,
       height: barHeight,
       width: width / items.length,
@@ -167,7 +167,7 @@ class BottomTabBarState extends State<BottomTabBar> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           if (item.svgAsset != null)
-            SvgPicture.asset(item.svgAsset, color: color)
+            SvgPicture.asset(item.svgAsset!, color: color)
           else
             Icon(item.icon, color: color, size: 24.0),
           const SizedBox(height: 3),

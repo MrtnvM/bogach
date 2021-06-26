@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class TopBar extends HookWidget {
-  const TopBar({this.onMenuTap});
+  const TopBar({required this.onMenuTap});
 
   static const bottomOffset = 24.0;
   static const topBarContentHeight = 130.0;
@@ -83,7 +83,7 @@ class TopBar extends HookWidget {
 }
 
 class _CirclesBackground extends StatelessWidget {
-  const _CirclesBackground({Key key}) : super(key: key);
+  const _CirclesBackground({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

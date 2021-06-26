@@ -5,11 +5,11 @@ import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
 
 T useConfig<T>(T Function(ConfigState) converter) {
-  return useGlobalState((s) => converter(s.config));
+  return useGlobalState((s) => converter(s.config))!;
 }
 
 _OnlineStatus useOnlineStatus() {
-  final isOnline = useConfig((c) => c.isOnline ?? true);
+  final isOnline = useConfig((c) => c.isOnline);
 
   final statusColor = isOnline //
       ? ColorRes.onlineStatus
@@ -27,7 +27,11 @@ _OnlineStatus useOnlineStatus() {
 }
 
 class _OnlineStatus {
-  const _OnlineStatus({this.isOnline, this.color, this.description});
+  const _OnlineStatus({
+    required this.isOnline,
+    required this.color,
+    required this.description,
+  });
 
   final bool isOnline;
   final Color color;

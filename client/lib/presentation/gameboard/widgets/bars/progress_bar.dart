@@ -14,7 +14,7 @@ import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ProgressBar extends HookWidget {
-  const ProgressBar({Key key, @required this.onMenuTap}) : super(key: key);
+  const ProgressBar({Key? key, required this.onMenuTap}) : super(key: key);
 
   static const height = 66.0;
 
@@ -22,11 +22,11 @@ class ProgressBar extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userId = useUserId();
-    final target = useCurrentGame((g) => g.target);
+    final userId = useUserId()!;
+    final target = useCurrentGame((g) => g!.target)!;
     final currentTargetValue = useCurrentGame(
-      (g) => mapGameToCurrentTargetValue(g, userId),
-    );
+      (g) => mapGameToCurrentTargetValue(g!, userId),
+    )!;
     final progress = currentTargetValue / target.value;
 
     return Container(
@@ -51,9 +51,9 @@ class ProgressBar extends HookWidget {
 
 class _ProgressTitle extends HookWidget {
   const _ProgressTitle({
-    Key key,
-    this.target,
-    this.currentValue,
+    Key? key,
+    required this.target,
+    required this.currentValue,
   }) : super(key: key);
 
   final Target target;
@@ -61,8 +61,9 @@ class _ProgressTitle extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentMonth = useCurrentGame((g) => g.state.monthNumber);
-    final monthLimit = useCurrentGame((g) => g.config?.monthLimit);
+    final currentMonth = useCurrentGame((g) => g!.state.monthNumber);
+    final monthLimit = useCurrentGame((g) => g!.config.monthLimit);
+    final gameboardTutorial = useGameboardTutorial();
 
     final monthPast = monthLimit != null
         ? '${Strings.month}: $currentMonth / $monthLimit'
@@ -93,6 +94,7 @@ class _ProgressTitle extends HookWidget {
         if (monthPast != null)
           Text(
             monthPast,
+            key: gameboardTutorial?.monthKey,
             textAlign: TextAlign.left,
             style: Styles.tableHeaderTitleBlack.copyWith(
               color: Colors.white,
@@ -106,7 +108,7 @@ class _ProgressTitle extends HookWidget {
 }
 
 class _MenuButton extends StatelessWidget {
-  const _MenuButton({Key key, @required this.onMenuTap}) : super(key: key);
+  const _MenuButton({Key? key, required this.onMenuTap}) : super(key: key);
 
   final VoidCallback onMenuTap;
 
@@ -124,7 +126,7 @@ class _MenuButton extends StatelessWidget {
 }
 
 class _RoundProgress extends HookWidget {
-  const _RoundProgress({Key key, @required this.progress}) : super(key: key);
+  const _RoundProgress({Key? key, required this.progress}) : super(key: key);
 
   final double progress;
 

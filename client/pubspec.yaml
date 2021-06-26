@@ -1,115 +1,118 @@
 name: cash_flow
 description: The best investment trainer!
-version: 2.1.0+45
+version: 2.2.0+46
 
 environment:
-  sdk: '>=2.6.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
 
   # Core
-  rxdart: ^0.24.1
-  flutter_secure_storage: ^3.3.1+1
-  shared_preferences: ^0.5.6+1
-  intl: ^0.16.1
-  crypto: ^2.1.5
-  get_it: ^5.0.1
-  json_serializable: ^3.2.5
-  device_preview: ^0.4.4
-  in_app_purchase: ^0.3.3
-  connectivity: ^2.0.0
-  fimber: ^0.4.4
-  flutter_rollbar: ^0.0.2
+  rxdart: ^0.26.0
+  flutter_secure_storage: ^4.2.0
+  shared_preferences: ^2.0.5
+  intl: ^0.17.0
+  uni_links: ^0.5.1
+  crypto: 3.0.1
+  get_it: ^6.1.1
+  json_serializable: ^4.1.1
+  device_preview: ^0.7.3
+  in_app_purchase: ^0.5.2
+  connectivity: ^3.0.3
+  fimber: ^0.6.1
+  #flutter_rollbar: ^0.0.2
 
   # Test
-  mockito: ^4.1.2
-  test: ^1.15.4
+  mockito: ^5.0.7
+  test: ^1.16.3
 
   # Immutability
-  built_value: ^7.1.0
-  built_collection: ^4.3.2
-  freezed_annotation: ^0.11.0+1
+  built_value: ^8.0.5
+  built_collection: ^5.0.0
+  freezed_annotation: ^0.14.1
 
   # Firebase
-  firebase_core: ^0.7.0
-  firebase_analytics: ^7.0.0
-  firebase_dynamic_links: ^0.7.0
-  firebase_crashlytics: ^0.4.0+1
-  firebase_auth: ^0.20.0+1
-  firebase_database: ^6.0.0
-  firebase_messaging: ^8.0.0-dev.14
-  firebase_performance: ^0.5.0+1
-  firebase_storage: ^7.0.0
-  cloud_firestore: ^0.16.0
-  firebase_remote_config: ^0.6.0
+  firebase_core: ^1.1.0
+  firebase_analytics: ^8.0.2
+  firebase_dynamic_links: ^2.0.2
+  firebase_crashlytics: ^2.0.2
+  firebase_auth: ^1.1.2
+  firebase_database: ^7.0.0-dev.2
+  firebase_messaging: ^9.1.3
+  firebase_performance: ^0.7.0+2
+  firebase_storage: ^8.0.5
+  firebase_remote_config: ^0.10.0-dev.2
+  cloud_firestore: ^1.0.7
 
   # Analytics
-  amplitude_flutter: ^2.0.0
+  amplitude_flutter: ^3.1.0
 
   # Notifications
-  notification_permissions: ^0.4.8
+  notification_permissions: ^0.5.0
 
   # Social
-  flutter_facebook_login: ^3.0.0
-  google_sign_in: ^4.5.1
-  apple_sign_in: ^0.1.0
+  flutter_facebook_auth: ^3.3.3+1
+  google_sign_in: ^5.0.2
+  sign_in_with_apple: ^3.0.0
 
   # Images
-  image_picker: ^0.6.7+21
-  image_cropper: ^1.3.1
+  image_picker: ^0.7.4
+  image_cropper: ^1.4.0
 
   # UI
-  flutter_hooks: ^0.12.0
-  auto_size_text: ^2.1.0
-  tutorial_coach_mark: ^0.5.1
-  cached_network_image: ^2.3.3
-  smooth_page_indicator: ^0.2.0
-  flutter_svg: ^0.18.1
-  charts_flutter: ^0.9.0
-  cupertino_icons: ^0.1.2
-  url_launcher: ^5.4.2
-  share: ^0.6.5+4
-  flutter_swiper: ^1.1.6
-  shimmer: ^1.1.2
-  app_settings: ^4.0.4
-  percent_indicator: ^2.1.7+2
-  feedback: ^0.2.1+1
+  flutter_hooks: ^0.16.0
+  auto_size_text: ^3.0.0-nullsafety.0
+  tutorial_coach_mark: ^1.0.0
+  cached_network_image: ^3.0.0
+  smooth_page_indicator: ^0.3.0-nullsafety.0
+  flutter_svg: ^0.22.0
+  #charts_flutter: ^0.10.0 #wait for Google update https://github.com/google/charts/issues/579#issuecomment-817792878
+  cupertino_icons: ^1.0.2
+  url_launcher: ^6.0.3
+  syncfusion_flutter_charts: ^19.1.63
+  share: ^2.0.1
+  flutter_swiper:
+    git:
+      url: https://github.com/Arkangel12/flutter_swiper
+      ref: master
   k_chart:
     git:
-      url: https://github.com/robertBadamshin/k_chart
-      ref: chart-design-updates
+      url: https://github.com/MrtnvM/k_chart
+      ref: master
+  shimmer: ^2.0.0
+  app_settings: ^4.1.0
+  #nnbd
+  percent_indicator: ^3.3.0-nullsafety.1
+  feedback: ^1.2.1
 
   # Dash Kit
-  dash_kit_core: ^2.1.2
-  dash_kit_network: ^2.0.4
-  dash_kit_control_panel: ^1.0.0
-  dash_kit_loadable: ^2.1.2
-  dash_kit_uikit: ^1.0.0
+  dash_kit_core: ^3.0.0-dev.5
+  dash_kit_network: ^3.0.0-dev.3
+  dash_kit_control_panel: ^3.0.0-dev.5
+  dash_kit_loadable: ^3.0.0-dev.1
+  dash_kit_uikit: ^3.0.0-dev.1
 
-  google_mobile_ads: ^0.11.0
-
-  version: ^1.3.0
-  launch_review: ^2.0.0
-
-dependency_overrides:
-  # for dash_kit_control_panel and flutter_rollbar compatibility
-  package_info: ^0.4.3
+  version: ^2.0.0
+  launch_review: ^3.0.1
+  collection: ^1.15.0-nullsafety.4
+  google_mobile_ads: ^0.12.1+1
 
 dev_dependencies:
-  effective_dart: ^1.2.4
-  flutter_launcher_icons:
-    git:
-      url: git://github.com/fluttercommunity/flutter_launcher_icons
-      ref: flavors
+  effective_dart: ^1.3.1
+  flutter_launcher_icons: ^0.9.0
 
   flutter_test:
     sdk: flutter
 
-  build_runner: ^1.10.2
-  freezed: ^0.11.6
-  built_value_generator: ^7.1.0
+  build_runner: ^2.0.1
+  freezed: ^0.14.1+3
+  built_value_generator:
+    git:
+      url: https://github.com/JEuler/built_value.dart.git
+      path: built_value_generator
+      ref: build-config-up
 
 flutter:
   uses-material-design: true

@@ -1,3 +1,4 @@
+import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
@@ -8,17 +9,17 @@ typedef OnCountChangedCallback = void Function(int);
 
 class PriceCalculator extends StatelessWidget {
   const PriceCalculator({
-    @required this.currentPrice,
-    Key key,
+    Key? key,
+    required this.currentPrice,
     this.onCountChanged,
     this.count = 1,
-  })  : assert(currentPrice != null),
-        assert(count != null),
-        super(key: key);
+    required this.action,
+  }) : super(key: key);
 
   final int count;
   final double currentPrice;
-  final OnCountChangedCallback onCountChanged;
+  final OnCountChangedCallback? onCountChanged;
+  final BuySellAction action;
 
   @override
   Widget build(BuildContext context) {

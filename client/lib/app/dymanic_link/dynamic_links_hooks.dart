@@ -9,7 +9,7 @@ void useDynamicLinkHandler() {
   final addFriend = useAddFriend();
 
   useDynamicLinkSubscription((dynamicLink) {
-    final link = dynamicLink.link;
+    final link = dynamicLink?.link;
 
     if (link == null) {
       return;
@@ -30,7 +30,11 @@ void useDynamicLinkHandler() {
 
     if (query.contains(DynamicLinks.inviterId)) {
       final inviterId = link.queryParameters[DynamicLinks.inviterId];
-      addFriend(inviterId);
+
+      if (inviterId != null) {
+        Logger.i('Inviter id: $inviterId');
+        addFriend(inviterId);
+      }
       return;
     }
   });

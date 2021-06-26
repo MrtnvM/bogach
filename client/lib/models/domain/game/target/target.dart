@@ -8,10 +8,10 @@ part 'target.freezed.dart';
 part 'target.g.dart';
 
 @freezed
-abstract class Target with _$Target {
+class Target with _$Target {
   factory Target({
-    @required TargetType type,
-    @required double value,
+    required TargetType type,
+    required double value,
   }) = _Target;
 
   factory Target.fromJson(Map<String, dynamic> json) => _$TargetFromJson(json);
@@ -39,15 +39,15 @@ String mapTargetTypeToString(TargetType type) {
 double mapGameToCurrentTargetValue(Game game, String userId) {
   switch (game.target.type) {
     case TargetType.cash:
-      return game.participants[userId].account.cash;
+      return game.participants[userId]?.account.cash ?? 0;
 
     case TargetType.passiveIncome:
-      final totalIncome = game.participants[userId].possessionState.incomes
-          .fold<double>(0.0, (sum, i) => sum + i.value);
+      final totalIncome = game.participants[userId]?.possessionState.incomes
+          .fold<double>(0.0, (sum, i) => sum + i.value) ?? 0;
 
-      final salary = game.participants[userId].possessionState.incomes
+      final salary = game.participants[userId]?.possessionState.incomes
           .where((i) => i.type == IncomeType.salary)
-          .fold<double>(0.0, (sum, i) => sum + i.value);
+          .fold<double>(0.0, (sum, i) => sum + i.value) ?? 0;
 
       final passiveIncome = totalIncome - salary;
       return passiveIncome;

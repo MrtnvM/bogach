@@ -9,17 +9,15 @@ part 'multiplayer_state.g.dart';
 
 abstract class MultiplayerState
     implements Built<MultiplayerState, MultiplayerStateBuilder> {
-  factory MultiplayerState([void Function(MultiplayerStateBuilder) updates]) =
+  factory MultiplayerState([void Function(MultiplayerStateBuilder)? updates]) =
       _$MultiplayerState;
   MultiplayerState._();
 
-  @nullable
-  GameTemplate get selectedGameTemplate;
+  GameTemplate? get selectedGameTemplate;
 
-  @nullable
-  String get createdRoomId;
+  String? get createdRoomId;
 
-  Map<String, Room> get rooms;
+  Map<String, Room?> get rooms;
 
   List<OnlineProfile> get onlineProfiles;
   StoreList<UserProfile> get userProfiles;

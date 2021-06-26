@@ -7,7 +7,7 @@ part 'salary_change_player_action.g.dart';
 class SalaryChangePlayerAction extends PlayerAction {
   const SalaryChangePlayerAction(this.eventId);
 
-  final String eventId;
+  final String? eventId;
 
   @override
   Map<String, dynamic> toJson() => _$SalaryChangePlayerActionToJson(this);

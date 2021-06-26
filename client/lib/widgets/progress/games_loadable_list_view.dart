@@ -7,11 +7,11 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 class GamesLoadableListView<T extends StoreListItem>
     extends LoadableListView<T> {
   const GamesLoadableListView({
-    @required LoadableListViewModel<T> viewModel,
+    required LoadableListViewModel<T> viewModel,
     this.swiperController,
   }) : super(viewModel: viewModel);
 
-  final SwiperController swiperController;
+  final SwiperController? swiperController;
 
   @override
   State<StatefulWidget> createState() {
@@ -25,7 +25,7 @@ class SnapLoadableListViewState<T extends StoreListItem>
     extends LoadableListViewState<T> {
   SnapLoadableListViewState({this.swiperController});
 
-  final SwiperController swiperController;
+  final SwiperController? swiperController;
 
   @override
   Widget build(BuildContext context) {

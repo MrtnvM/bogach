@@ -3,12 +3,12 @@ import 'package:cash_flow/utils/extensions/extensions.dart';
 
 class AnimatedPrice extends StatefulWidget {
   const AnimatedPrice({
-    Key key,
-    @required this.begin,
-    @required this.end,
+    Key? key,
+    required this.begin,
+    required this.end,
+    required this.style,
     this.curve = Curves.linear,
     this.duration = const Duration(milliseconds: 250),
-    this.style,
     this.textAlign,
     this.textDirection,
     this.locale,
@@ -24,14 +24,14 @@ class AnimatedPrice extends StatefulWidget {
   final Curve curve;
   final Duration duration;
   final TextStyle style;
-  final TextAlign textAlign;
-  final TextDirection textDirection;
-  final Locale locale;
-  final bool softWrap;
-  final TextOverflow overflow;
-  final double textScaleFactor;
-  final int maxLines;
-  final String semanticsLabel;
+  final TextAlign? textAlign;
+  final TextDirection? textDirection;
+  final Locale? locale;
+  final bool? softWrap;
+  final TextOverflow? overflow;
+  final double? textScaleFactor;
+  final int? maxLines;
+  final String? semanticsLabel;
 
   @override
   _AnimatedPriceState createState() => _AnimatedPriceState();
@@ -39,10 +39,10 @@ class AnimatedPrice extends StatefulWidget {
 
 class _AnimatedPriceState extends State<AnimatedPrice>
     with TickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<double> _animation;
-  double _latestBegin;
-  double _latestEnd;
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  late double _latestBegin;
+  late double _latestEnd;
 
   @override
   void dispose() {
@@ -94,9 +94,9 @@ class _AnimatedPriceState extends State<AnimatedPrice>
 
 class _AnimatedPriceText extends AnimatedWidget {
   const _AnimatedPriceText({
-    Key key,
-    @required this.animation,
-    this.style,
+    Key? key,
+    required this.animation,
+    required this.style,
     this.textAlign,
     this.textDirection,
     this.locale,
@@ -109,14 +109,14 @@ class _AnimatedPriceText extends AnimatedWidget {
 
   final Animation<double> animation;
   final TextStyle style;
-  final TextAlign textAlign;
-  final TextDirection textDirection;
-  final Locale locale;
-  final bool softWrap;
-  final TextOverflow overflow;
-  final double textScaleFactor;
-  final int maxLines;
-  final String semanticsLabel;
+  final TextAlign? textAlign;
+  final TextDirection? textDirection;
+  final Locale? locale;
+  final bool? softWrap;
+  final TextOverflow? overflow;
+  final double? textScaleFactor;
+  final int? maxLines;
+  final String? semanticsLabel;
 
   @override
   Widget build(BuildContext context) {

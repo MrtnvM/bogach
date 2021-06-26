@@ -15,7 +15,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:rxdart/rxdart.dart';
 
 class StartGameAction extends BaseAction {
-  StartGameAction(this.gameContext) : assert(gameContext != null);
+  StartGameAction(this.gameContext);
 
   final GameContext gameContext;
 
@@ -50,7 +50,7 @@ class StartGameAction extends BaseAction {
 
     return state.rebuild((s) {
       final gameId = gameContext.gameId;
-      s.game.activeGameStates[gameId] = ActiveGameState.waitingForStart();
+      s.game.activeGameStates![gameId] = ActiveGameState.waitingForStart();
 
       s.game.monthResultAds = <int, Ad>{};
     });
@@ -65,10 +65,10 @@ class StartGameAction extends BaseAction {
 class StopGameAction extends BaseAction {
   StopGameAction(this.gameId);
 
-  final String gameId;
+  final String? gameId;
 
   @override
-  AppState reduce() {
+  AppState? reduce() {
     return null;
   }
 }

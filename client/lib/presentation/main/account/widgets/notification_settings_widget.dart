@@ -7,7 +7,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:notification_permissions/notification_permissions.dart';
 
 class NotificationsSettingsWidget extends HookWidget {
-  const NotificationsSettingsWidget({Key key}) : super(key: key);
+  const NotificationsSettingsWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class NotificationsSettingsWidget extends HookWidget {
           activeColor: ColorRes.mainGreen,
           value: areNotificationsTurnedOn,
           onChanged: (newValue) {
-            tempPermissionValue.value = newValue;
+            tempPermissionValue.value = newValue ?? false;
           },
         ),
       ],

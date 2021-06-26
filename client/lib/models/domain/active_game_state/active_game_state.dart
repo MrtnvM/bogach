@@ -4,14 +4,14 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'active_game_state.freezed.dart';
 
 @freezed
-abstract class ActiveGameState with _$ActiveGameState {
+class ActiveGameState with _$ActiveGameState {
   ActiveGameState._();
 
   factory ActiveGameState.waitingForStart() = ActiveGameWaitingForStartState;
 
   factory ActiveGameState.gameEvent({
-    @required int eventIndex,
-    @required int sendingEventIndex,
+    required int eventIndex,
+    required int sendingEventIndex,
   }) = ActiveGameGameEventState;
 
   factory ActiveGameState.waitingPlayers(
@@ -21,7 +21,7 @@ abstract class ActiveGameState with _$ActiveGameState {
   factory ActiveGameState.monthResult() = ActiveGameMonthResultState;
 
   factory ActiveGameState.gameOver({
-    @required List<Winner> winners,
-    @required int monthNumber,
+    required List<Winner> winners,
+    required int monthNumber,
   }) = ActiveGameGameOverState;
 }

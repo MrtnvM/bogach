@@ -7,28 +7,27 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class MultiplayerProfile {
   MultiplayerProfile({
-    @required this.userId,
-    @required this.avatarUrl,
-    @required this.userName,
-    @required this.isOnline,
+    required this.userId,
+    required this.avatarUrl,
+    required this.userName,
+    required this.isOnline,
     this.isFriend = false,
   });
 
   final String userId;
-  final String avatarUrl;
-  final String userName;
+  final String? avatarUrl;
+  final String? userName;
   final bool isOnline;
   final bool isFriend;
 }
 
 class MultiplayerProfileWidget extends HookWidget {
   const MultiplayerProfileWidget({
-    Key key,
-    @required this.profile,
-    @required this.isSelected,
-    @required this.onTap,
-  })  : assert(profile != null),
-        super(key: key);
+    Key? key,
+    required this.profile,
+    required this.isSelected,
+    required this.onTap,
+  })  : super(key: key);
 
   final MultiplayerProfile profile;
   final Function(String) onTap;
@@ -40,7 +39,7 @@ class MultiplayerProfileWidget extends HookWidget {
     final avatarSize = size(60);
 
     return GestureDetector(
-      onTap: () => onTap?.call(profile.userId),
+      onTap: () => onTap.call(profile.userId),
       child: SizedBox(
         width: avatarSize,
         child: Column(
@@ -68,7 +67,7 @@ class MultiplayerProfileWidget extends HookWidget {
               children: [
                 Expanded(
                   child: Text(
-                    profile.userName,
+                    profile.userName!,
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
@@ -87,7 +86,7 @@ class MultiplayerProfileWidget extends HookWidget {
 }
 
 class _SelectedProfileIcon extends HookWidget {
-  const _SelectedProfileIcon({Key key}) : super(key: key);
+  const _SelectedProfileIcon({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

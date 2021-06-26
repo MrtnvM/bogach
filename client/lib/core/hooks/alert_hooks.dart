@@ -7,13 +7,13 @@ typedef RetriableShowAlertFunction = void Function(
 );
 
 RetriableShowAlertFunction showWarningAlert({
-  @required BuildContext context,
-  String Function(dynamic) message,
-  String submitButtonText,
-  bool needCancelButton,
+  required BuildContext context,
+  String Function(dynamic)? message,
+  String? submitButtonText,
+  bool? needCancelButton,
 }) {
   return (error, retry) {
-    final errorMessage = message?.call(error) ?? error?.toString();
+    final errorMessage = (message?.call(error) ?? error?.toString())!;
 
     showWarningAlertDialog(
       context: context,

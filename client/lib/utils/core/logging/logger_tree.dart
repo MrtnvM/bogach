@@ -1,5 +1,5 @@
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
-import 'package:fimber/fimber_base.dart';
+import 'package:fimber/fimber.dart';
 
 class LoggerTree extends LogTree {
   LoggerTree({this.logLevels = defaultLevels});
@@ -12,7 +12,7 @@ class LoggerTree extends LogTree {
 
   @override
   void log(String level, String message,
-      {String tag, dynamic ex, StackTrace stacktrace}) {
+      {String? tag, dynamic ex, StackTrace? stacktrace}) {
     if (level == 'V') {
       Logger.v(message, ex, stacktrace);
     } else if (level == 'D') {

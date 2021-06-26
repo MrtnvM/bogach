@@ -13,7 +13,7 @@ part 'app_state.g.dart';
 
 abstract class AppState
     implements Built<AppState, AppStateBuilder>, GlobalState {
-  factory AppState([void Function(AppStateBuilder) updates]) = _$AppState;
+  factory AppState([void Function(AppStateBuilder)? updates]) = _$AppState;
 
   AppState._();
 
@@ -31,13 +31,17 @@ abstract class AppState
 
   @override
   T updateOperation<T extends GlobalState>(
-    Object operationKey,
+    Object? operationKey,
     OperationState operationState,
   ) {
+    if (operationKey == null) {
+      return this as T;
+    }
+
     final GlobalState newState = rebuild(
       (s) => s.operationsState[operationKey] = operationState,
     );
-    return newState;
+    return newState as T;
   }
 
   @override

@@ -10,7 +10,7 @@ class StartListeningPurchasesAction extends BaseAction {
   StartListeningPurchasesAction();
 
   @override
-  AppState reduce() {
+  AppState? reduce() {
     final purchaseService = GetIt.I.get<PurchaseService>();
     final action$ = GetIt.I.get<ReduxActionObserver>().onAction;
 
@@ -27,7 +27,7 @@ class StartListeningPurchasesAction extends BaseAction {
 
 class StopListeningPurchasesAction extends BaseAction {
   @override
-  AppState reduce() {
+  AppState? reduce() {
     return null;
   }
 }

@@ -7,7 +7,7 @@ import 'package:cash_flow/services/dynamic_link/get_room_invite_link.dart';
 import 'package:cash_flow/services/dynamic_link/sender/dymaic_link_sender.dart';
 
 class ShareRoomInviteLinkAction extends BaseAction {
-  ShareRoomInviteLinkAction(this.roomId) : assert(roomId != null);
+  ShareRoomInviteLinkAction(this.roomId);
 
   final String roomId;
 
@@ -15,10 +15,10 @@ class ShareRoomInviteLinkAction extends BaseAction {
   Operation get operationKey => Operation.shareRoomInviteLink;
 
   @override
-  Future<AppState> reduce() async {
+  Future<AppState?> reduce() async {
     final link = await getRoomInviteLink(
       roomId: roomId,
-      currentUser: state.profile.currentUser,
+      currentUser: state.profile.currentUser!,
     );
 
     await shareDynamicLink(link);

@@ -66,4 +66,12 @@ export namespace DomainErrors {
       ru: 'Достигнут предел в количестве участников игры',
     },
   };
+
+  export const creditIsNotAvilable: DomainError = {
+    type: 'domain',
+    code: 'credit-not-available',
+    message: {
+      ru: 'Вы не можете взять кредит, так как ваш денежный поток станет отрицательным',
+    },
+  };
 }

@@ -1,8 +1,5 @@
-import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/income/models/income_event_data.dart';
-import 'package:cash_flow/presentation/gameboard/game_events/income/ui/income_game_event_hooks.dart';
-import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
 import 'package:cash_flow/resources/images.dart';
@@ -17,12 +14,10 @@ class IncomeGameEvent extends HookWidget {
 
   final GameEvent event;
 
-  IncomeEventData get eventData => event.data;
+  IncomeEventData get eventData => event.data as IncomeEventData;
 
   @override
   Widget build(BuildContext context) {
-    final sendPlayerAction = useIncomePlayerActionHandler(event: event);
-
     return Column(
       children: <Widget>[
         InfoTable(
@@ -38,11 +33,6 @@ class IncomeGameEvent extends HookWidget {
             ),
           ],
         ),
-        const SizedBox(height: 28),
-        PlayerActionBar(confirm: () {
-          sendPlayerAction();
-          AnalyticsSender.incomeEvent(event.name, eventData.income);
-        }),
       ],
     );
   }

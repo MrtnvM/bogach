@@ -4,6 +4,6 @@ class SearchQueryResult<T> {
     this.items = const [],
   });
 
-  final String searchString;
+  final String? searchString;
   final List<T> items;
 }

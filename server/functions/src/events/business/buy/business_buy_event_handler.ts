@@ -8,6 +8,7 @@ import { Account } from '../../../models/domain/account';
 import { BusinessAsset } from '../../../models/domain/assets/business_asset';
 import { UserEntity } from '../../../models/domain/user/user';
 import { DomainErrors } from '../../../core/exceptions/domain/domain_errors';
+import { CreditHandler } from '../../common/credit_handler';
 
 type Event = BusinessBuyEvent.Event;
 type Action = BusinessBuyEvent.PlayerAction;
@@ -17,6 +18,13 @@ interface ActionResult {
   readonly newCreditValue: number;
   readonly newAssets: Asset[];
   readonly newLiabilities: Liability[];
+}
+
+interface BuyResult {
+  readonly newAccountBalance: number;
+  readonly newCreditValue: number;
+  readonly credit?: Liability;
+  readonly defaultLiability?: Liability;
 }
 
 interface ActionBuyParameters {
@@ -33,9 +41,14 @@ interface ActionBuyParameters {
   readonly payback: number;
   readonly sellProbability: number;
   readonly debt: number;
+  readonly buyInCredit: boolean;
 }
 
 export class BusinessBuyEventHandler extends PlayerActionHandler {
+  constructor(private creditHandler: CreditHandler) {
+    super();
+  }
+
   get gameEventType(): string {
     return BusinessBuyEvent.Type;
   }
@@ -64,7 +77,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
       sellProbability,
     } = event.data;
 
-    const { action: businessAction } = action;
+    const { action: businessAction, inCredit } = action;
 
     if (businessAction !== 'buy') {
       throw new Error(
@@ -75,13 +88,14 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
       );
     }
 
-    const assets = game.participants[userId].possessions.assets;
+    const gameParticipant = game.participants[userId];
+    const assets = gameParticipant.possessions.assets;
     this.checkExistingBusiness(assets, businessId);
 
-    const liabilities = game.participants[userId].possessions.liabilities;
+    const liabilities = gameParticipant.possessions.liabilities;
     this.checkExistingLiability(liabilities, businessId);
 
-    const userAccount = game.participants[userId].account;
+    const userAccount = gameParticipant.account;
     const priceToPay = currentPrice - debt;
     const businessName = event.name;
     const actionBuyParameters: ActionBuyParameters = {
@@ -98,17 +112,18 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
       payback,
       sellProbability,
       debt,
+      buyInCredit: inCredit,
     };
 
     const actionResult = this.applyBuyAction(actionBuyParameters);
 
     const updatedGame: Game = produce(game, (draft) => {
-      const participant = draft.participants[userId];
+      const draftParticipant = draft.participants[userId];
 
-      participant.account.credit = actionResult.newCreditValue;
-      participant.account.cash = actionResult.newAccountBalance;
-      participant.possessions.assets = actionResult.newAssets;
-      participant.possessions.liabilities = actionResult.newLiabilities;
+      draftParticipant.account.credit = actionResult.newCreditValue;
+      draftParticipant.account.cash = actionResult.newAccountBalance;
+      draftParticipant.possessions.assets = actionResult.newAssets;
+      draftParticipant.possessions.liabilities = actionResult.newLiabilities;
     });
 
     return updatedGame;
@@ -137,37 +152,28 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
   }
 
   applyBuyAction(actionParameters: ActionBuyParameters): ActionResult {
-    const { userAccount, priceToPay } = actionParameters;
+    const { buyInCredit, userAccount, priceToPay } = actionParameters;
 
-    //TODO implement credit and write tests
-    const canCredit = false;
     const isEnoughMoney = userAccount.cash >= priceToPay;
-    if (!isEnoughMoney && !canCredit) {
-      throw DomainErrors.notEnoughCash;
-    }
-
-    let newAccountBalance = 0;
-    let newCreditValue = userAccount.credit;
-    if (priceToPay <= userAccount.cash) {
-      newAccountBalance = userAccount.cash - priceToPay;
-    } else if (canCredit) {
-      const sumToCredit = priceToPay - userAccount.cash;
-      newAccountBalance = 0;
-      newCreditValue += sumToCredit;
+    let buyResult;
+    if (!buyInCredit || isEnoughMoney) {
+      buyResult = this.handleBuyWithoutCredit(actionParameters);
     } else {
-      throw new Error(
-        'Unexpected behavior on ' + BusinessBuyEventHandler.name + 'when counting sum'
-      );
+      buyResult = this.handleBuyWithCredit(actionParameters);
     }
 
     const newAssets = this.addNewItemToAssets(actionParameters);
-    const newLiabilities = this.addNewLiability(actionParameters);
+    var newLiabilities = this.addNewLiability(
+      actionParameters.liabilities,
+      buyResult.defaultLiability
+    );
+    newLiabilities = this.addNewLiability(newLiabilities, buyResult.credit);
 
     const actionResult: ActionResult = {
-      newAccountBalance,
+      newAccountBalance: buyResult.newAccountBalance,
       newAssets,
       newLiabilities,
-      newCreditValue,
+      newCreditValue: buyResult.newCreditValue,
     };
 
     return actionResult;
@@ -205,22 +211,89 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     return newAssets;
   }
 
-  addNewLiability(actionBuyParameters: ActionBuyParameters): Liability[] {
-    const { liabilities, businessId, businessName, debt } = actionBuyParameters;
+  addNewLiability(liabilities: Liability[], newLiability?: Liability): Liability[] {
+    if (newLiability === undefined) {
+      return liabilities;
+    }
 
-    const newLiabilities = (liabilities || []).slice();
+    const newLiabilities = liabilities.slice();
+    newLiabilities.push(newLiability);
+    return newLiabilities;
+  }
 
-    const newLiability: Liability = {
+  handleBuyWithoutCredit(actionParameters: ActionBuyParameters): BuyResult {
+    const { userAccount, priceToPay } = actionParameters;
+
+    const isEnoughMoney = userAccount.cash >= priceToPay;
+    if (!isEnoughMoney) {
+      throw DomainErrors.notEnoughCash;
+    }
+
+    const defaultLiability = this.createDefaultLiability(actionParameters);
+
+    const newAccountBalance = userAccount.cash - priceToPay;
+    const buyResult: BuyResult = {
+      newAccountBalance,
+      newCreditValue: userAccount.credit,
+      defaultLiability: defaultLiability,
+    };
+
+    return buyResult;
+  }
+
+  handleBuyWithCredit(actionParameters: ActionBuyParameters): BuyResult {
+    const { businessId, businessName, userAccount, priceToPay } = actionParameters;
+
+    const creditParameters = {
+      userCashFlow: userAccount.cashFlow,
+      userCash: userAccount.cash,
+      priceToPay: priceToPay,
+    };
+
+    const {
+      isAvailable: isCreditAvailable,
+      monthlyPayment,
+      creditSum,
+    } = this.creditHandler.isCreditAvailable(creditParameters);
+
+    if (!isCreditAvailable) {
+      throw DomainErrors.creditIsNotAvilable;
+    }
+
+    const newAccountBalance = 0;
+    const newCreditValue = userAccount.credit + creditSum;
+
+    const credit: Liability = {
+      id: businessId,
+      name: businessName,
+      type: 'credit',
+      monthlyPayment: monthlyPayment,
+      value: creditSum,
+    };
+
+    const defaultLiability = this.createDefaultLiability(actionParameters);
+
+    const buyResult: BuyResult = {
+      newAccountBalance,
+      newCreditValue,
+      credit,
+      defaultLiability,
+    };
+
+    return buyResult;
+  }
+
+  createDefaultLiability(actionParameters: ActionBuyParameters): Liability {
+    const { businessId, businessName, debt } = actionParameters;
+
+    const liability: Liability = {
       id: businessId,
       name: businessName,
       type: 'business_credit',
-      // TODO temporary maybe, 0 now
       monthlyPayment: 0,
       value: debt,
     };
 
-    newLiabilities.push(newLiability);
-
-    return newLiabilities;
+    return liability;
   }
 }

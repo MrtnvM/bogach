@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:fimber/fimber.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:notification_permissions/notification_permissions.dart';
@@ -26,16 +25,21 @@ void usePushNotificationsPermissionRequest({
   }, []);
 }
 
-PermissionStatus usePushNotificationsSettings() {
+PermissionStatus? usePushNotificationsSettings() {
 // Since firebase_messaging	^8.0.0-dev.15 you can get notifications settings:
 // NEW: [Apple] Added support for getNotificationSettings().
 // But it requires for update of firebase_core to	^0.7.0
 // So right now notification_permissions lib is used.
-  return useFuture(NotificationPermissions.getNotificationPermissionStatus())
-      .data;
+  return useFuture(
+    NotificationPermissions.getNotificationPermissionStatus(),
+    initialData: [],
+  ).data as PermissionStatus?;
 }
 
-void usePushTokenSubscription(void onTokenUpdated(String token), [List keys]) {
+void usePushTokenSubscription(
+  void onTokenUpdated(String? token), [
+  List? keys,
+]) {
   final firebaseMessaging = useFirebaseMessaging();
 
   useEffect(() {
@@ -49,11 +53,9 @@ void usePushTokenSubscription(void onTokenUpdated(String token), [List keys]) {
 }
 
 void usePushMessageSubscription(void onMessage(Map<String, dynamic> message)) {
-  final void Function(RemoteMessage) onPushNotification = (message) {
+  final onPushNotification = (message) {
     if (message?.data != null) {
       onMessage(message.data);
-    } else {
-      Fimber.e('Push notification with empty data', ex: message);
     }
   };
 

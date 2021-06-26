@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event_type.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -11,12 +10,12 @@ abstract class GameEventData {
 @JsonSerializable(createFactory: false)
 class GameEvent {
   GameEvent({
-    @required this.id,
-    @required this.name,
-    @required this.description,
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.type,
+    required this.data,
     this.image,
-    @required this.type,
-    @required this.data,
   });
 
   factory GameEvent.fromJson(Map<String, dynamic> json) {
@@ -36,7 +35,7 @@ class GameEvent {
   final String id;
   final String name;
   final String description;
-  final String image;
+  final String? image;
   @JsonKey(fromJson: GameEventType.fromJson, toJson: GameEventType.toJson)
   final GameEventType type;
   final GameEventData data;

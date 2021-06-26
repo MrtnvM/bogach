@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class EmptyListWidget extends StatelessWidget {
   const EmptyListWidget([this.text]);
 
-  final String text;
+  final String? text;
 
   @override
   Widget build(BuildContext context) {

@@ -21,14 +21,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class GameboardTabItem {
-  const GameboardTabItem({@required this.tab, @required this.widget});
+  const GameboardTabItem({required this.tab, required this.widget});
 
   final Widget widget;
   final BottomTabBarItem tab;
 }
 
 class GameBoard extends HookWidget {
-  const GameBoard({Key key, @required this.gameId}) : super(key: key);
+  const GameBoard({Key? key, required this.gameId}) : super(key: key);
 
   final String gameId;
 
@@ -45,7 +45,7 @@ class GameBoard extends HookWidget {
 }
 
 class _GameboardBody extends HookWidget {
-  const _GameboardBody({@required this.gameId});
+  const _GameboardBody({required this.gameId});
 
   final String gameId;
 
@@ -54,7 +54,7 @@ class _GameboardBody extends HookWidget {
     final mediaQueryData = useAdaptiveMediaQueryData();
 
     final activeGameState = useCurrentActiveGameState();
-    final gameExists = useCurrentGame((g) => g != null);
+    final gameExists = useCurrentGame((g) => g != null)!;
     final isMultiplayer = useIsMultiplayerGame();
 
     useGameboardAnalytics();
@@ -74,11 +74,12 @@ class _GameboardBody extends HookWidget {
         body: DefaultTabController(
           length: tabItems.length,
           initialIndex: 1,
-          child: activeGameState.maybeMap(
-            gameEvent: (_) => _GameboardContentWidget(tabItems: tabItems),
-            gameOver: (_) => WinnersPage(),
-            orElse: () => _GameboardContentWidget(tabItems: tabItems),
-          ),
+          child: activeGameState?.maybeMap(
+                gameEvent: (_) => _GameboardContentWidget(tabItems: tabItems),
+                gameOver: (_) => WinnersPage(),
+                orElse: () => _GameboardContentWidget(tabItems: tabItems),
+              ) ??
+              _GameboardContentWidget(tabItems: tabItems),
         ),
       ),
     );
@@ -122,13 +123,13 @@ class _GameboardBody extends HookWidget {
 }
 
 class _GameboardContentWidget extends HookWidget {
-  const _GameboardContentWidget({@required this.tabItems});
+  const _GameboardContentWidget({required this.tabItems});
 
   final List<GameboardTabItem> tabItems;
 
   @override
   Widget build(BuildContext context) {
-    final tabController = DefaultTabController.of(context);
+    final tabController = DefaultTabController.of(context)!;
     final tabs = tabItems.map((i) => i.tab).toList();
     final tabWidgets = tabItems.map((i) => i.widget).toList();
     final menuController = useState(GameboardMenuController());
@@ -146,7 +147,7 @@ class _GameboardContentWidget extends HookWidget {
                   tabController: tabController,
                   activeColor: ColorRes.mainGreen,
                   items: tabs,
-                  onTap: (i) => DefaultTabController.of(context).animateTo(i),
+                  onTap: tabController.animateTo,
                 ),
               ],
             ),
@@ -172,7 +173,7 @@ class _LoadingGameWidget extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gameExists = useCurrentGame((g) => g != null);
+    final gameExists = useCurrentGame((g) => g != null) ?? false;
     final notchSize = useNotchSize();
 
     return Stack(

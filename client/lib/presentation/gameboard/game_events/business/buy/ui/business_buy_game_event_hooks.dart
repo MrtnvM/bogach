@@ -15,7 +15,7 @@ import 'package:cash_flow/utils/extensions/extensions.dart';
 
 Map<String, String> useBusinessBuyInfoTableData(GameEvent event) {
   return useMemoized(() {
-    final BusinessBuyEventData eventData = event.data;
+    final eventData = event.data as BusinessBuyEventData;
 
     final data = {
       Strings.offeredPrice: eventData.currentPrice.toPrice(),
@@ -31,8 +31,9 @@ Map<String, String> useBusinessBuyInfoTableData(GameEvent event) {
 }
 
 VoidCallback useBusinessBuyPlayerActionHandler({
-  @required GameEvent event,
-  @required BuySellAction action,
+  required GameEvent event,
+  required BuySellAction action,
+  required inCredit,
 }) {
   final dispatch = useDispatcher();
   final context = useContext();
@@ -40,16 +41,17 @@ VoidCallback useBusinessBuyPlayerActionHandler({
   final gameContext = useCurrentGameContext();
 
   return () {
-    final BusinessBuyEventData eventData = event.data;
+    final eventData = event.data as BusinessBuyEventData;
     final price = eventData.currentPrice - eventData.debt;
 
-    if (!isEnoughCash(price.toDouble())) {
+    if (inCredit == false && !isEnoughCash(price.toDouble())) {
       return;
     }
 
     final playerAction = BusinessBuyPlayerAction(
       const BuySellAction.buy(),
       event.id,
+      inCredit,
     );
 
     final action = SendPlayerMoveAction(
@@ -59,7 +61,7 @@ VoidCallback useBusinessBuyPlayerActionHandler({
     );
 
     dispatch(action)
-        .catchError((e) => handleError(context: context, exception: e));
+        .onError((e, st) => handleError(context: context, exception: e));
   };
 }
 

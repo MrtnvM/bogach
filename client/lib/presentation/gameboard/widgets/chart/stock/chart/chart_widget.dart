@@ -7,20 +7,24 @@ import 'package:k_chart/renderer/base_chart_renderer.dart';
 
 class ChartWidget extends HookWidget {
   const ChartWidget({
-    @required this.candles,
+    required this.candles,
     this.padding,
-    this.backgroundColor,
+    this.backgroundColor = Colors.white,
     this.height = 250,
   });
 
   final List<CandleData> candles;
   final double height;
-  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry? padding;
   final Color backgroundColor;
 
   @override
   Widget build(BuildContext context) {
     final chartData = useChartData(candles);
+    final chartStyle = ChartStyle()
+      ..pointWidth = 16
+      ..candleWidth = 10;
+    final chartColors = ChartColors();
 
     return Container(
       height: height,
@@ -30,26 +34,15 @@ class ChartWidget extends HookWidget {
         builder: (context, constraints) {
           return KChartWidget(
             chartData,
+            chartStyle,
+            chartColors,
             bgColor: [backgroundColor, backgroundColor],
             isLine: false,
-            mainState: MainState.NONE,
-            volHidden: true,
-            secondaryState: SecondaryState.NONE,
-            fixedLength: 0,
             dateFormat: const ['M'],
             infoWindowDateFormat: const ['MM'],
             language: KChartLanguage.russian,
-            selectionLineColor: Colors.grey.withAlpha(40),
-            lineChartColor: Colors.green,
-            lineChartFillColor: Colors.green,
-            maxMinColor: Colors.green,
-            chartVerticalPadding: 24,
             priceFormatter: (price) => price.toPrice(),
             gridColumns: constraints.maxWidth ~/ 45,
-            style: ChartStyle.defaultStyle.copyWith(
-              pointWidth: 16,
-              candleWidth: 10,
-            ),
           );
         },
       ),
@@ -71,9 +64,8 @@ List<KLineEntity> useChartData(List<CandleData> candles) {
         close: candle.close,
         high: candle.high,
         low: candle.low,
-        time: candle.time.millisecondsSinceEpoch,
+        time: candle.time?.millisecondsSinceEpoch,
         change: change,
-        vol: 0,
         amount: 0,
         ratio: changeInPercent,
       ));

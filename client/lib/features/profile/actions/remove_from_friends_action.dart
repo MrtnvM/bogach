@@ -13,10 +13,10 @@ class RemoveFromFriendsAciton extends BaseAction {
   Operation get operationKey => Operation.removeFromFriends;
 
   @override
-  Future<AppState> reduce() async {
+  Future<AppState?> reduce() async {
     final userService = GetIt.I.get<UserService>();
 
-    final userId = state.profile.currentUser.id;
+    final userId = state.profile.currentUser!.id;
 
     await userService.removeFromFriends(
       userId: userId,

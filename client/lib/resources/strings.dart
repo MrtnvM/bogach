@@ -1,4 +1,3 @@
-import 'package:feedback/feedback.dart';
 import 'package:intl/intl.dart';
 
 // ignore: avoid_classes_with_only_static_members
@@ -114,6 +113,7 @@ class Strings {
   static const fieldIsRequired = 'Необходимо заполнить';
   static const continueAction = 'Продолжить';
   static const buy = 'Купить';
+  static const sell = 'Продать';
   static const price = 'Стоимость:';
   static const cost = 'Стоимость';
   static const defence = 'Защита';
@@ -156,6 +156,7 @@ class Strings {
   static const roi = 'ROI за год:';
   static const saleRate = 'Вероятность продажи';
   static const takeLoan = 'Взять\nкредит';
+  static String get buyInCredit => 'В кредит';
 
   static const investments = 'Вложения';
   static String get debentures => 'Облигации';
@@ -195,7 +196,8 @@ class Strings {
 
   static String getSelling(String name) => 'Продается $name';
 
-  static String itemsPerPrice({int count, String price}) => '$count по $price';
+  static String itemsPerPrice({int? count, String? price}) =>
+      '$count по $price';
 
   static const noInternetError = 'Не удалось подключиться к серверу. '
       'Пожалуйста, проверьте ваше интернет-соединение';
@@ -326,14 +328,12 @@ class Strings {
 
   static String get gameEvent => 'Событие';
   static String get gameEventDescription =>
-      'В течение месяца ты будешь сталкиваться с набором событий, '
-      'в виде покупки/продажи ценных бумаг и бизнесов, доходов и расходов, '
-      'страховок и прочего. \n\n'
+      'В течение месяца ты будешь сталкиваться с набором событий. '
       'Будь вниматален и принимай верные решения на пути к цели!';
 
   static String get gameEventActions => 'Действия';
   static String get gameEventActionsDescription =>
-      'Здесь Вы можете подтвердить выбор (например: продажу / покупку), '
+      'А здесь ты можешь подтвердить выбор (например: продажу / покупку), '
       'взять в кредит, или просто пропустить событие';
 
   static String get noGameEvents => 'Произошла ошибка.\nНет игровых событий';
@@ -382,10 +382,13 @@ class Strings {
   static String get winnersPageDescription => 'Ты достиг своей цели всего за';
   static String get winnersMultiplayerPageDescription =>
       'Ты достиг своей цели!';
+  static String get wonForNMonths => 'Ты достиг своей цели за';
+  static String wonFasterThan(int percentage) =>
+      'Быстрее чем $percentage% пользователей!';
 
-  static String get gameFailedPageTitle => 'Цель не достигнута!';
+  static String get gameFailedPageTitle => 'Цель не достигнута';
   static String get gameFailedPageDescription =>
-      'Ты явно можешь лучше!\nНужна еще одна попытка!';
+      'Ты явно можешь лучше.\nНужна еще одна попытка!';
 
   static String get startAgain => 'Начать заново';
 
@@ -431,7 +434,8 @@ class Strings {
   static String get roomCreationFailed =>
       'При создании комнаты возникла ошибка';
   static String get join => 'Присоединиться';
-  static String waitingWhenLeaderStartGame(String leaderName) {
+
+  static String waitingWhenLeaderStartGame(String? leaderName) {
     return 'Ожидаем пока $leaderName начнет игру...';
   }
 
@@ -524,20 +528,4 @@ class Strings {
       'познавательнее для вас. Пожалуйста, обновите приложение для'
       ' доступа к новым функциям - это не займет много времени :)';
   static String get update => 'Обновить';
-
-  static final ruFeedbackTranslations = _RuFeedbackTranslations();
-}
-
-class _RuFeedbackTranslations extends FeedbackTranslation {
-  @override
-  String get draw => 'Нарисовать';
-
-  @override
-  String get feedbackDescriptionText => 'Что случилось?';
-
-  @override
-  String get navigate => 'Навигация';
-
-  @override
-  String get submitButtonText => 'Отправить';
 }

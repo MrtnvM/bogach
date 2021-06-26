@@ -18,9 +18,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class ContainerWithHeaderImage extends HookWidget {
   const ContainerWithHeaderImage({
-    @required this.children,
-    @required this.navBarTitle,
-    Key key,
+    required this.children,
+    required this.navBarTitle,
+    Key? key,
     this.subTitle,
     this.imageUrl,
     this.imageSvg,
@@ -28,11 +28,11 @@ class ContainerWithHeaderImage extends HookWidget {
   }) : super(key: key);
 
   final List<Widget> children;
-  final String navBarTitle;
-  final String subTitle;
-  final String imageUrl;
-  final String imageSvg;
-  final bool isLoading;
+  final String? navBarTitle;
+  final String? subTitle;
+  final String? imageUrl;
+  final String? imageSvg;
+  final bool? isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class ContainerWithHeaderImage extends HookWidget {
     );
     final activeGameState = useCurrentActiveGameState();
     useEffect(() {
-      WidgetsBinding.instance.addPostFrameCallback((_) => onScroll());
+      WidgetsBinding.instance!.addPostFrameCallback((_) => onScroll());
       return null;
     }, [startNewMonthOperationState, activeGameState]);
 
@@ -118,7 +118,7 @@ class ContainerWithHeaderImage extends HookWidget {
 
 class _Header extends HookWidget {
   const _Header({
-    Key key,
+    Key? key,
     this.imageHeight,
     this.topPadding,
     this.navBarTitle,
@@ -127,17 +127,17 @@ class _Header extends HookWidget {
     this.imageSvg,
   }) : super(key: key);
 
-  final String navBarTitle;
-  final String subTitle;
-  final String imageUrl;
-  final String imageSvg;
+  final String? navBarTitle;
+  final String? subTitle;
+  final String? imageUrl;
+  final String? imageSvg;
 
-  final double imageHeight;
-  final double topPadding;
+  final double? imageHeight;
+  final double? topPadding;
 
   @override
   Widget build(BuildContext context) {
-    final game = useCurrentGame((g) => g);
+    final game = useCurrentGame((g) => g)!;
     final isMultiplayerGame = game.type == GameType.multiplayer();
 
     return Stack(
@@ -152,7 +152,7 @@ class _Header extends HookWidget {
         ),
         Container(
           height: imageHeight,
-          padding: EdgeInsets.only(top: topPadding),
+          padding: EdgeInsets.only(top: topPadding!),
           child: Center(
             child: _HeaderContent(
               navBarTitle: navBarTitle,
@@ -174,7 +174,9 @@ class _Header extends HookWidget {
 }
 
 class _HeaderBackground extends StatelessWidget {
-  const _HeaderBackground({Key key}) : super(key: key);
+  const _HeaderBackground({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -205,22 +207,22 @@ class _HeaderBackground extends StatelessWidget {
 
 class _HeaderContent extends HookWidget {
   const _HeaderContent({
-    Key key,
+    Key? key,
     this.navBarTitle,
     this.subTitle,
     this.imageUrl,
     this.imageSvg,
   }) : super(key: key);
 
-  final String navBarTitle;
-  final String subTitle;
-  final String imageUrl;
-  final String imageSvg;
+  final String? navBarTitle;
+  final String? subTitle;
+  final String? imageUrl;
+  final String? imageSvg;
 
   @override
   Widget build(BuildContext context) {
     final gameTutorial = GameboardTutorialWidget.of(context);
-    final isQuestGame = useCurrentGame((g) => g.config.level != null);
+    final isQuestGame = useCurrentGame((g) => g?.config.level != null);
 
     return Column(
       children: <Widget>[
@@ -234,7 +236,7 @@ class _HeaderContent extends HookWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              navBarTitle,
+              navBarTitle!,
               style: Styles.bodyBlackBold.copyWith(color: ColorRes.white),
             ),
           ],
@@ -242,8 +244,8 @@ class _HeaderContent extends HookWidget {
         const SizedBox(height: 8),
         if (subTitle != null)
           Text(
-            subTitle,
-            key: isQuestGame ? gameTutorial?.monthKey : null,
+            subTitle!,
+            key: isQuestGame! ? gameTutorial?.monthKey : null,
             style: Styles.bodyBlack.copyWith(
               color: ColorRes.white,
               fontSize: 15,
@@ -256,13 +258,13 @@ class _HeaderContent extends HookWidget {
 
 class _HeaderContentImage extends StatelessWidget {
   const _HeaderContentImage({
-    Key key,
+    Key? key,
     this.imageUrl,
     this.imageSvg,
   }) : super(key: key);
 
-  final String imageUrl;
-  final String imageSvg;
+  final String? imageUrl;
+  final String? imageSvg;
 
   @override
   Widget build(BuildContext context) {
@@ -279,7 +281,7 @@ class _HeaderContentImage extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(27)),
           color: ColorRes.white,
         ),
-        child: SvgPicture.asset(imageSvg, color: ColorRes.mainGreen),
+        child: SvgPicture.asset(imageSvg!, color: ColorRes.mainGreen),
       );
     }
 
@@ -323,7 +325,7 @@ class _Timer extends HookWidget {
 }
 
 int _useTimerRemainingSeconds() {
-  final moveStartDate = useCurrentGame((s) => s.state.moveStartDateInUTC);
+  final moveStartDate = useCurrentGame((s) => s?.state.moveStartDateInUTC);
   final remainingSeconds = useState(_getRemainingSeconds(moveStartDate));
 
   useEffect(() {
@@ -347,7 +349,7 @@ int _useTimerRemainingSeconds() {
   return remainingSecondsValue;
 }
 
-int _getRemainingSeconds(DateTime moveStartDate) {
+int _getRemainingSeconds(DateTime? moveStartDate) {
   if (moveStartDate == null) {
     return 0;
   }

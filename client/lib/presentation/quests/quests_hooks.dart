@@ -25,24 +25,24 @@ Future<void> Function(String questId, QuestAction action) useQuestStarter() {
     return store
         .dispatchFuture(StartQuestGameAction(questId, action))
         .then((_) {
-      final gameId = store.state.newGame.newGameId;
+      final gameId = store.state.newGame.newGameId!;
 
       if (isTutorialPassed) {
         appRouter.goTo(GameBoard(gameId: gameId));
       } else {
         appRouter.goTo(TutorialPage(gameId: gameId));
       }
-    }).catchError((e) {
+    }).onError((e, st) {
       handleError(context: context, exception: e);
     });
   };
 }
 
-StoreList<QuestUiModel> useQuestsTemplates() {
+StoreList<QuestUiModel>? useQuestsTemplates() {
   return useGlobalState((s) {
     final completedGames =
-        s.profile.currentUser?.completedGames?.questGames ?? [];
-    final currentQuestIndex = s.profile.currentUser.currentQuestIndex ?? 0;
+        s.profile.currentUser?.completedGames.questGames ?? [];
+    final currentQuestIndex = s.profile.currentUser!.currentQuestIndex ?? 0;
 
     final quests = StoreList(s.newGame.quests.items
         .map((quest) => QuestUiModel(

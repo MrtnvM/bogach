@@ -7,14 +7,14 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class SectionTitle extends HookWidget {
   const SectionTitle({
-    @required this.text,
+    required this.text,
     this.actionWidget,
     this.padding,
-  }) : assert(text != null);
+  });
 
   final String text;
-  final Widget actionWidget;
-  final EdgeInsets padding;
+  final Widget? actionWidget;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class SectionTitle extends HookWidget {
             ),
             if (actionWidget != null) ...[
               SizedBox(width: size(16)),
-              actionWidget,
+              actionWidget!,
             ]
           ],
         ),

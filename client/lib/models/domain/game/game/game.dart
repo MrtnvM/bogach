@@ -12,21 +12,21 @@ part 'game.freezed.dart';
 part 'game.g.dart';
 
 @freezed
-abstract class Game with _$Game implements StoreListItem {
+class Game with _$Game implements StoreListItem {
   factory Game({
-    @required String id,
-    @required String name,
+    required String id,
+    required String name,
     @JsonKey(fromJson: GameType.fromJson, toJson: GameType.toJson)
-    @required
+    required
         GameType type,
-    @required CurrentGameState state,
-    @required List<String> participantsIds,
-    @required Map<String, Participant> participants,
-    @required Target target,
-    @required List<GameEvent> currentEvents,
-    @required GameConfig config,
-    @JsonKey(fromJson: fromISO8601DateJson) DateTime createdAt,
-    @JsonKey(fromJson: fromISO8601DateJson) DateTime updatedAt,
+    required CurrentGameState state,
+    required List<String> participantsIds,
+    required Map<String, Participant> participants,
+    required Target target,
+    required List<GameEvent> currentEvents,
+    required GameConfig config,
+    @JsonKey(fromJson: fromISO8601DateJson) DateTime? createdAt,
+    @JsonKey(fromJson: fromISO8601DateJson) DateTime? updatedAt,
   }) = _Game;
 
   factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);

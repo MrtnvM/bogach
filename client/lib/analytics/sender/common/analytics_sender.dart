@@ -11,7 +11,7 @@ class AnalyticsSender {
   static final amplitudeAnalytics = Amplitude.getInstance();
 
   static bool isEnabled = false;
-  static String _userId;
+  static String? _userId;
 
   /// ----------------------------------------------------------------
   /// Gameboard events
@@ -64,6 +64,11 @@ class AnalyticsSender {
   static void buyBusiness(String businessName, int price) {
     final params = {'business_name': businessName, 'business_price': price};
     _send('business_buy_event', params);
+  }
+
+  static void buyBusinessInCredit(String businessName, int price) {
+    final params = {'business_name': businessName, 'business_price': price};
+    _send('business_buy_in_credit_event', params);
   }
 
   static void skipBuyBusiness(String businessName, int price) {
@@ -231,8 +236,8 @@ class AnalyticsSender {
       _send('multiplayer_purchase_canceled', {'purchase': purchase});
 
   static void multiplayerPurchaseFailed({
-    @required String error,
-    @required String purchase,
+    required String error,
+    required String purchase,
   }) =>
       _send('multiplayer_purchase_failed',
           {'error': error, 'purchase': purchase});
@@ -319,7 +324,7 @@ class AnalyticsSender {
   static void tutorialCompleted() => _send('tutorial_completed');
   static void tutorialSkip() => _send('tutorial_skip');
 
-  static void tutorialEvent(String event) =>
+  static void tutorialEvent(String? event) =>
       _send('tutorial_event', {'event': event});
 
   /// ----------------------------------------------------------------

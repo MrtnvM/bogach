@@ -4,10 +4,10 @@ part 'config_state.freezed.dart';
 part 'config_state.g.dart';
 
 @freezed
-abstract class ConfigState with _$ConfigState {
+class ConfigState with _$ConfigState {
   factory ConfigState({
-    bool isGameboardTutorialPassed,
-    bool isOnline,
+    required bool isGameboardTutorialPassed,
+    required bool isOnline,
   }) = _ConfigState;
 
   factory ConfigState.fromJson(Map<String, dynamic> json) =>

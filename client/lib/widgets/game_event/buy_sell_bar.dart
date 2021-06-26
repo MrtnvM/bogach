@@ -8,12 +8,11 @@ typedef OnActionChangedCallback = void Function(BuySellAction);
 
 class BuySellBar extends StatelessWidget {
   const BuySellBar({
-    Key key,
+    Key? key,
     this.selectedAction = const BuySellAction.buy(),
-    this.onActionChanged,
-    this.canSell,
-  })  : assert(selectedAction != null),
-        super(key: key);
+    required this.onActionChanged,
+    this.canSell = false,
+  }) : super(key: key);
 
   final BuySellAction selectedAction;
   final OnActionChangedCallback onActionChanged;
@@ -33,6 +32,7 @@ class BuySellBar extends StatelessWidget {
           selectedAction: selectedAction,
           onSelected: () => onActionChanged(buyAction),
           isEnabled: true,
+          color: ColorRes.mainGreen,
         ),
         _buildBarButton(
           context,
@@ -40,6 +40,7 @@ class BuySellBar extends StatelessWidget {
           selectedAction: selectedAction,
           onSelected: () => onActionChanged(sellAction),
           isEnabled: canSell,
+          color: ColorRes.mainRed,
         ),
       ],
     );
@@ -47,66 +48,61 @@ class BuySellBar extends StatelessWidget {
 
   Widget _buildBarButton(
     BuildContext context, {
-    @required BuySellAction action,
-    @required BuySellAction selectedAction,
-    @required VoidCallback onSelected,
-    @required bool isEnabled,
+    required BuySellAction action,
+    required BuySellAction selectedAction,
+    required VoidCallback onSelected,
+    required bool isEnabled,
+    required Color color,
   }) {
     final title = action.map(
       buy: (_) => Strings.purchasing,
       sell: (_) => Strings.selling,
     );
 
+    final isSelected = action == selectedAction;
+    final isBuyAction = action == const BuySellAction.buy();
+    final isSellAction = action == const BuySellAction.sell();
+
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          if (action != selectedAction && isEnabled) {
+          if (!isSelected && isEnabled) {
             onSelected();
           }
         },
-        child: Container(
-          height: 50,
-          decoration: BoxDecoration(
-            color: _getBarColor(
-              isEnabled: isEnabled,
-              isSelected: action == selectedAction,
-            ),
-          ),
-          alignment: Alignment.center,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                title,
-                style: Styles.body1.copyWith(
-                  color: _getBarTextColor(isEnabled),
-                  fontSize: 16,
-                  fontWeight: action == selectedAction
-                      ? FontWeight.w700
-                      : FontWeight.w500,
-                  letterSpacing: 0.6,
-                ),
+        child: Padding(
+          padding: EdgeInsets.only(top: isSelected ? 0 : 6),
+          child: Container(
+            height: isSelected ? 42 : 36,
+            decoration: BoxDecoration(
+              color: isEnabled
+                  ? color.withAlpha(isSelected ? 255 : 180)
+                  : ColorRes.grey2,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(!isSelected && isSellAction ? 0 : 8),
+                topRight: Radius.circular(!isSelected && isBuyAction ? 0 : 8),
               ),
-            ],
+            ),
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  title,
+                  style: Styles.body1.copyWith(
+                    color: isEnabled ? Colors.white : Colors.grey,
+                    fontSize: 15,
+                    fontWeight: action == selectedAction
+                        ? FontWeight.w700
+                        : FontWeight.w500,
+                    letterSpacing: 0.6,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
-  }
-
-  Color _getBarColor({bool isEnabled, bool isSelected}) {
-    if (isSelected) {
-      return ColorRes.mainGreen;
-    }
-
-    if (!isEnabled) {
-      return ColorRes.grey2;
-    }
-
-    return ColorRes.lightGreen;
-  }
-
-  Color _getBarTextColor(bool isEnabled) {
-    return isEnabled ? Colors.white : Colors.grey;
   }
 }

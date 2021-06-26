@@ -8,12 +8,12 @@ part 'participant.freezed.dart';
 part 'participant.g.dart';
 
 @freezed
-abstract class Participant with _$Participant {
+class Participant with _$Participant {
   factory Participant({
-    @required String id,
-    @required PossessionState possessionState,
-    @required Account account,
-    @required ParticipantProgress progress,
+    required String id,
+    required PossessionState possessionState,
+    required Account account,
+    required ParticipantProgress progress,
   }) = _Participant;
 
   factory Participant.fromJson(Map<String, dynamic> json) =>

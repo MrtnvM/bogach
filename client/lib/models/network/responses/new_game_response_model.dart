@@ -5,7 +5,7 @@ part 'new_game_response_model.g.dart';
 @JsonSerializable()
 class NewGameResponseModel {
   const NewGameResponseModel({
-    this.id,
+    required this.id,
   });
 
   factory NewGameResponseModel.fromJson(Map<String, dynamic> json) =>

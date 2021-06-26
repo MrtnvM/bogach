@@ -5,11 +5,11 @@ import 'package:mockito/mockito.dart';
 @immutable
 class FakePurchaseDetails extends Fake implements PurchaseDetails {
   FakePurchaseDetails({
-    @required String productId,
-    @required String purchaseId,
-    @required PurchaseStatus status,
+    required String productId,
+    required String purchaseId,
+    required PurchaseStatus status,
+    required PurchaseVerificationData verificationData,
     bool pendingComplete = false,
-    PurchaseVerificationData verificationData,
   })  : _fakeProductId = productId,
         _fakePurchaseId = purchaseId,
         _fakeStatus = status,
@@ -26,7 +26,7 @@ class FakePurchaseDetails extends Fake implements PurchaseDetails {
   String get productID => _fakeProductId;
 
   @override
-  String get purchaseID => _fakePurchaseId;
+  String? get purchaseID => _fakePurchaseId;
 
   @override
   PurchaseStatus get status => _fakeStatus;

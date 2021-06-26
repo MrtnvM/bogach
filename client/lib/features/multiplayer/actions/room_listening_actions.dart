@@ -8,12 +8,12 @@ import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
 class StartListeningRoomUpdatesAction extends BaseAction {
-  StartListeningRoomUpdatesAction(this.roomId) : assert(roomId != null);
+  StartListeningRoomUpdatesAction(this.roomId);
 
   final String roomId;
 
   @override
-  AppState reduce() {
+  AppState? reduce() {
     final gameService = GetIt.I.get<GameService>();
     final action$ = GetIt.I.get<ReduxActionObserver>().onAction;
 
@@ -34,12 +34,12 @@ class StartListeningRoomUpdatesAction extends BaseAction {
 }
 
 class StopListeningRoomUpdatesAction extends BaseAction {
-  StopListeningRoomUpdatesAction(this.roomId) : assert(roomId != null);
+  StopListeningRoomUpdatesAction(this.roomId);
 
   final String roomId;
 
   @override
-  AppState reduce() {
+  AppState? reduce() {
     return null;
   }
 }

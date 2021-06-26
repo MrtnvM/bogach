@@ -13,7 +13,7 @@ class SetActiveGameState extends BaseAction {
   AppState reduce() {
     return state.rebuild((s) {
       final gameId = gameContext.gameId;
-      s.game.activeGameStates[gameId] = activeGameState;
+      s.game.activeGameStates![gameId] = activeGameState;
     });
   }
 }

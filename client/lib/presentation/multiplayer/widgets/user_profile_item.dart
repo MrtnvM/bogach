@@ -6,26 +6,26 @@ import 'package:flutter/material.dart';
 class UserProfileItem extends StatelessWidget {
   const UserProfileItem(
     this.profile, {
-    Key key,
+    Key? key,
     this.titleColor,
   }) : super(key: key);
 
-  final UserProfile profile;
-  final Color titleColor;
+  final UserProfile? profile;
+  final Color? titleColor;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: ValueKey(profile.userId),
+      key: ValueKey(profile!.userId),
       padding: const EdgeInsets.symmetric(horizontal: 4),
       width: 80,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          UserAvatar(url: profile.avatarUrl, size: 52),
+          UserAvatar(url: profile!.avatarUrl, size: 52),
           const SizedBox(height: 8),
           Text(
-            profile.fullName,
+            profile!.fullName,
             style: Styles.body1.copyWith(fontSize: 13, color: titleColor),
             textAlign: TextAlign.center,
             maxLines: 2,

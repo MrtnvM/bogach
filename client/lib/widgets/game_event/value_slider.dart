@@ -9,12 +9,12 @@ typedef OnCountChangedCallback = void Function(int);
 
 class ValueSlider extends HookWidget {
   const ValueSlider({
-    @required this.currentPrice,
-    @required this.currentAction,
-    @required this.selectedCount,
-    @required this.minCount,
-    @required this.maxCount,
-    Key key,
+    required this.currentPrice,
+    required this.currentAction,
+    required this.selectedCount,
+    required this.minCount,
+    required this.maxCount,
+    Key? key,
     this.onCountChanged,
   }) : super(key: key);
 
@@ -23,7 +23,7 @@ class ValueSlider extends HookWidget {
   final int selectedCount;
   final int minCount;
   final int maxCount;
-  final OnCountChangedCallback onCountChanged;
+  final OnCountChangedCallback? onCountChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +32,8 @@ class ValueSlider extends HookWidget {
     final isEnoughCash = isSellAction(currentAction) ||
         isBuyAction(currentAction) && totalPrice <= account.cash;
 
-    final sliderActiveColor = isEnoughCash
-        ? ColorRes.mainGreen //
-        : ColorRes.primaryYellowColor;
+    final sliderActiveColor =
+        isEnoughCash ? ColorRes.mainGreen : ColorRes.grey2;
     final sliderInactiveColor = isEnoughCash
         ? ColorRes.lightGreen.withOpacity(0.6)
         : ColorRes.primaryYellowColor.withOpacity(0.4);
@@ -52,7 +51,7 @@ class ValueSlider extends HookWidget {
             activeColor: sliderActiveColor,
             inactiveColor: sliderInactiveColor,
             value: selectedCount.toDouble(),
-            onChanged: (count) => onCountChanged(count.toInt()),
+            onChanged: (count) => onCountChanged!(count.toInt()),
             divisions: _getDivisionsCount(),
           ),
         ),

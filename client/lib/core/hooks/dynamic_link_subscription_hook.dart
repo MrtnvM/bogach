@@ -2,16 +2,16 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 void useDynamicLinkSubscription(
-  void handler(PendingDynamicLinkData link), {
-  void errorHandler(dynamic error),
+  void handler(PendingDynamicLinkData? link), {
+  void errorHandler(dynamic error)?,
 }) {
   useEffect(() {
     FirebaseDynamicLinks.instance.getInitialLink().then((dynamicLink) {
       if (dynamicLink?.link != null) {
         handler(dynamicLink);
       }
-    }).catchError((error) {
-      errorHandler(error);
+    }).onError((error, st) {
+      errorHandler!(error);
     });
 
     FirebaseDynamicLinks.instance.onLink(
@@ -21,7 +21,7 @@ void useDynamicLinkSubscription(
         }
       },
       onError: (error) async {
-        errorHandler(error);
+        errorHandler!(error);
       },
     );
 

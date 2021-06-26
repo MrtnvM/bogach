@@ -12,10 +12,10 @@ class ActionButton extends StatelessWidget {
     this.withRoundedBorder = false,
   });
 
-  final String text;
-  final VoidCallback onPressed;
+  final String? text;
+  final VoidCallback? onPressed;
   final Color color;
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
   final bool withRoundedBorder;
 
   @override
@@ -25,13 +25,15 @@ class ActionButton extends StatelessWidget {
           color: ColorRes.white,
         );
 
-    return RaisedButton(
-      shape: withRoundedBorder == true
-          ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))
-          : null,
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        shape: withRoundedBorder == true
+            ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))
+            : null,
+        primary: color,
+      ),
       onPressed: onPressed,
-      color: color,
-      child: Text(text, style: titleStyle),
+      child: Text(text!, style: titleStyle),
     );
   }
 }

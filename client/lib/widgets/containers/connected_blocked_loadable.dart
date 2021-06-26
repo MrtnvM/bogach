@@ -5,8 +5,8 @@ import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 
 class ConnectedBlockedLoadable extends StatelessWidget {
   const ConnectedBlockedLoadable({
-    @required this.child,
-    @required this.converter,
+    required this.child,
+    required this.converter,
     this.indicatorColor = Colors.white,
   });
 

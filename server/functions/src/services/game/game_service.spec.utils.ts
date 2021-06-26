@@ -40,6 +40,7 @@ export const expenseEvent = create<ExpenseEvent.Event>({
 
 export const game: Game = GameFixture.createGame({
   id: gameId,
+  participantsIds: [userId],
   participants: {
     [userId]: ParticipantFixture.createParticipant({
       id: userId,

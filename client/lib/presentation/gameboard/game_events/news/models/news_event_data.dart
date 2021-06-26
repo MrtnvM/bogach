@@ -6,11 +6,11 @@ part 'news_event_data.freezed.dart';
 part 'news_event_data.g.dart';
 
 @freezed
-abstract class NewsEventData
+class NewsEventData
     with _$NewsEventData
     implements GameEventData {
   factory NewsEventData({
-    @required String imageUrl,
+    required String imageUrl,
   }) = _NewsEventData;
 
   factory NewsEventData.fromJson(Map<String, dynamic> json) =>

@@ -1,6 +1,5 @@
 import 'package:cash_flow/configuration/cash_api_environment.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
-import 'package:flutter/foundation.dart';
 
 /// [BogachLogInterceptor] is used to print logs during network requests.
 /// It's better to add [BogachLogInterceptor] to the tail
@@ -9,7 +8,7 @@ import 'package:flutter/foundation.dart';
 /// This is because the execution of interceptors is in the order of addition.
 class BogachLogInterceptor extends Interceptor {
   BogachLogInterceptor({
-    @required this.environment,
+    required this.environment,
     this.request = true,
     this.requestHeader = false,
     this.requestBody = true,
@@ -52,7 +51,10 @@ class BogachLogInterceptor extends Interceptor {
   void Function(Object object) logPrint;
 
   @override
-  Future onRequest(RequestOptions options) async {
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) {
     logPrint('[REQUEST] ${_getRequestInfo(options)}');
 
     if (requestHeader) {
@@ -70,12 +72,16 @@ class BogachLogInterceptor extends Interceptor {
     }
 
     logPrint('');
+    super.onRequest(options, handler);
   }
 
   @override
-  Future onError(DioError err) async {
+  void onError(
+    DioError err,
+    ErrorInterceptorHandler handler,
+  ) {
     if (error) {
-      final requestInfo = _getRequestInfo(err.request);
+      final requestInfo = _getRequestInfo(err.requestOptions);
       logPrint('[REQUEST FAILED]: $requestInfo');
       logPrint('ERROR: $err');
 
@@ -86,30 +92,33 @@ class BogachLogInterceptor extends Interceptor {
 
       logPrint('');
     }
+    super.onError(err, handler);
   }
 
   @override
-  Future onResponse(Response response) async {
-    final requestInfo = _getRequestInfo(response.request);
+  void onResponse(
+    Response response,
+    ResponseInterceptorHandler handler,
+  ) {
+    final requestInfo = _getRequestInfo(response.requestOptions);
     final statusCode = response.statusCode;
 
     logPrint('[RESPONSE ($statusCode)]: $requestInfo');
     _printResponse(response);
+    super.onResponse(response, handler);
   }
 
-  void _printResponse(Response response) {
+  void _printResponse(Response? response) {
     if (responseHeader) {
-      if (response.isRedirect == true) {
+      if (response!.isRedirect == true) {
         _printKV('redirect', response.realUri);
       }
-      if (response.headers != null) {
-        logPrint('headers:');
-        response.headers.forEach((key, v) => _printKV(' $key', v.join(',')));
-      }
+      logPrint('headers:');
+      response.headers.forEach((key, v) => _printKV(' $key', v.join(',')));
     }
 
     if (responseBody) {
-      final responseData = response.data;
+      final responseData = response!.data;
 
       if (responseData == null ||
           (responseData is String && responseData.trim().isEmpty)) {
@@ -123,7 +132,7 @@ class BogachLogInterceptor extends Interceptor {
     logPrint('');
   }
 
-  void _printKV(String key, Object v) {
+  void _printKV(String key, Object? v) {
     logPrint('$key: $v');
   }
 

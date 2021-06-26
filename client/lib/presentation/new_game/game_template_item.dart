@@ -5,20 +5,20 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class GameTemplateItem extends HookWidget {
   const GameTemplateItem({
-    @required this.gameTemplate,
-    @required this.onStartNewGamePressed,
+    required this.gameTemplate,
+    required this.onStartNewGamePressed,
     this.canContinueGame,
     this.onContinueGamePressed,
     this.onSelectionChanged,
     this.selectedItemId,
   });
 
-  final String selectedItemId;
+  final String? selectedItemId;
   final GameTemplate gameTemplate;
-  final bool Function(GameTemplate) canContinueGame;
+  final bool Function(GameTemplate)? canContinueGame;
   final void Function(GameTemplate) onStartNewGamePressed;
-  final void Function(GameTemplate) onContinueGamePressed;
-  final void Function(String) onSelectionChanged;
+  final void Function(GameTemplate)? onContinueGamePressed;
+  final void Function(String?)? onSelectionChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class GameTemplateItem extends HookWidget {
       continueGame: continueGame,
       isShowingActionsButtons: selectedItemId == gameTemplate.id,
       onTap: () {
-        if (canContinueGame == null || !canContinueGame(gameTemplate)) {
+        if (canContinueGame == null || !canContinueGame!(gameTemplate)) {
           startGame();
           return;
         }

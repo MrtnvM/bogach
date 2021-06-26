@@ -10,20 +10,22 @@ import 'package:cash_flow/resources/styles.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:tutorial_coach_mark/animated_focus_light.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
-GameboardTutorialWidget useGameboardTutorial() {
+GameboardTutorialWidget? useGameboardTutorial() {
   final context = useContext();
   final widget = GameboardTutorialWidget.of(context);
   return widget;
 }
 
 class GameboardTutorialWidget extends InheritedWidget {
-  GameboardTutorialWidget({Key key, @required this.gameId, Widget child})
-      : super(key: key, child: child);
+  GameboardTutorialWidget({
+    Key? key,
+    required this.gameId,
+    required Widget child,
+  }) : super(key: key, child: child);
 
-  static TutorialCoachMark _currentTutorial;
+  static TutorialCoachMark? _currentTutorial;
 
   final String gameId;
 
@@ -34,14 +36,13 @@ class GameboardTutorialWidget extends InheritedWidget {
   final monthKey = GlobalKey();
 
   final currentProgressKey = GlobalKey();
-  final progressBarKey = GlobalKey();
 
   final gameEventKey = GlobalKey();
   final gameEventActionsKey = GlobalKey();
 
   final financesTabKey = GlobalKey();
 
-  static GameboardTutorialWidget of(BuildContext context) {
+  static GameboardTutorialWidget? of(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<GameboardTutorialWidget>();
   }
@@ -64,15 +65,15 @@ class GameboardTutorialWidget extends InheritedWidget {
 
         if (target.keyTarget == gameEventKey) {
           await Future.delayed(const Duration(milliseconds: 50));
-          Scrollable.ensureVisible(gameEventKey.currentContext);
+          Scrollable.ensureVisible(gameEventKey.currentContext!);
         }
 
         if (target.keyTarget == gameEventActionsKey) {
           await Future.delayed(const Duration(milliseconds: 150));
-          Scrollable.ensureVisible(gameEventActionsKey.currentContext);
+          Scrollable.ensureVisible(gameEventActionsKey.currentContext!);
         }
       },
-      onClickSkip: () {
+      onSkip: () {
         AnalyticsSender.tutorialSkip();
         SessionTracker.tutorial.stop();
 
@@ -86,7 +87,7 @@ class GameboardTutorialWidget extends InheritedWidget {
       },
     );
 
-    _currentTutorial.show();
+    _currentTutorial!.show();
   }
 
   void _onTutorialPassed(BuildContext context) {
@@ -165,7 +166,7 @@ class GameboardTutorialWidget extends InheritedWidget {
         contents: createTargetContent(
           title: Strings.gameEvent,
           description: Strings.gameEventDescription,
-          align: AlignContent.top,
+          align: ContentAlign.bottom,
           context: context,
           buttonTitle: Strings.tutorialGoNext6,
         ),
@@ -178,7 +179,7 @@ class GameboardTutorialWidget extends InheritedWidget {
         contents: createTargetContent(
           title: Strings.gameEventActions,
           description: Strings.gameEventActionsDescription,
-          align: AlignContent.top,
+          align: ContentAlign.top,
           context: context,
           buttonTitle: Strings.tutorialGoNext7,
         ),
@@ -191,7 +192,7 @@ class GameboardTutorialWidget extends InheritedWidget {
         contents: createTargetContent(
           title: Strings.financesTabTitle,
           description: Strings.financesTabTitleDescription,
-          align: AlignContent.top,
+          align: ContentAlign.top,
           context: context,
           buttonTitle: Strings.tutorialFinish,
         ),
@@ -199,19 +200,19 @@ class GameboardTutorialWidget extends InheritedWidget {
     ];
   }
 
-  List<ContentTarget> createTargetContent({
-    @required BuildContext context,
-    @required String title,
-    @required String description,
-    @required String buttonTitle,
-    AlignContent align = AlignContent.bottom,
+  List<TargetContent> createTargetContent({
+    required BuildContext context,
+    required String title,
+    required String description,
+    required String buttonTitle,
+    ContentAlign align = ContentAlign.bottom,
   }) {
     final mediaQuery = MediaQuery.of(context);
     final screenHeight = mediaQuery.size.height;
     final isSmallScreen = screenHeight < 600;
 
     return [
-      ContentTarget(
+      TargetContent(
         align: align,
         child: MediaQuery(
           data: mediaQuery.copyWith(
@@ -221,7 +222,7 @@ class GameboardTutorialWidget extends InheritedWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              if (align == AlignContent.bottom) const SizedBox(height: 32),
+              if (align == ContentAlign.bottom) const SizedBox(height: 32),
               Text(
                 title,
                 style: Styles.caption.copyWith(
@@ -259,7 +260,7 @@ class GameboardTutorialWidget extends InheritedWidget {
                   ),
                 ),
               ),
-              if (align == AlignContent.top) const SizedBox(height: 8),
+              if (align == ContentAlign.top) const SizedBox(height: 8),
             ],
           ),
         ),

@@ -56,6 +56,7 @@ class ColorRes {
   static const mainGreen = Color(0xFF08B675);
   static const lightGreen = Color(0xFF80D7B5);
   static const bottomBarGray = Color(0xFFF9F9F9);
+  static const mainRed = Color(0xffff5e59);
 
   static const questAccessPageBackground = Color.fromARGB(255, 85, 182, 250);
   static const buyMultiplayerGamesPageBackground =

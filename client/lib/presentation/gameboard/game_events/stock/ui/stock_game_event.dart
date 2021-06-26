@@ -5,9 +5,8 @@ import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/model/stock_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/ui/stock_game_event_hooks.dart';
-import 'package:cash_flow/presentation/gameboard/gameboard_hooks.dart';
-import 'package:cash_flow/presentation/gameboard/widgets/bars/action_bar.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/chart/stock/chart/chart_widget.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/data/selector_state.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_content.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
@@ -21,11 +20,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class StockGameEvent extends HookWidget {
-  const StockGameEvent(this.event);
+  StockGameEvent(this.event, this.selectorState)
+      : super(key: ValueKey(event.id));
 
   final GameEvent event;
+  final ValueNotifier<SelectorState> selectorState;
 
-  StockEventData get eventData => event.data;
+  StockEventData get eventData => event.data as StockEventData;
 
   @override
   Widget build(BuildContext context) {
@@ -33,18 +34,21 @@ class StockGameEvent extends HookWidget {
     final selectedCount = useState(1);
     final infoTableData = useStockInfoTableData(event);
     final isQuest = useIsQuestGame();
-    final sendPlayerAction = useStockPlayerActionHandler(
-      event: event,
-      selectedCount: selectedCount.value,
-      action: buySellAction.value,
-    );
-    final skipPlayerAction = useSkipAction(event.id);
 
     final userId = useUserId();
-    final cash = useCurrentGame((g) => g.participants[userId].account.cash);
+    final cash = useCurrentGame((g) => g!.participants[userId!]!.account.cash);
     final alreadyHaveCount = useCurrentStock(event)?.countInPortfolio ?? 0;
 
     final stockDialogInfoModel = useStockInfoDialogModel();
+
+    useEffect(() {
+      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+        selectorState.value = SelectorState(
+          action: buySellAction.value,
+          count: selectedCount.value,
+        );
+      });
+    }, [buySellAction.value, selectedCount.value]);
 
     final selectorViewModel = SelectorViewModel(
       currentPrice: eventData.currentPrice,
@@ -99,27 +103,6 @@ class StockGameEvent extends HookWidget {
             buySellAction.value = action;
           },
         ),
-        const SizedBox(height: 28),
-        PlayerActionBar(
-          confirm: () {
-            sendPlayerAction();
-            AnalyticsSender.buySellStock(
-              buySellAction.value,
-              selectedCount.value,
-              event.name,
-              eventData.currentPrice,
-            );
-          },
-          skip: () {
-            skipPlayerAction();
-
-            AnalyticsSender.skipBuySellStock(
-              buySellAction.value,
-              event.name,
-              eventData.currentPrice,
-            );
-          },
-        )
       ],
     );
   }

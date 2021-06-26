@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 VoidCallback useIncomePlayerActionHandler({
-  @required GameEvent event,
+  required GameEvent event,
 }) {
   final context = useContext();
   final dispatch = useDispatcher();
@@ -21,6 +21,6 @@ VoidCallback useIncomePlayerActionHandler({
         playerAction: const EmptyPlayerAction(),
         gameContext: gameContext,
       ),
-    ).catchError((e) => handleError(context: context, exception: e));
+    ).onError((e, st) => handleError(context: context, exception: e));
   };
 }

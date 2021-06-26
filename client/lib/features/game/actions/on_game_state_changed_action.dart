@@ -14,12 +14,12 @@ class OnGameStateChangedAction extends BaseAction {
   @override
   AppState reduce() {
     return state.rebuild((s) {
-      final currentActiveGameState = s.game.activeGameStates[game.id];
-      var newActiveGameState = currentActiveGameState;
+      final currentActiveGameState = s.game.activeGameStates?[game.id];
+      var newActiveGameState = currentActiveGameState!;
 
       if (game.state.gameStatus == GameStatus.playersMove) {
-        final userId = s.profile.currentUser.userId;
-        final progress = game.participants[userId].progress;
+        final userId = s.profile.currentUser!.userId;
+        final progress = game.participants[userId]!.progress;
 
         if (progress.status == ParticipantProgressStatus.monthResult) {
           final waitingPlayerList = getParticipantIdsForWaiting(
@@ -56,8 +56,8 @@ class OnGameStateChangedAction extends BaseAction {
       }
 
       s.game
-        ..games[game.id] = game
-        ..activeGameStates[game.id] = newActiveGameState;
+        ..games?[game.id] = game
+        ..activeGameStates?[game.id] = newActiveGameState;
     });
   }
 }
@@ -66,7 +66,7 @@ List<String> getParticipantIdsForWaiting(
   String myUserId,
   Map<String, Participant> participants,
 ) {
-  final progress = participants[myUserId].progress;
+  final progress = participants[myUserId]!.progress;
   final myCurrentMonth = progress.currentMonthForParticipant;
 
   final waitingPlayerList = participants.entries

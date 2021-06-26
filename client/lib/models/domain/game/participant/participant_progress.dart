@@ -5,13 +5,13 @@ part 'participant_progress.freezed.dart';
 part 'participant_progress.g.dart';
 
 @freezed
-abstract class ParticipantProgress with _$ParticipantProgress {
+class ParticipantProgress with _$ParticipantProgress {
   factory ParticipantProgress({
-    @required ParticipantProgressStatus status,
-    @required int currentEventIndex,
-    @required int currentMonthForParticipant,
-    @required List<MonthResult> monthResults,
-    @required double progress,
+    required ParticipantProgressStatus status,
+    required int currentEventIndex,
+    required int currentMonthForParticipant,
+    required List<MonthResult> monthResults,
+    required double progress,
   }) = _ParticipantProgress;
 
   factory ParticipantProgress.fromJson(Map<String, dynamic> json) =>

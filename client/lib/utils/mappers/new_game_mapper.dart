@@ -7,16 +7,16 @@ List<GameTemplate> mapToGameTemplates(List<GameTemplateResponseModel> games) {
   return games
       .map(
         (game) => GameTemplate(
-          id: game.id,
-          name: game.name,
-          icon: game.icon,
+          id: game.id!,
+          name: game.name!,
+          icon: game.icon!,
           image: game.image,
           accountState: Account(
-            cash: game.accountState.cash,
-            cashFlow: game.accountState.cashFlow,
-            credit: game.accountState.credit,
+            cash: game.accountState!.cash,
+            cashFlow: game.accountState!.cashFlow,
+            credit: game.accountState!.credit,
           ),
-          target: Target(type: game.target.type, value: game.target.value),
+          target: Target(type: game.target!.type, value: game.target!.value),
         ),
       )
       .toList();

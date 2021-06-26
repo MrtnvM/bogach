@@ -11,7 +11,7 @@ import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/buttons/raised_icon_button.dart';
 
 class LogoutButton extends StatelessWidget {
-  const LogoutButton({Key key}) : super(key: key);
+  const LogoutButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,17 +35,17 @@ class LogoutButton extends StatelessWidget {
             style: Styles.bodyBlackBold,
           ),
           actions: [
-            FlatButton(
+            TextButton(
               onPressed: appRouter.goBack,
               child: const Text(Strings.cancel),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () {
                 context
                     .dispatch(StopListeningProfileUpdatesAction())
                     .then((value) => context.dispatch(LogoutAction()))
                     .then((_) => _onLogoutFinished())
-                    .catchError((_) => _onLogoutFinished());
+                    .onError((_, st) => _onLogoutFinished());
               },
               child: Text(
                 Strings.goOut,

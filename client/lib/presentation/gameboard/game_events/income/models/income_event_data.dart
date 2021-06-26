@@ -6,9 +6,9 @@ part 'income_event_data.freezed.dart';
 part 'income_event_data.g.dart';
 
 @freezed
-abstract class IncomeEventData with _$IncomeEventData implements GameEventData {
+class IncomeEventData with _$IncomeEventData implements GameEventData {
   factory IncomeEventData({
-    int income,
+    required int income,
   }) = _IncomeEventData;
 
   factory IncomeEventData.fromJson(Map<String, dynamic> json) =>

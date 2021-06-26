@@ -28,7 +28,7 @@ _GameTemplateListViewModel useGameTemplateListViewModel() {
 
   final gameTemplates = useGlobalState((s) {
     final completedGames =
-        s.profile.currentUser?.completedGames?.singleplayerGames ?? [];
+        s.profile.currentUser?.completedGames.singleplayerGames ?? [];
     final templates = StoreList(s.newGame.gameTemplates.items.toList());
 
     templates.updateList(sortTemplates(
@@ -41,48 +41,48 @@ _GameTemplateListViewModel useGameTemplateListViewModel() {
   final templatesRequestState = useOperationState(Operation.loadGameTemplates);
   final loadGameTemplates = () => dispatch(GetGameTemplatesAction());
 
-  void Function(GameTemplate) createNewGame;
+  late void Function(GameTemplate) createNewGame;
   createNewGame = (template) {
     AnalyticsSender.singleplayerTemplateSelected(template.name);
 
     dispatch(StartSinglePlayerGameAction(templateId: template.id)).then((_) {
-      final gameId = store.state.newGame.newGameId;
+      final gameId = store.state.newGame.newGameId!;
 
       if (isTutorialPassed) {
         appRouter.goTo(GameBoard(gameId: gameId));
       } else {
         appRouter.goTo(TutorialPage(gameId: gameId));
       }
-    }).catchError(
-      (e) => handleError(
+    }).onError((e, st) {
+      handleError(
         context: context,
         exception: e,
         onRetry: () => createNewGame(template),
-      ),
-    );
+      );
+    });
   };
 
   // ignore: avoid_types_on_closure_parameters
   final canContinueGame = (GameTemplate template) {
-    final games = user.lastGames.singleplayerGames;
+    final games = user?.lastGames.singleplayerGames ?? [];
     final index = games.indexWhere((g) => g.templateId == template.id);
     final hasSuchGame = index >= 0;
     return hasSuchGame;
   };
 
-  final void Function(GameTemplate) continueGame = (template) {
+  final continueGame = (template) {
     if (!canContinueGame(template)) {
       return;
     }
 
-    final games = user.lastGames.singleplayerGames;
+    final games = user?.lastGames.singleplayerGames ?? [];
     final index = games.indexWhere((g) => g.templateId == template.id);
 
     AnalyticsSender.singleplayerTemplateSelected(template.name);
     AnalyticsSender.singleplayerContinueGame();
 
-    final gameId = user.lastGames.singleplayerGames[index].gameId;
-    appRouter.goTo(GameBoard(gameId: gameId));
+    final gameId = user?.lastGames.singleplayerGames[index].gameId;
+    appRouter.goTo(GameBoard(gameId: gameId!));
   };
 
   return _GameTemplateListViewModel(
@@ -97,16 +97,16 @@ _GameTemplateListViewModel useGameTemplateListViewModel() {
 
 class _GameTemplateListViewModel {
   _GameTemplateListViewModel({
-    @required this.templatesRequestState,
-    @required this.gameTemplates,
-    @required this.createNewGame,
-    @required this.continueGame,
-    @required this.loadGameTemplates,
-    @required this.canContinueGame,
+    required this.templatesRequestState,
+    required this.gameTemplates,
+    required this.createNewGame,
+    required this.continueGame,
+    required this.loadGameTemplates,
+    required this.canContinueGame,
   });
 
-  final OperationState templatesRequestState;
-  final StoreList<GameTemplate> gameTemplates;
+  final OperationState? templatesRequestState;
+  final StoreList<GameTemplate>? gameTemplates;
   final void Function(GameTemplate) createNewGame;
   final void Function(GameTemplate) continueGame;
   final VoidCallback loadGameTemplates;

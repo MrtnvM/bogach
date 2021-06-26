@@ -5,15 +5,15 @@ import 'package:cash_flow/utils/core/platform/package_info_utils.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 Future<String> createDynamicLink({
-  Map<String, dynamic> queryParameters,
-  SocialMetaTagParameters socialTagParameters,
-  GoogleAnalyticsParameters analyticsParameters,
+  required Map<String, dynamic> queryParameters,
+  SocialMetaTagParameters? socialTagParameters,
+  GoogleAnalyticsParameters? analyticsParameters,
 }) async {
   await checkInternetConnection();
 
   final packageName = await getPackageName();
 
-  final baseUrl = AppConfiguration.environment.dynamicLink.baseUrl;
+  final baseUrl = AppConfiguration.environment!.dynamicLink.baseUrl;
   final query = queryParameters.entries
       .map((parameter) => '${parameter.key}=${parameter.value}')
       .join();

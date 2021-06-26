@@ -1,7 +1,9 @@
 import 'package:cash_flow/app/app_state.dart';
+import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/features/new_game/actions/start_quest_game_action.dart';
+import 'package:cash_flow/features/new_game/actions/start_singleplayer_game_action.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/gameboard/gameboard.dart';
@@ -13,31 +15,46 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 VoidCallback useGameRestarter() {
   final context = useContext();
   final dispatch = useDispatcher();
-  final currentQuest = useCurrentGame((g) => g.config.level);
+  final gameTemplateId = useCurrentGame((g) => g?.config.gameTemplateId);
+  final currentQuest = useCurrentGame((g) => g?.config.level);
 
-  void Function() startAgain;
+  void Function()? startAgain;
   startAgain = () {
-    if (currentQuest == null) {
+    BaseAction? startGameAction;
+
+    if (gameTemplateId != null) {
+      startGameAction = StartSinglePlayerGameAction(
+        templateId: gameTemplateId,
+      );
+    } else if (currentQuest != null) {
+      startGameAction = StartQuestGameAction(
+        currentQuest,
+        QuestAction.startNewGame,
+      );
+    }
+
+    if (startGameAction == null) {
       return;
     }
 
-    final action = StartQuestGameAction(
-      currentQuest,
-      QuestAction.startNewGame,
-    );
+    dispatch(startGameAction).then((_) {
+      final appState = StoreProvider.state<AppState>(context);
+      final newGameId = appState?.newGame.newGameId;
 
-    dispatch(action).then((_) {
-      final newGameId =
-          StoreProvider.state<AppState>(context).newGame.newGameId;
+      if (newGameId == null) {
+        throw Exception('No newGameId on starting game');
+      }
 
       appRouter.goToRoot();
       appRouter.goTo(GameBoard(gameId: newGameId));
-    }).catchError(
-      (error) => handleError(
-        context: context,
-        exception: error,
-        onRetry: startAgain,
-      ),
+    }).onError(
+      (error, st) {
+        handleError(
+          context: context,
+          exception: error,
+          onRetry: startAgain,
+        );
+      },
     );
   };
 

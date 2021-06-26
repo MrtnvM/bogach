@@ -13,8 +13,8 @@ class BorderButton extends StatelessWidget {
     this.textColor = ColorRes.white,
   });
 
-  final String text;
-  final VoidCallback onPressed;
+  final String? text;
+  final VoidCallback? onPressed;
   final Color textColor;
   final Color color;
 
@@ -25,16 +25,19 @@ class BorderButton extends StatelessWidget {
             text: text,
             onPressed: onPressed,
           )
-        : OutlineButton(
-            color: color,
-            onPressed: onPressed,
-            borderSide: BorderSide(color: color),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(6.0),
+        : OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              primary: color,
+              side: BorderSide(color: color),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6.0),
+              ),
+              // TODO(Artem): Find the way to fix
+              // highlightedBorderColor: color,
             ),
-            highlightedBorderColor: color,
+            onPressed: onPressed,
             child: AutoSizeText(
-              text.toUpperCase(),
+              text!.toUpperCase(),
               textAlign: TextAlign.center,
               style: Styles.body1,
             ),

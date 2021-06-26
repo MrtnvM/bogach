@@ -17,6 +17,7 @@ import {
   applyGameTransformers,
   HistoryGameTransformer,
   UpdateMoveStartDateTransformer,
+  StatisticsTransformer,
 } from '../../transformers/game_transformers';
 import { IncomeHandler } from '../../events/income/income_handler';
 import { ExpenseHandler } from '../../events/expense/expense_handler';
@@ -38,6 +39,7 @@ import produce, { Draft } from 'immer';
 import { PlayedGameInfo } from '../../models/domain/user/player_game_info';
 import { PurchaseProfileEntity } from '../../models/purchases/purchase_profile';
 import { nowInUtc } from '../../utils/datetime';
+import { CreditHandler } from '../../events/common/credit_handler';
 
 export class GameService {
   constructor(
@@ -54,7 +56,7 @@ export class GameService {
   private handlers: PlayerActionHandler[] = [
     new DebentureEventHandler(),
     new StockEventHandler(),
-    new BusinessBuyEventHandler(),
+    new BusinessBuyEventHandler(new CreditHandler()),
     new BusinessSellEventHandler(),
     new IncomeHandler(),
     new ExpenseHandler(),
@@ -160,6 +162,15 @@ export class GameService {
       }
 
       if (updatedGame.state.gameStatus === 'game_over') {
+        const isSingleplayerGame = game.type === 'singleplayer' && !game.config.level;
+
+        if (isSingleplayerGame) {
+          const statistic = await this.gameProvider.updateLevelStatistic(updatedGame);
+          updatedGame = applyGameTransformers(updatedGame, [
+            new StatisticsTransformer(statistic, userId),
+          ]);
+        }
+
         await this.gameProvider.updateGameParticipantsCompletedGames(updatedGame);
       }
 

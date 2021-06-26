@@ -18,7 +18,8 @@ class StartQuestGameAction extends BaseAction {
 
   @override
   Future<AppState> reduce() async {
-    final userId = state.profile.currentUser.id;
+    final currentUser = state.profile.currentUser!;
+    final userId = currentUser.id;
 
     final getGameId = () async {
       switch (action) {
@@ -29,13 +30,11 @@ class StartQuestGameAction extends BaseAction {
             gameLevelId: questId,
             userId: userId,
           );
-          break;
 
         case QuestAction.continueGame:
-          final questGames = state.profile.currentUser.lastGames.questGames;
+          final questGames = currentUser.lastGames.questGames;
           final index = questGames.indexWhere((g) => g.templateId == questId);
           return index < 0 ? null : questGames[index].gameId;
-          break;
       }
     };
 

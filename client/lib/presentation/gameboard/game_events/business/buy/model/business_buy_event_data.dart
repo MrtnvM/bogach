@@ -5,18 +5,18 @@ part 'business_buy_event_data.freezed.dart';
 part 'business_buy_event_data.g.dart';
 
 @freezed
-abstract class BusinessBuyEventData
+class BusinessBuyEventData
     with _$BusinessBuyEventData
     implements GameEventData {
   factory BusinessBuyEventData({
-    String businessId,
-    int currentPrice,
-    int fairPrice,
-    int downPayment,
-    int debt,
-    int passiveIncomePerMonth,
-    int payback,
-    int sellProbability,
+    required String businessId,
+    required int currentPrice,
+    required int fairPrice,
+    required int downPayment,
+    required int debt,
+    required int passiveIncomePerMonth,
+    required int payback,
+    required int sellProbability,
   }) = _BusinessBuyEventData;
 
   factory BusinessBuyEventData.fromJson(Map<String, dynamic> json) =>

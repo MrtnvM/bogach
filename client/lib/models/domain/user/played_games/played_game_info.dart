@@ -5,10 +5,10 @@ part 'played_game_info.freezed.dart';
 part 'played_game_info.g.dart';
 
 @freezed
-abstract class PlayedGameInfo with _$PlayedGameInfo {
+class PlayedGameInfo with _$PlayedGameInfo {
   factory PlayedGameInfo({
-    String gameId,
-    @JsonKey(fromJson: fromISO8601DateJson) DateTime createdAt,
+    required String gameId,
+    @JsonKey(fromJson: fromISO8601DateJson) required DateTime? createdAt,
   }) = _PlayedGameInfo;
 
   factory PlayedGameInfo.fromJson(Map<String, dynamic> json) =>

@@ -7,23 +7,23 @@ import 'package:cash_flow/models/errors/purchase_errors.dart';
 import 'package:cash_flow/models/network/request/purchases/purchase_details_request_model.dart';
 import 'package:cash_flow/models/network/request/purchases/update_purchases_request_model.dart';
 import 'package:cash_flow/utils/error_handler.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
-import 'package:fimber/fimber_base.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:fimber/fimber.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PurchaseService {
   PurchaseService({
-    @required CashFlowApiClient apiClient,
-    @required InAppPurchaseConnection connection,
+    required CashFlowApiClient apiClient,
+    required InAppPurchaseConnection connection,
   })  : _connection = connection,
         _apiClient = apiClient;
 
   final CashFlowApiClient _apiClient;
   final InAppPurchaseConnection _connection;
 
-  String _currentPurchasingProduct;
+  String? _currentPurchasingProduct;
   final _pastPurchases = BehaviorSubject<List<PurchaseDetails>>.seeded([]);
   final _purchases = BehaviorSubject<Map<String, PurchaseDetails>>.seeded({});
 
@@ -62,12 +62,12 @@ class PurchaseService {
   }
 
   Future<bool> isAvailable() {
-    return _connection.isAvailable().catchError(recordError);
+    return _connection.isAvailable().onError(recordError);
   }
 
   Future<List<PurchaseDetails>> queryPastPurchases() async {
     final response =
-        await _connection.queryPastPurchases().catchError(recordError);
+        await _connection.queryPastPurchases().onError(recordError);
 
     if (response.error != null) {
       final error = QueryPastPurchasesRequestException(response.error);
@@ -83,7 +83,7 @@ class PurchaseService {
     return pastPurchases;
   }
 
-  Future<PurchaseProfile> restorePastPurchases(String userId) async {
+  Future<PurchaseProfile?> restorePastPurchases(String userId) async {
     Logger.i('Restoring past purchases started for user ($userId)');
     final pastPurchases = await queryPastPurchases();
     Logger.i('Restored purchases:');
@@ -108,33 +108,33 @@ class PurchaseService {
     return purchaseProfile;
   }
 
-  Future<bool> buyConsumable({@required ProductDetails productDetails}) {
+  Future<bool> buyConsumable({required ProductDetails productDetails}) {
     final purchaseParams = PurchaseParam(productDetails: productDetails);
     return _connection
         .buyConsumable(purchaseParam: purchaseParams)
-        .catchError(recordError);
+        .onError(recordError);
   }
 
-  Future<bool> buyNonConsumable({@required ProductDetails productDetails}) {
+  Future<bool> buyNonConsumable({required ProductDetails productDetails}) {
     final purchaseParams = PurchaseParam(productDetails: productDetails);
     return _connection
         .buyNonConsumable(purchaseParam: purchaseParams)
-        .catchError(recordError);
+        .onError(recordError);
   }
 
-  Future<List<ProductDetails>> queryProductDetails({Set<String> ids}) {
+  Future<List<ProductDetails>> queryProductDetails({required Set<String> ids}) {
     return _connection.queryProductDetails(ids).then((response) {
       if (response.notFoundIDs.isNotEmpty) {
         throw NoInAppPurchaseProductsException(response.notFoundIDs);
       }
 
       return response.productDetails;
-    }).catchError(recordError);
+    }).onError(recordError);
   }
 
   Future<ProductDetails> getProduct(String productId) async {
     final response = await _connection
-        .queryProductDetails({productId}).catchError(recordError);
+        .queryProductDetails({productId}).onError(recordError);
 
     if (response.notFoundIDs.isNotEmpty) {
       throw NoInAppPurchaseProductsException(response.notFoundIDs);
@@ -144,9 +144,9 @@ class PurchaseService {
     return product;
   }
 
-  Future<PurchaseProfile> buyNonConsumableProduct({
-    @required String productId,
-    @required String userId,
+  Future<PurchaseProfile?> buyNonConsumableProduct({
+    required String productId,
+    required String userId,
   }) async {
     try {
       _currentPurchasingProduct = productId;
@@ -162,10 +162,10 @@ class PurchaseService {
           .buyNonConsumable(
             purchaseParam: PurchaseParam(productDetails: product),
           )
-          .catchError(recordError);
+          .onError(recordError);
 
       Logger.i('Waiting purchase details for product ($productId)');
-      final purchase = await _getPurchase(productId: productId);
+      final purchase = (await _getPurchase(productId: productId))!;
       _logPurchase(purchase);
 
       if (purchase.status == PurchaseStatus.error) {
@@ -218,9 +218,9 @@ class PurchaseService {
     }
   }
 
-  Future<PurchaseProfile> buyConsumableProduct({
-    @required String productId,
-    @required String userId,
+  Future<PurchaseProfile?> buyConsumableProduct({
+    required String productId,
+    required String userId,
   }) async {
     try {
       _currentPurchasingProduct = productId;
@@ -236,10 +236,10 @@ class PurchaseService {
           .buyConsumable(
             purchaseParam: PurchaseParam(productDetails: product),
           )
-          .catchError(recordError);
+          .onError(recordError);
 
       Logger.i('Waiting purchase details for product ($productId)');
-      final purchase = await _getPurchase(productId: productId);
+      final purchase = (await _getPurchase(productId: productId))!;
       _logPurchase(purchase);
 
       if (purchase.status == PurchaseStatus.error) {
@@ -283,7 +283,7 @@ class PurchaseService {
     }
   }
 
-  Future<PurchaseProfile> buyQuestsAccess(String userId) async {
+  Future<PurchaseProfile?> buyQuestsAccess(String userId) async {
     try {
       final purchaseProfile = await restorePastPurchases(userId);
 
@@ -303,9 +303,9 @@ class PurchaseService {
     }
   }
 
-  Future<PurchaseProfile> buyMultiplayerGames({
-    @required MultiplayerGamePurchases purchase,
-    @required String userId,
+  Future<PurchaseProfile?> buyMultiplayerGames({
+    required MultiplayerGamePurchases purchase,
+    required String userId,
   }) {
     try {
       final productId = purchase.productId;
@@ -320,7 +320,7 @@ class PurchaseService {
     }
   }
 
-  Future<PurchaseProfile> _sendPurchasesToServer(
+  Future<PurchaseProfile?> _sendPurchasesToServer(
     String userId,
     List<PurchaseDetails> purchases,
   ) async {
@@ -329,9 +329,9 @@ class PurchaseService {
         .map(
           (p) => PurchaseDetailsRequestModel(
             productId: p.productID,
-            purchaseId: p.purchaseID,
-            verificationData: p.verificationData?.serverVerificationData,
-            source: p.verificationData?.source?.toString(),
+            purchaseId: p.purchaseID!,
+            verificationData: p.verificationData.serverVerificationData,
+            source: p.verificationData.source.toString(),
           ),
         )
         .toList();
@@ -347,7 +347,7 @@ class PurchaseService {
             purchases: completedPurchases,
           ),
         )
-        .catchError(recordError);
+        .onError(recordError);
 
     return purchaseProfile;
   }
@@ -375,7 +375,7 @@ class PurchaseService {
 
     final results = await Future.wait([
       for (final purchase in notCompletedPurchases)
-        _connection.completePurchase(purchase).catchError(recordError),
+        _connection.completePurchase(purchase).onError(recordError),
     ]);
 
     final retryStatuses = [
@@ -423,7 +423,7 @@ class PurchaseService {
   }
 
   void _updatePurchases(List<PurchaseDetails> purchases) {
-    final currentPurchases = _purchases.value;
+    final currentPurchases = _purchases.value!;
     final updatedPurchases = {...currentPurchases};
 
     for (final p in purchases) {
@@ -432,11 +432,12 @@ class PurchaseService {
       /// On Android if purchase was canceled purchase has
       /// empty info fields even the product ID, so we are using saved
       /// product ID of the current purchase to fix the problem
-      if (purchase.productID == null) {
+      // TODO(Artem): purchase.productID can't be null
+      if (purchase.purchaseID == null) {
         purchase = PurchaseDetails(
           purchaseID: null,
-          productID: _currentPurchasingProduct,
-          verificationData: null,
+          productID: _currentPurchasingProduct!,
+          verificationData: purchase.verificationData,
           transactionDate: null,
         )..status = PurchaseStatus.error;
       }
@@ -444,27 +445,26 @@ class PurchaseService {
       updatedPurchases[purchase.productID] = purchase;
     }
 
-    _purchases.value = updatedPurchases;
+    _purchases.add(updatedPurchases);
   }
 
-  Future<PurchaseDetails> _getPurchase({@required String productId}) async {
+  Future<PurchaseDetails?> _getPurchase({required String productId}) async {
     final purchase = await purchases
-        .map((purchases) => purchases.firstWhere(
+        .map((purchases) => purchases.firstWhereOrNull(
               (p) =>
                   p.productID == productId &&
                   [
                     PurchaseStatus.purchased,
                     PurchaseStatus.error,
                   ].contains(p.status),
-              orElse: () => null,
             ))
         .where((p) => p != null)
         .first
-        .catchError(recordError);
+        .onError(recordError);
 
-    final newPurchases = _purchases.value;
+    final newPurchases = _purchases.value!;
     newPurchases.remove(productId);
-    _purchases.value = newPurchases;
+    _purchases.add(newPurchases);
 
     return purchase;
   }
@@ -476,10 +476,10 @@ class PurchaseService {
       '  Purchase Status = ${purchase.status}\n'
       '  Pending completion = ${purchase.pendingCompletePurchase}\n'
       '  Server verification data = '
-      '${purchase.verificationData?.serverVerificationData}\n'
+      '${purchase.verificationData.serverVerificationData}\n'
       '  Local verification data = '
-      '${purchase.verificationData?.localVerificationData}\n'
-      '  Source = ${purchase.verificationData?.source}',
+      '${purchase.verificationData.localVerificationData}\n'
+      '  Source = ${purchase.verificationData.source}',
     );
   }
 }
