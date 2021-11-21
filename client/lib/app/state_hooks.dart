@@ -21,13 +21,13 @@ List<UserProfile> useCurrentUserFriends() {
   final dispatch = useDispatcher();
   final profiles =
       useGlobalState((s) => s.multiplayer.userProfiles) ?? StoreList();
-  final friendsIds = user?.friends ?? [];
+  final friendsIds = user?.friends;
 
   useEffect(() {
     late VoidCallback loadMissingProfiles;
 
     loadMissingProfiles = () {
-      final missingProfilesIds = friendsIds //
+      final missingProfilesIds = (friendsIds ?? []) //
           .where((userId) => profiles.getItem(userId) == null)
           .toList();
 
@@ -43,9 +43,9 @@ List<UserProfile> useCurrentUserFriends() {
     loadMissingProfiles();
 
     return null;
-  }, [friendsIds, profiles]);
+  }, [friendsIds]);
 
-  return friendsIds //
+  return (friendsIds ?? []) //
       .map(profiles.getItem)
       .where((item) => item != null)
       .toList()
