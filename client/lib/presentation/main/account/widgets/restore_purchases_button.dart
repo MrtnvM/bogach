@@ -14,18 +14,22 @@ class RestorePurchasesButton extends HookWidget {
     final dispatch = useDispatcher();
     final size = useAdaptiveSize();
 
-    final restorePurchases = () async {
+    late Future<void> Function() restorePurchases;
+    restorePurchases = () async {
       try {
         await dispatch(RestorePurchasesAction());
         showAlert(
           context: context,
           title: Strings.purchasesRestoredAlertTitle,
           message: Strings.purchasesRestoredAlertMessage,
+          submitButtonText: Strings.ok,
+          needCancelButton: false,
         );
       } catch (error) {
         showWarningAlertDialog(
           context: context,
           errorMessage: Strings.restorePurchasesError,
+          onSubmit: restorePurchases,
         );
       }
     };
