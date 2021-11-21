@@ -14,10 +14,10 @@ void useSingleplayerMonthResultAdLoader() {
 
   useEffect(() {
     /// We should load the ad ahead of showing
-    final monthForAd = month != null ? month + 3 : null;
+    final monthForAd = month != null ? month + 2 : null;
 
-    /// We show ad not for every month, only once in 3 month
-    final isAppropriateMonth = monthForAd != null && (monthForAd - 1) % 3 == 0;
+    /// We show ad not for every month, only once in 2 month
+    final isAppropriateMonth = monthForAd != null && (monthForAd - 1) % 2 == 0;
     final shouldLoadAd = isAppropriateMonth && isSingleplayerGame;
 
     if (shouldLoadAd) {
@@ -39,8 +39,9 @@ void _useAdDisposer() {
   }
 
   final adsForDispose = ads?.entries //
-      .where((e) => e.key < month)
-      .toList() ?? [];
+          .where((e) => e.key < month)
+          .toList() ??
+      [];
 
   for (final adEntry in adsForDispose) {
     final month = adEntry.key;
