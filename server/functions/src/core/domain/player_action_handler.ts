@@ -5,7 +5,7 @@ import { UserEntity } from '../../models/domain/user/user';
 export abstract class PlayerActionHandler {
   abstract get gameEventType(): GameEventEntity.Type;
 
-  abstract async validate(event: any, action: any): Promise<boolean>;
+  abstract validate(event: any, action: any): Promise<boolean>;
 
-  abstract async handle(game: Game, event: any, action: any, userId: UserEntity.Id): Promise<Game>;
+  abstract handle(game: Game, event: any, action: any, userId: UserEntity.Id): Promise<Game>;
 }

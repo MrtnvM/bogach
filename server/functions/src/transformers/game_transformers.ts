@@ -17,7 +17,7 @@ export const applyGameTransformers = (game: Game, transformers: GameTransformer[
   return (transformers || []).reduce((prev, transformer) => {
     try {
       return transformer.apply(prev);
-    } catch (err) {
+    } catch (err: any) {
       const context = transformer.transformerContext();
       const errorMessage =
         'GAME TRANSFORMER ERROR\n' +

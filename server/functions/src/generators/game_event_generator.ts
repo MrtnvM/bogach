@@ -91,7 +91,7 @@ export class GameEventGenerator {
 
       try {
         gameEvent = rule.generate(updatedGame);
-      } catch (e) {
+      } catch (e: any) {
         const errorMessage =
           `GENERATION OF GAME EVENT BY RULE: ${rule.getType()}` +
           `ERROR MESSAGE: ${e && e['message']}`;

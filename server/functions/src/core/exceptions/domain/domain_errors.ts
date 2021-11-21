@@ -67,7 +67,7 @@ export namespace DomainErrors {
     },
   };
 
-  export const creditIsNotAvilable: DomainError = {
+  export const creditIsNotAvailable: DomainError = {
     type: 'domain',
     code: 'credit-not-available',
     message: {
