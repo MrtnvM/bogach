@@ -1,6 +1,5 @@
 import 'package:alice_lightweight/alice.dart';
 import 'package:cash_flow/widgets/settings/logout_setting.dart';
-import 'package:cash_flow/widgets/settings/purchases_setting.dart';
 import 'package:cash_flow/widgets/settings/reset_config_setting.dart';
 import 'package:cash_flow/widgets/uikit/ui_kit_setting.dart';
 import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
@@ -50,7 +49,6 @@ class SettingsProvider extends ControlPanelSettingsProvider {
       NetworkSetting(networkProps),
       LogConsoleButton(),
       const LogoutSetting(),
-      const PurchasesSetting(),
       const ResetConfigSetting(),
     ];
   }

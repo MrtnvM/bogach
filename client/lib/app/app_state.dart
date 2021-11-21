@@ -5,7 +5,6 @@ import 'package:cash_flow/features/config/config_state.dart';
 import 'package:cash_flow/features/game/game_state.dart';
 import 'package:cash_flow/features/multiplayer/multiplayer_state.dart';
 import 'package:cash_flow/features/profile/profile_state.dart';
-import 'package:cash_flow/features/purchase/purchase_state.dart';
 import 'package:cash_flow/features/new_game/new_game_state.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 
@@ -18,7 +17,6 @@ abstract class AppState
   AppState._();
 
   ProfileState get profile;
-  PurchaseState get purchase;
 
   GameState get game;
   NewGameState get newGame;
@@ -53,7 +51,6 @@ abstract class AppState
     return AppState(
       (b) => b
         ..profile = ProfileState.initial().toBuilder()
-        ..purchase = PurchaseState.initial().toBuilder()
         ..game = GameState.initial().toBuilder()
         ..newGame = NewGameState.initial().toBuilder()
         ..multiplayer = MultiplayerState.initial().toBuilder()

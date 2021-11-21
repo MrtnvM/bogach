@@ -21,3 +21,5 @@ ui-debug.log
 data/purchasers.json
 
 data/games/
+
+client/.fvm/

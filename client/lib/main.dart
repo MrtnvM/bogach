@@ -19,7 +19,6 @@ import 'package:cash_flow/configuration/ui_kit.dart';
 import 'package:cash_flow/features/config/actions/load_config_action.dart';
 import 'package:cash_flow/features/config/actions/track_online_status_action.dart';
 import 'package:cash_flow/features/profile/actions/set_current_user_action.dart';
-import 'package:cash_flow/features/purchase/actions/listening_purchases_actions.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/utils/core/launch_counter.dart';
 import 'package:cash_flow/utils/core/logging/firebase_tree.dart';
@@ -31,11 +30,12 @@ import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:fimber/fimber.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:intl/intl.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'features/profile/actions/start_listening_profile_updates_action.dart';
@@ -58,7 +58,6 @@ Future<void> main({
   final apiClient = configureApiClient(alice, environment);
   final launchCounter = LaunchCounter(sharedPreferences);
 
-  configurePurchases();
   configureControlPanel(alice, apiClient);
   configureErrorReporting();
   setOrientationPortrait();
@@ -78,13 +77,13 @@ Future<void> main({
   Intl.defaultLocale = 'ru';
 
   final currentUser = await userCache.getUserProfile();
+  await configurePurchases(currentUser?.userId);
 
   final isAuthorized = currentUser?.userId != null;
   store.dispatch(SetCurrentUserAction(currentUser));
   if (isAuthorized) {
     store.dispatch(StartListeningProfileUpdatesAction(currentUser!.id));
   }
-  store.dispatch(StartListeningPurchasesAction());
 
   store.dispatchFuture(LoadConfigAction()).then((_) {
     store.dispatch(TrackOnlineStatusAction());
@@ -119,8 +118,13 @@ Future<void> main({
   });
 }
 
-void configurePurchases() {
-  InAppPurchaseConnection.enablePendingPurchases();
+Future<void> configurePurchases(String? userId) async {
+  await Purchases.setDebugLogsEnabled(!kReleaseMode);
+  await Purchases.setup(
+    'aAGJgIHOwhRDbUagijKmyGAJztZmWuWi',
+    appUserId: userId,
+    userDefaultsSuiteName: 'purchases',
+  );
 }
 
 void initLogging(String environmentName, isLoggerEnabled) {

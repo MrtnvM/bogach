@@ -9,7 +9,7 @@ import 'package:cash_flow/configuration/cash_api_environment.dart';
 import 'package:cash_flow/services/config_service.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/multiplayer_service.dart';
-import 'package:cash_flow/services/purchase_service.dart';
+import 'package:cash_flow/services/revenue_cat_purchase_service.dart';
 import 'package:cash_flow/services/updates_service.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,7 +22,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Store<AppState> configureStore() {
@@ -86,11 +85,6 @@ Future<void> configureDependencyInjection(
     apiClient: apiClient,
   );
 
-  final purchaseService = PurchaseService(
-    apiClient: apiClient,
-    connection: InAppPurchaseConnection.instance,
-  );
-
   final configService = ConfigService(
     preferences: sharedPreferences,
   );
@@ -104,9 +98,11 @@ Future<void> configureDependencyInjection(
     preferences: sharedPreferences,
   );
 
+  final purchaseService = RevenueCatPurchaseService(apiClient: apiClient);
+
   GetIt.I.registerSingleton<GameService>(gameService);
   GetIt.I.registerSingleton<UserService>(userService);
-  GetIt.I.registerSingleton<PurchaseService>(purchaseService);
+  GetIt.I.registerSingleton<RevenueCatPurchaseService>(purchaseService);
   GetIt.I.registerSingleton<ConfigService>(configService);
   GetIt.I.registerSingleton<UpdatesService>(updatesService);
   GetIt.I.registerSingleton<MultiplayerService>(multiplayerService);
