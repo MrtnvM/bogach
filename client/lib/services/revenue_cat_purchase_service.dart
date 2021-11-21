@@ -24,8 +24,8 @@ class RevenueCatPurchaseService {
 
   Future<PurchaseProfile> purchase(String productId) async {
     try {
-      await Purchases.purchaseProduct(productId);
-      final purchaseProfile = await _updatePurchaseProfile([productId]);
+      final purchaserInfo = await Purchases.purchaseProduct(productId);
+      final purchaseProfile = await _updatePurchaseProfile(purchaserInfo);
       return purchaseProfile;
     } on PlatformException catch (e) {
       final errorCode = PurchasesErrorHelper.getErrorCode(e);
@@ -39,24 +39,21 @@ class RevenueCatPurchaseService {
 
   Future<PurchaseProfile> restorePurchases() async {
     final purchaserInfo = await Purchases.restoreTransactions();
-    final purchases = purchaserInfo.nonSubscriptionTransactions;
-    final purchasedProductIds = purchases.map((p) => p.productId).toList();
-
-    final purchaseProfile = await _updatePurchaseProfile(purchasedProductIds);
+    final purchaseProfile = await _updatePurchaseProfile(purchaserInfo);
     return purchaseProfile;
   }
 
   Future<PurchaseProfile> _updatePurchaseProfile(
-    List<String> productsIds,
+    PurchaserInfo purchaserInfo,
   ) async {
     final userId = await Purchases.appUserID;
     final purchaseRequest = UpdatePurchasesRequestModel(
       userId: userId,
       purchases: [
-        for (final productId in productsIds)
+        for (final transaction in purchaserInfo.nonSubscriptionTransactions)
           PurchaseDetailsRequestModel(
-            productId: productId,
-            purchaseId: productId,
+            productId: transaction.productId,
+            purchaseId: transaction.revenueCatId,
           )
       ],
     );
