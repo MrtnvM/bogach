@@ -3,8 +3,6 @@ import { Entity } from '../../core/domain/entity';
 export interface PurchaseDetails {
   readonly productId: string;
   readonly purchaseId: string;
-  readonly verificationData: string;
-  readonly source: string;
 }
 
 export namespace PurchaseDetailsEntity {
