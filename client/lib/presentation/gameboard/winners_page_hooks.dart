@@ -22,14 +22,14 @@ VoidCallback useGameRestarter() {
   startAgain = () {
     BaseAction? startGameAction;
 
-    if (gameTemplateId != null) {
-      startGameAction = StartSinglePlayerGameAction(
-        templateId: gameTemplateId,
-      );
-    } else if (currentQuest != null) {
+    if (currentQuest != null) {
       startGameAction = StartQuestGameAction(
         currentQuest,
         QuestAction.startNewGame,
+      );
+    } else if (gameTemplateId != null) {
+      startGameAction = StartSinglePlayerGameAction(
+        templateId: gameTemplateId,
       );
     }
 

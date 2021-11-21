@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
+import 'package:cash_flow/features/new_game/actions/start_quest_game_action.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
@@ -15,6 +17,7 @@ import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 
 class WinnersPage extends HookWidget {
   @override
@@ -25,6 +28,14 @@ class WinnersPage extends HookWidget {
     final gameExists = useCurrentGame((g) => g != null)!;
     final benchmark = useCurrentParticipantBenchmark();
 
+    final isInProgress = useGlobalState((s) {
+      final operations = [
+        Operation.createQuestGame,
+        Operation.createGame,
+      ];
+      return operations.any((o) => s.getOperationState(o).isInProgress);
+    })!;
+
     if (!gameExists) {
       return LoadableView(
         isLoading: !gameExists,
@@ -34,38 +45,43 @@ class WinnersPage extends HookWidget {
       );
     }
 
-    return Container(
-      color: ColorRes.mainGreen,
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            _HeadlineImage(isWin: isWin),
-            const SizedBox(height: 40),
-            _HeadlineTitle(isWin: isWin),
-            const SizedBox(height: 24),
-            _HeadlineDescription(
-              isWin: isWin,
-              isMultiplayer: isMultiplayer,
-              isSinglePlayer: isSingleplayer,
-              benchmark: benchmark,
-            ),
-            if (isMultiplayer) ...[
+    return LoadableView(
+      isLoading: isInProgress,
+      backgroundColor: ColorRes.black.withOpacity(0.2),
+      indicatorColor: const AlwaysStoppedAnimation<Color>(ColorRes.mainGreen),
+      child: Container(
+        color: ColorRes.mainGreen,
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              _HeadlineImage(isWin: isWin),
+              const SizedBox(height: 40),
+              _HeadlineTitle(isWin: isWin),
               const SizedBox(height: 24),
-              _PlayerResultTable(),
-            ],
-            const SizedBox(height: 54),
-            if (isWin) ...[
-              _GoToMainMenuButton(),
-            ] else ...[
-              if (!isMultiplayer) ...[
-                _StartAgainButton(),
-                const SizedBox(height: 16),
+              _HeadlineDescription(
+                isWin: isWin,
+                isMultiplayer: isMultiplayer,
+                isSinglePlayer: isSingleplayer,
+                benchmark: benchmark,
+              ),
+              if (isMultiplayer) ...[
+                const SizedBox(height: 24),
+                _PlayerResultTable(),
               ],
-              _GoToMainMenuButton(),
+              const SizedBox(height: 54),
+              if (isWin) ...[
+                _GoToMainMenuButton(),
+              ] else ...[
+                if (!isMultiplayer) ...[
+                  _StartAgainButton(),
+                  const SizedBox(height: 16),
+                ],
+                _GoToMainMenuButton(),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
