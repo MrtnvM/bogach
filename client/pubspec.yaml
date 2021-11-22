@@ -1,6 +1,6 @@
 name: cash_flow
 description: The best investment trainer!
-version: 2.3.0+48
+version: 2.3.0+49
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
