@@ -24,6 +24,16 @@
       "args": ["--flavor", "staging"]
     },
     {
+      "name": "Flutter - iOS Purchases",
+      "type": "dart",
+      "request": "launch",
+      "program": "client/lib/main_staging.dart",
+      "args": [
+        "--flavor",
+        "purchases-staging"
+      ]
+    },
+    {
       "name": "Flutter - UAT",
       "type": "dart",
       "request": "launch",

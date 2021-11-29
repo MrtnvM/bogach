@@ -170,7 +170,7 @@ class _QuestItemWidget extends HookWidget {
     final isFirstQuest = quests.itemsIds.first == quest.id;
 
     final isQuestPurchased =
-        isFirstQuest || hasQuestsAccess || user.boughtQuestsAccess!;
+        isFirstQuest || hasQuestsAccess || user.boughtQuestsAccess == true;
     final isQuestOpenedByUser = quest.isAvailable;
     final isQuestAvailable =
         (isQuestPurchased && isQuestOpenedByUser) || DemoMode.isEnabled;

@@ -8,13 +8,12 @@ import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/profile/actions/update_user_action.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
-import 'package:cash_flow/presentation/main/account/widgets/friends_list_widget.dart';
+import 'package:cash_flow/presentation/main/account/sections/profile_section.dart';
+import 'package:cash_flow/presentation/main/account/sections/purchases_section.dart';
 import 'package:cash_flow/presentation/main/account/widgets/logout_button.dart';
-import 'package:cash_flow/presentation/main/account/widgets/name_input.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
-import 'package:cash_flow/widgets/avatar/editable_user_avatar.dart';
 import 'package:cash_flow/widgets/buttons/action_button.dart';
 import 'package:cash_flow/widgets/inputs/drop_focus.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
@@ -30,7 +29,6 @@ class AccountPage extends HookWidget {
   Widget build(BuildContext context) {
     final user = useCurrentUser()!;
     final dispatch = useDispatcher();
-    final friends = useCurrentUserFriends();
 
     final newFullName = useState(user.fullName);
     final newAvatar = useState<File?>(null);
@@ -39,7 +37,11 @@ class AccountPage extends HookWidget {
         newFullName.value == user.fullName && newAvatar.value == null;
 
     final isInProgress = useGlobalState((s) {
-      final operations = [Operation.updateUser, Operation.removeFromFriends];
+      final operations = [
+        Operation.updateUser,
+        Operation.removeFromFriends,
+        Operation.restorePurchases
+      ];
       return operations.any((o) => s.getOperationState(o).isInProgress);
     })!;
 
@@ -105,36 +107,14 @@ class AccountPage extends HookWidget {
             fit: StackFit.expand,
             children: [
               ListView(
-                padding: EdgeInsets.all(size(16)),
+                padding: EdgeInsets.symmetric(vertical: size(16)),
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: ColorRes.cardBackground,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: ColorRes.lightGrey),
-                      boxShadow: [
-                        BoxShadow(color: ColorRes.cardShadow, blurRadius: 2)
-                      ],
-                    ),
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        EditableUserAvatar(
-                          url: user.avatarUrl,
-                          onChanged: (file) => newAvatar.value = file,
-                          avatarSize: size(size(size(120))),
-                        ),
-                        SizedBox(height: size(24)),
-                        NameInput(
-                          initialValue: user.fullName,
-                          onChange: (name) => newFullName.value = name,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: size(32)),
-                  FriendsListWidget(friends: friends),
+                  PurchasesSection(),
+                  const Divider(),
+                  ProfileSection(
+                    onAvatarChanged: (file) => newAvatar.value = file,
+                    onUsernameChanged: (name) => newFullName.value = name,
+                  )
                 ],
               ),
               if (!isInfoTheSame)

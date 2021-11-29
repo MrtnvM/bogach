@@ -104,7 +104,7 @@ export class ErrorRecorder {
 
     try {
       return await callback();
-    } catch (error) {
+    } catch (error: any) {
       if (!ErrorRecorder.isEnabled) {
         throw error;
       }

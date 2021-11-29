@@ -42,16 +42,29 @@ StoreList<QuestUiModel>? useQuestsTemplates() {
   return useGlobalState((s) {
     final completedGames =
         s.profile.currentUser?.completedGames.questGames ?? [];
-    final currentQuestIndex = s.profile.currentUser!.currentQuestIndex ?? 0;
+    final questList = s.newGame.quests.items;
 
-    final quests = StoreList(s.newGame.quests.items
-        .map((quest) => QuestUiModel(
-            quest: quest,
-            isAvailable: s.newGame.quests.itemsIds.indexOf(quest.id) <=
-                currentQuestIndex))
-        .toList());
+    final quests = StoreList(questList.map((quest) {
+      final questIndex = questList.indexOf(quest);
+      final isFirstQuest = questIndex == 0;
 
-    quests.updateList(quests.items.rebuild((b) => b.sort((a, b) {
+      if (isFirstQuest) {
+        return QuestUiModel(quest: quest, isAvailable: true);
+      }
+
+      final previousQuest = questList[questIndex - 1];
+      final isPreviousQuestWasCompleted =
+          completedGames.any((e) => e.templateId == previousQuest.id);
+
+      return QuestUiModel(
+        quest: quest,
+        isAvailable: isPreviousQuestWasCompleted,
+      );
+    }).toList());
+
+    quests.updateList(
+      quests.items.rebuild(
+        (b) => b.sort((a, b) {
           final aIndex = completedGames
               .indexWhere((e) => e.templateId == a.quest.template.id);
           final bIndex = completedGames
@@ -66,7 +79,9 @@ StoreList<QuestUiModel>? useQuestsTemplates() {
           }
 
           return aIndex.compareTo(bIndex);
-        })));
+        }),
+      ),
+    );
 
     return quests;
   });

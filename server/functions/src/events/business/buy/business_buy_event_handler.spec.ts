@@ -281,7 +281,7 @@ describe('Business buy event event handler', () => {
       await handler.handle(game, event, action, userId);
       throw new Error('Should fail on previous line');
     } catch (error) {
-      expect(error).toStrictEqual(DomainErrors.creditIsNotAvilable);
+      expect(error).toStrictEqual(DomainErrors.creditIsNotAvailable);
     }
 
     const expectedCreditParams: CreditParameters = {

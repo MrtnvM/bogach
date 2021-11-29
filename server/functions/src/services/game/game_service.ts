@@ -152,7 +152,7 @@ export class GameService {
           new MonthTransformer(),
           new InsuranceTransformer(userId),
         ]);
-      } catch (error) {
+      } catch (error: any) {
         const errorMessage =
           'HANDLE PLAYER ACTION ERROR ON GAME CHANGING:\n' + //
           `ERROR MESSAGE: ${error['message'] ?? ''}\n` +
@@ -268,7 +268,7 @@ export class GameService {
           new UpdateMoveStartDateTransformer(),
           new MonthTransformer(),
         ]);
-      } catch (error) {
+      } catch (error: any) {
         const errorMessage =
           'COMPLETE MONTH ERROR ON GAME CHANGING:\n' + //
           `ERROR MESSAGE: ${error && error['message']}\n` +

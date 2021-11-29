@@ -204,7 +204,7 @@ class Strings {
 
   static String get restorePurchasesError => 'Не удалось восстановить покупки. '
       'Пожалуйста, проверьте ваше интернет-соединение '
-      'и используемый аккаунт для магазина';
+      'и используемый аккаунт для магазина приложений';
 
   static const cannotAuthoriseThroughSocial =
       'Вы зарегистрированы с указанной почтой через '
@@ -512,6 +512,8 @@ class Strings {
   static String get tutorialFinish => 'Погнали!';
 
   // Account
+  static String get profileSectionTitle => 'Профиль';
+  static String get purchaseSectionTitle => 'Покупки';
   static String get yourName => 'Ваше имя';
   static String get inviteNotifications => 'Уведомления о приглашениях';
   static String get friends => 'Друзья';
@@ -521,6 +523,10 @@ class Strings {
   static String get removeFromFriends => 'Удалить из друзей';
   static String get updateProfileErrorMessage =>
       'При обновлении профиля возникла ошибка';
+  static String get restorePurchases => 'Восстановить покупки';
+  static String get purchasesRestoredAlertTitle => 'Восстановление покупок';
+  static String get purchasesRestoredAlertMessage =>
+      'Совершенные покупки в приложении успешно востановлены!';
 
   // Update App Dialog
   static String get updateIsNeeded => 'У нас что-то новенькое!';

@@ -48,7 +48,7 @@ void _recordError(dynamic error, dynamic stacktrace) {
   if (error is NetworkConnectionException ||
       error is InvalidCredentialsException ||
       error is EmailHasBeenTakenException ||
-      error is ProductPurchaseCanceledException) {
+      error is PurchaseCanceledException) {
     return;
   }
 

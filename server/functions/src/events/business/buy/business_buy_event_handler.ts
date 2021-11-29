@@ -136,7 +136,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     });
 
     if (theSameBusinessIndex >= 0) {
-      throw new Error('Cant buy two the same businesses');
+      throw new Error("Can't buy two the same businesses");
     }
   }
 
@@ -147,7 +147,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     });
 
     if (theSameLiabilityIndex >= 0) {
-      throw new Error('Cant buy business with two the same liabilities');
+      throw new Error("Can't buy business with two the same liabilities");
     }
   }
 
@@ -163,7 +163,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     }
 
     const newAssets = this.addNewItemToAssets(actionParameters);
-    var newLiabilities = this.addNewLiability(
+    let newLiabilities = this.addNewLiability(
       actionParameters.liabilities,
       buyResult.defaultLiability
     );
@@ -257,7 +257,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     } = this.creditHandler.isCreditAvailable(creditParameters);
 
     if (!isCreditAvailable) {
-      throw DomainErrors.creditIsNotAvilable;
+      throw DomainErrors.creditIsNotAvailable;
     }
 
     const newAccountBalance = 0;

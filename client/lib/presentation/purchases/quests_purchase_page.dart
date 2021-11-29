@@ -5,7 +5,7 @@ import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/purchase/actions/buy_quests_access_action.dart';
-import 'package:cash_flow/features/purchase/actions/query_past_purchases_action.dart';
+import 'package:cash_flow/features/purchase/actions/restore_purchases_action.dart';
 import 'package:cash_flow/models/domain/game/quest/quest.dart';
 import 'package:cash_flow/models/errors/purchase_errors.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -24,7 +24,6 @@ import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 
 class QuestsPurchasePage extends HookWidget {
   const QuestsPurchasePage({this.quest});
@@ -36,14 +35,9 @@ class QuestsPurchasePage extends HookWidget {
     final isOperationInProgress = useGlobalState(
       (s) =>
           s.getOperationState(Operation.buyQuestsAcceess).isInProgress ||
-          s.getOperationState(Operation.queryPastPurchases).isInProgress ||
+          s.getOperationState(Operation.restorePurchases).isInProgress ||
           s.getOperationState(Operation.createQuestGame).isInProgress,
     )!;
-
-    final isStoreAvailable = useFuture(
-      InAppPurchaseConnection.instance.isAvailable(),
-      initialData: true,
-    );
 
     final hasQuestsAccess = useGlobalState(
       (s) => s.profile.currentUser?.purchaseProfile?.isQuestsAvailable ?? false,
@@ -79,10 +73,7 @@ class QuestsPurchasePage extends HookWidget {
               if (hasQuestsAccess)
                 _StartQuestButton(quest: quest)
               else
-                _BuyButton(
-                  quest: quest,
-                  isStoreAvailable: isStoreAvailable.data,
-                ),
+                _BuyButton(quest: quest),
             ],
           ),
         ),
@@ -102,7 +93,7 @@ class _RestorePurchasesButton extends HookWidget {
       AnalyticsSender.restorePurchasesStart();
 
       try {
-        await dispatch(QueryPastPurchasesAction());
+        await dispatch(RestorePurchasesAction());
       } catch (error) {
         AnalyticsSender.restorePurchasesFailed();
         handleError(context: context, exception: error);
@@ -213,14 +204,9 @@ class _AdvantagesWidget extends StatelessWidget {
 }
 
 class _BuyButton extends HookWidget {
-  const _BuyButton({
-    required this.quest,
-    required this.isStoreAvailable,
-    Key? key,
-  }) : super(key: key);
+  const _BuyButton({required this.quest, Key? key}) : super(key: key);
 
   final Quest? quest;
-  final bool? isStoreAvailable;
 
   @override
   Widget build(BuildContext context) {
@@ -242,9 +228,9 @@ class _BuyButton extends HookWidget {
         }
 
         await startQuest(quest!.id, QuestAction.startNewGame);
-      } on ProductPurchaseCanceledException catch (error) {
+      } on PurchaseCanceledException catch (error) {
         AnalyticsSender.questsPurchaseCanceled();
-        Logger.i('Purchase canceled: ${error.product.id}');
+        Logger.i('Purchase canceled: ${error.productId}');
       } catch (error) {
         AnalyticsSender.questsPurchaseFailed();
 
@@ -278,17 +264,6 @@ class _BuyButton extends HookWidget {
             ],
           ),
         ),
-        if (!isStoreAvailable!) ...[
-          const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Text(
-              Strings.storeConnectionError,
-              style: Styles.body1,
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ]
       ],
     );
   }

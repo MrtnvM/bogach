@@ -33,7 +33,7 @@ enum Operation {
 
   // Purchase
   queryProductDetails,
-  queryPastPurchases,
+  restorePurchases,
   buyQuestsAcceess,
   buyMultiplayerGames,
 }
