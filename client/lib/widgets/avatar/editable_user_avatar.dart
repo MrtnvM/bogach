@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cash_flow/resources/colors.dart';
-import 'package:cash_flow/utils/image_picker.dart';
+import 'package:cash_flow/utils/ui/image_picker.dart';
 import 'package:cash_flow/widgets/avatar/avatar_widget.dart';
 import 'package:cash_flow/widgets/buttons/raised_icon_button.dart';
 import 'package:flutter/material.dart';

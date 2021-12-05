@@ -541,4 +541,8 @@ class Strings {
   static String get recommendationsDescription =>
       'Для тех, кто готов двигаться дальше';
   static String get booksSectionTitle => 'Книги';
+  static String get pages => 'Страниц';
+  static String get rating => 'Рейтинг';
+  static String get reviews => 'Оценок';
+  static String get readFragment => 'Читать фрагмент';
 }

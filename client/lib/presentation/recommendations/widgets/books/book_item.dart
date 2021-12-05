@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/models/domain/recommendations/recommendation_book.dart';
+import 'package:cash_flow/navigation/app_router.dart';
+import 'package:cash_flow/presentation/recommendations/book_recommendation/recommendation_book_page.dart';
 import 'package:cash_flow/presentation/recommendations/widgets/books/book_advantage.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/styles.dart';
@@ -17,32 +19,32 @@ class BookItem extends HookWidget {
     final mediaQuery = useAdaptiveMediaQueryData();
     final size = useAdaptiveSize();
 
-    return Container(
-      constraints: BoxConstraints(
-        maxWidth: mediaQuery.size.width - size(16) * 2,
-      ),
-      padding: EdgeInsets.only(
-        top: size(12),
-        bottom: size(12),
-        left: size(12),
-        right: size(16),
-      ),
-      margin: EdgeInsets.all(size(16)),
-      decoration: BoxDecoration(
-        color: ColorRes.bookItemBackground,
-        borderRadius: BorderRadius.all(Radius.circular(size(4))),
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 8,
-            color: Colors.grey.withAlpha(150),
-          )
-        ],
-      ),
-      child: MediaQuery(
-        data: mediaQuery,
-        child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () => print('Selected book!'),
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () => appRouter.goTo(RecommendationBookPage(book.bookId)),
+      child: Container(
+        constraints: BoxConstraints(
+          maxWidth: mediaQuery.size.width - size(16) * 2,
+        ),
+        padding: EdgeInsets.only(
+          top: size(12),
+          bottom: size(12),
+          left: size(12),
+          right: size(16),
+        ),
+        margin: EdgeInsets.all(size(16)),
+        decoration: BoxDecoration(
+          color: ColorRes.bookItemBackground,
+          borderRadius: BorderRadius.all(Radius.circular(size(4))),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 8,
+              color: Colors.grey.withAlpha(150),
+            )
+          ],
+        ),
+        child: MediaQuery(
+          data: mediaQuery,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

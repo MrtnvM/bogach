@@ -80,4 +80,8 @@ class Images {
   static const iconMindset = 'assets/images/png/icon_mindset.png';
   static const iconFinances = 'assets/images/png/icon_finances.png';
   static const iconEnergy = 'assets/images/png/icon_energy.png';
+
+  static const backButton = 'assets/images/svg/back_button.svg';
+
+  static const litresLogo = 'assets/images/svg/litres-ru-logo.svg';
 }
