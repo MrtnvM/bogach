@@ -10,6 +10,7 @@ import 'package:cash_flow/models/domain/user/online/online_profile.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/main/account/account_page.dart';
 import 'package:cash_flow/presentation/main/games/games_page.dart';
+import 'package:cash_flow/presentation/recommendations/recommendations_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -87,6 +88,7 @@ class MainPage extends HookWidget {
             index: pageIndex.value,
             children: const [
               GamesPage(),
+              RecommendationsPage(),
               AccountPage(),
             ],
           ),
@@ -104,6 +106,10 @@ class MainPage extends HookWidget {
               BottomNavigationBarItem(
                 icon: const Icon(Icons.insights),
                 label: Strings.gamesTabTitle,
+              ),
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.thumb_up_off_alt),
+                label: Strings.recommendationsTabTitle,
               ),
               BottomNavigationBarItem(
                 icon: const Icon(Icons.person),

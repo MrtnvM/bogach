@@ -33,6 +33,7 @@ class Strings {
 
   // Main Page
   static String get gamesTabTitle => 'Игры';
+  static String get recommendationsTabTitle => 'Рекомендации';
   static String get accountTabTitle => 'Аккаунт';
 
   // Authorization
@@ -534,4 +535,10 @@ class Strings {
       'познавательнее для вас. Пожалуйста, обновите приложение для'
       ' доступа к новым функциям - это не займет много времени :)';
   static String get update => 'Обновить';
+
+  // Recommendations page
+  static String get recommendationsTitle => 'Богач рекомендует';
+  static String get recommendationsDescription =>
+      'Для тех, кто готов двигаться дальше';
+  static String get booksSectionTitle => 'Книги';
 }

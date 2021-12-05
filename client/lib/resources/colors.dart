@@ -72,4 +72,7 @@ class ColorRes {
 
   static const shimmerBaseColor = Color(0xFFDDDDDD);
   static const shimmerHightlightColor = Color(0xFFFFFFFF);
+
+  static const bookAdvantageBackground = Color(0xFFFDFDFD);
+  static const bookItemBackground = Color(0xFFF5F5F5);
 }
