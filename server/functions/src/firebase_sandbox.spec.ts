@@ -75,16 +75,14 @@ describe('Firebase sandbox', () => {
     const firestoreInstance = new Firestore();
     const userDao = new FirestoreUserDAO(selector, firestoreInstance);
     const userProvider = new UserProvider(userDao);
-    const purchseService = new PurchaseService(userProvider);
+    const purchaseService = new PurchaseService(userProvider);
 
     const purchaseDetails: PurchaseDetails = {
       productId: 'bogach.multiplayer.games.10',
       purchaseId: '10000007925390781',
-      source: 'IAPSource.AppStore',
-      verificationData: '',
     };
 
-    await purchseService.updatePurchases(userId, [purchaseDetails]);
+    await purchaseService.updatePurchases(userId, [purchaseDetails]);
 
     const messaging = admin.messaging();
     await messaging.send({
