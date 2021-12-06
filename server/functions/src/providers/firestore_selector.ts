@@ -6,9 +6,8 @@ import { RoomEntity } from '../models/domain/room';
 import { UserEntity } from '../models/domain/user/user';
 
 export type DocumentReference = FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>;
-export type CollectionReference = FirebaseFirestore.CollectionReference<
-  FirebaseFirestore.DocumentData
->;
+export type CollectionReference =
+  FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData>;
 
 export type Query = FirebaseFirestore.Query;
 
@@ -33,4 +32,8 @@ export class FirestoreSelector {
 
   levelStatistics = (): CollectionReference => this.firestore.collection('level_statistics');
   levelStatistic = (templateId: GameTemplateEntity.Id) => this.levelStatistics().doc(templateId);
+
+  recommendationBooks = (): CollectionReference =>
+    this.firestore.collection('recommendation_books');
+  recommendationBook = (bookId: string) => this.recommendationBooks().doc(bookId);
 }

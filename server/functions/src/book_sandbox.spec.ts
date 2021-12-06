@@ -1,22 +1,42 @@
 /// <reference types="@types/jest"/>
 
-import fetch from 'node-fetch';
-import cheerio from 'cheerio';
+import * as admin from 'firebase-admin';
+import { Firestore } from './core/firebase/firestore';
+import { FirestoreSelector } from './providers/firestore_selector';
 import { writeJson } from './utils/json';
+import { LitresService } from './services/litres/litres_service';
+import { BookRecommendationsProvider } from './providers/recommendations/book_recommendations_provider';
+import { BookRecommendationsService } from './services/recommendations/book_recommendations_service';
+import { FirestoreBookRecommendationsDAO } from './dao/firestore/firestore_book_recommendations_dao';
+import { FIREBASE_STAGING_CONFIG } from './config';
+
+const LITRES_PARTNER_ID = 432409830;
+
+admin.initializeApp(FIREBASE_STAGING_CONFIG);
 
 describe('Sandbox', () => {
   test('Parse Litres book', async () => {
     jest.setTimeout(150_000);
 
-    const bookLinks = [
-      'https://www.litres.ru/aleksey-markov-12132/hulinomika-huliganskaya-ekonomika-finansovye-rynki-dl/',
-      'https://www.litres.ru/dzhorzh-semuel-kleyson/samyy-bogatyy-chelovek-v-vavilone/',
-      'https://www.litres.ru/bodo-shefer/mani-ili-azbuka-deneg/',
+    const firestore = admin.firestore();
+    const selector = new FirestoreSelector(firestore);
+    const firestoreInstance = new Firestore();
+
+    const litresService = new LitresService(LITRES_PARTNER_ID);
+
+    const bookDao = new FirestoreBookRecommendationsDAO(selector, firestoreInstance);
+    const bookProvider = new BookRecommendationsProvider(bookDao);
+    const bookService = new BookRecommendationsService(bookProvider);
+
+    const booksIds = [
+      23593618, 11279349, 9361857, 22960394, 27059084, 23789575, 42132666, 29837855, 8647268,
+      36628165, 6564681, 25578317,
     ];
 
     const books = await Promise.all(
-      bookLinks.map(async (link) => {
-        const book = await parseLitresBook(link);
+      booksIds.map(async (bookId) => {
+        const book = await litresService.parseBook(bookId);
+        await bookService.updatedBook(book);
         writeJson(`data/books/${book.title}.json`, book);
         return book;
       })
@@ -25,39 +45,3 @@ describe('Sandbox', () => {
     console.log('Books: ', books);
   });
 });
-
-const parseLitresBook = async (link: string) => {
-  const response = await fetch(link);
-
-  const html = await response.text();
-  const $ = cheerio.load(html);
-
-  const title = $('.biblio_book_name h1').text();
-  const author = $('.biblio_book_author a span[itemprop="name"]').text();
-  const rating = parseFloat(
-    $('.rating-source-litres .rating-text-wrapper .rating-number').text().replace(/,/g, '.')
-  );
-  const reviewCount = parseInt(
-    $('.rating-source-litres .rating-text-wrapper .votes-count').text().replace(/\s/g, ''),
-    10
-  );
-  const price = parseInt($('.biblio_book_buy span.simple-price').text().trim(), 10);
-
-  const pagesCountText = $('.biblio_book_info li.volume').text();
-  const pagesCount = parseInt(pagesCountText.match(/[^\d]*(\d{1,})\s*стр/)![1], 10);
-
-  const descriptionBlocks = $('div.biblio_book_descr_publishers p').toArray();
-  const originalDescription = descriptionBlocks.map((b) => $(b).text()).join('\n\n');
-
-  const book = {
-    title,
-    author,
-    rating,
-    reviewCount,
-    price,
-    pagesCount,
-    originalDescription,
-  };
-
-  return book;
-};

@@ -5,6 +5,25 @@ declare var process: {
 };
 
 import * as Rollbar from 'rollbar';
+import * as admin from 'firebase-admin';
+
+/// Firebase
+
+export const FIREBASE_STAGING_CONFIG = {
+  databaseURL: 'https://cash-flow-staging.firebaseio.com',
+  storageBucket: 'cash-flow-staging.appspot.com',
+  credential: admin.credential.cert(
+    require('../environments/staging/firebase_service_account.json')
+  ),
+};
+
+export const FIREBASE_PRODUCTION_CONFIG = {
+  databaseURL: 'https://bogach-production.firebaseio.com',
+  storageBucket: 'bogach-production.appspot.com',
+  credential: admin.credential.cert(
+    require('../environments/production/firebase_service_account.json')
+  ),
+};
 
 /// Cloud
 

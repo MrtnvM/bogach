@@ -1,6 +1,7 @@
 /// <reference types="@types/jest"/>
 
 import * as admin from 'firebase-admin';
+import { FIREBASE_STAGING_CONFIG } from './config';
 import { Firestore } from './core/firebase/firestore';
 import { RealtimeDatabase } from './core/firebase/realtime_database';
 import { FirestoreUserDAO } from './dao/firestore/firestore_user_dao';
@@ -18,29 +19,7 @@ import {
 } from './transformers/game_transformers';
 import { writeJson } from './utils/json';
 
-const stagingConfig = {
-  databaseURL: 'https://cash-flow-staging.firebaseio.com',
-  storageBucket: 'cash-flow-staging.appspot.com',
-  credential: admin.credential.cert(
-    require('../environments/staging/firebase_service_account.json')
-  ),
-};
-
-const productionConfig = {
-  databaseURL: 'https://bogach-production.firebaseio.com',
-  storageBucket: 'bogach-production.appspot.com',
-  credential: admin.credential.cert(
-    require('../environments/production/firebase_service_account.json')
-  ),
-};
-
-/// Linter fix
-const linterFix = true;
-if (!linterFix) {
-  console.log([stagingConfig, productionConfig]);
-}
-
-admin.initializeApp(stagingConfig);
+admin.initializeApp(FIREBASE_STAGING_CONFIG);
 
 describe('Firebase sandbox', () => {
   test.skip('Query purchasers from Firestore', async () => {
