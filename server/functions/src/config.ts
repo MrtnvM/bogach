@@ -7,6 +7,14 @@ declare var process: {
 import * as Rollbar from 'rollbar';
 import * as admin from 'firebase-admin';
 
+/// Books
+
+export const LITRES_PARTNER_ID = 432409830;
+export const RECOMMENDATION_BOOKS_IDS = [
+  23593618, 11279349, 9361857, 22960394, 27059084, 23789575, 42132666, 29837855, 8647268, 36628165,
+  6564681, 25578317,
+];
+
 /// Firebase
 
 export const FIREBASE_STAGING_CONFIG = {

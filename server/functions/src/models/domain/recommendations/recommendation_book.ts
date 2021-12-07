@@ -3,6 +3,7 @@ export type RecommendationBook = {
 
   title: string;
   author: string;
+  coverUrl?: string;
   pagesCount: number;
   description?: string;
   originalDescription: string;

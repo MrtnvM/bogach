@@ -4,7 +4,7 @@ import cheerio from 'cheerio';
 import { RecommendationBook } from '../../models/domain/recommendations/recommendation_book';
 import { downloadFile } from '../../utils/download_file';
 
-export class LitresService {
+export class LitresDataProvider {
   constructor(private partnerId: number) {}
 
   async parseBook(bookId: number): Promise<RecommendationBook> {

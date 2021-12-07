@@ -8,7 +8,7 @@ export class BookRecommendationsProvider {
     return this.bookDao.getBooks();
   }
 
-  updateBook(book: RecommendationBook) {
+  updateBook(book: Partial<RecommendationBook>) {
     return this.bookDao.updateBook(book);
   }
 }

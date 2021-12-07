@@ -2,5 +2,5 @@ import { RecommendationBook } from '../models/domain/recommendations/recommendat
 
 export interface IBookRecommendationsDAO {
   getBooks(): Promise<RecommendationBook[]>;
-  updateBook(book: RecommendationBook): Promise<RecommendationBook>;
+  updateBook(book: Partial<RecommendationBook>): Promise<RecommendationBook>;
 }
