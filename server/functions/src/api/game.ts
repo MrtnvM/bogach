@@ -11,6 +11,7 @@ import { UserProvider } from '../providers/user_provider';
 import { TimerProvider } from '../providers/timer_provider';
 import { GameTemplatesProvider } from '../providers/game_templates_provider';
 import { DAOs } from '../dao/daos';
+import { sendResponse } from '../core/api/send_response';
 
 export const create = (daos: DAOs) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
@@ -45,7 +46,7 @@ export const create = (daos: DAOs) => {
 
     const game = gameService.createNewGame(templateId, participantsIds || [userId]);
 
-    await send(game, response);
+    await sendResponse(game, response);
   });
 
   const getGame = https.onRequest(async (request, response) => {
@@ -55,7 +56,7 @@ export const create = (daos: DAOs) => {
     const gameId = apiRequest.queryParameter('game_id');
 
     const game = gameProvider.getGame(gameId as GameEntity.Id);
-    await send(game, response);
+    await sendResponse(game, response);
   });
 
   const getAllGameTemplates = https.onRequest(async (request, response) => {
@@ -63,7 +64,7 @@ export const create = (daos: DAOs) => {
     apiRequest.checkMethod('GET');
 
     const gameTemplates = gameTemplatesProvider.getGameTemplates();
-    await send(Promise.resolve(gameTemplates), response);
+    await sendResponse(Promise.resolve(gameTemplates), response);
   });
 
   const getGameTemplate = https.onRequest(async (request, response) => {
@@ -73,7 +74,7 @@ export const create = (daos: DAOs) => {
     const templateId = apiRequest.queryParameter('template_id');
 
     const gameTemplate = gameTemplatesProvider.getGameTemplate(templateId as GameTemplateEntity.Id);
-    await send(Promise.resolve(gameTemplate), response);
+    await sendResponse(Promise.resolve(gameTemplate), response);
   });
 
   const handleGameEvent = https.onRequest(async (request, response) => {
@@ -88,7 +89,7 @@ export const create = (daos: DAOs) => {
       .handlePlayerAction(eventId, action, context)
       .then(() => 'Player action handled');
 
-    await send(handleEvent, response);
+    await sendResponse(handleEvent, response);
   });
 
   const startNewMonth = https.onRequest(async (request, response) => {
@@ -104,7 +105,7 @@ export const create = (daos: DAOs) => {
       return 'New month started';
     };
 
-    await send(startNewMonthRequest(), response);
+    await sendResponse(startNewMonthRequest(), response);
   });
 
   const getGameLevels = https.onRequest(async (request, response) => {
@@ -112,7 +113,7 @@ export const create = (daos: DAOs) => {
     apiRequest.checkMethod('GET');
 
     const gameLevels = gameLevelsProvider.getGameLevels();
-    await send(Promise.resolve(gameLevels), response);
+    await sendResponse(Promise.resolve(gameLevels), response);
   });
 
   const createGameByLevel = https.onRequest(async (request, response) => {
@@ -123,26 +124,8 @@ export const create = (daos: DAOs) => {
     const userId = apiRequest.jsonField('userId');
 
     const newGame = gameService.createNewGameByLevel(gameLevelId, [userId]);
-    await send(newGame, response);
-    return Promise.resolve();
+    await sendResponse(newGame, response);
   });
-
-  const send = <T>(data: Promise<T>, response: functions.Response) => {
-    return data
-      .then((result) => response.status(200).send(result))
-      .catch((error) => {
-        if (error['type'] === 'domain') {
-          const json = JSON.stringify(error);
-          response.status(422).send(json);
-          return;
-        }
-
-        const errorMessage = error['message'] ? error.message : error;
-        console.error('ERROR: ' + JSON.stringify(error));
-        console.error('ERROR MESSAGE: ' + errorMessage);
-        response.status(422).send(errorMessage);
-      });
-  };
 
   return {
     create: createGame,

@@ -6,6 +6,7 @@ import { DAOs } from '../dao/daos';
 import { PurchaseDetailsEntity } from '../models/purchases/purchase_details';
 import { UserProvider } from '../providers/user_provider';
 import { PurchaseService } from '../services/purchase/purchase_service';
+import { sendResponse } from '../core/api/send_response';
 
 export const create = (daos: DAOs) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
@@ -27,25 +28,8 @@ export const create = (daos: DAOs) => {
     purchases.forEach(PurchaseDetailsEntity.validate);
 
     const updatePurchasesOperation = purchaseService.updatePurchases(userId, purchases);
-    await send(updatePurchasesOperation, response);
+    await sendResponse(updatePurchasesOperation, response);
   });
-
-  const send = <T>(data: Promise<T>, response: functions.Response) => {
-    return data
-      .then((result) => response.status(200).send(result))
-      .catch((error) => {
-        if (error['type'] === 'domain') {
-          const json = JSON.stringify(error);
-          response.status(422).send(json);
-          return;
-        }
-
-        const errorMessage = error['message'] ? error.message : error;
-        console.error('ERROR: ' + JSON.stringify(error));
-        console.error('ERROR MESSAGE: ' + errorMessage);
-        response.status(422).send(errorMessage);
-      });
-  };
 
   return {
     updatePurchases,
