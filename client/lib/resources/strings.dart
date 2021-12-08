@@ -114,6 +114,7 @@ class Strings {
   static const fieldIsRequired = 'Необходимо заполнить';
   static const continueAction = 'Продолжить';
   static const buy = 'Купить';
+  static const buyFor = 'Купить за ';
   static const sell = 'Продать';
   static const price = 'Стоимость:';
   static const cost = 'Стоимость';

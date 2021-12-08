@@ -1,4 +1,5 @@
-import 'package:cash_flow/core/hooks/media_query_hooks.dart';
+import 'package:cash_flow/core/hooks/dispatcher.dart';
+import 'package:cash_flow/features/recommendations/actions/get_recommendations_books_action.dart';
 import 'package:cash_flow/presentation/recommendations/widgets/books/books_section.dart';
 import 'package:cash_flow/presentation/recommendations/widgets/recommendations_header.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,10 @@ class RecommendationsPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final size = useAdaptiveSize();
+    final dispatch = useDispatcher();
+    useEffect(() {
+      dispatch(GetRecommendationsBooksAction());
+    }, []);
 
     return Column(
       children: [

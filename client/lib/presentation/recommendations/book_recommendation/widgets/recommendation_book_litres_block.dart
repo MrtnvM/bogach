@@ -24,13 +24,13 @@ class RecommendationBookLitresBlock extends HookWidget {
         _LitresButton(
           color: ColorRes.litresOrange,
           title: Strings.readFragment,
-          onTap: () => launch(book.readerLink),
+          onTap: () => launch(book.litres.bookFragmentLink),
         ),
         SizedBox(height: size(8)),
         _LitresButton(
           color: ColorRes.litresGreen,
-          title: Strings.buy,
-          onTap: () => launch(book.link),
+          title: Strings.buyFor + book.litres.price.toString(),
+          onTap: () => launch(book.litres.bookLink),
         ),
       ],
     );

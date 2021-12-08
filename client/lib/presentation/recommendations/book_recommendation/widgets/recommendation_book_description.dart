@@ -12,7 +12,10 @@ class RecommendationBookDescription extends HookWidget {
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: size(4)),
-      child: Text(book.description, style: Styles.bodyBlack),
+      child: Text(
+        book.description ?? book.originalDescription,
+        style: Styles.bodyBlack,
+      ),
     );
   }
 }

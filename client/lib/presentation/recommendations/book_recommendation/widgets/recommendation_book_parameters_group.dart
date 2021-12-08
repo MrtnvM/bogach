@@ -15,17 +15,17 @@ class RecommendationBookParametersGroup extends HookWidget {
         RecommendationBookParam(
           icon: Icons.auto_stories,
           title: Strings.pages,
-          paramValue: book.pageCount.toString(),
+          paramValue: book.pagesCount.toString(),
         ),
         RecommendationBookParam(
           icon: Icons.star,
           title: Strings.rating,
-          paramValue: book.rating.toString(),
+          paramValue: book.litres.rating.toString(),
         ),
         RecommendationBookParam(
           icon: Icons.reviews,
           title: Strings.reviews,
-          paramValue: book.reviewCount.toString(),
+          paramValue: book.litres.reviewCount.toString(),
         ),
       ],
     );

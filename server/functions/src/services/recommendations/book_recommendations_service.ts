@@ -73,6 +73,8 @@ export class BookRecommendationsService {
             reviewCount: book.litres.reviewCount,
             rating: book.litres.rating,
             price: book.litres.price,
+            bookLink: book.litres.bookLink,
+            bookFragmentLink: book.litres.bookFragmentLink,
           },
         } as Partial<RecommendationBook>);
 

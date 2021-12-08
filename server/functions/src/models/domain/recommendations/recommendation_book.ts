@@ -7,6 +7,10 @@ export type RecommendationBook = {
   pagesCount: number;
   description?: string;
   originalDescription: string;
+  advantages?: {
+    title: string;
+    icon: string;
+  }[];
 
   litres: {
     rating: number;

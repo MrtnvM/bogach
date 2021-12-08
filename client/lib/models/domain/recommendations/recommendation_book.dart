@@ -1,40 +1,32 @@
+import 'package:cash_flow/models/domain/recommendations/recommendation_book_litres_info.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
+import 'package:flutter/foundation.dart';
+import 'package:cash_flow/models/domain/recommendations/recommendation_book_advantage.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class RecommendationBookAdvantage {
-  const RecommendationBookAdvantage({required this.title, required this.icon});
+part 'recommendation_book.freezed.dart';
+part 'recommendation_book.g.dart';
 
-  final String title;
-  final String icon;
-}
+@freezed
+class RecommendationBook with _$RecommendationBook implements StoreListItem {
+  factory RecommendationBook({
+    required String bookId,
+    required String coverUrl,
+    required String color,
+    required String title,
+    required String author,
+    required String? description,
+    required String originalDescription,
+    required int pagesCount,
+    required RecommendationBookLitresInfo litres,
+    required List<RecommendationBookAdvantage> advantages,
+    required int updatedAt,
+  }) = _RecommendationBook;
 
-class RecommendationBook extends StoreListItem {
-  RecommendationBook({
-    required this.bookId,
-    required this.coverUrl,
-    required this.color,
-    required this.title,
-    required this.author,
-    required this.description,
-    required this.pageCount,
-    required this.rating,
-    required this.reviewCount,
-    required this.advantages,
-    required this.link,
-    required this.readerLink,
-  });
+  RecommendationBook._();
 
-  final String bookId;
-  final String coverUrl;
-  final String color;
-  final String title;
-  final String author;
-  final String description;
-  final int pageCount;
-  final double rating;
-  final int reviewCount;
-  final String link;
-  final String readerLink;
-  final List<RecommendationBookAdvantage> advantages;
+  factory RecommendationBook.fromJson(Map<String, dynamic> json) =>
+      _$RecommendationBookFromJson(json);
 
   @override
   Object get id => bookId;
