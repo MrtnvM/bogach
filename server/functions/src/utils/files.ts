@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as crypto from 'crypto';
 
 export const createDirectoryForFileIfNeeded = (path: string) => {
   const directories = path.split('/').slice(0, -1);
@@ -14,4 +15,13 @@ export const createDirectoryForFileIfNeeded = (path: string) => {
       fs.mkdirSync(dirPath);
     }
   }
+};
+
+export const getFileHash = async (path: string) => {
+  const fileBuffer = await fs.promises.readFile(path);
+  const hashSum = crypto.createHash('sha256');
+  hashSum.update(fileBuffer);
+
+  const hex = hashSum.digest('hex');
+  return hex;
 };

@@ -1,14 +1,14 @@
 /// <reference types="@types/jest"/>
 
 import * as admin from 'firebase-admin';
-import { Firestore } from './core/firebase/firestore';
-import { FirestoreSelector } from './providers/firestore_selector';
-import { SlackProvider } from './providers/slack/slack_provider';
-import { BookRecommendationsProvider } from './providers/recommendations/book_recommendations_provider';
-import { BookRecommendationsService } from './services/recommendations/book_recommendations_service';
-import { FirestoreBookRecommendationsDAO } from './dao/firestore/firestore_book_recommendations_dao';
-import { FIREBASE_STAGING_CONFIG, LITRES_PARTNER_ID, RECOMMENDATION_BOOKS_IDS } from './config';
-import { LitresDataProvider } from './providers/recommendations/litres_data_provider';
+import { Firestore } from '../core/firebase/firestore';
+import { FirestoreSelector } from '../providers/firestore_selector';
+import { SlackProvider } from '../providers/slack/slack_provider';
+import { BookRecommendationsProvider } from '../providers/recommendations/book_recommendations_provider';
+import { BookRecommendationsService } from '../services/recommendations/book_recommendations_service';
+import { FirestoreBookRecommendationsDAO } from '../dao/firestore/firestore_book_recommendations_dao';
+import { FIREBASE_STAGING_CONFIG, LITRES_PARTNER_ID, RECOMMENDATION_BOOKS_IDS } from '../config';
+import { LitresDataProvider } from '../providers/recommendations/litres_data_provider';
 
 admin.initializeApp(FIREBASE_STAGING_CONFIG);
 

@@ -1,7 +1,7 @@
 import { FirestoreSelector } from '../../providers/firestore_selector';
 import { Firestore } from '../../core/firebase/firestore';
 import { IBookRecommendationsDAO } from '../book_recommendations_dao';
-import { RecommendationBook } from '../../models/domain/recommendations/recommendation_book';
+import { RecommendationBook } from '../../models/domain/recommendations/books/recommendation_book';
 
 export class FirestoreBookRecommendationsDAO implements IBookRecommendationsDAO {
   constructor(private selector: FirestoreSelector, private firestore: Firestore) {}

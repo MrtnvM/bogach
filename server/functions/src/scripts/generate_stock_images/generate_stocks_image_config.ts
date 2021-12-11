@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { readJsonFile, writeJson } from '../utils/json';
+import { readJsonFile, writeJson } from '../../utils/json';
 
-const dataPath = path.join(__dirname, '..', '..', 'data');
+const dataPath = path.join(__dirname, '..', '..', '..', 'data');
 const stocksPath = `${dataPath}/stocks_history`;
 const stocksConfigPath = `${dataPath}/stocks`;
 export const stocksImagesConfigPath = `${stocksConfigPath}/stocks_images_config.json`;

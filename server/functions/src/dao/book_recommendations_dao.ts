@@ -1,4 +1,4 @@
-import { RecommendationBook } from '../models/domain/recommendations/recommendation_book';
+import { RecommendationBook } from '../models/domain/recommendations/books/recommendation_book';
 
 export interface IBookRecommendationsDAO {
   getBooks(): Promise<RecommendationBook[]>;

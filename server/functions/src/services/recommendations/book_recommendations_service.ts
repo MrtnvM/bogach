@@ -1,4 +1,4 @@
-import { RecommendationBook } from '../../models/domain/recommendations/recommendation_book';
+import { RecommendationBook } from '../../models/domain/recommendations/books/recommendation_book';
 import { BookRecommendationsProvider } from '../../providers/recommendations/book_recommendations_provider';
 import { LitresDataProvider } from '../../providers/recommendations/litres_data_provider';
 import { SlackProvider } from '../../providers/slack/slack_provider';

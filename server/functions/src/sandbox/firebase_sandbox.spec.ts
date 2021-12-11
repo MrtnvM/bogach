@@ -1,23 +1,23 @@
 /// <reference types="@types/jest"/>
 
 import * as admin from 'firebase-admin';
-import { FIREBASE_STAGING_CONFIG } from './config';
-import { Firestore } from './core/firebase/firestore';
-import { RealtimeDatabase } from './core/firebase/realtime_database';
-import { FirestoreUserDAO } from './dao/firestore/firestore_user_dao';
-import { RealtimeDatabaseGameDAO } from './dao/realtime_database/realtime_database_game_dao';
-import { RealtimeDatabaseRefs } from './dao/realtime_database/realtime_database_refs';
-import { Game } from './models/domain/game/game';
-import { PurchaseDetails } from './models/purchases/purchase_details';
-import { FirestoreSelector } from './providers/firestore_selector';
-import { UserProvider } from './providers/user_provider';
-import { PurchaseService } from './services/purchase/purchase_service';
+import { FIREBASE_STAGING_CONFIG } from '../config';
+import { Firestore } from '../core/firebase/firestore';
+import { RealtimeDatabase } from '../core/firebase/realtime_database';
+import { FirestoreUserDAO } from '../dao/firestore/firestore_user_dao';
+import { RealtimeDatabaseGameDAO } from '../dao/realtime_database/realtime_database_game_dao';
+import { RealtimeDatabaseRefs } from '../dao/realtime_database/realtime_database_refs';
+import { Game } from '../models/domain/game/game';
+import { PurchaseDetails } from '../models/purchases/purchase_details';
+import { FirestoreSelector } from '../providers/firestore_selector';
+import { UserProvider } from '../providers/user_provider';
+import { PurchaseService } from '../services/purchase/purchase_service';
 import {
   applyGameTransformers,
   GameEventsTransformer,
   HistoryGameTransformer,
-} from './transformers/game_transformers';
-import { writeJson } from './utils/json';
+} from '../transformers/game_transformers';
+import { writeJson } from '../utils/json';
 
 admin.initializeApp(FIREBASE_STAGING_CONFIG);
 

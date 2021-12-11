@@ -36,4 +36,11 @@ export class FirestoreSelector {
   recommendationBooks = (): CollectionReference =>
     this.firestore.collection('recommendation_books');
   recommendationBook = (bookId: string) => this.recommendationBooks().doc(bookId);
+
+  recommendationCourses = (): CollectionReference =>
+    this.firestore.collection('recommendation_courses');
+  recommendationCourse = (courseId: string) => this.recommendationCourses().doc(courseId);
+
+  configs = (): CollectionReference => this.firestore.collection('config');
+  coursesConfig = () => this.configs().doc('courses_config');
 }

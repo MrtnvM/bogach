@@ -1,7 +1,7 @@
 import * as admin from 'firebase-admin';
 import fetch from 'node-fetch';
 import cheerio from 'cheerio';
-import { RecommendationBook } from '../../models/domain/recommendations/recommendation_book';
+import { RecommendationBook } from '../../models/domain/recommendations/books/recommendation_book';
 import { downloadFile } from '../../utils/download_file';
 
 export class LitresDataProvider {
