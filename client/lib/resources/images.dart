@@ -84,4 +84,5 @@ class Images {
   static const backButton = 'assets/images/svg/back_button.svg';
 
   static const litresLogo = 'assets/images/svg/litres-ru-logo.svg';
+  static const skillFactoryLogo = 'assets/images/png/skill_factory_logo.png';
 }

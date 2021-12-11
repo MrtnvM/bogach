@@ -39,5 +39,10 @@ service cloud.firestore {
       allow get: if true;
       allow list: if true;
     }
+
+    match /recommendation_courses/{recommendation_course} {
+      allow get: if true;
+      allow list: if true;
+    }
   }
 }

@@ -77,6 +77,14 @@ class Styles {
     color: ColorRes.mainBlack,
   );
 
+  static const bodyBold = TextStyle(
+    fontFamily: _defaultFontFamily,
+    fontSize: 14,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.bold,
+    color: _defaultTextColor,
+  );
+
   static const bodyBlackSemibold = TextStyle(
     fontFamily: _defaultFontFamily,
     fontSize: 14,

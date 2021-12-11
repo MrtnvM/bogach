@@ -1,6 +1,8 @@
 import 'dart:convert';
 
-import 'package:cash_flow/models/domain/recommendations/recommendation_book.dart';
+import 'package:cash_flow/core/data/firestore_list_provider.dart';
+import 'package:cash_flow/models/domain/recommendations/books/recommendation_book.dart';
+import 'package:cash_flow/models/domain/recommendations/courses/recommendation_course.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,6 +14,16 @@ class RecommendationsService {
 
   final FirebaseFirestore firestore;
   final SharedPreferences preferences;
+
+  late final FirestoreListProvider<RecommendationCourse> courcesProvider =
+      FirestoreListProvider(
+    firestore: firestore,
+    preferences: preferences,
+    collectionName: 'recommendation_courses',
+    entityKey: 'recommendation_courses',
+    fromJson: (json) => RecommendationCourse.fromJson(json),
+    toJson: (c) => c.toJson(),
+  );
 
   static const keyRecommendationBooks = 'recommendation_books';
   static const keyRecommendationBooksUpdatedAt =
@@ -36,6 +48,10 @@ class RecommendationsService {
     await _updateCachedUpdatedAtDateForBooks(books);
 
     return books;
+  }
+
+  Future<List<RecommendationCourse>> getCourses() {
+    return courcesProvider.getItems();
   }
 
   Future<List<RecommendationBook>> _loadUpdatedBooks() async {

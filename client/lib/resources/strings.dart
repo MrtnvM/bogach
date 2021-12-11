@@ -546,4 +546,9 @@ class Strings {
   static String get rating => 'Рейтинг';
   static String get reviews => 'Оценок';
   static String get readFragment => 'Читать фрагмент';
+
+  static String get coursesSectionTitle => 'Профессии';
+  static String get coursesSectionDescription =>
+      'Для тех, кто ищет новые возможности повышения денежного потока';
+  static String get startCourseDate => 'Старт программы ';
 }

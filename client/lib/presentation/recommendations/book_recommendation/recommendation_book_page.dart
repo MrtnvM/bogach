@@ -1,6 +1,5 @@
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/presentation/recommendations/book_recommendation/data/current_recommendation_book_data_provider.dart';
-import 'package:cash_flow/presentation/recommendations/book_recommendation/data/current_recommendation_book_hook.dart';
 import 'package:cash_flow/presentation/recommendations/book_recommendation/widgets/recommendation_book_info_widget.dart';
 import 'package:cash_flow/presentation/recommendations/book_recommendation/widgets/recommnendation_book_header.dart';
 import 'package:cash_flow/utils/ui/hex_color.dart';

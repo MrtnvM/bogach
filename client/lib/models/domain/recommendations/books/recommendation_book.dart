@@ -1,7 +1,7 @@
-import 'package:cash_flow/models/domain/recommendations/recommendation_book_litres_info.dart';
+import 'package:cash_flow/models/domain/recommendations/books/recommendation_book_advantage.dart';
+import 'package:cash_flow/models/domain/recommendations/books/recommendation_book_litres_info.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/foundation.dart';
-import 'package:cash_flow/models/domain/recommendations/recommendation_book_advantage.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'recommendation_book.freezed.dart';

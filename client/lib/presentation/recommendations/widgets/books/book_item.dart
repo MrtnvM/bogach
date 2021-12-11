@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
-import 'package:cash_flow/models/domain/recommendations/recommendation_book.dart';
+import 'package:cash_flow/models/domain/recommendations/books/recommendation_book.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/recommendations/book_recommendation/recommendation_book_page.dart';
 import 'package:cash_flow/presentation/recommendations/widgets/books/book_advantage.dart';
