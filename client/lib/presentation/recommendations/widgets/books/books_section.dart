@@ -18,7 +18,7 @@ class BooksSection extends HookWidget {
     final size = useAdaptiveSize();
     final books = useGlobalState((s) => s.recommendations.books);
     final itemCount = books?.items.length ?? 0;
-    final bookSectionSize = size(208);
+    final bookSectionSize = size(212);
 
     return Column(
       children: [

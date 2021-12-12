@@ -8,6 +8,7 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:shimmer/shimmer.dart';
 
 class BookItem extends HookWidget {
   const BookItem(this.book);
@@ -49,7 +50,7 @@ class BookItem extends HookWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              _BookCover(imageUrl: book.coverUrl),
+              _BookCover(book.coverUrl),
               SizedBox(width: size(16)),
               Expanded(
                 child: Column(
@@ -121,20 +122,40 @@ class _BookTitle extends StatelessWidget {
   }
 }
 
-class _BookCover extends HookWidget {
-  const _BookCover({Key? key, required this.imageUrl}) : super(key: key);
+class _BookCover extends StatelessWidget {
+  const _BookCover(this.imageUrl);
 
   final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
-    final size = useAdaptiveSize();
-
     return ClipRRect(
       borderRadius: BorderRadius.circular(4),
       child: CachedNetworkImage(
         imageUrl: imageUrl,
-        height: size(168),
+        placeholder: (context, _) => const _BookCoverPlaceholder(),
+      ),
+    );
+  }
+}
+
+class _BookCoverPlaceholder extends StatelessWidget {
+  const _BookCoverPlaceholder();
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: ColorRes.shimmerBaseColor,
+      highlightColor: ColorRes.shimmerHightlightColor,
+      child: AspectRatio(
+        aspectRatio: 0.63,
+        child: Container(
+          height: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            color: Colors.black,
+          ),
+        ),
       ),
     );
   }
