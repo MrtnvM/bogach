@@ -8,7 +8,7 @@ class FirestoreListProvider<T extends StoreListItem> {
   FirestoreListProvider({
     required this.firestore,
     required this.preferences,
-    required this.entityKey,
+    required this.cacheEntityKey,
     required this.collectionName,
     required this.fromJson,
     required this.toJson,
@@ -17,13 +17,13 @@ class FirestoreListProvider<T extends StoreListItem> {
   final FirebaseFirestore firestore;
   final SharedPreferences preferences;
 
-  final String entityKey;
+  final String cacheEntityKey;
   final String collectionName;
 
   final T Function(Map<String, dynamic>) fromJson;
   final Map<String, dynamic> Function(T) toJson;
 
-  String get _updatedAtKey => '${entityKey}_updated_at';
+  String get _updatedAtKey => '${cacheEntityKey}_updated_at';
 
   CollectionReference get firestoreCollection =>
       firestore.collection(collectionName);
@@ -58,7 +58,7 @@ class FirestoreListProvider<T extends StoreListItem> {
   }
 
   Future<List<T>> _getCachedItems() async {
-    final itemsJson = preferences.getString(entityKey);
+    final itemsJson = preferences.getString(cacheEntityKey);
     if (itemsJson == null) {
       return [];
     }
@@ -75,7 +75,7 @@ class FirestoreListProvider<T extends StoreListItem> {
   Future<void> _updateCachedItems(List<T> items) async {
     final booksData = items.map(toJson).toList();
     final booksJson = json.encode(booksData);
-    await preferences.setString(entityKey, booksJson);
+    await preferences.setString(cacheEntityKey, booksJson);
   }
 
   int _getCachedUpdatedAtTimestamp() {
