@@ -11,7 +11,7 @@ class RecommendationBookDescription extends HookWidget {
     final book = useCurrentRecommendationBook();
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: size(4)),
+      padding: EdgeInsets.symmetric(horizontal: size(20)),
       child: Text(
         book.description ?? book.originalDescription,
         style: Styles.bodyBlack,

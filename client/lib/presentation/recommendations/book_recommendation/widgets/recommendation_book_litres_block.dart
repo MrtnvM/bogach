@@ -16,24 +16,27 @@ class RecommendationBookLitresBlock extends HookWidget {
     final size = useAdaptiveSize();
     final book = useCurrentRecommendationBook();
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SvgPicture.asset(Images.litresLogo, height: size(16)),
-        SizedBox(height: size(20)),
-        _LitresButton(
-          color: ColorRes.litresOrange,
-          title: Strings.readFragment,
-          onTap: () => launch(book.litres.bookFragmentLink),
-        ),
-        SizedBox(height: size(8)),
-        _LitresButton(
-          color: ColorRes.litresGreen,
-          title: Strings.buyFor + book.litres.price.toPrice(),
-          onTap: () => launch(book.litres.bookLink),
-        ),
-      ],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: size(16)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SvgPicture.asset(Images.litresLogo, height: size(16)),
+          SizedBox(height: size(20)),
+          _LitresButton(
+            color: ColorRes.litresOrange,
+            title: Strings.readFragment,
+            onTap: () => launch(book.litres.bookFragmentLink),
+          ),
+          SizedBox(height: size(8)),
+          _LitresButton(
+            color: ColorRes.litresGreen,
+            title: Strings.buyFor + book.litres.price.toPrice(),
+            onTap: () => launch(book.litres.bookLink),
+          ),
+        ],
+      ),
     );
   }
 }

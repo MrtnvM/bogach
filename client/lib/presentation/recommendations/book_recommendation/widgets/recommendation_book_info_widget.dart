@@ -1,4 +1,5 @@
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
+import 'package:cash_flow/presentation/recommendations/book_recommendation/widgets/recommendation_book_advantages_block.dart';
 import 'package:cash_flow/presentation/recommendations/book_recommendation/widgets/recommendation_book_description.dart';
 import 'package:cash_flow/presentation/recommendations/book_recommendation/widgets/recommendation_book_litres_block.dart';
 import 'package:cash_flow/presentation/recommendations/book_recommendation/widgets/recommendation_book_parameters_group.dart';
@@ -27,7 +28,6 @@ class RecommendationBookInfoWidget extends HookWidget {
           ),
         ],
       ),
-      padding: EdgeInsets.symmetric(horizontal: size(16)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -35,7 +35,9 @@ class RecommendationBookInfoWidget extends HookWidget {
           SizedBox(height: size(12)),
           RecommendationBookParametersGroup(),
           SizedBox(height: size(14)),
-          const Divider(height: 1),
+          Divider(height: 1, indent: size(16), endIndent: size(16)),
+          SizedBox(height: size(16)),
+          RecommendationBookAdvantagesBlock(),
           SizedBox(height: size(16)),
           RecommendationBookDescription(),
           SizedBox(height: size(24)),
