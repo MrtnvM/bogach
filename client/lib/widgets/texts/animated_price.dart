@@ -1,5 +1,5 @@
-import 'package:flutter/widgets.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
+import 'package:flutter/widgets.dart';
 
 class AnimatedPrice extends StatefulWidget {
   const AnimatedPrice({

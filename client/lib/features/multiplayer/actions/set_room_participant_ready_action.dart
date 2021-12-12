@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:get_it/get_it.dart';
 import 'package:cash_flow/app/app_state.dart';
 import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/services/game_service.dart';
+import 'package:get_it/get_it.dart';
 
 class SetRoomParticipantReadyAction extends BaseAction {
   SetRoomParticipantReadyAction({

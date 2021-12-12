@@ -1,6 +1,4 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
-import 'package:flutter/material.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:cash_flow/features/profile/actions/logout_action.dart';
 import 'package:cash_flow/features/profile/actions/start_listening_profile_updates_action.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -9,6 +7,8 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/buttons/raised_icon_button.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
+import 'package:flutter/material.dart';
 
 class LogoutButton extends StatelessWidget {
   const LogoutButton({Key? key}) : super(key: key);

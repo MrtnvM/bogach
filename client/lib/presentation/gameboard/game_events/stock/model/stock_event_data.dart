@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_annotation_target
+
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/common/candles/candle_data.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';

@@ -1,6 +1,6 @@
 import 'package:cash_flow/resources/strings.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 
 import '../account/account.dart';
 import '../target/target.dart';

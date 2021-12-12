@@ -2,8 +2,8 @@ import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
-import 'package:flutter/material.dart';
 import 'package:cash_flow/utils/extensions/extensions.dart';
+import 'package:flutter/material.dart';
 
 class MonthlyIncomeWidget extends StatelessWidget {
   const MonthlyIncomeWidget({

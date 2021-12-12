@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/models/domain/recommendations/courses/recommendation_course.dart';
-import 'package:cash_flow/navigation/app_router.dart';
-import 'package:cash_flow/presentation/recommendations/course_recommendation/course_recommendation_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';

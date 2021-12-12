@@ -186,6 +186,7 @@ class UserService {
           Fimber.e(ex.toString(), ex: ex);
         }
       }
+      // ignore: unnecessary_lambdas
     }).handleError((e, st) => recordError(e, st), test: (e) => true);
   }
 

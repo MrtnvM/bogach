@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_annotation_target
+
 import 'package:cash_flow/models/domain/game/current_game_state/winner.dart';
 import 'package:cash_flow/utils/core/date.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';

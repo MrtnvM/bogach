@@ -8,9 +8,9 @@ import 'package:cash_flow/presentation/gameboard/game_events/insurance/models/in
 import 'package:cash_flow/presentation/gameboard/gameboard_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_model.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:cash_flow/utils/extensions/extensions.dart';
 
 Map<String, String> useInsuranceInfoTableData(GameEvent event) {
   return useMemoized(() {

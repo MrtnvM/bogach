@@ -1,8 +1,8 @@
 import 'package:cash_flow/presentation/gameboard/game_events/common/candles/candle_data.dart';
+import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:k_chart/flutter_k_chart.dart';
-import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:k_chart/renderer/base_chart_renderer.dart';
 
 class ChartWidget extends HookWidget {

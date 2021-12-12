@@ -7,10 +7,10 @@ import 'package:cash_flow/presentation/gameboard/widgets/bars/gameboard_timer.da
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
+import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:cash_flow/widgets/tutorial/gameboard_tutorial_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ProgressBar extends HookWidget {

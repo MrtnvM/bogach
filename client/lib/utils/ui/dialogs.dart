@@ -1,8 +1,8 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:flutter/material.dart';
-import 'package:app_settings/app_settings.dart';
 
 void showWarningAlertDialog({
   required BuildContext context,

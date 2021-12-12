@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_annotation_target
+
 import 'package:cash_flow/utils/core/date.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter/foundation.dart';

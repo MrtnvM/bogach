@@ -1,5 +1,4 @@
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
-import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

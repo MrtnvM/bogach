@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_annotation_target
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'income.freezed.dart';
@@ -9,8 +11,7 @@ class Income with _$Income {
     required String name,
     required double value,
     @JsonKey(unknownEnumValue: IncomeType.other, defaultValue: IncomeType.other)
-    required
-        IncomeType type,
+        required IncomeType type,
   }) = _Income;
 
   factory Income.fromJson(Map<String, dynamic> json) => _$IncomeFromJson(json);
