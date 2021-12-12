@@ -10,10 +10,8 @@ import 'package:cash_flow/presentation/main/main_page.dart';
 import 'package:cash_flow/presentation/onboarding/onboarding_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/inputs/drop_focus.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -47,7 +45,6 @@ class CashFlowApp extends HookWidget {
 
     final theme = Theme.of(context).copyWith(
       scaffoldBackgroundColor: ColorRes.scaffoldBackground,
-      accentColor: Colors.white,
       primaryColor: ColorRes.mainGreen,
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
@@ -55,24 +52,42 @@ class CashFlowApp extends HookWidget {
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         },
       ),
+      colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.white),
     );
 
+    // return DropFocus(
+    //   child: DevicePreviewWrapper(
+    //     child: MaterialApp(
+    //       debugShowCheckedModeBanner: false,
+    //       builder: (context, widget) => LoadableView(
+    //         backgroundColor: ColorRes.black80,
+    //         isLoading: isAppOperationInProgress,
+    //         child: DevicePreviewWrapper.appBuilder(context, widget!),
+    //       ),
+    //       navigatorKey: appRouter.navigatorKey,
+    //       navigatorObservers: [
+    //         ...getAnalyticsObservers(),
+    //       ],
+    //       home: _getHomePage(),
+    //       theme: theme,
+    //     ),
+    //   ),
+    // );
+
     return DropFocus(
-      child: DevicePreviewWrapper(
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          builder: (context, widget) => LoadableView(
-            backgroundColor: ColorRes.black80,
-            isLoading: isAppOperationInProgress,
-            child: DevicePreviewWrapper.appBuilder(context, widget!),
-          ),
-          navigatorKey: appRouter.navigatorKey,
-          navigatorObservers: [
-            ...getAnalyticsObservers(),
-          ],
-          home: _getHomePage(),
-          theme: theme,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        builder: (context, widget) => LoadableView(
+          backgroundColor: ColorRes.black80,
+          isLoading: isAppOperationInProgress,
+          child: widget!,
         ),
+        navigatorKey: appRouter.navigatorKey,
+        navigatorObservers: [
+          ...getAnalyticsObservers(),
+        ],
+        home: _getHomePage(),
+        theme: theme,
       ),
     );
   }
@@ -98,23 +113,23 @@ class CashFlowApp extends HookWidget {
   }
 }
 
-class DevicePreviewWrapper extends StatelessWidget {
-  const DevicePreviewWrapper({required this.child});
+// class DevicePreviewWrapper extends StatelessWidget {
+//   const DevicePreviewWrapper({required this.child});
 
-  final Widget child;
+//   final Widget child;
 
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<bool>(
-      stream: DevicePreviewMode.onModeChanged,
-      builder: (context, snapShoot) => DevicePreview(
-        enabled: snapShoot.hasData && snapShoot.data!,
-        builder: (context) => child,
-      ),
-    );
-  }
+//   @override
+//   Widget build(BuildContext context) {
+//     return StreamBuilder<bool>(
+//       stream: DevicePreviewMode.onModeChanged,
+//       builder: (context, snapShoot) => DevicePreview(
+//         enabled: snapShoot.hasData && snapShoot.data!,
+//         builder: (context) => child,
+//       ),
+//     );
+//   }
 
-  static Widget appBuilder(BuildContext context, Widget widget) {
-    return DevicePreview.appBuilder(context, widget);
-  }
-}
+//   static Widget appBuilder(BuildContext context, Widget widget) {
+//     return DevicePreview.appBuilder(context, widget);
+//   }
+// }

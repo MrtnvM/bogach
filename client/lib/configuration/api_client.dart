@@ -1,4 +1,4 @@
-import 'package:alice_lightweight/alice.dart';
+// import 'package:alice_lightweight/alice.dart';
 import 'package:cash_flow/api_client/bogach_log_interceptor.dart';
 import 'package:cash_flow/api_client/cash_flow_api_client.dart';
 import 'package:cash_flow/configuration/cash_api_environment.dart';
@@ -7,10 +7,13 @@ import 'package:cash_flow/utils/debug.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 
 CashFlowApiClient configureApiClient(
-  Alice alice,
+  // Alice alice,
   CashApiEnvironment environment,
 ) {
-  final apiDio = _createApiDio(alice, environment);
+  final apiDio = _createApiDio(
+    // alice,
+    environment,
+  );
 
   final client = CashFlowApiClient(
     environment: environment,
@@ -20,14 +23,17 @@ CashFlowApiClient configureApiClient(
   return client;
 }
 
-Dio _createApiDio(Alice alice, CashApiEnvironment environment) {
+Dio _createApiDio(
+  // Alice alice,
+  CashApiEnvironment environment,
+) {
   final apiDio = Dio();
 
   apiDio.options.connectTimeout = 30 * 1000;
   apiDio.options.receiveTimeout = 30 * 1000;
   apiDio.options.sendTimeout = 30 * 1000;
 
-  apiDio.interceptors.add(alice.getDioInterceptor());
+  // apiDio.interceptors.add(alice.getDioInterceptor());
 
   debug(() {
     apiDio.interceptors.add(BogachLogInterceptor(environment: environment));

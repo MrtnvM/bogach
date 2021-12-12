@@ -34,8 +34,8 @@ class UpdatesService {
         preferences.setString(lastAppVersion, lastAppVersionValue);
       }
       return lastAppVersionValue;
-    } catch (error) {
-      recordError(error);
+    } catch (error, stacktrace) {
+      recordError(error, stacktrace);
       rethrow;
     }
   }

@@ -3,6 +3,7 @@ import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/presentation/recommendations/widgets/courses/course_item.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/widgets/progress/section_description.dart';
 import 'package:cash_flow/widgets/progress/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -22,8 +23,9 @@ class CourseSection extends HookWidget {
 
     return Column(
       children: [
-        SizedBox(height: size(24)),
-        SectionTitle(text: Strings.booksSectionTitle),
+        SizedBox(height: size(16)),
+        SectionTitle(text: Strings.coursesSectionTitle),
+        SectionDescription(text: Strings.coursesSectionDescription),
         SizedBox(height: size(4)),
         if (itemCount > 0)
           SizedBox(

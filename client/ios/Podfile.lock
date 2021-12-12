@@ -271,7 +271,7 @@ PODS:
   - nanopb/encode (2.30908.0)
   - notification_permissions (0.4.4):
     - Flutter
-  - package_info (0.0.1):
+  - package_info_plus (0.4.5):
     - Flutter
   - path_provider (0.0.1):
     - Flutter
@@ -288,7 +288,7 @@ PODS:
   - Reachability (3.2)
   - share (0.0.1):
     - Flutter
-  - shared_preferences (0.0.1):
+  - shared_preferences_ios (0.0.1):
     - Flutter
   - sign_in_with_apple (0.0.1):
     - Flutter
@@ -299,6 +299,8 @@ PODS:
   - uni_links (0.0.1):
     - Flutter
   - url_launcher (0.0.1):
+    - Flutter
+  - webview_flutter_wkwebview (0.0.1):
     - Flutter
 
 DEPENDENCIES:
@@ -326,15 +328,16 @@ DEPENDENCIES:
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - launch_review (from `.symlinks/plugins/launch_review/ios`)
   - notification_permissions (from `.symlinks/plugins/notification_permissions/ios`)
-  - package_info (from `.symlinks/plugins/package_info/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - purchases_flutter (from `.symlinks/plugins/purchases_flutter/ios`)
   - share (from `.symlinks/plugins/share/ios`)
-  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - uni_links (from `.symlinks/plugins/uni_links/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
   trunk:
@@ -426,16 +429,16 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/launch_review/ios"
   notification_permissions:
     :path: ".symlinks/plugins/notification_permissions/ios"
-  package_info:
-    :path: ".symlinks/plugins/package_info/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   purchases_flutter:
     :path: ".symlinks/plugins/purchases_flutter/ios"
   share:
     :path: ".symlinks/plugins/share/ios"
-  shared_preferences:
-    :path: ".symlinks/plugins/shared_preferences/ios"
+  shared_preferences_ios:
+    :path: ".symlinks/plugins/shared_preferences_ios/ios"
   sign_in_with_apple:
     :path: ".symlinks/plugins/sign_in_with_apple/ios"
   sqflite:
@@ -444,6 +447,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/uni_links/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
+  webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 CHECKOUT OPTIONS:
   FirebaseFirestore:
@@ -485,7 +490,7 @@ SPEC CHECKSUMS:
   FirebasePerformance: 3166d0c16b359b1ef92be774f46f2768b98c8993
   FirebaseRemoteConfig: 0ea30de5fb0231df8c1bdcdf3b6c23bdc5066131
   FirebaseStorage: 8542711850ca181a3931c0ed483006a7b46039e7
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_facebook_auth: 4b170c07b7fce791497093fcc3f134fb215f3f07
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
@@ -504,8 +509,8 @@ SPEC CHECKSUMS:
   launch_review: 75d5a956ba8eaa493e9c9d4bf4c05e505e8d5ed0
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
-  notification_permissions: b74860c2967c1579243a675e63cd55e0ae75cef7
-  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
+  notification_permissions: 825ea1bf2a52ab585c53fd7b5e8e96876d735d4b
+  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   Protobuf: 3724efa50cb2846d7ccebc8691c574e85fd74471
@@ -515,12 +520,13 @@ SPEC CHECKSUMS:
   PurchasesHybridCommon: a3282e900a2a05eb6c52acc4c72fb4f931160f5a
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
-  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
+  shared_preferences_ios: aef470a42dc4675a1cdd50e3158b42e3d1232b32
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   uni_links: d97da20c7701486ba192624d99bffaaffcfc298a
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
+  webview_flutter_wkwebview: 005fbd90c888a42c5690919a1527ecc6649e1162
 
 PODFILE CHECKSUM: e92ebc868d5b7814ac7c6c6df07725295adaa5c1
 

@@ -1,14 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/models/domain/recommendations/courses/recommendation_course.dart';
+import 'package:cash_flow/navigation/app_router.dart';
+import 'package:cash_flow/presentation/recommendations/course_recommendation/course_recommendation_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
+import 'package:cash_flow/utils/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
-import 'package:cash_flow/utils/extensions/extensions.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CourseItem extends HookWidget {
   const CourseItem(this.course);
@@ -19,10 +22,14 @@ class CourseItem extends HookWidget {
   Widget build(BuildContext context) {
     final mediaQuery = useAdaptiveMediaQueryData();
     final size = useAdaptiveSize();
+    final borderRadius = BorderRadius.all(Radius.circular(size(4)));
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () => print('SELECTED: ${course.profession}'),
+      onTap: () => launch(
+        course.url,
+        forceSafariVC: true,
+      ),
       child: Container(
         constraints: BoxConstraints(
           maxWidth: mediaQuery.size.width - size(16) * 2,
@@ -31,7 +38,7 @@ class CourseItem extends HookWidget {
         margin: EdgeInsets.all(size(16)),
         decoration: BoxDecoration(
           color: ColorRes.bookItemBackground,
-          borderRadius: BorderRadius.all(Radius.circular(size(4))),
+          borderRadius: borderRadius,
           boxShadow: [
             BoxShadow(
               blurRadius: 8,
@@ -45,6 +52,14 @@ class CourseItem extends HookWidget {
             children: <Widget>[
               Positioned.fill(
                 child: _CourseImage(imageUrl: course.imageUrl),
+              ),
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: borderRadius,
+                    color: Colors.black.withOpacity(0.2),
+                  ),
+                ),
               ),
               Positioned(
                 bottom: 0,
@@ -77,7 +92,10 @@ class _CourseInfo extends HookWidget {
     final startDateFormatter = DateFormat('d MMMM');
 
     return Container(
-      color: const Color(0xFF1E1E1E).withOpacity(0.5),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1E1E1E).withOpacity(0.5),
+        borderRadius: BorderRadius.all(Radius.circular(size(4))),
+      ),
       padding: EdgeInsets.only(
         top: size(8),
         left: size(12),
