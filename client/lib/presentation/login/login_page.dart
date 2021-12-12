@@ -19,8 +19,8 @@ import 'package:cash_flow/resources/urls.dart';
 import 'package:cash_flow/utils/error_handler.dart';
 import 'package:cash_flow/widgets/buttons/color_button.dart';
 import 'package:cash_flow/widgets/containers/cash_flow_scaffold.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
+import 'package:fimber/fimber.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -285,7 +285,7 @@ class LoginPage extends HookWidget {
         break;
 
       case LoginStatus.failed:
-        Logger.e('Facebook Auth Error', result.message);
+        Fimber.e('Facebook Auth Error', ex: result.message);
         _onLoginError(context, Exception(result.message), isAuthorising);
         break;
 
@@ -314,7 +314,7 @@ class LoginPage extends HookWidget {
     error,
     ValueNotifier<bool> isAuthorising,
   ) {
-    Logger.e(error);
+    Fimber.e('Login Error', ex: error);
     handleError(context: context, exception: error);
     isAuthorising.value = false;
 
@@ -327,9 +327,9 @@ class LoginPage extends HookWidget {
     ValueNotifier<bool> isAuthorising,
   ) async {
     final account = await GoogleSignIn().signIn().onError((e, st) {
-      Logger.e('Google Auth Error', e);
+      Fimber.e('Google Auth Error', ex: e);
       _onLoginError(context, e, isAuthorising);
-      recordError(e);
+      recordError(e, st);
     });
 
     if (account == null) {
@@ -401,7 +401,7 @@ class LoginPage extends HookWidget {
         return _onLoginSuccess(dispatch);
       }).catchError((e) => _onLoginError(context, e, isAuthorising));
     } catch (ex) {
-      Logger.e('Apple Auth Error', ex);
+      Fimber.e('Apple Auth Error', ex: ex);
       _onLoginError(context, ex, isAuthorising);
     }
   }

@@ -4,8 +4,8 @@ import 'package:built_value/built_value.dart';
 import 'package:cash_flow/features/config/config_state.dart';
 import 'package:cash_flow/features/game/game_state.dart';
 import 'package:cash_flow/features/multiplayer/multiplayer_state.dart';
-import 'package:cash_flow/features/profile/profile_state.dart';
 import 'package:cash_flow/features/new_game/new_game_state.dart';
+import 'package:cash_flow/features/profile/profile_state.dart';
 import 'package:cash_flow/features/recommendations/recommendations_state.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 

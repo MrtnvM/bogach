@@ -6,7 +6,7 @@ import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/cache/add_friends_storage.dart';
 import 'package:cash_flow/services/user_service.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
+import 'package:fimber/fimber.dart';
 import 'package:get_it/get_it.dart';
 
 class AddFriendsAction extends BaseAction {
@@ -40,7 +40,7 @@ class AddFriendsAction extends BaseAction {
     await userService.addFriends(userId, addToFriendsIds).then((result) {
       usersAddToFriendsStorage.deleteUserIds(addToFriendsIds);
     }, onError: (error) async {
-      Logger.e('Sending add friends request error', error);
+      Fimber.e('Sending add friends request error', ex: error);
 
       final action = AddFriendsAction(
         userId: userId,

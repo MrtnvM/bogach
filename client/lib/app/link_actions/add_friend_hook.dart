@@ -1,13 +1,14 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/cache/add_friends_storage.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
-import 'package:cash_flow/features/multiplayer/actions/add_friends_action.dart';
 import 'package:cash_flow/features/multiplayer/actions/add_friend_to_storage_action.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
+import 'package:cash_flow/features/multiplayer/actions/add_friends_action.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
-import 'package:cash_flow/app/app_state.dart';
+import 'package:fimber/fimber.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get_it/get_it.dart';
+
+import '../app_state.dart';
 
 Function(String) useAddFriend() {
   final context = useContext();
@@ -30,7 +31,7 @@ Function(String) useAddFriend() {
       AnalyticsSender.accountInvitationAccepted();
     } catch (error) {
       AnalyticsSender.accountInvitationAcceptRequestFailed();
-      Logger.e(error);
+      Fimber.e('Failed to add user to friends', ex: error);
     }
   };
 }

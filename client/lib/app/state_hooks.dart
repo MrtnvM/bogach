@@ -4,8 +4,8 @@ import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/profile/actions/load_profiles_action.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
+import 'package:fimber/fimber.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 String? useUserId() {
@@ -33,7 +33,7 @@ List<UserProfile> useCurrentUserFriends() {
 
       final action = LoadProfilesAction(ids: missingProfilesIds);
       dispatch(action).onError((error, st) async {
-        Logger.e(error);
+        Fimber.e('Failed to load missing profile', ex: error);
 
         await Future.delayed(const Duration(seconds: 2));
         loadMissingProfiles();

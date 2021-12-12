@@ -1,5 +1,11 @@
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:fimber/fimber.dart';
+import 'package:logger/logger.dart';
+
+var logger = Logger(
+  filter: null,
+  printer: PrettyPrinter(),
+  output: null,
+);
 
 class LoggerTree extends LogTree {
   LoggerTree({this.logLevels = defaultLevels});
@@ -14,15 +20,15 @@ class LoggerTree extends LogTree {
   void log(String level, String message,
       {String? tag, dynamic ex, StackTrace? stacktrace}) {
     if (level == 'V') {
-      Logger.v(message, ex, stacktrace);
+      logger.v(message, ex, stacktrace);
     } else if (level == 'D') {
-      Logger.d(message, ex, stacktrace);
+      logger.d(message, ex, stacktrace);
     } else if (level == 'I') {
-      Logger.i(message, ex, stacktrace);
+      logger.i(message, ex, stacktrace);
     } else if (level == 'W') {
-      Logger.w(message, ex, stacktrace);
+      logger.w(message, ex, stacktrace);
     } else if (level == 'E') {
-      Logger.e(message, ex, stacktrace);
+      logger.e(message, ex, stacktrace);
     }
   }
 }

@@ -1,14 +1,14 @@
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/store_hooks.dart';
+import 'package:cash_flow/features/multiplayer/actions/join_room_action.dart';
+import 'package:cash_flow/features/multiplayer/multiplayer_hooks.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/multiplayer/room_page.dart';
 import 'package:cash_flow/presentation/purchases/multiplayer_purchase_page.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
-import 'package:flutter/foundation.dart';
 import 'package:cash_flow/resources/strings.dart';
-import 'package:cash_flow/features/multiplayer/actions/join_room_action.dart';
-import 'package:cash_flow/features/multiplayer/multiplayer_hooks.dart';
+import 'package:fimber/fimber.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 Function(String?) useJoinRoom() {
@@ -48,7 +48,7 @@ Function(String?) useJoinRoom() {
           errorMessage: Strings.joinRoomError,
         );
 
-        Logger.e('ERROR ON JOINING TO ROOM ($roomId):\n$error');
+        Fimber.e('ERROR ON JOINING TO ROOM ($roomId):\n$error');
       });
     };
 
