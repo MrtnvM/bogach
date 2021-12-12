@@ -93,6 +93,14 @@ class Styles {
     color: ColorRes.mainBlack,
   );
 
+  static const bodySemibold = TextStyle(
+    fontFamily: _defaultFontFamily,
+    fontSize: 14,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w600,
+    color: _defaultTextColor,
+  );
+
   static const caption = TextStyle(
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w600,

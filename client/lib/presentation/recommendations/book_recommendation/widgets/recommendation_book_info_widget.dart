@@ -6,39 +6,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class RecommendationBookInfoWidget extends HookWidget {
-  const RecommendationBookInfoWidget();
+  const RecommendationBookInfoWidget({this.minHeight = 0});
+
+  final double minHeight;
 
   @override
   Widget build(BuildContext context) {
     final size = useAdaptiveSize();
 
     return Container(
+      constraints: BoxConstraints(minHeight: minHeight),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(size(16))),
+        borderRadius: BorderRadius.all(Radius.circular(size(16))),
+        boxShadow: const [
+          BoxShadow(
+            spreadRadius: 3,
+            blurRadius: 10,
+            color: Colors.black26,
+          ),
+        ],
       ),
       padding: EdgeInsets.symmetric(horizontal: size(16)),
       child: Column(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(height: size(12)),
           RecommendationBookParametersGroup(),
           SizedBox(height: size(14)),
           const Divider(height: 1),
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                SizedBox(height: size(16)),
-                RecommendationBookDescription(),
-                SizedBox(height: size(24)),
-                RecommendationBookLitresBlock(),
-                SizedBox(
-                  height: MediaQuery.of(context).padding.bottom,
-                ),
-              ],
-            ),
+          SizedBox(height: size(16)),
+          RecommendationBookDescription(),
+          SizedBox(height: size(24)),
+          RecommendationBookLitresBlock(),
+          SizedBox(
+            height: MediaQuery.of(context).padding.bottom + 8,
           ),
         ],
       ),
