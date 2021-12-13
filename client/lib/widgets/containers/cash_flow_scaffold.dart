@@ -58,6 +58,7 @@ class CashFlowScaffold extends StatelessWidget {
         ? AppBar(
             title: TitleText(title),
             centerTitle: true,
+            backgroundColor: ColorRes.mainGreen,
           )
         : null;
   }
