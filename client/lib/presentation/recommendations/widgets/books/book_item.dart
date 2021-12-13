@@ -131,9 +131,12 @@ class _BookCover extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(4),
-      child: CachedNetworkImage(
-        imageUrl: imageUrl,
-        placeholder: (context, _) => const _BookCoverPlaceholder(),
+      child: Hero(
+        tag: imageUrl,
+        child: CachedNetworkImage(
+          imageUrl: imageUrl,
+          placeholder: (context, _) => const _BookCoverPlaceholder(),
+        ),
       ),
     );
   }

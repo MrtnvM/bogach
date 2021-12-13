@@ -86,9 +86,12 @@ class _BookCover extends HookWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(4),
-        child: CachedNetworkImage(
-          imageUrl: imageUrl,
-          height: size(250) * imageScaleFactor,
+        child: Hero(
+          tag: imageUrl,
+          child: CachedNetworkImage(
+            imageUrl: imageUrl,
+            height: size(250) * imageScaleFactor,
+          ),
         ),
       ),
     );
