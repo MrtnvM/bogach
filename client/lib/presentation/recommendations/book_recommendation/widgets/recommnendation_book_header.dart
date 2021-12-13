@@ -73,14 +73,21 @@ class _BookCover extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final size = useAdaptiveSize();
+    final shadowOpacity = useState(0.0);
 
-    return Container(
+    useEffect(() {
+      Future.delayed(const Duration(milliseconds: 150))
+          .then((_) => shadowOpacity.value = 0.25);
+    }, []);
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
             blurRadius: 12,
             spreadRadius: 4,
-            color: Colors.black.withOpacity(0.25),
+            color: Colors.black.withOpacity(shadowOpacity.value),
           )
         ],
       ),

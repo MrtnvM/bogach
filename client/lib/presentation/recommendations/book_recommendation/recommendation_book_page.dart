@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/navigation/app_router.dart';
@@ -33,9 +34,13 @@ class RecommendationBookPage extends HookWidget {
       WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
         infoBlockMargin.value = 0.0;
 
-        final headerHeight = headerKey.value.currentContext?.size?.height ?? 0;
-        infoTopPadding.value = headerHeight;
-        infoBlockMinHeight.value = screenSize.height - headerHeight;
+        Future.delayed(const Duration(milliseconds: 50)).then((value) {
+          final headerContext = headerKey.value.currentContext;
+          final headerHeight = headerContext?.size?.height ?? 0;
+
+          infoTopPadding.value = headerHeight;
+          infoBlockMinHeight.value = screenSize.height - headerHeight;
+        });
       });
     }, []);
 
@@ -54,6 +59,10 @@ class RecommendationBookPage extends HookWidget {
       return () => scrollController.removeListener(scrollListener);
     }, []);
 
+    useEffect(() {
+      AnalyticsSender.recomendationBookOpen(bookId);
+    }, []);
+
     return CurrentRecommendationBookDataProvider(
       bookId: bookId,
       child: Scaffold(
@@ -70,7 +79,7 @@ class RecommendationBookPage extends HookWidget {
                 child: AnimatedContainer(
                   margin: EdgeInsets.only(top: infoBlockMargin.value),
                   duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeIn,
+                  curve: Curves.easeInOutQuart,
                   child: ListView(
                     controller: scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),

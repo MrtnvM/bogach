@@ -300,8 +300,6 @@ PODS:
     - Flutter
   - url_launcher (0.0.1):
     - Flutter
-  - webview_flutter_wkwebview (0.0.1):
-    - Flutter
 
 DEPENDENCIES:
   - amplitude_flutter (from `.symlinks/plugins/amplitude_flutter/ios`)
@@ -337,7 +335,6 @@ DEPENDENCIES:
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - uni_links (from `.symlinks/plugins/uni_links/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
-  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
   trunk:
@@ -447,8 +444,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/uni_links/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
-  webview_flutter_wkwebview:
-    :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 CHECKOUT OPTIONS:
   FirebaseFirestore:
@@ -526,7 +521,6 @@ SPEC CHECKSUMS:
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   uni_links: d97da20c7701486ba192624d99bffaaffcfc298a
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
-  webview_flutter_wkwebview: 005fbd90c888a42c5690919a1527ecc6649e1162
 
 PODFILE CHECKSUM: e92ebc868d5b7814ac7c6c6df07725295adaa5c1
 

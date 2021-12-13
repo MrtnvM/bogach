@@ -1,3 +1,4 @@
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/presentation/recommendations/book_recommendation/data/current_recommendation_book_hook.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -27,13 +28,19 @@ class RecommendationBookLitresBlock extends HookWidget {
           _LitresButton(
             color: ColorRes.litresOrange,
             title: Strings.readFragment,
-            onTap: () => launch(book.litres.bookFragmentLink),
+            onTap: () {
+              AnalyticsSender.recommendationBookReadFragment(book.bookId);
+              launch(book.litres.bookFragmentLink);
+            },
           ),
           SizedBox(height: size(8)),
           _LitresButton(
             color: ColorRes.litresGreen,
             title: Strings.buyFor + book.litres.price.toPrice(),
-            onTap: () => launch(book.litres.bookLink),
+            onTap: () {
+              AnalyticsSender.recomendationBookBuy(book.bookId);
+              launch(book.litres.bookLink);
+            },
           ),
         ],
       ),

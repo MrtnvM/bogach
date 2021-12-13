@@ -14,7 +14,8 @@ class AppConfiguration {
     assert(!initializationWasCalled, 'Init should be called once!');
 
     _environment = environment;
-    print('Environment: ${_environment!.name}');
+    print('ENVIRONMENT: ${_environment!.name}');
+    print('FIREBASE ENVIRONMENT: ${Firebase.app().options.projectId}');
 
     _checkIsCorrectFirebaseEnvironmentSelected();
   }

@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/models/domain/recommendations/courses/recommendation_course.dart';
+import 'package:cash_flow/presentation/main/main_page_tab_provider.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -21,13 +23,20 @@ class CourseItem extends HookWidget {
     final mediaQuery = useAdaptiveMediaQueryData();
     final size = useAdaptiveSize();
     final borderRadius = BorderRadius.all(Radius.circular(size(4)));
+    final currentMainPageTab = useCurrentMainPageTab();
+
+    useEffect(() {
+      if (currentMainPageTab == MainPageTab.recommendations) {
+        AnalyticsSender.recomendationCourseSeen(course.courseId);
+      }
+    }, [currentMainPageTab]);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () => launch(
-        course.url,
-        forceSafariVC: true,
-      ),
+      onTap: () {
+        AnalyticsSender.recomendationCourseOpen(course.courseId);
+        launch(course.url, forceSafariVC: true);
+      },
       child: Container(
         constraints: BoxConstraints(
           maxWidth: mediaQuery.size.width - size(16) * 2,
@@ -176,7 +185,7 @@ class _CourseSourceLogo extends HookWidget {
     if (source == 'SkillFactory') {
       return Image.asset(
         Images.skillFactoryLogo,
-        width: size(75),
+        width: size(90),
       );
     }
 

@@ -347,6 +347,26 @@ class AnalyticsSender {
   static void accountLogout() => _send('account_logout');
 
   /// ----------------------------------------------------------------
+  /// Recommendations
+  /// ----------------------------------------------------------------
+
+  static void recommendationsOpen() => _send('recommendations_open');
+
+  static void recomendationBookOpen(String bookId) =>
+      _send('recommendation_book_open', {'book_id': bookId});
+  static void recomendationBookBuy(String bookId) =>
+      _send('recommendation_book_buy', {'book_id': bookId});
+  static void recommendationBookReadFragment(String bookId) =>
+      _send('recommendation_book_read_fragment', {'book_id': bookId});
+  static void recommendationBookSeen(String bookId) =>
+      _send('recommendation_book_seen', {'book_id': bookId});
+
+  static void recomendationCourseSeen(String courseId) =>
+      _send('recommendation_course_seen', {'course_id': courseId});
+  static void recomendationCourseOpen(String courseId) =>
+      _send('recommendation_course_open', {'course_id': courseId});
+
+  /// ----------------------------------------------------------------
   /// App events
   /// ----------------------------------------------------------------
 

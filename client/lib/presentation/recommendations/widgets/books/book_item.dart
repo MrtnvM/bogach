@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/models/domain/recommendations/books/recommendation_book.dart';
 import 'package:cash_flow/navigation/app_router.dart';
+import 'package:cash_flow/presentation/main/main_page_tab_provider.dart';
 import 'package:cash_flow/presentation/recommendations/book_recommendation/recommendation_book_page.dart';
 import 'package:cash_flow/presentation/recommendations/widgets/books/book_advantage.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -19,6 +21,13 @@ class BookItem extends HookWidget {
   Widget build(BuildContext context) {
     final mediaQuery = useAdaptiveMediaQueryData();
     final size = useAdaptiveSize();
+    final currentMainPageTab = useCurrentMainPageTab();
+
+    useEffect(() {
+      if (currentMainPageTab == MainPageTab.recommendations) {
+        AnalyticsSender.recommendationBookSeen(book.bookId);
+      }
+    }, []);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,

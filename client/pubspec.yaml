@@ -88,7 +88,6 @@ dependencies:
   #nnbd
   percent_indicator: ^3.3.0-nullsafety.1
   feedback: ^1.2.1
-  webview_flutter: ^3.0.0
 
   # Dash Kit
   dash_kit_core: ^3.0.0-dev.5
