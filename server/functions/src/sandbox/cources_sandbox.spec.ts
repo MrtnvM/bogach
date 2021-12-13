@@ -90,7 +90,102 @@ describe('Sandbox', () => {
         'https://firebasestorage.googleapis.com/v0/b/cash-flow-staging.appspot.com/o/recommendations%2Fcourse_images%2Fweb.jpg?alt=media&token=28b9a92d-aeeb-4b57-91d3-7822ef05b7b7',
     };
 
-    const courses = [gameDevCourse, javaCourse, webCourse];
+    const systemAdminCourse: Partial<Course> = {
+      id: '14103488',
+      profession: 'Профессия Системный администратор',
+      salaryText: 'Медианная зарплата',
+      salaryValue: 91000,
+      startDate: new Date(2022, 1, 19),
+      discount: 60,
+      source: 'SkillFactory',
+      imageUrl:
+        'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/recommendations%2Fcourses%2Fcourse_images%2Fsystem-admin.jpg?alt=media&token=cdafd92f-917a-49a0-8e81-63110bf6bdab',
+    };
+
+    const androidCourse: Partial<Course> = {
+      id: '11228019',
+      profession: 'Профессия Android-разработчик',
+      salaryText: 'Медианная зарплата',
+      salaryValue: 150000,
+      startDate: new Date(2021, 12, 28),
+      discount: 40,
+      source: 'SkillFactory',
+      imageUrl:
+        'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/recommendations%2Fcourses%2Fcourse_images%2Fandroid-developer.jpg?alt=media&token=e15c172d-6f78-4d30-9258-788fd44fd926',
+    };
+
+    const dataScienceCourse: Partial<Course> = {
+      id: '10085909',
+      profession: 'Профессия Data Scientist',
+      salaryText: 'Средняя зарплата',
+      salaryValue: 250000,
+      startDate: new Date(2021, 12, 15),
+      discount: 40,
+      source: 'SkillFactory',
+      imageUrl:
+        'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/recommendations%2Fcourses%2Fcourse_images%2Fandroid-developer.jpg?alt=media&token=e15c172d-6f78-4d30-9258-788fd44fd926',
+    };
+
+    const iosCourse: Partial<Course> = {
+      id: '19162066',
+      profession: 'Профессия iOS-разработчик',
+      salaryText: 'Медианная зарплата',
+      salaryValue: 147000,
+      startDate: new Date(2021, 12, 27),
+      discount: 40,
+      source: 'SkillFactory',
+      imageUrl:
+        'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/recommendations%2Fcourses%2Fcourse_images%2Fios-dev.jpg?alt=media&token=45d768ed-6bb1-40f1-8eb7-2055dd6c53fa',
+    };
+
+    const hackerCourse: Partial<Course> = {
+      id: '14039106',
+      profession: 'Профессия Этичный хакер',
+      salaryText: 'Медианная зарплата',
+      salaryValue: 120000,
+      startDate: new Date(2021, 12, 16),
+      discount: 50,
+      source: 'SkillFactory',
+      imageUrl:
+        'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/recommendations%2Fcourses%2Fcourse_images%2Fhacker.jpg?alt=media&token=d36bb7a7-7f5c-4753-825d-d951994b585b',
+    };
+
+    const pythonCourse: Partial<Course> = {
+      id: '19166124',
+      profession: 'Профессия Python-разработчик',
+      salaryText: 'Медианная зарплата',
+      salaryValue: 120000,
+      startDate: new Date(2021, 12, 24),
+      discount: 40,
+      source: 'SkillFactory',
+      imageUrl:
+        'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/recommendations%2Fcourses%2Fcourse_images%2Fpython-dev.jpg?alt=media&token=59aebac0-cdf7-4ed5-ba3f-43225013b8ab',
+    };
+
+    const qaCourse: Partial<Course> = {
+      id: '20563461',
+      profession: 'Профессия Инженер по ручному тестированию',
+      salaryText: 'Средняя зарплата от',
+      salaryValue: 60000,
+      startDate: new Date(2021, 12, 14),
+      discount: 40,
+      source: 'SkillFactory',
+      imageUrl:
+        'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/recommendations%2Fcourses%2Fcourse_images%2Fqa-engineer.jpg?alt=media&token=65c5a349-d585-4922-bad8-2a347f3fe30c',
+    };
+
+    const courses = [
+      gameDevCourse,
+      javaCourse,
+      webCourse,
+      systemAdminCourse,
+      androidCourse,
+      dataScienceCourse,
+      iosCourse,
+      hackerCourse,
+      pythonCourse,
+      qaCourse,
+    ];
 
     /// This will cache feed data for the rest requests
     await skillFactoryDataProvider.getFeed();
