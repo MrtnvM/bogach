@@ -143,10 +143,7 @@ export class SkillFactoryDataProvider {
     const courseId = course.id;
     if (!courseId) throw new Error('No course id');
 
-    const { feedCourses } = await this.getFeed();
-    const feedCourse = feedCourses.find((c) => c.id === courseId);
-    if (!feedCourse) throw new Error('No course in the feed with id: ' + courseId);
-
+    const feedCourse = await this.getFeedCourse(courseId);
     const currentCourse = await this.courseDao.getCourse(courseId);
 
     const newCourse: Partial<Course> = {

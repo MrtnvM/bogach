@@ -24,12 +24,12 @@ describe('Sandbox', () => {
 
   const skillFactoryDataProvider = new SkillFactoryDataProvider(coursesDao, configDao);
 
-  test('Get SkillFactory data updates', async () => {
+  test.skip('Get SkillFactory data updates', async () => {
     const updates = await skillFactoryDataProvider.checkCoursesUpdates();
     console.log('COURSES UPDATES: ', updates);
   });
 
-  test('Update skipped courses', async () => {
+  test.skip('Update skipped courses', async () => {
     const skippedCoursesIds = [
       '10823281',
       '23564079',
@@ -54,16 +54,28 @@ describe('Sandbox', () => {
   });
 
   test.only('Update course data', async () => {
+    const marketAnalystCourse: Partial<Course> = {
+      id: '17160316',
+      profession: 'Профессия Маркетолог-аналитик',
+      salaryText: 'Средняя зарплата от',
+      salaryValue: 150000,
+      startDate: new Date(2021, 11, 20),
+      discount: 40,
+      source: 'SkillFactory',
+      imageUrl:
+        'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/recommendations%2Fcourses%2Fcourse_images%2Fmarketing.jpeg?alt=media&token=e4b2f74b-c089-4f70-bd15-01120ed3773c',
+    };
+
     const gameDevCourse: Partial<Course> = {
       id: '20744316',
       profession: 'Профессия Разработчик игр на Unity',
       salaryText: 'Средняя зарплата от',
       salaryValue: 120000,
-      startDate: new Date(2021, 12, 14),
+      startDate: new Date(2021, 11, 14),
       discount: 40,
       source: 'SkillFactory',
       imageUrl:
-        'https://firebasestorage.googleapis.com/v0/b/cash-flow-staging.appspot.com/o/recommendations%2Fcourse_images%2Fgame-dev.jpg?alt=media&token=a02ba5f7-7627-4038-8c08-3b9d50b7ee5d',
+        'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/recommendations%2Fcourses%2Fcourse_images%2Fgame-dev.jpeg?alt=media&token=8f87e79e-4aaa-450b-862a-e7298c2eaeee',
     };
 
     const javaCourse: Partial<Course> = {
@@ -71,11 +83,11 @@ describe('Sandbox', () => {
       profession: 'Профессия Java-разработчик',
       salaryText: 'Медианная зарплата',
       salaryValue: 140000,
-      startDate: new Date(2021, 12, 28),
+      startDate: new Date(2021, 11, 28),
       discount: 40,
       source: 'SkillFactory',
       imageUrl:
-        'https://firebasestorage.googleapis.com/v0/b/cash-flow-staging.appspot.com/o/recommendations%2Fcourse_images%2Fjava.jpg?alt=media&token=94a4d571-fbe5-42f7-92e6-efd11a23b837',
+        'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/recommendations%2Fcourses%2Fcourse_images%2Fjava.jpeg?alt=media&token=48956de4-57f2-48f9-ac2c-e06483155f70',
     };
 
     const webCourse: Partial<Course> = {
@@ -83,7 +95,7 @@ describe('Sandbox', () => {
       profession: 'Профессия Web-разработчик',
       salaryText: 'Медианная зарплата',
       salaryValue: 110000,
-      startDate: new Date(2022, 1, 19),
+      startDate: new Date(2022, 0, 19),
       discount: 40,
       source: 'SkillFactory',
       imageUrl:
@@ -95,7 +107,7 @@ describe('Sandbox', () => {
       profession: 'Профессия Системный администратор',
       salaryText: 'Медианная зарплата',
       salaryValue: 91000,
-      startDate: new Date(2022, 1, 19),
+      startDate: new Date(2022, 0, 19),
       discount: 60,
       source: 'SkillFactory',
       imageUrl:
@@ -107,7 +119,7 @@ describe('Sandbox', () => {
       profession: 'Профессия Android-разработчик',
       salaryText: 'Медианная зарплата',
       salaryValue: 150000,
-      startDate: new Date(2021, 12, 28),
+      startDate: new Date(2021, 11, 28),
       discount: 40,
       source: 'SkillFactory',
       imageUrl:
@@ -119,11 +131,11 @@ describe('Sandbox', () => {
       profession: 'Профессия Data Scientist',
       salaryText: 'Средняя зарплата',
       salaryValue: 250000,
-      startDate: new Date(2021, 12, 15),
+      startDate: new Date(2021, 11, 15),
       discount: 40,
       source: 'SkillFactory',
       imageUrl:
-        'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/recommendations%2Fcourses%2Fcourse_images%2Fandroid-developer.jpg?alt=media&token=e15c172d-6f78-4d30-9258-788fd44fd926',
+        'https://firebasestorage.googleapis.com/v0/b/bogach-production.appspot.com/o/recommendations%2Fcourses%2Fcourse_images%2Fdata-science.jpg?alt=media&token=46d5e029-31b7-4860-8b70-65a61f1bed67',
     };
 
     const iosCourse: Partial<Course> = {
@@ -131,7 +143,7 @@ describe('Sandbox', () => {
       profession: 'Профессия iOS-разработчик',
       salaryText: 'Медианная зарплата',
       salaryValue: 147000,
-      startDate: new Date(2021, 12, 27),
+      startDate: new Date(2021, 11, 27),
       discount: 40,
       source: 'SkillFactory',
       imageUrl:
@@ -143,7 +155,7 @@ describe('Sandbox', () => {
       profession: 'Профессия Этичный хакер',
       salaryText: 'Медианная зарплата',
       salaryValue: 120000,
-      startDate: new Date(2021, 12, 16),
+      startDate: new Date(2021, 11, 16),
       discount: 50,
       source: 'SkillFactory',
       imageUrl:
@@ -155,7 +167,7 @@ describe('Sandbox', () => {
       profession: 'Профессия Python-разработчик',
       salaryText: 'Медианная зарплата',
       salaryValue: 120000,
-      startDate: new Date(2021, 12, 24),
+      startDate: new Date(2021, 11, 24),
       discount: 40,
       source: 'SkillFactory',
       imageUrl:
@@ -167,7 +179,7 @@ describe('Sandbox', () => {
       profession: 'Профессия Инженер по ручному тестированию',
       salaryText: 'Средняя зарплата от',
       salaryValue: 60000,
-      startDate: new Date(2021, 12, 14),
+      startDate: new Date(2021, 11, 14),
       discount: 40,
       source: 'SkillFactory',
       imageUrl:
@@ -175,6 +187,7 @@ describe('Sandbox', () => {
     };
 
     const courses = [
+      marketAnalystCourse,
       gameDevCourse,
       javaCourse,
       webCourse,
