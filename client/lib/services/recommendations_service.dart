@@ -34,10 +34,20 @@ class RecommendationsService {
   );
 
   Future<List<RecommendationBook>> getBooks() async {
-    return booksProvider.getItems();
+    final books = await booksProvider.getItems();
+    books.shuffle();
+    return books;
   }
 
-  Future<List<RecommendationCourse>> getCourses() {
-    return courcesProvider.getItems();
+  Future<List<RecommendationCourse>> getCourses() async {
+    final courses = await courcesProvider.getItems();
+
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final actualCourses = courses //
+        .where((c) => c.startDate.millisecondsSinceEpoch > now)
+        .toList();
+
+    actualCourses.shuffle();
+    return actualCourses;
   }
 }
