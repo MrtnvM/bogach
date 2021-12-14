@@ -26,7 +26,10 @@ admin.initializeApp({
   credential: admin.credential.cert(getCredentials()),
 });
 
-const selector = new FirestoreSelector(admin.firestore());
+const adminFirestore = admin.firestore();
+const adminStorage = admin.storage();
+
+const selector = new FirestoreSelector(adminFirestore);
 const firestore = new Firestore();
 
 const realtimeDatabase = admin.database();
@@ -52,7 +55,7 @@ const RoomAPI = roomAPI.create(daos);
 const PurchaseAPI = purchaseAPI.create(daos);
 const UserAPI = userAPI.create(daos);
 const MultiplayerAPI = multiplayerAPI.create(daos);
-const RecommendationsAPI = recommendationsApi.create(daos);
+const RecommendationsAPI = recommendationsApi.create(daos, adminStorage);
 
 export const createGame = GameAPI.create;
 export const getGame = GameAPI.getGame;

@@ -1,3 +1,4 @@
+import * as Jimp from 'jimp';
 import * as admin from 'firebase-admin';
 import fetch from 'node-fetch';
 import cheerio from 'cheerio';
@@ -5,7 +6,7 @@ import { RecommendationBook } from '../../models/domain/recommendations/books/re
 import { downloadFile } from '../../utils/download_file';
 
 export class LitresDataProvider {
-  constructor(private partnerId: number) {}
+  constructor(private partnerId: number, private storage: admin.storage.Storage) {}
 
   async parseBook(bookId: number): Promise<RecommendationBook> {
     const { html, bookLink } = await this.getBookPageHtml(bookId);
@@ -58,11 +59,19 @@ export class LitresDataProvider {
       .text()
       .match(/src=\"([^\"]+)\"/)![1];
 
-    const coverPath = `data/books/covers/${bookId}.jpeg`;
+    const coverPath = `data/books/covers/original-${bookId}.jpeg`;
     await downloadFile(url, coverPath);
 
-    const bucket = admin.storage().bucket();
-    const [file] = await bucket.upload(coverPath, {
+    const resizedCoverPath = `data/books/covers/original-${bookId}.jpeg`;
+    const jimpImage = await Jimp.read(coverPath);
+    const newHeight = 640;
+    const scaleFactor = newHeight / jimpImage.getHeight();
+    const newWidth = jimpImage.getWidth() * scaleFactor;
+
+    await jimpImage.resize(newWidth, newHeight).writeAsync(resizedCoverPath);
+
+    const bucket = this.storage.bucket();
+    const [file] = await bucket.upload(resizedCoverPath, {
       destination: `recommendations/books/covers/${bookId}.jpeg`,
       public: true,
     });

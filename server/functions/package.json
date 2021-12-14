@@ -24,6 +24,7 @@
     "firebase-admin": "^9.4.2",
     "firebase-functions": "^3.3.0",
     "immer": "^6.0.3",
+    "jimp": "^0.16.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "node-fetch": "^2.6.1",

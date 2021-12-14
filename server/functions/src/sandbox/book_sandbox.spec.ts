@@ -16,12 +16,13 @@ admin.initializeApp(FIREBASE_STAGING_CONFIG);
 describe('Sandbox', () => {
   jest.setTimeout(150_000);
 
+  const storage = admin.storage();
   const firestore = admin.firestore();
   const selector = new FirestoreSelector(firestore);
   const firestoreInstance = new Firestore();
 
   const slackProvider = new SlackProvider();
-  const litresDataProvider = new LitresDataProvider(LITRES_PARTNER_ID);
+  const litresDataProvider = new LitresDataProvider(LITRES_PARTNER_ID, storage);
 
   const bookDao = new FirestoreBookRecommendationsDAO(selector, firestoreInstance);
   const bookProvider = new BookRecommendationsProvider(bookDao);
