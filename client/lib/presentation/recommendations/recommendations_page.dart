@@ -22,14 +22,16 @@ class RecommendationsPage extends HookWidget {
       children: [
         SizedBox(height: MediaQuery.of(context).padding.top),
         RecommendationsHeader(),
-        ListView(
-          shrinkWrap: true,
-          padding: const EdgeInsets.all(0),
-          children: const [
-            BooksSection(),
-            Divider(),
-            CourseSection(),
-          ],
+        Expanded(
+          child: ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            children: const [
+              BooksSection(),
+              Divider(),
+              CourseSection(),
+            ],
+          ),
         ),
       ],
     );
