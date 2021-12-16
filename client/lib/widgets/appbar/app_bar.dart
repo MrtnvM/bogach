@@ -1,10 +1,8 @@
-import 'package:cash_flow/app_configuration.dart';
 import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CashAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -56,20 +54,17 @@ class CashAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ControlPanelGate(
-      isEnabled: AppConfiguration.controlPanelEnabled,
-      child: AppBar(
-        backgroundColor: backgroundColor,
-        title: title,
-        centerTitle: centerTitle,
-        leading: leading,
-        bottom: bottom,
-        actions: actions,
-        brightness: brightness,
-        titleSpacing: titleSpacing,
-        automaticallyImplyLeading: false,
-        elevation: elevation,
-      ),
+    return AppBar(
+      backgroundColor: backgroundColor,
+      title: title,
+      centerTitle: centerTitle,
+      leading: leading,
+      bottom: bottom,
+      actions: actions,
+      brightness: brightness,
+      titleSpacing: titleSpacing,
+      automaticallyImplyLeading: false,
+      elevation: elevation,
     );
   }
 }

@@ -74,4 +74,15 @@ class Images {
   static const eventBusiness = 'assets/images/svg/business.svg';
   static const eventNews = 'assets/images/svg/news.svg';
   static const eventInsurance = 'assets/images/svg/insurance.svg';
+
+  static const borodachAvatar = 'assets/images/png/borodach_avatar.png';
+
+  static const iconMindset = 'assets/images/png/icon_mindset.png';
+  static const iconFinances = 'assets/images/png/icon_finances.png';
+  static const iconEnergy = 'assets/images/png/icon_energy.png';
+
+  static const backButton = 'assets/images/svg/back_button.svg';
+
+  static const litresLogo = 'assets/images/svg/litres-ru-logo.svg';
+  static const skillFactoryLogo = 'assets/images/png/skill_factory_logo.png';
 }

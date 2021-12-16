@@ -9,7 +9,6 @@ import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/utils/error_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:fimber/fimber.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -136,7 +135,7 @@ class UserService {
         .map((p) => p.id);
 
     if (emptyProfiles.isNotEmpty) {
-      Logger.d('WARNING: not found profiles with IDs: $emptyProfiles');
+      Fimber.d('WARNING: not found profiles with IDs: $emptyProfiles');
     }
 
     return profiles
@@ -187,7 +186,8 @@ class UserService {
           Fimber.e(ex.toString(), ex: ex);
         }
       }
-    }).handleError(recordError, test: (e) => true);
+      // ignore: unnecessary_lambdas
+    }).handleError((e, st) => recordError(e, st), test: (e) => true);
   }
 
   Future<void> updateUser({

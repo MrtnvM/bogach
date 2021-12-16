@@ -1,10 +1,10 @@
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
+import 'package:cash_flow/navigation/app_router.dart';
 import 'package:cash_flow/presentation/purchases/quests_purchase_page.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/widgets/containers/badge.dart';
 import 'package:flutter/material.dart';
-import 'package:cash_flow/navigation/app_router.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class QuestsBadge extends HookWidget {

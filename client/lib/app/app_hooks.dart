@@ -2,7 +2,7 @@ import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/push_notification_hooks.dart';
 import 'package:cash_flow/features/profile/actions/send_device_push_token_action.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
+import 'package:fimber/fimber.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:uni_links/uni_links.dart';
 
@@ -41,14 +41,14 @@ void useDeepLinkHandler() {
   useEffect(() {
     // ignore: avoid_types_on_closure_parameters
     final onDeepLink = (String? deepLink) {
-      Logger.i('APP CAPTURE DEEP LINK:\n$deepLink');
+      Fimber.i('APP CAPTURE DEEP LINK:\n$deepLink');
 
       if (deepLink == null) {
         return;
       }
 
       final uri = Uri.parse(deepLink);
-      Logger.e('PARSED URI:\n${uri.toString()}');
+      Fimber.e('PARSED URI:\n${uri.toString()}');
 
       // final path = uri.path;
       // if (path.contains(DynamicLinks.join)) {
@@ -58,7 +58,7 @@ void useDeepLinkHandler() {
     };
 
     final onDeepLinkError = (error, st) {
-      Logger.e('ERROR ON HANDLING DEEP LINK:\n$error');
+      Fimber.e('ERROR ON HANDLING DEEP LINK:\n$error');
     };
 
     getInitialLink().then(onDeepLink).onError(onDeepLinkError);

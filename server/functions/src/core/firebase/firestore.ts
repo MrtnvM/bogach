@@ -28,8 +28,10 @@ export class Firestore {
     return selector.get();
   }
 
-  getItemData(selector: DocumentReference) {
-    return selector.get().then((snapshot) => snapshot.data());
+  getItemData<T = FirebaseFirestore.DocumentData>(
+    selector: DocumentReference
+  ): Promise<T | undefined> {
+    return selector.get().then((snapshot) => snapshot.data() as T);
   }
 
   async getQueryItems(selector: Query) {

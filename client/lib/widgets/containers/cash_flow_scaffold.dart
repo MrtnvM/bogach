@@ -1,8 +1,6 @@
-import 'package:cash_flow/app_configuration.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/inputs/drop_focus.dart';
 import 'package:cash_flow/widgets/texts/title_test.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -60,6 +58,7 @@ class CashFlowScaffold extends StatelessWidget {
         ? AppBar(
             title: TitleText(title),
             centerTitle: true,
+            backgroundColor: ColorRes.mainGreen,
           )
         : null;
   }
@@ -74,13 +73,10 @@ class CashFlowScaffold extends StatelessWidget {
       ),
       margin: const EdgeInsets.only(bottom: 8),
       alignment: Alignment.bottomCenter,
-      child: ControlPanelGate(
-        isEnabled: AppConfiguration.controlPanelEnabled,
-        child: Center(
-          child: Image.asset(
-            footerImage!,
-            fit: BoxFit.cover,
-          ),
+      child: Center(
+        child: Image.asset(
+          footerImage!,
+          fit: BoxFit.cover,
         ),
       ),
     );

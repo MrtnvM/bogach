@@ -26,7 +26,7 @@ class StartListeningRoomUpdatesAction extends BaseAction {
           action$.whereType<LogoutAction>(),
         ]))
         .map<BaseAction>((room) => OnCurrentRoomUpdatedAction(room))
-        .onErrorReturnWith((error) => OnCurrentRoomUpdatedAction(null))
+        .onErrorReturnWith((error, st) => OnCurrentRoomUpdatedAction(null))
         .listen(dispatch);
 
     return null;

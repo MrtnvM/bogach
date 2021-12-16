@@ -36,12 +36,12 @@ class StartGameAction extends BaseAction {
         .map<BaseAction>(
           (profiles) => SetGameParticipantsProfilesAction(profiles),
         )
-        .onErrorReturnWith((e) => OnGameErrorAction(e, gameContext));
+        .onErrorReturnWith((e, st) => OnGameErrorAction(e, gameContext));
 
     final gameSubscription = gameService
         .getGame(gameContext)
         .map<BaseAction>((game) => OnGameStateChangedAction(game))
-        .onErrorReturnWith((e) => OnGameErrorAction(e, gameContext))
+        .onErrorReturnWith((e, st) => OnGameErrorAction(e, gameContext))
         .takeUntil(onStopActiveGame);
 
     Rx.concat([userProfiles, gameSubscription])

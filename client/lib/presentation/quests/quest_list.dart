@@ -16,7 +16,6 @@ import 'package:cash_flow/widgets/common/common_error_widget.dart';
 import 'package:cash_flow/widgets/common/empty_list_widget.dart';
 import 'package:cash_flow/widgets/progress/games_loadable_list_view.dart';
 import 'package:collection/collection.dart' show IterableExtension;
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
 import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
@@ -51,11 +50,11 @@ class QuestList extends HookWidget {
     final offsetAnimation = Tween(begin: 0.0, end: 10.0)
         .chain(CurveTween(curve: Curves.elasticIn))
         .animate(animationController)
-          ..addStatusListener((status) {
-            if (status == AnimationStatus.completed) {
-              animationController.reverse();
-            }
-          });
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          animationController.reverse();
+        }
+      });
 
     useEffect(() => swiperController.dispose, []);
 
@@ -172,8 +171,7 @@ class _QuestItemWidget extends HookWidget {
     final isQuestPurchased =
         isFirstQuest || hasQuestsAccess || user.boughtQuestsAccess == true;
     final isQuestOpenedByUser = quest.isAvailable;
-    final isQuestAvailable =
-        (isQuestPurchased && isQuestOpenedByUser) || DemoMode.isEnabled;
+    final isQuestAvailable = isQuestPurchased && isQuestOpenedByUser;
 
     if (isQuestAvailable) {
       return (quest, action) {

@@ -5,7 +5,7 @@ import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/purchases/purchases.dart';
 import 'package:cash_flow/services/revenue_cat_purchase_service.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
+import 'package:fimber/fimber.dart';
 import 'package:get_it/get_it.dart';
 
 class BuyMultiplayerGames extends BaseAction {
@@ -24,7 +24,7 @@ class BuyMultiplayerGames extends BaseAction {
     final purchaseService = GetIt.I.get<RevenueCatPurchaseService>();
     final purchaseProfile = await purchaseService.purchase(purchase.productId);
 
-    Logger.i('New purchase profile:\n$purchaseProfile');
+    Fimber.i('New purchase profile:\n$purchaseProfile');
 
     return state.rebuild((s) {
       s.profile.currentUser = s.profile.currentUser!.copyWith(

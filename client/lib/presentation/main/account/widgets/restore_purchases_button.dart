@@ -2,7 +2,7 @@ import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/purchase/actions/restore_purchases_action.dart';
 import 'package:cash_flow/resources/strings.dart';
-import 'package:cash_flow/utils/dialogs.dart';
+import 'package:cash_flow/utils/ui/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 

@@ -1,4 +1,4 @@
-import 'package:cash_flow/utils/dialogs.dart';
+import 'package:cash_flow/utils/ui/dialogs.dart';
 import 'package:flutter/material.dart';
 
 typedef RetriableShowAlertFunction = void Function(

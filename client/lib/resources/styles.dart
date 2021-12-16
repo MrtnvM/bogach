@@ -77,12 +77,28 @@ class Styles {
     color: ColorRes.mainBlack,
   );
 
+  static const bodyBold = TextStyle(
+    fontFamily: _defaultFontFamily,
+    fontSize: 14,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.bold,
+    color: _defaultTextColor,
+  );
+
   static const bodyBlackSemibold = TextStyle(
     fontFamily: _defaultFontFamily,
     fontSize: 14,
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w600,
     color: ColorRes.mainBlack,
+  );
+
+  static const bodySemibold = TextStyle(
+    fontFamily: _defaultFontFamily,
+    fontSize: 14,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w600,
+    color: _defaultTextColor,
   );
 
   static const caption = TextStyle(

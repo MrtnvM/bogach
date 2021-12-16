@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_annotation_target
+
 import 'package:cash_flow/models/domain/user/last_games/last_games.dart';
 import 'package:cash_flow/models/domain/user/played_games/played_games.dart';
 import 'package:cash_flow/models/domain/user/purchase_profile.dart';

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
-import 'package:cash_flow/utils/dialogs.dart';
+import 'package:cash_flow/utils/ui/dialogs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

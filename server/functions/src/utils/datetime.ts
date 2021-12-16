@@ -1,3 +1,5 @@
+import * as admin from 'firebase-admin';
+
 export function nowInUtc(): number {
   const date = new Date();
   const utc = Date.UTC(
@@ -11,3 +13,7 @@ export function nowInUtc(): number {
 
   return new Date(utc).getTime();
 }
+
+export const dateFromTimestamp = (timestamp: any) => {
+  return (timestamp as admin.firestore.Timestamp).toDate();
+};

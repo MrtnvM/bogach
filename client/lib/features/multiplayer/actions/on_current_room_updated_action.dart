@@ -5,7 +5,7 @@ import 'package:cash_flow/app/base_action.dart';
 import 'package:cash_flow/models/domain/room/room.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
 import 'package:cash_flow/services/user_service.dart';
-import 'package:dash_kit_control_panel/dash_kit_control_panel.dart';
+import 'package:fimber/fimber.dart';
 import 'package:get_it/get_it.dart';
 
 class OnCurrentRoomUpdatedAction extends BaseAction {
@@ -44,7 +44,7 @@ class OnCurrentRoomUpdatedAction extends BaseAction {
     userService
         .loadProfiles(participantWithoutProfile)
         .catchError((error) {
-          Logger.e('PARTICIPANT PROFILES LOADING FAILED\n$error');
+          Fimber.e('PARTICIPANT PROFILES LOADING FAILED\n$error', ex: error);
           return const <UserProfile>[];
         })
         .then((profiles) => _OnProfilesLoadedAction(profiles))

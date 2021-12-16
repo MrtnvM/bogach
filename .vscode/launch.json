@@ -94,6 +94,29 @@
       "windows": {
         "program": "${workspaceFolder}/server/functions/node_modules/jest/bin/jest"
       }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Script - Generate stocks images",
+      "runtimeArgs": [
+        "-r",
+        "ts-node/register"
+      ],
+      "args": [
+        "${workspaceFolder}/server/functions/src/scripts/generate_stock_images/index.ts"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Script - Generate stocks images 2",
+      "program": "${workspaceFolder}/server/functions/lib/scripts/generate_stock_images/index.js",
+      "preLaunchTask": "tsc: build server",
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/server/functions/lib/**/*.js"
+      ]
     }
   ]
 }

@@ -31,6 +31,8 @@ class ColorRes {
   static const green = Color(0xFF4CAF50);
   static const orange = Color(0xFFFFA726);
 
+  static final backButtonColor = const Color(0xFFC4C4C4).withAlpha(50);
+
   static const newGameBoardHeaderBackground = Color(0xFFFFE21C);
   static const newGameBoardPrimaryTextColor = Color(0xFF01BAEF);
   static const newGameBoardProgressColor = Color(0xFF79C745);
@@ -72,4 +74,10 @@ class ColorRes {
 
   static const shimmerBaseColor = Color(0xFFDDDDDD);
   static const shimmerHightlightColor = Color(0xFFFFFFFF);
+
+  static const bookAdvantageBackground = Color(0xFFFDFDFD);
+  static const bookItemBackground = Color(0xFFF5F5F5);
+
+  static const litresGreen = Color(0xFF0E920E);
+  static const litresOrange = Color(0xFFFF4C00);
 }

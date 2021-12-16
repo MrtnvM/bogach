@@ -6,10 +6,10 @@ import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/widgets/common/common_error_widget.dart';
 import 'package:cash_flow/widgets/common/empty_list_widget.dart';
 import 'package:cash_flow/widgets/progress/games_loadable_list_view.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
 class TemplateGameList extends HookWidget {

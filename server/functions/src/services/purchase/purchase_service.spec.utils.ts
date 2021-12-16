@@ -17,7 +17,7 @@ const getInitialProfile = (profile?: Partial<User>): User => {
     purchaseProfile: profile?.purchaseProfile,
 
     playedGames: profile?.playedGames || {
-      multiplayerGames: []
+      multiplayerGames: [],
     },
   };
 };
@@ -30,8 +30,6 @@ const getPurchase = (purchase: Partial<PurchaseDetails>): PurchaseDetails => {
   return {
     productId: purchase.productId,
     purchaseId: purchase.purchaseId || `${purchase.productId} purchase`,
-    verificationData: purchase.verificationData || 'verification_token_1',
-    source: purchase.source || 'AppStore',
   };
 };
 

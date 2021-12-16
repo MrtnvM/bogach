@@ -33,6 +33,7 @@ class Strings {
 
   // Main Page
   static String get gamesTabTitle => 'Игры';
+  static String get recommendationsTabTitle => 'Рекомендации';
   static String get accountTabTitle => 'Аккаунт';
 
   // Authorization
@@ -113,6 +114,7 @@ class Strings {
   static const fieldIsRequired = 'Необходимо заполнить';
   static const continueAction = 'Продолжить';
   static const buy = 'Купить';
+  static const buyFor = 'Купить за ';
   static const sell = 'Продать';
   static const price = 'Стоимость:';
   static const cost = 'Стоимость';
@@ -534,4 +536,19 @@ class Strings {
       'познавательнее для вас. Пожалуйста, обновите приложение для'
       ' доступа к новым функциям - это не займет много времени :)';
   static String get update => 'Обновить';
+
+  // Recommendations page
+  static String get recommendationsTitle => 'Богач рекомендует';
+  static String get recommendationsDescription =>
+      'Для тех, кто готов двигаться дальше';
+  static String get booksSectionTitle => 'Книги';
+  static String get pages => 'Страниц';
+  static String get rating => 'Рейтинг';
+  static String get reviews => 'Оценок';
+  static String get readFragment => 'Читать фрагмент';
+
+  static String get coursesSectionTitle => 'Профессии';
+  static String get coursesSectionDescription =>
+      'Для тех, кто ищет новые возможности повышения денежного потока';
+  static String get startCourseDate => 'Старт программы ';
 }

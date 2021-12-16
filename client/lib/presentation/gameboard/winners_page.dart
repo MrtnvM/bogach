@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/core/hooks/global_state_hook.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
-import 'package:cash_flow/features/new_game/actions/start_quest_game_action.dart';
 import 'package:cash_flow/models/domain/game/game/game.dart';
 import 'package:cash_flow/models/domain/game/target/target.dart';
 import 'package:cash_flow/models/domain/user/user_profile.dart';
@@ -14,10 +13,10 @@ import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
 import 'package:cash_flow/widgets/buttons/color_button.dart';
+import 'package:dash_kit_core/dash_kit_core.dart';
 import 'package:dash_kit_loadable/dash_kit_loadable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:dash_kit_core/dash_kit_core.dart';
 
 class WinnersPage extends HookWidget {
   @override

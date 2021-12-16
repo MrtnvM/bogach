@@ -9,6 +9,7 @@ import 'package:cash_flow/configuration/cash_api_environment.dart';
 import 'package:cash_flow/services/config_service.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/multiplayer_service.dart';
+import 'package:cash_flow/services/recommendations_service.dart';
 import 'package:cash_flow/services/revenue_cat_purchase_service.dart';
 import 'package:cash_flow/services/updates_service.dart';
 import 'package:cash_flow/services/user_service.dart';
@@ -100,6 +101,11 @@ Future<void> configureDependencyInjection(
 
   final purchaseService = RevenueCatPurchaseService(apiClient: apiClient);
 
+  final recommendationsService = RecommendationsService(
+    firestore: firestore,
+    preferences: sharedPreferences,
+  );
+
   GetIt.I.registerSingleton<GameService>(gameService);
   GetIt.I.registerSingleton<UserService>(userService);
   GetIt.I.registerSingleton<RevenueCatPurchaseService>(purchaseService);
@@ -107,4 +113,5 @@ Future<void> configureDependencyInjection(
   GetIt.I.registerSingleton<UpdatesService>(updatesService);
   GetIt.I.registerSingleton<MultiplayerService>(multiplayerService);
   GetIt.I.registerSingleton<UsersAddToFriendsStorage>(usersAddToFriendsStorage);
+  GetIt.I.registerSingleton<RecommendationsService>(recommendationsService);
 }

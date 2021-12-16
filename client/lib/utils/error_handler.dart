@@ -1,12 +1,12 @@
-import 'package:cash_flow/models/network/core/response_model.dart';
 import 'package:cash_flow/models/errors/purchase_errors.dart';
+import 'package:cash_flow/models/network/core/response_model.dart';
 import 'package:cash_flow/models/network/errors/email_has_been_taken_exception.dart';
 import 'package:cash_flow/models/network/errors/invalid_credentials_exception.dart';
+import 'package:dash_kit_network/dash_kit_network.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/services.dart';
-import 'package:dash_kit_network/dash_kit_network.dart';
 
-T recordError<T>(dynamic error, [dynamic stacktrace]) {
+T recordError<T>(dynamic error, StackTrace stacktrace) {
   _recordError(error, stacktrace);
 
   if (error is PlatformException) {

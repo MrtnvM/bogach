@@ -5,6 +5,7 @@ import { APIRequest } from '../core/api/request_data';
 import { UserProvider } from '../providers/user_provider';
 import { DAOs } from '../dao/daos';
 import { MultiplayerService } from '../services/multiplayer/multiplayer_service';
+import { sendResponse } from '../core/api/send_response';
 
 export const create = (daos: DAOs) => {
   const https = functions.region(config.CLOUD_FUNCTIONS_REGION).https;
@@ -22,7 +23,7 @@ export const create = (daos: DAOs) => {
 
     const status = multiplayerService.setOnlineStatus(userId, fullName, avatarUrl);
 
-    await send(status, response);
+    await sendResponse(status, response);
   });
 
   const getOnlineProfiles = https.onRequest(async (request, response) => {
@@ -32,25 +33,8 @@ export const create = (daos: DAOs) => {
     const userId = apiRequest.queryParameter('user_id');
 
     const profiles = multiplayerService.getOnlineProfiles(userId);
-    await send(profiles, response);
+    await sendResponse(profiles, response);
   });
-
-  const send = <T>(data: Promise<T>, response: functions.Response) => {
-    return data
-      .then((result) => response.status(200).send(result))
-      .catch((error) => {
-        if (error['type'] === 'domain') {
-          const json = JSON.stringify(error);
-          response.status(422).send(json);
-          return;
-        }
-
-        const errorMessage = error['message'] ? error.message : error;
-        console.error('ERROR: ' + JSON.stringify(error));
-        console.error('ERROR MESSAGE: ' + errorMessage);
-        response.status(422).send(errorMessage);
-      });
-  };
 
   return {
     getOnlineProfiles,

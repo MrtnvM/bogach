@@ -26,9 +26,7 @@ class GameService {
   final FirebaseDatabase realtimeDatabase;
 
   Future<List<GameTemplate>> getGameTemplates() {
-    return apiClient
-        .getGameTemplates()
-        .then(mapToGameTemplates);
+    return apiClient.getGameTemplates().then(mapToGameTemplates);
   }
 
   Future<List<Quest>> getQuests(String userId) {
@@ -65,7 +63,8 @@ class GameService {
       final jsonData = json.decode(jsonString);
       final game = Game.fromJson(jsonData);
       return game;
-    }).handleError(recordError, test: (e) => true);
+      // ignore: unnecessary_lambdas
+    }).handleError((e, st) => recordError(e, st), test: (e) => true);
   }
 
   Future<Game?> getGameByLevel(String levelId, String userId) async {
@@ -116,7 +115,8 @@ class GameService {
         .snapshots()
         .where((snapshot) => snapshot.data() != null)
         .map((snapshot) => Room.fromJson(snapshot.data()!))
-        .handleError(recordError, test: (e) => true);
+        // ignore: unnecessary_lambdas
+        .handleError((e, st) => recordError(e, st), test: (e) => true);
   }
 
   Future<Room> getRoom(String roomId) {
@@ -125,6 +125,7 @@ class GameService {
         .doc(roomId)
         .get()
         .then((snapshot) => Room.fromJson(snapshot.data()!))
-        .onError(recordError);
+        // ignore: unnecessary_lambdas
+        .onError((e, st) => recordError(e, st));
   }
 }

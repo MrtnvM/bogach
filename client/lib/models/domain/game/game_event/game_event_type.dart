@@ -10,8 +10,8 @@ import 'package:cash_flow/presentation/gameboard/game_events/real_estate/models/
 import 'package:cash_flow/presentation/gameboard/game_events/salary_change/models/salary_change_event_data.dart';
 import 'package:cash_flow/presentation/gameboard/game_events/stock/model/stock_event_data.dart';
 import 'package:cash_flow/resources/strings.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'game_event_type.freezed.dart';
 

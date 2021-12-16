@@ -10,6 +10,7 @@ import 'package:cash_flow/models/domain/user/online/online_profile.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
 import 'package:cash_flow/presentation/main/account/account_page.dart';
 import 'package:cash_flow/presentation/main/games/games_page.dart';
+import 'package:cash_flow/presentation/recommendations/recommendations_page.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/images.dart';
 import 'package:cash_flow/resources/strings.dart';
@@ -20,6 +21,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+
+import 'main_page_tab_provider.dart';
 
 class MainPage extends HookWidget {
   const MainPage();
@@ -77,39 +80,58 @@ class MainPage extends HookWidget {
       );
     });
 
+    final currentTab = {
+      0: MainPageTab.games,
+      1: MainPageTab.recommendations,
+      2: MainPageTab.account
+    }[pageIndex.value]!;
+
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.dark,
       child: BogachLoadableView(
         isLoading: isLoading,
-        child: Scaffold(
-          backgroundColor: ColorRes.mainPageBackground,
-          body: IndexedStack(
-            index: pageIndex.value,
-            children: const [
-              GamesPage(),
-              AccountPage(),
-            ],
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: pageIndex.value,
-            onTap: (newIndex) {
-              pageIndex.value = newIndex;
+        child: MainPageTabProvider(
+          currentTab: currentTab,
+          child: Scaffold(
+            backgroundColor: ColorRes.mainPageBackground,
+            body: IndexedStack(
+              index: pageIndex.value,
+              children: const [
+                GamesPage(),
+                RecommendationsPage(),
+                AccountPage(),
+              ],
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: pageIndex.value,
+              onTap: (newIndex) {
+                pageIndex.value = newIndex;
 
-              const accountPageIndex = 1;
-              if (newIndex == accountPageIndex) {
-                AnalyticsSender.accountOpen();
-              }
-            },
-            items: [
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.insights),
-                label: Strings.gamesTabTitle,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.person),
-                label: Strings.accountTabTitle,
-              )
-            ],
+                const recommendationsIndex = 1;
+                if (newIndex == recommendationsIndex) {
+                  AnalyticsSender.recommendationsOpen();
+                }
+
+                const accountPageIndex = 2;
+                if (newIndex == accountPageIndex) {
+                  AnalyticsSender.accountOpen();
+                }
+              },
+              items: [
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.insights),
+                  label: Strings.gamesTabTitle,
+                ),
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.thumb_up_off_alt),
+                  label: Strings.recommendationsTabTitle,
+                ),
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.person),
+                  label: Strings.accountTabTitle,
+                )
+              ],
+            ),
           ),
         ),
       ),

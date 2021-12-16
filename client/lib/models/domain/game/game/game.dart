@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_annotation_target
+
 import 'package:cash_flow/models/domain/game/current_game_state/current_game_state.dart';
 import 'package:cash_flow/models/domain/game/game/type/game_type.dart';
 import 'package:cash_flow/models/domain/game/game_config/game_config.dart';
@@ -17,8 +19,7 @@ class Game with _$Game implements StoreListItem {
     required String id,
     required String name,
     @JsonKey(fromJson: GameType.fromJson, toJson: GameType.toJson)
-    required
-        GameType type,
+        required GameType type,
     required CurrentGameState state,
     required List<String> participantsIds,
     required Map<String, Participant> participants,

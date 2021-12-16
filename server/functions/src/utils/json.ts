@@ -1,19 +1,8 @@
 import * as fs from 'fs';
+import { createDirectoryForFileIfNeeded } from './files';
 
 export const writeJson = (path: string, data: any) => {
-  const directories = path.split('/').slice(0, -1);
-
-  for (let i = 0; i < directories.length; i++) {
-    const dirPath = directories.slice(0, i + 1).join('/');
-
-    if (dirPath === '') {
-      continue;
-    }
-
-    if (!fs.existsSync(dirPath)) {
-      fs.mkdirSync(dirPath);
-    }
-  }
+  createDirectoryForFileIfNeeded(path);
 
   if (fs.existsSync(path)) {
     fs.unlinkSync(path);
