@@ -8,6 +8,7 @@ import 'package:cash_flow/presentation/gameboard/game_events/stock/ui/stock_game
 import 'package:cash_flow/presentation/gameboard/widgets/chart/stock/chart/chart_widget.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/data/selector_state.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_content.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/price/price_info_widget.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
 import 'package:cash_flow/resources/colors.dart';
@@ -40,6 +41,7 @@ class StockGameEvent extends HookWidget {
     final alreadyHaveCount = useCurrentStock(event)?.countInPortfolio ?? 0;
 
     final stockDialogInfoModel = useStockInfoDialogModel();
+    final currentStock = useCurrentStock(event);
 
     useEffect(() {
       WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
@@ -93,6 +95,13 @@ class StockGameEvent extends HookWidget {
               },
             );
           },
+        ),
+        const SizedBox(height: 12),
+        PriceInfoWidget(
+          itemImageUrl: event.image,
+          currentPrice: eventData.currentPrice,
+          previousPrice: currentStock?.averagePrice ?? 0,
+          countInPortfolio: currentStock?.countInPortfolio ?? 0,
         ),
         const SizedBox(height: 24),
         GameEventSelectorWidget(

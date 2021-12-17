@@ -165,8 +165,6 @@ class Strings {
   static const currentPrice = 'Текущая цена:';
   static const investmentType = 'Наименование:';
   static const nominalCost = 'Номинальная стоимость:';
-  static const alreadyHave = 'В наличии:';
-  static const changeInPortfolio = 'Измeнение цены:';
   static const incomePerMonth = 'Ежемесячный доход:';
   static const available = 'Доступно:';
   static const buyAllAvailable = 'Купить на все';
@@ -192,9 +190,6 @@ class Strings {
 
   static const smallBusinessTitle = 'Малый бизнесс';
   static const smallBusinessDesc = 'Продается терминал платежных систем';
-
-  static String getUserAvailableCount(String count, String cost) =>
-      '$count по $cost';
 
   static String getSelling(String name) => 'Продается $name';
 
@@ -293,6 +288,10 @@ class Strings {
       '(машина, недвижимость), или защитить себя финансово'
       ' от несчастного случая';
 
+  static String get inPortfolio => 'В портфеле';
+  static String get portfolioValue => 'Стоимость бумаг в портфеле';
+  static String get countShort => 'шт.';
+
   static String get monthResult => 'Итоги за месяц';
   static String get financialResults => 'Финансовые показатели';
   static String get financialResultsChange => 'Изменения показателей';
@@ -321,6 +320,7 @@ class Strings {
   static String get monthIsOver => 'Месяц завершен!';
 
   static String get month => 'Месяц';
+  static String get monthShort => 'мес.';
   static String get monthDescription => 'Показывает текущий номер месяца '
       'и сколько всего месяцев, есть для осуществления цели';
 

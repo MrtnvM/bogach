@@ -18,32 +18,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 Map<String, String> useDebentureInfoTableData(GameEvent event) {
-  final currentDebenture = useCurrentDebenture(event);
-  final alreadyHave = currentDebenture?.count ?? 0;
-
   final eventData = event.data as DebentureEventData;
-
-  final alreadyHaveString = alreadyHave == 0
-      ? alreadyHave.toString()
-      : Strings.getUserAvailableCount(
-          alreadyHave.toString(),
-          currentDebenture!.averagePrice.toPrice(),
-        );
-
-  final currentPrice = eventData.currentPrice;
-  final previousPrice = currentDebenture?.averagePrice;
-  final priceChange = previousPrice == null
-      ? 0.0
-      : ((currentPrice - previousPrice) / previousPrice) * 100;
 
   final data = {
     Strings.currentPrice: eventData.currentPrice.toPrice(),
     Strings.nominalCost: eventData.nominal.toPrice(),
     Strings.passiveIncomePerMonth:
         (eventData.profitabilityPercent / 12).toPercent(),
-    Strings.alreadyHave: alreadyHaveString,
-    if (alreadyHave > 0)
-      Strings.changeInPortfolio: priceChange.toPercentWithSign()
   };
 
   return data;

@@ -77,12 +77,13 @@ class Images {
 
   static const borodachAvatar = 'assets/images/png/borodach_avatar.png';
 
-  static const iconMindset = 'assets/images/png/icon_mindset.png';
-  static const iconFinances = 'assets/images/png/icon_finances.png';
-  static const iconEnergy = 'assets/images/png/icon_energy.png';
-
   static const backButton = 'assets/images/svg/back_button.svg';
 
   static const litresLogo = 'assets/images/svg/litres-ru-logo.svg';
   static const skillFactoryLogo = 'assets/images/png/skill_factory_logo.png';
+
+  static const infoBlockArrowRight = 'assets/images/png/icon-right-arrow.png';
+  static const infoBlockArrowUp = 'assets/images/png/info-block-arrow-up.png';
+  static const infoBlockArrowDown =
+      'assets/images/png/info-block-arrow-down.png';
 }
