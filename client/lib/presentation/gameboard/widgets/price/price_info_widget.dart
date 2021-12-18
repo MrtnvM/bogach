@@ -189,7 +189,7 @@ class _PortfolioValueBlock extends HookWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              portfolioValue.round().toString(),
+              portfolioValue.toPriceWithoutSymbol(),
               style: Styles.infoBlockValue,
             ),
             Text(

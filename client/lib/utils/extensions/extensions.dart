@@ -10,6 +10,10 @@ extension PriceFormatting on num {
     return _defaultCurrencyFormat.format(this);
   }
 
+  String toPriceWithoutSymbol() {
+    return _defaultCurrencyFormat.format(this).replaceAll('₽', '').trim();
+  }
+
   String toPriceWithSign() {
     final price = toPrice();
     return this > 0 ? '+$price' : price;

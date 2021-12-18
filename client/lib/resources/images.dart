@@ -86,4 +86,7 @@ class Images {
   static const infoBlockArrowUp = 'assets/images/png/info-block-arrow-up.png';
   static const infoBlockArrowDown =
       'assets/images/png/info-block-arrow-down.png';
+
+  static const addButton = 'assets/images/png/add-button.png';
+  static const removeButton = 'assets/images/png/remove-button.png';
 }

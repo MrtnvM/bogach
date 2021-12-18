@@ -73,7 +73,7 @@ class BuySellBar extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.only(top: isSelected ? 0 : 6),
           child: Container(
-            height: isSelected ? 42 : 36,
+            height: isSelected ? 40 : 34,
             decoration: BoxDecoration(
               color: isEnabled
                   ? color.withAlpha(isSelected ? 255 : 180)
