@@ -1,5 +1,6 @@
 import 'dart:ui' show lerpDouble;
 import 'package:cash_flow/resources/styles.dart';
+import 'package:cash_flow/widgets/inputs/drop_focus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -121,11 +122,14 @@ class BottomTabBarState extends State<BottomTabBar> {
   }
 
   void _select(int index) {
+    DropFocus.drop();
     setState(() => currentIndex = index);
     widget.onTap(index);
   }
 
   void _onChangingSelectedTab() {
+    DropFocus.drop();
+
     final offset = widget.tabController.offset;
 
     if (!_isAnimationListenerEnabled) {
