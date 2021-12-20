@@ -36,12 +36,24 @@ describe('Sandbox', () => {
     await bookService.updateBooksData(RECOMMENDATION_BOOKS_IDS);
   });
 
-  test.skip('Update book data', async () => {
+  test.skip('Update book data manually', async () => {
     const book: Partial<RecommendationBook> = {
-      bookId: undefined,
+      bookId: '',
     };
 
     const result = await bookService.updateBook(book);
     console.log('RESULT: ', result);
+  });
+
+  test.skip('Update book data manually', async () => {
+    const bookId = '25578317';
+    const book = await bookService.getBook(bookId);
+    const updates: string[] = [];
+
+    await bookService.updateBookData(parseInt(bookId, 10), book, updates);
+    const updatedBook = await bookService.getBook(bookId);
+
+    console.log('RESULT: ', updatedBook);
+    console.log('UPDATES: ', updates);
   });
 });

@@ -10,6 +10,10 @@ export class BookRecommendationsService {
     private bookProvider: BookRecommendationsProvider
   ) {}
 
+  getBook(bookId: string) {
+    return this.bookProvider.getBook(bookId);
+  }
+
   getBooks() {
     return this.bookProvider.getBooks();
   }
