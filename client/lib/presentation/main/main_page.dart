@@ -53,7 +53,8 @@ class MainPage extends HookWidget {
         final requests = [
           Operation.createGame,
           Operation.createRoom,
-          Operation.createQuestGame
+          Operation.createQuestGame,
+          Operation.buyWithNewYearAction,
         ];
 
         return requests

@@ -14,6 +14,7 @@ import 'package:cash_flow/presentation/quests/quest_list.dart';
 import 'package:cash_flow/presentation/quests/quests_badge.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/utils/ui/widgets.dart';
 import 'package:cash_flow/widgets/progress/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -62,12 +63,22 @@ class _GamePageContent extends HookWidget {
     final selectedProfiles = useState(<String>{});
     final size = useAdaptiveSize();
 
+    final newYearWidgetKey = useState(GlobalKey());
+    final newYearWidgetHeight = useState(0.0);
+
+    useEffect(() {
+      Future.delayed(const Duration(milliseconds: 50)).then((_) {
+        final height = getWidgetSize(newYearWidgetKey.value).height;
+        newYearWidgetHeight.value = height;
+      });
+    }, []);
+
     return Stack(
       children: [
         Positioned.fill(
           child: ListView(
             shrinkWrap: true,
-            padding: const EdgeInsets.all(0),
+            padding: EdgeInsets.only(bottom: newYearWidgetHeight.value),
             children: <Widget>[
               SizedBox(height: size(24)),
               const SectionTitle(text: Strings.singleGame),
@@ -127,7 +138,10 @@ class _GamePageContent extends HookWidget {
           left: 0,
           right: 0,
           bottom: 0,
-          child: NewYearActionWidget(),
+          child: NewYearActionWidget(
+            key: newYearWidgetKey.value,
+            onDissmised: () => newYearWidgetHeight.value = 0,
+          ),
         ),
       ],
     );

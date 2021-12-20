@@ -59,7 +59,9 @@ export class PurchaseService {
       return allPurchases.some((p) => p.productId === productId);
     };
 
-    const isQuestsAvailable = hasPurchase(Purchases.questsAccessProductId);
+    const isQuestsAvailable =
+      hasPurchase(Purchases.questsAccessProductId) ||
+      hasPurchase(Purchases.newYear2022ActionProductId);
 
     const multiplayerGamePurchases: { [productId: string]: number } = {
       [Purchases.depricatedMultiplayer1ProductId]: 1,
@@ -69,6 +71,8 @@ export class PurchaseService {
       [Purchases.multiplayerGames1]: 1,
       [Purchases.multiplayerGames10]: 10,
       [Purchases.multiplayerGames25]: 25,
+
+      [Purchases.newYear2022ActionProductId]: 25,
     };
 
     const boughtMultiplayerGamesCount = allPurchases

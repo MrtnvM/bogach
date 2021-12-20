@@ -551,4 +551,8 @@ class Strings {
   static String get coursesSectionDescription =>
       'Для тех, кто ищет новые возможности повышения денежного потока';
   static String get startCourseDate => 'Старт программы ';
+
+  static String get newYearActionBoughtAlertTitle => 'Новогодняя акция';
+  static String get newYearActionBoughtAlertMessage =>
+      'Вы успешно купили доступ к базе квестов и 25 мультиплеерных игр!';
 }

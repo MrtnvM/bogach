@@ -6,6 +6,7 @@ const questsAccessProductId = 'bogach.quests.access';
 const multiplayer1ProductId = 'bogach.multiplayer.games.1';
 const multiplayer10ProductId = 'bogach.multiplayer.games.10';
 const multiplayer25ProductId = 'bogach.multiplayer.games.25';
+const newYear2022ActionProductId = 'bogach.new_year_2022';
 
 String hashProductId(String productId) {
   const salt = '(c) Bogach Team';
