@@ -6,10 +6,16 @@ import { RecommendationBook } from '../../models/domain/recommendations/books/re
 export class FirestoreBookRecommendationsDAO implements IBookRecommendationsDAO {
   constructor(private selector: FirestoreSelector, private firestore: Firestore) {}
 
+  async getBook(bookId: string): Promise<RecommendationBook | undefined> {
+    const selector = this.selector.recommendationBook(bookId);
+    const book = await this.firestore.getItemData<RecommendationBook>(selector);
+    return book;
+  }
+
   async getBooks(): Promise<RecommendationBook[]> {
     const selector = this.selector.recommendationBooks();
-    const books = await this.firestore.getItems(selector);
-    return books as RecommendationBook[];
+    const books = await this.firestore.getItems<RecommendationBook>(selector);
+    return books;
   }
 
   async updateBook(book: RecommendationBook): Promise<RecommendationBook> {

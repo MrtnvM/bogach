@@ -367,6 +367,23 @@ class AnalyticsSender {
       _send('recommendation_course_open', {'course_id': courseId});
 
   /// ----------------------------------------------------------------
+  /// Recommendations
+  /// ----------------------------------------------------------------
+
+  static void newYearActionPurchaseSeen() =>
+      _send('new_year_action_purchase_seen');
+  static void newYearActionPurchaseDismissed() =>
+      _send('new_year_action_purchase_dismissed');
+  static void newYearActionPurchaseStarted() =>
+      _send('new_year_action_purchase_started');
+  static void newYearActionPurchaseCanceled() =>
+      _send('new_year_action_purchase_canceled');
+  static void newYearActionPurchaseFailed() =>
+      _send('new_year_action_purchase_failed');
+  static void newYearActionPurchasePurchased() =>
+      _send('new_year_action_purchase_purchased');
+
+  /// ----------------------------------------------------------------
   /// App events
   /// ----------------------------------------------------------------
 

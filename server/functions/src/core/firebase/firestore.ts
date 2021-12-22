@@ -7,7 +7,7 @@ export interface FirestoreWriteOptions {
 }
 
 export class Firestore {
-  async getItems(selector: CollectionReference) {
+  async getItems<T = FirebaseFirestore.DocumentData>(selector: CollectionReference): Promise<T[]> {
     try {
       const items = await selector.listDocuments().then((snapshots) => {
         const dataObjects = snapshots
@@ -18,7 +18,7 @@ export class Firestore {
         return Promise.all(dataObjects);
       });
 
-      return items;
+      return items as T[];
     } catch {
       return [];
     }

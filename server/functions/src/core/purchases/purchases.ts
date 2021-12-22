@@ -15,6 +15,8 @@ export namespace Purchases {
 
   export const questsAccessProductId = 'bogach.quests.access';
 
+  export const newYear2022ActionProductId = 'bogach.new_year_2022';
+
   export const depricatedMultiplayer1ProductId = 'bogach.multiplayer.1';
   export const depricatedMultiplayer5ProductId = 'bogach.multiplayer.5';
   export const depricatedMultiplayer10ProductId = 'bogach.multiplayer.10';

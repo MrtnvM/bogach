@@ -80,4 +80,12 @@ class ColorRes {
 
   static const litresGreen = Color(0xFF0E920E);
   static const litresOrange = Color(0xFFFF4C00);
+
+  static const infoBlockTitle = Color(0xFF999999);
+  static const infoBlockValue = Color(0xFF000000);
+  static const infoBlockDescription = Color(0xFF8B8B8B);
+  static const divider = Color(0xFFDDDDDD);
+
+  static const increase = Color(0xFF76C42D);
+  static const decrease = Color(0xFFFC4762);
 }

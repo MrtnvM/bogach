@@ -17,16 +17,13 @@
       "port": 9000
     },
     "hosting": {
-      "port": 5000
+      "port": 5002
     },
     "ui": {
       "enabled": true
     },
     "auth": {
       "port": 9099
-    },
-    "pubsub": {
-      "port": 8085
     }
   },
   "hosting": {

@@ -1,10 +1,17 @@
 import 'package:intl/intl.dart';
 
+final _defaultCurrencyFormat = NumberFormat.currency(
+  decimalDigits: 0,
+  symbol: '₽',
+);
+
 extension PriceFormatting on num {
   String toPrice() {
-    final formatCurrency = NumberFormat.currency(decimalDigits: 0, symbol: '₽');
+    return _defaultCurrencyFormat.format(this);
+  }
 
-    return formatCurrency.format(this);
+  String toPriceWithoutSymbol() {
+    return _defaultCurrencyFormat.format(this).replaceAll('₽', '').trim();
   }
 
   String toPriceWithSign() {

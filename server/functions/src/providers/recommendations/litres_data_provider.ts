@@ -21,7 +21,16 @@ export class LitresDataProvider {
       $('.rating-source-litres .rating-text-wrapper .votes-count').text().replace(/\s/g, ''),
       10
     );
-    const price = parseInt($('.biblio_book_buy span.simple-price').text().trim(), 10);
+
+    let price = 0;
+
+    const newPriceString = $('.biblio_book_buy span.new-price')?.text();
+    if (newPriceString) {
+      price = this.parsePrice(newPriceString);
+    } else {
+      const priceString = $('.biblio_book_buy span.simple-price').text();
+      price = this.parsePrice(priceString);
+    }
 
     const pagesCountText = $('.biblio_book_info li.volume').text();
     const pagesCount = parseInt(pagesCountText.match(/[^\d]*(\d{1,})\s*стр/)![1], 10);
@@ -86,5 +95,19 @@ export class LitresDataProvider {
 
     const html = await response.text();
     return { html, bookLink };
+  }
+
+  private parsePrice(priceString?: string) {
+    if (!priceString) return 0;
+
+    const preparedValue = priceString.trim().replace(/\s/g, '').replace('₽', '');
+    const priceValue = parseFloat(preparedValue);
+    const price = Math.round(priceValue);
+
+    if (!price) {
+      throw new Error('Can not parse book price');
+    }
+
+    return price;
   }
 }

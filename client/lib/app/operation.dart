@@ -36,4 +36,5 @@ enum Operation {
   restorePurchases,
   buyQuestsAcceess,
   buyMultiplayerGames,
+  buyWithNewYearAction,
 }

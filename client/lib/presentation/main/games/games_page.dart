@@ -4,6 +4,7 @@ import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/new_game/actions/get_game_templates_action.dart';
 import 'package:cash_flow/features/new_game/actions/get_quests_action.dart';
+import 'package:cash_flow/presentation/main/games/widgets/new-year-action/new_year_action_widget.dart';
 import 'package:cash_flow/presentation/main/games/widgets/profile_bar.dart';
 import 'package:cash_flow/presentation/multiplayer/multiplayer_game_list.dart';
 import 'package:cash_flow/presentation/multiplayer/widgets/multiplayer_game_count_badge.dart';
@@ -13,6 +14,7 @@ import 'package:cash_flow/presentation/quests/quest_list.dart';
 import 'package:cash_flow/presentation/quests/quests_badge.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
+import 'package:cash_flow/utils/ui/widgets.dart';
 import 'package:cash_flow/widgets/progress/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -61,61 +63,86 @@ class _GamePageContent extends HookWidget {
     final selectedProfiles = useState(<String>{});
     final size = useAdaptiveSize();
 
-    return ListView(
-      shrinkWrap: true,
-      padding: const EdgeInsets.all(0),
-      children: <Widget>[
-        SizedBox(height: size(24)),
-        const SectionTitle(text: Strings.singleGame),
-        SizedBox(
-          height: size(150),
-          child: TemplateGameList(
-            selectedItemId: selectedSinglePlayerGameTemplateId.value,
-            onSelectionChanged: (templateId) {
-              selectedQuestId.value = null;
-              selectedSinglePlayerGameTemplateId.value = templateId;
-            },
+    final newYearWidgetKey = useState(GlobalKey());
+    final newYearWidgetHeight = useState(0.0);
+
+    useEffect(() {
+      Future.delayed(const Duration(milliseconds: 50)).then((_) {
+        final height = getWidgetSize(newYearWidgetKey.value).height;
+        newYearWidgetHeight.value = height;
+      });
+    }, []);
+
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.only(bottom: newYearWidgetHeight.value),
+            children: <Widget>[
+              SizedBox(height: size(24)),
+              const SectionTitle(text: Strings.singleGame),
+              SizedBox(
+                height: size(150),
+                child: TemplateGameList(
+                  selectedItemId: selectedSinglePlayerGameTemplateId.value,
+                  onSelectionChanged: (templateId) {
+                    selectedQuestId.value = null;
+                    selectedSinglePlayerGameTemplateId.value = templateId;
+                  },
+                ),
+              ),
+              const Divider(),
+              SizedBox(height: size(12)),
+              SectionTitle(
+                text: Strings.gameLevels,
+                actionWidget: QuestsBadge(),
+              ),
+              SizedBox(
+                height: size(150),
+                child: QuestList(
+                  selectedItemId: selectedQuestId.value,
+                  onSelectionChanged: (questId) {
+                    selectedSinglePlayerGameTemplateId.value = null;
+                    selectedQuestId.value = questId;
+                  },
+                ),
+              ),
+              const Divider(),
+              SizedBox(height: size(12)),
+              SectionTitle(
+                text: Strings.multiplayer,
+                actionWidget: MultiplayerGameCountBadge(),
+              ),
+              SizedBox(height: size(12)),
+              SizedBox(
+                height: size(100),
+                child: MultiplayerProfilesList(selectedProfiles),
+              ),
+              SizedBox(height: size(0)),
+              SizedBox(
+                height: size(150),
+                child: MultiplayerGameList(
+                  selectedProfiles: selectedProfiles.value,
+                  onItemSelected: () {
+                    selectedSinglePlayerGameTemplateId.value = null;
+                    selectedQuestId.value = null;
+                  },
+                ),
+              ),
+              const Divider(),
+            ],
           ),
         ),
-        const Divider(),
-        SizedBox(height: size(12)),
-        SectionTitle(
-          text: Strings.gameLevels,
-          actionWidget: QuestsBadge(),
-        ),
-        SizedBox(
-          height: size(150),
-          child: QuestList(
-            selectedItemId: selectedQuestId.value,
-            onSelectionChanged: (questId) {
-              selectedSinglePlayerGameTemplateId.value = null;
-              selectedQuestId.value = questId;
-            },
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: NewYearActionWidget(
+            key: newYearWidgetKey.value,
+            onDissmised: () => newYearWidgetHeight.value = 0,
           ),
         ),
-        const Divider(),
-        SizedBox(height: size(12)),
-        SectionTitle(
-          text: Strings.multiplayer,
-          actionWidget: MultiplayerGameCountBadge(),
-        ),
-        SizedBox(height: size(12)),
-        SizedBox(
-          height: size(100),
-          child: MultiplayerProfilesList(selectedProfiles),
-        ),
-        SizedBox(height: size(0)),
-        SizedBox(
-          height: size(150),
-          child: MultiplayerGameList(
-            selectedProfiles: selectedProfiles.value,
-            onItemSelected: () {
-              selectedSinglePlayerGameTemplateId.value = null;
-              selectedQuestId.value = null;
-            },
-          ),
-        ),
-        const Divider(),
       ],
     );
   }

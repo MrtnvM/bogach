@@ -3,6 +3,7 @@ import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
 import 'package:cash_flow/resources/colors.dart';
 import 'package:cash_flow/resources/strings.dart';
 import 'package:cash_flow/resources/styles.dart';
+import 'package:cash_flow/widgets/inputs/drop_focus.dart';
 import 'package:cash_flow/widgets/tutorial/gameboard_tutorial_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -88,11 +89,14 @@ class PlayerActionBar extends StatelessWidget {
     Color color = ColorRes.white,
     Color rippleColor = ColorRes.white,
     required String text,
-    Function()? onPressed,
+    VoidCallback? onPressed,
     bool withCounter = false,
   }) {
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: () {
+        DropFocus.drop();
+        onPressed?.call();
+      },
       style: ElevatedButton.styleFrom(
         primary: color,
         onPrimary: rippleColor,

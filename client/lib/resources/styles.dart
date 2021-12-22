@@ -264,4 +264,27 @@ class Styles {
     fontSize: 11,
     color: ColorRes.greyCog,
   );
+
+  static const infoBlockTitle = TextStyle(
+    fontFamily: _defaultFontFamily,
+    fontSize: 10,
+    fontStyle: FontStyle.normal,
+    color: ColorRes.infoBlockTitle,
+  );
+
+  static const infoBlockValue = TextStyle(
+    fontFamily: _defaultFontFamily,
+    fontSize: 16,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.bold,
+    color: ColorRes.infoBlockValue,
+  );
+
+  static const infoBlockDescription = TextStyle(
+    fontFamily: _defaultFontFamily,
+    fontSize: 12,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w600,
+    color: ColorRes.infoBlockDescription,
+  );
 }

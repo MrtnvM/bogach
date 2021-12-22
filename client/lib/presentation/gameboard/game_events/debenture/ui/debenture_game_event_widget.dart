@@ -1,5 +1,6 @@
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/state_hooks.dart';
+import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/game/game_hooks.dart';
 import 'package:cash_flow/models/domain/game/game_event/game_event.dart';
 import 'package:cash_flow/models/domain/player_action/buy_sell_action.dart';
@@ -7,6 +8,7 @@ import 'package:cash_flow/presentation/gameboard/game_events/debenture/models/de
 import 'package:cash_flow/presentation/gameboard/game_events/debenture/ui/debenture_game_event_hooks.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/data/selector_state.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/dialog/game_event_info_dialog_content.dart';
+import 'package:cash_flow/presentation/gameboard/widgets/price/price_info_widget.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/info_table.dart';
 import 'package:cash_flow/presentation/gameboard/widgets/table/title_row.dart';
 import 'package:cash_flow/resources/images.dart';
@@ -27,6 +29,7 @@ class DebentureGameEventWidget extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = useAdaptiveSize();
     final buySellAction = useState(const BuySellAction.buy());
     final selectedCount = useState(1);
     final infoTableData = useDebentureInfoTableData(event);
@@ -34,9 +37,12 @@ class DebentureGameEventWidget extends HookWidget {
     final userId = useUserId();
     final cash = useCurrentGame((g) => g!.participants[userId!]!.account.cash);
 
-    final alreadyHave = useCurrentDebenture(event)?.count ?? 0;
+    final currentDebenture = useCurrentDebenture(event);
+    final previousPrice = currentDebenture?.averagePrice ?? 0;
+    final alreadyHave = currentDebenture?.count ?? 0;
     final passiveIncomePerMonth =
         eventData.nominal * eventData.profitabilityPercent / 100 / 12;
+    final totalPassiveIncomePerMonth = alreadyHave * passiveIncomePerMonth;
 
     final debentureDialogInfoModel = useDebentureInfoDialogModel();
 
@@ -87,6 +93,13 @@ class DebentureGameEventWidget extends HookWidget {
               },
             );
           },
+        ),
+        SizedBox(height: size(12)),
+        PriceInfoWidget(
+          countInPortfolio: alreadyHave,
+          currentPrice: eventData.currentPrice,
+          previousPrice: previousPrice,
+          monthlyIncome: totalPassiveIncomePerMonth,
         ),
         const SizedBox(height: 24),
         GameEventSelectorWidget(

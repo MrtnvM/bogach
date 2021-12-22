@@ -24,6 +24,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'main_page_tab_provider.dart';
 
+var _isOnlineStatusEnabled = true;
+
 class MainPage extends HookWidget {
   const MainPage();
 
@@ -33,13 +35,15 @@ class MainPage extends HookWidget {
     final dispatch = useDispatcher();
 
     final setOnline = () {
-      dispatch(SetUserOnlineAction(
-        user: OnlineProfile(
-          userId: user.id,
-          avatarUrl: user.avatarUrl ?? Images.defaultAvatarUrl,
-          fullName: user.fullName,
-        ),
-      ));
+      if (_isOnlineStatusEnabled) {
+        dispatch(SetUserOnlineAction(
+          user: OnlineProfile(
+            userId: user.id,
+            avatarUrl: user.avatarUrl ?? Images.defaultAvatarUrl,
+            fullName: user.fullName,
+          ),
+        ));
+      }
     };
 
     useUserIdSender();
@@ -49,7 +53,8 @@ class MainPage extends HookWidget {
         final requests = [
           Operation.createGame,
           Operation.createRoom,
-          Operation.createQuestGame
+          Operation.createQuestGame,
+          Operation.buyWithNewYearAction,
         ];
 
         return requests

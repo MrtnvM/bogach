@@ -21,7 +21,7 @@ export class FirestoreCourseRecommendationsDAO implements ICourseRecommendations
 
   async getCourses(): Promise<Course[]> {
     const selector = this.selector.recommendationCourses();
-    const courses = (await this.firestore.getItems(selector)) as Course[];
+    const courses = await this.firestore.getItems<Course>(selector);
 
     for (const course of courses) {
       course.startDate = dateFromTimestamp(course.startDate);
