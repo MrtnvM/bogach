@@ -53,7 +53,7 @@ describe('Sandbox', () => {
     console.log('RESULT: ', result);
   });
 
-  test.only('Update course data', async () => {
+  test.skip('Update course data', async () => {
     const marketAnalystCourse: Partial<Course> = {
       id: '17160316',
       profession: 'Профессия Маркетолог-аналитик',
