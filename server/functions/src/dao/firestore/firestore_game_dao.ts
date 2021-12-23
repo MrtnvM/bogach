@@ -21,7 +21,7 @@ export class FirestoreGameDAO implements IGameDAO {
     return game as Game;
   }
 
-  async updateGame(game: Game): Promise<Game> {
+  async updateGame(game: Game, oldGame: Game): Promise<Game> {
     GameEntity.validate(game);
 
     const selector = this.selector.game(game.id);
@@ -31,11 +31,11 @@ export class FirestoreGameDAO implements IGameDAO {
     return updatedGame as Game;
   }
 
-  updateGameWithoutParticipants(game: Game): Promise<void> {
+  updateGameWithoutParticipants(game: Game, oldGame: Game): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
-  updateParticipant(game: Game, userId: string): Promise<void> {
+  updateParticipant(game: Game, oldGame: Game, userId: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
 

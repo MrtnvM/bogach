@@ -95,7 +95,7 @@ describe('Game Service - Multiplayer game', () => {
     );
 
     await gameService.completeMonth(gameId, 1);
-    verify(mockGameProvider.updateGame(anything())).never();
+    verify(mockGameProvider.updateGame(anything(), anything())).never();
   });
 
   test('Can not complete already completed month', async () => {
@@ -108,7 +108,7 @@ describe('Game Service - Multiplayer game', () => {
     );
 
     await gameService.completeMonth(gameId, 2);
-    verify(mockGameProvider.updateGame(anything())).never();
+    verify(mockGameProvider.updateGame(anything(), anything())).never();
   });
 
   test('Can not complete future month', async () => {
@@ -117,7 +117,7 @@ describe('Game Service - Multiplayer game', () => {
     when(mockGameProvider.getGame(gameId)).thenResolve(gameWhenOnlyFirstPlayerStartedNewMonth);
 
     await gameService.completeMonth(gameId, 3);
-    verify(mockGameProvider.updateGame(anything())).never();
+    verify(mockGameProvider.updateGame(anything(), anything())).never();
   });
 
   test('Successfully complete month', async () => {
@@ -129,7 +129,7 @@ describe('Game Service - Multiplayer game', () => {
     // Also checking that one more call does not breaking the logic
     await gameService.completeMonth(gameId, 2);
 
-    verify(mockGameProvider.updateGame(anything())).twice();
+    verify(mockGameProvider.updateGame(anything(), anything())).twice();
 
     const [newGame] = capture(mockGameProvider.updateGame).last();
     const [timerParams] = capture(mockTimerProvider.scheduleTimer).last();

@@ -49,7 +49,7 @@ export const randomValueFromRange = (range: ValueRange) => {
   }
 
   const interval = range.max - range.min;
-  const stepsCount = parseInt((interval / range.stepValue).toString());
+  const stepsCount = parseInt((interval / range.stepValue).toString(), 10);
   const randomNumber = range.min + range.stepValue * random.int(0, stepsCount);
 
   return randomNumber;

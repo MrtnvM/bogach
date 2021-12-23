@@ -166,7 +166,7 @@ describe('Game Service - Singleplayer game', () => {
     const gameContext: GameContext = { gameId, userId };
     await gameService.handlePlayerAction(lastEventId, lastEventPlayerAction, gameContext);
 
-    verify(mockGameProvider.updateGame(anything())).never();
+    verify(mockGameProvider.updateGame(anything(), anything())).never();
   });
 
   test('Successfully removed completed singleplayer game', async () => {

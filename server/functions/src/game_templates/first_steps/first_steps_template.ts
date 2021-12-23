@@ -28,7 +28,7 @@ export const firstStepsTemplate: GameTemplate = {
   accountState: {
     cash: 2_000,
     credit: 0,
-    cashFlow: 5_000,
+    cashFlow: 30_000,
   },
   target: {
     type: 'cash',

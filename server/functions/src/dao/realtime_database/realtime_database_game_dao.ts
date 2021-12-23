@@ -54,32 +54,36 @@ export class RealtimeDatabaseGameDAO implements IGameDAO {
     return createdGame;
   }
 
-  async updateGame(game: Game): Promise<Game> {
+  async updateGame(game: Game, oldGame: Game): Promise<Game> {
     GameEntity.validate(game);
 
     const selector = this.refs.game(game.id);
-    const updatedGame = await this.db.updateItem(selector, game);
+    const updatedGame = await this.db.updateItem(selector, game, oldGame);
 
     GameEntity.validate(updatedGame);
     return updatedGame as Game;
   }
 
-  async updateGameWithoutParticipants(game: Game): Promise<void> {
+  async updateGameWithoutParticipants(game: Game, oldGame: Game): Promise<void> {
     GameEntity.validate(game);
 
     const newGame = { ...game, participants: undefined };
     delete newGame.participants;
 
+    const oldGameData = { ...oldGame, participants: undefined };
+    delete oldGameData.participants;
+
     const selector = this.refs.game(newGame.id);
-    await this.db.updateItem(selector, newGame);
+    await this.db.updateItem(selector, newGame, oldGameData);
   }
 
-  async updateParticipant(game: Game, userId: UserEntity.Id): Promise<void> {
+  async updateParticipant(game: Game, oldGame: Game, userId: UserEntity.Id): Promise<void> {
     GameEntity.validate(game);
 
-    const participant = game.participants[userId];
+    const updatedParticipant = game.participants[userId];
+    const oldParticipant = oldGame.participants[userId];
     const participantRef = this.refs.gameParticipant(userId, game.id);
-    await this.db.updateItem(participantRef, participant);
+    await this.db.updateItem(participantRef, updatedParticipant, oldParticipant);
   }
 
   async deleteGame(gameId: string): Promise<void> {

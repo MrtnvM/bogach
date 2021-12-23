@@ -111,7 +111,8 @@ export class GameService {
     return this.errorRecorder.executeWithErrorRecording(context, async () => {
       const { gameId, userId } = gameContext;
 
-      let game = await this.gameProvider.getGame(gameId);
+      const initialGame = await this.gameProvider.getGame(gameId);
+      let game = initialGame;
       if (!game) {
         throw new Error(`No game with ID: ${gameId} \nGAME: ${JSON.stringify(game, null, 2)}`);
       }
@@ -176,9 +177,9 @@ export class GameService {
 
       if (game.state.monthNumber < updatedGame.state.monthNumber) {
         this.scheduleCompleteMonthTimer(updatedGame);
-        await this.gameProvider.updateGame(updatedGame);
+        await this.gameProvider.updateGame(updatedGame, initialGame);
       } else {
-        await this.gameProvider.updateGameForUser(updatedGame, userId);
+        await this.gameProvider.updateGameForUser(updatedGame, initialGame, userId);
       }
 
       await this.removeCompletedGameFromLastGamesIfNeeded(updatedGame);
@@ -218,10 +219,10 @@ export class GameService {
           ]);
           this.scheduleCompleteMonthTimer(updatedGame);
 
-          await this.gameProvider.updateGameWithoutParticipants(updatedGame);
+          await this.gameProvider.updateGameWithoutParticipants(updatedGame, game);
         }
 
-        await this.gameProvider.updateGameForUser(updatedGame, userId);
+        await this.gameProvider.updateGameForUser(updatedGame, game, userId);
         return updatedGame;
       }
 
@@ -281,7 +282,7 @@ export class GameService {
         this.scheduleCompleteMonthTimer(updatedGame);
       }
 
-      await this.gameProvider.updateGame(updatedGame);
+      await this.gameProvider.updateGame(updatedGame, game);
     });
   }
 
