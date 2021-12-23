@@ -111,7 +111,7 @@ export class RealEstateBuyEventHandler extends PlayerActionHandler {
     });
 
     if (theSameRealEstateIndex >= 0) {
-      throw new Error('Cant buy two the same real estates');
+      throw new Error('Can not buy two the same real estates');
     }
   }
 
@@ -122,7 +122,7 @@ export class RealEstateBuyEventHandler extends PlayerActionHandler {
     });
 
     if (theSameLiabilityIndex >= 0) {
-      throw new Error('Cant buy real estates with two the same liabilities');
+      throw new Error('Can not buy real estates with two the same liabilities');
     }
   }
 

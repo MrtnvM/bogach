@@ -101,7 +101,7 @@ export namespace AssetEntity {
         return 0;
 
       default:
-        throw new Error("ERROR: Can't determine income for asset with type: " + asset.type);
+        throw new Error('ERROR: Can not determine income for asset with type: ' + asset.type);
     }
   };
 
@@ -133,7 +133,7 @@ export namespace AssetEntity {
         return undefined;
 
       default:
-        throw new Error("ERROR: Can't determine income for asset with type: " + asset.type);
+        throw new Error('ERROR: Can not determine income for asset with type: ' + asset.type);
     }
   };
 
@@ -174,7 +174,7 @@ export namespace AssetEntity {
         return otherAsset.value;
 
       default:
-        throw new Error("ERROR: Can't determine value for asset with type: " + asset.type);
+        throw new Error('ERROR: Can not determine value for asset with type: ' + asset.type);
     }
   };
 }

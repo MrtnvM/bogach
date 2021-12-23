@@ -66,7 +66,7 @@ describe('Realty buy event event handler', () => {
     expect(newGame).toStrictEqual(expectedGame);
   });
 
-  test('Cant buy two the same real estates', async () => {
+  test('Can not buy two the same real estates', async () => {
     const handler = new RealEstateBuyEventHandler();
 
     const event = utils.createBuyRealEstateEvent({
@@ -84,11 +84,11 @@ describe('Realty buy event event handler', () => {
     const action = utils.createBuyRealEstateAction(eventId);
 
     await expect(handler.handle(game, event, action, userId)).rejects.toThrow(
-      new Error('Cant buy two the same real estates')
+      new Error('Can not buy two the same real estates')
     );
   });
 
-  test('Cant buy two the same realties if liability present', async () => {
+  test('Can not buy two the same realties if liability present', async () => {
     const handler = new RealEstateBuyEventHandler();
 
     const newRealEstateAssetData: RealEstateBuyEvent.Data = {
@@ -107,7 +107,7 @@ describe('Realty buy event event handler', () => {
     const action = utils.createBuyRealEstateAction(eventId);
 
     await expect(handler.handle(game, event, action, userId)).rejects.toThrow(
-      new Error('Cant buy real estates with two the same liabilities')
+      new Error('Can not buy real estates with two the same liabilities')
     );
   });
 

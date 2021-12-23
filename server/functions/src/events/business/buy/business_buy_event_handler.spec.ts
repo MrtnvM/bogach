@@ -76,7 +76,7 @@ describe('Business buy event event handler', () => {
     expect(newGame).toStrictEqual(expectedGame);
   });
 
-  test('Cant buy two the same businesses', async () => {
+  test('Can not buy two the same businesses', async () => {
     const currentPrice = 120_000;
     const event = utils.dryCleaningBusinessOfferEvent(currentPrice);
 
@@ -90,11 +90,11 @@ describe('Business buy event event handler', () => {
       await handler.handle(game, event, action, userId);
       throw new Error('Should fail on previous line');
     } catch (error) {
-      expect(error).toStrictEqual(new Error('Cant buy two the same businesses'));
+      expect(error).toStrictEqual(new Error('Can not buy two the same businesses'));
     }
   });
 
-  test('Cant buy two the same businesses if liability present', async () => {
+  test('Can not buy two the same businesses if liability present', async () => {
     const newBusinessData: BusinessBuyEvent.Data = {
       businessId: 'existingLiabilityId',
       currentPrice: 100_000,
@@ -123,7 +123,7 @@ describe('Business buy event event handler', () => {
       await handler.handle(game, event, action, userId);
       throw new Error('Should fail on previous line');
     } catch (error) {
-      expect(error).toStrictEqual(new Error('Cant buy business with two the same liabilities'));
+      expect(error).toStrictEqual(new Error('Can not buy business with two the same liabilities'));
     }
   });
 

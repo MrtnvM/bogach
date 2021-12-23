@@ -136,7 +136,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     });
 
     if (theSameBusinessIndex >= 0) {
-      throw new Error("Can't buy two the same businesses");
+      throw new Error('Can not buy two the same businesses');
     }
   }
 
@@ -147,7 +147,7 @@ export class BusinessBuyEventHandler extends PlayerActionHandler {
     });
 
     if (theSameLiabilityIndex >= 0) {
-      throw new Error("Can't buy business with two the same liabilities");
+      throw new Error('Can not buy business with two the same liabilities');
     }
   }
 
