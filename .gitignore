@@ -27,3 +27,7 @@ client/.fvm/
 data/books/
 
 data/courses/
+
+server/functions/data/courses/landings/
+
+server/functions/data/courses/
