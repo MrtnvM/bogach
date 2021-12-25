@@ -117,6 +117,16 @@
       "outFiles": [
         "${workspaceFolder}/server/functions/lib/**/*.js"
       ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Server - Debug",
+      "program": "${workspaceFolder}/server/functions/lib/server.js",
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/server/functions/lib/**/*.js"
+      ]
     }
   ]
 }

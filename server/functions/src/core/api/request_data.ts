@@ -1,3 +1,4 @@
+import * as express from 'express';
 import * as functions from 'firebase-functions';
 import * as apiUtils from '../../utils/api';
 import { GameContextEntity, GameContext } from '../../models/domain/game/game_context';
@@ -5,7 +6,10 @@ import { GameEntity } from '../../models/domain/game/game';
 import { UserEntity } from '../../models/domain/user/user';
 
 export namespace APIRequest {
-  export const from = (request: functions.https.Request, response: functions.Response) => {
+  export const from = (
+    request: functions.https.Request | express.Request,
+    response: functions.Response | express.Response
+  ) => {
     const jsonField = apiUtils.jsonBodyField(request);
     const optionalJsonField = apiUtils.optionalJsonBodyField(request);
     const queryParameter = apiUtils.queryParams(request);

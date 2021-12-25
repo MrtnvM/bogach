@@ -5,12 +5,12 @@
     "build": "tsc",
     "serve": "yarn build && firebase serve --only functions",
     "shell": "yarn build && firebase functions:shell",
-    "start": "yarn shell",
     "deploy:staging": "firebase deploy -P staging --only functions",
     "deploy:uat": "firebase deploy -P uat --only functions",
     "deploy:production": "firebase deploy -P production --only functions",
     "start-emulator": "yarn build && firebase emulators:start",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "start": "yarn build && node lib/server.js"
   },
   "engines": {
     "node": "12"
@@ -21,12 +21,14 @@
     "cheerio": "^1.0.0-rc.10",
     "csv-parser": "^3.0.0",
     "deep-object-diff": "^1.1.0",
+    "express": "^4.17.2",
     "firebase-admin": "^9.4.2",
     "firebase-functions": "^3.3.0",
     "immer": "^6.0.3",
     "jimp": "^0.16.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
+    "node-cron": "^3.0.0",
     "node-fetch": "^2.6.1",
     "random": "^2.2.0",
     "rollbar": "^2.20.0",

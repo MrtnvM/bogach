@@ -100,7 +100,7 @@ export const getCredentials = () => {
 
   switch (env) {
     case 'local':
-      return undefined;
+      return require('../environments/staging/firebase_service_account.json');
 
     case 'staging':
       return require('../environments/staging/firebase_service_account.json');

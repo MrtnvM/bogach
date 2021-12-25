@@ -1,8 +1,11 @@
+import * as express from 'express';
 import * as functions from 'firebase-functions';
 import { MissingQueryParamError } from '../core/exceptions/api/missing_query_param_error';
 import { MissingJsonBodyFieldError } from '../core/exceptions/api/missing_json_body_field_error';
 
-export function queryParams(request: functions.https.Request): (s: string) => any {
+export function queryParams(
+  request: functions.https.Request | express.Request
+): (s: string) => any {
   return (name: string) => {
     const value = request.query[name];
 
@@ -14,7 +17,7 @@ export function queryParams(request: functions.https.Request): (s: string) => an
   };
 }
 
-export function jsonBodyField(request: functions.https.Request) {
+export function jsonBodyField(request: functions.https.Request | express.Request) {
   return (path: string) => {
     const value = request.body[path];
 
@@ -26,7 +29,7 @@ export function jsonBodyField(request: functions.https.Request) {
   };
 }
 
-export function optionalJsonBodyField(request: functions.https.Request) {
+export function optionalJsonBodyField(request: functions.https.Request | express.Request) {
   return (path: string) => {
     const value = request.body[path];
 
