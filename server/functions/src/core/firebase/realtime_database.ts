@@ -2,6 +2,12 @@ import * as admin from 'firebase-admin';
 import { nowInUtc } from '../../utils/datetime';
 import * as _ from 'lodash';
 
+const isOlderThan2Minutes = (date: Date) => {
+  const now = new Date();
+  const diffInSeconds = Math.abs(now.getTime() - date.getTime()) / 1000;
+  return diffInSeconds > 120;
+};
+
 export interface RealtimeDatabaseWriteOptions {
   createdAt?: boolean;
   updatedAt?: boolean;
@@ -19,12 +25,6 @@ export class RealtimeDatabase {
 
   constructor() {
     setInterval(() => {
-      const isOlderThan2Minutes = (date: Date) => {
-        const now = new Date();
-        const diffInSeconds = Math.abs(now.getTime() - date.getTime()) / 1000;
-        return diffInSeconds > 120;
-      };
-
       for (const valueListenerKey in this.valueListeners) {
         const valueListener = this.valueListeners[valueListenerKey];
 
@@ -43,7 +43,9 @@ export class RealtimeDatabase {
       if (!key) throw new Error('Missing key on quering value from Realtime Database');
 
       const valueListener = this.valueListeners[key];
-      if (valueListener) {
+      const isValueListenerExpired = valueListener && isOlderThan2Minutes(valueListener.updatedAt);
+
+      if (valueListener && !isValueListenerExpired) {
         if (valueListener.currentValue) {
           resolve(valueListener.currentValue);
         }
