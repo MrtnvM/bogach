@@ -31,6 +31,7 @@ export class RealtimeDatabase {
         if (isOlderThan2Minutes(valueListener.updatedAt)) {
           const { ref, listener } = valueListener;
           ref.off('value', listener);
+          delete this.valueListeners[valueListenerKey];
         }
       }
     }, 1000);
