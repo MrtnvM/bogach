@@ -2,26 +2,42 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Attach to API Process",
-      "type": "node",
-      "request": "attach",
-      "processId": "${command:PickProcess}",
-      "sourceMaps": true,
-      "outFiles": ["${workspaceFolder}/server/functions/libs/*.js"]
-    },
-    {
       "name": "Flutter - Development",
       "type": "dart",
       "request": "launch",
       "program": "client/lib/main_development.dart",
-      "args": ["--flavor", "development"]
+      "args": [
+        "--flavor",
+        "development"
+      ]
     },
     {
       "name": "Flutter - Staging",
       "type": "dart",
       "request": "launch",
       "program": "client/lib/main_staging.dart",
-      "args": ["--flavor", "staging"]
+      "args": [
+        "--flavor",
+        "staging"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Server - Debug",
+      "program": "${workspaceFolder}/server/functions/lib/server.js",
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/server/functions/lib/**/*.js"
+      ]
+    },
+    {
+      "name": "Attach to API Process",
+      "type": "node",
+      "request": "attach",
+      "processId": "${command:PickProcess}",
+      "sourceMaps": true,
+      "outFiles": ["${workspaceFolder}/server/functions/libs/*.js"]
     },
     {
       "name": "Flutter - iOS Purchases",
@@ -32,13 +48,6 @@
         "--flavor",
         "purchases-staging"
       ]
-    },
-    {
-      "name": "Flutter - UAT",
-      "type": "dart",
-      "request": "launch",
-      "program": "client/lib/main_uat.dart",
-      "args": ["--flavor", "uat"]
     },
     {
       "name": "Flutter - Production",
@@ -63,24 +72,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Jest Current File",
-      "program": "${workspaceFolder}/server/functions/node_modules/.bin/jest",
-      "args": [
-        "${fileBasenameNoExtension}",
-        "--config",
-        "./server/functions/jest.config.js"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
-      "windows": {
-        "program": "${workspaceFolder}/server/functions/node_modules/jest/bin/jest"
-      }
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Jest Current File - Node 12",
+      "name": "Jest - Current File",
       "program": "${workspaceFolder}/server/functions/node_modules/.bin/jest",
       "args": [
         "${fileBasenameNoExtension}",
@@ -113,16 +105,6 @@
       "name": "Script - Generate stocks images 2",
       "program": "${workspaceFolder}/server/functions/lib/scripts/generate_stock_images/index.js",
       "preLaunchTask": "tsc: build server",
-      "sourceMaps": true,
-      "outFiles": [
-        "${workspaceFolder}/server/functions/lib/**/*.js"
-      ]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Server - Debug",
-      "program": "${workspaceFolder}/server/functions/lib/server.js",
       "sourceMaps": true,
       "outFiles": [
         "${workspaceFolder}/server/functions/lib/**/*.js"
