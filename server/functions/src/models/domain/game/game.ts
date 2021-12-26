@@ -141,12 +141,13 @@ export namespace GameEntity {
 
     const participantsIds = Object.keys(gameEntity.participants);
     participantsIds.sort();
-    gameEntity.participantsIds.sort();
+    const gameParticipantsIds = [...gameEntity.participantsIds];
+    gameParticipantsIds.sort();
 
-    if (JSON.stringify(participantsIds) !== JSON.stringify(gameEntity.participantsIds)) {
+    if (JSON.stringify(participantsIds) !== JSON.stringify(gameParticipantsIds)) {
       throw Error(
         'Participants ids is not the same as in the participantIds\n' +
-          `[participantIds] = ${JSON.stringify(gameEntity.participantsIds)}\n` +
+          `[participantIds] = ${JSON.stringify(gameParticipantsIds)}\n` +
           `[participants] = ${JSON.stringify(participantsIds)}`
       );
     }
