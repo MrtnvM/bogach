@@ -6,6 +6,35 @@ import { GameEntity } from '../../models/domain/game/game';
 import { UserEntity } from '../../models/domain/user/user';
 
 export namespace APIRequest {
+  type Request = {
+    getContext(): GameContext;
+    parseEntity<T>(jsonFieldName: string, parser: (data: any) => T): T;
+    jsonField(field: string): any;
+    optionalJsonField(field: string): any;
+    queryParameter(param: string): any;
+  };
+
+  export const handle = (handler: (request: Request) => Promise<any>): express.RequestHandler => {
+    return async (request: express.Request, response: express.Response) => {
+      try {
+        const apiRequest: Request = APIRequest.from(request, response);
+        const result = await handler(apiRequest);
+        response.status(200).send(result);
+      } catch (error: any) {
+        if (error['type'] === 'domain') {
+          const json = JSON.stringify(error);
+          response.status(422).send(json);
+          return;
+        }
+
+        const errorMessage = error['message'] ? error.message : error;
+        console.error('ERROR: ' + JSON.stringify(error));
+        console.error('ERROR MESSAGE: ' + errorMessage);
+        response.status(422).send(errorMessage);
+      }
+    };
+  };
+
   export const from = (
     request: functions.https.Request | express.Request,
     response: functions.Response | express.Response

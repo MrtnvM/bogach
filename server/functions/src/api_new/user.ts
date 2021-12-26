@@ -6,28 +6,25 @@ import { UserService } from '../services/user/user_service';
 import { UserEntity } from '../models/domain/user/user';
 import { DAOs } from '../dao/daos';
 import { FirebaseMessaging } from '../core/firebase/firebase_messaging';
-import { sendResponse } from '../core/api/send_response';
 
 export const initialize = (daos: DAOs, app: express.Express) => {
   const userProvider = new UserProvider(daos.user);
   const firebaseMessaging = new FirebaseMessaging();
   const userService = new UserService(userProvider, firebaseMessaging);
 
-  app.get('/getUserProfile', async (request, response) => {
-    const apiRequest = APIRequest.from(request, response);
-    apiRequest.checkMethod('GET');
+  app.get(
+    '/getUserProfile',
+    APIRequest.handle(async (apiRequest) => {
+      const userId = apiRequest.queryParameter('userId');
+      const userProfile = await userProvider.getUserProfile(userId as UserEntity.Id);
 
-    const userId = apiRequest.queryParameter('userId');
-    const userProfile = userProvider.getUserProfile(userId as UserEntity.Id);
+      return userProfile;
+    })
+  );
 
-    await sendResponse(userProfile, response);
-  });
-
-  app.post('/addFriends', async (request, response) => {
-    const apiRequest = APIRequest.from(request, response);
-    apiRequest.checkMethod('POST');
-
-    const addFriendsExecution = async () => {
+  app.post(
+    '/addFriends',
+    APIRequest.handle(async (apiRequest) => {
       const userId = apiRequest.jsonField('userId');
       const usersAddToFriendsKey = 'usersAddToFriends';
       const usersAddToFriends = apiRequest.jsonField(usersAddToFriendsKey);
@@ -37,19 +34,16 @@ export const initialize = (daos: DAOs, app: express.Express) => {
       }
 
       await userService.addFriends({ userId, usersAddToFriends });
-    };
+    })
+  );
 
-    await sendResponse(addFriendsExecution(), response);
-  });
+  app.delete(
+    '/removeFromFriends',
+    APIRequest.handle(async (apiRequest) => {
+      const userId = apiRequest.jsonField('userId');
+      const removedFriendId = apiRequest.jsonField('removedFriendId');
 
-  app.delete('/removeFromFriends', async (request, response) => {
-    const apiRequest = APIRequest.from(request, response);
-    apiRequest.checkMethod('DELETE');
-
-    const userId = apiRequest.jsonField('userId');
-    const removedFriendId = apiRequest.jsonField('removedFriendId');
-
-    const result = userService.removeFromFriends({ userId, removedFriendId });
-    await sendResponse(result, response);
-  });
+      await userService.removeFromFriends({ userId, removedFriendId });
+    })
+  );
 };

@@ -10,7 +10,6 @@ import { GameLevelsProvider } from '../providers/game_levels_provider';
 import { TimerProvider } from '../providers/timer_provider';
 import { GameTemplatesProvider } from '../providers/game_templates_provider';
 import { DAOs } from '../dao/daos';
-import { sendResponse } from '../core/api/send_response';
 
 export const initialize = (daos: DAOs, app: express.Express) => {
   const gameTemplatesProvider = new GameTemplatesProvider();
@@ -29,37 +28,33 @@ export const initialize = (daos: DAOs, app: express.Express) => {
   const roomService = new RoomService(gameProvider, userProvider, timerProvider, firebaseMessaging);
   const gameService = new GameService(gameProvider, gameLevelProvider, userProvider, timerProvider);
 
-  app.post('/createRoom', async (request, response) => {
-    const apiRequest = APIRequest.from(request, response);
-    apiRequest.checkMethod('POST');
+  app.post(
+    '/createRoom',
+    APIRequest.handle(async (apiRequest) => {
+      const gameTemplateId = apiRequest.jsonField('gameTemplateId');
+      const currentUserId = apiRequest.jsonField('currentUserId');
+      const invitedUsers = apiRequest.optionalJsonField('invitedUsers') || [];
 
-    const gameTemplateId = apiRequest.jsonField('gameTemplateId');
-    const currentUserId = apiRequest.jsonField('currentUserId');
-    const invitedUsers = apiRequest.optionalJsonField('invitedUsers') || [];
+      const room = await roomService.createRoom(gameTemplateId, currentUserId, invitedUsers);
+      return room;
+    })
+  );
 
-    const createRoomRequest = roomService.createRoom(gameTemplateId, currentUserId, invitedUsers);
+  app.post(
+    '/setRoomParticipantReady',
+    APIRequest.handle(async (apiRequest) => {
+      const roomId = apiRequest.jsonField('roomId');
+      const participantId = apiRequest.jsonField('participantId');
 
-    await sendResponse(createRoomRequest, response);
-  });
+      await roomService.onParticipantReady(roomId, participantId);
+    })
+  );
 
-  app.post('/setRoomParticipantReady', async (request, response) => {
-    const apiRequest = APIRequest.from(request, response);
-    apiRequest.checkMethod('POST');
+  app.post(
+    '/createRoomGame',
+    APIRequest.handle(async (apiRequest) => {
+      const roomId = apiRequest.jsonField('roomId');
 
-    const roomId = apiRequest.jsonField('roomId');
-    const participantId = apiRequest.jsonField('participantId');
-
-    const setReadyStatusRequest = roomService.onParticipantReady(roomId, participantId);
-    await sendResponse(setReadyStatusRequest, response);
-  });
-
-  app.post('/createRoomGame', async (request, response) => {
-    const apiRequest = APIRequest.from(request, response);
-    apiRequest.checkMethod('POST');
-
-    const roomId = apiRequest.jsonField('roomId');
-
-    const createRoomGameRequest = async () => {
       const { room, game } = await roomService.createRoomGame(roomId);
       await gameService.reduceMultiplayerGames(
         room.participants.map((participant) => participant.id),
@@ -67,19 +62,16 @@ export const initialize = (daos: DAOs, app: express.Express) => {
         (game.createdAt && new Date(game.createdAt).getTime()) || undefined
       );
       return room;
-    };
+    })
+  );
 
-    await sendResponse(createRoomGameRequest(), response);
-  });
+  app.post(
+    '/completeMonth',
+    APIRequest.handle(async (apiRequest) => {
+      const gameId = apiRequest.jsonField('game_id');
+      const monthNumber = apiRequest.jsonField('month_number');
 
-  app.post('/completeMonth', async (request, response) => {
-    const apiRequest = APIRequest.from(request, response);
-    apiRequest.checkMethod('POST');
-
-    const gameId = apiRequest.jsonField('game_id');
-    const monthNumber = apiRequest.jsonField('month_number');
-
-    const completeMonthRequest = gameService.completeMonth(gameId, monthNumber);
-    await sendResponse(completeMonthRequest, response);
-  });
+      await gameService.completeMonth(gameId, monthNumber);
+    })
+  );
 };

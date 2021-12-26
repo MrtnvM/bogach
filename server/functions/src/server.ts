@@ -53,6 +53,7 @@ const daos: DAOs = {
 };
 
 const app = express();
+app.use(express.json());
 const PORT = 3000;
 
 GameAPI.initialize(daos, app);
