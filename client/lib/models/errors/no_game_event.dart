@@ -1,0 +1,1 @@
+class NoGameEventError extends Error {}

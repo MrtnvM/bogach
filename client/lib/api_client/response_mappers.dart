@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cash_flow/models/errors/domain_game_error.dart';
+import 'package:cash_flow/models/errors/no_game_event.dart';
 import 'package:cash_flow/models/network/core/response_model.dart';
 import 'package:dash_kit_network/dash_kit_network.dart';
 
@@ -17,6 +18,10 @@ T Function(Response) standard<T>(T Function(Map<String, dynamic>?) mapper) {
       } else {
         return mapper({});
       }
+    }
+
+    if (data is String && data.contains('No game event with ID')) {
+      throw NoGameEventError();
     }
 
     final errorResponseData = json.decode(data);
