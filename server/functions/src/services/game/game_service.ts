@@ -322,7 +322,7 @@ export class GameService {
 
     const startDate = moment(new Date(updatedGame.state.moveStartDateInUTC));
     const endDate = moment(startDate).add(1, 'minute');
-    const now = moment();
+    const now = moment().utc();
 
     const milliseconds = endDate.diff(now, 'milliseconds');
 
