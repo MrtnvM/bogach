@@ -63,7 +63,7 @@ class CashApiEnvironment extends ApiEnvironment {
 
   static const production = CashApiEnvironment(
     name: 'production',
-    baseUrl: 'https://europe-west2-bogach-production.cloudfunctions.net/',
+    baseUrl: 'https://bogach-production-api-rrbvc52dhq-nw.a.run.app/',
     dynamicLink: DynamicLinks('bogach-game.ru'),
     validateRequestsByDefault: false,
     isRequestsAuthorisedByDefault: false,
