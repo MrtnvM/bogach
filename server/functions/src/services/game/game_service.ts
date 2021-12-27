@@ -40,6 +40,7 @@ import { PlayedGameInfo } from '../../models/domain/user/player_game_info';
 import { PurchaseProfileEntity } from '../../models/purchases/purchase_profile';
 import { nowInUtc } from '../../utils/datetime';
 import { CreditHandler } from '../../events/common/credit_handler';
+import * as moment from 'moment';
 
 export class GameService {
   constructor(
@@ -319,11 +320,17 @@ export class GameService {
       return;
     }
 
-    this.timerProvider.scheduleTimer({
-      startDateInUTC: updatedGame.state.moveStartDateInUTC,
-      gameId: updatedGame.id,
-      monthNumber: updatedGame.state.monthNumber,
-    });
+    const startDate = moment(new Date(updatedGame.state.moveStartDateInUTC));
+    const endDate = moment(startDate).add(1, 'minute');
+    const now = moment();
+
+    const milliseconds = endDate.diff(now, 'milliseconds');
+
+    if (milliseconds > 0) {
+      setTimeout(async () => {
+        await this.completeMonth(updatedGame.id, updatedGame.state.monthNumber);
+      }, milliseconds);
+    }
   }
 
   async reduceMultiplayerGames(
