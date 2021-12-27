@@ -17,10 +17,8 @@ export class UserService {
 
     /// Adding friend that tap on link to the inviter user
     usersAddToFriends.forEach(async (userAddToFriend) => {
-      const {
-        updatedUser: inviterUser,
-        isNewFriendAdded: isNewFriendAddedForInviter,
-      } = await this.addFriendsToUser(userAddToFriend, [userId]);
+      const { updatedUser: inviterUser, isNewFriendAdded: isNewFriendAddedForInviter } =
+        await this.addFriendsToUser(userAddToFriend, [userId]);
 
       const device = await this.userProvider.getUserDevice(inviterUser.userId);
 
@@ -66,7 +64,7 @@ export class UserService {
   }
 
   private updateFriendsList(user: User, usersToAdd: UserEntity.Id[]) {
-    const friends = user.friends || [];
+    const friends = [...(user.friends || [])];
     let isNewFriendAdded = false;
 
     usersToAdd
