@@ -49,7 +49,7 @@ dependencies:
   cloud_firestore: ^1.0.7
 
   # Analytics
-  amplitude_flutter: ^3.1.0
+  amplitude_flutter: ^3.8.0
 
   # Notifications
   notification_permissions: ^0.6.1
