@@ -59,7 +59,7 @@ describe('Sandbox', () => {
       profession: 'Профессия Маркетолог-аналитик',
       salaryText: 'Средняя зарплата от',
       salaryValue: 150000,
-      startDate: new Date(2021, 11, 20),
+      startDate: new Date(2022, 0, 10),
       discount: 40,
       source: 'SkillFactory',
       imageUrl:
@@ -71,7 +71,7 @@ describe('Sandbox', () => {
       profession: 'Профессия Разработчик игр на Unity',
       salaryText: 'Средняя зарплата от',
       salaryValue: 120000,
-      startDate: new Date(2021, 11, 14),
+      startDate: new Date(2022, 0, 18),
       discount: 40,
       source: 'SkillFactory',
       imageUrl:
@@ -83,7 +83,7 @@ describe('Sandbox', () => {
       profession: 'Профессия Java-разработчик',
       salaryText: 'Медианная зарплата',
       salaryValue: 140000,
-      startDate: new Date(2021, 11, 28),
+      startDate: new Date(2022, 0, 25),
       discount: 40,
       source: 'SkillFactory',
       imageUrl:
@@ -119,7 +119,7 @@ describe('Sandbox', () => {
       profession: 'Профессия Android-разработчик',
       salaryText: 'Медианная зарплата',
       salaryValue: 150000,
-      startDate: new Date(2021, 11, 28),
+      startDate: new Date(2022, 0, 25),
       discount: 40,
       source: 'SkillFactory',
       imageUrl:
@@ -131,7 +131,7 @@ describe('Sandbox', () => {
       profession: 'Профессия Data Scientist',
       salaryText: 'Средняя зарплата',
       salaryValue: 250000,
-      startDate: new Date(2021, 11, 15),
+      startDate: new Date(2022, 0, 12),
       discount: 40,
       source: 'SkillFactory',
       imageUrl:
@@ -143,7 +143,7 @@ describe('Sandbox', () => {
       profession: 'Профессия iOS-разработчик',
       salaryText: 'Медианная зарплата',
       salaryValue: 147000,
-      startDate: new Date(2021, 11, 27),
+      startDate: new Date(2022, 0, 24),
       discount: 40,
       source: 'SkillFactory',
       imageUrl:
@@ -155,7 +155,7 @@ describe('Sandbox', () => {
       profession: 'Профессия Этичный хакер',
       salaryText: 'Медианная зарплата',
       salaryValue: 120000,
-      startDate: new Date(2021, 11, 16),
+      startDate: new Date(2022, 0, 13),
       discount: 50,
       source: 'SkillFactory',
       imageUrl:
@@ -167,7 +167,7 @@ describe('Sandbox', () => {
       profession: 'Профессия Python-разработчик',
       salaryText: 'Медианная зарплата',
       salaryValue: 120000,
-      startDate: new Date(2021, 11, 24),
+      startDate: new Date(2022, 0, 21),
       discount: 40,
       source: 'SkillFactory',
       imageUrl:
@@ -179,7 +179,7 @@ describe('Sandbox', () => {
       profession: 'Профессия Инженер по ручному тестированию',
       salaryText: 'Средняя зарплата от',
       salaryValue: 60000,
-      startDate: new Date(2021, 11, 14),
+      startDate: new Date(2022, 0, 18),
       discount: 40,
       source: 'SkillFactory',
       imageUrl:
