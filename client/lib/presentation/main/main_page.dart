@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/operation.dart';
 import 'package:cash_flow/app/remote_config/remote_config_hooks.dart';
@@ -25,6 +27,20 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'main_page_tab_provider.dart';
 
 var _isOnlineStatusEnabled = true;
+
+class _Tab {
+  _Tab({
+    required this.tab,
+    required this.widget,
+    required this.onSelected,
+    required this.barItem,
+  });
+
+  final MainPageTab tab;
+  final Widget widget;
+  final VoidCallback onSelected;
+  final BottomNavigationBarItem barItem;
+}
 
 class MainPage extends HookWidget {
   const MainPage();
@@ -85,57 +101,56 @@ class MainPage extends HookWidget {
       );
     });
 
-    final currentTab = {
-      0: MainPageTab.games,
-      1: MainPageTab.recommendations,
-      2: MainPageTab.account
-    }[pageIndex.value]!;
+    final tabs = useState([
+      _Tab(
+        tab: MainPageTab.games,
+        widget: const GamesPage(),
+        onSelected: () {},
+        barItem: BottomNavigationBarItem(
+          icon: const Icon(Icons.insights),
+          label: Strings.gamesTabTitle,
+        ),
+      ),
+      if (!Platform.isIOS)
+        _Tab(
+          tab: MainPageTab.recommendations,
+          widget: const RecommendationsPage(),
+          onSelected: AnalyticsSender.recommendationsOpen,
+          barItem: BottomNavigationBarItem(
+            icon: const Icon(Icons.thumb_up_off_alt),
+            label: Strings.recommendationsTabTitle,
+          ),
+        ),
+      _Tab(
+        tab: MainPageTab.account,
+        widget: const AccountPage(),
+        onSelected: AnalyticsSender.accountOpen,
+        barItem: BottomNavigationBarItem(
+          icon: const Icon(Icons.person),
+          label: Strings.accountTabTitle,
+        ),
+      )
+    ]);
 
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.dark,
       child: BogachLoadableView(
         isLoading: isLoading,
         child: MainPageTabProvider(
-          currentTab: currentTab,
+          currentTab: tabs.value[pageIndex.value].tab,
           child: Scaffold(
             backgroundColor: ColorRes.mainPageBackground,
             body: IndexedStack(
               index: pageIndex.value,
-              children: const [
-                GamesPage(),
-                RecommendationsPage(),
-                AccountPage(),
-              ],
+              children: tabs.value.map((t) => t.widget).toList(),
             ),
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: pageIndex.value,
               onTap: (newIndex) {
                 pageIndex.value = newIndex;
-
-                const recommendationsIndex = 1;
-                if (newIndex == recommendationsIndex) {
-                  AnalyticsSender.recommendationsOpen();
-                }
-
-                const accountPageIndex = 2;
-                if (newIndex == accountPageIndex) {
-                  AnalyticsSender.accountOpen();
-                }
+                tabs.value[pageIndex.value].onSelected();
               },
-              items: [
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.insights),
-                  label: Strings.gamesTabTitle,
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.thumb_up_off_alt),
-                  label: Strings.recommendationsTabTitle,
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.person),
-                  label: Strings.accountTabTitle,
-                )
-              ],
+              items: tabs.value.map((t) => t.barItem).toList(),
             ),
           ),
         ),
