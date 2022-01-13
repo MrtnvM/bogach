@@ -1,6 +1,6 @@
 name: cash_flow
 description: The best investment trainer!
-version: 2.5.0+52
+version: 2.6.1+54
 
 environment:
   sdk: '>=2.14.4 <3.0.0'
@@ -49,7 +49,7 @@ dependencies:
   cloud_firestore: ^1.0.7
 
   # Analytics
-  amplitude_flutter: ^3.1.0
+  amplitude_flutter: ^3.8.0
 
   # Notifications
   notification_permissions: ^0.6.1

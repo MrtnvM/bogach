@@ -1,7 +1,7 @@
 PODS:
-  - Amplitude (7.2.0)
+  - Amplitude (8.5.0)
   - amplitude_flutter (0.0.1):
-    - Amplitude (= 7.2.0)
+    - Amplitude (= 8.5.0)
     - Flutter
   - "app_settings (3.0.0+1)":
     - Flutter
@@ -451,8 +451,8 @@ CHECKOUT OPTIONS:
     :tag: 7.11.0
 
 SPEC CHECKSUMS:
-  Amplitude: c948c6f99c7f798c196523b2a5584367401d910f
-  amplitude_flutter: 5c934cf8331619b62bbd5a69f3cfea9090b3ca94
+  Amplitude: ef9ed339ddd33c9183edf63fa4bbaa86cf873321
+  amplitude_flutter: 8ddb231989e68ed8c005c838d7fc59edbca09833
   app_settings: d103828c9f5d515c4df9ee754dabd443f7cedcf3
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   cloud_firestore: 5dbb01f115c77f4380e2248852518f52830d631f

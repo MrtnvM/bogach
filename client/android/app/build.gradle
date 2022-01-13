@@ -48,9 +48,9 @@ android {
     defaultConfig {
         applicationId "io.mobile.bogach"
         minSdkVersion 23
-        targetSdkVersion 30
-        versionCode 52
-        versionName "2.5.0"
+        targetSdkVersion 31
+        versionCode 54
+        versionName "2.6.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

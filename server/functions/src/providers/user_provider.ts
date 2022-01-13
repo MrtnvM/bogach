@@ -91,8 +91,10 @@ export class UserProvider {
 
     if (!profile.purchaseProfile) {
       updatedProfile = produce(updatedProfile, (draft) => {
-        draft.purchaseProfile = PurchaseProfileEntity.initialPurchaseProfile;
-        draft.purchaseProfile.isQuestsAvailable = updatedProfile.boughtQuestsAccess || false;
+        draft.purchaseProfile = {
+          ...PurchaseProfileEntity.initialPurchaseProfile,
+          isQuestsAvailable: updatedProfile.boughtQuestsAccess || false,
+        };
       });
     }
 
