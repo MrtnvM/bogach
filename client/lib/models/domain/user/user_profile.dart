@@ -59,6 +59,11 @@ class UserProfile with _$UserProfile implements StoreListItem {
         friends: <String>[],
         multiplayerGamePlayed: 0,
         profileVersion: 1,
+        purchaseProfile: PurchaseProfile(
+          boughtMultiplayerGamesCount: 3,
+          isQuestsAvailable: false,
+        ),
+        boughtQuestsAccess: false,
       );
 
   @override

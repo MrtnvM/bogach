@@ -264,6 +264,7 @@ class UserService {
     if (serverProfile != updatedUser) {
       final userData = updatedUser!.toJson();
       await firestore.collection('users').doc(userId).set(userData);
+      updatedUser = await apiClient.getUserProfile(userId);
     }
 
     await userCache.setUserProfile(updatedUser);
