@@ -9,7 +9,10 @@ part 'liability.g.dart';
 class Liability with _$Liability {
   factory Liability({
     required String name,
-    @JsonKey(unknownEnumValue: LiabilityType.other, defaultValue: LiabilityType.other)
+    @JsonKey(
+      unknownEnumValue: LiabilityType.other,
+      defaultValue: LiabilityType.other,
+    )
         required LiabilityType type,
     required double monthlyPayment,
     required double value,
