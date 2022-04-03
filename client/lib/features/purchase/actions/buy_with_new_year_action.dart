@@ -7,9 +7,9 @@ import 'package:cash_flow/core/purchases/purchases.dart';
 import 'package:cash_flow/services/revenue_cat_purchase_service.dart';
 import 'package:get_it/get_it.dart';
 
-class BuyWithNewYearActionAction extends BaseAction {
+class BuyWithDiscountActionAction extends BaseAction {
   @override
-  Operation get operationKey => Operation.buyWithNewYearAction;
+  Operation get operationKey => Operation.buyWithDiscountAction;
 
   @override
   bool abortDispatch() => state.profile.currentUser == null;

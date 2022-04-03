@@ -4,7 +4,7 @@ import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
 import 'package:cash_flow/features/new_game/actions/get_game_templates_action.dart';
 import 'package:cash_flow/features/new_game/actions/get_quests_action.dart';
-import 'package:cash_flow/presentation/main/games/widgets/new-year-action/new_year_action_widget.dart';
+import 'package:cash_flow/presentation/main/games/widgets/discount-action/discount_action_widget.dart';
 import 'package:cash_flow/presentation/main/games/widgets/profile_bar.dart';
 import 'package:cash_flow/presentation/multiplayer/multiplayer_game_list.dart';
 import 'package:cash_flow/presentation/multiplayer/widgets/multiplayer_game_count_badge.dart';
@@ -63,13 +63,13 @@ class _GamePageContent extends HookWidget {
     final selectedProfiles = useState(<String>{});
     final size = useAdaptiveSize();
 
-    final newYearWidgetKey = useState(GlobalKey());
-    final newYearWidgetHeight = useState(0.0);
+    final discountWidgetKey = useState(GlobalKey());
+    final discountWidgetHeight = useState(0.0);
 
     useEffect(() {
       Future.delayed(const Duration(milliseconds: 50)).then((_) {
-        final height = getWidgetSize(newYearWidgetKey.value).height;
-        newYearWidgetHeight.value = height;
+        final height = getWidgetSize(discountWidgetKey.value).height;
+        discountWidgetHeight.value = height;
       });
     }, []);
 
@@ -78,7 +78,7 @@ class _GamePageContent extends HookWidget {
         Positioned.fill(
           child: ListView(
             shrinkWrap: true,
-            padding: EdgeInsets.only(bottom: newYearWidgetHeight.value),
+            padding: EdgeInsets.only(bottom: discountWidgetHeight.value),
             children: <Widget>[
               SizedBox(height: size(24)),
               const SectionTitle(text: Strings.singleGame),
@@ -138,9 +138,9 @@ class _GamePageContent extends HookWidget {
           left: 0,
           right: 0,
           bottom: 0,
-          child: NewYearActionWidget(
-            key: newYearWidgetKey.value,
-            onDissmised: () => newYearWidgetHeight.value = 0,
+          child: DiscountActionWidget(
+            key: discountWidgetKey.value,
+            onDissmised: () => discountWidgetHeight.value = 0,
           ),
         ),
       ],

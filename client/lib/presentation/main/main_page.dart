@@ -70,7 +70,7 @@ class MainPage extends HookWidget {
           Operation.createGame,
           Operation.createRoom,
           Operation.createQuestGame,
-          Operation.buyWithNewYearAction,
+          Operation.buyWithDiscountAction,
         ];
 
         return requests
