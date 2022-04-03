@@ -11,6 +11,8 @@
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		841EC9B925FF9400003B2020 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 841EC9B825FF9400003B2020 /* StoreKit.framework */; };
+		8451587B27F8B08300B9A9C6 /* google_mobile_ads.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8451587A27F8B08300B9A9C6 /* google_mobile_ads.framework */; };
+		8451587C27F8B08300B9A9C6 /* google_mobile_ads.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8451587A27F8B08300B9A9C6 /* google_mobile_ads.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		846DC64B2600F527005CE066 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 846DC64D2600F527005CE066 /* InfoPlist.strings */; };
 		846FDEBB25FF916A00D6323D /* Configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 846FDEBA25FF916A00D6323D /* Configuration.storekit */; };
 		849812F4263B69EF0025A662 /* SingleplayerMonthResultAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849812F3263B69EF0025A662 /* SingleplayerMonthResultAdView.swift */; };
@@ -31,6 +33,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				8451587C27F8B08300B9A9C6 /* google_mobile_ads.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -59,6 +62,7 @@
 		843E35D826036B7A001DB2C0 /* RunnerRelease-uat.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "RunnerRelease-uat.entitlements"; sourceTree = "<group>"; };
 		843E3616260B559A001DB2C0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		843E3617260B559B001DB2C0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8451587A27F8B08300B9A9C6 /* google_mobile_ads.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = google_mobile_ads.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		846DC64C2600F527005CE066 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		846DC64E2600F596005CE066 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		846DC651260361B7005CE066 /* RunnerRelease-production.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "RunnerRelease-production.entitlements"; sourceTree = "<group>"; };
@@ -97,6 +101,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8451587B27F8B08300B9A9C6 /* google_mobile_ads.framework in Frameworks */,
 				C83DFB3324E4501E006140FF /* Pods_Runner.framework in Frameworks */,
 				841EC9B925FF9400003B2020 /* StoreKit.framework in Frameworks */,
 			);
@@ -194,6 +199,7 @@
 		C8C149DD263E0D0F69F878FD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8451587A27F8B08300B9A9C6 /* google_mobile_ads.framework */,
 				841EC9B825FF9400003B2020 /* StoreKit.framework */,
 				C83DFB3224E4501E006140FF /* Pods_Runner.framework */,
 				C83DFB2B24E44FD0006140FF /* Pods_Runner.framework */,
