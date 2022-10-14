@@ -16,8 +16,6 @@ import FirebaseCore
     
     GeneratedPluginRegistrant.register(with: self)
     
-    SingleplayerMonthResultAdFactory.register(with: self)
-    
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
     

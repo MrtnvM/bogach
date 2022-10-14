@@ -552,7 +552,7 @@ class Strings {
       'Для тех, кто ищет новые возможности повышения денежного потока';
   static String get startCourseDate => 'Старт программы ';
 
-  static String get newYearActionBoughtAlertTitle => 'Новогодняя акция';
-  static String get newYearActionBoughtAlertMessage =>
+  static String get discountActionBoughtAlertTitle => 'Акция от Богача';
+  static String get discountActionBoughtAlertMessage =>
       'Вы успешно купили доступ к базе квестов и 25 мультиплеерных игр!';
 }

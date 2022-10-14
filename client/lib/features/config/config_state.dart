@@ -8,6 +8,8 @@ class ConfigState with _$ConfigState {
   factory ConfigState({
     required bool isGameboardTutorialPassed,
     required bool isOnline,
+    // ignore: invalid_annotation_target
+    @JsonKey(defaultValue: 0) required int discountActionSeenCount,
   }) = _ConfigState;
 
   factory ConfigState.fromJson(Map<String, dynamic> json) =>
@@ -17,6 +19,7 @@ class ConfigState with _$ConfigState {
     return ConfigState(
       isGameboardTutorialPassed: false,
       isOnline: true,
+      discountActionSeenCount: 0,
     );
   }
 }

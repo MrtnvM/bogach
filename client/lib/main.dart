@@ -29,7 +29,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -94,8 +93,6 @@ Future<void> main({
 
   AnalyticsSender.appLaunched();
   SessionTracker.gameLaunched.start();
-
-  MobileAds.instance.initialize();
 
   runZonedGuarded<Future<void>>(() async {
     runApp(

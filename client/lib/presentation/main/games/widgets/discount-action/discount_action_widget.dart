@@ -2,6 +2,8 @@ import 'package:cash_flow/analytics/sender/common/analytics_sender.dart';
 import 'package:cash_flow/app/state_hooks.dart';
 import 'package:cash_flow/core/hooks/dispatcher.dart';
 import 'package:cash_flow/core/hooks/media_query_hooks.dart';
+import 'package:cash_flow/features/config/actions/increase_discount_action_seen_count_action.dart';
+import 'package:cash_flow/features/config/config_hooks.dart';
 import 'package:cash_flow/features/purchase/actions/buy_with_new_year_action.dart';
 import 'package:cash_flow/models/errors/purchase_errors.dart';
 import 'package:cash_flow/presentation/dialogs/dialogs.dart';
@@ -13,13 +15,13 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class NewYearActionWidget extends HookWidget {
-  const NewYearActionWidget({
+class DiscountActionWidget extends HookWidget {
+  const DiscountActionWidget({
     Key? key,
     required this.onDissmised,
   }) : super(key: key);
 
-  static bool _isPurchaseAlreadySeen = false;
+  static bool _isPurchaseSeen = false;
 
   final VoidCallback onDissmised;
 
@@ -28,45 +30,47 @@ class NewYearActionWidget extends HookWidget {
     final user = useCurrentUser()!;
     final size = useAdaptiveSize();
     final dispatch = useDispatcher();
-    final isVisible = useState(true);
+    final discountActionSeen = useConfig((c) => c.discountActionSeenCount);
+    final isVisible = useState(discountActionSeen < 3);
     final isQuestsAvailable = user.purchaseProfile?.isQuestsAvailable == true;
-    final isNewYearActionAvailable = isVisible.value && !isQuestsAvailable;
+    final isDiscountActionAvailable = isVisible.value && !isQuestsAvailable;
 
     useEffect(() {
-      if (isNewYearActionAvailable && !_isPurchaseAlreadySeen) {
-        AnalyticsSender.newYearActionPurchaseSeen();
-        _isPurchaseAlreadySeen = true;
+      if (isDiscountActionAvailable && !_isPurchaseSeen) {
+        AnalyticsSender.discountActionPurchaseSeen();
+        dispatch(IncreaseDiscountActionSeenCountAction());
+        _isPurchaseSeen = true;
       }
     }, []);
 
-    if (!isNewYearActionAvailable) {
+    if (!isDiscountActionAvailable) {
       return const SizedBox();
     }
 
-    late VoidCallback buyWithNewYearAction;
-    buyWithNewYearAction = () async {
+    late VoidCallback buyWithDiscountAction;
+    buyWithDiscountAction = () async {
       try {
-        AnalyticsSender.newYearActionPurchaseStarted();
-        await dispatch(BuyWithNewYearActionAction());
-        AnalyticsSender.newYearActionPurchasePurchased();
+        AnalyticsSender.discountActionPurchaseStarted();
+        await dispatch(BuyWithDiscountActionAction());
+        AnalyticsSender.discountActionPurchasePurchased();
 
         showAlert(
           context: context,
-          title: Strings.newYearActionBoughtAlertTitle,
-          message: Strings.newYearActionBoughtAlertMessage,
+          title: Strings.discountActionBoughtAlertTitle,
+          message: Strings.discountActionBoughtAlertMessage,
           submitButtonText: Strings.ok,
           needCancelButton: false,
         );
       } on PurchaseCanceledException catch (error) {
-        AnalyticsSender.newYearActionPurchaseCanceled();
+        AnalyticsSender.discountActionPurchaseCanceled();
         Fimber.i('Purchase canceled: ${error.productId}');
       } catch (error) {
-        AnalyticsSender.newYearActionPurchaseFailed();
+        AnalyticsSender.discountActionPurchaseFailed();
 
         handleError(
           context: context,
           exception: error,
-          onRetry: buyWithNewYearAction,
+          onRetry: buyWithDiscountAction,
         );
       }
     };
@@ -75,16 +79,16 @@ class NewYearActionWidget extends HookWidget {
       key: ValueKey(user.id),
       onDismissed: (_) {
         isVisible.value = false;
-        AnalyticsSender.newYearActionPurchaseDismissed();
+        AnalyticsSender.discountActionPurchaseDismissed();
         onDissmised();
       },
       child: GestureDetector(
-        onTap: buyWithNewYearAction,
+        onTap: buyWithDiscountAction,
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: size(12), vertical: size(8)),
           decoration: BoxDecoration(
             image: const DecorationImage(
-              image: AssetImage(Images.newYearActionBackground),
+              image: AssetImage(Images.actionBackground),
               fit: BoxFit.cover,
             ),
             borderRadius: BorderRadius.circular(16),
@@ -101,7 +105,7 @@ class NewYearActionWidget extends HookWidget {
             children: [
               Padding(
                 padding: EdgeInsets.all(size(8)),
-                child: Image.asset(Images.newYearBogach, height: size(50)),
+                child: Image.asset(Images.discountBogach, height: size(50)),
               ),
               Expanded(
                 child: Padding(
@@ -122,7 +126,7 @@ class NewYearActionWidget extends HookWidget {
                       ),
                       SizedBox(height: size(4)),
                       Text(
-                        'Настала пора празднечных скидок!',
+                        'Успей получить скидку!',
                         style: Styles.body1.copyWith(
                           fontSize: 12,
                         ),

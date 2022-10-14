@@ -90,7 +90,7 @@ class Images {
   static const addButton = 'assets/images/png/add-button.png';
   static const removeButton = 'assets/images/png/remove-button.png';
 
-  static const newYearActionBackground =
-      'assets/images/png/new-year-gradient-bg.png';
+  static const actionBackground = 'assets/images/png/new-year-gradient-bg.png';
   static const newYearBogach = 'assets/images/png/new-year-bogach.png';
+  static const discountBogach = 'assets/images/png/discount_action.png';
 }

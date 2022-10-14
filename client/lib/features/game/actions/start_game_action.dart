@@ -11,7 +11,6 @@ import 'package:cash_flow/models/domain/game/game_context/game_context.dart';
 import 'package:cash_flow/services/game_service.dart';
 import 'package:cash_flow/services/user_service.dart';
 import 'package:get_it/get_it.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:rxdart/rxdart.dart';
 
 class StartGameAction extends BaseAction {
@@ -51,8 +50,6 @@ class StartGameAction extends BaseAction {
     return state.rebuild((s) {
       final gameId = gameContext.gameId;
       s.game.activeGameStates![gameId] = ActiveGameState.waitingForStart();
-
-      s.game.monthResultAds = <int, Ad>{};
     });
   }
 
